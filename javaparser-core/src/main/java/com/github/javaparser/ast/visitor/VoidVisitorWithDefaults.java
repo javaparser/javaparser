@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -39,14 +39,12 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     /**
      * This will be called by every node visit method that is not overridden.
      */
-    public void defaultAction(Node n, A arg) {
-    }
+    public void defaultAction(Node n, A arg) {}
 
     /**
      * This will be called by the NodeList visit method when it is not overridden.
      */
-    public void defaultAction(NodeList n, A arg) {
-    }
+    public void defaultAction(NodeList n, A arg) {}
 
     @Override
     public void visit(final AnnotationDeclaration n, final A arg) {
@@ -532,7 +530,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final PatternExpr n, final A arg) {
+    public void visit(final TypePatternExpr n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -543,6 +541,11 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final CompactConstructorDeclaration n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final RecordPatternExpr n, final A arg) {
         defaultAction(n, arg);
     }
 }

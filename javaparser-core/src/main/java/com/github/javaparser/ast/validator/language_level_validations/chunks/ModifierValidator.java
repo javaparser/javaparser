@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,8 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations.chunks;
+
+import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static java.util.Arrays.asList;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
@@ -32,27 +34,33 @@ import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.github.javaparser.ast.Modifier.Keyword.*;
-import static java.util.Arrays.asList;
-
 
 /**
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
 public class ModifierValidator extends VisitorValidator {
-    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP};
-    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
-    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[]{PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
+
+    private final Modifier.Keyword[] interfaceWithNothingSpecial =
+            new Modifier.Keyword[] {PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP};
+
+    private final Modifier.Keyword[] interfaceWithStaticAndDefault =
+            new Modifier.Keyword[] {PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT
+            };
+
+    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[] {
+        PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT
+    };
 
     private final boolean hasStrictfp;
+
     private final boolean hasDefaultAndStaticInterfaceMethods;
+
     private final boolean hasPrivateInterfaceMethods;
 
-    public ModifierValidator(boolean hasStrictfp, boolean hasDefaultAndStaticInterfaceMethods, boolean hasPrivateInterfaceMethods) {
+    public ModifierValidator(
+            boolean hasStrictfp, boolean hasDefaultAndStaticInterfaceMethods, boolean hasPrivateInterfaceMethods) {
         this.hasStrictfp = hasStrictfp;
         this.hasDefaultAndStaticInterfaceMethods = hasDefaultAndStaticInterfaceMethods;
         this.hasPrivateInterfaceMethods = hasPrivateInterfaceMethods;
@@ -70,19 +78,20 @@ public class ModifierValidator extends VisitorValidator {
 
     private void validateClassModifiers(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isTopLevelType()) {
-            validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP, SEALED, NON_SEALED);
         } else if (n.isNestedType()) {
-            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP);
+            validateModifiers(
+                    n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP, SEALED, NON_SEALED);
         } else if (n.isLocalClassDeclaration()) {
-            validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP);
+            validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP, SEALED, NON_SEALED);
         }
     }
 
     private void validateInterfaceModifiers(TypeDeclaration<?> n, ProblemReporter reporter) {
         if (n.isTopLevelType()) {
-            validateModifiers(n, reporter, PUBLIC, ABSTRACT, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, ABSTRACT, STRICTFP, SEALED, NON_SEALED);
         } else if (n.isNestedType()) {
-            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, STRICTFP, SEALED, NON_SEALED);
         }
     }
 
@@ -124,7 +133,8 @@ public class ModifierValidator extends VisitorValidator {
     @Override
     public void visit(MethodDeclaration n, ProblemReporter reporter) {
         if (n.isAbstract()) {
-            final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Cannot be 'abstract' and also '", "', '", "'.");
+            final SeparatedItemStringBuilder builder =
+                    new SeparatedItemStringBuilder("Cannot be 'abstract' and also '", "', '", "'.");
             for (Modifier.Keyword m : asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
                 if (n.hasModifier(m)) {
                     builder.append(m.asString());
@@ -147,7 +157,18 @@ public class ModifierValidator extends VisitorValidator {
                         validateModifiers(n, reporter, interfaceWithNothingSpecial);
                     }
                 } else {
-                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
+                    validateModifiers(
+                            n,
+                            reporter,
+                            PUBLIC,
+                            PROTECTED,
+                            PRIVATE,
+                            ABSTRACT,
+                            STATIC,
+                            FINAL,
+                            SYNCHRONIZED,
+                            NATIVE,
+                            STRICTFP);
                 }
             }
         }
@@ -182,7 +203,8 @@ public class ModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier.Keyword... allowedModifiers) {
+    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(
+            T n, ProblemReporter reporter, Modifier.Keyword... allowedModifiers) {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
         if (hasStrictfp) {
@@ -213,7 +235,8 @@ public class ModifierValidator extends VisitorValidator {
         return false;
     }
 
-    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateAtMostOneOf(T t, ProblemReporter reporter, Modifier.Keyword... modifiers) {
+    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateAtMostOneOf(
+            T t, ProblemReporter reporter, Modifier.Keyword... modifiers) {
         List<Modifier.Keyword> foundModifiers = new ArrayList<>();
         for (Modifier.Keyword m : modifiers) {
             if (t.hasModifier(m)) {
@@ -228,5 +251,4 @@ public class ModifierValidator extends VisitorValidator {
             reporter.report(t, builder.toString());
         }
     }
-
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,18 +18,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes.modifiers;
+
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 
 /**
  * A node that can be public.
  */
 public interface NodeWithPublicModifier<N extends Node> extends NodeWithModifiers<N> {
+
     default boolean isPublic() {
         return hasModifier(PUBLIC);
     }
@@ -38,5 +38,4 @@ public interface NodeWithPublicModifier<N extends Node> extends NodeWithModifier
     default N setPublic(boolean set) {
         return setModifier(PUBLIC, set);
     }
-
 }

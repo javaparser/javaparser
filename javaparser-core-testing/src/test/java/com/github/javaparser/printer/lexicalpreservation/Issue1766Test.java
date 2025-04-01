@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,78 +21,56 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.utils.TestUtils;
+public class Issue1766Test extends AbstractLexicalPreservingTest {
 
-public class Issue1766Test extends AbstractLexicalPreservingTest  {
-    
     @Test
     public void testWithLexicalPreservationEnabled() {
-        
-        String actual = 
-                "public class SimpleTestClass {\n" + 
-                "  public SimpleTestClass() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "  @Override\n" + 
-                "  void bubber() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" +
-                "}";
-        
-        String expected = 
-                "public class SimpleTestClass {\n" + 
-                "  public SimpleTestClass() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "  @Override\n" + 
-                "  void bubber() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "}";
-        
-        final ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setLexicalPreservationEnabled(true);
-        StaticJavaParser.setConfiguration(parserConfiguration);
-      
-        CompilationUnit cu = StaticJavaParser.parse(actual);
-        TestUtils.assertEqualsStringIgnoringEol(expected, actual);
+
+        considerCode("public class SimpleTestClass {\n" + "  public SimpleTestClass() {\n"
+                + "    // nothing\n"
+                + "  }\n"
+                + "  @Override\n"
+                + "  void bubber() {\n"
+                + "    // nothing\n"
+                + "  }\n"
+                + "}");
+
+        String expected = "public class SimpleTestClass {\n" + "  public SimpleTestClass() {\n"
+                + "    // nothing\n"
+                + "  }\n"
+                + "  @Override\n"
+                + "  void bubber() {\n"
+                + "    // nothing\n"
+                + "  }\n"
+                + "}";
+
+        TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
-    
+
     @Test
     public void testWithLexicalPreservingPrinterSetup() {
-        
-        String actual = 
-                "public class SimpleTestClass {\n" + 
-                "  public SimpleTestClass() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "  @Override\n" + 
-                "  void bubber() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" +
-                "}";
-        
-        String expected = 
-                "public class SimpleTestClass {\n" + 
-                "  public SimpleTestClass() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "  @Override\n" + 
-                "  void bubber() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "}";
-        
-        final ParserConfiguration parserConfiguration = new ParserConfiguration();
-        StaticJavaParser.setConfiguration(parserConfiguration);
-      
-        CompilationUnit cu = StaticJavaParser.parse(actual);
-        LexicalPreservingPrinter.setup(cu);
-        TestUtils.assertEqualsStringIgnoringEol(expected, actual);
+
+        considerCode("public class SimpleTestClass {\n" + "  public SimpleTestClass() {\n"
+                + "    // nothing\n"
+                + "  }\n"
+                + "  @Override\n"
+                + "  void bubber() {\n"
+                + "    // nothing\n"
+                + "  }\n"
+                + "}");
+
+        String expected = "public class SimpleTestClass {\n" + "  public SimpleTestClass() {\n"
+                + "    // nothing\n"
+                + "  }\n"
+                + "  @Override\n"
+                + "  void bubber() {\n"
+                + "    // nothing\n"
+                + "  }\n"
+                + "}";
+
+        TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 }

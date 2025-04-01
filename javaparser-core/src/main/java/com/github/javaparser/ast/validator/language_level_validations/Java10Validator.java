@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.type.VarType;
@@ -33,13 +32,12 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Var
  */
 public class Java10Validator extends Java9Validator {
 
-    final Validator varOnlyOnLocalVariableDefinitionAndForAndTry = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(false));
+    final Validator varOnlyOnLocalVariableDefinitionAndForAndTry =
+            new SingleNodeTypeValidator<>(VarType.class, new VarValidator(false));
 
     public Java10Validator() {
         super();
-
         // Released Language Features
-
         {
             /*
              * Java 10 released local variable type inference in for and try-with (JEP286).
@@ -47,6 +45,5 @@ public class Java10Validator extends Java9Validator {
              */
             add(varOnlyOnLocalVariableDefinitionAndForAndTry);
         }
-
     }
 }

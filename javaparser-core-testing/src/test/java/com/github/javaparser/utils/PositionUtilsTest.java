@@ -1,4 +1,28 @@
+/*
+ * Copyright (C) 2013-2024 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.utils;
+
+import static com.github.javaparser.utils.PositionUtils.nodeContains;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -10,10 +34,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.type.Type;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.utils.PositionUtils.nodeContains;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class PositionUtilsTest {
     @Test
@@ -70,13 +90,7 @@ public class PositionUtilsTest {
 
     @Test
     public void nodeContainsAnnotations_WithCommentNodeInTheMiddle_IgnoringAnnotations() {
-        String code = "" +
-                "@A\n" +
-                "/*o*/\n" +
-                "@B\n" +
-                "class X {\n" +
-                "}\n" +
-                "";
+        String code = "" + "@A\n" + "/*o*/\n" + "@B\n" + "class X {\n" + "}\n" + "";
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString(), "Issue with the parsing of the code, not this test.");
@@ -92,16 +106,9 @@ public class PositionUtilsTest {
         assertFalse(contains);
     }
 
-
     @Test
     public void nodeContainsAnnotations_WithAnnotationNodeInTheMiddle() {
-        String code = "" +
-                "@A\n" +
-                "@B\n" +
-                "@C\n" +
-                "class X {\n" +
-                "}\n" +
-                "";
+        String code = "" + "@A\n" + "@B\n" + "@C\n" + "class X {\n" + "}\n" + "";
         CompilationUnit cu = StaticJavaParser.parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString(), "Issue with the parsing of the code, not this test.");
 
@@ -121,18 +128,16 @@ public class PositionUtilsTest {
         assertFalse(nodeContains(x, annotationB, true), formatRangeCompareResult(x, annotationB, "X", "B"));
         assertFalse(nodeContains(x, annotationC, true), formatRangeCompareResult(x, annotationC, "X", "C"));
         assertFalse(nodeContains(x, x, true), formatRangeCompareResult(x, x, "X", "X"));
-
     }
 
     private String formatRangeCompareResult(Node x, Node annotationA, String containerId, String otherId) {
-        return String.format("container range in detected as NOT containing other range: " +
-                        "\n - container (%s): %s" +
-                        "\n -     other (%s): %s",
+        return String.format(
+                "container range in detected as NOT containing other range: " + "\n - container (%s): %s"
+                        + "\n -     other (%s): %s",
                 containerId,
                 x.getRange().get().toString(),
                 otherId,
-                annotationA.getRange().get().toString()
-        );
+                annotationA.getRange().get().toString());
     }
 
     @Test
@@ -153,14 +158,17 @@ public class PositionUtilsTest {
         //// @A @B /*o*/ public class X {}
         ////       ^^^^^                   // range of o
 
-        // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the subtree, but are printed before).
+        // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the
+        // subtree, but are printed before).
         assertTrue(nodeContains(x, o, false), formatRangeCompareResult(x, o, "X", "o"));
         assertFalse(nodeContains(x, o, true), formatRangeCompareResult(x, o, "X", "o"));
 
-
-        // FIXME: Both tests currently fail due to the comment being attached to the SimpleName, as opposed to the ClassOrInterfaceDeclaration
-//        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
-//        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+        // FIXME: Both tests currently fail due to the comment being attached to the SimpleName, as opposed to the
+        // ClassOrInterfaceDeclaration
+        //        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected
+        // node -- expected to be the ClassOrInterfaceDeclaration");
+        //        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be
+        // the ClassOrInterfaceDeclaration");
 
     }
 
@@ -182,13 +190,17 @@ public class PositionUtilsTest {
         //// @A @B public /*o*/ class X {}
         ////              ^^^^^            // range of o
 
-        // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the subtree, but are printed before).
+        // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the
+        // subtree, but are printed before).
         assertTrue(nodeContains(x, o, false), formatRangeCompareResult(x, o, "X", "o"));
         assertTrue(nodeContains(x, o, true), formatRangeCompareResult(x, o, "X", "o"));
 
-        // FIXME: Both tests currently fail due to the comment being attached to the SimpleName, as opposed to the ClassOrInterfaceDeclaration
-//        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
-//        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+        // FIXME: Both tests currently fail due to the comment being attached to the SimpleName, as opposed to the
+        // ClassOrInterfaceDeclaration
+        //        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected
+        // node -- expected to be the ClassOrInterfaceDeclaration");
+        //        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be
+        // the ClassOrInterfaceDeclaration");
 
     }
 
@@ -201,7 +213,6 @@ public class PositionUtilsTest {
         SimpleName simpleName = x.getName();
         Comment o = simpleName.getComment().get();
 
-
         //// 12345678912345678912345678901
         //// @A @B public class /*o*/ X {}
         //// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ // range of x, WITH annotations -- thus contained == TRUE
@@ -210,15 +221,19 @@ public class PositionUtilsTest {
         //// @A @B public class /*o*/ X {}
         ////                    ^^^^^      // range of o
 
-        // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the subtree, but are printed before).
+        // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the
+        // subtree, but are printed before).
         assertTrue(nodeContains(x, o, false), formatRangeCompareResult(x, o, "X", "o"));
         assertTrue(nodeContains(x, o, true), formatRangeCompareResult(x, o, "X", "o"));
 
         assertTrue(o.getCommentedNode().isPresent());
 
-        // FIXME: Both tests currently fail due to the comment being attached to the SimpleName, as opposed to the ClassOrInterfaceDeclaration
-//        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
-//        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+        // FIXME: Both tests currently fail due to the comment being attached to the SimpleName, as opposed to the
+        // ClassOrInterfaceDeclaration
+        //        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected
+        // node -- expected to be the ClassOrInterfaceDeclaration");
+        //        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be
+        // the ClassOrInterfaceDeclaration");
 
     }
 
@@ -227,17 +242,18 @@ public class PositionUtilsTest {
         CompilationUnit cu = StaticJavaParser.parse("@A @B public class X /*o*/ {}");
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
 
-//        // TODO: At what point is the declaration supposed to end and the code block begin? Should the block comment move "inside" the code block?
-//        // cu =
-//        @A
-//        @B
-//        public class X {
-//            /*o*/
-//        }
+        //        // TODO: At what point is the declaration supposed to end and the code block begin? Should the block
+        // comment move "inside" the code block?
+        //        // cu =
+        //        @A
+        //        @B
+        //        public class X {
+        //            /*o*/
+        //        }
 
-        // TODO: Should the comment be attached to the SimpleName (as opposed to being attached to null but not orphaned?)
+        // TODO: Should the comment be attached to the SimpleName (as opposed to being attached to null but not
+        // orphaned?)
         Comment o = cu.getComments().get(0);
-
 
         //// 12345678912345678912345678901
         //// @A @B public class X /*o*/ {}
@@ -247,16 +263,20 @@ public class PositionUtilsTest {
         //// @A @B public class X /*o*/ {}
         ////                      ^^^^^    // range of o
 
-        // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the subtree, but are printed before).
+        // TODO: Determine if comments outside the text range of a node are "contained" within a node (part of the
+        // subtree, but are printed before).
         assertTrue(nodeContains(x, o, false), formatRangeCompareResult(x, o, "X", "o"));
         assertTrue(nodeContains(x, o, true), formatRangeCompareResult(x, o, "X", "o"));
 
         // FIXME: Comment is unattached (returns null), but is not considered to be orphaned...?
-//        assertTrue(o.getCommentedNode().isPresent());
+        //        assertTrue(o.getCommentedNode().isPresent());
 
-        // FIXME: Both tests currently fail due to the comment being unattached, as opposed to the ClassOrInterfaceDeclaration
-//        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
-//        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be the ClassOrInterfaceDeclaration");
+        // FIXME: Both tests currently fail due to the comment being unattached, as opposed to the
+        // ClassOrInterfaceDeclaration
+        //        assertEquals(x.getClass(), o.getCommentedNode().get().getClass(), "Comment attached to an unexpected
+        // node -- expected to be the ClassOrInterfaceDeclaration");
+        //        assertEquals(x, o.getCommentedNode().get(), "Comment attached to an unexpected node -- expected to be
+        // the ClassOrInterfaceDeclaration");
 
     }
 }

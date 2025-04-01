@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,23 +21,23 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.declarations;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
 
@@ -69,8 +69,10 @@ class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ClassOrInterfaceDeclaration classDecl = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDecl = Navigator.demandMethod(classDecl, "usage");
-        MethodCallExpr callToFoo = (MethodCallExpr) Navigator.demandReturnStmt(methodDecl).getExpression().get();
-        ResolvedMethodDeclaration methodDeclaration = javaParserFacade.solve(callToFoo).getCorrespondingDeclaration();
+        MethodCallExpr callToFoo = (MethodCallExpr)
+                Navigator.demandReturnStmt(methodDecl).getExpression().get();
+        ResolvedMethodDeclaration methodDeclaration =
+                javaParserFacade.solve(callToFoo).getCorrespondingDeclaration();
         for (ResolvedTypeParameterDeclaration tp : methodDeclaration.getTypeParameters()) {
             assertTrue(tp instanceof JavaParserTypeParameter);
             assertEquals("C", tp.getName());
@@ -86,8 +88,10 @@ class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ClassOrInterfaceDeclaration classDecl = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDecl = Navigator.demandMethod(classDecl, "usage");
-        MethodCallExpr callToFoo = (MethodCallExpr) Navigator.demandReturnStmt(methodDecl).getExpression().get();
-        ResolvedMethodDeclaration methodDeclaration = javaParserFacade.solve(callToFoo).getCorrespondingDeclaration();
+        MethodCallExpr callToFoo = (MethodCallExpr)
+                Navigator.demandReturnStmt(methodDecl).getExpression().get();
+        ResolvedMethodDeclaration methodDeclaration =
+                javaParserFacade.solve(callToFoo).getCorrespondingDeclaration();
         ResolvedReferenceTypeDeclaration typeDeclaration = methodDeclaration.declaringType();
         assertEquals(2, typeDeclaration.getTypeParameters().size());
         assertTrue(typeDeclaration.getTypeParameters().get(0) instanceof JavaParserTypeParameter);
@@ -98,7 +102,5 @@ class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
         assertEquals("B", typeDeclaration.getTypeParameters().get(1).getName());
         assertEquals(false, typeDeclaration.getTypeParameters().get(1).declaredOnMethod());
         assertEquals(true, typeDeclaration.getTypeParameters().get(1).declaredOnType());
-
     }
-
 }

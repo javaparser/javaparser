@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,10 +21,9 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
 import java.util.Objects;
 
 /**
@@ -45,8 +44,8 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
      * @param variadic
      * @param name can potentially be null
      */
-    public ReflectionParameterDeclaration(Class<?> type, java.lang.reflect.Type genericType, TypeSolver typeSolver,
-                                          boolean variadic, String name) {
+    public ReflectionParameterDeclaration(
+            Class<?> type, java.lang.reflect.Type genericType, TypeSolver typeSolver, boolean variadic, String name) {
         this.type = type;
         this.genericType = genericType;
         this.typeSolver = typeSolver;
@@ -70,10 +69,7 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
 
     @Override
     public String toString() {
-        return "ReflectionParameterDeclaration{" +
-                "type=" + type +
-                ", name=" + name +
-                '}';
+        return "ReflectionParameterDeclaration{" + "type=" + type + ", name=" + name + '}';
     }
 
     @Override
@@ -106,11 +102,11 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReflectionParameterDeclaration that = (ReflectionParameterDeclaration) o;
-        return variadic == that.variadic &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(genericType, that.genericType) &&
-                Objects.equals(typeSolver, that.typeSolver) &&
-                Objects.equals(name, that.name);
+        return variadic == that.variadic
+                && Objects.equals(type, that.type)
+                && Objects.equals(genericType, that.genericType)
+                && Objects.equals(typeSolver, that.typeSolver)
+                && Objects.equals(name, that.name);
     }
 
     @Override

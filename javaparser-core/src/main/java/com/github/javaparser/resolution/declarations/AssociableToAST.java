@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,18 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.Node;
-
 import java.util.Optional;
 
 /**
  * A declaration that can be potentially associated with an AST node.
- * @param <N> type of AST Node that can be associated
  */
-public interface AssociableToAST<N extends Node> {
+public interface AssociableToAST {
 
     /**
      * If the declaration is associated to an AST node return it, otherwise it return empty.
@@ -52,7 +49,22 @@ public interface AssociableToAST<N extends Node> {
      * In these cases getWrappedNode is particularly nice because it returns the right type of AST node,
      * not just a Node.
      */
-    default Optional<N> toAst() {
-        throw new UnsupportedOperationException();
+    default Optional<Node> toAst() {
+        return Optional.empty();
+    }
+
+    /**
+     * If the declaration is associated to an AST node and the type matches the expected {@link Class} return it,
+     * otherwise it returns empty.
+     *
+     * @param clazz The expected class of the AST Node.
+     * @param <N>   The expected type of AST Node.
+     *
+     * @return The declaration with the expected {@link Class}.
+     *
+     * @see AssociableToAST#toAst()
+     */
+    default <N extends Node> Optional<N> toAst(Class<N> clazz) {
+        return toAst().filter(clazz::isInstance).map(clazz::cast);
     }
 }

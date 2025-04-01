@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,14 +23,9 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Modifier.Keyword;
-import com.github.javaparser.ast.body.EnumDeclaration;
+import org.junit.jupiter.api.Test;
 
 class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
 
@@ -51,7 +46,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
-    
+
     @Test
     void printingGenericVariableDeclarationWithAddedModifierWithAnotherSyntaxe() {
         String def2 = "List <String> i";
@@ -60,7 +55,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
-    
+
     @Test
     void printingGeneric2VariableDeclarationWithAddedModifier() {
         String def2 = "List<List<String>> i";
@@ -69,7 +64,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
-    
+
     @Test
     void printingGeneric2VariableDeclarationWithAddedModifierWithAnotherSyntaxe() {
         String def2 = "List < List < String > > i";
@@ -78,5 +73,4 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
-
 }

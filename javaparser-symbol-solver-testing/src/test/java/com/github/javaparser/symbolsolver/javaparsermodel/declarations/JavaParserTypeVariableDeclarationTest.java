@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2021 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,29 +21,28 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
-import com.github.javaparser.resolution.declarations.AssociableToASTTest;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest implements AssociableToASTTest<TypeParameter> {
+class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest {
 
     @Override
     public JavaParserTypeVariableDeclaration createValue() {
@@ -54,10 +53,9 @@ class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest 
     }
 
     @Override
-    public Optional<TypeParameter> getWrappedDeclaration(AssociableToAST<TypeParameter> associableToAST) {
-        return Optional.of(
-                safeCast(associableToAST, JavaParserTypeVariableDeclaration.class).getWrappedNode()
-        );
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
+        return Optional.of(safeCast(associableToAST, JavaParserTypeVariableDeclaration.class)
+                .getWrappedNode());
     }
 
     @Override
@@ -79,11 +77,14 @@ class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest 
         private void testGetAncestorWith(Iterable<String> expectedTypes, String sourceCode) {
             CompilationUnit cu = parser.parse(sourceCode).getResult().orElseThrow(AssertionError::new);
             TypeParameter typeParameter = Navigator.demandNodeOfGivenClass(cu, TypeParameter.class);
-            JavaParserTypeVariableDeclaration parserTypeParameter = new JavaParserTypeVariableDeclaration(typeParameter, typeSolver);
-            assertEquals(expectedTypes, parserTypeParameter.getAncestors().stream()
-                    .map(ResolvedReferenceType::getQualifiedName)
-                    .sorted()
-                    .collect(Collectors.toList()));
+            JavaParserTypeVariableDeclaration parserTypeParameter =
+                    new JavaParserTypeVariableDeclaration(typeParameter, typeSolver);
+            assertEquals(
+                    expectedTypes,
+                    parserTypeParameter.getAncestors().stream()
+                            .map(ResolvedReferenceType::getQualifiedName)
+                            .sorted()
+                            .collect(Collectors.toList()));
         }
 
         @Test
@@ -103,7 +104,5 @@ class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest 
             String sourceCode = "class A {} interface B {} class C<T extends A & B> {}";
             testGetAncestorWith(Arrays.asList("A", "B"), sourceCode);
         }
-
     }
-
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,20 +18,20 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
+
+import static com.github.javaparser.utils.Utils.*;
 
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.utils.LineSeparator;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static com.github.javaparser.utils.Utils.*;
 
 /**
  * The class responsible for parsing the content of JavadocComments and producing JavadocDocuments.
@@ -40,6 +40,7 @@ import static com.github.javaparser.utils.Utils.*;
 class JavadocParser {
 
     private static String BLOCK_TAG_PREFIX = "@";
+
     private static Pattern BLOCK_PATTERN = Pattern.compile("^\\s*" + BLOCK_TAG_PREFIX, Pattern.MULTILINE);
 
     public static Javadoc parse(JavadocComment comment) {
@@ -47,7 +48,7 @@ class JavadocParser {
     }
 
     public static Javadoc parse(String commentContent) {
-        List<String> cleanLines = cleanLines(normalizeEolInTextBlock(commentContent, SYSTEM_EOL));
+        List<String> cleanLines = cleanLines(normalizeEolInTextBlock(commentContent, LineSeparator.SYSTEM));
         int indexOfFirstBlockTag = cleanLines.stream()
                 .filter(JavadocParser::isABlockLine)
                 .map(cleanLines::indexOf)
@@ -56,25 +57,23 @@ class JavadocParser {
         List<String> blockLines;
         String descriptionText;
         if (indexOfFirstBlockTag == -1) {
-            descriptionText = trimRight(String.join(SYSTEM_EOL, cleanLines));
+            descriptionText = trimRight(String.join(LineSeparator.SYSTEM.asRawString(), cleanLines));
             blockLines = Collections.emptyList();
         } else {
-            descriptionText = trimRight(String.join(SYSTEM_EOL, cleanLines.subList(0, indexOfFirstBlockTag)));
-
-            //Combine cleaned lines, but only starting with the first block tag till the end
-            //In this combined string it is easier to handle multiple lines which actually belong together
-            String tagBlock = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size())
-                .stream()
-                .collect(Collectors.joining(SYSTEM_EOL));
-
-            //Split up the entire tag back again, considering now that some lines belong to the same block tag.
-            //The pattern splits the block at each new line starting with the '@' symbol, thus the symbol
-            //then needs to be added again so that the block parsers handles everything correctly.
+            descriptionText = trimRight(
+                    String.join(LineSeparator.SYSTEM.asRawString(), cleanLines.subList(0, indexOfFirstBlockTag)));
+            // Combine cleaned lines, but only starting with the first block tag till the end
+            // In this combined string it is easier to handle multiple lines which actually belong together
+            String tagBlock = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size()).stream()
+                    .collect(Collectors.joining(LineSeparator.SYSTEM.asRawString()));
+            // Split up the entire tag back again, considering now that some lines belong to the same block tag.
+            // The pattern splits the block at each new line starting with the '@' symbol, thus the symbol
+            // then needs to be added again so that the block parsers handles everything correctly.
             blockLines = BLOCK_PATTERN
-                .splitAsStream(tagBlock)
-                .filter(s1 -> !s1.isEmpty())
-                .map(s -> BLOCK_TAG_PREFIX + s)
-                .collect(Collectors.toList());
+                    .splitAsStream(tagBlock)
+                    .filter(s1 -> !s1.isEmpty())
+                    .map(s -> BLOCK_TAG_PREFIX + s)
+                    .collect(Collectors.toList());
         }
         Javadoc document = new Javadoc(JavadocDescription.parseText(descriptionText));
         blockLines.forEach(l -> document.addBlockTag(parseBlockTag(l)));
@@ -100,39 +99,39 @@ class JavadocParser {
     }
 
     private static List<String> cleanLines(String content) {
-        String[] lines = content.split(SYSTEM_EOL);
+        String[] lines = content.split(LineSeparator.SYSTEM.asRawString());
         if (lines.length == 0) {
             return Collections.emptyList();
         }
-
-        List<String> cleanedLines = Arrays.stream(lines).map(l -> {
-            int asteriskIndex = startsWithAsterisk(l);
-            if (asteriskIndex == -1) {
-                return l;
-            } else {
-                // if a line starts with space followed by an asterisk drop to the asterisk
-                // if there is a space immediately after the asterisk drop it also
-                if (l.length() > (asteriskIndex + 1)) {
-
-                    char c = l.charAt(asteriskIndex + 1);
-                    if (c == ' ' || c == '\t') {
-                        return l.substring(asteriskIndex + 2);
+        List<String> cleanedLines = Arrays.stream(lines)
+                .map(l -> {
+                    int asteriskIndex = startsWithAsterisk(l);
+                    if (asteriskIndex == -1) {
+                        return l;
                     }
-                }
-                return l.substring(asteriskIndex + 1);
-            }
-        }).collect(Collectors.toList());
+                    if (l.length() > (asteriskIndex + 1)) {
+                        char c = l.charAt(asteriskIndex + 1);
+                        if (c == ' ' || c == '\t') {
+                            return l.substring(asteriskIndex + 2);
+                        }
+                    }
+                    return l.substring(asteriskIndex + 1);
+                })
+                .collect(Collectors.toList());
         // lines containing only whitespace are normalized to empty lines
-        cleanedLines = cleanedLines.stream().map(l -> l.trim().isEmpty() ? "" : l).collect(Collectors.toList());
+        cleanedLines =
+                cleanedLines.stream().map(l -> l.trim().isEmpty() ? "" : l).collect(Collectors.toList());
         // if the first starts with a space, remove it
-        if (!cleanedLines.get(0).isEmpty() && (cleanedLines.get(0).charAt(0) == ' ' || cleanedLines.get(0).charAt(0) == '\t')) {
+        if (!cleanedLines.get(0).isEmpty()
+                && (cleanedLines.get(0).charAt(0) == ' ' || cleanedLines.get(0).charAt(0) == '\t')) {
             cleanedLines.set(0, cleanedLines.get(0).substring(1));
         }
         // drop empty lines at the beginning and at the end
         while (cleanedLines.size() > 0 && cleanedLines.get(0).trim().isEmpty()) {
             cleanedLines = cleanedLines.subList(1, cleanedLines.size());
         }
-        while (cleanedLines.size() > 0 && cleanedLines.get(cleanedLines.size() - 1).trim().isEmpty()) {
+        while (cleanedLines.size() > 0
+                && cleanedLines.get(cleanedLines.size() - 1).trim().isEmpty()) {
             cleanedLines = cleanedLines.subList(0, cleanedLines.size() - 1);
         }
         return cleanedLines;
@@ -142,15 +141,14 @@ class JavadocParser {
     static int startsWithAsterisk(String line) {
         if (line.startsWith("*")) {
             return 0;
-        } else if ((line.startsWith(" ") || line.startsWith("\t")) && line.length() > 1) {
+        }
+        if ((line.startsWith(" ") || line.startsWith("\t")) && line.length() > 1) {
             int res = startsWithAsterisk(line.substring(1));
             if (res == -1) {
                 return -1;
-            } else {
-                return 1 + res;
             }
-        } else {
-            return -1;
+            return 1 + res;
         }
+        return -1;
     }
 }

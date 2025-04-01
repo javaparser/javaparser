@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,14 +21,14 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ThisExprTest {
     @Test
@@ -40,8 +40,7 @@ class ThisExprTest {
 
     @Test
     void justThisName() {
-        JavaParser javaParser = new JavaParser(new ParserConfiguration()
-                .setStoreTokens(false));
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setStoreTokens(false));
         ParseResult<Expression> parseResult = javaParser.parseExpression("this.c");
         FieldAccessExpr fieldAccess = parseResult.getResult().get().asFieldAccessExpr();
         assertEquals("c", fieldAccess.getName().asString());
@@ -58,8 +57,7 @@ class ThisExprTest {
 
     @Test
     void singleScopeThisName() {
-        JavaParser javaParser = new JavaParser(new ParserConfiguration()
-                .setStoreTokens(false));
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setStoreTokens(false));
         ParseResult<Expression> parseResult = javaParser.parseExpression("A.this.c");
         FieldAccessExpr fieldAccess = parseResult.getResult().get().asFieldAccessExpr();
         assertEquals("c", fieldAccess.getName().asString());
@@ -76,11 +74,9 @@ class ThisExprTest {
 
     @Test
     void multiScopeThisName() {
-        JavaParser javaParser = new JavaParser(new ParserConfiguration()
-                .setStoreTokens(false));
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setStoreTokens(false));
         ParseResult<Expression> parseResult = javaParser.parseExpression("a.B.this.c");
         FieldAccessExpr fieldAccess = parseResult.getResult().get().asFieldAccessExpr();
         assertEquals("c", fieldAccess.getName().asString());
     }
-
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,13 +21,12 @@
 
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_16_PREVIEW;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
-
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_16_PREVIEW;
 
 class Java16PreviewValidatorTest {
 
     private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_16_PREVIEW));
-
 }

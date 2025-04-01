@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.stmt.ContinueStmt;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.stmt.ContinueStmt;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class ContinueStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ContinueStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, ContinueStmt.class, "ContinueStmt", "com.github.javaparser.ast.stmt", false, false);
+        super(
+                superBaseNodeMetaModel,
+                ContinueStmt.class,
+                "ContinueStmt",
+                "com.github.javaparser.ast.stmt",
+                false,
+                false);
     }
 
     public PropertyMetaModel labelPropertyMetaModel;

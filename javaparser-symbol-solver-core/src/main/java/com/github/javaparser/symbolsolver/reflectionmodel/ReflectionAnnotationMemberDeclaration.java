@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,41 +21,43 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 /**
  * @author Malte Skoruppa
  */
 public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotationMemberDeclaration {
 
-    private static Map<Class<?>, Function<Object, ? extends Expression>> valueAsExressionConverter = new HashMap<>();
+    private static Map<Class<?>, Function<Object, ? extends Expression>> valueAsExpressionConverters = new HashMap<>();
+
     static {
-        valueAsExressionConverter.put(Boolean.class, (value) -> new BooleanLiteralExpr(Boolean.class.cast(value)));
-        valueAsExressionConverter.put(Character.class, (value) -> new CharLiteralExpr(Character.class.cast(value)));
-        valueAsExressionConverter.put(Double.class, (value) -> new DoubleLiteralExpr(Double.class.cast(value)));
-        valueAsExressionConverter.put(Integer.class, (value) -> new IntegerLiteralExpr(Integer.class.cast(value)));
-        valueAsExressionConverter.put(Long.class, (value) -> new LongLiteralExpr(Long.class.cast(value)));
-        valueAsExressionConverter.put(String.class, (value) -> new StringLiteralExpr(String.class.cast(value)));
+        valueAsExpressionConverters.put(Boolean.class, (value) -> new BooleanLiteralExpr((Boolean) value));
+        valueAsExpressionConverters.put(Character.class, (value) -> new CharLiteralExpr((Character) value));
+        valueAsExpressionConverters.put(Double.class, (value) -> new DoubleLiteralExpr((Double) value));
+        valueAsExpressionConverters.put(Integer.class, (value) -> new IntegerLiteralExpr((Integer) value));
+        valueAsExpressionConverters.put(Long.class, (value) -> new LongLiteralExpr((Long) value));
+        valueAsExpressionConverters.put(String.class, (value) -> new StringLiteralExpr((String) value));
+        valueAsExpressionConverters.put(Class.class, (value) -> {
+            final ClassOrInterfaceType type = new ClassOrInterfaceType(null, ((Class<?>) value).getSimpleName());
+            return new ClassExpr(type);
+        });
     }
-    
+
     private Method annotationMember;
     private TypeSolver typeSolver;
 
@@ -67,8 +69,42 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
     @Override
     public Expression getDefaultValue() {
         Object value = annotationMember.getDefaultValue();
-        Function<Object, ? extends Expression> fn = valueAsExressionConverter.get(value.getClass());
-        if (fn == null) throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
+        if (value == null) return null;
+
+        if (value.getClass().isArray()) {
+            Object[] values = (Object[]) value;
+            final NodeList<Expression> expressions =
+                    Arrays.stream(values).map(this::transformDefaultValue).collect(NodeList.toNodeList());
+            return new ArrayInitializerExpr(expressions);
+        }
+
+        return transformDefaultValue(value);
+    }
+
+    private Expression transformDefaultValue(Object value) {
+        if (value instanceof Enum<?>) {
+            final Class<?> declaringClass = ((Enum<?>) value).getDeclaringClass();
+            final String name = ((Enum<?>) value).name();
+            return new FieldAccessExpr(new NameExpr(declaringClass.getSimpleName()), name);
+        } else if (value instanceof Annotation) {
+            final Class<? extends Annotation> annotationType = ((Annotation) value).annotationType();
+            final Method[] declaredMethods = annotationType.getDeclaredMethods();
+            final NodeList<MemberValuePair> pairs = Arrays.stream(declaredMethods)
+                    .map(m -> {
+                        final ReflectionAnnotationMemberDeclaration nestedMemberDeclaration =
+                                new ReflectionAnnotationMemberDeclaration(m, typeSolver);
+                        return new MemberValuePair(m.getName(), nestedMemberDeclaration.getDefaultValue());
+                    })
+                    .collect(NodeList.toNodeList());
+
+            return new NormalAnnotationExpr(new Name(annotationType.getSimpleName()), pairs);
+        }
+
+        Function<Object, ? extends Expression> fn = valueAsExpressionConverters.get(value.getClass());
+        if (fn == null)
+            throw new UnsupportedOperationException(String.format(
+                    "Obtaining the default value of the annotation member %s (of type %s) is not supported yet.",
+                    annotationMember.getName(), value.getClass().getSimpleName()));
         return fn.apply(value);
     }
 
@@ -80,9 +116,10 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
         }
         SymbolReference<ResolvedReferenceTypeDeclaration> rrtd = typeSolver.tryToSolveType(returnType.getName());
         if (rrtd.isSolved()) {
-            return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration(), typeSolver);
+            return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration());
         }
-        throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
+        throw new UnsupportedOperationException(String.format(
+                "Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
     }
 
     @Override

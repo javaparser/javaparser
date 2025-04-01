@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,9 +18,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,11 +30,13 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class ResolvedUnionType implements ResolvedType {
+
     private List<ResolvedType> elements;
 
     public ResolvedUnionType(List<ResolvedType> elements) {
         if (elements.size() < 2) {
-            throw new IllegalArgumentException("An union type should have at least two elements. This has " + elements.size());
+            throw new IllegalArgumentException(
+                    "An union type should have at least two elements. This has " + elements.size());
         }
         this.elements = new LinkedList<>(elements);
     }
@@ -42,7 +44,7 @@ public class ResolvedUnionType implements ResolvedType {
     public Optional<ResolvedReferenceType> getCommonAncestor() {
         Optional<List<ResolvedReferenceType>> reduce = elements.stream()
                 .map(ResolvedType::asReferenceType)
-                .map(ResolvedReferenceType::getAllAncestors)
+                .map(rt -> rt.getAllAncestors(ResolvedReferenceTypeDeclaration.breadthFirstFunc))
                 .reduce((a, b) -> {
                     ArrayList<ResolvedReferenceType> common = new ArrayList<>(a);
                     common.retainAll(b);
@@ -55,9 +57,7 @@ public class ResolvedUnionType implements ResolvedType {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         ResolvedUnionType that = (ResolvedUnionType) o;
-
         return new HashSet<>(elements).equals(new HashSet<>(that.elements));
     }
 
@@ -84,5 +84,12 @@ public class ResolvedUnionType implements ResolvedType {
     @Override
     public ResolvedUnionType asUnionType() {
         return this;
+    }
+
+    /*
+     * Returns the list of the resolved types
+     */
+    public List<ResolvedType> getElements() {
+        return elements;
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,17 +21,16 @@
 
 package com.github.javaparser.builders;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.utils.LineSeparator;
+import java.util.List;
+import java.util.function.Function;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.function.Function;
-
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ClassOrInterfaceDeclarationBuildersTest {
     CompilationUnit cu;
@@ -51,7 +50,8 @@ class ClassOrInterfaceDeclarationBuildersTest {
         ClassOrInterfaceDeclaration testClass = cu.addClass("test");
         testClass.addExtendedType(List.class);
         assertEquals(1, cu.getImports().size());
-        assertEquals("import " + List.class.getName() + ";" + SYSTEM_EOL,
+        assertEquals(
+                "import " + List.class.getName() + ";" + LineSeparator.SYSTEM,
                 cu.getImport(0).toString());
         assertEquals(1, testClass.getExtendedTypes().size());
         assertEquals(List.class.getSimpleName(), testClass.getExtendedTypes(0).getNameAsString());
@@ -62,9 +62,11 @@ class ClassOrInterfaceDeclarationBuildersTest {
         ClassOrInterfaceDeclaration testClass = cu.addClass("test");
         testClass.addImplementedType(Function.class);
         assertEquals(1, cu.getImports().size());
-        assertEquals("import " + Function.class.getName() + ";" + SYSTEM_EOL,
+        assertEquals(
+                "import " + Function.class.getName() + ";" + LineSeparator.SYSTEM,
                 cu.getImport(0).toString());
         assertEquals(1, testClass.getImplementedTypes().size());
-        assertEquals(Function.class.getSimpleName(), testClass.getImplementedTypes(0).getNameAsString());
+        assertEquals(
+                Function.class.getSimpleName(), testClass.getImplementedTypes(0).getNameAsString());
     }
 }

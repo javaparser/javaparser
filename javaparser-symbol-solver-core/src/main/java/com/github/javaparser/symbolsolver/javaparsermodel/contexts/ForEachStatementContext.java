@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,23 +21,22 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
 import java.util.Collections;
 import java.util.List;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-
-public class ForEachStatementContext extends AbstractJavaParserContext<ForEachStmt> {
+public class ForEachStatementContext extends StatementContext<ForEachStmt> {
 
     public ForEachStatementContext(ForEachStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -48,20 +47,20 @@ public class ForEachStatementContext extends AbstractJavaParserContext<ForEachSt
         if (wrappedNode.getVariable().getVariables().size() != 1) {
             throw new IllegalStateException();
         }
-        VariableDeclarator variableDeclarator = wrappedNode.getVariable().getVariables().get(0);
+        VariableDeclarator variableDeclarator =
+                wrappedNode.getVariable().getVariables().get(0);
         if (variableDeclarator.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
-        } else {
-            if (demandParentNode(wrappedNode) instanceof BlockStmt) {
-                return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
-            } else {
-                return solveSymbolInParentContext(name);
-            }
         }
+        if (demandParentNode(wrappedNode) instanceof BlockStmt) {
+            return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
+        }
+        return solveSymbolInParentContext(name);
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
     }

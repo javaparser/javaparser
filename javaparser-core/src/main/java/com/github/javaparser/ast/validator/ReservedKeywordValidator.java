@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,20 +18,21 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
+
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
-
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Validates that identifiers are not keywords - this for the few keywords that the parser
  * accepts because they were added after Java 1.0.
  */
 public class ReservedKeywordValidator extends VisitorValidator {
+
     private final String keyword;
+
     private final String error;
 
     public ReservedKeywordValidator(String keyword) {

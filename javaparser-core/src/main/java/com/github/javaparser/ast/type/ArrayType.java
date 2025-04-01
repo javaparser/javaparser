@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,11 +23,6 @@ package com.github.javaparser.ast.type;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -41,8 +36,14 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.Pair;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -118,8 +119,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
             return this;
         }
         notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
-        if (this.componentType != null)
-            this.componentType.setParentNode(null);
+        if (this.componentType != null) this.componentType.setParentNode(null);
         this.componentType = componentType;
         setAsParentNodeOf(componentType);
         return this;
@@ -132,23 +132,44 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
      */
     @SafeVarargs
     public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {
+        TokenRange outerMostTokenRange = null;
         for (int i = arrayBracketPairLists.length - 1; i >= 0; i--) {
             final List<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     ArrayBracketPair pair = arrayBracketPairList.get(j);
-                    TokenRange tokenRange = null;
                     if (type.getTokenRange().isPresent() && pair.getTokenRange().isPresent()) {
-                        tokenRange = new TokenRange(type.getTokenRange().get().getBegin(), pair.getTokenRange().get().getEnd());
+                        TokenRange currentTokenRange = new TokenRange(
+                                type.getTokenRange().get().getBegin(),
+                                pair.getTokenRange().get().getEnd());
+                        // The end range must be equals to the last array bracket pair in the list
+                        // in the example below:
+                        // Long[][]
+                        //        ^
+                        //        |
+                        // this is the outermost range for the ArrayType
+                        outerMostTokenRange = getOuterMostTokenRange(currentTokenRange, outerMostTokenRange);
                     }
-                    type = new ArrayType(tokenRange, type, pair.getOrigin(), pair.getAnnotations());
-                    if (tokenRange != null) {
-                        type.setRange(tokenRange.toRange().get());
-                    }
+                    type = new ArrayType(outerMostTokenRange, type, pair.getOrigin(), pair.getAnnotations());
                 }
             }
         }
         return type;
+    }
+
+    /*
+     * Returns a {@code TokenRange} with the outermost ending token
+     */
+    private static TokenRange getOuterMostTokenRange(TokenRange tokenRange1, TokenRange tokenRange2) {
+        if (tokenRange2 == null) return tokenRange1;
+        if (tokenRange1
+                .getEnd()
+                .getRange()
+                .get()
+                .isAfter(tokenRange2.getEnd().getRange().get())) {
+            return tokenRange1;
+        }
+        return new TokenRange(tokenRange1.getBegin(), tokenRange2.getEnd());
     }
 
     /**
@@ -160,7 +181,8 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         final List<ArrayBracketPair> arrayBracketPairs = new ArrayList<>(0);
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
-            arrayBracketPairs.add(new ArrayBracketPair(type.getTokenRange().orElse(null), arrayType.getOrigin(), arrayType.getAnnotations()));
+            arrayBracketPairs.add(new ArrayBracketPair(
+                    type.getTokenRange().orElse(null), arrayType.getOrigin(), arrayType.getAnnotations()));
             type = arrayType.getComponentType();
         }
         return new Pair<>(type, arrayBracketPairs);
@@ -294,7 +316,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public Optional<ArrayType> toArrayType() {
         return Optional.of(this);
     }
-    
+
     /**
      * Finds the element type, meaning: the type without ArrayTypes around it.
      * <p>
@@ -304,12 +326,17 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public Type getElementType() {
         return this.getComponentType().getElementType();
     }
-    
+
     /**
      * returns the array level that is 0 for non array type.
      */
     @Override
     public int getArrayLevel() {
         return 1 + this.getComponentType().getArrayLevel();
+    }
+
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        return new ResolvedArrayType(getComponentType().convertToUsage(context));
     }
 }

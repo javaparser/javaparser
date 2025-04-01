@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,13 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types.parametrization;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-
 import java.util.*;
 
 /**
@@ -35,7 +33,9 @@ import java.util.*;
 public class ResolvedTypeParametersMap {
 
     public static class Builder {
+
         private Map<String, ResolvedType> nameToValue;
+
         private Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration;
 
         public Builder() {
@@ -43,8 +43,9 @@ public class ResolvedTypeParametersMap {
             nameToDeclaration = new HashMap<>();
         }
 
-        private Builder(Map<String, ResolvedType> nameToValue,
-                        Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
+        private Builder(
+                Map<String, ResolvedType> nameToValue,
+                Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
             this.nameToValue = new HashMap<>();
             this.nameToValue.putAll(nameToValue);
             this.nameToDeclaration = new HashMap<>();
@@ -55,8 +56,7 @@ public class ResolvedTypeParametersMap {
             return new ResolvedTypeParametersMap(nameToValue, nameToDeclaration);
         }
 
-        public Builder setValue(ResolvedTypeParameterDeclaration typeParameter,
-                                ResolvedType value) {
+        public Builder setValue(ResolvedTypeParameterDeclaration typeParameter, ResolvedType value) {
             // TODO: we shouldn't just silently overwrite existing types!
             String qualifiedName = typeParameter.getQualifiedName();
             nameToValue.put(qualifiedName, value);
@@ -69,11 +69,8 @@ public class ResolvedTypeParametersMap {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ResolvedTypeParametersMap)) return false;
-
         ResolvedTypeParametersMap that = (ResolvedTypeParametersMap) o;
-
         return nameToValue.equals(that.nameToValue) && nameToDeclaration.equals(that.nameToDeclaration);
-
     }
 
     @Override
@@ -83,20 +80,19 @@ public class ResolvedTypeParametersMap {
 
     @Override
     public String toString() {
-        return "TypeParametersMap{" +
-                "nameToValue=" + nameToValue +
-                '}';
+        return "TypeParametersMap{" + "nameToValue=" + nameToValue + '}';
     }
 
     private Map<String, ResolvedType> nameToValue;
+
     private Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration;
 
     public static ResolvedTypeParametersMap empty() {
         return new Builder().build();
     }
 
-    private ResolvedTypeParametersMap(Map<String, ResolvedType> nameToValue,
-                                      Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
+    private ResolvedTypeParametersMap(
+            Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
         this.nameToValue = new HashMap<>();
         this.nameToValue.putAll(nameToValue);
         this.nameToDeclaration = new HashMap<>();
@@ -107,24 +103,22 @@ public class ResolvedTypeParametersMap {
         String qualifiedName = typeParameter.getQualifiedName();
         if (nameToValue.containsKey(qualifiedName)) {
             return nameToValue.get(qualifiedName);
-        } else {
-            return new ResolvedTypeVariable(typeParameter);
         }
+        return new ResolvedTypeVariable(typeParameter);
     }
 
     public Optional<ResolvedType> getValueBySignature(String signature) {
         if (nameToValue.containsKey(signature)) {
             return Optional.of(nameToValue.get(signature));
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
-    public List<String> getNames(){
+    public List<String> getNames() {
         return new ArrayList<>(nameToValue.keySet());
     }
 
-    public List<ResolvedType> getTypes(){
+    public List<ResolvedType> getTypes() {
         return new ArrayList<>(nameToValue.values());
     }
 
@@ -139,7 +133,8 @@ public class ResolvedTypeParametersMap {
     public ResolvedType replaceAll(ResolvedType type) {
         Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
         for (ResolvedTypeParameterDeclaration typeParameterDeclaration : this.nameToDeclaration.values()) {
-            type = type.replaceTypeVariables(typeParameterDeclaration, getValue(typeParameterDeclaration), inferredTypes);
+            type = type.replaceTypeVariables(
+                    typeParameterDeclaration, getValue(typeParameterDeclaration), inferredTypes);
         }
         return type;
     }

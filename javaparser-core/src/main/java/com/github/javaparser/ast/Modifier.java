@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.ast;
 
+import static com.github.javaparser.ast.NodeList.toNodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -28,8 +31,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModifierMetaModel;
 import java.util.Arrays;
-import static com.github.javaparser.ast.NodeList.toNodeList;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A modifier, like private, public, or volatile.
@@ -84,11 +85,18 @@ public class Modifier extends Node {
         return new Modifier(Keyword.TRANSITIVE);
     }
 
+    public static Modifier sealedModifier() {
+        return new Modifier(Keyword.SEALED);
+    }
+
+    public static Modifier nonSealedModifier() {
+        return new Modifier(Keyword.NON_SEALED);
+    }
+
     /**
      * The Java modifier keywords.
      */
     public enum Keyword {
-
         DEFAULT("default"),
         PUBLIC("public"),
         PROTECTED("protected"),
@@ -101,7 +109,9 @@ public class Modifier extends Node {
         SYNCHRONIZED("synchronized"),
         NATIVE("native"),
         STRICTFP("strictfp"),
-        TRANSITIVE("transitive");
+        TRANSITIVE("transitive"),
+        SEALED("sealed"),
+        NON_SEALED("non-sealed");
 
         private final String codeRepresentation;
 

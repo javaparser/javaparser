@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,10 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
+import com.github.javaparser.resolution.model.SymbolReference;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -41,10 +40,7 @@ public class MemoryTypeSolver implements TypeSolver {
 
     @Override
     public String toString() {
-        return "MemoryTypeSolver{" +
-                "parent=" + parent +
-                ", declarationMap=" + declarationMap +
-                '}';
+        return "MemoryTypeSolver{" + "parent=" + parent + ", declarationMap=" + declarationMap + '}';
     }
 
     @Override
@@ -56,7 +52,6 @@ public class MemoryTypeSolver implements TypeSolver {
 
         if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
         return !(declarationMap != null ? !declarationMap.equals(that.declarationMap) : that.declarationMap != null);
-
     }
 
     @Override
@@ -91,9 +86,7 @@ public class MemoryTypeSolver implements TypeSolver {
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         if (declarationMap.containsKey(name)) {
             return SymbolReference.solved(declarationMap.get(name));
-        } else {
-            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
         }
+        return SymbolReference.unsolved();
     }
-
 }

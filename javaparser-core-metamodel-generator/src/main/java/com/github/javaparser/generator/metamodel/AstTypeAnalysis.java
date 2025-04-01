@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,15 +21,14 @@
 
 package com.github.javaparser.generator.metamodel;
 
-import com.github.javaparser.ast.NodeList;
+import static java.lang.reflect.Modifier.isAbstract;
 
+import com.github.javaparser.ast.NodeList;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Optional;
-
-import static java.lang.reflect.Modifier.isAbstract;
 
 /**
  * A hacky thing that collects flags we need from AST types to generate the metamodel.

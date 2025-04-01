@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,10 +18,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
@@ -29,7 +27,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration, AssociableToAST<MethodDeclaration> {
+public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration {
 
     /**
      * The type of the value returned by the current method. This method can also be invoked
@@ -52,4 +50,45 @@ public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration
      */
     boolean isStatic();
 
+    /*
+     * Returns the method descriptor (https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.3)
+     * The method descriptor for the method: {@code Object m(int i, double d, Thread t) {...}}
+     * is {@code (IDLjava/lang/Thread;)Ljava/lang/Object;}
+     * Note that the internal forms of the binary names of Thread and Object are used.
+     */
+    String toDescriptor();
+
+    /*
+     * A method declaration d1 with return type R1 is return-type-substitutable
+     * for another method d2 with return type R2 if any of the following is true:
+     * If R1 is void then R2 is void.
+     * If R1 is a primitive type then R2 is identical to R1.
+     * If R1 is a reference type then one of the following is true:
+     * R1, adapted to the type parameters of d2 (§8.4.4), is a subtype of R2.
+     * R1 can be converted to a subtype of R2 by unchecked conversion (§5.1.9).
+     * d1 does not have the same signature as d2 (§8.4.2), and R1 = |R2|.
+     * TODO: Probably this method needs to refer to a method "isTypeSubstituable" implemented in ResolvedType
+     */
+    default boolean isReturnTypeSubstituable(ResolvedType otherResolvedType) {
+        ResolvedType returnType = getReturnType();
+        if (returnType.isVoid()) {
+            return otherResolvedType.isVoid();
+        }
+        if (returnType.isPrimitive()) {
+            return otherResolvedType.isPrimitive() && returnType.asPrimitive().equals(otherResolvedType.asPrimitive());
+        }
+        // If R1 is a reference type then one of the following is true:
+        // R1, adapted to the type parameters of d2 (§8.4.4), is a subtype of R2.
+        // Below we are trying to compare a reference type for example an Object to a type variable let's say T
+        // we can certainly simplify by saying that this is always true.
+        if (otherResolvedType.isTypeVariable()) {
+            return true;
+        }
+        // R1 can be converted to a subtype of R2 by unchecked conversion (§5.1.9).
+        // d1 does not have the same signature as d2 (§8.4.2), and R1 = |R2|.
+        if (returnType.describe().equals(otherResolvedType.erasure().describe())) {
+            return true;
+        }
+        throw new UnsupportedOperationException("Return-Type-Substituable must be implemented on reference type.");
+    }
 }

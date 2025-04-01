@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.expr.Expression;
@@ -30,24 +29,28 @@ import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
  * This validator validates according to Java 7 syntax rules.
  */
 public class Java7Validator extends Java6Validator {
-    final SingleNodeTypeValidator<TryStmt> tryWithLimitedResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
-        if (n.getCatchClauses().isEmpty()
-                && n.getResources().isEmpty()
-                && !n.getFinallyBlock().isPresent()) {
-            reporter.report(n, "Try has no finally, no catch, and no resources.");
-        }
-        for (Expression resource : n.getResources()) {
-            if (!resource.isVariableDeclarationExpr()) {
-                reporter.report(n, "Try with resources only supports variable declarations.");
-            }
-        }
-    });
-    private final SingleNodeTypeValidator<UnionType> multiCatch = new SingleNodeTypeValidator<>(UnionType.class, (n, reporter) -> {
-        // Case "0 elements" is caught elsewhere.
-        if (n.getElements().size() == 1) {
-            reporter.report(n, "Union type (multi catch) must have at least two elements.");
-        }
-    });
+
+    final SingleNodeTypeValidator<TryStmt> tryWithLimitedResources =
+            new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
+                if (n.getCatchClauses().isEmpty()
+                        && n.getResources().isEmpty()
+                        && !n.getFinallyBlock().isPresent()) {
+                    reporter.report(n, "Try has no finally, no catch, and no resources.");
+                }
+                for (Expression resource : n.getResources()) {
+                    if (!resource.isVariableDeclarationExpr()) {
+                        reporter.report(n, "Try with resources only supports variable declarations.");
+                    }
+                }
+            });
+
+    private final SingleNodeTypeValidator<UnionType> multiCatch =
+            new SingleNodeTypeValidator<>(UnionType.class, (n, reporter) -> {
+                // Case "0 elements" is caught elsewhere.
+                if (n.getElements().size() == 1) {
+                    reporter.report(n, "Union type (multi catch) must have at least two elements.");
+                }
+            });
 
     public Java7Validator() {
         super();

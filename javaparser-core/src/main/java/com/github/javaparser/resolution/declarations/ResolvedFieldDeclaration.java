@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,23 +18,20 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
-
-import com.github.javaparser.ast.body.FieldDeclaration;
 
 /**
  * Declaration of a field.
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasAccessSpecifier, AssociableToAST<FieldDeclaration> {
+public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasAccessSpecifier {
 
     /**
      * Is the field static?
      */
     boolean isStatic();
-    
+
     /**
      * Is the field volatile?
      */
@@ -54,5 +51,4 @@ public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasA
      * The type on which this field has been declared
      */
     ResolvedTypeDeclaration declaringType();
-
 }

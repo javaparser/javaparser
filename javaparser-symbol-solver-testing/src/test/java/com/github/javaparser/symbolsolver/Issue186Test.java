@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,21 +21,20 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class Issue186Test extends AbstractResolutionTest {
 
@@ -44,11 +43,13 @@ class Issue186Test extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("Issue186");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JavaTest");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "foo");
-        MethodCallExpr methodCallExpr = Navigator.findMethodCall(methodDeclaration, "flatMap").get();
+        MethodCallExpr methodCallExpr =
+                Navigator.findMethodCall(methodDeclaration, "flatMap").get();
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        assertEquals("java.util.stream.Stream<java.lang.String>", javaParserFacade.getType(methodCallExpr).describe());
-
+        assertEquals(
+                "java.util.stream.Stream<java.lang.String>",
+                javaParserFacade.getType(methodCallExpr).describe());
     }
 
     @Test
@@ -59,10 +60,14 @@ class Issue186Test extends AbstractResolutionTest {
         List<LambdaExpr> lambdas = methodDeclaration.findAll(LambdaExpr.class);
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        assertEquals("java.util.function.Predicate<? super java.lang.String>", javaParserFacade.getType(lambdas.get(0)).describe());
-        assertEquals("java.util.function.Function<? super java.lang.String, ? extends java.lang.Integer>", javaParserFacade.getType(lambdas.get(1)).describe());
-        assertEquals("java.util.function.Predicate<? super java.lang.Integer>", javaParserFacade.getType(lambdas.get(2)).describe());
-
+        assertEquals(
+                "java.util.function.Predicate<? super java.lang.String>",
+                javaParserFacade.getType(lambdas.get(0)).describe());
+        assertEquals(
+                "java.util.function.Function<? super java.lang.String, ? extends java.lang.Integer>",
+                javaParserFacade.getType(lambdas.get(1)).describe());
+        assertEquals(
+                "java.util.function.Predicate<? super java.lang.Integer>",
+                javaParserFacade.getType(lambdas.get(2)).describe());
     }
-
 }

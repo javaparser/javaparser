@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,16 +21,15 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class ReflectionMethodDeclarationTest {
 
@@ -41,9 +40,21 @@ class ReflectionMethodDeclarationTest {
         ResolvedClassDeclaration object = new ReflectionClassDeclaration(Object.class, typeResolver);
         ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
 
-        ResolvedMethodDeclaration equals = object.getAllMethods().stream().filter(m -> m.getName().equals("equals")).findFirst().get().getDeclaration();
-        ResolvedMethodDeclaration containsAll = list.getAllMethods().stream().filter(m -> m.getName().equals("containsAll")).findFirst().get().getDeclaration();
-        ResolvedMethodDeclaration subList = list.getAllMethods().stream().filter(m -> m.getName().equals("subList")).findFirst().get().getDeclaration();
+        ResolvedMethodDeclaration equals = object.getAllMethods().stream()
+                .filter(m -> m.getName().equals("equals"))
+                .findFirst()
+                .get()
+                .getDeclaration();
+        ResolvedMethodDeclaration containsAll = list.getAllMethods().stream()
+                .filter(m -> m.getName().equals("containsAll"))
+                .findFirst()
+                .get()
+                .getDeclaration();
+        ResolvedMethodDeclaration subList = list.getAllMethods().stream()
+                .filter(m -> m.getName().equals("subList"))
+                .findFirst()
+                .get()
+                .getDeclaration();
 
         assertEquals("arg0", equals.getParam(0).getName());
         assertEquals("arg0", containsAll.getParam(0).getName());
@@ -52,9 +63,7 @@ class ReflectionMethodDeclarationTest {
     }
 
     class Foo {
-        void myMethod(int a, char c) {
-
-        }
+        void myMethod(int a, char c) {}
     }
 
     @Test
@@ -63,10 +72,13 @@ class ReflectionMethodDeclarationTest {
 
         ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
 
-        ResolvedMethodDeclaration myMethod = foo.getAllMethods().stream().filter(m -> m.getName().equals("myMethod")).findFirst().get().getDeclaration();
+        ResolvedMethodDeclaration myMethod = foo.getAllMethods().stream()
+                .filter(m -> m.getName().equals("myMethod"))
+                .findFirst()
+                .get()
+                .getDeclaration();
 
         assertEquals("arg0", myMethod.getParam(0).getName());
         assertEquals("arg1", myMethod.getParam(1).getName());
     }
-
 }

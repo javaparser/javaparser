@@ -2,7 +2,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,10 +21,6 @@ package com.github.javaparser.printer.lexicalpreservation;
  * GNU Lesser General Public License for more details.
  */
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -36,26 +32,22 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.utils.TestUtils;
+import org.junit.jupiter.api.Test;
 
-public class Issue1467Test {
-    
+public class Issue1467Test extends AbstractLexicalPreservingTest {
+
     @Test
     public void test() {
-        String before = 
-                "public class Bar {\n" + 
-                        "    public void foo() {\n" + 
-                        "        System.out.print(\"Hello\");\n" + 
-                        "    }\n" + 
-                        "}";
-        String expected = 
-                "public void f() {\n" + 
-                "        throw new UnsupportedOperationException(\"Not supported yet.\");\n" +
-                "    }" ;
-        CompilationUnit cu = StaticJavaParser.parse(before);
-        LexicalPreservingPrinter.setup(cu);
+        considerCode("public class Bar {\n" + "    public void foo() {\n"
+                + "        System.out.print(\"Hello\");\n"
+                + "    }\n"
+                + "}");
+        String expected = "public void f() {\n"
+                + "        throw new UnsupportedOperationException(\"Not supported yet.\");\n" + "    }";
         // add method declaration
-        MethodDeclaration decl = cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0).addMethod("f", Keyword.PUBLIC);
-        // create body 
+        MethodDeclaration decl =
+                cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0).addMethod("f", Keyword.PUBLIC);
+        // create body
         BlockStmt body = new BlockStmt();
         NodeList<Statement> statements = new NodeList<>();
         ObjectCreationExpr exception = new ObjectCreationExpr();

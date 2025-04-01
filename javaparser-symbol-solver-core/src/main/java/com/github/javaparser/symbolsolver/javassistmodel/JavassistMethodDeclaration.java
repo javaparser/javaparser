@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,21 +23,19 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import javassist.CtMethod;
-
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.List;
+import javassist.CtMethod;
 
 /**
  * @author Federico Tomassetti
@@ -65,9 +63,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
 
     @Override
     public String toString() {
-        return "JavassistMethodDeclaration{" +
-                "ctMethod=" + ctMethod +
-                '}';
+        return "JavassistMethodDeclaration{" + "ctMethod=" + ctMethod + '}';
     }
 
     @Override
@@ -145,8 +141,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     }
 
     @Override
-    public Optional<MethodDeclaration> toAst() {
-        return Optional.empty();
+    public String toDescriptor() {
+        return ctMethod.getMethodInfo().getDescriptor();
     }
-
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,9 +18,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -32,18 +32,21 @@ import com.github.javaparser.ast.validator.ReservedKeywordValidator;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 import com.github.javaparser.ast.validator.TreeVisitorValidator;
 import com.github.javaparser.ast.validator.Validator;
-
 import java.util.Optional;
 
 /**
  * This validator validates according to Java 5 syntax rules.
  */
 public class Java5Validator extends Java1_4Validator {
+
     final Validator genericsWithoutDiamondOperator = new TreeVisitorValidator((node, reporter) -> {
         if (node instanceof NodeWithTypeArguments) {
             Optional<NodeList<Type>> typeArguments = ((NodeWithTypeArguments<? extends Node>) node).getTypeArguments();
             if (typeArguments.isPresent() && typeArguments.get().isEmpty()) {
-                reporter.report(node, "The diamond operator is not supported.");
+                reporter.report(
+                        node,
+                        new UpgradeJavaMessage(
+                                "The diamond operator is not supported.", ParserConfiguration.LanguageLevel.JAVA_7));
             }
         }
     });
@@ -65,8 +68,10 @@ public class Java5Validator extends Java1_4Validator {
         VariableDeclarationExpr declaration = node.getVariable();
         // assert that the variable declaration expression has exactly one variable declarator
         if (declaration.getVariables().size() != 1) {
-            reporter.report(node, "A foreach statement's variable declaration must have exactly one variable " +
-                    "declarator. Given: " + declaration.getVariables().size() + ".");
+            reporter.report(
+                    node,
+                    "A foreach statement's variable declaration must have exactly one variable " + "declarator. Given: "
+                            + declaration.getVariables().size() + ".");
         }
     });
 
@@ -78,11 +83,9 @@ public class Java5Validator extends Java1_4Validator {
         add(noPrimitiveGenericArguments);
         add(enumNotAllowed);
         add(forEachStmt);
-
         // TODO validate annotations on classes, fields and methods but nowhere else
         // The following is probably too simple.
         remove(noAnnotations);
-
         remove(noEnums);
         remove(noVarargs);
         remove(noForEach);

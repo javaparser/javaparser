@@ -1,35 +1,56 @@
+/*
+ * Copyright (C) 2013-2024 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.symbolsolver.resolution;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StringProvider;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 public class InstanceOfTest {
+
+    private CompilationUnit parse(String code) {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+        return new JavaParser(parserConfiguration).parse(code).getResult().get();
+    }
 
     protected final TypeSolver typeSolver = new ReflectionTypeSolver();
 
@@ -55,167 +76,154 @@ public class InstanceOfTest {
      * - if() {} else if (A) { Resolves }
      * - if() {} else if (!A) { Not }
      */
-    protected final String sourceCode = "" +
-            "import java.util.List;\n" +
-            "\n" +
-            "class X {\n" +
-            "\n" +
-            "    public void localVariable_shouldNotResolve() {\n" +
-            "        String obj = \"abc\";\n" +
-            "        boolean condition = obj instanceof String s;\n" +
-            "        boolean result = s.contains(\"fails - not in scope\");\n" +
-            "    }\n" +
-            "\n" +
-            "    public void localVariable_shouldNotResolve_usageFollowsDeclaration_shouldNotResolve() {\n" +
-            "        String obj = \"abc\";\n" +
-            "        boolean condition = obj instanceof String s;\n" +
-            "        boolean result;\n" +
-            "        result = s.contains(\"fails - not in scope\");\n" +
-            "    }\n" +
-            "\n" +
-            "    public void localVariable_shouldNotResolve_usagePreceedsDeclaration_shouldNotResolve() {\n" +
-            "        String obj = \"abc\";\n" +
-            "        boolean result;\n" +
-            "        result = s.contains(\"fails - not in scope\");\n" +
-            "        boolean condition = obj instanceof String s;\n" +
-            "    }\n" +
-            "\n" +
-            "    public void localVariable_shouldNotResolve_logicalAnd_shouldResolve() {\n" +
-            "        String obj = \"abc\";\n" +
-            "        boolean condition = obj instanceof String s && s.contains(\"in scope\");\n" +
-            "    }\n" +
-            "\n" +
-            "    public void localVariable_shouldNotResolve_logicalOr_shouldNotResolve() {\n" +
-            "        String obj = \"abc\";\n" +
-            "        boolean condition = obj instanceof String s || s.contains(\"fails - not in scope\");\n" +
-            "    }\n" +
-            "\n" +
-            "    public void if_conditional_emptyBlock_logicalAnd_shouldResolve() {\n" +
-            "        String obj = \"abc\";\n" +
-            "        if (obj instanceof String s && s.contains(\"in scope\")) {\n" +
-            "            // Empty BlockStmt\n" +
-            "        }\n" +
-            "    }\n" +
-            "\n" +
-            "    public void if_conditional_emptyBlock_logicalOr_shouldNotResolve() {\n" +
-            "        String obj = \"abc\";\n" +
-            "        if (obj instanceof String s || s.contains(\"fails - not in scope\")) {\n" +
-            "            // Empty BlockStmt\n" +
-            "        }\n" +
-            "    }\n" +
-            "\n" +
-            "    public void if_conditional_negated_shouldResolveToLocalVariableNotPattern() {\n" +
-            "        List<Integer> s;\n" +
-            "        boolean result;\n" +
-            "        String obj = \"abc\";\n" +
-            "        if (!(obj instanceof String s) && true) {\n" +
-            "            result = s.contains(\"fails - not in scope\");\n" +
-            "        }\n" +
-            "    }\n" +
-            "\n" +
-            "    public void if_else_conditional_mixedResolveResults() {\n" +
-            "        boolean result;\n" +
-            "        String obj = \"abc\";\n" +
-            "        if ((obj instanceof String s) && true) {\n" +
-            "            result = s.contains(\"in scope\");\n" +
-            "        } else {\n" +
-            "            result = s.contains(\"fails - not in scope\");\n" +
-            "        }\n" +
-            "    }\n" +
-            "\n" +
-            "    public void if_else_conditional_negated_mixedResolveResults() {\n" +
-            "        boolean result;\n" +
-            "        String obj = \"abc\";\n" +
-            "        if (!(obj instanceof String s) && true) {\n" +
-            "            result = s.contains(\"fails - not in scope\");\n" +
-            "        } else {\n" +
-            "            result = s.contains(\"in scope\");\n" +
-            "        }\n" +
-            "    }\n" +
-            "\n" +
-            "    public void if_conditional_usageBeforeDeclaration_shouldNotResolve() {\n" +
-            "        String obj = \"abc\";\n" +
-            "        if(s.contains(\"fails - not in scope\") && obj instanceof String s) {\n" +
-            "            // Empty BlockStmt\n" +
-            "        }\n" +
-            "    \n" +
-            "    }\n" +
-            "\n" +
-            "    public void if_conditional_1_mixedResolveResults() {\n" +
-            "        boolean result;\n" +
-            "        String obj = \"abc\";\n" +
-            "        if ((obj instanceof String s) && true) {\n" +
-            "            result = s.contains(\"in scope\");\n" +
-            "        } else {\n" +
-            "            result = s.contains(\"fails - not in scope\");\n" +
-            "        }\n" +
-            "    }\n" +
-            "\n" +
-            "    public void if_conditional_negated_no_braces_on_else_mixed() {\n" +
-            "        List<Integer> s;\n" +
-            "        boolean result;\n" +
-            "        String obj = \"abc\";\n" +
-            "        if (!(obj instanceof String s) && true) {\n" +
-            "            // Empty BlockStmt\n" +
-            "        } else\n" +
-            "            result = s.contains(\"in scope\");\n" +
-            "    }\n" +
-            "\n" +
-            "    public void if_conditional_negated_no_braces_on_if_shouldResolveToLocalVariableNotPattern() {\n" +
-            "        List<Integer> s;\n" +
-            "        boolean result;\n" +
-            "        String obj = \"abc\";\n" +
-            "        if (!(obj instanceof String s) && true) \n" +
-            "            result = s.contains(\"fails - not in scope\");\n" +
-            "        \n" +
-            "    }\n" +
-            "\n" +
-            "    public void if_conditional_OR_shouldNotResolve() {\n" +
-            "        String obj = \"abc\";\n" +
-            "        if(obj instanceof String s || s.contains(\"fails - not in scope\")) {\n" +
-            "            // Empty BlockStmt\n" +
-            "        }\n" +
-            "    }\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "}\n";
-
+    protected final String sourceCode = "" + "import java.util.List;\n"
+            + "\n"
+            + "class X {\n"
+            + "\n"
+            + "    public void localVariable_shouldNotResolve() {\n"
+            + "        String obj = \"abc\";\n"
+            + "        boolean condition = obj instanceof String s;\n"
+            + "        boolean result = s.contains(\"fails - not in scope\");\n"
+            + "    }\n"
+            + "\n"
+            + "    public void localVariable_shouldNotResolve_usageFollowsDeclaration_shouldNotResolve() {\n"
+            + "        String obj = \"abc\";\n"
+            + "        boolean condition = obj instanceof String s;\n"
+            + "        boolean result;\n"
+            + "        result = s.contains(\"fails - not in scope\");\n"
+            + "    }\n"
+            + "\n"
+            + "    public void localVariable_shouldNotResolve_usagePreceedsDeclaration_shouldNotResolve() {\n"
+            + "        String obj = \"abc\";\n"
+            + "        boolean result;\n"
+            + "        result = s.contains(\"fails - not in scope\");\n"
+            + "        boolean condition = obj instanceof String s;\n"
+            + "    }\n"
+            + "\n"
+            + "    public void localVariable_shouldNotResolve_logicalAnd_shouldResolve() {\n"
+            + "        String obj = \"abc\";\n"
+            + "        boolean condition = obj instanceof String s && s.contains(\"in scope\");\n"
+            + "    }\n"
+            + "\n"
+            + "    public void localVariable_shouldNotResolve_logicalOr_shouldNotResolve() {\n"
+            + "        String obj = \"abc\";\n"
+            + "        boolean condition = obj instanceof String s || s.contains(\"fails - not in scope\");\n"
+            + "    }\n"
+            + "\n"
+            + "    public void if_conditional_emptyBlock_logicalAnd_shouldResolve() {\n"
+            + "        String obj = \"abc\";\n"
+            + "        if (obj instanceof String s && s.contains(\"in scope\")) {\n"
+            + "            // Empty BlockStmt\n"
+            + "        }\n"
+            + "    }\n"
+            + "\n"
+            + "    public void if_conditional_emptyBlock_logicalOr_shouldNotResolve() {\n"
+            + "        String obj = \"abc\";\n"
+            + "        if (obj instanceof String s || s.contains(\"fails - not in scope\")) {\n"
+            + "            // Empty BlockStmt\n"
+            + "        }\n"
+            + "    }\n"
+            + "\n"
+            + "    public void if_conditional_negated_shouldResolveToLocalVariableNotPattern() {\n"
+            + "        List<Integer> s;\n"
+            + "        boolean result;\n"
+            + "        String obj = \"abc\";\n"
+            + "        if (!(obj instanceof String s) && true) {\n"
+            + "            result = s.contains(\"fails - not in scope\");\n"
+            + "        }\n"
+            + "    }\n"
+            + "\n"
+            + "    public void if_else_conditional_mixedResolveResults() {\n"
+            + "        boolean result;\n"
+            + "        String obj = \"abc\";\n"
+            + "        if ((obj instanceof String s) && true) {\n"
+            + "            result = s.contains(\"in scope\");\n"
+            + "        } else {\n"
+            + "            result = s.contains(\"fails - not in scope\");\n"
+            + "        }\n"
+            + "    }\n"
+            + "\n"
+            + "    public void if_else_conditional_negated_mixedResolveResults() {\n"
+            + "        boolean result;\n"
+            + "        String obj = \"abc\";\n"
+            + "        if (!(obj instanceof String s) && true) {\n"
+            + "            result = s.contains(\"fails - not in scope\");\n"
+            + "        } else {\n"
+            + "            result = s.contains(\"in scope\");\n"
+            + "        }\n"
+            + "    }\n"
+            + "\n"
+            + "    public void if_conditional_usageBeforeDeclaration_shouldNotResolve() {\n"
+            + "        String obj = \"abc\";\n"
+            + "        if(s.contains(\"fails - not in scope\") && obj instanceof String s) {\n"
+            + "            // Empty BlockStmt\n"
+            + "        }\n"
+            + "    \n"
+            + "    }\n"
+            + "\n"
+            + "    public void if_conditional_1_mixedResolveResults() {\n"
+            + "        boolean result;\n"
+            + "        String obj = \"abc\";\n"
+            + "        if ((obj instanceof String s) && true) {\n"
+            + "            result = s.contains(\"in scope\");\n"
+            + "        } else {\n"
+            + "            result = s.contains(\"fails - not in scope\");\n"
+            + "        }\n"
+            + "    }\n"
+            + "\n"
+            + "    public void if_conditional_negated_no_braces_on_if_shouldResolveToLocalVariableNotPattern() {\n"
+            + "        List<Integer> s;\n"
+            + "        boolean result;\n"
+            + "        String obj = \"abc\";\n"
+            + "        if (!(obj instanceof String s) && true) \n"
+            + "            result = s.contains(\"fails - not in scope\");\n"
+            + "        \n"
+            + "    }\n"
+            + "\n"
+            + "    public void if_conditional_OR_shouldNotResolve() {\n"
+            + "        String obj = \"abc\";\n"
+            + "        if(obj instanceof String s || s.contains(\"fails - not in scope\")) {\n"
+            + "            // Empty BlockStmt\n"
+            + "        }\n"
+            + "    }\n"
+            + "\n"
+            + "\n"
+            + "\n"
+            + "\n"
+            + "\n"
+            + "\n"
+            + "}\n";
 
     protected CompilationUnit compilationUnit;
-
 
     @BeforeEach
     public void setup() {
         compilationUnit = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, sourceCode);
     }
 
-
     @Test
     public void givenInstanceOfPattern_usingJdk13_thenExpectException() {
-        final String x = "" +
-                "class X {\n" +
-                "  public X() {\n" +
-                "    boolean result;\n" +
-                "    String obj = \"abc\";\n" +
-                "    if (!(obj instanceof String s) && true) {\n" +
-                "        result = s.contains(\"b\");\n" +
-                "    }\n" +
-                "  }\n" +
-                " }\n";
+        final String x = "" + "class X {\n"
+                + "  public X() {\n"
+                + "    boolean result;\n"
+                + "    String obj = \"abc\";\n"
+                + "    if (!(obj instanceof String s) && true) {\n"
+                + "        result = s.contains(\"b\");\n"
+                + "    }\n"
+                + "  }\n"
+                + " }\n";
 
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_13);
 
-        ParseResult<CompilationUnit> parseResult = new JavaParser(parserConfiguration)
-                .parse(ParseStart.COMPILATION_UNIT, new StringProvider(x));
+        ParseResult<CompilationUnit> parseResult =
+                new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StringProvider(x));
 
         assertEquals(1, parseResult.getProblems().size());
-        assertEquals("Use of patterns with instanceof is not supported.", parseResult.getProblem(0).getMessage());
+        assertEquals(
+                "Use of patterns with instanceof is not supported. Pay attention that this feature is supported starting from 'JAVA_14' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.",
+                parseResult.getProblem(0).getMessage());
     }
 
     @Nested
@@ -223,7 +231,8 @@ public class InstanceOfTest {
 
         @Test
         public void variableInBlock_shouldNotResolveOnFollowingLines() {
-            MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve_usageFollowsDeclaration_shouldNotResolve");
+            MethodDeclaration methodDeclaration =
+                    getMethodByName("localVariable_shouldNotResolve_usageFollowsDeclaration_shouldNotResolve");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
@@ -232,16 +241,14 @@ public class InstanceOfTest {
             // Expected to not be able to resolve s, as out of scope within an else block.
             assertThrows(UnsolvedSymbolException.class, () -> {
                 final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                // Note: Only printed if the above line doesn't error...
-                System.out.println("resolve = " + resolve);
             });
-
         }
 
         @Test
         public void variableInBlock_mustNotResolveBeforeDeclaration() {
 
-            MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve_usagePreceedsDeclaration_shouldNotResolve");
+            MethodDeclaration methodDeclaration =
+                    getMethodByName("localVariable_shouldNotResolve_usagePreceedsDeclaration_shouldNotResolve");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
@@ -252,13 +259,8 @@ public class InstanceOfTest {
                     UnsolvedSymbolException.class,
                     () -> {
                         final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                        // Note: Only printed if the above line doesn't error...
-                        System.out.println("resolve = " + resolve);
-                        System.out.println("erroneously solved:: outOfScopeMethodCall = " + outOfScopeMethodCall);
                     },
-                    "Error: Variable defined within a pattern expression is used before it is declared - should not be resolved, but is."
-            );
-
+                    "Error: Variable defined within a pattern expression is used before it is declared - should not be resolved, but is.");
         }
 
         @Nested
@@ -266,16 +268,15 @@ public class InstanceOfTest {
 
             @Test
             public void logicalAndShouldResolve() {
-                MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve_logicalAnd_shouldResolve");
+                MethodDeclaration methodDeclaration =
+                        getMethodByName("localVariable_shouldNotResolve_logicalAnd_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
                 MethodCallExpr inScopeMethodCall = methodCalls.get(0);
 
-
                 // Resolving the method call .contains()
                 final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-                System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
                 assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
                 assertEquals("boolean", resolve.getReturnType().describe());
@@ -283,19 +284,18 @@ public class InstanceOfTest {
                 assertEquals(1, resolve.getNumberOfParams());
                 assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
 
-
                 // Resolving the variable `s`
                 assertTrue(inScopeMethodCall.hasScope());
                 final Expression expression = inScopeMethodCall.getScope().get();
 
                 final ResolvedType resolvedType = expression.calculateResolvedType();
                 assertEquals("java.lang.String", resolvedType.describe());
-
             }
 
             @Test
             public void logicalOrShouldNotResolve() {
-                MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve_logicalOr_shouldNotResolve");
+                MethodDeclaration methodDeclaration =
+                        getMethodByName("localVariable_shouldNotResolve_logicalOr_shouldNotResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -306,12 +306,8 @@ public class InstanceOfTest {
                         UnsolvedSymbolException.class,
                         () -> {
                             final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                            // Note: Only printed if the above line doesn't error...
-                            System.out.println("resolve = " + resolve);
-                            System.out.println("erroneously solved:: outOfScopeMethodCall = " + outOfScopeMethodCall);
                         },
-                        "Error: Variable defined within a pattern expression should not be available on the right hand side of an || operator."
-                );
+                        "Error: Variable defined within a pattern expression should not be available on the right hand side of an || operator.");
             }
         }
     }
@@ -324,7 +320,8 @@ public class InstanceOfTest {
 
             @Test
             public void condition_rightBranch_logicalAndShouldResolveWithCorrectBreakdowns() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_emptyBlock_logicalAnd_shouldResolve");
+                MethodDeclaration methodDeclaration =
+                        getMethodByName("if_conditional_emptyBlock_logicalAnd_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -333,7 +330,6 @@ public class InstanceOfTest {
 
                 // Resolving the method call .contains()
                 final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-                System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
                 assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
                 assertEquals("boolean", resolve.getReturnType().describe());
@@ -341,17 +337,13 @@ public class InstanceOfTest {
                 assertEquals(1, resolve.getNumberOfParams());
                 assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
 
-
                 // Resolving the variable `s`
                 assertTrue(inScopeMethodCall.hasScope());
                 final Expression expression = inScopeMethodCall.getScope().get();
 
                 final ResolvedType resolvedType = expression.calculateResolvedType();
                 assertEquals("java.lang.String", resolvedType.describe());
-
-
             }
-
 
             /**
              * This tests that the components on the right hand side resolve.
@@ -359,7 +351,8 @@ public class InstanceOfTest {
              */
             @Test
             public void condition_rightBranch_nameExprResolves() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_emptyBlock_logicalAnd_shouldResolve");
+                MethodDeclaration methodDeclaration =
+                        getMethodByName("if_conditional_emptyBlock_logicalAnd_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -372,9 +365,7 @@ public class InstanceOfTest {
 
                 NameExpr nameExpr = nameExprs.get(0);
                 ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
-                System.out.println(resolvedNameExpr);
             }
-
 
             /**
              * This tests that the components on the right hand side resolve.
@@ -382,7 +373,8 @@ public class InstanceOfTest {
              */
             @Test
             public void condition_rightBranch_methodCallResolves() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_emptyBlock_logicalAnd_shouldResolve");
+                MethodDeclaration methodDeclaration =
+                        getMethodByName("if_conditional_emptyBlock_logicalAnd_shouldResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -395,16 +387,14 @@ public class InstanceOfTest {
 
                 MethodCallExpr methodCallExpr = methodCallExprs.get(0);
                 ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
-                System.out.println("resolvedType = " + resolvedType);
 
                 ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
-                System.out.println("resolvedMethodDeclaration = " + resolvedMethodDeclaration);
             }
-
 
             @Test
             public void condition_leftBranchMethodCall_doesNotResolve() {
-                MethodDeclaration methodDeclaration = getMethodByName("if_conditional_usageBeforeDeclaration_shouldNotResolve");
+                MethodDeclaration methodDeclaration =
+                        getMethodByName("if_conditional_usageBeforeDeclaration_shouldNotResolve");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(1, methodCalls.size());
 
@@ -413,12 +403,9 @@ public class InstanceOfTest {
                 // Expected to not be able to resolve s, as out of scope within an else block.
                 assertThrows(UnsolvedSymbolException.class, () -> {
                     final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                    // Note: Only printed if the above line doesn't error...
-                    System.out.println("resolve = " + resolve);
                 });
             }
         }
-
 
         @Nested
         class IfElseIfElseBlock {
@@ -428,7 +415,6 @@ public class InstanceOfTest {
                 MethodDeclaration methodDeclaration = getMethodByName("if_else_conditional_mixedResolveResults");
                 final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(2, methodCalls.size());
-
             }
 
             @Test
@@ -443,9 +429,6 @@ public class InstanceOfTest {
                 // Expected to not be able to resolve s, as out of scope within an else block.
                 assertThrows(UnsolvedSymbolException.class, () -> {
                     final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                    // Note: Only printed if the above line doesn't error...
-                    System.out.println("resolve = " + resolve);
-                    System.out.println("erroneously solved:: outOfScopeMethodCall = " + outOfScopeMethodCall);
                 });
             }
 
@@ -458,17 +441,14 @@ public class InstanceOfTest {
                 MethodCallExpr inScopeMethodCall = methodCalls.get(0);
                 MethodCallExpr outOfScopeMethodCall = methodCalls.get(1);
 
-
                 // Resolving the method call .contains()
                 final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-                System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
                 assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
                 assertEquals("boolean", resolve.getReturnType().describe());
                 assertEquals("contains", resolve.getName());
                 assertEquals(1, resolve.getNumberOfParams());
                 assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
-
 
                 // Resolving the variable `s`
                 assertTrue(inScopeMethodCall.hasScope());
@@ -479,31 +459,10 @@ public class InstanceOfTest {
             }
         }
 
-
-        @Test
-        public void givenInstanceOfPattern_andField_else_skipBraces_thenResolvesToPattern() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_else_mixed");
-            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-            assertEquals(1, methodCalls.size());
-
-            MethodCallExpr methodCallExprInElse = methodCalls.get(0);
-
-            // Resolving the method call .contains()
-            final ResolvedMethodDeclaration resolve = methodCallExprInElse.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
-
-            // The method call in the else block should be in scope of the pattern (String) due to the negated condition
-            assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
-            assertEquals("boolean", resolve.getReturnType().describe());
-            assertEquals("contains", resolve.getName());
-            assertEquals(1, resolve.getNumberOfParams());
-            assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
-
-        }
-
         @Test
         public void givenInstanceOfPattern_andField_skipBraces_thenResolvesToPattern() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_if_shouldResolveToLocalVariableNotPattern");
+            MethodDeclaration methodDeclaration =
+                    getMethodByName("if_conditional_negated_no_braces_on_if_shouldResolveToLocalVariableNotPattern");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
@@ -511,7 +470,6 @@ public class InstanceOfTest {
 
             // Resolving the method call .contains()
             final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
             // Should resolve to the field (List.contains()), not the pattern expression (String.contains())
             assertEquals("java.util.List.contains(java.lang.Object)", resolve.getQualifiedSignature());
@@ -519,12 +477,12 @@ public class InstanceOfTest {
             assertEquals("contains", resolve.getName());
             assertEquals(1, resolve.getNumberOfParams());
             assertEquals("contains(java.lang.Object)", resolve.getSignature());
-
         }
 
         @Test
         public void givenInstanceOfPattern_andField_thenResolvesToField() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_shouldResolveToLocalVariableNotPattern");
+            MethodDeclaration methodDeclaration =
+                    getMethodByName("if_conditional_negated_shouldResolveToLocalVariableNotPattern");
             final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
             assertEquals(1, methodCalls.size());
 
@@ -532,7 +490,6 @@ public class InstanceOfTest {
 
             // Resolving the method call .contains()
             final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
             // Should resolve to the field (List.contains()), not the pattern expression (String.contains())
             assertEquals("java.util.List.contains(java.lang.Object)", resolve.getQualifiedSignature());
@@ -555,13 +512,192 @@ public class InstanceOfTest {
             // Expected to not be able to resolve s, as out of scope within an else block.
             assertThrows(UnsolvedSymbolException.class, () -> {
                 final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                // Note: Only printed if the above line doesn't error...
-                System.out.println("resolve = " + resolve);
             });
         }
-
     }
 
+    @Nested
+    class PatternTest {
+        @Test
+        public void instanceOfWithRecordPatternShouldResolve() {
+            CompilationUnit cu = parse("class Test {\n" + "    public void foo(Object o) {\n"
+                    + "        if (o instanceof Box(InnerBox(Integer i), InnerBox(String s))) {\n"
+                    + "            System.out.println(s);\n"
+                    + "        };\n"
+                    + "    }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable1() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "      return;\n"
+                    + "    }\n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable2() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o) {\n"
+                    + "    if (!(o instanceof String s)) {}\n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable3() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        // do nothing\n"
+                    + "    } else {\n"
+                    + "        System.out.println(s);\n"
+                    + "    }\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable4() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o) {\n"
+                    + "    if (!(o instanceof String s) || false) {\n"
+                    + "        // do nothing\n"
+                    + "    } else {\n"
+                    + "        System.out.println(s);\n"
+                    + "    }\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable5() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        // do nothing\n"
+                    + "    } else if (b) {\n"
+                    + "        // do nothing\n"
+                    + "    } else {\n"
+                    + "        System.out.println(s);\n"
+                    + "    }\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable6() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        // do nothing\n"
+                    + "    } else if (b) {\n"
+                    + "        // do nothing\n"
+                    + "    } \n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable7() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        return;\n"
+                    + "    } else if (b) {\n"
+                    + "        // do nothing\n"
+                    + "    } \n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable8() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        return;\n"
+                    + "    } else if (b) {\n"
+                    + "        // do nothing\n"
+                    + "    } else {}\n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable9() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        return;\n"
+                    + "    } else if (b) {\n"
+                    + "        // do nothing\n"
+                    + "    } else {\n"
+                    + "        return;\n"
+                    + "    }\n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable10() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        return;\n"
+                    + "    } else if (b) {\n"
+                    + "        throw new RuntimeException();\n"
+                    + "    } else {\n"
+                    + "        return;"
+                    + "    }\n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
+        }
+    }
 
     @Nested
     class Simpler {
@@ -571,24 +707,17 @@ public class InstanceOfTest {
             MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve");
 
             List<NameExpr> nameExprs = methodDeclaration.findAll(NameExpr.class);
-            System.out.println("nameExprs = " + nameExprs);
 
             assertEquals(2, nameExprs.size());
 
             NameExpr nameExpr = nameExprs.get(0);
             ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
             ResolvedType resolvedNameExprType = nameExpr.calculateResolvedType();
-
-            System.out.println("resolvedNameExpr = " + resolvedNameExpr);
-            System.out.println("resolvedNameExprType = " + resolvedNameExprType);
-
         }
     }
 
     private MethodDeclaration getMethodByName(String name) {
-        return compilationUnit
-                .findAll(MethodDeclaration.class)
-                .stream()
+        return compilationUnit.findAll(MethodDeclaration.class).stream()
                 .filter(methodDeclaration -> methodDeclaration.getNameAsString().equals(name))
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
@@ -608,8 +737,7 @@ public class InstanceOfTest {
 
         return new JavaParser(parserConfiguration)
                 .parse(ParseStart.COMPILATION_UNIT, new StringProvider(code))
-                .getResult().get();
+                .getResult()
+                .get();
     }
-
-
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,19 +18,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
-
-import java.util.Optional;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+import java.util.Optional;
 
 /**
  * A node that has a Range, which is every Node.
  */
 public interface NodeWithRange<N> {
+
     Optional<Range> getRange();
 
     N setRange(Range range);
@@ -76,7 +75,7 @@ public interface NodeWithRange<N> {
         }
         return false;
     }
-    
+
     /*
      * Returns true if the node has a range
      */

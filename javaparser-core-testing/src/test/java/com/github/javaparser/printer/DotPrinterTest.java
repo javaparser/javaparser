@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,14 +21,14 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.expr.Expression;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.Expression;
+import org.junit.jupiter.api.Test;
 
 class DotPrinterTest {
     @Test
@@ -84,22 +84,23 @@ class DotPrinterTest {
         DotPrinter printer = new DotPrinter(false);
         CompilationUnit cu = parse("//q\"q\nclass X{}");
         String output = printer.output(cu);
-        assertEqualsStringIgnoringEol("digraph {\n" +
-                "n0 [label=\"root\"];\n" +
-                "n1 [label=\"types\"];\n" +
-                "n0 -> n1;\n" +
-                "n2 [label=\"type\"];\n" +
-                "n1 -> n2;\n" +
-                "n3 [label=\"isInterface='false'\"];\n" +
-                "n2 -> n3;\n" +
-                "n4 [label=\"name\"];\n" +
-                "n2 -> n4;\n" +
-                "n5 [label=\"identifier='X'\"];\n" +
-                "n4 -> n5;\n" +
-                "n6 [label=\"comment\"];\n" +
-                "n2 -> n6;\n" +
-                "n7 [label=\"content='q\\\"q'\"];\n" +
-                "n6 -> n7;\n" +
-                "}", output);
+        assertEqualsStringIgnoringEol(
+                "digraph {\n" + "n0 [label=\"root\"];\n"
+                        + "n1 [label=\"types\"];\n"
+                        + "n0 -> n1;\n"
+                        + "n2 [label=\"type\"];\n"
+                        + "n1 -> n2;\n"
+                        + "n3 [label=\"isInterface='false'\"];\n"
+                        + "n2 -> n3;\n"
+                        + "n4 [label=\"name\"];\n"
+                        + "n2 -> n4;\n"
+                        + "n5 [label=\"identifier='X'\"];\n"
+                        + "n4 -> n5;\n"
+                        + "n6 [label=\"comment\"];\n"
+                        + "n2 -> n6;\n"
+                        + "n7 [label=\"content='q\\\"q'\"];\n"
+                        + "n6 -> n7;\n"
+                        + "}",
+                output);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,9 +22,9 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.ArrayAccessExpr;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.resolution.model.SymbolReference;
 
 /**
  * <p>
@@ -79,7 +79,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
  *
  * @author Roger Howell
  */
-public class ArrayAccessExprContext extends AbstractJavaParserContext<ArrayAccessExpr> {
+public class ArrayAccessExprContext extends ExpressionContext<ArrayAccessExpr> {
 
     public ArrayAccessExprContext(ArrayAccessExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -93,5 +93,4 @@ public class ArrayAccessExprContext extends AbstractJavaParserContext<ArrayAcces
          */
         return super.solveSymbolInParentContext(name);
     }
-
 }

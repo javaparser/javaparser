@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,8 +24,9 @@ package com.github.javaparser.generator.core.other;
 import com.github.javaparser.generator.Generator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,15 +48,15 @@ public class BndGenerator extends Generator {
         Path projectRoot = root.getParent().getParent().getParent();
         String lineSeparator = System.getProperty("line.separator");
         try (Stream<Path> stream = Files.walk(root)) {
-            String packagesList = stream
-                    .filter(Files::isRegularFile)
+            String packagesList = stream.filter(Files::isRegularFile)
                     .map(path -> getPackageName(root, path))
                     .distinct()
                     .sorted()
-                    .reduce(null, (packageList, packageName) ->
-                        concatPackageName(packageName, packageList, lineSeparator));
+                    .reduce(
+                            null,
+                            (packageList, packageName) -> concatPackageName(packageName, packageList, lineSeparator));
             Path output = projectRoot.resolve("bnd.bnd");
-            try(Writer writer = Files.newBufferedWriter(output)) {
+            try (Writer writer = Files.newBufferedWriter(output)) {
                 Path templateFile = projectRoot.resolve("bnd.bnd.template");
                 String template = new String(Files.readAllBytes(templateFile), StandardCharsets.UTF_8);
                 writer.write(template.replace("{exportedPackages}", packagesList));
@@ -65,9 +66,8 @@ public class BndGenerator extends Generator {
     }
 
     private String concatPackageName(String packageName, String packageList, String lineSeparator) {
-        return (packageList == null ?
-                ("\\" + lineSeparator) :
-                (packageList + ", \\" + lineSeparator)) + "    " + packageName;
+        return (packageList == null ? ("\\" + lineSeparator) : (packageList + ", \\" + lineSeparator)) + "    "
+                + packageName;
     }
 
     private static String getPackageName(Path root, Path path) {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,9 @@
 
 package com.github.javaparser.generator.core.node;
 
+import static com.github.javaparser.StaticJavaParser.parseExplicitConstructorInvocationStmt;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -33,16 +36,14 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
 
-import static com.github.javaparser.StaticJavaParser.parseExplicitConstructorInvocationStmt;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
 public class MainConstructorGenerator extends NodeGenerator {
     public MainConstructorGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
 
     @Override
-    protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
+    protected void generateNode(
+            BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         if (nodeMetaModel.is(Node.class)) {
             return;
         }

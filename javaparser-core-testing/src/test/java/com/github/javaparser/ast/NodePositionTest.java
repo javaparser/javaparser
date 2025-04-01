@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,15 +21,17 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.Providers;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 class NodePositionTest {
 
@@ -67,22 +69,26 @@ class NodePositionTest {
 
     @Test
     void packageProtectedMethodShouldHavePositionSet() throws IOException {
-      ensureAllNodesHaveValidBeginPosition("public class A { void foo() {} }");
+        ensureAllNodesHaveValidBeginPosition("public class A { void foo() {} }");
     }
 
     @Test
     void packageProtectedConstructorShouldHavePositionSet() throws IOException {
-      ensureAllNodesHaveValidBeginPosition("public class A { A() {} }");
+        ensureAllNodesHaveValidBeginPosition("public class A { A() {} }");
     }
 
     private void ensureAllNodesHaveValidBeginPosition(final String code) {
-        ParseResult<CompilationUnit> res = new JavaParser().parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+        ParseResult<CompilationUnit> res =
+                new JavaParser().parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
         assertTrue(res.getProblems().isEmpty());
 
         CompilationUnit cu = res.getResult().get();
         getAllNodes(cu).forEach(n -> {
-            assertNotNull(n.getRange(), String.format("There should be no node without a range: %s (class: %s)",
-                    n, n.getClass().getCanonicalName()));
+            assertNotNull(
+                    n.getRange(),
+                    String.format(
+                            "There should be no node without a range: %s (class: %s)",
+                            n, n.getClass().getCanonicalName()));
             if (n.getBegin().get().line == 0 && !n.toString().isEmpty()) {
                 throw new IllegalArgumentException("There should be no node at line 0: " + n + " (class: "
                         + n.getClass().getCanonicalName() + ")");

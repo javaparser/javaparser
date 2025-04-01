@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,10 +21,9 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public interface ResolvedParameterDeclarationTest extends ResolvedValueDeclarationTest {
 
@@ -40,5 +39,4 @@ public interface ResolvedParameterDeclarationTest extends ResolvedValueDeclarati
     default void resolvedParameterShouldHaveAName() {
         assertTrue(createValue().hasName());
     }
-
 }

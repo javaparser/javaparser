@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,10 @@
  */
 package com.github.javaparser.ast.modules;
 
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.ast.Modifier.Keyword.TRANSITIVE;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Name;
@@ -33,13 +37,12 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleRequiresDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.ast.Modifier.Keyword.TRANSITIVE;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A require directive in module-info.java. {@code require a.b.C;}
  */
-public class ModuleRequiresDirective extends ModuleDirective implements NodeWithStaticModifier<ModuleRequiresDirective>, NodeWithName<ModuleRequiresDirective> {
+public class ModuleRequiresDirective extends ModuleDirective
+        implements NodeWithStaticModifier<ModuleRequiresDirective>, NodeWithName<ModuleRequiresDirective> {
 
     private NodeList<Modifier> modifiers;
 
@@ -89,8 +92,7 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
-            this.modifiers.setParentNode(null);
+        if (this.modifiers != null) this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return this;
@@ -108,13 +110,23 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
 
+    /*
+     * A requires static directive indicates that a module is required at compile time, but is optional at runtime.
+     */
+    public boolean isStatic() {
+        return hasModifier(STATIC);
+    }
+
+    /*
+     * Requires transitive—implied readability.
+     * To specify a dependency on another module and to ensure that other modules reading your module also read that dependency
+     */
     public boolean isTransitive() {
         return hasModifier(TRANSITIVE);
     }

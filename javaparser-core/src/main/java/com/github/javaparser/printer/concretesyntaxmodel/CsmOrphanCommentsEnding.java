@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,17 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.concretesyntaxmodel;
+
+import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.printer.SourcePrinter;
-
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 
 public class CsmOrphanCommentsEnding implements CsmElement {
 
@@ -40,7 +38,6 @@ public class CsmOrphanCommentsEnding implements CsmElement {
         if (everything.isEmpty()) {
             return;
         }
-
         int commentsAtEnd = 0;
         boolean findingComments = true;
         while (findingComments && commentsAtEnd < everything.size()) {
@@ -51,9 +48,8 @@ public class CsmOrphanCommentsEnding implements CsmElement {
             }
         }
         for (int i = 0; i < commentsAtEnd; i++) {
-            Comment c = (Comment)everything.get(everything.size() - commentsAtEnd + i);
+            Comment c = (Comment) everything.get(everything.size() - commentsAtEnd + i);
             CsmComment.process(c, printer);
         }
     }
-
 }

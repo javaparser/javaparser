@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,11 +21,10 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Are meta-variables for types - that is, they are special names that allow abstract reasoning about types.
@@ -41,7 +40,8 @@ public class InferenceVariable implements ResolvedType {
     private String name;
     private ResolvedTypeParameterDeclaration typeParameterDeclaration;
 
-    public static List<InferenceVariable> instantiate(List<ResolvedTypeParameterDeclaration> typeParameterDeclarations) {
+    public static List<InferenceVariable> instantiate(
+            List<ResolvedTypeParameterDeclaration> typeParameterDeclarations) {
         List<InferenceVariable> inferenceVariables = new LinkedList<>();
         for (ResolvedTypeParameterDeclaration tp : typeParameterDeclarations) {
             inferenceVariables.add(InferenceVariable.unnamed(tp));
@@ -62,7 +62,7 @@ public class InferenceVariable implements ResolvedType {
     public boolean isInferenceVariable() {
         return true;
     }
-    
+
     @Override
     public String describe() {
         return name;
@@ -76,7 +76,8 @@ public class InferenceVariable implements ResolvedType {
         InferenceVariable that = (InferenceVariable) o;
 
         if (!name.equals(that.name)) return false;
-        return typeParameterDeclaration != null ? typeParameterDeclaration.equals(that.typeParameterDeclaration)
+        return typeParameterDeclaration != null
+                ? typeParameterDeclaration.equals(that.typeParameterDeclaration)
                 : that.typeParameterDeclaration == null;
     }
 
@@ -106,10 +107,9 @@ public class InferenceVariable implements ResolvedType {
 
     @Override
     public String toString() {
-        return "InferenceVariable{" +
-                "name='" + name + '\'' +
-                ", typeParameterDeclaration=" + typeParameterDeclaration +
-                '}';
+        return "InferenceVariable{" + "name='"
+                + name + '\'' + ", typeParameterDeclaration="
+                + typeParameterDeclaration + '}';
     }
 
     @Override

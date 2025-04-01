@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.ast.comments;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -31,8 +34,6 @@ import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Abstract class for all AST nodes that represent comments.
@@ -97,7 +98,8 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LineComment asLineComment() {
-        throw new IllegalStateException(f("%s is not LineComment, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(
+                f("%s is not LineComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     public Optional<Node> getCommentedNode() {
@@ -141,15 +143,14 @@ public abstract class Comment extends Node {
 
     @Override
     public boolean remove() {
-        // the other are orphan comments and remove should work with them
         if (this.commentedNode != null) {
             this.commentedNode.setComment(null);
             return true;
-        } else if (this.getParentNode().isPresent()) {
-            return this.getParentNode().get().removeOrphanComment(this);
-        } else {
-            return false;
         }
+        if (this.getParentNode().isPresent()) {
+            return this.getParentNode().get().removeOrphanComment(this);
+        }
+        return false;
     }
 
     @Override
@@ -181,7 +182,8 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public BlockComment asBlockComment() {
-        throw new IllegalStateException(f("%s is not BlockComment, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(
+                f("%s is not BlockComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -191,20 +193,18 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JavadocComment asJavadocComment() {
-        throw new IllegalStateException(f("%s is not JavadocComment, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(
+                f("%s is not JavadocComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifBlockComment(Consumer<BlockComment> action) {
-    }
+    public void ifBlockComment(Consumer<BlockComment> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJavadocComment(Consumer<JavadocComment> action) {
-    }
+    public void ifJavadocComment(Consumer<JavadocComment> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLineComment(Consumer<LineComment> action) {
-    }
+    public void ifLineComment(Consumer<LineComment> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BlockComment> toBlockComment() {
@@ -219,5 +219,22 @@ public abstract class Comment extends Node {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LineComment> toLineComment() {
         return Optional.empty();
+    }
+
+    /*
+     * Header is "//" for line comment
+     */
+    public abstract String getHeader();
+
+    /*
+     *
+     */
+    public abstract String getFooter();
+
+    /*
+     * Returns the content of the comment with header and footer
+     */
+    public String asString() {
+        return getHeader() + getContent() + getFooter();
     }
 }

@@ -18,24 +18,19 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
-
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Validates that "record" cannot be used as identifier for type declarations (e.g., classes, enums, and records).
  * For details, see <a href="https://openjdk.java.net/jeps/395">JEP 395</a>
  */
 public class RecordAsTypeIdentifierNotAllowed extends VisitorValidator {
+
     private final String error;
 
     public RecordAsTypeIdentifierNotAllowed() {
@@ -44,7 +39,7 @@ public class RecordAsTypeIdentifierNotAllowed extends VisitorValidator {
 
     @Override
     public void visit(Name n, ProblemReporter arg) {
-        if (n.getIdentifier().equals("record") && !validUsage(n)) {
+        if ("record".equals(n.getIdentifier()) && !validUsage(n)) {
             arg.report(n, error);
         }
         super.visit(n, arg);
@@ -52,7 +47,7 @@ public class RecordAsTypeIdentifierNotAllowed extends VisitorValidator {
 
     @Override
     public void visit(SimpleName n, ProblemReporter arg) {
-        if (n.getIdentifier().equals("record") && !validUsage(n)) {
+        if ("record".equals(n.getIdentifier()) && !validUsage(n)) {
             arg.report(n, error);
         }
         super.visit(n, arg);
@@ -63,7 +58,6 @@ public class RecordAsTypeIdentifierNotAllowed extends VisitorValidator {
             return true;
         }
         Node parent = node.getParentNode().get();
-
         return !(parent instanceof TypeDeclaration);
     }
 }

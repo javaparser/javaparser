@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,42 +22,36 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-import javassist.CtClass;
-import javassist.CtField;
-import javassist.bytecode.AccessFlag;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javassist.CtClass;
+import javassist.CtField;
+import javassist.bytecode.AccessFlag;
 
 /**
  * @author Federico Tomassetti
  */
 public class JavassistEnumDeclaration extends AbstractTypeDeclaration
-        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
-        SymbolResolutionCapability {
+        implements ResolvedEnumDeclaration,
+                MethodResolutionCapability,
+                MethodUsageResolutionCapability,
+                SymbolResolutionCapability {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -68,7 +62,9 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
             throw new IllegalArgumentException();
         }
         if (!ctClass.isEnum()) {
-            throw new IllegalArgumentException("Trying to instantiate a JavassistEnumDeclaration with something which is not an enum: " + ctClass.toString());
+            throw new IllegalArgumentException(
+                    "Trying to instantiate a JavassistEnumDeclaration with something which is not an enum: "
+                            + ctClass.toString());
         }
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
@@ -106,14 +102,18 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public ResolvedFieldDeclaration getField(String name) {
-        Optional<ResolvedFieldDeclaration> field = javassistTypeDeclarationAdapter.getDeclaredFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+        Optional<ResolvedFieldDeclaration> field = javassistTypeDeclarationAdapter.getDeclaredFields().stream()
+                .filter(f -> f.getName().equals(name))
+                .findFirst();
 
-        return field.orElseThrow(() -> new RuntimeException("Field " + name + " does not exist in " + ctClass.getName() + "."));
+        return field.orElseThrow(
+                () -> new RuntimeException("Field " + name + " does not exist in " + ctClass.getName() + "."));
     }
 
     @Override
     public boolean hasField(String name) {
-        return javassistTypeDeclarationAdapter.getDeclaredFields().stream().anyMatch(f -> f.getName().equals(name));
+        return javassistTypeDeclarationAdapter.getDeclaredFields().stream()
+                .anyMatch(f -> f.getName().equals(name));
     }
 
     @Override
@@ -127,13 +127,33 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
+    public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
+        String otherName = other.getQualifiedName();
+        // Enums cannot be extended
+        if (otherName.equals(this.getQualifiedName())) {
+            return true;
+        }
+        if (JAVA_LANG_ENUM.equals(otherName)) {
+            return true;
+        }
+        // Enum implements Comparable and Serializable
+        if (otherName.equals(JAVA_LANG_COMPARABLE)) {
+            return true;
+        }
+        if (otherName.equals(JAVA_IO_SERIALIZABLE)) {
+            return true;
+        }
+        return other.isJavaLangObject();
+    }
+
+    @Override
     public boolean isAssignableBy(ResolvedType type) {
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.isAssignableBy(type);
     }
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.isAssignableBy(other);
     }
 
     @Override
@@ -158,13 +178,19 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
-                                                    Context invokationContext, List<ResolvedType> typeParameterValues) {
-        return JavassistUtils.solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name,
+            List<ResolvedType> argumentsTypes,
+            Context invokationContext,
+            List<ResolvedType> typeParameterValues) {
+        return JavassistUtils.solveMethodAsUsage(
+                name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
     }
 
     @Override
@@ -178,10 +204,10 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
         The name of the ReferenceTypeDeclaration could be composed on the internal class and the outer class, e.g. A$B. That's why we search the internal type in the ending part.
         In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
          */
-        Optional<ResolvedReferenceTypeDeclaration> type =
-                this.internalTypes().stream().filter(f -> f.getName().endsWith(name)).findFirst();
-        return type.orElseThrow(() ->
-                new UnsolvedSymbolException("Internal type not found: " + name));
+        Optional<ResolvedReferenceTypeDeclaration> type = this.internalTypes().stream()
+                .filter(f -> f.getName().endsWith(name))
+                .findFirst();
+        return type.orElseThrow(() -> new UnsolvedSymbolException("Internal type not found: " + name));
     }
 
     @Override
@@ -209,12 +235,12 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
             }
         }
 
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, String fqn) {
         if (fqn == null) {
-            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         ResolvedReferenceTypeDeclaration fqnTypeDeclaration = typeSolver.solveType(fqn);
@@ -240,9 +266,6 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{" +
-                "ctClass=" + ctClass.getName() +
-                ", typeSolver=" + typeSolver +
-                '}';
+        return getClass().getSimpleName() + "{" + "ctClass=" + ctClass.getName() + ", typeSolver=" + typeSolver + '}';
     }
 }

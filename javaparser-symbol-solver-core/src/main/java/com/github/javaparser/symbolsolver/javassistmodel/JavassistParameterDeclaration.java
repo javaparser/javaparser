@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,9 +21,9 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.CtClass;
 
 /**
@@ -48,11 +48,10 @@ public class JavassistParameterDeclaration implements ResolvedParameterDeclarati
 
     @Override
     public String toString() {
-        return "JavassistParameterDeclaration{" +
-                "type=" + type +
-                ", typeSolver=" + typeSolver +
-                ", variadic=" + variadic +
-                '}';
+        return "JavassistParameterDeclaration{" + "type="
+                + type + ", typeSolver="
+                + typeSolver + ", variadic="
+                + variadic + '}';
     }
 
     @Override

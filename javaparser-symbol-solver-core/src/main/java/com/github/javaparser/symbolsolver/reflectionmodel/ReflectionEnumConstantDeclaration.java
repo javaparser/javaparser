@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,12 +21,11 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-
 import java.lang.reflect.Field;
 
 public class ReflectionEnumConstantDeclaration implements ResolvedEnumConstantDeclaration {
@@ -51,6 +50,6 @@ public class ReflectionEnumConstantDeclaration implements ResolvedEnumConstantDe
     public ResolvedType getType() {
         Class<?> enumClass = enumConstant.getDeclaringClass();
         ResolvedReferenceTypeDeclaration typeDeclaration = new ReflectionEnumDeclaration(enumClass, typeSolver);
-        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration);
     }
 }

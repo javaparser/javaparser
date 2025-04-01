@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,14 +22,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This represents the default constructor added by the compiler for objects not declaring one.
@@ -37,7 +36,8 @@ import java.util.Optional;
  *
  * @author Federico Tomassetti
  */
-public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclaration> implements ResolvedConstructorDeclaration {
+public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclaration>
+        implements ResolvedConstructorDeclaration {
 
     private N declaringType;
 
@@ -83,10 +83,5 @@ public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclar
     @Override
     public ResolvedType getSpecifiedException(int index) {
         throw new UnsupportedOperationException("The default constructor does not throw exceptions");
-    }
-
-    @Override
-    public Optional<ConstructorDeclaration> toAst() {
-        return Optional.empty();
     }
 }

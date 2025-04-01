@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -30,7 +30,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.util.Arrays;
 
 /**
@@ -52,8 +51,10 @@ public abstract class NodeGenerator extends Generator {
     }
 
     protected Pair<CompilationUnit, ClassOrInterfaceDeclaration> parseNode(BaseNodeMetaModel nodeMetaModel) {
-        CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
-        ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new AssertionError("Can't find class"));
+        CompilationUnit nodeCu =
+                sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
+        ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName())
+                .orElseThrow(() -> new AssertionError("Can't find class"));
         return new Pair<>(nodeCu, nodeCoid);
     }
 
@@ -69,15 +70,16 @@ public abstract class NodeGenerator extends Generator {
 
         boolean isOverriding = Arrays.stream(superClass.getMethods())
                 .filter(m -> m.getName().equals(methodDeclaration.getNameAsString()))
-                .anyMatch(m -> m.getParameters().length == methodDeclaration.getParameters().size());
+                .anyMatch(m -> m.getParameters().length
+                        == methodDeclaration.getParameters().size());
         if (isOverriding) {
             annotateOverridden(methodDeclaration);
         }
     }
 
-    protected void after() throws Exception {
+    protected void after() throws Exception {}
 
-    }
-
-    protected abstract void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) throws Exception;
+    protected abstract void generateNode(
+            BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid)
+            throws Exception;
 }

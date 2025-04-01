@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -40,17 +40,28 @@ public class MethodReferenceThrowsCompatibleWithType extends ConstraintFormula {
     public ReductionResult reduce(BoundSet currentBoundSet) {
         // A constraint formula of the form ‹MethodReference →throws T› is reduced as follows:
         //
-        // - If T is not a functional interface type, or if T is a functional interface type but does not have a function type (§9.9), the constraint reduces to false.
+        // - If T is not a functional interface type, or if T is a functional interface type but does not have a
+        // function type (§9.9), the constraint reduces to false.
         //
-        // - Otherwise, let the target function type for the method reference expression be the function type of T. If the method reference is inexact (§15.13.1) and one or more of the function type's parameter types is not a proper type, the constraint reduces to false.
+        // - Otherwise, let the target function type for the method reference expression be the function type of T. If
+        // the method reference is inexact (§15.13.1) and one or more of the function type's parameter types is not a
+        // proper type, the constraint reduces to false.
         //
-        // - Otherwise, if the method reference is inexact and the function type's result is neither void nor a proper type, the constraint reduces to false.
+        // - Otherwise, if the method reference is inexact and the function type's result is neither void nor a proper
+        // type, the constraint reduces to false.
         //
-        // - Otherwise, let E1, ..., En be the types in the function type's throws clause that are not proper types. Let X1, ..., Xm be the checked exceptions in the throws clause of the invocation type of the method reference's compile-time declaration (§15.13.2) (as derived from the function type's parameter types and return type). Then there are two cases:
+        // - Otherwise, let E1, ..., En be the types in the function type's throws clause that are not proper types. Let
+        // X1, ..., Xm be the checked exceptions in the throws clause of the invocation type of the method reference's
+        // compile-time declaration (§15.13.2) (as derived from the function type's parameter types and return type).
+        // Then there are two cases:
         //
-        //   - If n = 0 (the function type's throws clause consists only of proper types), then if there exists some i (1 ≤ i ≤ m) such that Xi is not a subtype of any proper type in the throws clause, the constraint reduces to false; otherwise, the constraint reduces to true.
+        //   - If n = 0 (the function type's throws clause consists only of proper types), then if there exists some i
+        // (1 ≤ i ≤ m) such that Xi is not a subtype of any proper type in the throws clause, the constraint reduces to
+        // false; otherwise, the constraint reduces to true.
         //
-        //   - If n > 0, the constraint reduces to a set of subtyping constraints: for all i (1 ≤ i ≤ m), if Xi is not a subtype of any proper type in the throws clause, then the constraints include, for all j (1 ≤ j ≤ n), ‹Xi <: Ej›. In addition, for all j (1 ≤ j ≤ n), the constraint reduces to the bound throws Ej.
+        //   - If n > 0, the constraint reduces to a set of subtyping constraints: for all i (1 ≤ i ≤ m), if Xi is not a
+        // subtype of any proper type in the throws clause, then the constraints include, for all j (1 ≤ j ≤ n), ‹Xi <:
+        // Ej›. In addition, for all j (1 ≤ j ≤ n), the constraint reduces to the bound throws Ej.
 
         throw new UnsupportedOperationException();
     }
@@ -75,9 +86,6 @@ public class MethodReferenceThrowsCompatibleWithType extends ConstraintFormula {
 
     @Override
     public String toString() {
-        return "MethodReferenceThrowsCompatibleWithType{" +
-                "methodReference=" + methodReference +
-                ", T=" + T +
-                '}';
+        return "MethodReferenceThrowsCompatibleWithType{" + "methodReference=" + methodReference + ", T=" + T + '}';
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,14 +21,15 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-public abstract class AbstractTypeDeclarationTest extends AbstractSymbolResolutionTest implements ResolvedReferenceTypeDeclarationTest {
+public abstract class AbstractTypeDeclarationTest extends AbstractSymbolResolutionTest
+        implements ResolvedReferenceTypeDeclarationTest {
 
     @Override
     public abstract AbstractTypeDeclaration createValue();
@@ -49,5 +50,4 @@ public abstract class AbstractTypeDeclarationTest extends AbstractSymbolResoluti
         AbstractTypeDeclaration abstractTypeDeclaration = createValue();
         assertEquals(isFunctionalInterface(abstractTypeDeclaration), abstractTypeDeclaration.isFunctionalInterface());
     }
-
 }

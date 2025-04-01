@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.Generated;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class ArrayCreationLevelMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ArrayCreationLevelMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, ArrayCreationLevel.class, "ArrayCreationLevel", "com.github.javaparser.ast", false, false);
+        super(
+                superBaseNodeMetaModel,
+                ArrayCreationLevel.class,
+                "ArrayCreationLevel",
+                "com.github.javaparser.ast",
+                false,
+                false);
     }
 
     public PropertyMetaModel annotationsPropertyMetaModel;

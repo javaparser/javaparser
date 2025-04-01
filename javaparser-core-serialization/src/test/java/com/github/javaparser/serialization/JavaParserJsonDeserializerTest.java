@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,7 +20,16 @@
  */
 package com.github.javaparser.serialization;
 
-import com.github.javaparser.*;
+import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.serialization.JavaParserJsonSerializerTest.serialize;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Range;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -31,19 +40,13 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.LineSeparator;
+import jakarta.json.Json;
+import java.io.StringReader;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-
-import javax.json.Json;
-import java.io.StringReader;
-
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.serialization.JavaParserJsonSerializerTest.serialize;
-import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaParserJsonDeserializerTest {
     private final JavaParserJsonDeserializer deserializer = new JavaParserJsonDeserializer();
@@ -119,34 +122,41 @@ class JavaParserJsonDeserializerTest {
         CompilationUnit cu = parse("/* block comment */\npublic class X{ \n // line comment\npublic void test() {}\n}");
         String serialized = serialize(cu, false);
 
-        CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
-        ClassOrInterfaceDeclaration classXDeclaration = deserialized.getClassByName("X").get();
+        CompilationUnit deserialized =
+                (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+        ClassOrInterfaceDeclaration classXDeclaration =
+                deserialized.getClassByName("X").get();
         assertTrue(classXDeclaration.getComment().isPresent());
 
         Comment comment = classXDeclaration.getComment().get();
-        assertEquals("com.github.javaparser.ast.comments.BlockComment", comment.getClass().getName());
+        assertEquals(
+                "com.github.javaparser.ast.comments.BlockComment",
+                comment.getClass().getName());
         assertEquals(" block comment ", comment.getContent());
 
         MethodDeclaration methodDeclaration = classXDeclaration.getMethods().get(0);
         assertTrue(methodDeclaration.getComment().isPresent());
-        assertEquals("com.github.javaparser.ast.comments.LineComment", methodDeclaration.getComment().get().getClass().getName());
+        assertEquals(
+                "com.github.javaparser.ast.comments.LineComment",
+                methodDeclaration.getComment().get().getClass().getName());
         assertEquals(" line comment", methodDeclaration.getComment().get().getContent());
     }
 
     @Test
     void testJavaDocComment() {
-        CompilationUnit cu = parse("public class X{ " +
-                "     /**\n" +
-                "     * Woke text.\n" +
-                "     * @param a blub\n" +
-                "     * @return true \n" +
-                "     */" +
-                "     public boolean test(int a) { return true; }\n" +
-                "}");
+        CompilationUnit cu = parse("public class X{ " + "     /**\n"
+                + "     * Woke text.\n"
+                + "     * @param a blub\n"
+                + "     * @return true \n"
+                + "     */"
+                + "     public boolean test(int a) { return true; }\n"
+                + "}");
         String serialized = serialize(cu, false);
 
-        CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
-        ClassOrInterfaceDeclaration classDeclaration = deserialized.getClassByName("X").get();
+        CompilationUnit deserialized =
+                (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+        ClassOrInterfaceDeclaration classDeclaration =
+                deserialized.getClassByName("X").get();
         MethodDeclaration methodDeclaration = classDeclaration.getMethods().get(0);
         assertTrue(methodDeclaration.getJavadoc().isPresent());
         Javadoc javadoc = methodDeclaration.getJavadoc().get();
@@ -165,7 +175,8 @@ class JavaParserJsonDeserializerTest {
         CompilationUnit cu = parse("public class X{} class Z{}");
         String serialized = serialize(cu, false);
 
-        CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+        CompilationUnit deserialized =
+                (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
         assertTrue(deserialized.hasRange());
         Range range = deserialized.getRange().get();
@@ -196,12 +207,18 @@ class JavaParserJsonDeserializerTest {
             public ResolvedType calculateType(Expression expression) {
                 return null;
             }
+
+            @Override
+            public ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node) {
+                return null;
+            }
         };
         StaticJavaParser.getConfiguration().setSymbolResolver(stubResolver);
         CompilationUnit cu = parse("public class X{} class Z{}");
         String serialized = serialize(cu, false);
 
-        CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
+        CompilationUnit deserialized =
+                (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
         assertTrue(deserialized.containsData(Node.SYMBOL_RESOLVER_KEY));
         assertEquals(stubResolver, deserialized.getData(Node.SYMBOL_RESOLVER_KEY));
     }
@@ -217,8 +234,6 @@ class JavaParserJsonDeserializerTest {
     private static void assertEqualsStringIgnoringEol(String expected, String actual) {
         assertEquals(
                 normalizeEolInTextBlock(expected, LineSeparator.ARBITRARY),
-                normalizeEolInTextBlock(actual, LineSeparator.ARBITRARY)
-        );
+                normalizeEolInTextBlock(actual, LineSeparator.ARBITRARY));
     }
-
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,14 +18,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
+
+import static com.github.javaparser.StaticJavaParser.parseTypeParameter;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.TypeParameter;
-
-import static com.github.javaparser.StaticJavaParser.parseTypeParameter;
 
 /**
  * A node that can have type parameters.
@@ -36,6 +35,7 @@ import static com.github.javaparser.StaticJavaParser.parseTypeParameter;
  * </pre>
  */
 public interface NodeWithTypeParameters<N extends Node> {
+
     NodeList<TypeParameter> getTypeParameters();
 
     default TypeParameter getTypeParameter(int i) {

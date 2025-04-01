@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,15 +18,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
+
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.function.Supplier;
-
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * To avoid dependencies on logging frameworks, we have invented yet another logging framework :-)
@@ -34,10 +33,12 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * See <a href="http://javaparser.org/javaparsers-logging-framework-in-one-file/">a blog about this</a>
  */
 public class Log {
+
     /**
      * This adapter logs to standard out and standard error.
      */
     public static class StandardOutStandardErrorAdapter implements Adapter {
+
         @Override
         public void info(Supplier<String> messageSupplier) {
             System.out.println(messageSupplier.get());
@@ -64,7 +65,8 @@ public class Log {
         }
 
         private void printStackTrace(Throwable throwable) {
-            try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
+            try (StringWriter sw = new StringWriter();
+                    PrintWriter pw = new PrintWriter(sw)) {
                 throwable.printStackTrace(pw);
                 trace(sw::toString);
             } catch (IOException e) {
@@ -77,17 +79,15 @@ public class Log {
      * This adapter logs nothing.
      */
     public static class SilentAdapter implements Adapter {
-        @Override
-        public void info(Supplier<String> messageSupplier) {
-        }
 
         @Override
-        public void trace(Supplier<String> messageSupplier) {
-        }
+        public void info(Supplier<String> messageSupplier) {}
 
         @Override
-        public void error(Supplier<Throwable> throwableSupplier, Supplier<String> messageSupplier) {
-        }
+        public void trace(Supplier<String> messageSupplier) {}
+
+        @Override
+        public void error(Supplier<Throwable> throwableSupplier, Supplier<String> messageSupplier) {}
     }
 
     public interface Adapter {
@@ -128,7 +128,6 @@ public class Log {
             return f(format, objects);
         };
     }
-
 
     /**
      * For logging things that are nice to see scrolling by.

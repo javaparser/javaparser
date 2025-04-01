@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,10 +23,10 @@ package com.github.javaparser.symbolsolver.resolution.typeinference.constraintfo
 
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.types.ResolvedIntersectionType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SubtypeOfBound;
@@ -51,14 +51,14 @@ public class TypeSubtypeOfType extends ConstraintFormula {
     public ReductionResult reduce(BoundSet currentBoundSet) {
         // A constraint formula of the form ‹S <: T› is reduced as follows:
         //
-        // - If S and T are proper types, the constraint reduces to true if S is a subtype of T (§4.10), and false otherwise.
+        // - If S and T are proper types, the constraint reduces to true if S is a subtype of T (§4.10), and false
+        // otherwise.
 
         if (isProperType(S) && isProperType(T)) {
             if (T.isAssignableBy(S)) {
                 return ReductionResult.trueResult();
-            } else {
-                return ReductionResult.falseResult();
             }
+            return ReductionResult.falseResult();
         }
 
         // - Otherwise, if S is the null type, the constraint reduces to true.
@@ -86,22 +86,30 @@ public class TypeSubtypeOfType extends ConstraintFormula {
         }
 
         // FEDERICO - Added start
-        //if (T.isTypeVariable()) {
+        // if (T.isTypeVariable()) {
         //    return ReductionResult.oneBound(new SubtypeOfBound(S, T));
-        //}
+        // }
         // FEDERICO - Added end
 
         // - Otherwise, the constraint is reduced according to the form of T:
         //
-        //   - If T is a parameterized class or interface type, or an inner class type of a parameterized class or interface type (directly or indirectly), let A1, ..., An be the type arguments of T. Among the supertypes of S, a corresponding class or interface type is identified, with type arguments B1, ..., Bn. If no such type exists, the constraint reduces to false. Otherwise, the constraint reduces to the following new constraints: for all i (1 ≤ i ≤ n), ‹Bi <= Ai›.
+        //   - If T is a parameterized class or interface type, or an inner class type of a parameterized class or
+        // interface type (directly or indirectly), let A1, ..., An be the type arguments of T. Among the supertypes of
+        // S, a corresponding class or interface type is identified, with type arguments B1, ..., Bn. If no such type
+        // exists, the constraint reduces to false. Otherwise, the constraint reduces to the following new constraints:
+        // for all i (1 ≤ i ≤ n), ‹Bi <= Ai›.
         //
-        //   - If T is any other class or interface type, then the constraint reduces to true if T is among the supertypes of S, and false otherwise.
+        //   - If T is any other class or interface type, then the constraint reduces to true if T is among the
+        // supertypes of S, and false otherwise.
         //
-        //   - If T is an array type, T'[], then among the supertypes of S that are array types, a most specific type is identified, S'[] (this may be S itself). If no such array type exists, the constraint reduces to false. Otherwise:
+        //   - If T is an array type, T'[], then among the supertypes of S that are array types, a most specific type is
+        // identified, S'[] (this may be S itself). If no such array type exists, the constraint reduces to false.
+        // Otherwise:
         //
         //     - If neither S' nor T' is a primitive type, the constraint reduces to ‹S' <: T'›.
         //
-        //     - Otherwise, the constraint reduces to true if S' and T' are the same primitive type, and false otherwise.
+        //     - Otherwise, the constraint reduces to true if S' and T' are the same primitive type, and false
+        // otherwise.
         //
         //   - If T is a type variable, there are three cases:
 
@@ -116,7 +124,8 @@ public class TypeSubtypeOfType extends ConstraintFormula {
             //     - Otherwise, if T has a lower bound, B, the constraint reduces to ‹S <: B›.
 
             if (T.asTypeVariable().asTypeParameter().hasLowerBound()) {
-                return ReductionResult.oneConstraint(new TypeSubtypeOfType(typeSolver, S, T.asTypeVariable().asTypeParameter().getLowerBound()));
+                return ReductionResult.oneConstraint(new TypeSubtypeOfType(
+                        typeSolver, S, T.asTypeVariable().asTypeParameter().getLowerBound()));
             }
 
             //     - Otherwise, the constraint reduces to false.
@@ -125,10 +134,11 @@ public class TypeSubtypeOfType extends ConstraintFormula {
         }
 
         //
-        //   - If T is an intersection type, I1 & ... & In, the constraint reduces to the following new constraints: for all i (1 ≤ i ≤ n), ‹S <: Ii›.
+        //   - If T is an intersection type, I1 & ... & In, the constraint reduces to the following new constraints: for
+        // all i (1 ≤ i ≤ n), ‹S <: Ii›.
         //
 
-        throw new UnsupportedOperationException("S = "+ S + ", T = " + T);
+        throw new UnsupportedOperationException("S = " + S + ", T = " + T);
     }
 
     @Override
@@ -151,9 +161,6 @@ public class TypeSubtypeOfType extends ConstraintFormula {
 
     @Override
     public String toString() {
-        return "TypeSubtypeOfType{" +
-                "S=" + S +
-                ", T=" + T +
-                '}';
+        return "TypeSubtypeOfType{" + "S=" + S + ", T=" + T + '}';
     }
 }

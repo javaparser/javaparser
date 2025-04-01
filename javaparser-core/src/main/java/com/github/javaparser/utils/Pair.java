@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,12 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
-import java.util.Objects;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
+import java.util.Objects;
 
 /**
  * Simply a pair of objects.
@@ -32,7 +31,9 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * @param <B> type of object b.
  */
 public class Pair<A, B> {
+
     public final A a;
+
     public final B b;
 
     public Pair(A a, B b) {
@@ -44,12 +45,9 @@ public class Pair<A, B> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Pair<?, ?> pair = (Pair<?, ?>) o;
-
         if (!Objects.equals(a, pair.a)) return false;
         if (!Objects.equals(b, pair.b)) return false;
-
         return true;
     }
 

@@ -158,7 +158,7 @@ Then class 1 has 4 total contained comments
 Then class 1 has 1 orphan comment
 Then class 1 orphan comment 1 is "Case 1"
 Then field 1 in class 1 contains 0 comments
-!--Then field 2 in class 1 contains 0 comments
+!--  Then field 2 in class 1 contains 0 comments
 Then field 1 in class 1 is commented "field1"
 Then field 2 in class 1 is commented "Case 2"
 Then variable 1 value of field 2 in class 1 is commented "field2"
@@ -180,7 +180,7 @@ When the class is parsed by the Java parser
 Then the compilation unit has 2 contained comments
 Then class 1 has 2 total contained comments
 Then field 1 in class 1 contains 0 comments
-!--Then field 2 in class 1 contains 0 comments
+!--  Then field 2 in class 1 contains 0 comments
 Then field 1 in class 1 is commented "field1"
 Then variable 1 value of field 2 in class 1 is commented "field2"
 

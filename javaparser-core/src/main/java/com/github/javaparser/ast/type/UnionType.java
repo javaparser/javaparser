@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.joining;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -34,11 +37,13 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.UnionTypeMetaModel;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.joining;
+import java.util.stream.Collectors;
 
 /**
  * <h1>The union type</h1>
@@ -93,8 +98,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
             return this;
         }
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
-        if (this.elements != null)
-            this.elements.setParentNode(null);
+        if (this.elements != null) this.elements.setParentNode(null);
         this.elements = elements;
         setAsParentNodeOf(elements);
         return this;
@@ -191,5 +195,12 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<UnionType> toUnionType() {
         return Optional.of(this);
+    }
+
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        List<ResolvedType> resolvedElements =
+                getElements().stream().map(el -> el.convertToUsage(context)).collect(Collectors.toList());
+        return new ResolvedUnionType(resolvedElements);
     }
 }

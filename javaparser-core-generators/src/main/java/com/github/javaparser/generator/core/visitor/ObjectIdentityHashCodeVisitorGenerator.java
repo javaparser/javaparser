@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -33,11 +33,18 @@ import com.github.javaparser.utils.SourceRoot;
  */
 public class ObjectIdentityHashCodeVisitorGenerator extends VisitorGenerator {
     public ObjectIdentityHashCodeVisitorGenerator(SourceRoot sourceRoot) {
-        super(sourceRoot, "com.github.javaparser.ast.visitor", "ObjectIdentityHashCodeVisitor", "Integer", "Void", true);
+        super(
+                sourceRoot,
+                "com.github.javaparser.ast.visitor",
+                "ObjectIdentityHashCodeVisitor",
+                "Integer",
+                "Void",
+                true);
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(
+            BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         visitMethod.getParameters().forEach(p -> p.setFinal(true));
 
         final BlockStmt body = visitMethod.getBody().get();

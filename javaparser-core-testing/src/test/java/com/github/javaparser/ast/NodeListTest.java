@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,31 +21,20 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.expr.ArrayInitializerExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MemberValuePair;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import static com.github.javaparser.ast.NodeList.nodeList;
-import static org.junit.jupiter.api.Assertions.*;
-
-class NodeListTest {
+class NodeListTest extends AbstractLexicalPreservingTest {
 
     @Test
     void replace() {
@@ -132,7 +121,6 @@ class NodeListTest {
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
     }
 
-
     @Test
     public void getFirstWhenEmpty() {
         final NodeList<Name> list = nodeList();
@@ -187,25 +175,42 @@ class NodeListTest {
             List<String> listReplacements;
             AstObserver testObserver = new AstObserver() {
                 @Override
-                public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                    propertyChanges.add(String.format("%s.%s changed from %s to %s", observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+                public void propertyChange(
+                        Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                    propertyChanges.add(String.format(
+                            "%s.%s changed from %s to %s",
+                            observedNode.getClass().getSimpleName(),
+                            property.name().toLowerCase(),
+                            oldValue,
+                            newValue));
                 }
 
                 @Override
                 public void parentChange(Node observedNode, Node previousParent, Node newParent) {
-                    parentChanges.add(String.format("%s 's parent changed from %s to %s", observedNode.getClass().getSimpleName(), previousParent, newParent));
+                    parentChanges.add(String.format(
+                            "%s 's parent changed from %s to %s",
+                            observedNode.getClass().getSimpleName(), previousParent, newParent));
                 }
 
                 @Override
-                public void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-                    listChanges.add(String.format("%s %s to/from %s at position %d", nodeAddedOrRemoved.getClass().getSimpleName(), type.name(), observedNode.getClass().getSimpleName(), index));
+                public void listChange(
+                        NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+                    listChanges.add(String.format(
+                            "%s %s to/from %s at position %d",
+                            nodeAddedOrRemoved.getClass().getSimpleName(),
+                            type.name(),
+                            observedNode.getClass().getSimpleName(),
+                            index));
                 }
 
                 @Override
                 public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
-                    listReplacements.add(String.format("%s replaced within %s at position %d", newNode.getClass().getSimpleName(), observedNode.getClass().getSimpleName(), index));
+                    listReplacements.add(String.format(
+                            "%s replaced within %s at position %d",
+                            newNode.getClass().getSimpleName(),
+                            observedNode.getClass().getSimpleName(),
+                            index));
                 }
-
             };
 
             @BeforeEach
@@ -279,24 +284,17 @@ class NodeListTest {
                 assertEquals("Name replaced within NodeList at position 0", listReplacements.get(0));
             }
 
-
             @Test
             void usageTest() {
                 final String REFERENCE_TO_BE_DELETED = "bad";
-                String original = "" +
-                        "@MyAnnotation(myElements = {\"good\", \"bad\", \"ugly\"})\n" +
-                        "public final class MyClass {\n" +
-                        "}";
-                String expected = "" +
-                        "@MyAnnotation(myElements = {\"good\", \"ugly\"})\n" +
-                        "public final class MyClass {\n" +
-                        "}";
+                considerCode("" + "@MyAnnotation(myElements = {\"good\", \"bad\", \"ugly\"})\n"
+                        + "public final class MyClass {\n"
+                        + "}");
+                String expected = "" + "@MyAnnotation(myElements = {\"good\", \"ugly\"})\n"
+                        + "public final class MyClass {\n"
+                        + "}";
 
-                JavaParser javaParser = new JavaParser();
-                javaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
-
-                CompilationUnit compilationUnit = javaParser.parse(original).getResult().get();
-                List<NormalAnnotationExpr> annotations = compilationUnit.findAll(NormalAnnotationExpr.class);
+                List<NormalAnnotationExpr> annotations = cu.findAll(NormalAnnotationExpr.class);
 
                 annotations.forEach(annotation -> {
                     // testcase, per https://github.com/javaparser/javaparser/issues/2936#issuecomment-731370505
@@ -309,14 +307,13 @@ class NodeListTest {
                             Node elt = iterator.next();
                             {
                                 String nameAsString = ((StringLiteralExpr) elt).asString();
-                                if (REFERENCE_TO_BE_DELETED.equals(nameAsString))
-                                    iterator.remove();
+                                if (REFERENCE_TO_BE_DELETED.equals(nameAsString)) iterator.remove();
                             }
                         }
                     }
                 });
 
-                assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
+                assertEquals(expected, LexicalPreservingPrinter.print(cu));
             }
         }
 
@@ -340,7 +337,6 @@ class NodeListTest {
                 assertFalse(iterator.hasNext());
                 assertTrue(iterator.hasPrevious());
             }
-
         }
 
         @Nested
@@ -388,7 +384,6 @@ class NodeListTest {
                 assertFalse(iterator.hasNext());
                 assertFalse(iterator.hasPrevious());
             }
-
         }
 
         @Nested
@@ -440,7 +435,6 @@ class NodeListTest {
                     iterator.next();
                 });
             }
-
         }
     }
 }

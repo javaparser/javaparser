@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,13 @@
 
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.StaticJavaParser.parseType;
+import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
@@ -28,14 +35,6 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.language_level_validations.Java5Validator;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.StaticJavaParser.parseType;
-import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TypeTest {
     @Test
@@ -53,14 +52,16 @@ class TypeTest {
 
     @Test
     void primitiveTypeArgumentLenientValidator() {
-        ParserConfiguration config = new ParserConfiguration()
-                .setLanguageLevel(RAW);
-        config.getProcessors().add(() -> new Java5Validator() {{
-            remove(noPrimitiveGenericArguments);
-        }}.processor());
+        ParserConfiguration config = new ParserConfiguration().setLanguageLevel(RAW);
+        config.getProcessors()
+                .add(() -> new Java5Validator() {
+                    {
+                        remove(noPrimitiveGenericArguments);
+                    }
+                }.processor());
 
-        ParseResult<VariableDeclarationExpr> result = new JavaParser(config).parse(
-                VARIABLE_DECLARATION_EXPR, provider("List<long> x"));
+        ParseResult<VariableDeclarationExpr> result =
+                new JavaParser(config).parse(VARIABLE_DECLARATION_EXPR, provider("List<long> x"));
         assertTrue(result.isSuccessful());
 
         VariableDeclarationExpr decl = result.getResult().get();
@@ -86,5 +87,4 @@ class TypeTest {
         final Type type = parseType("TypeUtilsTest<String>.Tester");
         assertEquals("TypeUtilsTest<String>.Tester", type.toString());
     }
-
 }

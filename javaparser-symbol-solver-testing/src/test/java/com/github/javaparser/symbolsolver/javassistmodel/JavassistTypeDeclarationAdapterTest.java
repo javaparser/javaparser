@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,11 +21,19 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
@@ -34,15 +42,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JavassistTypeDeclarationAdapterTest extends AbstractResolutionTest {
 
@@ -56,8 +55,11 @@ class JavassistTypeDeclarationAdapterTest extends AbstractResolutionTest {
         JavassistTypeDeclarationAdapter adapter = new JavassistTypeDeclarationAdapter(clazz, typeSolver, declaration);
 
         List<ResolvedReferenceType> resultAncestors = adapter.getAncestors(false);
-        assertEquals(expectedAncestors,
-                resultAncestors.stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toList()));
+        assertEquals(
+                expectedAncestors,
+                resultAncestors.stream()
+                        .map(ResolvedReferenceType::getQualifiedName)
+                        .collect(Collectors.toList()));
     }
 
     /**
@@ -76,33 +78,17 @@ class JavassistTypeDeclarationAdapterTest extends AbstractResolutionTest {
                                     "com.github.javaparser.HasParentNode",
                                     "com.github.javaparser.ast.visitor.Visitable",
                                     "com.github.javaparser.ast.nodeTypes.NodeWithRange",
-                                    "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange"
-                            )
-                    ),
+                                    "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange")),
                     // Expression
                     Arguments.of(
                             "com.github.javaparser.ast.expr.Expression",
-                            singletonList(
-                                    "com.github.javaparser.ast.Node"
-                            )
-                    ),
+                            singletonList("com.github.javaparser.ast.Node")),
                     // Annotation.class
-                    Arguments.of(
-                            "com.github.javaparser.ParseStart",
-                            singletonList(
-                                    "java.lang.Object"
-                            )
-                    ),
+                    Arguments.of("com.github.javaparser.ParseStart", singletonList("java.lang.Object")),
                     // SlowTest Annotation
                     Arguments.of(
                             "com.github.javaparser.SlowTest",
-                            asList(
-                                    "java.lang.Object",
-                                    "java.lang.annotation.Annotation"
-                            )
-                    )
-            );
+                            asList("java.lang.Object", "java.lang.annotation.Annotation")));
         }
     }
-
 }

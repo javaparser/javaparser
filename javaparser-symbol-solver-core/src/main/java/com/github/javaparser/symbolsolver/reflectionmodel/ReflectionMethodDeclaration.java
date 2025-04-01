@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,24 +21,24 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import static com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration.isRecordType;
+
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
+import com.github.javaparser.utils.TypeUtils;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -74,9 +74,7 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
 
     @Override
     public String toString() {
-        return "ReflectionMethodDeclaration{" +
-                "method=" + method +
-                '}';
+        return "ReflectionMethodDeclaration{" + "method=" + method + '}';
     }
 
     @Override
@@ -91,9 +89,11 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
         }
         if (method.getDeclaringClass().isEnum()) {
             return new ReflectionEnumDeclaration(method.getDeclaringClass(), typeSolver);
-        } else {
-            return new ReflectionClassDeclaration(method.getDeclaringClass(), typeSolver);
         }
+        if (isRecordType(method.getDeclaringClass())) {
+            return new ReflectionRecordDeclaration(method.getDeclaringClass(), typeSolver);
+        }
+        return new ReflectionClassDeclaration(method.getDeclaringClass(), typeSolver);
     }
 
     @Override
@@ -112,13 +112,19 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
         if (method.isVarArgs()) {
             variadic = i == (method.getParameterCount() - 1);
         }
-        return new ReflectionParameterDeclaration(method.getParameterTypes()[i], method.getGenericParameterTypes()[i],
-                typeSolver, variadic, method.getParameters()[i].getName());
+        return new ReflectionParameterDeclaration(
+                method.getParameterTypes()[i],
+                method.getGenericParameterTypes()[i],
+                typeSolver,
+                variadic,
+                method.getParameters()[i].getName());
     }
 
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
-        return Arrays.stream(method.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
+        return Arrays.stream(method.getTypeParameters())
+                .map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver))
+                .collect(Collectors.toList());
     }
 
     public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
@@ -159,7 +165,7 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
     }
 
     @Override
-    public Optional<MethodDeclaration> toAst() {
-        return Optional.empty();
+    public String toDescriptor() {
+        return TypeUtils.getMethodDescriptor(method);
     }
 }

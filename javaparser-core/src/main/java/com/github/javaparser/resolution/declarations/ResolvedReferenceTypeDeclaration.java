@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,44 +18,47 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
-
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import java.io.Serializable;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
-public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration,
-                                                                  ResolvedTypeParametrizable {
+public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration, ResolvedTypeParametrizable {
 
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+
+    String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
+
+    String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
+
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
+
+    // Can't use java.lang.Record.class.getCanonicalName() since records were only added in Java 14.
+    String JAVA_LANG_RECORD = "java.lang.Record";
 
     @Override
     default ResolvedReferenceTypeDeclaration asReferenceType() {
         return this;
     }
 
-    ///
-    /// Ancestors
-    ///
+    @Override
+    default boolean isReferenceType() {
+        return true;
+    }
 
+    // /
+    // / Ancestors
+    // /
     /**
      * Resolves the types of all direct ancestors (i.e., the directly extended class and the directly implemented
      * interfaces) and returns the list of ancestors as a list of resolved reference types.
@@ -96,25 +99,26 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     /**
      * The list of all the ancestors of the current declaration, direct and indirect.
      * This list does not contains duplicates with the exact same type parameters.
-     * For example 
-     * if A inherits from B, and B inherits from C and implements D, and C inherits from E 
+     * For example
+     * if A inherits from B, and B inherits from C and implements D, and C inherits from E
      * By default the traversal is depth first
      */
     default List<ResolvedReferenceType> getAllAncestors() {
         return getAllAncestors(depthFirstFunc);
     }
-    
+
     /**
      * The list of all the ancestors of the current declaration, direct and indirect.
      * This list does not contains duplicates with the exact same type parameters.
-     * For example 
-     * if A inherits from B, and B inherits from C and implements D, and C inherits from E 
+     * For example
+     * if A inherits from B, and B inherits from C and implements D, and C inherits from E
      * Apply the specified traversal
      */
-    default List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
+    default List<ResolvedReferenceType> getAllAncestors(
+            Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
         return traverser.apply(this);
     }
-    
+
     /*
      * depth first search all ancestors
      * In the example above, this method returns B,C,E,D
@@ -134,37 +138,38 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         }
         return ancestors;
     };
-    
+
     /*
      * breadth first search all ancestors
      * In the example above, this method returns B,C,D,E
      */
     Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
-        Set<ResolvedReferenceType> ancestors = new HashSet<>();
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
-          // init direct ancestors 
-          Deque<ResolvedReferenceType> queuedAncestors = new LinkedList<ResolvedReferenceType>(rrtd.getAncestors());
-          ancestors.addAll(queuedAncestors);
-          while (!queuedAncestors.isEmpty()) {
-              ResolvedReferenceType queuedAncestor = queuedAncestors.removeFirst();
-              queuedAncestor.getTypeDeclaration()
-                      .ifPresent(rtd -> new LinkedHashSet<ResolvedReferenceType>(queuedAncestor.getDirectAncestors()).stream()
-                              .forEach(ancestor -> {
-                                  // add this ancestor to the queue (for a deferred search)
-                                  queuedAncestors.add(ancestor);
-                                  // add this ancestor to the list of ancestors
-                                  ancestors.add(ancestor);
-                              }));
-          }
-      }
-      return new ArrayList(ancestors);
+            // init direct ancestors
+            Deque<ResolvedReferenceType> queuedAncestors = new LinkedList<>(rrtd.getAncestors());
+            ancestors.addAll(queuedAncestors);
+            while (!queuedAncestors.isEmpty()) {
+                ResolvedReferenceType queuedAncestor = queuedAncestors.removeFirst();
+                queuedAncestor.getTypeDeclaration().ifPresent(rtd -> new LinkedHashSet<>(
+                                queuedAncestor.getDirectAncestors())
+                        .stream().forEach(ancestor -> {
+                            // add this ancestor to the queue (for a deferred search)
+                            queuedAncestors.add(ancestor);
+                            // add this ancestor to the list of ancestors
+                            if (!ancestors.contains(ancestor)) {
+                                ancestors.add(ancestor);
+                            }
+                        }));
+            }
+        }
+        return ancestors;
     };
 
-    ///
-    /// Fields
-    ///
-
+    // /
+    // / Fields
+    // /
     /**
      * Note that the type of the field should be expressed using the type variables of this particular type.
      * Consider for example:
@@ -182,21 +187,21 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
                 .findFirst();
         if (field.isPresent()) {
             return field.get();
-        } else {
-            throw new UnsolvedSymbolException("Field not found: " + name);
         }
+        throw new UnsolvedSymbolException("Field not found: " + name);
     }
 
     /**
      * Consider only field or inherited field which is not private.
      */
     default ResolvedFieldDeclaration getVisibleField(String name) {
-        Optional<ResolvedFieldDeclaration> field = getVisibleFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+        Optional<ResolvedFieldDeclaration> field = getVisibleFields().stream()
+                .filter(f -> f.getName().equals(name))
+                .findFirst();
         if (field.isPresent()) {
             return field.get();
-        } else {
-            throw new IllegalArgumentException();
         }
+        throw new IllegalArgumentException();
     }
 
     /**
@@ -223,8 +228,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default List<ResolvedFieldDeclaration> getVisibleFields() {
         return getAllFields().stream()
-                       .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != AccessSpecifier.PRIVATE)
-                       .collect(Collectors.toList());
+                .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != AccessSpecifier.PRIVATE)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -245,14 +250,14 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Return a list of all the fields declared in this type.
      */
     default List<ResolvedFieldDeclaration> getDeclaredFields() {
-        return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName()
-                                                            .equals(getQualifiedName())).collect(Collectors.toList());
+        return getAllFields().stream()
+                .filter(it -> it.declaringType().getQualifiedName().equals(getQualifiedName()))
+                .collect(Collectors.toList());
     }
 
-    ///
-    /// Methods
-    ///
-
+    // /
+    // / Methods
+    // /
     /**
      * Return a list of all the methods declared in this type declaration.
      */
@@ -264,10 +269,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     Set<MethodUsage> getAllMethods();
 
-    ///
-    /// Assignability
-    ///
-
+    // /
+    // / Assignability
+    // /
     /**
      * Can we assign instances of the given type to variables having the type defined
      * by this declaration?
@@ -288,10 +292,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     boolean isAssignableBy(ResolvedReferenceTypeDeclaration other);
 
-    ///
-    /// Annotations
-    ///
-
+    // /
+    // / Annotations
+    // /
     /**
      * Has the type at least one annotation declared having the specified qualified name?
      */
@@ -299,14 +302,46 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
 
     /**
      * Has the type at least one annotation declared or inherited having the specified qualified name?
+     * By default, the subclasses do not inherit the annotation declared on the parent class.
+     * However, there is a way to propagate particular annotations throughout the class hierarchy using the @Inherited annotation.
      */
     default boolean hasAnnotation(String qualifiedName) {
         if (hasDirectlyAnnotation(qualifiedName)) {
             return true;
         }
-        return getAllAncestors().stream()
-                .filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
-                .anyMatch(it -> it.asReferenceType().getTypeDeclaration().get().hasDirectlyAnnotation(qualifiedName));
+        return isClass()
+                && getAllAncestors().stream()
+                        .filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
+                        .filter(it ->
+                                it.asReferenceType().getTypeDeclaration().get().isClass())
+                        .map(it -> it.asReferenceType().getTypeDeclaration().get())
+                        .anyMatch(rrtd ->
+                                rrtd.hasDirectlyAnnotation(qualifiedName) && rrtd.isInheritedAnnotation(qualifiedName));
+    }
+
+    /**
+     * Returns true if the specified annotation is inheritable.
+     */
+    default boolean isInheritedAnnotation(String name) {
+        Optional<ResolvedAnnotationDeclaration> declaration = getDeclaredAnnotation(name);
+        return declaration.isPresent() && declaration.get().isInheritable();
+    }
+
+    /**
+     * Returns the resolved annotation corresponding to the specified name and declared in this type declaration.
+     */
+    default Optional<ResolvedAnnotationDeclaration> getDeclaredAnnotation(String name) {
+        return getDeclaredAnnotations().stream()
+                .filter(annotation -> annotation.getQualifiedName().endsWith(name))
+                .findFirst();
+    }
+
+    /**
+     * Return a collection of all annotations declared in this type declaration.
+     */
+    default Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        throw new UnsupportedOperationException(
+                "Getting declared annotation is not supproted on this type " + this.getName());
     }
 
     /**
@@ -315,10 +350,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     boolean isFunctionalInterface();
 
-    ///
-    /// Type parameters
-    ///
-
+    // /
+    // / Type parameters
+    // /
     @Override
     default Optional<ResolvedTypeParameterDeclaration> findTypeParameter(String name) {
         for (ResolvedTypeParameterDeclaration tp : this.getTypeParameters()) {
@@ -334,7 +368,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
 
     List<ResolvedConstructorDeclaration> getConstructors();
 
-
     /**
      * We don't make this _ex_plicit in the data representation because that would affect codegen
      * and make everything generate like {@code <T extends Object>} instead of {@code <T>}
@@ -346,8 +379,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     default boolean isJavaLangObject() {
         return this.isClass()
                 && !isAnonymousClass()
-                && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(JAVA_LANG_OBJECT);
+                && // Consider anonymous classes
+                hasName()
+                && JAVA_LANG_OBJECT.equals(getQualifiedName());
     }
 
     /**
@@ -355,8 +389,14 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see ResolvedReferenceType#isJavaLangEnum()
      */
     default boolean isJavaLangEnum() {
-        return this.isEnum()
-                && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return this.isEnum() && JAVA_LANG_ENUM.equals(getQualifiedName());
     }
 
+    /**
+     * @return true if this represents {@code java.lang.Record}
+     * @see ResolvedReferenceType#isJavaLangRecord()
+     */
+    default boolean isJavaLangRecord() {
+        return this.isRecord() && JAVA_LANG_RECORD.equals(getQualifiedName());
+    }
 }

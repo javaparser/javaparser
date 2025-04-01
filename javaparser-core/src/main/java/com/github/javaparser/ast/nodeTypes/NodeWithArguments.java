@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,19 +18,20 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
+
+import static com.github.javaparser.StaticJavaParser.parseExpression;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
-
-import static com.github.javaparser.StaticJavaParser.parseExpression;
+import java.util.function.Function;
 
 /**
  * A node with arguments.
  */
 public interface NodeWithArguments<N extends Node> {
+
     N setArguments(NodeList<Expression> arguments);
 
     NodeList<Expression> getArguments();
@@ -56,4 +57,27 @@ public interface NodeWithArguments<N extends Node> {
         return (N) this;
     }
 
+    /*
+     * Returns the position of the argument in the object's argument list.
+     */
+    default int getArgumentPosition(Expression argument) {
+        return getArgumentPosition(argument, expr -> expr);
+    }
+
+    /*
+     * Returns the position of the {@code argument} in the object's argument
+     * list, after converting the argument using the given {@code converter}
+     * function.
+     */
+    default int getArgumentPosition(Expression argument, Function<Expression, Expression> converter) {
+        if (argument == null) {
+            throw new IllegalStateException();
+        }
+        for (int i = 0; i < getArguments().size(); i++) {
+            Expression expression = getArguments().get(i);
+            expression = converter.apply(expression);
+            if (expression == argument) return i;
+        }
+        throw new IllegalStateException();
+    }
 }

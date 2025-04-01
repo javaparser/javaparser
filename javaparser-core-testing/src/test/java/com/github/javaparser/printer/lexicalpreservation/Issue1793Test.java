@@ -1,7 +1,6 @@
-
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,15 +23,13 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
+class Issue1793Test extends AbstractLexicalPreservingTest {
 
-class Issue1793Test {
-    
     @AfterEach
     public void reset() {
         StaticJavaParser.setConfiguration(new ParserConfiguration());
@@ -40,19 +37,13 @@ class Issue1793Test {
 
     @Test
     void importIsAddedOnTheSameLine() {
-        String src = 
-                "public class Test {\n" + 
-                "  public void foo(Bar x, Bar y) {\n" + 
-                "    x.barf(); // expected to be wrapped\n" + 
-                "    x.bark(); // expected to be wrapped\n" + 
-                "    y.barf(); // expected to be wrapped\n" + 
-                "    y.bark(); // expected to be wrapped\n" + 
-                "  }\n" + 
-                "}";
-        StaticJavaParser.setConfiguration(new ParserConfiguration().setLexicalPreservationEnabled(true));
-        CompilationUnit cu = StaticJavaParser.parse(src);
-        LexicalPreservingPrinter.setup(cu);
+        considerCode("public class Test {\n" + "  public void foo(Bar x, Bar y) {\n"
+                + "    x.barf(); // expected to be wrapped\n"
+                + "    x.bark(); // expected to be wrapped\n"
+                + "    y.barf(); // expected to be wrapped\n"
+                + "    y.bark(); // expected to be wrapped\n"
+                + "  }\n"
+                + "}");
         assertEquals(LexicalPreservingPrinter.print(cu), LexicalPreservingPrinter.print(cu.clone()));
     }
-
 }

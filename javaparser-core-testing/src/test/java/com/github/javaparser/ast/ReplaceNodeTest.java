@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,33 +21,33 @@
 
 package com.github.javaparser.ast;
 
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parsePackageDeclaration;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.utils.LineSeparator;
+import org.junit.jupiter.api.Test;
 
 class ReplaceNodeTest {
     @Test
     void testSimplePropertyWithGenericReplace() {
         CompilationUnit cu = parse("package x; class Y {}");
         cu.replace(cu.getPackageDeclaration().get(), parsePackageDeclaration("package z;"));
-        assertEquals(String.format("package z;%1$s" +
-                "%1$s" +
-                "class Y {%1$s" +
-                "}%1$s", SYSTEM_EOL), cu.toString());
+        assertEquals(
+                String.format("package z;%1$s" + "%1$s" + "class Y {%1$s" + "}%1$s", LineSeparator.SYSTEM),
+                cu.toString());
     }
 
     @Test
     void testListProperty() {
         CompilationUnit cu = parse("package x; class Y {}");
-        cu.replace(cu.getClassByName("Y").get(), parse("class B{int y;}").getClassByName("B").get());
-        assertEquals(String.format("package x;%1$s" +
-                "%1$s" +
-                "class B {%1$s" +
-                "%1$s" +
-                "    int y;%1$s" +
-                "}%1$s", SYSTEM_EOL), cu.toString());
+        cu.replace(
+                cu.getClassByName("Y").get(),
+                parse("class B{int y;}").getClassByName("B").get());
+        assertEquals(
+                String.format(
+                        "package x;%1$s" + "%1$s" + "class B {%1$s" + "%1$s" + "    int y;%1$s" + "}%1$s",
+                        LineSeparator.SYSTEM),
+                cu.toString());
     }
 }

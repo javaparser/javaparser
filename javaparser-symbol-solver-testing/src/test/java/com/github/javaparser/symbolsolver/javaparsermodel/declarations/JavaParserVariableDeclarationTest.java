@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,40 +23,35 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
-import com.github.javaparser.resolution.declarations.AssociableToASTTest;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclarationTest;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
 
-class JavaParserVariableDeclarationTest implements ResolvedValueDeclarationTest,
-        AssociableToASTTest<VariableDeclarationExpr> {
+class JavaParserVariableDeclarationTest extends AbstractResolutionTest implements ResolvedValueDeclarationTest {
 
     @Override
-    public Optional<VariableDeclarationExpr> getWrappedDeclaration(AssociableToAST<VariableDeclarationExpr> associableToAST) {
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
-                safeCast(associableToAST, JavaParserVariableDeclaration.class).getWrappedNode()
-        );
+                safeCast(associableToAST, JavaParserVariableDeclaration.class).getWrappedNode());
     }
 
     @Override
     public JavaParserVariableDeclaration createValue() {
         String code = "class A {a() {String s;}}";
-        CompilationUnit compilationUnit = StaticJavaParser.parse(code);
-        VariableDeclarator variableDeclarator = compilationUnit.findFirst(VariableDeclarator.class).get();
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
+                .parse(code);
+        VariableDeclarator variableDeclarator =
+                cu.findFirst(VariableDeclarator.class).get();
         ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
         return new JavaParserVariableDeclaration(variableDeclarator, reflectionTypeSolver);
     }
@@ -65,7 +60,7 @@ class JavaParserVariableDeclarationTest implements ResolvedValueDeclarationTest,
     public String getCanonicalNameOfExpectedType(ResolvedValueDeclaration resolvedDeclaration) {
         return String.class.getCanonicalName();
     }
-    
+
     @Test
     void test3631() {
         String code = ""
@@ -83,18 +78,14 @@ class JavaParserVariableDeclarationTest implements ResolvedValueDeclarationTest,
                 + "    }\n"
                 + "}";
 
-        ParserConfiguration configuration = new ParserConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
-        StaticJavaParser.setConfiguration(configuration);
-
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
+                .parse(code);
 
         List<NameExpr> names = cu.findAll(NameExpr.class);
         ResolvedValueDeclaration rvd = names.get(3).resolve();
-        
+
         String decl = rvd.asField().toAst().get().toString();
-        
+
         assertTrue("int x = 0;".equals(decl));
     }
-
 }

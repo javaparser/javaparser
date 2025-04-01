@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,25 +21,27 @@
 
 package com.github.javaparser.symbolsolver;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.utils.CodeGenerationUtils;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.utils.CodeGenerationUtils;
-
 public abstract class AbstractSymbolResolutionTest {
-    
+
     @AfterEach
     public void reset() {
         // reset configuration to not potentially disturb others tests.
         // So we have to set specific configuration between each test.
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
+        StaticJavaParser.setConfiguration(
+                new ParserConfiguration().setSymbolResolver(symbolResolver(defaultTypeSolver())));
     }
 
     @AfterAll
@@ -63,7 +65,8 @@ public abstract class AbstractSymbolResolutionTest {
         JDK14(14),
         JDK15(15),
         JDK16(16),
-        JDK17(17);
+        JDK17(17),
+        JDK18(18);
 
         private final Integer major;
 
@@ -91,26 +94,28 @@ public abstract class AbstractSymbolResolutionTest {
             String javaVersion = System.getProperty("java.version");
 
             // JavaParser explicitly requires a minimum of JDK8 to build.
-            if("8".equals(javaVersion) || javaVersion.startsWith("1.8") || javaVersion.startsWith("8")) {
+            if ("8".equals(javaVersion) || javaVersion.startsWith("1.8") || javaVersion.startsWith("8")) {
                 return JDK8;
-            } else if("9".equals(javaVersion) || javaVersion.startsWith("9.")) {
+            } else if ("9".equals(javaVersion) || javaVersion.startsWith("9.")) {
                 return JDK9;
-            } else if("10".equals(javaVersion) || javaVersion.startsWith("10.")) {
+            } else if ("10".equals(javaVersion) || javaVersion.startsWith("10.")) {
                 return JDK10;
-            } else if("11".equals(javaVersion) || javaVersion.startsWith("11.")) {
+            } else if ("11".equals(javaVersion) || javaVersion.startsWith("11.")) {
                 return JDK11;
-            } else if("12".equals(javaVersion) || javaVersion.startsWith("12.")) {
+            } else if ("12".equals(javaVersion) || javaVersion.startsWith("12.")) {
                 return JDK12;
-            } else if("13".equals(javaVersion) || javaVersion.startsWith("13.")) {
+            } else if ("13".equals(javaVersion) || javaVersion.startsWith("13.")) {
                 return JDK13;
-            } else if("14".equals(javaVersion) || javaVersion.startsWith("14.")) {
+            } else if ("14".equals(javaVersion) || javaVersion.startsWith("14.")) {
                 return JDK14;
-            } else if("15".equals(javaVersion) || javaVersion.startsWith("15.")) {
+            } else if ("15".equals(javaVersion) || javaVersion.startsWith("15.")) {
                 return JDK15;
-            } else if("16".equals(javaVersion) || javaVersion.startsWith("16.")) {
+            } else if ("16".equals(javaVersion) || javaVersion.startsWith("16.")) {
                 return JDK16;
-            } else if("17".equals(javaVersion) || javaVersion.startsWith("17.")) {
+            } else if ("17".equals(javaVersion) || javaVersion.startsWith("17.")) {
                 return JDK17;
+            } else if ("18".equals(javaVersion) || javaVersion.startsWith("18.")) {
+                return JDK18;
             }
 
             throw new IllegalStateException("Unable to determine the current version of java running");
@@ -122,10 +127,9 @@ public abstract class AbstractSymbolResolutionTest {
         @Deprecated
         @Override
         public String toString() {
-            return "TestJdk{" +
-                    "System.getProperty(\"java.version\")=" + System.getProperty("java.version") +
-                    ",major=" + major +
-                    '}';
+            return "TestJdk{" + "System.getProperty(\"java.version\")="
+                    + System.getProperty("java.version") + ",major="
+                    + major + '}';
         }
     }
 
@@ -133,7 +137,9 @@ public abstract class AbstractSymbolResolutionTest {
         if (Files.exists(path)) {
             return path.toAbsolutePath();
         }
-        Path underSymbolSolver = CodeGenerationUtils.mavenModuleRoot(AbstractSymbolResolutionTest.class).resolve("javaparser-symbol-solver-testing").resolve(path);
+        Path underSymbolSolver = CodeGenerationUtils.mavenModuleRoot(AbstractSymbolResolutionTest.class)
+                .resolve("javaparser-symbol-solver-testing")
+                .resolve(path);
         if (Files.exists(underSymbolSolver)) {
             return underSymbolSolver;
         } else {
@@ -143,5 +149,13 @@ public abstract class AbstractSymbolResolutionTest {
 
     protected static Path adaptPath(String path) {
         return adaptPath(Paths.get(path));
+    }
+
+    protected SymbolResolver symbolResolver(TypeSolver typeSolver) {
+        return new JavaSymbolSolver(typeSolver);
+    }
+
+    protected TypeSolver defaultTypeSolver() {
+        return new ReflectionTypeSolver();
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,15 +21,13 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import java.lang.reflect.Modifier;
-
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
+import java.lang.reflect.Modifier;
 import javassist.CtField;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
@@ -54,7 +52,8 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
                 signature = ctField.getSignature();
             }
             SignatureAttribute.Type genericSignatureType = SignatureAttribute.toTypeSignature(signature);
-            return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, (ResolvedTypeParametrizable) declaringType());
+            return JavassistUtils.signatureTypeToType(
+                    genericSignatureType, typeSolver, (ResolvedTypeParametrizable) declaringType());
         } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
@@ -64,7 +63,7 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
     public boolean isStatic() {
         return Modifier.isStatic(ctField.getModifiers());
     }
-    
+
     @Override
     public boolean isVolatile() {
         return Modifier.isVolatile(ctField.getModifiers());

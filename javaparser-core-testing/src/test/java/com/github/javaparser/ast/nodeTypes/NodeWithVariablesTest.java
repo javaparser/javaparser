@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,14 +21,14 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NodeWithVariablesTest {
 
@@ -45,7 +45,8 @@ class NodeWithVariablesTest {
 
     @Test
     void getCommonTypeFailsOnArrayDifferences() {
-        assertThrows(AssertionError.class, () -> parseVariableDeclarationExpr("int a[],b[][]").getCommonType());
+        assertThrows(AssertionError.class, () -> parseVariableDeclarationExpr("int a[],b[][]")
+                .getCommonType());
     }
 
     @Test

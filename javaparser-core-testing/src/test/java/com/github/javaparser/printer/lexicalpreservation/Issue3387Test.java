@@ -1,12 +1,6 @@
-package com.github.javaparser.printer.lexicalpreservation;
-
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-
-import java.util.StringJoiner;
-
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -25,48 +19,45 @@ import java.util.StringJoiner;
  * GNU Lesser General Public License for more details.
  */
 
-import org.junit.jupiter.api.Test;
+package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import java.util.StringJoiner;
+import org.junit.jupiter.api.Test;
 
 public class Issue3387Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void test3387() {
-        String input = new StringJoiner("\n")
+        considerCode(new StringJoiner("\n")
                 .add("class A {")
                 .add("")
                 .add("\tpublic void setTheNumber(int number) {")
                 .add("\t\tnumber = number;")
                 .add("\t}")
                 .add("")
-                .add("}").toString();
-        
-        String expected = "class A {\n" + 
-                "\n" + 
-                "\t/**\n" + 
-                "\t * Change Javadoc\n" + 
-                "\t */\n" + 
-                "\tpublic void setTheNumber(int number) {\n" + 
-                "\t\tnumber = number;\n" + 
-                "\t}\n" + 
-                "\n" + 
-                "}";
+                .add("}")
+                .toString());
 
-            CompilationUnit cu = StaticJavaParser.parse(input);
-            LexicalPreservingPrinter.setup(cu);
+        String expected = "class A {\n" + "\n"
+                + "\t/**\n"
+                + "\t * Change Javadoc\n"
+                + "\t */\n"
+                + "\tpublic void setTheNumber(int number) {\n"
+                + "\t\tnumber = number;\n"
+                + "\t}\n"
+                + "\n"
+                + "}";
 
-            MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
-            // create new javadoc comment
-            Javadoc javadoc = new Javadoc(JavadocDescription.parseText("Change Javadoc"));
-            md.setJavadocComment("\t", javadoc);
-            System.out.println(LexicalPreservingPrinter.print(cu));
-            assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
+        // create new javadoc comment
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("Change Javadoc"));
+        md.setJavadocComment("\t", javadoc);
+        System.out.println(LexicalPreservingPrinter.print(cu));
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
-
-
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,17 +18,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
-import com.github.javaparser.utils.LineSeparator;
-
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
+
+import com.github.javaparser.utils.LineSeparator;
 
 /**
  * Complements GeneratedJavaParserConstants
  */
 public class TokenTypes {
+
     public static boolean isWhitespace(int kind) {
         return getCategory(kind).isWhitespace();
     }
@@ -170,6 +170,10 @@ public class TokenTypes {
             case EXPORTS:
             case PROVIDES:
             case TRANSITIVE:
+            case PERMITS:
+            case SEALED:
+            case NON_SEALED:
+            case WHEN:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:
@@ -243,7 +247,7 @@ public class TokenTypes {
             case RSIGNEDSHIFT:
             case GT:
                 return JavaToken.Category.OPERATOR;
-            // The following are tokens that are only used internally by the lexer
+                // The following are tokens that are only used internally by the lexer
             case ENTER_JAVADOC_COMMENT:
             case ENTER_MULTILINE_COMMENT:
             case COMMENT_CONTENT:
@@ -254,7 +258,9 @@ public class TokenTypes {
             case TEXT_BLOCK_CONTENT:
             case ENTER_TEXT_BLOCK:
             default:
-                throw new AssertionError("Unable to categorise token kind " + kind + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?");
+                throw new AssertionError(
+                        "Unable to categorise token kind " + kind
+                                + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?");
         }
     }
 }

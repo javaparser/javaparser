@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,21 +23,17 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.stmt.IfStmt;
+import org.junit.jupiter.api.Test;
 
 public class Issue2393Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void test() {
-        CompilationUnit compilationUnit = StaticJavaParser.parse("public class Test { public void foo() { int i = 0;\nif(i == 5) { System.out.println(i); } } }");
-        LexicalPreservingPrinter.setup(compilationUnit);
-        IfStmt ifStmt = compilationUnit.findFirst(IfStmt.class).orElseThrow(() -> new IllegalStateException("Expected if"));
+        considerCode("public class Test { public void foo() { int i = 0;\nif(i == 5) { System.out.println(i); } } }");
+        IfStmt ifStmt = cu.findFirst(IfStmt.class).orElseThrow(() -> new IllegalStateException("Expected if"));
         ifStmt.setCondition(StaticJavaParser.parseExpression("i > 0"));
         assertEquals("i > 0", ifStmt.getCondition().toString());
     }
-
 }

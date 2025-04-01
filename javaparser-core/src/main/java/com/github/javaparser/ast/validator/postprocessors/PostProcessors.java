@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,14 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.postprocessors;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Processor;
 import com.github.javaparser.ast.Node;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +32,7 @@ import java.util.List;
  * A post processor that will call a collection of post processors.
  */
 public class PostProcessors {
+
     private final List<Processor> postProcessors = new ArrayList<>();
 
     public PostProcessors(Processor... postProcessors) {

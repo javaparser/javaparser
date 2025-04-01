@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,18 +23,16 @@ package com.github.javaparser.symbolsolver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 class Issue1518Test extends AbstractResolutionTest {
 
@@ -42,14 +40,12 @@ class Issue1518Test extends AbstractResolutionTest {
     void test() throws IOException {
         Path rootSourceDir = adaptPath("src/test/resources/issue1518");
 
-        String src =
-                "public class App {\n" + 
-                "    public static void main(String[] args) {\n" + 
-                "        Test1.Test2 test2 = new Test1.Test2();\n" + 
-                "        Test1.Test3 test3 = new Test1.Test3();\n" + 
-                "    }\n" + 
-                "}";
-        
+        String src = "public class App {\n" + "    public static void main(String[] args) {\n"
+                + "        Test1.Test2 test2 = new Test1.Test2();\n"
+                + "        Test1.Test3 test3 = new Test1.Test3();\n"
+                + "    }\n"
+                + "}";
+
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new JavaParserTypeSolver(rootSourceDir.toFile())));
         StaticJavaParser.setConfiguration(config);

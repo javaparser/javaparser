@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,17 +21,19 @@
 
 package com.github.javaparser.ast.expr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BinaryExprTest {
 
     @Test
     void convertOperator() {
-        assertEquals(AssignExpr.Operator.PLUS, BinaryExpr.Operator.PLUS.toAssignOperator().get());
+        assertEquals(
+                AssignExpr.Operator.PLUS,
+                BinaryExpr.Operator.PLUS.toAssignOperator().get());
     }
 
     /**
@@ -105,10 +107,10 @@ class BinaryExprTest {
             assertEquals(expected, actual);
         }
 
-
         @Test
         public void example() {
-            Expression expression = StaticJavaParser.parseExpression("year % 4 == 0 && year % 100 != 0 || year % 400 == 0");
+            Expression expression =
+                    StaticJavaParser.parseExpression("year % 4 == 0 && year % 100 != 0 || year % 400 == 0");
             Expression bracketedExpression = applyBrackets(expression);
 
             String expected = "((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)";
@@ -116,20 +118,17 @@ class BinaryExprTest {
 
             assertEquals(expected, actual);
         }
-
-
     }
 
-
     private Expression applyBrackets(Expression expression) {
-        expression.findAll(BinaryExpr.class)
-                .stream()
-                .filter(binaryExpr -> binaryExpr.getOperator() == BinaryExpr.Operator.AND || binaryExpr.getOperator() == BinaryExpr.Operator.OR)
+        expression.findAll(BinaryExpr.class).stream()
+                .filter(binaryExpr -> binaryExpr.getOperator() == BinaryExpr.Operator.AND
+                        || binaryExpr.getOperator() == BinaryExpr.Operator.OR)
                 .forEach(binaryExpr -> {
-                    if(!binaryExpr.getLeft().isBooleanLiteralExpr()) {
+                    if (!binaryExpr.getLeft().isBooleanLiteralExpr()) {
                         binaryExpr.setLeft(new EnclosedExpr(binaryExpr.getLeft()));
                     }
-                    if(!binaryExpr.getRight().isBooleanLiteralExpr()) {
+                    if (!binaryExpr.getRight().isBooleanLiteralExpr()) {
                         binaryExpr.setRight(new EnclosedExpr(binaryExpr.getRight()));
                     }
                 });

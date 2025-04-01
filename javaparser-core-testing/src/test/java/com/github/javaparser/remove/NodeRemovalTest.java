@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,10 @@
 
 package com.github.javaparser.remove;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -28,72 +32,79 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import com.github.javaparser.utils.TestParser;
-
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+class NodeRemovalTest extends AbstractLexicalPreservingTest {
 
-import java.util.List;
+    private final CompilationUnit compilationUnit = new CompilationUnit();
 
-class NodeRemovalTest {
-	private final CompilationUnit cu = new CompilationUnit();
+    @Test
+    void testRemoveClassFromCompilationUnit() {
+        ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("test");
+        assertEquals(1, compilationUnit.getTypes().size());
+        boolean remove = testClass.remove();
+        assertTrue(remove);
+        assertEquals(0, compilationUnit.getTypes().size());
+    }
 
-	@Test
-	void testRemoveClassFromCompilationUnit() {
-		ClassOrInterfaceDeclaration testClass = cu.addClass("test");
-		assertEquals(1, cu.getTypes().size());
-		boolean remove = testClass.remove();
-		assertTrue(remove);
-		assertEquals(0, cu.getTypes().size());
-	}
+    @Test
+    void testRemoveFieldFromClass() {
+        ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("test");
 
-	@Test
-	void testRemoveFieldFromClass() {
-		ClassOrInterfaceDeclaration testClass = cu.addClass("test");
+        FieldDeclaration addField = testClass.addField(String.class, "test");
+        assertEquals(1, testClass.getMembers().size());
+        boolean remove = addField.remove();
+        assertTrue(remove);
+        assertEquals(0, testClass.getMembers().size());
+    }
 
-		FieldDeclaration addField = testClass.addField(String.class, "test");
-		assertEquals(1, testClass.getMembers().size());
-		boolean remove = addField.remove();
-		assertTrue(remove);
-		assertEquals(0, testClass.getMembers().size());
-	}
+    @Test
+    void testRemoveStatementFromMethodBody() {
+        ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("testC");
 
-	@Test
-	void testRemoveStatementFromMethodBody() {
-		ClassOrInterfaceDeclaration testClass = cu.addClass("testC");
+        MethodDeclaration addMethod = testClass.addMethod("testM");
+        BlockStmt methodBody = addMethod.createBody();
+        Statement addStatement = methodBody.addAndGetStatement("test");
+        assertEquals(1, methodBody.getStatements().size());
+        boolean remove = addStatement.remove();
+        assertTrue(remove);
+        assertEquals(0, methodBody.getStatements().size());
+    }
 
-		MethodDeclaration addMethod = testClass.addMethod("testM");
-		BlockStmt methodBody = addMethod.createBody();
-		Statement addStatement = methodBody.addAndGetStatement("test");
-		assertEquals(1, methodBody.getStatements().size());
-		boolean remove = addStatement.remove();
-		assertTrue(remove);
-		assertEquals(0, methodBody.getStatements().size());
-	}
+    @Test
+    void testRemoveStatementFromMethodBodyWithLexicalPreservingPrinter() {
+        considerStatement("{\r\n" + "    log.error(\"context\", e);\r\n"
+                + "    log.error(\"context\", e);\r\n"
+                + "    throw new ApplicationException(e);\r\n"
+                + "}\r\n");
+        BlockStmt bstmt = statement.asBlockStmt();
+        List<Node> children = bstmt.getChildNodes();
+        remove(children.get(0));
+        assertTrue(children.size() == 2);
+        remove(children.get(0));
+        assertTrue(children.size() == 1);
+        assertTrue(children.stream().allMatch(n -> n.getParentNode() != null));
+    }
 
-	@Test
-	void testRemoveStatementFromMethodBodyWithLexicalPreservingPrinter() {
-		String sample = "{\r\n" + "    log.error(\"context\", e);\r\n" +
-				"    log.error(\"context\", e);\r\n" +
-				"    throw new ApplicationException(e);\r\n" + "}\r\n";
-		BlockStmt bstmt = TestParser.parseStatement(sample).asBlockStmt();
-		BlockStmt stmt = LexicalPreservingPrinter.setup(bstmt);
-		List<Node> children = stmt.getChildNodes();
-		remove(children.get(0));
-		assertTrue(children.size() == 2);
-		remove(children.get(0));
-		assertTrue(children.size() == 1);
-		assertTrue(children.stream().allMatch(n -> n.getParentNode() != null));
-	}
+    @Test
+    // issue 1638
+    public void removingAnnotationsFormattedWithAdditionalSpaces() {
+        considerCode("class X {\n" + "   @Override\n" + "  public void testCase() {\n" + "  }\n" + "}");
 
-	// remove the node and parent's node until response is true
-	boolean remove(Node node) {
-		boolean result = node.remove();
-		if (!result && node.getParentNode().isPresent())
-			result = remove(node.getParentNode().get());
-		return result;
-	}
+        cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsStringIgnoringEol("class X {\n" + "  public void testCase() {\n" + "  }\n" + "}", result);
+    }
+
+    // remove the node and parent's node until response is true
+    boolean remove(Node node) {
+        boolean result = node.remove();
+        if (!result && node.getParentNode().isPresent())
+            result = remove(node.getParentNode().get());
+        return result;
+    }
 }

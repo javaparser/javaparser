@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -97,15 +97,13 @@ public abstract class ConstraintFormula {
 
         @Override
         public String toString() {
-            return "ReductionResult{" +
-                    "boundSet=" + boundSet +
-                    ", constraintFormulas=" + constraintFormulas +
-                    '}';
+            return "ReductionResult{" + "boundSet=" + boundSet + ", constraintFormulas=" + constraintFormulas + '}';
         }
 
         public ConstraintFormula getConstraint(int index) {
             if (constraintFormulas.size() <= index) {
-                throw new IllegalArgumentException("Constraint with index " + index + " is not available as there are " + constraintFormulas.size() + " constraints");
+                throw new IllegalArgumentException("Constraint with index " + index + " is not available as there are "
+                        + constraintFormulas.size() + " constraints");
             }
             return constraintFormulas.get(index);
         }
@@ -142,5 +140,4 @@ public abstract class ConstraintFormula {
      * ii) Further constraint formulas, which are to be reduced recursively.
      */
     public abstract ReductionResult reduce(BoundSet currentBoundSet);
-
 }

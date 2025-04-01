@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.stream.Stream;
 
 public class JavaTest {
     class MethodDeclaration {
@@ -16,7 +17,7 @@ public class JavaTest {
             return true;
         }
     }
-    private List<String> foo(MethodDeclaration methodDecl) {
+    private Stream<Solved> foo(MethodDeclaration methodDecl) {
         return methodDecl
                 .getNodesByType(MethodDeclaration.class)
                 .stream()

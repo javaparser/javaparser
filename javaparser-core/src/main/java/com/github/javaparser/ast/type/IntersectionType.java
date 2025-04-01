@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.joining;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -34,11 +37,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.IntersectionTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedIntersectionType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.joining;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
@@ -96,8 +99,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
             return this;
         }
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
-        if (this.elements != null)
-            this.elements.setParentNode(null);
+        if (this.elements != null) this.elements.setParentNode(null);
         this.elements = elements;
         setAsParentNodeOf(elements);
         return this;
@@ -182,5 +184,10 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<IntersectionType> toIntersectionType() {
         return Optional.of(this);
+    }
+
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        throw new UnsupportedOperationException(getClass().getCanonicalName());
     }
 }

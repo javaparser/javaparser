@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.modules;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -35,7 +37,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleProvidesDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A provides directive in module-info.java. {@code provides X.Y with Z1.Z2, Z3.Z4;}
@@ -134,8 +135,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -148,8 +148,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
             return this;
         }
         notifyPropertyChange(ObservableProperty.WITH, this.with, with);
-        if (this.with != null)
-            this.with.setParentNode(null);
+        if (this.with != null) this.with.setParentNode(null);
         this.with = with;
         setAsParentNodeOf(with);
         return this;

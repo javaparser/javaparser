@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,9 +21,9 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 
 public interface ResolvedAnnotationDeclarationTest extends ResolvedReferenceTypeDeclarationTest {
 
@@ -34,5 +34,4 @@ public interface ResolvedAnnotationDeclarationTest extends ResolvedReferenceType
     default void getAnnotationMembersCantBeNull() {
         assertNotNull(createValue().getAnnotationMembers());
     }
-
 }

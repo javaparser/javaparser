@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,25 +21,20 @@
 
 package com.github.javaparser.utils;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.Position;
-import com.github.javaparser.Problem;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -52,15 +47,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class TestUtils {
 
@@ -83,12 +72,13 @@ public class TestUtils {
         if (resourceName.startsWith("/")) {
             resourceName = resourceName.substring(1);
         }
-        try (final InputStream resourceAsStream = TestUtils.class.getClassLoader().getResourceAsStream(resourceName)) {
+        try (final InputStream resourceAsStream =
+                TestUtils.class.getClassLoader().getResourceAsStream(resourceName)) {
             if (resourceAsStream == null) {
                 fail("resource not found by name: " + resourceName);
             }
             try (final InputStreamReader reader = new InputStreamReader(resourceAsStream, UTF_8);
-                 final BufferedReader br = new BufferedReader(reader)) {
+                    final BufferedReader br = new BufferedReader(reader)) {
                 final StringBuilder builder = new StringBuilder(4096);
                 String line;
                 while ((line = br.readLine()) != null) {
@@ -102,7 +92,6 @@ public class TestUtils {
         }
     }
 
-
     /**
      * Read the resource's contents as-is.
      * <br>
@@ -114,13 +103,13 @@ public class TestUtils {
         if (resourceName.startsWith("/")) {
             resourceName = resourceName.substring(1);
         }
-        try (final InputStream resourceAsStream = TestUtils.class.getClassLoader().getResourceAsStream(resourceName)) {
+        try (final InputStream resourceAsStream =
+                TestUtils.class.getClassLoader().getResourceAsStream(resourceName)) {
             if (resourceAsStream == null) {
                 fail("not found: " + resourceName);
             }
             try (final InputStreamReader reader = new InputStreamReader(resourceAsStream, UTF_8);
-                 final BufferedReader br = new BufferedReader(reader)
-            ) {
+                    final BufferedReader br = new BufferedReader(reader)) {
                 // Switched to reading char-by-char as opposed to line-by-line.
                 // This helps to retain the resource's own line endings.
                 final StringBuilder builder = new StringBuilder(4096);
@@ -163,7 +152,9 @@ public class TestUtils {
     }
 
     public static void assertInstanceOf(Class<?> expectedType, Object instance) {
-        assertTrue(expectedType.isAssignableFrom(instance.getClass()), f("%s is not an instance of %s.", instance.getClass(), expectedType));
+        assertTrue(
+                expectedType.isAssignableFrom(instance.getClass()),
+                f("%s is not an instance of %s.", instance.getClass(), expectedType));
     }
 
     /**
@@ -200,7 +191,6 @@ public class TestUtils {
                 zis.closeEntry();
                 ze = zis.getNextEntry();
             }
-
         }
         Log.info("Unzipped %s to %s", () -> zipFile, () -> outputFolder);
     }
@@ -210,9 +200,7 @@ public class TestUtils {
      */
     public static void download(URL url, Path destination) throws IOException {
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
+        Request request = new Request.Builder().url(url).build();
 
         Response response = client.newCall(request).execute();
         Files.write(destination, response.body().bytes());
@@ -300,18 +288,18 @@ public class TestUtils {
         // First test equality ignoring EOL chars
         assertEqualsStringIgnoringEol(expected, actual, message);
 
-        // If this passes but the next one fails, the failure is due only to EOL differences, allowing a more precise test failure message.
+        // If this passes but the next one fails, the failure is due only to EOL differences, allowing a more precise
+        // test failure message.
         assertEquals(
                 expected,
                 actual,
-                message + String.format(" -- failed due to line separator differences -- Expected: %s, but actual: %s (system eol: %s)",
-                        LineSeparator.detect(expected).asEscapedString(),
-                        LineSeparator.detect(actual).asEscapedString(),
-                        LineSeparator.SYSTEM.asEscapedString()
-                )
-        );
+                message
+                        + String.format(
+                                " -- failed due to line separator differences -- Expected: %s, but actual: %s (system eol: %s)",
+                                LineSeparator.detect(expected).asEscapedString(),
+                                LineSeparator.detect(actual).asEscapedString(),
+                                LineSeparator.SYSTEM.asEscapedString()));
     }
-
 
     /**
      * Assert that "actual" equals "expected", ignoring line separators.
@@ -319,8 +307,7 @@ public class TestUtils {
     public static void assertEqualsStringIgnoringEol(String expected, String actual) {
         assertEquals(
                 normalizeEolInTextBlock(expected, LineSeparator.ARBITRARY),
-                normalizeEolInTextBlock(actual, LineSeparator.ARBITRARY)
-        );
+                normalizeEolInTextBlock(actual, LineSeparator.ARBITRARY));
     }
 
     /**
@@ -330,10 +317,8 @@ public class TestUtils {
         assertEquals(
                 normalizeEolInTextBlock(expected, LineSeparator.ARBITRARY),
                 normalizeEolInTextBlock(actual, LineSeparator.ARBITRARY),
-                message
-        );
+                message);
     }
-
 
     /**
      * Assert that the given string is detected as having the given line separator.
@@ -374,7 +359,7 @@ public class TestUtils {
             }
             return parse.getResult()
                     .orElseThrow(() -> new IllegalArgumentException("No result when attempting to parse " + filePath));
-            } catch (IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalStateException("Error while parsing " + filePath, ex);
         }
     }
@@ -387,12 +372,12 @@ public class TestUtils {
     }
 
     public static <N extends Node> N getNodeStartingAtPosition(List<N> chars, int line, int col) {
-        List<N> nodesAtPosition = chars.stream()
-                .filter(expr -> startsAtPosition(expr, line, col))
-                .collect(toList());
+        List<N> nodesAtPosition =
+                chars.stream().filter(expr -> startsAtPosition(expr, line, col)).collect(toList());
 
         if (nodesAtPosition.size() != 1) {
-            throw new IllegalArgumentException("Expecting exactly one node to be positioned at " + line + "," + col + " but got " + nodesAtPosition);
+            throw new IllegalArgumentException("Expecting exactly one node to be positioned at " + line + "," + col
+                    + " but got " + nodesAtPosition);
         }
         return nodesAtPosition.get(0);
     }
@@ -404,5 +389,4 @@ public class TestUtils {
         LineSeparator actualLineSeparator = LineSeparator.detect(text);
         assertEquals(expectedLineSeparator, actualLineSeparator, message);
     }
-
 }

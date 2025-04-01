@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,11 +21,10 @@
 
 package com.github.javaparser;
 
-import org.junit.jupiter.api.Test;
+import static com.github.javaparser.StaticJavaParser.parseResource;
 
 import java.io.IOException;
-
-import static com.github.javaparser.StaticJavaParser.parseResource;
+import org.junit.jupiter.api.Test;
 
 class GeneratedJavaParserTokenManagerTest {
     private String makeFilename(String sampleName) {

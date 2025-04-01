@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,13 +24,11 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.junit.jupiter.api.Test;
-
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.junit.jupiter.api.Test;
 
 class ReflectionFieldDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -41,7 +39,7 @@ class ReflectionFieldDeclarationTest extends AbstractSymbolResolutionTest {
         ReflectionClassDeclaration rcd = new ReflectionClassDeclaration(AtomicBoolean.class, typeSolver);
         assertTrue(rcd.getField("value").isVolatile());
     }
-    
+
     @Test
     void verifyIsNotVolatileVariableDeclaration() {
         ReflectionClassDeclaration rcd = new ReflectionClassDeclaration(String.class, typeSolver);

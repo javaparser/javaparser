@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -28,7 +28,7 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import com.github.javaparser.utils.Utils;
+import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -71,7 +71,7 @@ class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreservingTes
     void addingAnnotation() {
         ArrayCreationLevel it = consider("[]");
         it.addAnnotation("myAnno");
-        assertTransformedToString("@myAnno()"+ Utils.SYSTEM_EOL +"[]", it);
+        assertTransformedToString("@myAnno" + LineSeparator.SYSTEM + "[]", it);
     }
 
     @Test
@@ -85,7 +85,6 @@ class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreservingTes
     void replacingAnnotation() {
         ArrayCreationLevel it = consider("@myAnno []");
         it.getAnnotations().set(0, new NormalAnnotationExpr(new Name("myOtherAnno"), new NodeList<>()));
-        assertTransformedToString("@myOtherAnno() []", it);
+        assertTransformedToString("@myOtherAnno []", it);
     }
-
 }

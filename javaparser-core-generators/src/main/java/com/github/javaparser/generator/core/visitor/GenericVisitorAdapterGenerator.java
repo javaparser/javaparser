@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,15 +21,15 @@
 
 package com.github.javaparser.generator.core.visitor;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.VisitorGenerator;
-import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
-
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import com.github.javaparser.utils.SourceRoot;
 
 /**
  * Generates JavaParser's VoidVisitorAdapter.
@@ -40,12 +40,13 @@ public class GenericVisitorAdapterGenerator extends VisitorGenerator {
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(
+            BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         visitMethod.getParameters().forEach(p -> p.setFinal(true));
 
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
-        
+
         body.addStatement("R result;");
 
         final String resultCheck = "if (result != null) return result;";
@@ -54,10 +55,9 @@ public class GenericVisitorAdapterGenerator extends VisitorGenerator {
             final String getter = field.getGetterMethodName() + "()";
             if (field.getNodeReference().isPresent()) {
                 if (field.isOptional()) {
-                    body.addStatement(f("if (n.%s.isPresent()) {" +
-                            "   result = n.%s.get().accept(this, arg);" +
-                            "   %s" +
-                            "}", getter, getter, resultCheck));
+                    body.addStatement(f(
+                            "if (n.%s.isPresent()) {" + "   result = n.%s.get().accept(this, arg);" + "   %s" + "}",
+                            getter, getter, resultCheck));
                 } else {
                     body.addStatement(f("{ result = n.%s.accept(this, arg); %s }", getter, resultCheck));
                 }

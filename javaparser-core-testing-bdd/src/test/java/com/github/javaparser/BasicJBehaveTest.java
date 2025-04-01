@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,20 +21,18 @@
 
 package com.github.javaparser;
 
+import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 
-import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
+import java.util.List;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.failures.FailingUponPendingStep;
 import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
+import org.jbehave.core.junit.JUnit4StoryRunner;
 import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.reporters.Format;
 import org.jbehave.core.reporters.StoryReporterBuilder;
-
-import java.util.List;
-
-import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 
 abstract class BasicJBehaveTest extends JUnitStories {
 
@@ -42,7 +40,7 @@ abstract class BasicJBehaveTest extends JUnitStories {
 
     BasicJBehaveTest(String storiesPath) {
         this.storiesPath = storiesPath;
-        JUnitReportingRunner.recommendedControls(configuredEmbedder());
+        JUnit4StoryRunner.recommendedControls(configuredEmbedder());
     }
 
     @Override
@@ -53,13 +51,12 @@ abstract class BasicJBehaveTest extends JUnitStories {
                 // Fails if Steps are not implemented
                 .usePendingStepStrategy(new FailingUponPendingStep())
                 // CONSOLE and HTML reporting
-                .useStoryReporterBuilder(new StoryReporterBuilder().withDefaultFormats()
-                        .withFormats(Format.CONSOLE, Format.HTML));
+                .useStoryReporterBuilder(
+                        new StoryReporterBuilder().withDefaultFormats().withFormats(Format.CONSOLE, Format.HTML));
     }
 
     @Override
     public final List<String> storyPaths() {
         return new StoryFinder().findPaths(codeLocationFromClass(this.getClass()), storiesPath, "");
     }
-
 }

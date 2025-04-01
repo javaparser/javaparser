@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,11 +21,10 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
-
 import java.util.Objects;
 import java.util.Optional;
 
@@ -80,36 +79,34 @@ public class ClassLoaderTypeSolver implements TypeSolver {
                 Class<?> clazz = classLoader.loadClass(name);
                 return SymbolReference.solved(ReflectionFactory.typeDeclarationFor(clazz, getRoot()));
             } catch (NoClassDefFoundError e) {
-                // We can safely ignore this one because it is triggered when there are package names which are almost the
+                // We can safely ignore this one because it is triggered when there are package names which are almost
+                // the
                 // same as class name, with the exclusion of the case.
                 // For example:
                 // java.lang.NoClassDefFoundError: com/github/javaparser/printer/ConcreteSyntaxModel
                 // (wrong name: com/github/javaparser/printer/concretesyntaxmodel)
                 // note that this exception seems to be thrown only on certain platform (mac yes, linux no)
-                return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+                return SymbolReference.unsolved();
             } catch (ClassNotFoundException e) {
                 // it could be an inner class
                 int lastDot = name.lastIndexOf('.');
                 if (lastDot == -1) {
-                    return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
-                } else {
-                    String parentName = name.substring(0, lastDot);
-                    String childName = name.substring(lastDot + 1);
-                    SymbolReference<ResolvedReferenceTypeDeclaration> parent = tryToSolveType(parentName);
-                    if (parent.isSolved()) {
-                        Optional<ResolvedReferenceTypeDeclaration> innerClass = parent.getCorrespondingDeclaration()
-                                .internalTypes()
-                                .stream().filter(it -> it.getName().equals(childName)).findFirst();
-                        return innerClass.map(SymbolReference::solved)
-                                .orElseGet(() -> SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
-                    } else {
-                        return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
-                    }
+                    return SymbolReference.unsolved();
                 }
+                String parentName = name.substring(0, lastDot);
+                String childName = name.substring(lastDot + 1);
+                SymbolReference<ResolvedReferenceTypeDeclaration> parent = tryToSolveType(parentName);
+                if (parent.isSolved()) {
+                    Optional<ResolvedReferenceTypeDeclaration> innerClass =
+                            parent.getCorrespondingDeclaration().internalTypes().stream()
+                                    .filter(it -> it.getName().equals(childName))
+                                    .findFirst();
+                    return innerClass.map(SymbolReference::solved).orElseGet(() -> SymbolReference.unsolved());
+                }
+                return SymbolReference.unsolved();
             }
         } else {
-            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+            return SymbolReference.unsolved();
         }
     }
-
 }

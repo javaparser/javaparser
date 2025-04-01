@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,15 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
-
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.function.Predicate;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.Observable;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * An object that can have a parent node.
@@ -39,7 +36,7 @@ public interface HasParentNode<T> extends Observable {
     default boolean hasParentNode() {
         return getParentNode().isPresent();
     }
-    
+
     /**
      * Returns the parent node, or {@code Optional.empty} if no parent is set.
      */
@@ -82,7 +79,7 @@ public interface HasParentNode<T> extends Observable {
     default <N> Optional<N> findAncestor(Class<N> type, Predicate<N> predicate) {
         return findAncestor(predicate, type);
     }
-    
+
     /**
      * Walks the parents of this node and returns the first node that matches one of types {@code types}, or
      * {@code empty()} if none is found. The given type may also be an interface type, such as one of the
@@ -92,11 +89,10 @@ public interface HasParentNode<T> extends Observable {
     default <N> Optional<N> findAncestor(Predicate<N> predicate, Class<N>... types) {
         if (!hasParentNode()) return Optional.empty();
         Node parent = getParentNode().get();
-        Optional<Class<N>> oType = Arrays.stream(types)
-                .filter(type -> type.isAssignableFrom(parent.getClass()) && predicate.test(type.cast(parent)))
-                .findFirst();
-        if (oType.isPresent()) {
-            return Optional.of(oType.get().cast(parent));
+        for (Class<N> type : types) {
+            if (type.isAssignableFrom(parent.getClass()) && predicate.test(type.cast(parent))) {
+                return Optional.of(type.cast(parent));
+            }
         }
         return parent.findAncestor(predicate, types);
     }
@@ -112,5 +108,4 @@ public interface HasParentNode<T> extends Observable {
     default boolean isDescendantOf(Node ancestor) {
         return findAncestor(n -> n == ancestor, Node.class).isPresent();
     }
-
 }

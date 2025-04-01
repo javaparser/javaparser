@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,19 +18,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
-
-import java.util.List;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.LineSeparator;
+import java.util.List;
 
 /**
  * Outputs a Graphviz diagram of the AST.
@@ -38,6 +36,7 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 public class DotPrinter {
 
     private int nodeCount;
+
     private final boolean outputNodeType;
 
     public DotPrinter(boolean outputNodeType) {
@@ -49,7 +48,7 @@ public class DotPrinter {
         StringBuilder output = new StringBuilder();
         output.append("digraph {");
         output(node, null, "root", output);
-        output.append(SYSTEM_EOL + "}");
+        output.append(LineSeparator.SYSTEM + "}");
         return output.toString();
     }
 
@@ -57,46 +56,41 @@ public class DotPrinter {
         assertNotNull(node);
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();
-        List<PropertyMetaModel> attributes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isAttribute)
-                .filter(PropertyMetaModel::isSingular).collect(toList());
-        List<PropertyMetaModel> subNodes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNode)
-                .filter(PropertyMetaModel::isSingular).collect(toList());
-        List<PropertyMetaModel> subLists = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNodeList)
+        List<PropertyMetaModel> attributes = allPropertyMetaModels.stream()
+                .filter(PropertyMetaModel::isAttribute)
+                .filter(PropertyMetaModel::isSingular)
                 .collect(toList());
-
+        List<PropertyMetaModel> subNodes = allPropertyMetaModels.stream()
+                .filter(PropertyMetaModel::isNode)
+                .filter(PropertyMetaModel::isSingular)
+                .collect(toList());
+        List<PropertyMetaModel> subLists = allPropertyMetaModels.stream()
+                .filter(PropertyMetaModel::isNodeList)
+                .collect(toList());
         String ndName = nextNodeName();
         if (outputNodeType)
-            builder.append(SYSTEM_EOL + ndName + " [label=\"" + escape(name) + " (" + metaModel.getTypeName()
+            builder.append(LineSeparator.SYSTEM + ndName + " [label=\"" + escape(name) + " (" + metaModel.getTypeName()
                     + ")\"];");
-        else
-            builder.append(SYSTEM_EOL + ndName + " [label=\"" + escape(name) + "\"];");
-
-        if (parentNodeName != null)
-            builder.append(SYSTEM_EOL + parentNodeName + " -> " + ndName + ";");
-
+        else builder.append(LineSeparator.SYSTEM + ndName + " [label=\"" + escape(name) + "\"];");
+        if (parentNodeName != null) builder.append(LineSeparator.SYSTEM + parentNodeName + " -> " + ndName + ";");
         for (PropertyMetaModel a : attributes) {
             String attrName = nextNodeName();
-            builder.append(SYSTEM_EOL + attrName + " [label=\"" + escape(a.getName()) + "='"
+            builder.append(LineSeparator.SYSTEM + attrName + " [label=\"" + escape(a.getName()) + "='"
                     + escape(a.getValue(node).toString()) + "'\"];");
-            builder.append(SYSTEM_EOL + ndName + " -> " + attrName + ";");
-
+            builder.append(LineSeparator.SYSTEM + ndName + " -> " + attrName + ";");
         }
-
         for (PropertyMetaModel sn : subNodes) {
             Node nd = (Node) sn.getValue(node);
-            if (nd != null)
-                output(nd, ndName, sn.getName(), builder);
+            if (nd != null) output(nd, ndName, sn.getName(), builder);
         }
-
         for (PropertyMetaModel sl : subLists) {
             NodeList<? extends Node> nl = (NodeList<? extends Node>) sl.getValue(node);
             if (nl != null && nl.isNonEmpty()) {
                 String ndLstName = nextNodeName();
-                builder.append(SYSTEM_EOL + ndLstName + " [label=\"" + escape(sl.getName()) + "\"];");
-                builder.append(SYSTEM_EOL + ndName + " -> " + ndLstName + ";");
+                builder.append(LineSeparator.SYSTEM + ndLstName + " [label=\"" + escape(sl.getName()) + "\"];");
+                builder.append(LineSeparator.SYSTEM + ndName + " -> " + ndLstName + ";");
                 String slName = sl.getName().substring(0, sl.getName().length() - 1);
-                for (Node nd : nl)
-                    output(nd, ndLstName, slName, builder);
+                for (Node nd : nl) output(nd, ndLstName, slName, builder);
             }
         }
     }

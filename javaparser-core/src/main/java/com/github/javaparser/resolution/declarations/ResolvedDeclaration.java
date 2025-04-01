@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 /**
@@ -26,7 +25,7 @@ package com.github.javaparser.resolution.declarations;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedDeclaration {
+public interface ResolvedDeclaration extends AssociableToAST {
 
     /**
      * Anonymous classes do not have a name, for example.
@@ -64,7 +63,7 @@ public interface ResolvedDeclaration {
     /**
      * Does this declaration represents a pattern declaration?
      */
-    default boolean isPattern() {
+    default boolean isTypePattern() {
         return false;
     }
 
@@ -129,7 +128,7 @@ public interface ResolvedDeclaration {
     /**
      * Return this as a PatternDeclaration or throw an UnsupportedOperationException
      */
-    default ResolvedPatternDeclaration asPattern() {
+    default ResolvedTypePatternDeclaration asTypePattern() {
         throw new UnsupportedOperationException(String.format("%s is not a Pattern", this));
     }
 }

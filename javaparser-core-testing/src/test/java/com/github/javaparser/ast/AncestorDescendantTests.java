@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,14 +21,13 @@
 
 package com.github.javaparser.ast;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.*;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class AncestorDescendantTests {
 
@@ -41,11 +40,17 @@ public class AncestorDescendantTests {
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
         assertTrue(parse.isSuccessful());
 
-        VariableDeclarationExpr node = parse.getResult().get()
+        VariableDeclarationExpr node = parse.getResult()
+                .get()
                 .getType(0) // class A
-                .getMember(0).asMethodDeclaration() // method foo()
-                .getBody().get().getStatement(0).asExpressionStmt() // int a = 42;
-                .getExpression().asVariableDeclarationExpr(); // a = 42
+                .getMember(0)
+                .asMethodDeclaration() // method foo()
+                .getBody()
+                .get()
+                .getStatement(0)
+                .asExpressionStmt() // int a = 42;
+                .getExpression()
+                .asVariableDeclarationExpr(); // a = 42
 
         assertFalse(node.isAncestorOf(node));
     }
@@ -59,11 +64,17 @@ public class AncestorDescendantTests {
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
         assertTrue(parse.isSuccessful());
 
-        VariableDeclarationExpr node = parse.getResult().get()
+        VariableDeclarationExpr node = parse.getResult()
+                .get()
                 .getType(0) // class A
-                .getMember(0).asMethodDeclaration() // method foo()
-                .getBody().get().getStatement(0).asExpressionStmt() // int a = 42;
-                .getExpression().asVariableDeclarationExpr(); // a = 42
+                .getMember(0)
+                .asMethodDeclaration() // method foo()
+                .getBody()
+                .get()
+                .getStatement(0)
+                .asExpressionStmt() // int a = 42;
+                .getExpression()
+                .asVariableDeclarationExpr(); // a = 42
 
         assertFalse(node.isDescendantOf(node));
     }
@@ -77,11 +88,17 @@ public class AncestorDescendantTests {
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
         assertTrue(parse.isSuccessful());
 
-        VariableDeclarationExpr superNode = parse.getResult().get()
+        VariableDeclarationExpr superNode = parse.getResult()
+                .get()
                 .getType(0) // class A
-                .getMember(0).asMethodDeclaration() // method foo()
-                .getBody().get().getStatement(0).asExpressionStmt() // int a = 42;
-                .getExpression().asVariableDeclarationExpr(); // a = 42
+                .getMember(0)
+                .asMethodDeclaration() // method foo()
+                .getBody()
+                .get()
+                .getStatement(0)
+                .asExpressionStmt() // int a = 42;
+                .getExpression()
+                .asVariableDeclarationExpr(); // a = 42
 
         Expression subNode = superNode.getVariable(0).getInitializer().get(); // 42
 
@@ -105,19 +122,31 @@ public class AncestorDescendantTests {
         ParseResult<CompilationUnit> parseB = parser.parse(ParseStart.COMPILATION_UNIT, providerB);
         assertTrue(parseB.isSuccessful());
 
-        VariableDeclarationExpr superNodeA = parseA.getResult().get()
+        VariableDeclarationExpr superNodeA = parseA.getResult()
+                .get()
                 .getType(0) // class A
-                .getMember(0).asMethodDeclaration() // method foo()
-                .getBody().get().getStatement(0).asExpressionStmt() // int a = 42;
-                .getExpression().asVariableDeclarationExpr(); // a = 42
+                .getMember(0)
+                .asMethodDeclaration() // method foo()
+                .getBody()
+                .get()
+                .getStatement(0)
+                .asExpressionStmt() // int a = 42;
+                .getExpression()
+                .asVariableDeclarationExpr(); // a = 42
 
         Expression subNodeA = superNodeA.getVariable(0).getInitializer().get(); // 42
 
-        VariableDeclarationExpr superNodeB = parseB.getResult().get()
+        VariableDeclarationExpr superNodeB = parseB.getResult()
+                .get()
                 .getType(0) // class B
-                .getMember(0).asMethodDeclaration() // method foo()
-                .getBody().get().getStatement(0).asExpressionStmt() // int b = 42;
-                .getExpression().asVariableDeclarationExpr(); // b = 42
+                .getMember(0)
+                .asMethodDeclaration() // method foo()
+                .getBody()
+                .get()
+                .getStatement(0)
+                .asExpressionStmt() // int b = 42;
+                .getExpression()
+                .asVariableDeclarationExpr(); // b = 42
 
         Expression subNodeB = superNodeB.getVariable(0).getInitializer().get(); // 42
 

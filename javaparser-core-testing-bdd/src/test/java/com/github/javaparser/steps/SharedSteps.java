@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,27 +21,26 @@
 
 package com.github.javaparser.steps;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.text.IsEqualCompressingWhiteSpace.equalToCompressingWhiteSpace;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import org.hamcrest.CoreMatchers;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.text.IsEqualCompressingWhiteSpace.equalToCompressingWhiteSpace;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.hamcrest.CoreMatchers;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 
 public class SharedSteps {
 
@@ -130,7 +129,8 @@ public class SharedSteps {
         assertThat(compilationUnit.toString(), CoreMatchers.is(equalToCompressingWhiteSpace(classSrc)));
     }
 
-    public static <T extends BodyDeclaration<?>> T getMemberByTypeAndPosition(TypeDeclaration<?> typeDeclaration, int position, Class<T> typeClass) {
+    public static <T extends BodyDeclaration<?>> T getMemberByTypeAndPosition(
+            TypeDeclaration<?> typeDeclaration, int position, Class<T> typeClass) {
         int typeCount = 0;
         for (BodyDeclaration<?> declaration : typeDeclaration.getMembers()) {
             if (declaration.getClass().equals(typeClass)) {
@@ -143,8 +143,8 @@ public class SharedSteps {
         throw new IllegalArgumentException("No member " + typeClass + " at position: " + position);
     }
 
-    public static MethodDeclaration getMethodByPositionAndClassPosition(CompilationUnit compilationUnit,
-                                                                        int methodPosition, int classPosition) {
+    public static MethodDeclaration getMethodByPositionAndClassPosition(
+            CompilationUnit compilationUnit, int methodPosition, int classPosition) {
         TypeDeclaration<?> type = compilationUnit.getType(classPosition - 1);
 
         int memberCount = 0;
@@ -158,6 +158,7 @@ public class SharedSteps {
             }
             memberCount++;
         }
-        throw new IllegalArgumentException("Method not found at position " + methodPosition + "in class " + classPosition);
+        throw new IllegalArgumentException(
+                "Method not found at position " + methodPosition + "in class " + classPosition);
     }
 }

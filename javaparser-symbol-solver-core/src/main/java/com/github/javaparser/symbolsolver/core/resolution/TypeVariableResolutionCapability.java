@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,11 +21,11 @@
 
 package com.github.javaparser.symbolsolver.core.resolution;
 
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.List;
 
 public interface TypeVariableResolutionCapability {
-	MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes);
+    MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes);
 }

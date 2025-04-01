@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,20 +18,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A list that overrides the equals and hashcode calculation of the added nodes
@@ -40,14 +34,16 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public class VisitorList<N extends Node> implements List<N> {
 
     protected List<EqualsHashcodeOverridingFacade> innerList;
+
     protected final GenericVisitor<Integer, Void> hashcodeVisitor;
+
     protected final GenericVisitor<Boolean, Visitable> equalsVisitor;
 
     /**
      * Pass the visitors to use for equals and hashcode.
      */
-    public VisitorList(GenericVisitor<Integer, Void> hashcodeVisitor,
-                       GenericVisitor<Boolean, Visitable> equalsVisitor) {
+    public VisitorList(
+            GenericVisitor<Integer, Void> hashcodeVisitor, GenericVisitor<Boolean, Visitable> equalsVisitor) {
         this.hashcodeVisitor = hashcodeVisitor;
         this.equalsVisitor = equalsVisitor;
         innerList = new ArrayList<>();
@@ -66,21 +62,16 @@ public class VisitorList<N extends Node> implements List<N> {
     @Override
     public boolean addAll(Collection<? extends N> col) {
         boolean modified = false;
-        for (N elem : col)
-            if (add(elem))
-                modified = true;
+        for (N elem : col) if (add(elem)) modified = true;
         return modified;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends N> col) {
-        if (col.isEmpty())
-            return false;
+        if (col.isEmpty()) return false;
         for (N elem : col) {
-            if (index == size())
-                add(elem);
-            else
-                add(index, elem);
+            if (index == size()) add(elem);
+            else add(index, elem);
             index++;
         }
         return true;
@@ -98,9 +89,7 @@ public class VisitorList<N extends Node> implements List<N> {
 
     @Override
     public boolean containsAll(Collection<?> col) {
-        for (Object elem : col)
-            if (!contains(elem))
-                return false;
+        for (Object elem : col) if (!contains(elem)) return false;
         return true;
     }
 
@@ -122,6 +111,7 @@ public class VisitorList<N extends Node> implements List<N> {
     @Override
     public Iterator<N> iterator() {
         return new Iterator<N>() {
+
             final Iterator<EqualsHashcodeOverridingFacade> itr = innerList.iterator();
 
             @Override
@@ -154,6 +144,7 @@ public class VisitorList<N extends Node> implements List<N> {
     @Override
     public ListIterator<N> listIterator(int index) {
         return new ListIterator<N>() {
+
             final ListIterator<EqualsHashcodeOverridingFacade> itr = innerList.listIterator(index);
 
             @Override
@@ -216,9 +207,7 @@ public class VisitorList<N extends Node> implements List<N> {
     @Override
     public boolean removeAll(Collection<?> col) {
         boolean modified = false;
-        for (Object elem : col)
-            if (remove(elem))
-                modified = true;
+        for (Object elem : col) if (remove(elem)) modified = true;
         return modified;
     }
 
@@ -243,6 +232,7 @@ public class VisitorList<N extends Node> implements List<N> {
     @Override
     public List<N> subList(int fromIndex, int toIndex) {
         return new VisitorList<N>(hashcodeVisitor, equalsVisitor) {
+
             {
                 this.innerList = VisitorList.this.innerList.subList(fromIndex, toIndex);
             }
@@ -251,19 +241,24 @@ public class VisitorList<N extends Node> implements List<N> {
 
     @Override
     public Object[] toArray() {
-        return innerList.stream().map(facade -> facade.overridden).collect(Collectors.toList()).toArray();
+        return innerList.stream()
+                .map(facade -> facade.overridden)
+                .collect(Collectors.toList())
+                .toArray();
     }
 
     @Override
     public <T> T[] toArray(T[] arr) {
-        return innerList.stream().map(facade -> facade.overridden).collect(Collectors.toList()).toArray(arr);
+        return innerList.stream()
+                .map(facade -> facade.overridden)
+                .collect(Collectors.toList())
+                .toArray(arr);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
-        if (size() == 0)
-            return sb.append("]").toString();
+        if (size() == 0) return sb.append("]").toString();
         for (EqualsHashcodeOverridingFacade facade : innerList) {
             sb.append(facade.overridden.toString() + ", ");
         }
@@ -271,6 +266,7 @@ public class VisitorList<N extends Node> implements List<N> {
     }
 
     private class EqualsHashcodeOverridingFacade implements Visitable {
+
         private final N overridden;
 
         EqualsHashcodeOverridingFacade(N overridden) {

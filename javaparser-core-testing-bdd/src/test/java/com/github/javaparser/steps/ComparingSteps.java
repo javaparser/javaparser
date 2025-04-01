@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,14 +21,14 @@
 
 package com.github.javaparser.steps;
 
-import com.github.javaparser.ast.CompilationUnit;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import com.github.javaparser.ast.CompilationUnit;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
 
 public class ComparingSteps {
 
@@ -57,5 +57,4 @@ public class ComparingSteps {
     public void thenTheyAreEquals() {
         assertThat(first, is(equalTo(second)));
     }
-
 }

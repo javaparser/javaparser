@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -55,10 +55,7 @@ public class ProperLowerBound {
 
     @Override
     public String toString() {
-        return "ProperLowerBound{" +
-                "inferenceVariable=" + inferenceVariable +
-                ", properType=" + properType +
-                '}';
+        return "ProperLowerBound{" + "inferenceVariable=" + inferenceVariable + ", properType=" + properType + '}';
     }
 
     public InferenceVariable getInferenceVariable() {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,36 +23,29 @@ package com.github.javaparser.symbolsolver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.io.IOException;
+import org.junit.jupiter.api.Test;
 
 class Issue1713Test extends AbstractResolutionTest {
 
     @Test()
     void test() throws IOException {
-        
-        String src = 
-                "class X {\n" + 
-                "  @SuppressWarnings(value = \"unchecked\")\n" +
-                "  void x() {}\n" +
-                "}";
+
+        String src = "class X {\n" + "  @SuppressWarnings(value = \"unchecked\")\n" + "  void x() {}\n" + "}";
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         StaticJavaParser.setConfiguration(config);
 
         CompilationUnit cu = StaticJavaParser.parse(src);
-        
+
         NormalAnnotationExpr nae = cu.findFirst(NormalAnnotationExpr.class).get();
         assertEquals("java.lang.SuppressWarnings", nae.resolve().getQualifiedName());
-
     }
 }

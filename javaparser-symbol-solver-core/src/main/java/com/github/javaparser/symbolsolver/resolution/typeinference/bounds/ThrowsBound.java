@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,7 +24,6 @@ package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
 import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariableSubstitution;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,9 +54,7 @@ public class ThrowsBound extends Bound {
 
     @Override
     public String toString() {
-        return "ThrowsBound{" +
-                "inferenceVariable=" + inferenceVariable +
-                '}';
+        return "ThrowsBound{" + "inferenceVariable=" + inferenceVariable + '}';
     }
 
     @Override

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,13 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.resolution.types.ResolvedType;
-
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +31,9 @@ import java.util.Optional;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration,
-        ResolvedTypeParametrizable, HasAccessSpecifier {
+public interface ResolvedMethodLikeDeclaration
+        extends ResolvedDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier {
+
     /**
      * The package name of the declaring type.
      */
@@ -104,9 +103,24 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration,
      */
     default ResolvedParameterDeclaration getLastParam() {
         if (getNumberOfParams() == 0) {
-            throw new UnsupportedOperationException("This method has no typeParametersValues, therefore it has no a last parameter");
+            throw new UnsupportedOperationException(
+                    "This method has no typeParametersValues, therefore it has no a last parameter");
         }
         return getParam(getNumberOfParams() - 1);
+    }
+
+    /*
+     * Returns the list of formal parameter types
+     */
+    default List<ResolvedType> formalParameterTypes() {
+        if (getNumberOfParams() == 0) {
+            return Collections.emptyList();
+        }
+        List<ResolvedType> types = new ArrayList<>();
+        for (int i = 0; i < getNumberOfParams(); i++) {
+            types.add(getParam(i).getType());
+        }
+        return types;
     }
 
     /**
@@ -116,9 +130,8 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration,
     default boolean hasVariadicParameter() {
         if (getNumberOfParams() == 0) {
             return false;
-        } else {
-            return getParam(getNumberOfParams() - 1).isVariadic();
         }
+        return getParam(getNumberOfParams() - 1).isVariadic();
     }
 
     @Override
@@ -148,12 +161,11 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration,
     default List<ResolvedType> getSpecifiedExceptions() {
         if (getNumberOfSpecifiedExceptions() == 0) {
             return Collections.emptyList();
-        } else {
-            List<ResolvedType> exceptions = new LinkedList<>();
-            for (int i=0;i<getNumberOfSpecifiedExceptions();i++) {
-                exceptions.add(getSpecifiedException(i));
-            }
-            return exceptions;
         }
+        List<ResolvedType> exceptions = new ArrayList<>();
+        for (int i = 0; i < getNumberOfSpecifiedExceptions(); i++) {
+            exceptions.add(getSpecifiedException(i));
+        }
+        return exceptions;
     }
 }

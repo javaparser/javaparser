@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,26 +21,24 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-
-import java.util.Optional;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.resolution.declarations.AssociableToAST;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration, AssociableToAST<FieldDeclaration> {
+public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
 
     private VariableDeclarator variableDeclarator;
     private com.github.javaparser.ast.body.FieldDeclaration wrappedNode;
@@ -53,7 +51,8 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration, Ass
         this.variableDeclarator = variableDeclarator;
         this.typeSolver = typeSolver;
         if (!(demandParentNode(variableDeclarator) instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
-            throw new IllegalStateException(demandParentNode(variableDeclarator).getClass().getCanonicalName());
+            throw new IllegalStateException(
+                    demandParentNode(variableDeclarator).getClass().getCanonicalName());
         }
         this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) demandParentNode(variableDeclarator);
     }
@@ -72,7 +71,7 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration, Ass
     public boolean isStatic() {
         return wrappedNode.hasModifier(Modifier.Keyword.STATIC);
     }
-    
+
     @Override
     public boolean isVolatile() {
         return wrappedNode.hasModifier(Modifier.Keyword.VOLATILE);
@@ -114,9 +113,9 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration, Ass
         }
         throw new IllegalStateException();
     }
-    
+
     @Override
-    public Optional<FieldDeclaration> toAst() {
+    public Optional<Node> toAst() {
         return Optional.ofNullable(wrappedNode);
     }
 }

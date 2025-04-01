@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,97 +21,99 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.lang.annotation.Inherited;
 import java.util.Collections;
 import java.util.stream.Collectors;
-
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
 @interface OuterAnnotation {
-  @interface InnerAnnotation {}
+    @interface InnerAnnotation {}
 }
 
 @interface WithValue {
-  String value();
+    String value();
 }
 
 @interface WithField {
-  int FIELD_DECLARATION = 0;
+    int FIELD_DECLARATION = 0;
 }
 
 @Inherited
 @interface InheritedAnnotation {}
 
 class ReflectionAnnotationDeclarationTest {
-  private TypeSolver typeSolver = new ReflectionTypeSolver(false);
+    private TypeSolver typeSolver = new ReflectionTypeSolver(false);
 
-  @Test
-  void isClass() {
-    ReflectionAnnotationDeclaration
-        annotation = (ReflectionAnnotationDeclaration) typeSolver.solveType(
-            "com.github.javaparser.symbolsolver.reflectionmodel.OuterAnnotation");
-    assertFalse(annotation.isClass());
-  }
+    @Test
+    void isClass() {
+        ReflectionAnnotationDeclaration annotation = (ReflectionAnnotationDeclaration)
+                typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.OuterAnnotation");
+        assertFalse(annotation.isClass());
+    }
 
-  @Test
-  void innerIsClass() {
-    ReflectionAnnotationDeclaration
-        annotation = (ReflectionAnnotationDeclaration) typeSolver.solveType(
-            "com.github.javaparser.symbolsolver.reflectionmodel.OuterAnnotation.InnerAnnotation");
-    assertFalse(annotation.isClass());
-  }
+    @Test
+    void innerIsClass() {
+        ReflectionAnnotationDeclaration annotation = (ReflectionAnnotationDeclaration) typeSolver.solveType(
+                "com.github.javaparser.symbolsolver.reflectionmodel.OuterAnnotation.InnerAnnotation");
+        assertFalse(annotation.isClass());
+    }
 
-  @Test
-  void getInternalTypes() {
-    ReflectionAnnotationDeclaration annotation =
-        (ReflectionAnnotationDeclaration) typeSolver.solveType(
-            "com.github.javaparser.symbolsolver.reflectionmodel.OuterAnnotation");
-    assertEquals(Collections.singleton("InnerAnnotation"),
-        annotation.internalTypes().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
-  }
+    @Test
+    void getInternalTypes() {
+        ReflectionAnnotationDeclaration annotation = (ReflectionAnnotationDeclaration)
+                typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.OuterAnnotation");
+        assertEquals(
+                Collections.singleton("InnerAnnotation"),
+                annotation.internalTypes().stream()
+                        .map(ResolvedDeclaration::getName)
+                        .collect(Collectors.toSet()));
+    }
 
-  @Test
-  void solveMethodForAnnotationWithValue() {
-    ReflectionAnnotationDeclaration annotation =
-        (ReflectionAnnotationDeclaration) typeSolver.solveType(WithValue.class.getCanonicalName());
-    final SymbolReference<ResolvedMethodDeclaration> symbolReference =
-        annotation.solveMethod("value", Collections.emptyList(), false);
-    assertEquals("value", symbolReference.getCorrespondingDeclaration().getName());
-  }
+    @Test
+    void solveMethodForAnnotationWithValue() {
+        ReflectionAnnotationDeclaration annotation =
+                (ReflectionAnnotationDeclaration) typeSolver.solveType(WithValue.class.getCanonicalName());
+        final SymbolReference<ResolvedMethodDeclaration> symbolReference =
+                annotation.solveMethod("value", Collections.emptyList(), false);
+        assertEquals("value", symbolReference.getCorrespondingDeclaration().getName());
+    }
 
-  @Test
-  void getAllFields_shouldReturnTheCorrectFields() {
-    ReflectionAnnotationDeclaration annotation =
-            (ReflectionAnnotationDeclaration) typeSolver.solveType(
-                    "com.github.javaparser.symbolsolver.reflectionmodel.WithField");
-    assertEquals(Collections.singleton("FIELD_DECLARATION"),
-            annotation.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
-  }
-  
-  @Test
-  void isAnnotationNotInheritable() {
-    ReflectionAnnotationDeclaration
-        annotation = (ReflectionAnnotationDeclaration) typeSolver.solveType(
-            "com.github.javaparser.symbolsolver.reflectionmodel.OuterAnnotation");
-    assertFalse(annotation.isInheritable());
-  }
-  
-  @Test
-  void isAnnotationInheritable() {
-    ReflectionAnnotationDeclaration
-        annotation = (ReflectionAnnotationDeclaration) typeSolver.solveType(
-            "com.github.javaparser.symbolsolver.reflectionmodel.InheritedAnnotation");
-    assertTrue(annotation.isInheritable());
-  }
+    @Test
+    void getAllFields_shouldReturnTheCorrectFields() {
+        ReflectionAnnotationDeclaration annotation = (ReflectionAnnotationDeclaration)
+                typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.WithField");
+        assertEquals(
+                Collections.singleton("FIELD_DECLARATION"),
+                annotation.getAllFields().stream()
+                        .map(ResolvedDeclaration::getName)
+                        .collect(Collectors.toSet()));
+    }
 
+    @Test
+    void getClassName_shouldReturnCorrectValue() {
+        ReflectionAnnotationDeclaration annotation = (ReflectionAnnotationDeclaration)
+                typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.WithField");
+        assertEquals("WithField", annotation.getClassName());
+    }
+
+    @Test
+    void isAnnotationNotInheritable() {
+        ReflectionAnnotationDeclaration annotation = (ReflectionAnnotationDeclaration)
+                typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.OuterAnnotation");
+        assertFalse(annotation.isInheritable());
+    }
+
+    @Test
+    void isAnnotationInheritable() {
+        ReflectionAnnotationDeclaration annotation = (ReflectionAnnotationDeclaration)
+                typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.InheritedAnnotation");
+        assertTrue(annotation.isInheritable());
+    }
 }

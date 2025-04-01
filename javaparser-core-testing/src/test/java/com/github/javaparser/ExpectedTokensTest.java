@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,17 +21,15 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.utils.ExtractingVisitors;
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.github.javaparser.utils.TestUtils.getNodeStartingAtPosition;
 import static com.github.javaparser.utils.TestUtils.parseFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
+import com.github.javaparser.utils.ExtractingVisitors;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 class ExpectedTokensTest {
 
@@ -70,5 +68,4 @@ class ExpectedTokensTest {
         CharLiteralExpr expr = getNodeStartingAtPosition(chars, line, col);
         assertEquals(expectedTokenValue, expr.getValue(), "Node at " + line + "," + col);
     }
-
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.FalseBound;
-
 import java.util.Optional;
 import java.util.Set;
 
@@ -66,7 +65,8 @@ public abstract class Bound {
     }
 
     boolean isAnInstantiationFor(InferenceVariable v) {
-        return isAnInstantiation().isPresent() && isAnInstantiation().get().getInferenceVariable().equals(v);
+        return isAnInstantiation().isPresent()
+                && isAnInstantiation().get().getInferenceVariable().equals(v);
     }
 
     /**
@@ -93,18 +93,16 @@ public abstract class Bound {
         Optional<ProperLowerBound> partial = isProperLowerBound();
         if (partial.isPresent() && partial.get().getInferenceVariable().equals(inferenceVariable)) {
             return partial;
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     Optional<ProperUpperBound> isProperUpperBoundFor(InferenceVariable inferenceVariable) {
         Optional<ProperUpperBound> partial = isProperUpperBound();
         if (partial.isPresent() && partial.get().getInferenceVariable().equals(inferenceVariable)) {
             return partial;
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     /**

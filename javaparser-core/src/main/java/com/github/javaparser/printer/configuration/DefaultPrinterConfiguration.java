@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -17,38 +17,41 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.configuration;
 
+import com.github.javaparser.printer.Printer;
+import com.github.javaparser.printer.configuration.Indentation.IndentType;
+import com.github.javaparser.utils.LineSeparator;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import com.github.javaparser.printer.Printer;
-import com.github.javaparser.printer.configuration.Indentation.IndentType;
-import com.github.javaparser.utils.Utils;
-
 /**
  * Configuration options for the {@link Printer}.
  */
 public class DefaultPrinterConfiguration implements PrinterConfiguration {
-    
+
     public enum ConfigOption {
+
         /**
          * Order imports alphabetically
          */
-        ORDER_IMPORTS(Boolean.class), 
+        ORDER_IMPORTS(Boolean.class),
+        /**
+         * The logic to be used when ordering the imports.
+         */
+        SORT_IMPORTS_STRATEGY(ImportOrderingStrategy.class),
         /**
          * Print comments only. It can be combined with {@code PRINT_JAVADOC} to print regular comments and javadoc.
          */
-        PRINT_COMMENTS(Boolean.class), 
+        PRINT_COMMENTS(Boolean.class),
         /**
          * Print javadoc comments only. It can be combined with {@code PRINT_COMMENTS} to print regular javadoc and comments
          */
-        PRINT_JAVADOC(Boolean.class), 
-        SPACE_AROUND_OPERATORS(Boolean.class), 
-        COLUMN_ALIGN_PARAMETERS(Boolean.class), 
+        PRINT_JAVADOC(Boolean.class),
+        SPACE_AROUND_OPERATORS(Boolean.class),
+        COLUMN_ALIGN_PARAMETERS(Boolean.class),
         COLUMN_ALIGN_FIRST_METHOD_CHAIN(Boolean.class),
         /**
          * Indent the case when it is true, don't if false
@@ -86,48 +89,60 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          * Set it to 1 or less to always align vertically.
          */
         MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY(Integer.class, Integer.valueOf(5)),
-        END_OF_LINE_CHARACTER(String.class, Utils.SYSTEM_EOL),
+        END_OF_LINE_CHARACTER(String.class, LineSeparator.SYSTEM.asRawString()),
         /**
          * Indentation proprerty
          */
-        INDENTATION(Indentation.class, new Indentation(IndentType.SPACES, 4));
-        
+        INDENTATION(Indentation.class, new Indentation(IndentType.SPACES, 4)),
+        /**
+         * This parameter allows to print pretty formatted arrays
+         * <pre>{@code
+         *     @ApiResponses(value = {
+         *        @ApiResponse(responseCode = "200", description = "OK"),
+         *        @ApiResponse(responseCode = "404", description = "Error")
+         *     })
+         * }<pre>
+         * instead of inline like this
+         * <pre>{@code
+         *         @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "Error")})
+         * }<pre>
+         */
+        INDENT_PRINT_ARRAYS_OF_ANNOTATIONS(Boolean.class);
+
         Object defaultValue;
-        
+
         Class type;
-        
+
         // DefaultConfigurationOption without currentValue
         ConfigOption(Class clazz) {
             this.type = clazz;
         }
-        
+
         // DefaultConfigurationOption with initial currentValue
-        ConfigOption(Class clazz, Object value) {
+        <T> ConfigOption(Class<T> clazz, T value) {
             this.type = clazz;
-            if (!(this.type.isAssignableFrom(value.getClass()))) {
-                throw new IllegalArgumentException(String.format("%s is not an instance of %s", value, type.getName()));
-            }
             this.defaultValue = value;
         }
-        
-       
     }
-    
+
     // contains all available options
     // an option contained in the set is considered as activated
     private Set<ConfigurationOption> defaultOptions = new HashSet<>(Arrays.asList(
             new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS, ConfigOption.PRINT_COMMENTS.defaultValue),
             new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC, ConfigOption.PRINT_JAVADOC.defaultValue),
-            new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS, ConfigOption.SPACE_AROUND_OPERATORS.defaultValue),
-            new DefaultConfigurationOption(ConfigOption.INDENT_CASE_IN_SWITCH, ConfigOption.INDENT_CASE_IN_SWITCH.defaultValue),
-            new DefaultConfigurationOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY, ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.defaultValue),
-            new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, ConfigOption.END_OF_LINE_CHARACTER.defaultValue),
-            new DefaultConfigurationOption(ConfigOption.INDENTATION, ConfigOption.INDENTATION.defaultValue)
-            ));
+            new DefaultConfigurationOption(
+                    ConfigOption.SPACE_AROUND_OPERATORS, ConfigOption.SPACE_AROUND_OPERATORS.defaultValue),
+            new DefaultConfigurationOption(
+                    ConfigOption.INDENT_CASE_IN_SWITCH, ConfigOption.INDENT_CASE_IN_SWITCH.defaultValue),
+            new DefaultConfigurationOption(
+                    ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY,
+                    ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.defaultValue),
+            new DefaultConfigurationOption(
+                    ConfigOption.END_OF_LINE_CHARACTER, ConfigOption.END_OF_LINE_CHARACTER.defaultValue),
+            new DefaultConfigurationOption(ConfigOption.INDENTATION, ConfigOption.INDENTATION.defaultValue)));
 
-    public DefaultPrinterConfiguration() {
-    }
-    
+    public DefaultPrinterConfiguration() {}
+
     /*
      * add the specified option if it does not exist or replace the existing option
      */
@@ -137,7 +152,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         defaultOptions.add(option);
         return this;
     }
-    
+
     /*
      * remove the specified option
      */
@@ -146,7 +161,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         defaultOptions.remove(option);
         return this;
     }
-    
+
     /*
      * True if an option is activated
      */
@@ -154,13 +169,13 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
     public boolean isActivated(ConfigurationOption option) {
         return defaultOptions.contains(option);
     }
-    
+
     /*
      * returns the specified option
      */
     @Override
     public Optional<ConfigurationOption> get(ConfigurationOption option) {
-        return defaultOptions.stream().filter(o-> o.equals(option)).findFirst();
+        return defaultOptions.stream().filter(o -> o.equals(option)).findFirst();
     }
 
     /**
@@ -170,5 +185,4 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
     public Set<ConfigurationOption> get() {
         return defaultOptions;
     }
-    
 }

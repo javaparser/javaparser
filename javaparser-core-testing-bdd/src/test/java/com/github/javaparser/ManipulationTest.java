@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,24 +23,21 @@ package com.github.javaparser;
 
 import com.github.javaparser.steps.ManipulationSteps;
 import com.github.javaparser.steps.SharedSteps;
-import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
+import java.util.HashMap;
+import java.util.Map;
+import org.jbehave.core.junit.JUnit4StoryRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 import org.junit.runner.RunWith;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@RunWith(JUnitReportingRunner.class)
+@RunWith(JUnit4StoryRunner.class)
 public class ManipulationTest extends BasicJBehaveTest {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
         Map<String, Object> state = new HashMap<>();
 
-        return new InstanceStepsFactory(configuration(),
-                new SharedSteps(state),
-                new ManipulationSteps(state));
+        return new InstanceStepsFactory(configuration(), new SharedSteps(state), new ManipulationSteps(state));
     }
 
     public ManipulationTest() {

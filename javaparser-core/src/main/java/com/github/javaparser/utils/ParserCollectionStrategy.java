@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,16 +18,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
-import com.github.javaparser.ParserConfiguration;
+import static java.nio.file.FileVisitResult.*;
 
+import com.github.javaparser.ParserConfiguration;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-
-import static java.nio.file.FileVisitResult.*;
 
 /**
  * A brute force {@link CollectionStrategy} for discovering a project structure.
@@ -60,13 +58,16 @@ public class ParserCollectionStrategy implements CollectionStrategy {
         ProjectRoot projectRoot = new ProjectRoot(path, parserConfiguration);
         try {
             Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+
                 Path current_root;
+
                 final PathMatcher javaMatcher = getPathMatcher("glob:**.java");
 
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-                    if (file.getFileName().toString().equals("module-info.java")) {
-                        // module-info.java is useless for finding the source root, since it can be placed within any directory.
+                    if ("module-info.java".equals(file.getFileName().toString())) {
+                        // module-info.java is useless for finding the source root, since it can be placed within any
+                        // directory.
                         return CONTINUE;
                     }
                     if (javaMatcher.matches(file)) {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,10 @@
 
 package com.github.javaparser.generator;
 
+import static com.github.javaparser.ast.NodeList.toNodeList;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -28,13 +32,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.Generated;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.util.List;
-
-import static com.github.javaparser.ast.NodeList.toNodeList;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * A general pattern that the generators in this module will follow.
@@ -61,10 +60,9 @@ public abstract class Generator {
     }
 
     private <T extends Node & NodeWithAnnotations<?>> void annotate(T node, Class<?> annotation, Expression content) {
-        node.setAnnotations(
-                node.getAnnotations().stream()
-                        .filter(a -> !a.getNameAsString().equals(annotation.getSimpleName()))
-                        .collect(toNodeList()));
+        node.setAnnotations(node.getAnnotations().stream()
+                .filter(a -> !a.getNameAsString().equals(annotation.getSimpleName()))
+                .collect(toNodeList()));
 
         if (content != null) {
             node.addSingleMemberAnnotation(annotation.getSimpleName(), content);
@@ -78,7 +76,8 @@ public abstract class Generator {
      * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
      * with callable. If not found, adds callable. When the new callable has no javadoc, any old javadoc will be kept.
      */
-    protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+    protected void addOrReplaceWhenSameSignature(
+            ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
         addMethod(containingClassOrInterface, callable, () -> containingClassOrInterface.addMember(callable));
     }
 
@@ -87,27 +86,33 @@ public abstract class Generator {
      * with callable. If not found, fails. When the new callable has no javadoc, any old javadoc will be kept. The
      * method or constructor is annotated with the generator class.
      */
-    protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        addMethod(containingClassOrInterface, callable,
-                () -> {
-                    throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
-                });
+    protected void replaceWhenSameSignature(
+            ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        addMethod(containingClassOrInterface, callable, () -> {
+            throw new AssertionError(f(
+                    "Wanted to regenerate a method with signature %s in %s, but it wasn't there.",
+                    callable.getSignature(), containingClassOrInterface.getNameAsString()));
+        });
     }
 
     private void addMethod(
             ClassOrInterfaceDeclaration containingClassOrInterface,
             CallableDeclaration<?> callable,
             Runnable onNoExistingMethod) {
-        List<CallableDeclaration<?>> existingCallables = containingClassOrInterface.getCallablesWithSignature(callable.getSignature());
+        List<CallableDeclaration<?>> existingCallables =
+                containingClassOrInterface.getCallablesWithSignature(callable.getSignature());
         if (existingCallables.isEmpty()) {
             onNoExistingMethod.run();
             return;
         }
         if (existingCallables.size() > 1) {
-            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
+            throw new AssertionError(f(
+                    "Wanted to regenerate a method with signature %s in %s, but found more than one.",
+                    callable.getSignature(), containingClassOrInterface.getNameAsString()));
         }
         final CallableDeclaration<?> existingCallable = existingCallables.get(0);
-        callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
+        callable.setJavadocComment(callable.getJavadocComment()
+                .orElseGet(() -> existingCallable.getJavadocComment().orElse(null)));
         annotateGenerated(callable);
         containingClassOrInterface.getMembers().replace(existingCallable, callable);
     }
@@ -116,10 +121,11 @@ public abstract class Generator {
      * Removes all methods from containingClassOrInterface that have the same signature as callable. This is not used by
      * any code, but it is useful when changing a generator and you need to get rid of a set of outdated methods.
      */
-    protected void removeMethodWithSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        for (CallableDeclaration<?> existingCallable : containingClassOrInterface.getCallablesWithSignature(callable.getSignature())) {
+    protected void removeMethodWithSameSignature(
+            ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        for (CallableDeclaration<?> existingCallable :
+                containingClassOrInterface.getCallablesWithSignature(callable.getSignature())) {
             containingClassOrInterface.remove(existingCallable);
         }
     }
-
 }

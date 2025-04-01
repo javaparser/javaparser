@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,76 +21,61 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public interface ResolvedDeclarationTest {
+import org.junit.jupiter.api.Test;
+
+public interface ResolvedDeclarationTest extends AssociableToASTTest {
 
     ResolvedDeclaration createValue();
 
     @Test
     default void whenNameIsPresentACallForMethodGetNameShouldNotBeNull() {
         ResolvedDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.hasName())
-            assertNotNull(resolvedDeclaration.getName());
-        else
-            assertNull(resolvedDeclaration.getName());
+        if (resolvedDeclaration.hasName()) assertNotNull(resolvedDeclaration.getName());
+        else assertNull(resolvedDeclaration.getName());
     }
 
     @Test
     default void whenDeclarationIsAFieldTheCallToTheMethodAsFieldShouldNotThrow() {
         ResolvedDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isField())
-            assertDoesNotThrow(resolvedDeclaration::asField);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asField);
+        if (resolvedDeclaration.isField()) assertDoesNotThrow(resolvedDeclaration::asField);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asField);
     }
 
     @Test
     default void whenDeclarationIsAMethodTheCallToTheMethodAsMethodShouldNotThrow() {
         ResolvedDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isMethod())
-            assertDoesNotThrow(resolvedDeclaration::asMethod);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asMethod);
+        if (resolvedDeclaration.isMethod()) assertDoesNotThrow(resolvedDeclaration::asMethod);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asMethod);
     }
 
     @Test
     default void whenDeclarationIsAParameterTheCallToTheMethodAsParameterShouldNotThrow() {
         ResolvedDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isParameter())
-            assertDoesNotThrow(resolvedDeclaration::asParameter);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asParameter);
+        if (resolvedDeclaration.isParameter()) assertDoesNotThrow(resolvedDeclaration::asParameter);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asParameter);
     }
 
     @Test
     default void whenDeclarationIsAPatternTheCallToTheMethodAsPatternShouldNotThrow() {
         ResolvedDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isPattern())
-            assertDoesNotThrow(resolvedDeclaration::asPattern);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asPattern);
+        if (resolvedDeclaration.isTypePattern()) assertDoesNotThrow(resolvedDeclaration::asTypePattern);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asTypePattern);
     }
 
     @Test
     default void whenDeclarationIsAEnumConstantTheCallToTheMethodAsEnumConstantShouldNotThrow() {
         ResolvedDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isEnumConstant())
-            assertDoesNotThrow(resolvedDeclaration::asEnumConstant);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asEnumConstant);
+        if (resolvedDeclaration.isEnumConstant()) assertDoesNotThrow(resolvedDeclaration::asEnumConstant);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asEnumConstant);
     }
 
     @Test
     default void whenDeclarationIsATypeTheCallToTheMethodAsTypeShouldNotThrow() {
         ResolvedDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isType())
-            assertDoesNotThrow(resolvedDeclaration::asType);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asType);
+        if (resolvedDeclaration.isType()) assertDoesNotThrow(resolvedDeclaration::asType);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asType);
     }
 
     /**
@@ -99,11 +84,9 @@ public interface ResolvedDeclarationTest {
      *
      * @see AssociableToAST#toAst()
      */
-    @Disabled(value = "This test is disabled, since not all of the classes implement this yet!")
     @Test
     default void declarationMostBeAssociableToAST() {
         ResolvedDeclaration resolvedDeclaration = createValue();
         assertTrue(resolvedDeclaration instanceof AssociableToAST);
     }
-
 }

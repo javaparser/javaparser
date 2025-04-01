@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,8 +18,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
+
+import static java.lang.Integer.signum;
 
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
@@ -31,11 +32,8 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-
 import java.util.Comparator;
 import java.util.List;
-
-import static java.lang.Integer.signum;
 
 public final class PositionUtils {
 
@@ -77,20 +75,16 @@ public final class PositionUtils {
             int signLine = signum(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b));
             if (signLine == 0) {
                 return signum(beginColumnWithoutConsideringAnnotation(a) - beginColumnWithoutConsideringAnnotation(b));
-            } else {
-                return signLine;
             }
+            return signLine;
         }
-
         Position aBegin = a.getBegin().get();
         Position bBegin = b.getBegin().get();
-
         int signLine = signum(aBegin.line - bBegin.line);
         if (signLine == 0) {
             return signum(aBegin.column - bBegin.column);
-        } else {
-            return signLine;
         }
+        return signLine;
     }
 
     public static AnnotationExpr getLastAnnotation(Node node) {
@@ -101,66 +95,57 @@ public final class PositionUtils {
             }
             sortByBeginPosition(annotations);
             return annotations.get(annotations.size() - 1);
-        } else {
-            return null;
         }
+        return null;
     }
 
     private static int beginLineWithoutConsideringAnnotation(Node node) {
         return firstNonAnnotationNode(node).getRange().get().begin.line;
     }
 
-
     private static int beginColumnWithoutConsideringAnnotation(Node node) {
         return firstNonAnnotationNode(node).getRange().get().begin.column;
     }
 
     private static Node firstNonAnnotationNode(Node node) {
-        // TODO: Consider the remaining "types" of thing that annotations can target ( https://docs.oracle.com/javase/8/docs/api/java/lang/annotation/ElementType.html )
         if (node instanceof ClassOrInterfaceDeclaration) {
             // Modifiers appear before the class name --
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;
-            Modifier earliestModifier = casted.getModifiers()
-                    .stream()
+            Modifier earliestModifier = casted.getModifiers().stream()
                     .filter(modifier -> modifier.hasRange())
                     .min(Comparator.comparing(o -> o.getRange().get().begin))
                     .orElse(null);
             if (earliestModifier == null) {
                 return casted.getName();
-            } else {
-                return earliestModifier;
             }
-        } else if (node instanceof MethodDeclaration) {
+            return earliestModifier;
+        }
+        if (node instanceof MethodDeclaration) {
             // Modifiers appear before the class name --
             MethodDeclaration casted = (MethodDeclaration) node;
-            Modifier earliestModifier = casted.getModifiers()
-                    .stream()
+            Modifier earliestModifier = casted.getModifiers().stream()
                     .filter(modifier -> modifier.hasRange())
                     .min(Comparator.comparing(o -> o.getRange().get().begin))
                     .orElse(null);
             if (earliestModifier == null) {
                 return casted.getType();
-            } else {
-                return earliestModifier;
             }
-        } else if (node instanceof FieldDeclaration) {
+            return earliestModifier;
+        }
+        if (node instanceof FieldDeclaration) {
             // Modifiers appear before the class name --
             FieldDeclaration casted = (FieldDeclaration) node;
-            Modifier earliestModifier = casted.getModifiers()
-                    .stream()
+            Modifier earliestModifier = casted.getModifiers().stream()
                     .filter(modifier -> modifier.hasRange())
                     .min(Comparator.comparing(o -> o.getRange().get().begin))
                     .orElse(null);
             if (earliestModifier == null) {
                 return casted.getVariable(0).getType();
-            } else {
-                return earliestModifier;
             }
-        } else {
-            return node;
+            return earliestModifier;
         }
+        return node;
     }
-
 
     /**
      * Compare the position of two nodes. Optionally include annotations within the range checks.
@@ -174,43 +159,39 @@ public final class PositionUtils {
      */
     public static boolean nodeContains(Node container, Node other, boolean ignoringAnnotations) {
         if (!container.hasRange()) {
-            throw new IllegalArgumentException("Cannot compare the positions of nodes if container node does not have a range.");
+            throw new IllegalArgumentException(
+                    "Cannot compare the positions of nodes if container node does not have a range.");
         }
         if (!other.hasRange()) {
-            throw new IllegalArgumentException("Cannot compare the positions of nodes if contained node does not have a range.");
+            throw new IllegalArgumentException(
+                    "Cannot compare the positions of nodes if contained node does not have a range.");
         }
-
-//        // FIXME: Not all nodes seem to have the compilation unit available?
-//        if (!Objects.equals(container.findCompilationUnit(), other.findCompilationUnit())) {
-//            // Allow the check to complete if they are both within a known CU (i.e. the CUs are the same),
-//            // ... or both not within a CU (i.e. both are Optional.empty())
-//            return false;
-//        }
-
+        // // FIXME: Not all nodes seem to have the compilation unit available?
+        // if (!Objects.equals(container.findCompilationUnit(), other.findCompilationUnit())) {
+        // // Allow the check to complete if they are both within a known CU (i.e. the CUs are the same),
+        // // ... or both not within a CU (i.e. both are Optional.empty())
+        // return false;
+        // }
         final boolean nodeCanHaveAnnotations = container instanceof NodeWithAnnotations;
-//        final boolean hasAnnotations = PositionUtils.getLastAnnotation(container) != null;
+        // final boolean hasAnnotations = PositionUtils.getLastAnnotation(container) != null;
         if (!ignoringAnnotations || PositionUtils.getLastAnnotation(container) == null) {
             // No special consideration required - perform simple range check.
             return container.containsWithinRange(other);
         }
-
         if (!container.containsWithinRange(other)) {
             return false;
         }
-
         if (!nodeCanHaveAnnotations) {
             return true;
         }
-
         // If the node is contained, but it comes immediately after the annotations,
         // let's not consider it contained (i.e. it must be "strictly contained").
         Node nodeWithoutAnnotations = firstNonAnnotationNode(container);
-        Range rangeWithoutAnnotations = container.getRange().get()
+        Range rangeWithoutAnnotations = container
+                .getRange()
+                .get()
                 .withBegin(nodeWithoutAnnotations.getBegin().get());
-        return rangeWithoutAnnotations
-//                .contains(other.getRange().get());
-                .strictlyContains(other.getRange().get());
-
+        return // .contains(other.getRange().get());
+        rangeWithoutAnnotations.strictlyContains(other.getRange().get());
     }
-
 }

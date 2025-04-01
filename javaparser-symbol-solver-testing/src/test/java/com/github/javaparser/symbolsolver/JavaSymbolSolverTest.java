@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -31,28 +33,32 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class JavaSymbolSolverTest extends AbstractResolutionTest {
 
     @Test
     void resolveMethodDeclaration() {
         CompilationUnit cu = parseSample("SymbolResolverExample", new ReflectionTypeSolver());
 
-        MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMethods().get(0);
+        MethodDeclaration methodDeclaration =
+                cu.getClassByName("A").get().getMethods().get(0);
         ResolvedMethodDeclaration resolvedMethodDeclaration = methodDeclaration.resolve();
         assertEquals("foo", resolvedMethodDeclaration.getName());
         assertEquals("A[]", resolvedMethodDeclaration.getReturnType().describe());
-        assertEquals("java.lang.String[]", resolvedMethodDeclaration.getParam(0).getType().describe());
+        assertEquals(
+                "java.lang.String[]",
+                resolvedMethodDeclaration.getParam(0).getType().describe());
         assertEquals("int[]", resolvedMethodDeclaration.getParam(1).getType().describe());
     }
 
     @Test
     void resolveMethodReferenceExpr() {
         JavaParser parser = createParserWithResolver(new ReflectionTypeSolver());
-        MethodReferenceExpr methodRef = parser.parse("import java.util.function.Function; class X{void x(){Function<Object, Integer>r=Object::hashCode;}}")
-                .getResult().get()
-                .findFirst(MethodReferenceExpr.class).get();
+        MethodReferenceExpr methodRef = parser.parse(
+                        "import java.util.function.Function; class X{void x(){Function<Object, Integer>r=Object::hashCode;}}")
+                .getResult()
+                .get()
+                .findFirst(MethodReferenceExpr.class)
+                .get();
         ResolvedMethodDeclaration resolvedMethodRef = methodRef.resolve();
         assertEquals("hashCode", resolvedMethodRef.getName());
         assertEquals("int", resolvedMethodRef.getReturnType().describe());
@@ -63,7 +69,8 @@ class JavaSymbolSolverTest extends AbstractResolutionTest {
     void resolveArrayType() {
         CompilationUnit cu = parseSample("SymbolResolverExample", new ReflectionTypeSolver());
 
-        MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMethods().get(0);
+        MethodDeclaration methodDeclaration =
+                cu.getClassByName("A").get().getMethods().get(0);
         ResolvedType resolvedType = methodDeclaration.getType().resolve();
         assertEquals("A[]", resolvedType.describe());
     }

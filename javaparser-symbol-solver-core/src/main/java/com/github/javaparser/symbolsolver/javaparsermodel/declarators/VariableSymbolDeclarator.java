@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,10 +23,9 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarators;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,25 +46,23 @@ public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableD
 
     @Override
     public List<ResolvedValueDeclaration> getSymbolDeclarations() {
-        List<ResolvedValueDeclaration> variables = wrappedNode.getVariables()
-                .stream()
+        List<ResolvedValueDeclaration> variables = wrappedNode.getVariables().stream()
                 .map(v -> JavaParserSymbolDeclaration.localVar(v, typeSolver))
                 .collect(Collectors.toCollection(ArrayList::new));
 
-//        // FIXME: This returns ALL PatternExpr, regardless of whether it is in scope or not.
-//        List<JavaParserSymbolDeclaration> patterns = wrappedNode.getVariables()
-//                .stream()
-//                .filter(variableDeclarator -> variableDeclarator.getInitializer().isPresent())
-//                .map(variableDeclarator -> variableDeclarator.getInitializer().get())
-//                .map(expression -> expression.findAll(PatternExpr.class))
-//                .flatMap(Collection::stream)
-//                .map(v -> JavaParserSymbolDeclaration.patternVar(v, typeSolver))
-//                .collect(Collectors.toCollection(ArrayList::new));
+        //        // FIXME: This returns ALL PatternExpr, regardless of whether it is in scope or not.
+        //        List<JavaParserSymbolDeclaration> patterns = wrappedNode.getVariables()
+        //                .stream()
+        //                .filter(variableDeclarator -> variableDeclarator.getInitializer().isPresent())
+        //                .map(variableDeclarator -> variableDeclarator.getInitializer().get())
+        //                .map(expression -> expression.findAll(PatternExpr.class))
+        //                .flatMap(Collection::stream)
+        //                .map(v -> JavaParserSymbolDeclaration.patternVar(v, typeSolver))
+        //                .collect(Collectors.toCollection(ArrayList::new));
 
         List<ResolvedValueDeclaration> all = new ArrayList<>(variables);
-//        all.addAll(patterns);
+        //        all.addAll(patterns);
 
         return all;
     }
-
 }

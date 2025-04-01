@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,22 +21,22 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-class Issue347Test extends AbstractResolutionTest{
+class Issue347Test extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
     private JavaParserFacade javaParserFacade;
@@ -49,13 +49,12 @@ class Issue347Test extends AbstractResolutionTest{
 
     @Test
     void resolvingReferenceToEnumDeclarationInSameFile() {
-        String code = "package foo.bar;\nenum Foo {\n" +
-                "    FOO_A, FOO_B\n" +
-                "}\n" +
-                "\n" +
-                "class UsingFoo {\n" +
-                "    Foo myFooField;\n" +
-                "}";
+        String code = "package foo.bar;\nenum Foo {\n" + "    FOO_A, FOO_B\n"
+                + "}\n"
+                + "\n"
+                + "class UsingFoo {\n"
+                + "    Foo myFooField;\n"
+                + "}";
         CompilationUnit cu = parse(code);
         FieldDeclaration fieldDeclaration = Navigator.demandNodeOfGivenClass(cu, FieldDeclaration.class);
         ResolvedType fieldType = javaParserFacade.getType(fieldDeclaration);
@@ -64,4 +63,3 @@ class Issue347Test extends AbstractResolutionTest{
         assertEquals("foo.bar.Foo", fieldType.asReferenceType().getQualifiedName());
     }
 }
-

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.serialization;
 
+import static com.github.javaparser.utils.Utils.decapitalize;
+import static java.util.Objects.requireNonNull;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
 import com.github.javaparser.TokenRange;
@@ -29,11 +32,7 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.Log;
-
-import javax.json.stream.JsonGenerator;
-
-import static com.github.javaparser.utils.Utils.decapitalize;
-import static java.util.Objects.requireNonNull;
+import jakarta.json.stream.JsonGenerator;
 
 /**
  * Serializes an AST or a partial AST to JSON.
@@ -64,10 +63,10 @@ public class JavaParserJsonSerializer {
      * @param node the current node to be serialized
      * @param generator the json-p generator for writing the json
      */
-
     private void serialize(String nodeName, Node node, JsonGenerator generator) {
         requireNonNull(node);
-        BaseNodeMetaModel nodeMetaModel = JavaParserMetaModel.getNodeMetaModel(node.getClass()).orElseThrow(() -> new IllegalStateException("Unknown Node: " + node.getClass()));
+        BaseNodeMetaModel nodeMetaModel = JavaParserMetaModel.getNodeMetaModel(node.getClass())
+                .orElseThrow(() -> new IllegalStateException("Unknown Node: " + node.getClass()));
 
         if (nodeName == null) {
             generator.writeStartObject();
@@ -103,7 +102,6 @@ public class JavaParserJsonSerializer {
      *
      * @see com.github.javaparser.metamodel.BaseNodeMetaModel#getAllPropertyMetaModels()
      */
-
     protected void writeNonMetaProperties(Node node, JsonGenerator generator) {
         this.writeRange(node, generator);
         this.writeTokens(node, generator);

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,17 +21,17 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TypeVariableUsageTest {
 
@@ -41,15 +41,15 @@ class TypeVariableUsageTest {
 
     @BeforeEach
     void setup() {
-        tpA = new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()));
-        
+        tpA = new ResolvedTypeVariable(
+                ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()));
+
         typeSolver = new ReflectionTypeSolver();
-        tpString = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        tpString = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
     }
 
     @Test
     void testIsAssignableBySimple() {
         assertEquals(false, tpString.isAssignableBy(tpA));
     }
-
 }

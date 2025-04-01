@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -27,27 +27,27 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.SymbolDeclarator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
-
 import java.util.List;
 import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
  */
-public abstract class AbstractMethodLikeDeclarationContext
-        <T extends Node & NodeWithParameters<T> & NodeWithTypeParameters<T>> extends AbstractJavaParserContext<T> {
+public abstract class AbstractMethodLikeDeclarationContext<
+                T extends Node & NodeWithParameters<T> & NodeWithTypeParameters<T>>
+        extends AbstractJavaParserContext<T> {
 
     public AbstractMethodLikeDeclarationContext(T wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -57,7 +57,8 @@ public abstract class AbstractMethodLikeDeclarationContext
     public final SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
-            SymbolReference<? extends ResolvedValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
+            SymbolReference<? extends ResolvedValueDeclaration> symbolReference =
+                    AbstractJavaParserContext.solveWith(sb, name);
             if (symbolReference.isSolved()) {
                 return symbolReference;
             }
@@ -97,7 +98,7 @@ public abstract class AbstractMethodLikeDeclarationContext
     }
 
     @Override
-    public final SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+    public final SymbolReference<ResolvedTypeDeclaration> solveType(String name, List<ResolvedType> typeArguments) {
         // TODO: Is null check required?
         if (wrappedNode.getTypeParameters() != null) {
             for (TypeParameter tp : wrappedNode.getTypeParameters()) {
@@ -111,19 +112,20 @@ public abstract class AbstractMethodLikeDeclarationContext
         List<TypeDeclaration> localTypes = wrappedNode.findAll(TypeDeclaration.class);
         for (TypeDeclaration<?> localType : localTypes) {
             if (localType.getName().getId().equals(name)) {
-                return SymbolReference.solved(JavaParserFacade.get(typeSolver)
-                        .getTypeDeclaration(localType));
-            } else if (name.startsWith(String.format("%s.", localType.getName()))) {
+                return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(localType));
+            }
+            if (name.startsWith(String.format("%s.", localType.getName()))) {
                 return JavaParserFactory.getContext(localType, typeSolver)
                         .solveType(name.substring(localType.getName().getId().length() + 1));
             }
         }
 
-        return solveTypeInParentContext(name);
+        return solveTypeInParentContext(name, typeArguments);
     }
 
     @Override
-    public final SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public final SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
     }

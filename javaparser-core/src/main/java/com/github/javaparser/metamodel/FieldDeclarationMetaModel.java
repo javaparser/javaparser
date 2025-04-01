@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class FieldDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     FieldDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, FieldDeclaration.class, "FieldDeclaration", "com.github.javaparser.ast.body", false, false);
+        super(
+                superBaseNodeMetaModel,
+                FieldDeclaration.class,
+                "FieldDeclaration",
+                "com.github.javaparser.ast.body",
+                false,
+                false);
     }
 
     public PropertyMetaModel modifiersPropertyMetaModel;

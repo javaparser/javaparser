@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.comments.BlockComment;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,6 +38,12 @@ public class BlockCommentMetaModel extends CommentMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     BlockCommentMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, BlockComment.class, "BlockComment", "com.github.javaparser.ast.comments", false, false);
+        super(
+                superBaseNodeMetaModel,
+                BlockComment.class,
+                "BlockComment",
+                "com.github.javaparser.ast.comments",
+                false,
+                false);
     }
 }

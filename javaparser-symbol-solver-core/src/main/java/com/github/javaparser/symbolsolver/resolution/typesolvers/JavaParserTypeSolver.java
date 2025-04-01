@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,19 +21,22 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
+import static com.github.javaparser.Providers.provider;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.cache.Cache;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.cache.Cache;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.cache.GuavaCache;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.utils.FileUtils;
 import com.google.common.cache.CacheBuilder;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -44,10 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
-import static com.github.javaparser.Providers.provider;
 
 /**
  * Defines a directory containing source code that should be used for solving symbols.
@@ -127,11 +126,12 @@ public class JavaParserTypeSolver implements TypeSolver {
      * @param parsedDirectoriesCache    The cache to store the list of {@link CompilationUnit} in a given directory.
      * @param foundTypesCache           The cache that associated a qualified name to its {@link SymbolReference}.
      */
-    public JavaParserTypeSolver(Path srcDir,
-                                JavaParser javaParser,
-                                Cache<Path, Optional<CompilationUnit>> parsedFilesCache,
-                                Cache<Path, List<CompilationUnit>> parsedDirectoriesCache,
-                                Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypesCache) {
+    public JavaParserTypeSolver(
+            Path srcDir,
+            JavaParser javaParser,
+            Cache<Path, Optional<CompilationUnit>> parsedFilesCache,
+            Cache<Path, List<CompilationUnit>> parsedDirectoriesCache,
+            Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypesCache) {
         Objects.requireNonNull(srcDir, "The srcDir can't be null.");
         Objects.requireNonNull(javaParser, "The javaParser can't be null.");
         Objects.requireNonNull(parsedFilesCache, "The parsedFilesCache can't be null.");
@@ -151,10 +151,7 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     @Override
     public String toString() {
-        return "JavaParserTypeSolver{" +
-                "srcDir=" + srcDir +
-                ", parent=" + parent +
-                '}';
+        return "JavaParserTypeSolver{" + "srcDir=" + srcDir + ", parent=" + parent + '}';
     }
 
     @Override
@@ -190,7 +187,12 @@ public class JavaParserTypeSolver implements TypeSolver {
 
             // JavaParser only allow one parse at time.
             synchronized (javaParser) {
-                Optional<CompilationUnit> compilationUnit = javaParser.parse(COMPILATION_UNIT, provider(srcFile, javaParser.getParserConfiguration().getCharacterEncoding()))
+                Optional<CompilationUnit> compilationUnit = javaParser
+                        .parse(
+                                COMPILATION_UNIT,
+                                provider(
+                                        srcFile,
+                                        javaParser.getParserConfiguration().getCharacterEncoding()))
                         .getResult()
                         .map(cu -> cu.setStorage(srcFile));
                 parsedFiles.put(srcFile.toAbsolutePath(), compilationUnit);
@@ -224,22 +226,21 @@ public class JavaParserTypeSolver implements TypeSolver {
             List<CompilationUnit> units = new ArrayList<>();
             if (Files.exists(srcDirectory)) {
                 try (DirectoryStream<Path> srcDirectoryStream = Files.newDirectoryStream(srcDirectory)) {
-                    srcDirectoryStream
-                            .forEach(file -> {
-                                if (file.getFileName().toString().toLowerCase().endsWith(".java")) {
-                                    parse(file).ifPresent(units::add);
-                                } else if (recursively && file.toFile().isDirectory()) {
-                                    units.addAll(parseDirectoryRecursively(file));
-                                }
-                            });
+                    srcDirectoryStream.forEach(file -> {
+                        if (file.getFileName().toString().toLowerCase().endsWith(".java")) {
+                            parse(file).ifPresent(units::add);
+                        } else if (recursively && file.toFile().isDirectory()) {
+                            units.addAll(parseDirectoryRecursively(file));
+                        }
+                    });
                 }
             }
             parsedDirectories.put(srcDirectory.toAbsolutePath(), units);
             return units;
         } catch (IOException e) {
-            throw new RuntimeException("Unable to parse directory due to an exception. Directory:" + srcDirectory.toAbsolutePath(), e);
+            throw new RuntimeException(
+                    "Unable to parse directory due to an exception. Directory:" + srcDirectory.toAbsolutePath(), e);
         }
-
     }
 
     @Override
@@ -261,8 +262,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         for (int i = nameElements.length; i > 0; i--) {
             StringBuilder filePath = new StringBuilder(srcDir.toAbsolutePath().toString());
             for (int j = 0; j < i; j++) {
-                filePath.append(File.separator)
-                        .append(nameElements[j]);
+                filePath.append(File.separator).append(nameElements[j]);
             }
             filePath.append(".java");
 
@@ -280,11 +280,11 @@ public class JavaParserTypeSolver implements TypeSolver {
                 Path srcFile = Paths.get(filePath.toString());
                 Optional<CompilationUnit> compilationUnit = parse(srcFile);
                 if (compilationUnit.isPresent()) {
-                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator
-                            .findType(compilationUnit.get(), typeName.toString());
+                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration =
+                            Navigator.findType(compilationUnit.get(), typeName.toString());
                     if (astTypeDeclaration.isPresent()) {
-                        return SymbolReference
-                                .solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
+                        return SymbolReference.solved(
+                                JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
                     }
                 }
                 dirToParse = srcFile.getParent().normalize().toString();
@@ -297,17 +297,16 @@ public class JavaParserTypeSolver implements TypeSolver {
             if (FileUtils.isValidPath(dirToParse)) {
                 List<CompilationUnit> compilationUnits = parseDirectory(Paths.get(dirToParse));
                 for (CompilationUnit compilationUnit : compilationUnits) {
-                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator
-                            .findType(compilationUnit, typeName.toString());
+                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration =
+                            Navigator.findType(compilationUnit, typeName.toString());
                     if (astTypeDeclaration.isPresent()) {
-                        return SymbolReference
-                                .solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
+                        return SymbolReference.solved(
+                                JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
                     }
                 }
             }
         }
 
-        return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+        return SymbolReference.unsolved();
     }
-
 }

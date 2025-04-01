@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,10 @@
 
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW;
+import static com.github.javaparser.Providers.provider;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -28,10 +32,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW;
-import static com.github.javaparser.Providers.provider;
 
 class Java14PreviewValidatorTest {
 
@@ -50,21 +50,27 @@ class Java14PreviewValidatorTest {
             void recordUsedAsClassIdentifier() {
                 String s = "public class record {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 14) 'record' is a restricted identifier and cannot be used for type declarations");
+                TestUtils.assertProblems(
+                        result,
+                        "(line 1,col 14) 'record' is a restricted identifier and cannot be used for type declarations");
             }
 
             @Test
             void recordUsedAsEnumIdentifier() {
                 String s = "public enum record {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 13) 'record' is a restricted identifier and cannot be used for type declarations");
+                TestUtils.assertProblems(
+                        result,
+                        "(line 1,col 13) 'record' is a restricted identifier and cannot be used for type declarations");
             }
 
             @Test
             void recordUsedAsRecordIdentifier() {
                 String s = "public record record() {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 15) 'record' is a restricted identifier and cannot be used for type declarations");
+                TestUtils.assertProblems(
+                        result,
+                        "(line 1,col 15) 'record' is a restricted identifier and cannot be used for type declarations");
             }
         }
 
@@ -95,5 +101,4 @@ class Java14PreviewValidatorTest {
             }
         }
     }
-
 }

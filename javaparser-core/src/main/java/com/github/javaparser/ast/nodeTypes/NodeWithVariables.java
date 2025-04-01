@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -27,7 +26,6 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.metamodel.DerivedProperty;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +34,7 @@ import java.util.stream.Collectors;
  * A node which has a list of variables.
  */
 public interface NodeWithVariables<N extends Node> {
+
     NodeList<VariableDeclarator> getVariables();
 
     N setVariables(NodeList<VariableDeclarator> variables);
@@ -124,12 +123,14 @@ public interface NodeWithVariables<N extends Node> {
      */
     @DerivedProperty
     default Optional<Type> getMaximumCommonType() {
-        return calculateMaximumCommonType(getVariables().stream().map(v -> v.getType()).collect(Collectors.toList()));
+        return calculateMaximumCommonType(
+                getVariables().stream().map(v -> v.getType()).collect(Collectors.toList()));
     }
 
     static Optional<Type> calculateMaximumCommonType(List<Type> types) {
         // we use a local class because we cannot use an helper static method in an interface
         class Helper {
+
             // Conceptually: given a type we start from the Element Type and get as many array levels as indicated
             // From the implementation point of view we start from the actual type and we remove how many array
             // levels as needed to get the target level of arrays
@@ -147,7 +148,6 @@ public interface NodeWithVariables<N extends Node> {
                 return Optional.of(type);
             }
         }
-
         Helper helper = new Helper();
         int level = 0;
         boolean keepGoing = true;
@@ -158,10 +158,13 @@ public interface NodeWithVariables<N extends Node> {
             // Now, given that equality on nodes consider the position the simplest way is to compare
             // the pretty-printed string got for a node. We just check all them are the same and if they
             // are we just just is not null
-            Object[] values = types.stream().map(v -> {
-                Optional<Type> t = helper.toArrayLevel(v, currentLevel);
-                return t.map(Node::toString).orElse(null);
-            }).distinct().toArray();
+            Object[] values = types.stream()
+                    .map(v -> {
+                        Optional<Type> t = helper.toArrayLevel(v, currentLevel);
+                        return t.map(Node::toString).orElse(null);
+                    })
+                    .distinct()
+                    .toArray();
             if (values.length == 1 && values[0] != null) {
                 level++;
             } else {
@@ -170,5 +173,4 @@ public interface NodeWithVariables<N extends Node> {
         }
         return helper.toArrayLevel(types.get(0), --level);
     }
-
 }

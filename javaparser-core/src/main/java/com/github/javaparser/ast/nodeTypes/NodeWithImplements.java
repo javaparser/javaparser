@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,19 +18,19 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
+
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
-
 /**
  * A node that implements other types.
  */
 public interface NodeWithImplements<N extends Node> {
+
     NodeList<ClassOrInterfaceType> getImplementedTypes();
 
     default ClassOrInterfaceType getImplementedTypes(int i) {
@@ -38,9 +38,9 @@ public interface NodeWithImplements<N extends Node> {
     }
 
     N setImplementedTypes(NodeList<ClassOrInterfaceType> implementsList);
-    
+
     void tryAddImportToParentCompilationUnit(Class<?> clazz);
-    
+
     @SuppressWarnings("unchecked")
     default N setImplementedType(int i, ClassOrInterfaceType implement) {
         getImplementedTypes().set(i, implement);
@@ -53,12 +53,16 @@ public interface NodeWithImplements<N extends Node> {
         return (N) this;
     }
 
-    /** @deprecated use addImplementedType instead */
+    /**
+     * @deprecated use addImplementedType instead
+     */
     default N addImplements(String name) {
         return addImplementedType(name);
     }
 
-    /** @deprecated use addImplementedType instead */
+    /**
+     * @deprecated use addImplementedType instead
+     */
     default N addImplements(Class<?> clazz) {
         return addImplementedType(clazz);
     }

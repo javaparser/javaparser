@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,37 +21,29 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.resolution.MethodAmbiguityException;
-import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.*;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.NullType;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Federico Tomassetti
@@ -72,7 +64,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
         assertTrue(context.getParent().isPresent());
-        assertEquals(new CompilationUnitContext(cu, typeSolver), context.getParent().get());
+        assertEquals(
+                new CompilationUnitContext(cu, typeSolver), context.getParent().get());
     }
 
     @Test
@@ -208,7 +201,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
     void solveSymbolAsValueReferringToInterfaceInheritedInstanceField() {
         CompilationUnit cu = parseSample("ClassWithSymbols");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        ClassOrInterfaceDeclarationContext context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
+        ClassOrInterfaceDeclarationContext context =
+                new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
         Optional<Value> ref = context.solveSymbolAsValue("o");
         assertEquals(true, ref.isPresent());
@@ -402,9 +396,10 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
-        ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
 
-        SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo4", ImmutableList.of(stringType), false);
+        SymbolReference<ResolvedMethodDeclaration> ref =
+                context.solveMethod("foo4", ImmutableList.of(stringType), false);
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -414,19 +409,19 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
     void solveMethodWithAmbiguosCall() {
         assertThrows(MethodAmbiguityException.class, () -> {
             CompilationUnit cu = parseSample("ClassWithMethods");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
-        SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo5", ImmutableList.of(NullType.INSTANCE), false);
-    });
-                
-}
+            ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+            Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
+            SymbolReference<ResolvedMethodDeclaration> ref =
+                    context.solveMethod("foo5", ImmutableList.of(NullType.INSTANCE), false);
+        });
+    }
 
     @Test
     void solveMethodAsUsageSimpleCase() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
+        Context context =
+                new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
 
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo0", ImmutableList.of());
         assertEquals(true, ref.isPresent());
@@ -438,8 +433,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
     void solveMethodAsUsageOverrideCase() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
+        Context context =
+                new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
 
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo1", ImmutableList.of());
         assertEquals(true, ref.isPresent());
@@ -451,8 +446,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
     void solveMethodAsUsageInheritedCase() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
+        Context context =
+                new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
 
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo2", ImmutableList.of());
         assertEquals(true, ref.isPresent());
@@ -464,8 +459,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
     void solveMethodAsUsageWithPrimitiveParameters() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
+        Context context =
+                new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
 
         ResolvedType intType = ResolvedPrimitiveType.INT;
 
@@ -479,10 +474,10 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
     void solveMethodAsUsageWithMoreSpecializedParameter() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
+        Context context =
+                new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
 
-        ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
 
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo4", ImmutableList.of(stringType));
         assertEquals(true, ref.isPresent());
@@ -494,10 +489,10 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
     void solveMethodAsUsageWithAmbiguosCall() {
         assertThrows(MethodAmbiguityException.class, () -> {
             CompilationUnit cu = parseSample("ClassWithMethods");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo5", ImmutableList.of(NullType.INSTANCE));
-    });
-                
-}
+            ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+            Context context =
+                    new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
+            Optional<MethodUsage> ref = context.solveMethodAsUsage("foo5", ImmutableList.of(NullType.INSTANCE));
+        });
+    }
 }

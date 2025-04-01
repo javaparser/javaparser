@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,12 @@
 
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_1_4;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
+import static com.github.javaparser.utils.TestUtils.assertProblems;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -28,12 +34,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.TestUtils.assertNoProblems;
-import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 class Java1_4ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_1_4));
@@ -46,41 +46,49 @@ class Java1_4ValidatorTest {
 
     @Test
     void noGenerics() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X<A>{List<String> b;}"));
-        assertProblems(result,
-                "(line 1,col 12) Generics are not supported.",
-                "(line 1,col 1) Generics are not supported."
-        );
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X<A>{List<String> b;}"));
+        assertProblems(
+                result,
+                "(line 1,col 1) Generics are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.",
+                "(line 1,col 12) Generics are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
     void noAnnotations() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("@Abc @Def() @Ghi(a=3) @interface X{}"));
-        assertProblems(result,
-                "(line 1,col 6) Annotations are not supported.",
-                "(line 1,col 13) Annotations are not supported.",
-                "(line 1,col 1) Annotations are not supported."
-        );
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("@Abc @Def() @Ghi(a=3) @interface X{}"));
+        assertProblems(
+                result,
+                "(line 1,col 13) Annotations are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.",
+                "(line 1,col 1) Annotations are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.",
+                "(line 1,col 6) Annotations are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
     void novarargs() {
         ParseResult<Parameter> result = javaParser.parse(PARAMETER, provider("String... x"));
-        assertProblems(result, "(line 1,col 1) Varargs are not supported.");
+        assertProblems(
+                result,
+                "(line 1,col 1) Varargs are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
     void noforeach() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x: xs){}"));
-        assertProblems(result, "(line 1,col 1) For-each loops are not supported.");
+        assertProblems(
+                result,
+                "(line 1,col 1) For-each loops are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
     void staticImport() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("import static x;import static x.*;import x.X;import x.*;"));
-        assertProblems(result,
-                "(line 1,col 17) Static imports are not supported.",
-                "(line 1,col 1) Static imports are not supported.");
+        ParseResult<CompilationUnit> result = javaParser.parse(
+                COMPILATION_UNIT, provider("import static x;import static x.*;import x.X;import x.*;"));
+        assertProblems(
+                result,
+                "(line 1,col 1) Static imports are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.",
+                "(line 1,col 17) Static imports are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test

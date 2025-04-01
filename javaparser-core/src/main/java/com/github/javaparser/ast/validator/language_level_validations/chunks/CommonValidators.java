@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations.chunks;
 
 import com.github.javaparser.ast.NodeList;
@@ -36,16 +35,19 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
  * Contains validations that are valid for every Java version.
  */
 public class CommonValidators extends Validators {
+
     public CommonValidators() {
         super(
-                new SimpleValidator<>(ClassOrInterfaceDeclaration.class,
+                new SimpleValidator<>(
+                        ClassOrInterfaceDeclaration.class,
                         n -> !n.isInterface() && n.getExtendedTypes().size() > 1,
-                        (n, reporter) -> reporter.report(n.getExtendedTypes(1), "A class cannot extend more than one other class.")
-                ),
-                new SimpleValidator<>(ClassOrInterfaceDeclaration.class,
+                        (n, reporter) -> reporter.report(
+                                n.getExtendedTypes(1), "A class cannot extend more than one other class.")),
+                new SimpleValidator<>(
+                        ClassOrInterfaceDeclaration.class,
                         n -> n.isInterface() && !n.getImplementedTypes().isEmpty(),
-                        (n, reporter) -> reporter.report(n.getImplementedTypes(0), "An interface cannot implement other interfaces.")
-                ),
+                        (n, reporter) -> reporter.report(
+                                n.getImplementedTypes(0), "An interface cannot implement other interfaces.")),
                 new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class, (n, reporter) -> {
                     if (n.isInterface()) {
                         n.getMembers().forEach(mem -> {
@@ -54,8 +56,7 @@ public class CommonValidators extends Validators {
                             }
                         });
                     }
-                }
-                ),
+                }),
                 new SingleNodeTypeValidator<>(AssignExpr.class, (n, reporter) -> {
                     // https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.26
                     Expression target = n.getTarget();
@@ -68,8 +69,7 @@ public class CommonValidators extends Validators {
                         return;
                     }
                     reporter.report(n.getTarget(), "Illegal left hand side of an assignment.");
-                }
-                ),
+                }),
                 new TreeVisitorValidator((node, problemReporter) -> {
                     NodeMetaModel mm = node.getMetaModel();
                     for (PropertyMetaModel ppm : mm.getAllPropertyMetaModels()) {
@@ -77,13 +77,13 @@ public class CommonValidators extends Validators {
                             if (ppm.isNodeList()) {
                                 NodeList<?> value = (NodeList<?>) ppm.getValue(node);
                                 if (value.isEmpty()) {
-                                    problemReporter.report(node, "%s.%s can not be empty.", mm.getTypeName(), ppm.getName());
+                                    problemReporter.report(
+                                            node, "%s.%s can not be empty.", mm.getTypeName(), ppm.getName());
                                 }
                             }
                             // No need to check empty strings, it should be impossible to set them to ""
                         }
                     }
-                })
-        );
+                }));
     }
 }

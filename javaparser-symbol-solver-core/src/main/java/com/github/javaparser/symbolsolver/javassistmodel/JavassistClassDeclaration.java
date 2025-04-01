@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,31 +23,25 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
-import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-import javassist.CtClass;
-import javassist.CtField;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import javassist.CtClass;
+import javassist.CtField;
 
 /**
  * @author Federico Tomassetti
@@ -64,7 +58,9 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
             throw new IllegalArgumentException();
         }
         if (ctClass.isInterface() || ctClass.isAnnotation() || ctClass.isPrimitive() || ctClass.isEnum()) {
-            throw new IllegalArgumentException("Trying to instantiate a JavassistClassDeclaration with something which is not a class: " + ctClass.toString());
+            throw new IllegalArgumentException(
+                    "Trying to instantiate a JavassistClassDeclaration with something which is not a class: "
+                            + ctClass.toString());
         }
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
@@ -73,12 +69,20 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
 
     @Override
     protected ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
     }
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         return ctClass.hasAnnotation(canonicalName);
+    }
+
+    /*
+     * Returns a set of the declared annotation on this type
+     */
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return javassistTypeDeclarationAdapter.getDeclaredAnnotations();
     }
 
     @Override
@@ -88,7 +92,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+        return javassistTypeDeclarationAdapter.isAssignableBy(other);
     }
 
     @Override
@@ -125,10 +129,15 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
         return ctClass.getName().replace('$', '.');
     }
 
+    @Override
     @Deprecated
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
-                                                    Context invokationContext, List<ResolvedType> typeParameterValues) {
-        return JavassistUtils.solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name,
+            List<ResolvedType> argumentsTypes,
+            Context invokationContext,
+            List<ResolvedType> typeParameterValues) {
+        return JavassistUtils.solveMethodAsUsage(
+                name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
     }
 
     @Override
@@ -153,12 +162,12 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
             }
         }
 
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, String fqn) {
         if (fqn == null) {
-            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         ResolvedReferenceTypeDeclaration fqnTypeDeclaration = typeSolver.solveType(fqn);
@@ -180,44 +189,45 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
 
     @Override
     @Deprecated
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
     }
 
     public ResolvedType getUsage(Node node) {
-        return new ReferenceTypeImpl(this, typeSolver);
+        return new ReferenceTypeImpl(this);
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType type) {
-        if (type.isNull()) {
-            return true;
-        }
-
-        if (type instanceof LambdaArgumentTypePlaceholder) {
+    public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
+        if (other instanceof LambdaArgumentTypePlaceholder) {
             return isFunctionalInterface();
         }
-
-        // TODO look into generics
-        if (type.describe().equals(this.getQualifiedName())) {
+        if (other.getQualifiedName().equals(getQualifiedName())) {
             return true;
         }
-
-        Optional<ResolvedReferenceType> superClassOpt = getSuperClass();
-        if (superClassOpt.isPresent()) {
-            ResolvedReferenceType superClass = superClassOpt.get();
-            if (superClass.isAssignableBy(type)) {
+        Optional<ResolvedReferenceType> oSuperClass = javassistTypeDeclarationAdapter.getSuperClass();
+        if (oSuperClass.isPresent()) {
+            ResolvedReferenceType superClass = oSuperClass.get();
+            Optional<ResolvedReferenceTypeDeclaration> oDecl = superClass.getTypeDeclaration();
+            if (oDecl.isPresent() && oDecl.get().canBeAssignedTo(other)) {
                 return true;
             }
         }
 
-        for (ResolvedReferenceType interfaceType : getInterfaces()) {
-            if (interfaceType.isAssignableBy(type)) {
+        for (ResolvedReferenceType interfaze : javassistTypeDeclarationAdapter.getInterfaces()) {
+            if (interfaze.getTypeDeclaration().isPresent()
+                    && interfaze.getTypeDeclaration().get().canBeAssignedTo(other)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    @Override
+    public boolean isAssignableBy(ResolvedType type) {
+        return javassistTypeDeclarationAdapter.isAssignableBy(type);
     }
 
     @Override
@@ -307,10 +317,10 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
         The name of the ReferenceTypeDeclaration could be composed of the internal class and the outer class, e.g. A$B. That's why we search the internal type in the ending part.
         In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
          */
-        Optional<ResolvedReferenceTypeDeclaration> type =
-                this.internalTypes().stream().filter(f -> f.getName().endsWith(name)).findFirst();
-        return type.orElseThrow(() ->
-                new UnsolvedSymbolException("Internal type not found: " + name));
+        Optional<ResolvedReferenceTypeDeclaration> type = this.internalTypes().stream()
+                .filter(f -> f.getName().endsWith(name))
+                .findFirst();
+        return type.orElseThrow(() -> new UnsolvedSymbolException("Internal type not found: " + name));
     }
 
     @Override
@@ -320,10 +330,5 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
         In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
          */
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
-    }
-
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
     }
 }

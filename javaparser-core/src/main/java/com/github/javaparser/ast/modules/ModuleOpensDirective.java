@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.modules;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -35,7 +37,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleOpensDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An opens directive in module-info.java. {@code opens R.S to T1.U1, T2.U2;}
@@ -105,8 +106,7 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -124,8 +124,7 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);
-        if (this.moduleNames != null)
-            this.moduleNames.setParentNode(null);
+        if (this.moduleNames != null) this.moduleNames.setParentNode(null);
         this.moduleNames = moduleNames;
         setAsParentNodeOf(moduleNames);
         return this;

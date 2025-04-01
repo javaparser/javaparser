@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,32 +21,33 @@
 
 package com.github.javaparser.generator.core.utils;
 
+import static com.github.javaparser.generator.core.utils.CodeUtils.castValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.generator.core.utils.CodeUtils.castValue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class CodeUtilsTest {
 
-	private static final String RETURN_VALUE = "this";
+    private static final String RETURN_VALUE = "this";
 
-	@Test
-	void castReturnValue_whenAValueMatchesTheExpectedTypeNoCastIsNeeded() {
-		Type returnType = PrimitiveType.booleanType();
-		Type valueType = PrimitiveType.booleanType();
+    @Test
+    void castReturnValue_whenAValueMatchesTheExpectedTypeNoCastIsNeeded() {
+        Type returnType = PrimitiveType.booleanType();
+        Type valueType = PrimitiveType.booleanType();
 
-		assertEquals(RETURN_VALUE, castValue(RETURN_VALUE, returnType, valueType.asString()));
-	}
+        assertEquals(RETURN_VALUE, castValue(RETURN_VALUE, returnType, valueType.asString()));
+    }
 
-	@Test
-	void castReturnValue_whenAValueIsNotAssignedByReturnShouldBeCasted() {
-		Type returnType = StaticJavaParser.parseType("String");
-		Type valueType = StaticJavaParser.parseType("Object");
+    @Test
+    void castReturnValue_whenAValueIsNotAssignedByReturnShouldBeCasted() {
+        Type returnType = StaticJavaParser.parseType("String");
+        Type valueType = StaticJavaParser.parseType("Object");
 
-		assertEquals(String.format("(%s) %s", returnType, RETURN_VALUE), castValue(RETURN_VALUE, returnType, valueType.asString()));
-	}
-
+        assertEquals(
+                String.format("(%s) %s", returnType, RETURN_VALUE),
+                castValue(RETURN_VALUE, returnType, valueType.asString()));
+    }
 }

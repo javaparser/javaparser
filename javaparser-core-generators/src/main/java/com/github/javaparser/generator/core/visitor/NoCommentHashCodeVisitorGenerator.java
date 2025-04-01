@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,7 +21,7 @@
 
 package com.github.javaparser.generator.core.visitor;
 
-import java.util.List;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -32,8 +32,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
-
-import static com.github.javaparser.StaticJavaParser.parseStatement;
+import java.util.List;
 
 public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
 
@@ -42,8 +41,8 @@ public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod,
-                                           CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(
+            BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         visitMethod.getParameters().forEach(p -> p.setFinal(true));
 
         final BlockStmt body = visitMethod.getBody().get();
@@ -53,7 +52,8 @@ public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
         final List<PropertyMetaModel> propertyMetaModels = node.getAllPropertyMetaModels();
         if (node.equals(JavaParserMetaModel.lineCommentMetaModel)
                 || node.equals(JavaParserMetaModel.blockCommentMetaModel)
-                || node.equals(JavaParserMetaModel.javadocCommentMetaModel) || propertyMetaModels.isEmpty()) {
+                || node.equals(JavaParserMetaModel.javadocCommentMetaModel)
+                || propertyMetaModels.isEmpty()) {
             builder.append("0");
         } else {
             for (PropertyMetaModel field : propertyMetaModels) {
@@ -62,8 +62,8 @@ public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
                     if (propertyMetaModels.size() == 1) {
                         builder.append("0");
                         break;
-                    } else
-                        continue;
+                    }
+                    continue;
                 }
                 // Is this field another AST node? Visit it.
                 if (field.getNodeReference().isPresent()) {

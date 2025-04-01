@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,13 +21,12 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Supplier;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class AarTypeSolverTest extends AbstractTypeSolverTest<AarTypeSolver> {
 
@@ -48,14 +47,38 @@ class AarTypeSolverTest extends AbstractTypeSolverTest<AarTypeSolver> {
     void initial() throws IOException {
         Path pathToJar = adaptPath("src/test/resources/aars/support-compat-24.2.0.aar");
         AarTypeSolver aarTypeSolver = new AarTypeSolver(pathToJar);
-        assertEquals(true, aarTypeSolver.tryToSolveType("android.support.v4.app.ActivityCompat").isSolved());
-        assertEquals(true, aarTypeSolver.tryToSolveType("android.support.v4.app.ActivityManagerCompat").isSolved());
-        assertEquals(true, aarTypeSolver.tryToSolveType("android.support.v4.app.NotificationCompat").isSolved());
-        assertEquals(true, aarTypeSolver.tryToSolveType("android.support.v4.app.NotificationCompat.Action").isSolved());
-        assertEquals(true, aarTypeSolver.tryToSolveType("android.support.v4.app.NotificationCompat.Action.Builder").isSolved());
-        assertEquals(false, aarTypeSolver.tryToSolveType("com.github.javaparser.ASTParser.Foo").isSolved());
-        assertEquals(false, aarTypeSolver.tryToSolveType("com.github.javaparser.Foo").isSolved());
+        assertEquals(
+                true,
+                aarTypeSolver
+                        .tryToSolveType("android.support.v4.app.ActivityCompat")
+                        .isSolved());
+        assertEquals(
+                true,
+                aarTypeSolver
+                        .tryToSolveType("android.support.v4.app.ActivityManagerCompat")
+                        .isSolved());
+        assertEquals(
+                true,
+                aarTypeSolver
+                        .tryToSolveType("android.support.v4.app.NotificationCompat")
+                        .isSolved());
+        assertEquals(
+                true,
+                aarTypeSolver
+                        .tryToSolveType("android.support.v4.app.NotificationCompat.Action")
+                        .isSolved());
+        assertEquals(
+                true,
+                aarTypeSolver
+                        .tryToSolveType("android.support.v4.app.NotificationCompat.Action.Builder")
+                        .isSolved());
+        assertEquals(
+                false,
+                aarTypeSolver
+                        .tryToSolveType("com.github.javaparser.ASTParser.Foo")
+                        .isSolved());
+        assertEquals(
+                false, aarTypeSolver.tryToSolveType("com.github.javaparser.Foo").isSolved());
         assertEquals(false, aarTypeSolver.tryToSolveType("Foo").isSolved());
     }
-
 }

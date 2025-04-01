@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -17,7 +17,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.configuration;
 
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
@@ -27,7 +26,9 @@ import com.github.javaparser.utils.Utils;
  * An option is a pair of ConfigOption and a currentValue
  */
 public class DefaultConfigurationOption implements ConfigurationOption {
+
     ConfigOption configOption;
+
     Object currentValue;
 
     public DefaultConfigurationOption(ConfigOption configOption) {
@@ -36,8 +37,7 @@ public class DefaultConfigurationOption implements ConfigurationOption {
 
     public DefaultConfigurationOption(ConfigOption configOption, Object value) {
         this.configOption = configOption;
-        if (value != null)
-            value(value);
+        if (value != null) value(value);
     }
 
     @Override

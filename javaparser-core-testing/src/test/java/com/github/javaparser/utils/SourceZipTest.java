@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,25 +21,29 @@
 
 package com.github.javaparser.utils;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
 
 class SourceZipTest {
 
     private final Path testDir = CodeGenerationUtils.mavenModuleRoot(SourceZipTest.class)
-            .resolve(Paths.get("..", "javaparser-core-testing", "src", "test", "resources", "com", "github", "javaparser",
+            .resolve(Paths.get(
+                    "..",
+                    "javaparser-core-testing",
+                    "src",
+                    "test",
+                    "resources",
+                    "com",
+                    "github",
+                    "javaparser",
                     "source_zip"))
             .normalize();
 

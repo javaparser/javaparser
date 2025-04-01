@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,18 +18,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
+
+import static com.github.javaparser.ast.NodeList.toNodeList;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-
 import java.util.Arrays;
 import java.util.List;
-
-import static com.github.javaparser.ast.NodeList.toNodeList;
 
 /**
  * A Node with Modifiers.
@@ -75,9 +73,8 @@ public interface NodeWithModifiers<N extends Node> {
     default N setModifier(Modifier.Keyword m, boolean set) {
         if (set) {
             return addModifier(m);
-        } else {
-            return removeModifier(m);
         }
+        return removeModifier(m);
     }
 
     /**

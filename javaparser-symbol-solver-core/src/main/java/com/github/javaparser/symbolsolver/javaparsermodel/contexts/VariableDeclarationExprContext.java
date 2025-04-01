@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,41 +22,19 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
-import java.util.ArrayList;
+import com.github.javaparser.resolution.TypeSolver;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Federico Tomassetti
  */
-public class VariableDeclarationExprContext extends AbstractJavaParserContext<VariableDeclarationExpr> {
+public class VariableDeclarationExprContext extends ExpressionContext<VariableDeclarationExpr> {
 
     public VariableDeclarationExprContext(VariableDeclarationExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
-    }
-
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
-        for (int i = 0; i < patternExprs.size(); i++) {
-            PatternExpr patternExpr = patternExprs.get(i);
-            if(patternExpr.getNameAsString().equals(name)) {
-                return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
-            }
-        }
-
-        // Default to solving in parent context if unable to solve directly here.
-        return solveSymbolInParentContext(name);
     }
 
     @Override
@@ -69,19 +47,4 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
         // TODO: Consider pattern exprs
         return Collections.emptyList();
     }
-
-
-
-    @Override
-    public List<PatternExpr> patternExprsExposedFromChildren() {
-        // Variable declarations never make pattern expressions available.
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
-        // Variable declarations never make pattern expressions available.
-        return Collections.emptyList();
-    }
-
 }

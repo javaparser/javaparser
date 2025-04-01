@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,30 +21,28 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarationTest;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ConstPool;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
         implements ResolvedAnnotationDeclarationTest {
@@ -58,6 +56,11 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
         } catch (NotFoundException e) {
             throw new RuntimeException("Unexpected error.", e);
         }
+    }
+
+    @Override
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
+        return Optional.empty();
     }
 
     @Override
@@ -99,8 +102,8 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
         CtClass fooAnnotation = classPool.makeAnnotation("com.example.Foo");
         CtClass barClass = fooAnnotation.makeNestedClass("Bar", true);
         CtClass bazClass = barClass.makeNestedClass("Baz", true);
-        JavassistAnnotationDeclaration fooClassDeclaration = new JavassistAnnotationDeclaration(fooAnnotation,
-                typeSolver);
+        JavassistAnnotationDeclaration fooClassDeclaration =
+                new JavassistAnnotationDeclaration(fooAnnotation, typeSolver);
 
         List<ResolvedReferenceTypeDeclaration> innerTypes = new ArrayList<>(fooClassDeclaration.internalTypes());
         assertEquals(1, innerTypes.size());
@@ -110,24 +113,26 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
     @Test
     void isAnnotationNotInheritable() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        
+
         ClassPool classPool = new ClassPool(true);
         CtClass annotation = classPool.makeAnnotation("com.example.Foo");
-        
-        JavassistAnnotationDeclaration fooAnnotationDeclaration = new JavassistAnnotationDeclaration(annotation, typeSolver);
+
+        JavassistAnnotationDeclaration fooAnnotationDeclaration =
+                new JavassistAnnotationDeclaration(annotation, typeSolver);
         // An annotation that does not declare an @Inherited annotation is not inheritable
         assertFalse(fooAnnotationDeclaration.isInheritable());
     }
-    
+
     @Test
     void isAnnotationInheritable() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        
+
         ClassPool classPool = new ClassPool(true);
         CtClass ctClass = classPool.makeAnnotation("com.example.Foo");
         addAnnotation(ctClass, "java.lang.annotation.Inherited");
-        
-        JavassistAnnotationDeclaration fooAnnotationDeclaration = new JavassistAnnotationDeclaration(ctClass, typeSolver);
+
+        JavassistAnnotationDeclaration fooAnnotationDeclaration =
+                new JavassistAnnotationDeclaration(ctClass, typeSolver);
         // An annotation that declares an @Inherited annotation is inheritable
         assertTrue(fooAnnotationDeclaration.isInheritable());
     }
@@ -135,8 +140,8 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
     private void addAnnotation(CtClass ctClass, String annotationName) {
         ConstPool constpool = ctClass.getClassFile().getConstPool();
 
-        AnnotationsAttribute annotationsAttribute = new AnnotationsAttribute(constpool,
-                AnnotationsAttribute.visibleTag);
+        AnnotationsAttribute annotationsAttribute =
+                new AnnotationsAttribute(constpool, AnnotationsAttribute.visibleTag);
         annotationsAttribute.setAnnotation(createAnnotation(annotationName, constpool));
 
         ctClass.getClassFile().addAttribute(annotationsAttribute);
@@ -145,5 +150,4 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
     private javassist.bytecode.annotation.Annotation createAnnotation(String annotationName, ConstPool constpool) {
         return new javassist.bytecode.annotation.Annotation(annotationName, constpool);
     }
-
 }

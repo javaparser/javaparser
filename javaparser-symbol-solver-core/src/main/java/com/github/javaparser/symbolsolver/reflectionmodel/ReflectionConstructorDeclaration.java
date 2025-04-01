@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,19 +21,15 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import static com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration.isRecordType;
 
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedType;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -50,8 +46,12 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
     }
 
     @Override
-    public ResolvedClassDeclaration declaringType() {
-        return new ReflectionClassDeclaration(constructor.getDeclaringClass(), typeSolver);
+    public ResolvedReferenceTypeDeclaration declaringType() {
+        if (isRecordType(constructor.getDeclaringClass())) {
+            return new ReflectionRecordDeclaration(constructor.getDeclaringClass(), typeSolver);
+        } else {
+            return new ReflectionClassDeclaration(constructor.getDeclaringClass(), typeSolver);
+        }
     }
 
     @Override
@@ -62,14 +62,18 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
     @Override
     public ResolvedParameterDeclaration getParam(int i) {
         if (i < 0 || i >= getNumberOfParams()) {
-            throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
+            throw new IllegalArgumentException(
+                    String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
         }
         boolean variadic = false;
         if (constructor.isVarArgs()) {
             variadic = i == (constructor.getParameterCount() - 1);
         }
-        return new ReflectionParameterDeclaration(constructor.getParameterTypes()[i],
-                constructor.getGenericParameterTypes()[i], typeSolver, variadic,
+        return new ReflectionParameterDeclaration(
+                constructor.getParameterTypes()[i],
+                constructor.getGenericParameterTypes()[i],
+                typeSolver,
+                variadic,
                 constructor.getParameters()[i].getName());
     }
 
@@ -85,7 +89,9 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
 
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
-        return Arrays.stream(constructor.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
+        return Arrays.stream(constructor.getTypeParameters())
+                .map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -99,10 +105,5 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
             throw new IllegalArgumentException();
         }
         return ReflectionFactory.typeUsageFor(this.constructor.getExceptionTypes()[index], typeSolver);
-    }
-
-    @Override
-    public Optional<ConstructorDeclaration> toAst() {
-        return Optional.empty();
     }
 }

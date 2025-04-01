@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -35,24 +35,23 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-public class JavassistTypeParameterDeclarationTest  extends AbstractResolutionTest {
+public class JavassistTypeParameterDeclarationTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 
@@ -64,20 +63,24 @@ public class JavassistTypeParameterDeclarationTest  extends AbstractResolutionTe
 
     @Test
     void testGetBounds() {
-        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.utils.PositionUtils");
+        JavassistClassDeclaration compilationUnit =
+                (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.utils.PositionUtils");
         assertTrue(compilationUnit.isClass());
 
         for (ResolvedMethodDeclaration method : compilationUnit.getDeclaredMethods()) {
             switch (method.getName()) {
                 case "sortByBeginPosition":
-                    List<ResolvedTypeParameterDeclaration> typeParams =  method.getTypeParameters();
+                    List<ResolvedTypeParameterDeclaration> typeParams = method.getTypeParameters();
                     assertEquals(1, typeParams.size());
                     assertEquals("T", typeParams.get(0).getName());
 
-                    List<ResolvedTypeParameterDeclaration.Bound> bounds = typeParams.get(0).getBounds();
+                    List<ResolvedTypeParameterDeclaration.Bound> bounds =
+                            typeParams.get(0).getBounds();
                     assertEquals(1, bounds.size());
                     assertTrue(bounds.get(0).isExtends());
-                    assertEquals("com.github.javaparser.ast.Node", bounds.get(0).getType().describe());
+                    assertEquals(
+                            "com.github.javaparser.ast.Node",
+                            bounds.get(0).getType().describe());
             }
         }
     }
@@ -87,24 +90,27 @@ public class JavassistTypeParameterDeclarationTest  extends AbstractResolutionTe
         Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
         typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver());
 
-        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("javaparser.GenericClass");
+        JavassistClassDeclaration compilationUnit =
+                (JavassistClassDeclaration) typeSolver.solveType("javaparser.GenericClass");
         assertTrue(compilationUnit.isClass());
 
         for (ResolvedMethodDeclaration method : compilationUnit.getDeclaredMethods()) {
             if ("complexGenerics".equals(method.getName())) {
-                List<ResolvedTypeParameterDeclaration> typeParams =  method.getTypeParameters();
+                List<ResolvedTypeParameterDeclaration> typeParams = method.getTypeParameters();
 
                 assertEquals(1, typeParams.size());
                 assertEquals("T", typeParams.get(0).getName());
 
-                List<ResolvedTypeParameterDeclaration.Bound> bounds = typeParams.get(0).getBounds();
+                List<ResolvedTypeParameterDeclaration.Bound> bounds =
+                        typeParams.get(0).getBounds();
                 assertEquals(2, bounds.size());
                 assertTrue(bounds.get(0).isExtends());
                 assertEquals("java.lang.Object", bounds.get(0).getType().describe());
                 assertTrue(bounds.get(1).isExtends());
-                assertEquals("javaparser.GenericClass.Foo<? extends T>", bounds.get(1).getType().describe());
+                assertEquals(
+                        "javaparser.GenericClass.Foo<? extends T>",
+                        bounds.get(1).getType().describe());
             }
         }
     }
-
 }

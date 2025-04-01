@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,16 +21,15 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-
-import org.junit.jupiter.api.Test;
+import static com.github.javaparser.ast.Modifier.createModifierList;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
+import com.github.javaparser.utils.LineSeparator;
+import org.junit.jupiter.api.Test;
 
 /**
  * Transforming FieldDeclaration and verifying the LexicalPreservation works as expected.
@@ -52,14 +51,14 @@ class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest 
         it.setModifiers(createModifierList(PUBLIC));
         assertTransformedToString("public int A;", it);
     }
-    
+
     @Test
     void removingModifiers() {
         FieldDeclaration it = consider("public int A;");
         it.setModifiers(new NodeList<>());
         assertTransformedToString("int A;", it);
     }
-    
+
     @Test
     void removingModifiersFromNonPrimitiveType() {
         FieldDeclaration it = consider("public String A;");
@@ -94,18 +93,15 @@ class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest 
     // Annotations
     @Test
     void removingAnnotations() {
-        FieldDeclaration it = consider( SYSTEM_EOL +
-                "@Annotation" + SYSTEM_EOL +
-                "public int A;");
+        FieldDeclaration it = consider(LineSeparator.SYSTEM + "@Annotation" + LineSeparator.SYSTEM + "public int A;");
         it.getAnnotationByName("Annotation").get().remove();
         assertTransformedToString("public int A;", it);
     }
 
     @Test
     void removingAnnotationsWithSpaces() {
-        FieldDeclaration it = consider( SYSTEM_EOL +
-                "  @Annotation " + SYSTEM_EOL +
-                "public int A;");
+        FieldDeclaration it =
+                consider(LineSeparator.SYSTEM + "  @Annotation " + LineSeparator.SYSTEM + "public int A;");
         it.getAnnotationByName("Annotation").get().remove();
         assertTransformedToString("public int A;", it);
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,9 +18,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
@@ -30,12 +30,17 @@ import com.github.javaparser.ast.validator.Validator;
  * This validator validates according to Java 1.1 syntax rules.
  */
 public class Java1_1Validator extends Java1_0Validator {
-    final Validator innerClasses = new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class,
-            (n, reporter) -> n.getParentNode().ifPresent(p -> {
-                if (p instanceof LocalClassDeclarationStmt && n.isInterface())
-                    reporter.report(n, "There is no such thing as a local interface.");
-            })
-    );
+
+    final Validator innerClasses =
+            new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class, (n, reporter) -> n.getParentNode()
+                    .ifPresent(p -> {
+                        if (p instanceof LocalClassDeclarationStmt && n.isInterface())
+                            reporter.report(
+                                    n,
+                                    new UpgradeJavaMessage(
+                                            "There is no such thing as a local interface.",
+                                            ParserConfiguration.LanguageLevel.JAVA_16));
+                    }));
 
     public Java1_1Validator() {
         super();

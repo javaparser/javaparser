@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,18 +18,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
+
+import static java.util.Arrays.asList;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.UnaryExpr;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 import java.util.function.Function;
-
-import static java.util.Arrays.*;
 
 /**
  * Any kind of utility.
@@ -37,23 +35,6 @@ import static java.util.Arrays.*;
  * @author Federico Tomassetti
  */
 public class Utils {
-
-    /**
-     * // TODO: Replace this within the internal codebase.
-     * @deprecated New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
-     *  else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
-     */
-    @Deprecated
-    public static final String EOL = LineSeparator.SYSTEM.asRawString();
-
-    /**
-     * @deprecated Renamed from {@link #EOL} to make it explicit that we're using the system's line separator.
-     *             New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
-     *              else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
-     *
-     */
-    @Deprecated
-    public static final String SYSTEM_EOL = LineSeparator.SYSTEM.asRawString();
 
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();
@@ -111,11 +92,9 @@ public class Utils {
         final StringBuilder result = new StringBuilder();
         final char[] buffer = new char[8 * 1024];
         int numChars;
-
         while ((numChars = reader.read(buffer, 0, buffer.length)) > 0) {
             result.append(buffer, 0, numChars);
         }
-
         return result.toString();
     }
 
@@ -140,7 +119,6 @@ public class Utils {
         }
         return sb.toString();
     }
-
 
     /**
      * @param input "aCamelCaseString"
@@ -195,12 +173,12 @@ public class Utils {
         return stringTransformer(s, "decapitalize", String::toLowerCase);
     }
 
-    private static String stringTransformer(String s, String operationDescription, Function<String, String> transformation) {
+    private static String stringTransformer(
+            String s, String operationDescription, Function<String, String> transformation) {
         if (s.isEmpty()) {
             throw new IllegalArgumentException(String.format("You cannot %s an empty string", operationDescription));
         }
-        return transformation.apply(s.substring(0, 1)) +
-                s.substring(1);
+        return transformation.apply(s.substring(0, 1)) + s.substring(1);
     }
 
     /**
@@ -226,17 +204,20 @@ public class Utils {
     }
 
     public static boolean valueIsNullOrEmptyStringOrOptional(Object value) {
+        // is null?
         if (value == null) {
             return true;
         }
-        if (value instanceof Optional) {
-            if (((Optional) value).isPresent()) {
-                value = ((Optional) value).get();
-            } else {
-                return true;
-            }
-        }
-        return false;
+        //        // is not Optional?
+        //        if (!(value instanceof Optional)) {
+        //        	return false;
+        //        }
+        //        // is an empty Optional?
+        //		if (!((Optional) value).isPresent()) {
+        //			return true;
+        //		}
+        //        return false;
+        return value instanceof Optional ? !((Optional) value).isPresent() : false;
     }
 
     /**
@@ -301,9 +282,7 @@ public class Utils {
      */
     public static String removeFileExtension(String filename) {
         int extensionIndex = filename.lastIndexOf(".");
-        if (extensionIndex == -1)
-            return filename;
-
+        if (extensionIndex == -1) return filename;
         return filename.substring(0, extensionIndex);
     }
 
@@ -327,5 +306,4 @@ public class Utils {
                 .map(unaryExpr -> unaryExpr.getOperator() == UnaryExpr.Operator.MINUS)
                 .orElse(false);
     }
-
 }

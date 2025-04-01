@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,23 +21,25 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.TypePatternExpr;
+import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
-import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.resolution.SymbolDeclarator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
-
 import java.util.List;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -50,17 +52,21 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        SwitchStmt switchStmt = (SwitchStmt) demandParentNode(wrappedNode);
-        ResolvedType type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
-        if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isPresent()) {
-            ResolvedReferenceTypeDeclaration typeDeclaration = type.asReferenceType().getTypeDeclaration().get();
+        SwitchNode switchNode = (SwitchNode) demandParentNode(wrappedNode);
+        ResolvedType type = JavaParserFacade.get(typeSolver).getType(switchNode.getSelector());
+        if (type.isReferenceType()
+                && type.asReferenceType().getTypeDeclaration().isPresent()) {
+            ResolvedReferenceTypeDeclaration typeDeclaration =
+                    type.asReferenceType().getTypeDeclaration().get();
             if (typeDeclaration.isEnum()) {
                 if (type instanceof ReferenceTypeImpl) {
                     ReferenceTypeImpl referenceType = (ReferenceTypeImpl) type;
-                    if(referenceType.getTypeDeclaration().isPresent()) {
-                        ResolvedReferenceTypeDeclaration typeUsageTypeDeclaration = referenceType.getTypeDeclaration().get();
+                    if (referenceType.getTypeDeclaration().isPresent()) {
+                        ResolvedReferenceTypeDeclaration typeUsageTypeDeclaration =
+                                referenceType.getTypeDeclaration().get();
                         if (typeUsageTypeDeclaration.asEnum().hasEnumConstant(name)) {
-                            return SymbolReference.solved(typeUsageTypeDeclaration.asEnum().getEnumConstant(name));
+                            return SymbolReference.solved(
+                                    typeUsageTypeDeclaration.asEnum().getEnumConstant(name));
                         }
                         if (typeUsageTypeDeclaration.hasField(name)) {
                             return SymbolReference.solved(typeUsageTypeDeclaration.getField(name));
@@ -75,7 +81,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
         }
 
         // look for declaration in this and previous switch entry statements
-        for (SwitchEntry seStmt : switchStmt.getEntries()) {
+        for (SwitchEntry seStmt : switchNode.getEntries()) {
             for (Statement stmt : seStmt.getStatements()) {
                 SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(stmt, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
@@ -93,8 +99,17 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
+    }
+
+    @Override
+    public List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
+        return wrappedNode.getLabels().stream()
+                .filter(label -> label.isPatternExpr())
+                .flatMap(label -> typePatternExprsDiscoveredInPattern(label.asPatternExpr()).stream())
+                .collect(Collectors.toList());
     }
 }

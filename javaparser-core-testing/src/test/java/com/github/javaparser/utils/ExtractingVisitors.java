@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,7 +24,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,5 +44,4 @@ public final class ExtractingVisitors {
             }
         });
     }
-
 }

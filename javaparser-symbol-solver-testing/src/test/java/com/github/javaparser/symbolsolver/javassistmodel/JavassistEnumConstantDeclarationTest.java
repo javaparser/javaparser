@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,10 +21,13 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclarationTest;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Optional;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
@@ -45,8 +48,12 @@ class JavassistEnumConstantDeclarationTest implements ResolvedEnumConstantDeclar
     }
 
     @Override
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
+        return Optional.empty();
+    }
+
+    @Override
     public String getCanonicalNameOfExpectedType(ResolvedValueDeclaration resolvedDeclaration) {
         return "java.time.DayOfWeek";
     }
-
 }

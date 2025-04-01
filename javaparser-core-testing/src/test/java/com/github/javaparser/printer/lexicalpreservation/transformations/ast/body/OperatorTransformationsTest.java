@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,13 +21,10 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import java.io.IOException;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * Transforming BinaryExpr and verifying the LexicalPreservation works as expected.
@@ -40,19 +37,18 @@ class OperatorTransformationsTest extends AbstractLexicalPreservingTest {
         expression.asBinaryExpr().setRight(new NameExpr("c"));
         assertTransformedToString("a && c", expression);
     }
-    
+
     @Test
     void unaryExpressionOperator() {
         considerExpression("!a");
         expression.asUnaryExpr().setExpression(new NameExpr("b"));
         assertTransformedToString("!b", expression);
     }
-    
+
     @Test
     void assignExpressionOperator() {
         considerExpression("a <<= 1");
         expression.asAssignExpr().setValue(new IntegerLiteralExpr(2));
         assertTransformedToString("a <<= 2", expression);
     }
-
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+import static java.util.Comparator.comparing;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -32,14 +36,13 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.FileVisitResult;
@@ -49,10 +52,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static java.util.Comparator.comparing;
 
 /**
  * Resolves resolvable nodes from one or more source files, and reports the results.
@@ -105,7 +104,8 @@ public class SourceFileInfoExtractor {
     }
 
     private void solveTypeDecl(ClassOrInterfaceDeclaration node) {
-        ResolvedTypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
+        ResolvedTypeDeclaration typeDeclaration =
+                JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
         if (typeDeclaration.isClass()) {
             out.println("\n[ Class " + typeDeclaration.getQualifiedName() + " ]");
             for (ResolvedReferenceType sc : typeDeclaration.asClass().getAllSuperClasses()) {
@@ -122,16 +122,16 @@ public class SourceFileInfoExtractor {
             solveTypeDecl((ClassOrInterfaceDeclaration) node);
         } else if (node instanceof Expression) {
             Node parentNode = demandParentNode(node);
-            if (parentNode instanceof ImportDeclaration ||
-                    parentNode instanceof Expression ||
-                    parentNode instanceof MethodDeclaration ||
-                    parentNode instanceof PackageDeclaration) {
+            if (parentNode instanceof ImportDeclaration
+                    || parentNode instanceof Expression
+                    || parentNode instanceof MethodDeclaration
+                    || parentNode instanceof PackageDeclaration) {
                 // skip
                 return;
             }
-            if (parentNode instanceof Statement ||
-                    parentNode instanceof VariableDeclarator ||
-                    parentNode instanceof SwitchEntry) {
+            if (parentNode instanceof Statement
+                    || parentNode instanceof VariableDeclarator
+                    || parentNode instanceof SwitchEntry) {
                 try {
                     ResolvedType ref = JavaParserFacade.get(typeSolver).getType(node);
                     out.println("  Line " + lineNr(node) + ") " + node + " ==> " + ref.describe());
@@ -172,10 +172,11 @@ public class SourceFileInfoExtractor {
 
     private String toString(SymbolReference<ResolvedMethodDeclaration> methodDeclarationSymbolReference) {
         if (methodDeclarationSymbolReference.isSolved()) {
-            return methodDeclarationSymbolReference.getCorrespondingDeclaration().getQualifiedSignature();
-        } else {
-            return "UNSOLVED";
+            return methodDeclarationSymbolReference
+                    .getCorrespondingDeclaration()
+                    .getQualifiedSignature();
         }
+        return "UNSOLVED";
     }
 
     private List<Node> collectAllNodes(Node node) {

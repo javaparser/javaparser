@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,19 +21,19 @@
 
 package com.github.javaparser.generator.core;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.generator.core.node.*;
 import com.github.javaparser.generator.core.other.BndGenerator;
 import com.github.javaparser.generator.core.other.TokenKindGenerator;
+import com.github.javaparser.generator.core.quality.NotNullGenerator;
 import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
 
 /**
  * Generates all generated visitors in the javaparser-core module.
@@ -41,11 +41,10 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
  * You may want to run_metamodel_generator.sh before that.
  */
 public class CoreGenerator {
-    private static final ParserConfiguration parserConfiguration = new ParserConfiguration()
-            .setLanguageLevel(RAW)
-//                                .setStoreTokens(false)
-//                                .setAttributeComments(false)
-//                                .setLexicalPreservationEnabled(true)
+    private static final ParserConfiguration parserConfiguration = new ParserConfiguration().setLanguageLevel(RAW)
+            //                                .setStoreTokens(false)
+            //                                .setAttributeComments(false)
+            //                                .setLexicalPreservationEnabled(true)
             ;
 
     public static void main(String[] args) throws Exception {
@@ -55,13 +54,14 @@ public class CoreGenerator {
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
         final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration)
-//                .setPrinter(LexicalPreservingPrinter::print)
+                //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
         StaticJavaParser.setConfiguration(parserConfiguration);
 
-        final Path generatedJavaCcRoot = Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
+        final Path generatedJavaCcRoot =
+                Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
         final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration)
-//                .setPrinter(LexicalPreservingPrinter::print)
+                //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
 
         new CoreGenerator().run(sourceRoot, generatedJavaCcSourceRoot);
@@ -97,5 +97,7 @@ public class CoreGenerator {
         new AcceptGenerator(sourceRoot).generate();
         new TokenKindGenerator(sourceRoot, generatedJavaCcSourceRoot).generate();
         new BndGenerator(sourceRoot).generate();
+
+        new NotNullGenerator(sourceRoot).generate();
     }
 }

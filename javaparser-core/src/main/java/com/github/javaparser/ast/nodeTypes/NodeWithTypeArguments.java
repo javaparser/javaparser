@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,17 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
+
+import static com.github.javaparser.ast.NodeList.nodeList;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.metamodel.DerivedProperty;
-
 import java.util.Optional;
-
-import static com.github.javaparser.ast.NodeList.nodeList;
 
 /**
  * A node that can have type arguments.
@@ -42,6 +40,7 @@ import static com.github.javaparser.ast.NodeList.nodeList;
  * On other nodes it is treated the same as the first case.
  */
 public interface NodeWithTypeArguments<N extends Node> {
+
     /**
      * @return the types that can be found in the type arguments: {@code  <String, Integer>}.
      */

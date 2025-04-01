@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,13 +21,15 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedType;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -37,14 +39,16 @@ public class JavaParserEnumConstantDeclaration implements ResolvedEnumConstantDe
     private TypeSolver typeSolver;
     private com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode;
 
-    public JavaParserEnumConstantDeclaration(com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode, TypeSolver typeSolver) {
+    public JavaParserEnumConstantDeclaration(
+            com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }
 
     @Override
     public ResolvedType getType() {
-        return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(wrappedNode), typeSolver), typeSolver);
+        return new ReferenceTypeImpl(
+                new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(wrappedNode), typeSolver));
     }
 
     @Override
@@ -61,4 +65,8 @@ public class JavaParserEnumConstantDeclaration implements ResolvedEnumConstantDe
         return wrappedNode;
     }
 
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.of(wrappedNode);
+    }
 }

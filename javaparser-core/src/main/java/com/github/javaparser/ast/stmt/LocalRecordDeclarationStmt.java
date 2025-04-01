@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -33,7 +35,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LocalRecordDeclarationStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <h1>A record declaration inside a method.</h1>
@@ -88,8 +89,7 @@ public class LocalRecordDeclarationStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.RECORD_DECLARATION, this.recordDeclaration, recordDeclaration);
-        if (this.recordDeclaration != null)
-            this.recordDeclaration.setParentNode(null);
+        if (this.recordDeclaration != null) this.recordDeclaration.setParentNode(null);
         this.recordDeclaration = recordDeclaration;
         setAsParentNodeOf(recordDeclaration);
         return this;

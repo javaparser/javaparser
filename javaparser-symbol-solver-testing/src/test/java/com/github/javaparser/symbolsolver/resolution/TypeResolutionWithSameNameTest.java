@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,24 +21,23 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import org.junit.jupiter.api.Test;
 
 public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
 
@@ -49,13 +48,13 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
      */
     @Test
     void testTypesWithSameNameInPackageAndNested_directExtends() throws IOException {
-        Path srcRootPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/00_package_precedes_nested_class");
-        Path extendsTypePath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/00_package_precedes_nested_class/extends_duplicate/A.java");
+        Path srcRootPath =
+                adaptPath("src/test/resources/TypeResolutionWithSameNameTest/00_package_precedes_nested_class");
+        Path extendsTypePath = adaptPath(
+                "src/test/resources/TypeResolutionWithSameNameTest/00_package_precedes_nested_class/extends_duplicate/A.java");
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
-        StaticJavaParser
-                .getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(extendsTypePath);
         ClassOrInterfaceDeclaration extendingTypeClass = Navigator.demandClass(cu, "A");
@@ -68,8 +67,14 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
         // Verify qualified name matches the non-nested class in the same package.
         // Note verbose assertions show both the "correct" expected value, and the erroneous value to be avoided.
         String qualifiedName = resolvedExtendedType.getQualifiedName();
-        assertEquals("extends_duplicate.DuplicateTypeName", qualifiedName, "Error - not resolved to the class in the package.");
-        assertNotEquals("extends_duplicate.A.DuplicateTypeName", qualifiedName, "Error - mistakenly resolved to a nested class instead of the expected class.");
+        assertEquals(
+                "extends_duplicate.DuplicateTypeName",
+                qualifiedName,
+                "Error - not resolved to the class in the package.");
+        assertNotEquals(
+                "extends_duplicate.A.DuplicateTypeName",
+                qualifiedName,
+                "Error - mistakenly resolved to a nested class instead of the expected class.");
     }
 
     /*
@@ -79,13 +84,13 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
      */
     @Test
     void testTypesWithSameNameInPackageAndNested_directImplements() throws IOException {
-        Path srcRootPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/01_package_precedes_nested_interface");
-        Path implementingTypePath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/01_package_precedes_nested_interface/implements_duplicate/A.java");
+        Path srcRootPath =
+                adaptPath("src/test/resources/TypeResolutionWithSameNameTest/01_package_precedes_nested_interface");
+        Path implementingTypePath = adaptPath(
+                "src/test/resources/TypeResolutionWithSameNameTest/01_package_precedes_nested_interface/implements_duplicate/A.java");
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
-        StaticJavaParser
-                .getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(implementingTypePath);
         ClassOrInterfaceDeclaration implementingTypeClass = Navigator.demandClass(cu, "A");
@@ -93,113 +98,138 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
         // Attempt to resolve `DuplicateTypeName` from `class ImplementingType implements **DuplicateTypeName**`
         assumeTrue(implementingTypeClass.getImplementedTypes().size() > 0);
         ClassOrInterfaceType implementedType = implementingTypeClass.getImplementedTypes(0);
-        ResolvedReferenceType resolvedImplementedType = implementedType.resolve().asReferenceType();
+        ResolvedReferenceType resolvedImplementedType =
+                implementedType.resolve().asReferenceType();
 
         // Verify qualified name matches the non-nested class in the same package.
         // Note verbose assertions show both the "correct" expected value, and the erroneous value to be avoided.
         String qualifiedName = resolvedImplementedType.getQualifiedName();
-        assertEquals("implements_duplicate.DuplicateTypeName", qualifiedName, "Error - not resolved to interface in the package.");
-        assertNotEquals("implements_duplicate.A.DuplicateTypeName", qualifiedName, "Error - mistakenly resolved to a nested class instead of the expected interface.");
+        assertEquals(
+                "implements_duplicate.DuplicateTypeName",
+                qualifiedName,
+                "Error - not resolved to interface in the package.");
+        assertNotEquals(
+                "implements_duplicate.A.DuplicateTypeName",
+                qualifiedName,
+                "Error - mistakenly resolved to a nested class instead of the expected interface.");
     }
 
     @Test
     void testTypesWithSameNameStaticNonTypeAndNonStaticType() throws IOException {
-        Path srcRootPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/02_ignore_static_non_type_import");
-        Path mainPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/02_ignore_static_non_type_import/main/Main.java");
+        Path srcRootPath =
+                adaptPath("src/test/resources/TypeResolutionWithSameNameTest/02_ignore_static_non_type_import");
+        Path mainPath = adaptPath(
+                "src/test/resources/TypeResolutionWithSameNameTest/02_ignore_static_non_type_import/main/Main.java");
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
-        StaticJavaParser
-                .getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(mainPath);
         ClassOrInterfaceDeclaration c = Navigator.demandClass(cu, "Main");
 
-        String qualifiedName = c.getFieldByName("field_a").get().resolve().getType().describe();
+        String qualifiedName =
+                c.getFieldByName("field_a").get().resolve().getType().describe();
         assertEquals("another.A", qualifiedName, "Error - not resolved to a class.");
-        assertNotEquals("another.MyEnum.A", qualifiedName, "Error - mistakenly resolved to an enum member instead of the expected class.");
+        assertNotEquals(
+                "another.MyEnum.A",
+                qualifiedName,
+                "Error - mistakenly resolved to an enum member instead of the expected class.");
     }
 
     @Test
     void testTypesWithSameNameSingleTypeImportAndPackage() throws IOException {
-        Path srcRootPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/03_single_type_import_precedes_package_member");
-        Path mainPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/03_single_type_import_precedes_package_member/main/Main.java");
+        Path srcRootPath = adaptPath(
+                "src/test/resources/TypeResolutionWithSameNameTest/03_single_type_import_precedes_package_member");
+        Path mainPath = adaptPath(
+                "src/test/resources/TypeResolutionWithSameNameTest/03_single_type_import_precedes_package_member/main/Main.java");
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
-        StaticJavaParser
-                .getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(mainPath);
         ClassOrInterfaceDeclaration c = Navigator.demandClass(cu, "Main");
 
-        String qualifiedName = c.getFieldByName("field_a").get().resolve().getType().describe();
+        String qualifiedName =
+                c.getFieldByName("field_a").get().resolve().getType().describe();
         assertEquals("another.A", qualifiedName, "Error - not resolved to the imorted class.");
-        assertNotEquals("main.A", qualifiedName, "Error - mistakenly resolved to a package member insted of the explicitly imported class.");
+        assertNotEquals(
+                "main.A",
+                qualifiedName,
+                "Error - mistakenly resolved to a package member insted of the explicitly imported class.");
     }
 
     @Test
     void testTypesWithSameNamePackageAndAsteriskImport() throws IOException {
-        Path srcRootPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/04_package_member_precedes_asterisk_import");
-        Path mainPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/04_package_member_precedes_asterisk_import/main/Main.java");
+        Path srcRootPath = adaptPath(
+                "src/test/resources/TypeResolutionWithSameNameTest/04_package_member_precedes_asterisk_import");
+        Path mainPath = adaptPath(
+                "src/test/resources/TypeResolutionWithSameNameTest/04_package_member_precedes_asterisk_import/main/Main.java");
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
-        StaticJavaParser
-                .getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(mainPath);
         ClassOrInterfaceDeclaration c = Navigator.demandClass(cu, "Main");
 
-        String qualifiedName = c.getFieldByName("field_a").get().resolve().getType().describe();
+        String qualifiedName =
+                c.getFieldByName("field_a").get().resolve().getType().describe();
         assertEquals("main.A", qualifiedName, "Error - not resolved to a package member.");
-        assertNotEquals("another.A", qualifiedName, "Error - mistakenly resolved to an asterisk-imported class instead of the expected package member.");
+        assertNotEquals(
+                "another.A",
+                qualifiedName,
+                "Error - mistakenly resolved to an asterisk-imported class instead of the expected package member.");
     }
 
     @Test
     void testTypesWithSameNameAsteriskImportAndJavaLang() throws IOException {
-        Path srcRootPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/05_asterisk_import_precedes_java_lang");
-        Path mainPath = adaptPath("src/test/resources/TypeResolutionWithSameNameTest/05_asterisk_import_precedes_java_lang/main/Main.java");
+        Path srcRootPath =
+                adaptPath("src/test/resources/TypeResolutionWithSameNameTest/05_asterisk_import_precedes_java_lang");
+        Path mainPath = adaptPath(
+                "src/test/resources/TypeResolutionWithSameNameTest/05_asterisk_import_precedes_java_lang/main/Main.java");
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
-        StaticJavaParser
-                .getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(mainPath);
         ClassOrInterfaceDeclaration c = Navigator.demandClass(cu, "Main");
 
         String qualifiedName = c.getFieldByName("s").get().resolve().getType().describe();
         assertEquals("another.String", qualifiedName, "Error - not resolved to an asterisk-imported class.");
-        assertNotEquals("java.lang.String", qualifiedName, "Error - mistakenly resolved to a member of java.lang instead of a member of asterisk-imported package.");
+        assertNotEquals(
+                "java.lang.String",
+                qualifiedName,
+                "Error - mistakenly resolved to a member of java.lang instead of a member of asterisk-imported package.");
     }
 
     @Test
     void testTypesWithSameNameInPackageAndNestedMethodDeclaration() {
-        String code = "package implements_duplicate;\n" +
-            "\n" +
-            "import java.util.Formattable;\n" +
-            "\n" +
-            "public abstract class A implements Formattable {\n" +
-            "\n" +
-            "    public interface Formattable {\n" +
-            "    }\n" +
-            "\n" +
-            "    public void foo(Formattable f) {\n" +
-            "    }\n" +
-            "\n" +
-            "}\n";
+        String code = "package implements_duplicate;\n" + "\n"
+                + "import java.util.Formattable;\n"
+                + "\n"
+                + "public abstract class A implements Formattable {\n"
+                + "\n"
+                + "    public interface Formattable {\n"
+                + "    }\n"
+                + "\n"
+                + "    public void foo(Formattable f) {\n"
+                + "    }\n"
+                + "\n"
+                + "}\n";
 
-        StaticJavaParser
-                .getConfiguration()
+        StaticJavaParser.getParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
 
         CompilationUnit cu = StaticJavaParser.parse(code);
 
         MethodDeclaration decl = cu.findFirst(MethodDeclaration.class).get();
-        String qualifiedName = decl.getParameters().get(0).getType().resolve().asReferenceType().getQualifiedName();
+        String qualifiedName = decl.getParameters()
+                .get(0)
+                .getType()
+                .resolve()
+                .asReferenceType()
+                .getQualifiedName();
         assertEquals("implements_duplicate.A.Formattable", qualifiedName, "Error - not resolved to local interface");
-        assertNotEquals("java.util.Formattable", qualifiedName,
-                        "Error - mistakenly resolved to import used in implements");
+        assertNotEquals(
+                "java.util.Formattable", qualifiedName, "Error - mistakenly resolved to import used in implements");
     }
 }

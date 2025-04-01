@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,10 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
+import com.github.javaparser.resolution.model.SymbolReference;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -53,7 +52,8 @@ public class AarTypeSolver implements TypeSolver {
         JarFile jarFile = new JarFile(aarFile);
         ZipEntry classesJarEntry = jarFile.getEntry("classes.jar");
         if (classesJarEntry == null) {
-            throw new IllegalArgumentException(String.format("The given file (%s) is malformed: entry classes.jar was not found", aarFile.getAbsolutePath()));
+            throw new IllegalArgumentException(String.format(
+                    "The given file (%s) is malformed: entry classes.jar was not found", aarFile.getAbsolutePath()));
         }
         delegate = new JarTypeSolver(jarFile.getInputStream(classesJarEntry));
     }
@@ -65,8 +65,7 @@ public class AarTypeSolver implements TypeSolver {
 
     @Override
     public void setParent(TypeSolver parent) {
-        if (parent == this)
-            throw new IllegalStateException("The parent of this TypeSolver cannot be itself.");
+        if (parent == this) throw new IllegalStateException("The parent of this TypeSolver cannot be itself.");
 
         delegate.setParent(parent);
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -28,5 +28,6 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
  */
 public interface ObjectProvider {
     ResolvedReferenceType object();
+
     ResolvedReferenceType byName(String qname);
 }

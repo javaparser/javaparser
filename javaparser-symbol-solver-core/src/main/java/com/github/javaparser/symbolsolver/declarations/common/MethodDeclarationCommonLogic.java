@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,17 +21,15 @@
 
 package com.github.javaparser.symbolsolver.declarations.common;
 
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.logic.InferenceContext;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,14 +51,15 @@ public class MethodDeclarationCommonLogic {
         ResolvedType returnType = replaceTypeParams(methodDeclaration.getReturnType(), context);
         List<ResolvedType> params = new ArrayList<>();
         for (int i = 0; i < methodDeclaration.getNumberOfParams(); i++) {
-            ResolvedType replaced = replaceTypeParams(methodDeclaration.getParam(i).getType(), context);
+            ResolvedType replaced =
+                    replaceTypeParams(methodDeclaration.getParam(i).getType(), context);
             params.add(replaced);
         }
 
         // We now look at the type parameter for the method which we can derive from the parameter types
         // and then we replace them in the return type
         // Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
-        InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+        InferenceContext inferenceContext = new InferenceContext(typeSolver);
         for (int i = 0; i < methodDeclaration.getNumberOfParams(); i++) {
             ResolvedParameterDeclaration formalParamDecl = methodDeclaration.getParam(i);
             ResolvedType formalParamType = formalParamDecl.getType();
@@ -103,7 +102,10 @@ public class MethodDeclarationCommonLogic {
     }
 
     protected Optional<ResolvedType> typeParamByName(String name, Context context) {
-        return methodDeclaration.getTypeParameters().stream().filter(tp -> tp.getName().equals(name)).map(tp -> toType(tp)).findFirst();
+        return methodDeclaration.getTypeParameters().stream()
+                .filter(tp -> tp.getName().equals(name))
+                .map(tp -> toType(tp))
+                .findFirst();
     }
 
     protected ResolvedType toType(ResolvedTypeParameterDeclaration typeParameterDeclaration) {

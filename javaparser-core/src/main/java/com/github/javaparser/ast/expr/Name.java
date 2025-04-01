@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -34,7 +36,6 @@ import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -118,6 +119,10 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         return identifier;
     }
 
+    public boolean hasQualifier() {
+        return qualifier != null;
+    }
+
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Name> getQualifier() {
         return Optional.ofNullable(qualifier);
@@ -129,8 +134,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
             return this;
         }
         notifyPropertyChange(ObservableProperty.QUALIFIER, this.qualifier, qualifier);
-        if (this.qualifier != null)
-            this.qualifier.setParentNode(null);
+        if (this.qualifier != null) this.qualifier.setParentNode(null);
         this.qualifier = qualifier;
         setAsParentNodeOf(qualifier);
         return this;

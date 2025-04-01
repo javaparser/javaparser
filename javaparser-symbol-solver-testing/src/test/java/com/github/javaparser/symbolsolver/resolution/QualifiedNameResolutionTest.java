@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,31 +21,34 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class QualifiedNameResolutionTest extends AbstractResolutionTest {
 
     @Test
     void resolveLocalVariableInParentOfParent() {
         CompilationUnit cu = parseSample("QualifiedNameTest");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "QualifiedNameTest");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField =
+                Navigator.demandClass(cu, "QualifiedNameTest");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo1");
         NameExpr nameExpr = Navigator.findNameExpression(method, "s").get();
 
-        SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
+        SymbolReference<? extends ResolvedValueDeclaration> ref =
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.util.Scanner", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        assertEquals(
+                "java.util.Scanner",
+                ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
-
 }

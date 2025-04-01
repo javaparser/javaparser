@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -19,6 +19,8 @@
  * GNU Lesser General Public License for more details.
  */
 package com.github.javaparser.ast.body;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
@@ -39,7 +41,6 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A constructor declaration: {@code class X { X() { } }} where X(){} is the constructor declaration.
@@ -49,28 +50,78 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration> implements NodeWithBlockStmt<ConstructorDeclaration>, NodeWithAccessModifiers<ConstructorDeclaration>, NodeWithJavadoc<ConstructorDeclaration>, NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration>, Resolvable<ResolvedConstructorDeclaration> {
+public class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration>
+        implements NodeWithBlockStmt<ConstructorDeclaration>,
+                NodeWithAccessModifiers<ConstructorDeclaration>,
+                NodeWithJavadoc<ConstructorDeclaration>,
+                NodeWithSimpleName<ConstructorDeclaration>,
+                NodeWithParameters<ConstructorDeclaration>,
+                NodeWithThrownExceptions<ConstructorDeclaration>,
+                NodeWithTypeParameters<ConstructorDeclaration>,
+                Resolvable<ResolvedConstructorDeclaration> {
 
     private BlockStmt body;
 
     public ConstructorDeclaration() {
-        this(null, new NodeList<>(), new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt(), null);
+        this(
+                null,
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>(),
+                new SimpleName(),
+                new NodeList<>(),
+                new NodeList<>(),
+                new BlockStmt(),
+                null);
     }
 
     public ConstructorDeclaration(String name) {
-        this(null, new NodeList<>(new Modifier()), new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt(), null);
+        this(
+                null,
+                new NodeList<>(new Modifier()),
+                new NodeList<>(),
+                new NodeList<>(),
+                new SimpleName(name),
+                new NodeList<>(),
+                new NodeList<>(),
+                new BlockStmt(),
+                null);
     }
 
     public ConstructorDeclaration(NodeList<Modifier> modifiers, String name) {
-        this(null, modifiers, new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt(), null);
+        this(
+                null,
+                modifiers,
+                new NodeList<>(),
+                new NodeList<>(),
+                new SimpleName(name),
+                new NodeList<>(),
+                new NodeList<>(),
+                new BlockStmt(),
+                null);
     }
 
-    public ConstructorDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+    public ConstructorDeclaration(
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            NodeList<TypeParameter> typeParameters,
+            SimpleName name,
+            NodeList<Parameter> parameters,
+            NodeList<ReferenceType> thrownExceptions,
+            BlockStmt body) {
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body, null);
     }
 
     @AllFieldsConstructor
-    public ConstructorDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
+    public ConstructorDeclaration(
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            NodeList<TypeParameter> typeParameters,
+            SimpleName name,
+            NodeList<Parameter> parameters,
+            NodeList<ReferenceType> thrownExceptions,
+            BlockStmt body,
+            ReceiverParameter receiverParameter) {
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body, receiverParameter);
     }
 
@@ -78,8 +129,25 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ConstructorDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
-        super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
+    public ConstructorDeclaration(
+            TokenRange tokenRange,
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            NodeList<TypeParameter> typeParameters,
+            SimpleName name,
+            NodeList<Parameter> parameters,
+            NodeList<ReferenceType> thrownExceptions,
+            BlockStmt body,
+            ReceiverParameter receiverParameter) {
+        super(
+                tokenRange,
+                modifiers,
+                annotations,
+                typeParameters,
+                name,
+                parameters,
+                thrownExceptions,
+                receiverParameter);
         setBody(body);
         customInitialization();
     }
@@ -114,8 +182,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
+        if (this.body != null) this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
@@ -153,7 +220,8 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
      * [throws exceptionsList]
      */
     @Override
-    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
+    public String getDeclarationAsString(
+            boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = getAccessSpecifier();

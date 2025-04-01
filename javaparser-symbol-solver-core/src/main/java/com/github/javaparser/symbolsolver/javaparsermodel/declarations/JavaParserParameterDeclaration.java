@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,24 +21,22 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.resolution.declarations.AssociableToAST;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.LambdaExprContext;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
-
 import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserParameterDeclaration implements ResolvedParameterDeclaration, AssociableToAST<Parameter> {
+public class JavaParserParameterDeclaration implements ResolvedParameterDeclaration {
 
     private final Parameter wrappedNode;
     private final TypeSolver typeSolver;
@@ -60,8 +58,10 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
 
     @Override
     public ResolvedType getType() {
-        if (wrappedNode.getType() instanceof UnknownType && JavaParserFactory.getContext(wrappedNode, typeSolver) instanceof LambdaExprContext) {
-            Optional<Value> value = JavaParserFactory.getContext(wrappedNode, typeSolver).solveSymbolAsValue(wrappedNode.getNameAsString());
+        if (wrappedNode.getType().isUnknownType()
+                && JavaParserFactory.getContext(wrappedNode, typeSolver) instanceof LambdaExprContext) {
+            Optional<Value> value = JavaParserFactory.getContext(wrappedNode, typeSolver)
+                    .solveSymbolAsValue(wrappedNode.getNameAsString());
             if (value.isPresent()) {
                 return value.get().getType();
             }
@@ -83,8 +83,7 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
     }
 
     @Override
-    public Optional<Parameter> toAst() {
+    public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
-
 }

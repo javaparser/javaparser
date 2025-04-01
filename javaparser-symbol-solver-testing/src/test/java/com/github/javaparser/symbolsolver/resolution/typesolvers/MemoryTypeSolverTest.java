@@ -1,10 +1,30 @@
+/*
+ * Copyright (C) 2013-2024 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MemoryTypeSolverTest extends AbstractTypeSolverTest<MemoryTypeSolver> {
 
@@ -22,8 +42,12 @@ class MemoryTypeSolverTest extends AbstractTypeSolverTest<MemoryTypeSolver> {
         Class<Integer> expectedNonExistingClass = Integer.class;
 
         MemoryTypeSolver memoryTypeSolver = createTypeSolver(expectedExistingClass);
-        assertFalse(memoryTypeSolver.tryToSolveType(expectedNonExistingClass.getCanonicalName()).isSolved());
-        assertTrue(memoryTypeSolver.tryToSolveType(expectedExistingClass.getCanonicalName()).isSolved());
+        assertFalse(memoryTypeSolver
+                .tryToSolveType(expectedNonExistingClass.getCanonicalName())
+                .isSolved());
+        assertTrue(memoryTypeSolver
+                .tryToSolveType(expectedExistingClass.getCanonicalName())
+                .isSolved());
     }
 
     /**
@@ -87,5 +111,4 @@ class MemoryTypeSolverTest extends AbstractTypeSolverTest<MemoryTypeSolver> {
         ResolvedReferenceTypeDeclaration declaration = ReflectionFactory.typeDeclarationFor(clazz, memorySolver);
         memorySolver.addDeclaration(clazz.getCanonicalName(), declaration);
     }
-
 }

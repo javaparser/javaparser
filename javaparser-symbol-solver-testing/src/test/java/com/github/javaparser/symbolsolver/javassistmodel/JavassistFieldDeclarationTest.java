@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,14 +24,12 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
+import org.junit.jupiter.api.Test;
 
 class JavassistFieldDeclarationTest {
 
@@ -43,12 +41,11 @@ class JavassistFieldDeclarationTest {
         JavassistClassDeclaration jcd = new JavassistClassDeclaration(clazz, typeSolver);
         assertTrue(jcd.getField("value").isVolatile());
     }
-    
+
     @Test
     void verifyIsNotVolatileVariableDeclarationFromJavassist() throws NotFoundException {
         CtClass clazz = ClassPool.getDefault().getCtClass("java.lang.String");
         JavassistClassDeclaration jcd = new JavassistClassDeclaration(clazz, typeSolver);
         assertFalse(jcd.getField("serialVersionUID").isVolatile());
     }
-    
 }

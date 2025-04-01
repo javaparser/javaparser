@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,10 @@
 
 package com.github.javaparser.utils;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -29,20 +33,16 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.github.javaparser.ParserConfiguration.*;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class TestParser {
 
     private static final Map<LanguageLevel, JavaParser> parserCache = new HashMap<>();
 
     private static JavaParser parser(LanguageLevel languageLevel) {
-        return parserCache.computeIfAbsent(languageLevel, ll -> new JavaParser(new ParserConfiguration().setLanguageLevel(ll)));
+        return parserCache.computeIfAbsent(
+                languageLevel, ll -> new JavaParser(new ParserConfiguration().setLanguageLevel(ll)));
     }
 
     private static <T> T unpack(ParseResult<T> result) {

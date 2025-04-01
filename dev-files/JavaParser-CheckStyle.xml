@@ -1,0 +1,46 @@
+<!DOCTYPE module PUBLIC
+		"-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+		"http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<module name="Checker">
+
+	<!-- Based on documentation: https://github.com/javaparser/javaparser/wiki/Coding-Guidelines -->
+
+	<property name="fileExtensions" value="java"/>
+
+	<!-- Wrap lines at 120 characters -->
+	<module name="LineLength">
+		<property name="max" value="120"/>
+		<property name="severity" value="warning" />
+	</module>
+
+	<module name="TreeWalker">
+
+		<!-- Indent with four spaces  -->
+		<module name="Indentation">
+			<property name="severity" value="warning" />
+		</module>
+
+		<!-- Type and Method annotations go on a separate line -->
+		<module name="AnnotationLocation">
+			<property name="allowSamelineMultipleAnnotations" value="false"/>
+			<property name="allowSamelineSingleParameterlessAnnotation" value="false"/>
+			<property name="allowSamelineParameterizedAnnotation" value="false"/>
+			<property name="severity" value="warning" />
+		</module>
+
+		<!-- Import order -->
+		<module name="CustomImportOrder">
+			<property name="customImportOrderRules"
+			          value="THIRD_PARTY_PACKAGE###SPECIAL_IMPORTS###STANDARD_JAVA_PACKAGE###STATIC"/>
+			<property name="specialImportsRegExp" value="^javax\."/>
+			<property name="standardPackageRegExp" value="^java\."/>
+			<property name="sortImportsInGroupAlphabetically" value="false"/>
+			<property name="separateLineBetweenGroups" value="false"/>
+			<property name="severity" value="warning" />
+		</module>
+
+		<!-- Imports that are not used, should be removed -->
+		<module name="UnusedImports"/>
+
+	</module>
+</module>

@@ -7,7 +7,7 @@
 pushd javaparser-core-generators
 
 # Generate code
-./mvnw --errors --show-version -B clean package -P run-generators -DskipTests
+../mvnw --errors --show-version -B clean package -P run-generators -DskipTests
 
 # Go back to previous directory
 popd
@@ -17,3 +17,6 @@ popd
 if [ "$?" -ne 0 ]; then
     exit 1
 fi
+
+# Format code to make diff more understandable
+./mvnw spotless:apply

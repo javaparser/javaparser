@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,13 @@
  */
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.StaticJavaParser.parseType;
+import static com.github.javaparser.ast.Modifier.Keyword;
+import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
+
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -28,16 +35,8 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
-
 import java.util.List;
 import java.util.Optional;
-
-import static com.github.javaparser.StaticJavaParser.parseType;
-import static com.github.javaparser.ast.Modifier.Keyword;
-import static com.github.javaparser.ast.Modifier.Keyword.*;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static java.util.Collections.unmodifiableList;
-import static java.util.stream.Collectors.toList;
 
 /**
  * A node having members.
@@ -46,6 +45,7 @@ import static java.util.stream.Collectors.toList;
  * method.
  */
 public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
+
     /**
      * @return all members inside the braces of this node,
      * like fields, methods, nested types, etc.
@@ -123,7 +123,8 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers   the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addFieldWithInitializer(Class<?> typeClass, String name, Expression initializer, Modifier.Keyword... modifiers) {
+    default FieldDeclaration addFieldWithInitializer(
+            Class<?> typeClass, String name, Expression initializer, Modifier.Keyword... modifiers) {
         tryAddImportToParentCompilationUnit(typeClass);
         return addFieldWithInitializer(typeClass.getSimpleName(), name, initializer, modifiers);
     }
@@ -137,7 +138,8 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers   the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addFieldWithInitializer(String type, String name, Expression initializer, Modifier.Keyword... modifiers) {
+    default FieldDeclaration addFieldWithInitializer(
+            String type, String name, Expression initializer, Modifier.Keyword... modifiers) {
         return addFieldWithInitializer(parseType(type), name, initializer, modifiers);
     }
 
@@ -150,7 +152,8 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers   the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addFieldWithInitializer(Type type, String name, Expression initializer, Modifier.Keyword... modifiers) {
+    default FieldDeclaration addFieldWithInitializer(
+            Type type, String name, Expression initializer, Modifier.Keyword... modifiers) {
         FieldDeclaration declaration = addField(type, name, modifiers);
         declaration.getVariables().iterator().next().setInitializer(initializer);
         return declaration;

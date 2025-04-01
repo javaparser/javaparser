@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,16 +18,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
-
-import java.util.Optional;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+import java.util.Optional;
 
-public abstract class TextElement implements TextElementMatcher {
+public abstract class TextElement implements TextElementMatcher, PrintableTextElement {
 
     abstract String expand();
 
@@ -59,7 +57,7 @@ public abstract class TextElement implements TextElementMatcher {
     public abstract boolean isSeparator();
 
     public abstract boolean isIdentifier();
-    
+
     public abstract boolean isKeyword();
 
     public abstract boolean isPrimitive();
@@ -87,11 +85,10 @@ public abstract class TextElement implements TextElementMatcher {
      * @return TextElementMatcher that matches any TextElement with the same Range
      */
     TextElementMatcher matchByRange() {
-        return (TextElement textElement) ->
-                getRange()
-                        .flatMap(r1 -> textElement.getRange()
-                                .map(r1::equals))
-                        // We're missing range information. This may happen when a node is manually instantiated. Don't be too harsh on that:
-                        .orElse(true);
+        return (TextElement textElement) -> getRange()
+                .flatMap(r1 -> textElement.getRange().map(r1::equals))
+                . // We're missing range information. This may happen when a node is manually instantiated. Don't be too
+                // harsh on that:
+                orElse(true);
     }
 }

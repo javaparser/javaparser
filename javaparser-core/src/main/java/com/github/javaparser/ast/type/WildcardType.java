@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -34,6 +34,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.WildcardTypeMetaModel;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -63,7 +65,10 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     }
 
     @AllFieldsConstructor
-    public WildcardType(final ReferenceType extendedType, final ReferenceType superType, final NodeList<AnnotationExpr> annotations) {
+    public WildcardType(
+            final ReferenceType extendedType,
+            final ReferenceType superType,
+            final NodeList<AnnotationExpr> annotations) {
         this(null, extendedType, superType, annotations);
     }
 
@@ -71,7 +76,11 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public WildcardType(TokenRange tokenRange, ReferenceType extendedType, ReferenceType superType, NodeList<AnnotationExpr> annotations) {
+    public WildcardType(
+            TokenRange tokenRange,
+            ReferenceType extendedType,
+            ReferenceType superType,
+            NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
         setExtendedType(extendedType);
         setSuperType(superType);
@@ -112,8 +121,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, this.extendedType, extendedType);
-        if (this.extendedType != null)
-            this.extendedType.setParentNode(null);
+        if (this.extendedType != null) this.extendedType.setParentNode(null);
         this.extendedType = extendedType;
         setAsParentNodeOf(extendedType);
         return this;
@@ -131,8 +139,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
             return this;
         }
         notifyPropertyChange(ObservableProperty.SUPER_TYPE, this.superType, superType);
-        if (this.superType != null)
-            this.superType.setParentNode(null);
+        if (this.superType != null) this.superType.setParentNode(null);
         this.superType = superType;
         setAsParentNodeOf(superType);
         return this;
@@ -253,5 +260,29 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<WildcardType> toWildcardType() {
         return Optional.of(this);
+    }
+
+    /**
+     * Convert a {@link WildcardType} into a {@link ResolvedType}.
+     *
+     * @param wildcardType  The wildcard type to be converted.
+     * @param context       The current context.
+     *
+     * @return The type resolved.
+     */
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        if (getExtendedType().isPresent() && !getSuperType().isPresent()) {
+            // removed (ReferenceTypeImpl)
+            return ResolvedWildcard.extendsBound(getExtendedType().get().convertToUsage(context));
+        }
+        if (!getExtendedType().isPresent() && getSuperType().isPresent()) {
+            // removed (ReferenceTypeImpl)
+            return ResolvedWildcard.superBound(getSuperType().get().convertToUsage(context));
+        }
+        if (!getExtendedType().isPresent() && !getSuperType().isPresent()) {
+            return ResolvedWildcard.UNBOUNDED;
+        }
+        throw new UnsupportedOperationException(toString());
     }
 }

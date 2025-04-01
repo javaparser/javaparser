@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,10 +21,10 @@
 
 package com.github.javaparser.ast.body;
 
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.utils.LineSeparator;
+import org.junit.jupiter.api.Test;
 
 class ConstructorDeclarationTest {
     @Test
@@ -32,8 +32,7 @@ class ConstructorDeclarationTest {
         ConstructorDeclaration cons = new ConstructorDeclaration("Cons");
         cons.createBody().addStatement("super();");
 
-        assertEquals(String.format("public Cons() {%1$s" +
-                "    super();%1$s" +
-                "}", SYSTEM_EOL), cons.toString());
+        assertEquals(
+                String.format("public Cons() {%1$s" + "    super();%1$s" + "}", LineSeparator.SYSTEM), cons.toString());
     }
 }
