@@ -119,6 +119,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         // is not the same as the current node.
         while (notMethodNode instanceof MethodCallExpr
                 || notMethodNode instanceof FieldAccessExpr
+                || (notMethodNode instanceof ObjectCreationExpr && notMethodNode.hasScope())
                 || (notMethodNode != null
                         && notMethodNode.hasScope()
                         && getScope(notMethodNode).equals(wrappedNode))) {
