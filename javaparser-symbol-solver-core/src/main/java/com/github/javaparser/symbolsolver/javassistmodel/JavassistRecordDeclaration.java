@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -48,7 +49,10 @@ import javassist.CtField;
  * @author Federico Tomassetti
  */
 public class JavassistRecordDeclaration extends AbstractTypeDeclaration
-        implements ResolvedRecordDeclaration, MethodUsageResolutionCapability, SymbolResolutionCapability {
+        implements ResolvedRecordDeclaration,
+                MethodUsageResolutionCapability,
+                SymbolResolutionCapability,
+                MethodResolutionCapability {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -339,5 +343,11 @@ public class JavassistRecordDeclaration extends AbstractTypeDeclaration
         In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
          */
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
+    }
+
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
     }
 }
