@@ -15,9 +15,14 @@ import org.junit.jupiter.api.Test;
 public class Issue3710Test {
     @Test
     void resolve_method_used_as_scope_for_inner_class_object_creation() {
-        String sourceCode = "class Example {\n" + "  void test() {\n"
-                + "    com.github.javaparser.symbolsolver.Outer.make().new Inner();\n"
+        String sourceCode = "class Example {\n"
+                + "  void test() {\n"
+                + "    Outer.make().new Inner();\n"
                 + "  }\n"
+                + "}\n"
+                + "class Outer {\n"
+                + "  class Inner {}\n"
+                + "  static Outer make() { return new Outer(); }\n"
                 + "}";
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver(false));
@@ -29,15 +34,6 @@ public class Issue3710Test {
 
         ResolvedMethodDeclaration resolvedMethod = methodCall.get().resolve();
 
-        Assertions.assertEquals(
-                "com.github.javaparser.symbolsolver.Outer.make()", resolvedMethod.getQualifiedSignature());
-    }
-}
-
-class Outer {
-    class Inner {}
-
-    static Outer make() {
-        return new Outer();
+        Assertions.assertEquals("Outer.make()", resolvedMethod.getQualifiedSignature());
     }
 }
