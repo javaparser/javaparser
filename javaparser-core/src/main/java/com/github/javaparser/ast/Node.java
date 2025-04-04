@@ -338,16 +338,17 @@ public abstract class Node
      */
     @Override
     public final String toString() {
+        Printer printer = getPrinter();
         if (containsData(LINE_SEPARATOR_KEY)) {
-            Printer printer = getPrinter();
             LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
             PrinterConfiguration config = printer.getConfiguration();
-            config.addOption(
-                    new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
-            printer.setConfiguration(config);
-            return printer.print(this);
+            if (config != null) {
+                config.addOption(new DefaultConfigurationOption(
+                        ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
+                printer.setConfiguration(config);
+            }
         }
-        return getPrinter().print(this);
+        return printer.print(this);
     }
 
     /**
@@ -849,7 +850,8 @@ public abstract class Node
 
     public static final DataKey<LineSeparator> LINE_SEPARATOR_KEY = new DataKey<LineSeparator>() {};
 
-    protected static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {};
+    // We need to expose it because we will need to use it to inject the printer
+    public static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {};
 
     protected static final DataKey<Boolean> PHANTOM_KEY = new DataKey<Boolean>() {};
 
