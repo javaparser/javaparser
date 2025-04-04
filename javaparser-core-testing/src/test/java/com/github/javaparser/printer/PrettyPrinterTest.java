@@ -367,7 +367,7 @@ class PrettyPrinterTest {
         PrinterConfiguration config = new DefaultPrinterConfiguration()
                 .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
-        Printer printer = new DefaultPrettyPrinter(config);
+        ConfigurablePrinter printer = new DefaultPrettyPrinter(config);
         assertFalse(printer.getConfiguration()
                 .get(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS))
                 .isPresent());

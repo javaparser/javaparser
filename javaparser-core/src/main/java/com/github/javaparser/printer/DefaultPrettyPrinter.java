@@ -29,7 +29,7 @@ import java.util.function.Function;
 /**
  * Pretty printer for AST nodes.
  */
-public class DefaultPrettyPrinter implements Printer {
+public class DefaultPrettyPrinter implements ConfigurablePrinter {
 
     private PrinterConfiguration configuration;
 

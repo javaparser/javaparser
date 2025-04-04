@@ -18,23 +18,14 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.printer.lexicalpreservation;
+package com.github.javaparser.printer;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
-public class DefaultLexicalPreservingPrinter implements Printer {
+public interface ConfigurablePrinter extends Printer {
 
-    /**
-     * Print a Node into a String, preserving the lexical information.
-     */
-    @Override
-    public String print(Node node) {
-        LexicalPreservingVisitor visitor = new LexicalPreservingVisitor();
-        final NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(node);
-        nodeText.getElements().forEach(element -> element.accept(visitor));
-        return visitor.toString();
-    }
+    Printer setConfiguration(PrinterConfiguration configuration);
+
+    PrinterConfiguration getConfiguration();
 
 }

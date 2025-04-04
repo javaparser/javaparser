@@ -30,7 +30,4 @@ public interface Printer {
 
     String print(Node node);
 
-    Printer setConfiguration(PrinterConfiguration configuration);
-
-    PrinterConfiguration getConfiguration();
 }
