@@ -27,8 +27,8 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.printer.ConfigurablePrinter;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
-import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import java.io.IOException;
@@ -45,7 +45,7 @@ class SourceRootTest {
     private final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class)
             .resolve("src/test/resources/com/github/javaparser/utils/");
     private final SourceRoot sourceRoot = new SourceRoot(root);
-    private Printer printer;
+    private ConfigurablePrinter printer;
 
     @BeforeEach
     void before() {

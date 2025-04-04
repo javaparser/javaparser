@@ -45,6 +45,7 @@ import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
+import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 import com.github.javaparser.utils.LineSeparator;
@@ -533,10 +534,8 @@ public class LexicalPreservingPrinter {
      * Print a Node into a String, preserving the lexical information.
      */
     public static String print(Node node) {
-        LexicalPreservingVisitor visitor = new LexicalPreservingVisitor();
-        final NodeText nodeText = getOrCreateNodeText(node);
-        nodeText.getElements().forEach(element -> element.accept(visitor));
-        return visitor.toString();
+        Printer printer = new DefaultLexicalPreservingPrinter();
+        return printer.print(node);
     }
 
     //
