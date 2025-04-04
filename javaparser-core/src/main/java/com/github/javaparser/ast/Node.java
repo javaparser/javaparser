@@ -346,8 +346,8 @@ public abstract class Node
                 ConfigurablePrinter configurablePrinter = (ConfigurablePrinter) printer;
                 PrinterConfiguration config = configurablePrinter.getConfiguration();
                 if (config != null) {
-                    config.addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER,
-                            lineSeparator.asRawString()));
+                    config.addOption(new DefaultConfigurationOption(
+                            ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
                     configurablePrinter.setConfiguration(config);
                 }
             }
@@ -361,7 +361,7 @@ public abstract class Node
      */
     public final String toString(PrinterConfiguration configuration) {
         Printer printer = getPrinter();
-        if (! (printer instanceof ConfigurablePrinter) ) {
+        if (!(printer instanceof ConfigurablePrinter)) {
             return printer.print(this);
         }
         ConfigurablePrinter configurablePrinter = (ConfigurablePrinter) printer;

@@ -22,7 +22,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.Printer;
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
 public class DefaultLexicalPreservingPrinter implements Printer {
 
@@ -36,5 +35,4 @@ public class DefaultLexicalPreservingPrinter implements Printer {
         nodeText.getElements().forEach(element -> element.accept(visitor));
         return visitor.toString();
     }
-
 }

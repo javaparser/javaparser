@@ -168,7 +168,7 @@ public class CompilationUnit extends Node {
     protected Printer getPrinter(PrinterConfiguration config) {
         Printer printer = getPrinter();
         if (printer instanceof ConfigurablePrinter) {
-            ((ConfigurablePrinter)printer).setConfiguration(config);
+            ((ConfigurablePrinter) printer).setConfiguration(config);
         }
         printer(printer);
         return printer;

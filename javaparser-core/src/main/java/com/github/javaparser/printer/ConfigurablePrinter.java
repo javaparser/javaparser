@@ -27,5 +27,4 @@ public interface ConfigurablePrinter extends Printer {
     Printer setConfiguration(PrinterConfiguration configuration);
 
     PrinterConfiguration getConfiguration();
-
 }
