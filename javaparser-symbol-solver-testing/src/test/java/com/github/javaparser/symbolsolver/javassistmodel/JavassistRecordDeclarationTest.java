@@ -33,14 +33,14 @@ import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.AssociableToAST;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
+import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -48,6 +48,7 @@ import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -379,5 +380,18 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     public void getAllFieldsCantBeNull() {
         assertNotNull(createValue().getAllFields());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    public void testSolveMethod() {
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ResolvedType functionType = new SymbolSolver(typeSolver).classToResolvedType(Function.class);
+        SymbolReference<ResolvedMethodDeclaration> method =
+                compilationUnit.solveMethod("map", Collections.singletonList(functionType), false);
+        assertTrue(method.isSolved());
+        assertEquals(
+                "box.Box.map(java.util.function.Function<T, U>)",
+                method.getCorrespondingDeclaration().getQualifiedSignature());
     }
 }

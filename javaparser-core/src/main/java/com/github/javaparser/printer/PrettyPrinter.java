@@ -33,7 +33,7 @@ import java.util.function.Function;
  * @deprecated This class could be removed in a future version. Use default DefaultPrettyPrinter.
  */
 @Deprecated
-public class PrettyPrinter implements Printer {
+public class PrettyPrinter implements ConfigurablePrinter {
 
     private PrinterConfiguration configuration;
 

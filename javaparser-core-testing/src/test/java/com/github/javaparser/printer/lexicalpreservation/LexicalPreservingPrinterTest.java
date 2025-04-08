@@ -25,10 +25,7 @@ import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaParser;
@@ -1862,5 +1859,30 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         String modifiedContent = LexicalPreservingPrinter.print(cu);
         System.out.println(modifiedContent);
         assertEquals(expected, LexicalPreservingPrinter.print(cu));
+    }
+
+    // issue 1821 Switch toString to LexicalPreservingPrinter when configured
+    @Test
+    void checkLPPIsDefaultPrinter() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        StaticJavaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        assertEquals(code, cu.toString());
+    }
+
+    @Test
+    void checkLegacyLPPExecution() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        StaticJavaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        assertEquals(cu.toString(), LexicalPreservingPrinter.print(cu));
+    }
+
+    @Test
+    void checkLPPIsNotDefaultPrinter() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        assertNotEquals(code, cu.toString());
     }
 }

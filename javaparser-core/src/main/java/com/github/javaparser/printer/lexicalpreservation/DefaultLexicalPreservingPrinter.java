@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -17,15 +17,21 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.printer;
+package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.printer.Printer;
 
-/**
- * Printer interface defines the API for a printer.
- * A printer outputs the AST as formatted Java source code.
- */
-public interface Printer {
+public class DefaultLexicalPreservingPrinter implements Printer {
 
-    String print(Node node);
+    /**
+     * Print a Node into a String, preserving the lexical information.
+     */
+    @Override
+    public String print(Node node) {
+        LexicalPreservingVisitor visitor = new LexicalPreservingVisitor();
+        final NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(node);
+        nodeText.getElements().forEach(element -> element.accept(visitor));
+        return visitor.toString();
+    }
 }
