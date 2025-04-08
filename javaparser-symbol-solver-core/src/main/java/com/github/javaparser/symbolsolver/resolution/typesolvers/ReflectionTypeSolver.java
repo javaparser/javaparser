@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 /**
  * Uses reflection to resolve types.
  * Classes on the classpath used to run your application will be found.
@@ -29,8 +32,52 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
  * @author Federico Tomassetti
  */
 public class ReflectionTypeSolver extends ClassLoaderTypeSolver {
+    private final Predicate<String> classFilter;
+    /**
+     * Class name filter matching all classes.
+     */
+    public static final Predicate<String> ALL_CLASSES = name -> true;
+    /**
+     * Class name filter matching classes in the core Java standard library.
+     * This includes everything under {@code java.} and {@code javax.}.
+     */
+    public static final Predicate<String> JRE_ONLY = name -> name.startsWith("java.") || name.startsWith("javax.");
+    /**
+     * Class name filter matching classes in the Java Class Library.
+     * The Java Class Library is the Java standard library; this filter includes all
+     * packages listed in the {@code java.se} module of Java 21, as well as
+     * {@code java.corba} as of Java 9. In this way, it encompasses the JCL of all
+     * Java version from Java 8 to 21.
+     */
+    public static final Predicate<String> JCL_ONLY = name -> Stream.of(
+                    "java.",
+                    "javax.",
+                    "org.ietf.jgss.",
+                    "org.omg.COBRA.",
+                    "org.omg.COBRA_2_3.",
+                    "org.omg.CosNaming.",
+                    "org.omg.Dynamic.",
+                    "org.omg.DynamicAny.",
+                    "org.omg.IOP.",
+                    "org.omg.Messaging.",
+                    "org.omg.PortableInterceptor.",
+                    "org.omg.PortableServer.",
+                    "org.omg.stub.java.rmi.",
+                    "org.w3c.dom.",
+                    "org.xml.sax.")
+            .anyMatch(name::startsWith);
 
-    private final boolean jreOnly;
+    /**
+     * @param classFilter a name-based filter indicating which types to resolve.
+     *                    Similarily to {@link ReflectionTypeSolver(boolean)}, this allows you to specify "I need to resolve certain classes (like the Java standard library), and whatever is available on the classpath is fine.".
+     * @see #ALL_CLASSES
+     * @see #JRE_ONLY
+     * @see #JCL_ONLY
+     */
+    public ReflectionTypeSolver(Predicate<String> classFilter) {
+        super(ReflectionTypeSolver.class.getClassLoader());
+        this.classFilter = classFilter;
+    }
 
     /**
      * @param jreOnly if true, will only resolve types from the java or javax packages.
@@ -38,8 +85,7 @@ public class ReflectionTypeSolver extends ClassLoaderTypeSolver {
      * If false, will resolve any kind of type.
      */
     public ReflectionTypeSolver(boolean jreOnly) {
-        super(ReflectionTypeSolver.class.getClassLoader());
-        this.jreOnly = jreOnly;
+        this(jreOnly ? JRE_ONLY : ALL_CLASSES);
     }
 
     /**
@@ -52,6 +98,6 @@ public class ReflectionTypeSolver extends ClassLoaderTypeSolver {
 
     @Override
     protected boolean filterName(String name) {
-        return !jreOnly || (name.startsWith("java.") || name.startsWith("javax."));
+        return classFilter.test(name);
     }
 }
