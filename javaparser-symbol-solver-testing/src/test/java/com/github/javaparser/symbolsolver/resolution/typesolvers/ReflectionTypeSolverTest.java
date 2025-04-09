@@ -85,4 +85,28 @@ class ReflectionTypeSolverTest extends ClassLoaderTypeSolverTest<ReflectionTypeS
                         },
                         null));
     }
+
+    @Test
+    void testFilteringAll() {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver(false);
+        assertEquals(true, reflectionTypeSolver.hasType("java.lang.Object"));
+        assertEquals(true, reflectionTypeSolver.hasType("org.xml.sax.Parser"));
+        assertEquals(true, reflectionTypeSolver.hasType(this.getClass().getCanonicalName()));
+    }
+
+    @Test
+    void testFilteringJRE() {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver(true);
+        assertEquals(true, reflectionTypeSolver.hasType("java.lang.Object"));
+        assertEquals(false, reflectionTypeSolver.hasType("org.xml.sax.Parser"));
+        assertEquals(false, reflectionTypeSolver.hasType(this.getClass().getCanonicalName()));
+    }
+
+    @Test
+    void testFilteringJCL() {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver(ReflectionTypeSolver.JCL_ONLY);
+        assertEquals(true, reflectionTypeSolver.hasType("java.lang.Object"));
+        assertEquals(true, reflectionTypeSolver.hasType("org.xml.sax.Parser"));
+        assertEquals(false, reflectionTypeSolver.hasType(this.getClass().getCanonicalName()));
+    }
 }
