@@ -82,11 +82,10 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
     }
 
     @Test
-    void classFileHierarchy() throws IOException {
+    void classFileHierarchy(@TempDir Path tempDir) throws IOException {
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
 
         // Unpack the jar file into a class hierarchy
-        Path tempDir = Files.createTempDirectory("jp");
         try (JarInputStream jarInputStream = new JarInputStream(Files.newInputStream(pathToJar))) {
             for (JarEntry entry = jarInputStream.getNextJarEntry();
                     entry != null;

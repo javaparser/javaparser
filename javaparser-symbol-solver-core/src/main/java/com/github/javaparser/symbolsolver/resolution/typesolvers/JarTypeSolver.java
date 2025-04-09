@@ -255,7 +255,7 @@ public class JarTypeSolver implements TypeSolver {
     }
 
     /**
-     * Given a apth to class file inside a class file hierarchy, extract the package name from the path.
+     * Given a path to a class file inside a class file hierarchy, extract the package name from the path.
      * @param pathToClassFileHierarchy the root of the class file hierarchy
      * @param pathToClassFile the path to the class file, inside the hierarchy
      * @return the package name of the class file
