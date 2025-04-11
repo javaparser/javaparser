@@ -1932,7 +1932,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
      * and finally to {@link DefaultImportOrderingStrategy}, and out them in groups, seperated by
      * newlines.
      */
-    private void printImports(NodeList<ImportDeclaration> imports, Void arg) {
+    protected void printImports(NodeList<ImportDeclaration> imports, Void arg) {
         ImportOrderingStrategy strategy = new DefaultImportOrderingStrategy();
         // Get Import strategy from configuration
         Optional<ConfigurationOption> optionalStrategy = getOption(ConfigOption.SORT_IMPORTS_STRATEGY);
@@ -1960,7 +1960,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     /**
      * Print all orphaned comments coming right before {@code node}.
      */
-    private void printOrphanCommentsBeforeThisChildNode(final Node node) {
+    protected void printOrphanCommentsBeforeThisChildNode(final Node node) {
         if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) return;
         if (node instanceof Comment) return;
         Node parent = node.getParentNode().orElse(null);
@@ -1995,7 +1995,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     /**
      * Print all orphan comments coming at the end of the given {@code node}.
      */
-    private void printOrphanCommentsEnding(final Node node) {
+    protected void printOrphanCommentsEnding(final Node node) {
         if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) return;
         List<Node> everything = new ArrayList<>(node.getChildNodes());
         sortByBeginPosition(everything);
@@ -2033,7 +2033,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     /**
      * Get the value of a given configuration option.
      */
-    private Optional<ConfigurationOption> getOption(ConfigOption cOption) {
+    protected Optional<ConfigurationOption> getOption(ConfigOption cOption) {
         return configuration.get(new DefaultConfigurationOption(cOption));
     }
 }
