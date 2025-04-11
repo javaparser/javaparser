@@ -395,7 +395,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>33.4.6-jre</version>
+                <version>33.4.7-jre</version>
             </dependency>
 			<dependency>
 				<groupId>org.checkerframework</groupId>
@@ -411,7 +411,7 @@
 			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
-				<version>5.12.1</version>
+				<version>5.12.2</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

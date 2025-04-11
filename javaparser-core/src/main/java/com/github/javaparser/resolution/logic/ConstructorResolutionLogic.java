@@ -184,9 +184,9 @@ public class ConstructorResolutionLogic {
         boolean possibleAmbiguity = false;
         for (int i = 1; i < applicableConstructors.size(); i++) {
             other = applicableConstructors.get(i);
-            if (isMoreSpecific(winningCandidate, other, typeSolver)) {
+            if (MethodResolutionLogic.isMoreSpecific(winningCandidate, other, argumentsTypes)) {
                 possibleAmbiguity = false;
-            } else if (isMoreSpecific(other, winningCandidate, typeSolver)) {
+            } else if (MethodResolutionLogic.isMoreSpecific(other, winningCandidate, argumentsTypes)) {
                 possibleAmbiguity = false;
                 winningCandidate = other;
             } else {
@@ -213,39 +213,5 @@ public class ConstructorResolutionLogic {
             }
         }
         return SymbolReference.solved(winningCandidate);
-    }
-
-    private static boolean isMoreSpecific(
-            ResolvedConstructorDeclaration constructorA,
-            ResolvedConstructorDeclaration constructorB,
-            TypeSolver typeSolver) {
-        boolean oneMoreSpecificFound = false;
-        if (constructorA.getNumberOfParams() < constructorB.getNumberOfParams()) {
-            return true;
-        }
-        if (constructorA.getNumberOfParams() > constructorB.getNumberOfParams()) {
-            return false;
-        }
-        for (int i = 0; i < constructorA.getNumberOfParams(); i++) {
-            ResolvedType tdA = constructorA.getParam(i).getType();
-            ResolvedType tdB = constructorB.getParam(i).getType();
-            // B is more specific
-            if (tdB.isAssignableBy(tdA) && !tdA.isAssignableBy(tdB)) {
-                oneMoreSpecificFound = true;
-            }
-            // A is more specific
-            if (tdA.isAssignableBy(tdB) && !tdB.isAssignableBy(tdA)) {
-                return false;
-            }
-            // if it matches a variadic and a not variadic I pick the not variadic
-            if (!tdA.isArray() && tdB.isArray()) {
-                return true;
-            }
-            // FIXME
-            if (i == (constructorA.getNumberOfParams() - 1) && tdA.arrayLevel() > tdB.arrayLevel()) {
-                return true;
-            }
-        }
-        return oneMoreSpecificFound;
     }
 }

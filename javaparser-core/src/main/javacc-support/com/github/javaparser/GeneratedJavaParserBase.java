@@ -328,6 +328,7 @@ abstract class GeneratedJavaParserBase {
             CastExpr castExpr = (CastExpr) ret;
             Expression inner = generateLambda(castExpr.getExpression(), lambdaBody);
             castExpr.setExpression(inner);
+            propagateRangeGrowthOnRight(castExpr, inner);
         } else {
             addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
         }
