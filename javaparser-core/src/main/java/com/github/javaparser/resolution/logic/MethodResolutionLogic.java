@@ -720,7 +720,8 @@ public class MethodResolutionLogic {
         return true;
     }
 
-    private static ResolvedType getMethodsExplicitAndVariadicParameterType(ResolvedMethodDeclaration method, int i) {
+    private static ResolvedType getMethodsExplicitAndVariadicParameterType(
+            ResolvedMethodLikeDeclaration method, int i) {
         int numberOfParams = method.getNumberOfParams();
         if (i < numberOfParams) {
             return method.getParam(i).getType();
@@ -731,8 +732,10 @@ public class MethodResolutionLogic {
         return null;
     }
 
-    private static boolean isMoreSpecific(
-            ResolvedMethodDeclaration methodA, ResolvedMethodDeclaration methodB, List<ResolvedType> argumentTypes) {
+    static boolean isMoreSpecific(
+            ResolvedMethodLikeDeclaration methodA,
+            ResolvedMethodLikeDeclaration methodB,
+            List<ResolvedType> argumentTypes) {
         final boolean aVariadic = methodA.hasVariadicParameter();
         final boolean bVariadic = methodB.hasVariadicParameter();
         final int aNumberOfParams = methodA.getNumberOfParams();
