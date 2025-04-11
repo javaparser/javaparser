@@ -713,7 +713,14 @@ public class MethodResolutionLogic {
 
     protected static boolean isExactMatch(ResolvedMethodLikeDeclaration method, List<ResolvedType> argumentsTypes) {
         for (int i = 0; i < method.getNumberOfParams(); i++) {
-            if (!method.getParam(i).getType().equals(argumentsTypes.get(i))) {
+            ResolvedType paramType = getMethodsExplicitAndVariadicParameterType(method, i);
+            if (paramType == null) {
+                return false;
+            }
+            if (i >= argumentsTypes.size()) {
+                return false;
+            }
+            if (!paramType.equals(argumentsTypes.get(i))) {
                 return false;
             }
         }
