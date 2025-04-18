@@ -25,7 +25,6 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -231,13 +230,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         List<ResolvedFieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
 
         this.getAncestors().forEach(a -> fields.addAll(a.getAllFieldsVisibleToInheritors()));
-
-        this.wrappedNode.getMembers().stream()
-                .filter(m -> m instanceof FieldDeclaration)
-                .forEach(m -> {
-                    FieldDeclaration fd = (FieldDeclaration) m;
-                    fd.getVariables().forEach(v -> fields.add(new JavaParserFieldDeclaration(v, typeSolver)));
-                });
 
         return fields;
     }
