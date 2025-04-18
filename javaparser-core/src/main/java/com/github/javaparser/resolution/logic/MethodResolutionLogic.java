@@ -644,10 +644,17 @@ public class MethodResolutionLogic {
             }
             // If some null arguments have been provided, use this to eliminate some opitons.
             if (!nullParamIndexes.isEmpty()) {
-                // remove method with array param if a non array exists and arg is null
+                // filter method with array param if a non array exists and arg is null
+                // For example, if we define 2 methods
+                // {@code void get(String str0, Object ... objects)}
+                // {@code void get(String str0, String str1, Object ... objects)}
+                // and want to determine the most specific method invoked by this expression
+                // {@code foo.get("", null , new Object());}
                 Set<ResolvedMethodDeclaration> removeCandidates = new HashSet<>();
                 for (Integer nullParamIndex : nullParamIndexes) {
                     for (ResolvedMethodDeclaration methDecl : applicableMethods) {
+                        //                        if (nullParamIndex < methDecl.getNumberOfParams() &&
+                        // methDecl.getParam(nullParamIndex).getType().isArray()) {
                         if (methDecl.getParam(nullParamIndex).getType().isArray()) {
                             removeCandidates.add(methDecl);
                         }
