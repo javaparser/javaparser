@@ -193,7 +193,14 @@ public class MethodResolutionLogic {
                     // we want to keep this method for future resolution
                     if (actualArgumentType.isConstraint()
                             && withWildcardTolerance
-                            && expectedDeclaredType.isPrimitive()) {
+                            && (actualArgumentType.asConstraintType().getBound().isTypeVariable()
+                                    || (!actualArgumentType
+                                                    .asConstraintType()
+                                                    .getBound()
+                                                    .isTypeVariable()
+                                            && expectedDeclaredType.isAssignableBy(actualArgumentType
+                                                    .asConstraintType()
+                                                    .getBound())))) {
                         needForWildCardTolerance = true;
                         continue;
                     }
