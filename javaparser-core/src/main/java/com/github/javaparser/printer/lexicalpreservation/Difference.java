@@ -634,6 +634,15 @@ public class Difference {
             // see issue #3721 this case is linked for example to a change of type of variable declarator
             nodeText.removeElement(originalIndex);
             diffIndex++;
+        } else if (originalElement.isChild() && removed.isToken()) {
+            // see issue #4747 this case is linked for example to a change of the annotation name
+            // This happens because changing a name results in the creation of a token when the syntax of the modified
+            // node is evaluated, whereas parsing an annotation results in a representation containing a child node
+            // (representing the annotation name). When the annotation name is modified, the element to be deleted (the
+            // child node) is compared with the token containing the character string representing the new annotation
+            // name.
+            nodeText.removeElement(originalIndex);
+            diffIndex++;
         } else {
             throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
         }
