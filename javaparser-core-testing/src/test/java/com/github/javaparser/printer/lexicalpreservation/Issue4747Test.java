@@ -23,13 +23,9 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.junit.jupiter.api.Test;
 
 public class Issue4747Test extends AbstractLexicalPreservingTest {
@@ -54,10 +50,8 @@ public class Issue4747Test extends AbstractLexicalPreservingTest {
                 null);
 
         String actual = LexicalPreservingPrinter.print(cu);
-        String expected = "public class TestClass {\n"
-                + "    @TestMarkerAnnotation\n"
-                + "    public void method1() {}\n"
-                + "}";
+        String expected =
+                "public class TestClass {\n" + "    @TestMarkerAnnotation\n" + "    public void method1() {}\n" + "}";
 
         assertEqualsStringIgnoringEol(expected, actual);
     }
