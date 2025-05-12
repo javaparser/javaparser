@@ -741,14 +741,24 @@ public class MethodResolutionLogic {
         return true;
     }
 
-    private static ResolvedType getMethodsExplicitAndVariadicParameterType(
-            ResolvedMethodLikeDeclaration method, int i) {
+    public static ResolvedType getMethodsExplicitAndVariadicParameterType(ResolvedMethodLikeDeclaration method, int i) {
         int numberOfParams = method.getNumberOfParams();
         if (i < numberOfParams) {
             return method.getParam(i).getType();
         }
         if (method.hasVariadicParameter()) {
             return method.getParam(numberOfParams - 1).getType();
+        }
+        return null;
+    }
+
+    public static ResolvedType getMethodUsageExplicitAndVariadicParameterType(MethodUsage method, int i) {
+        int numberOfParams = method.getNoParams();
+        if (i < numberOfParams) {
+            return method.getParamType(i);
+        }
+        if (method.getDeclaration().hasVariadicParameter()) {
+            return method.getParamType(numberOfParams - 1);
         }
         return null;
     }
