@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
@@ -31,6 +32,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
@@ -191,5 +193,22 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         ResolvedType type = javaParserFacade.getType(lambdaExpr);
         assertEquals("java.util.function.Consumer<? super java.lang.String>", type.describe());
+    }
+
+    @Test
+    void lambdaAsVararg() {
+        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
+                + "    void acceptConsumers(Consumer<String>... consumers) {}\n"
+                + "    void test(Consumer<String> first) {\n"
+                + "        acceptConsumers(first, s -> System.out.println(s));\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+        assertEquals(
+                "java.util.function.Consumer<java.lang.String>",
+                lambda.calculateResolvedType().describe());
     }
 }
