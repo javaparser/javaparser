@@ -172,4 +172,26 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         assertEquals("foo.Foo.fooId(java.lang.String)", resolvedMethod.getQualifiedSignature());
         assertEquals("java.lang.String", resolvedMethod.getReturnType().describe());
     }
+
+    @Test
+    void methodRefAsVariadicArgument() throws IOException {
+        String code = "import foo.Foo;\n" + "import java.util.function.Function;\n"
+                + "class Test {\n"
+                + "    static void collectFunctions(Function... functions) {}\n"
+                + "    void test() {\n"
+                + "        Function func1 = () -> {};\n"
+                + "        collectFunctions(func1, Object::hashCode);\n"
+                + "    }\n"
+                + "}";
+
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
+        ParserConfiguration configuration =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        StaticJavaParser.setConfiguration(configuration);
+
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
 }

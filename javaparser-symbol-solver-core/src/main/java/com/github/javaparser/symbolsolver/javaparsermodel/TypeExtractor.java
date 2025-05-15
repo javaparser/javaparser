@@ -653,10 +653,17 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     () -> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
                 MethodUsage usage = facade.solveMethodAsUsage(callExpr);
-                ResolvedType result = usage.getParamType(pos);
+                ResolvedType result = MethodResolutionLogic.getMethodUsageExplicitAndVariadicParameterType(usage, pos);
                 // We need to replace the type variables
                 Context ctx = JavaParserFactory.getContext(node, typeSolver);
                 result = result.solveGenericTypes(ctx);
+
+                // If the MethodReferenceExpr is used as a vararg, then the result will be a ResolvedArrayType, which
+                // cannot be a valid type for a method reference, so it is safe to unwrap it and use the component
+                // type instead.
+                if (result.isArray()) {
+                    result = result.asArrayType().getComponentType();
+                }
 
                 // We should find out which is the functional method (e.g., apply) and replace the params of the
                 // solveLambdas with it, to derive so the values. We should also consider the value returned by the
