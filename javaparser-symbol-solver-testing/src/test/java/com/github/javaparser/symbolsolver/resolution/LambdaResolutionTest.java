@@ -211,4 +211,80 @@ class LambdaResolutionTest extends AbstractResolutionTest {
                 "java.util.function.Consumer<java.lang.String>",
                 lambda.calculateResolvedType().describe());
     }
+
+    @Test
+    void lambdaOverloadsWithDifferentParameterCounts1() {
+        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
+                + "    void foo(Consumer<String> consumer) {}\n"
+                + "    void foo(Runnable r) {}\n"
+                + "    void test() {\n"
+                + "        foo(input -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals(
+                "Test.foo(java.util.function.Consumer<java.lang.String>)",
+                call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentParameterCounts2() {
+        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
+                + "    void foo(Consumer<java.lang.String> consumer) {}\n"
+                + "    void foo(Runnable r) {}\n"
+                + "    void test() {\n"
+                + "        foo(() -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals("Test.foo(java.lang.Runnable)", call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentReturnTypes1() {
+        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
+                + "class Test {\n"
+                + "    void foo(Consumer<String> consumer) {}\n"
+                + "    void foo(Function<Integer, String> func) {}\n"
+                + "    void test() {\n"
+                + "        foo(input -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals(
+                "Test.foo(java.util.function.Consumer<java.lang.String>)",
+                call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentReturnTypes2() {
+        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
+                + "class Test {\n"
+                + "    void foo(Consumer<String> consumer) {}\n"
+                + "    void foo(Function<Integer, String> func) {}\n"
+                + "    void test() {\n"
+                + "        foo(input -> { return \"\"; });\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals(
+                "Test.foo(java.util.function.Function<java.lang.Integer, java.lang.String>)",
+                call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
 }
