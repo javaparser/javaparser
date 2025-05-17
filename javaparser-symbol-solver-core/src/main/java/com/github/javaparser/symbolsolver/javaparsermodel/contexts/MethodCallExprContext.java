@@ -305,8 +305,12 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                         .asArrayType()
                         .getComponentType();
                 // the varargs corresponding type can not be an Array<T> because of the assumption
-                //                ResolvedType actualType = new
-                // ResolvedArrayType(actualParamTypes.get(actualParamTypes.size() - 1));
+                // ResolvedType actualType = new ResolvedArrayType(actualParamTypes.get(actualParamTypes.size() - 1));
+                // It is possible that the method is called with no arguments, in which case we can't get any further
+                // type information about the parameters
+                if (actualParamTypes.isEmpty()) {
+                    return methodUsage;
+                }
                 ResolvedType actualType = actualParamTypes.get(actualParamTypes.size() - 1);
                 if (!expectedType.isAssignableBy(actualType)) {
                     throw new UnsupportedOperationException(String.format(
