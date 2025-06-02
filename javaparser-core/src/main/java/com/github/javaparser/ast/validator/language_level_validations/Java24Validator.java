@@ -22,7 +22,7 @@ package com.github.javaparser.ast.validator.language_level_validations;
 /**
  * This validator validates according to Java 24 syntax rules.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/21/">https://openjdk.java.net/projects/jdk/21/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk/24/">https://openjdk.java.net/projects/jdk/24/</a>
  */
 public class Java24Validator extends Java23Validator {
 
