@@ -20,7 +20,7 @@
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 21 syntax rules.
+ * This validator validates according to Java 23 syntax rules.
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/21/">https://openjdk.java.net/projects/jdk/21/</a>
  */
