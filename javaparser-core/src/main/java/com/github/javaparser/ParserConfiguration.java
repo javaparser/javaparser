@@ -182,7 +182,11 @@ public class ParserConfiguration {
         /**
          * Java 21
          */
-        JAVA_21(new Java21Validator(), new Java21PostProcessor());
+        JAVA_21(new Java21Validator(), new Java21PostProcessor()),
+        /**
+         * Java 22
+         */
+        JAVA_22(new Java22Validator(), new Java22PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
@@ -202,7 +206,7 @@ public class ParserConfiguration {
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_21;
+        public static LanguageLevel BLEEDING_EDGE = JAVA_22;
 
         final Validator validator;
 
@@ -222,7 +226,8 @@ public class ParserConfiguration {
             JAVA_18,
             JAVA_19,
             JAVA_20,
-            JAVA_21
+            JAVA_21,
+            JAVA_22
         };
 
         LanguageLevel(Validator validator, PostProcessors postProcessor) {
