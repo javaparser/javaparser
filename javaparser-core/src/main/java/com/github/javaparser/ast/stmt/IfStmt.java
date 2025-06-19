@@ -38,9 +38,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -267,16 +265,19 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression condition() {
         return Objects.requireNonNull(condition);
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement elseStmt() {
         return elseStmt;
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement thenStmt() {
         return Objects.requireNonNull(thenStmt);
     }

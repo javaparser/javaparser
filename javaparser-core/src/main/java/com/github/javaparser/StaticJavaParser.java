@@ -552,5 +552,4 @@ public final class StaticJavaParser {
     public static <T extends Expression> T parseJmlExpression(String expression) {
         return (T) handleResult(newParser().parseJmlExpression(expression));
     }
-
 }

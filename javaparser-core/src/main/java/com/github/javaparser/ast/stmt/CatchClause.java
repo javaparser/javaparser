@@ -34,9 +34,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CatchClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -160,11 +158,13 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt body() {
         return Objects.requireNonNull(body);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter parameter() {
         return Objects.requireNonNull(parameter);
     }

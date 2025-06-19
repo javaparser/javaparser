@@ -33,9 +33,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.SimpleNameMetaModel;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -113,6 +111,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String identifier() {
         return Objects.requireNonNull(identifier);
     }

@@ -37,9 +37,7 @@ import com.github.javaparser.metamodel.PatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -173,6 +171,7 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type type() {
         return Objects.requireNonNull(type);
     }

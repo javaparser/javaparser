@@ -28,7 +28,6 @@ import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
@@ -69,7 +68,6 @@ import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -858,21 +856,25 @@ public class CompilationUnit extends Node {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ImportDeclaration> imports() {
         return Objects.requireNonNull(imports);
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleDeclaration module() {
         return module;
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public PackageDeclaration packageDeclaration() {
         return packageDeclaration;
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeDeclaration<?>> types() {
         return Objects.requireNonNull(types);
     }

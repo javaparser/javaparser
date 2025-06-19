@@ -50,9 +50,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -353,11 +351,13 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> variables() {
         return Objects.requireNonNull(variables);
     }

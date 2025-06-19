@@ -15,7 +15,6 @@ import java.util.Optional;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -294,6 +293,7 @@ public abstract class JmlClause extends Node implements Jmlish {
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName name() {
         return name;
     }

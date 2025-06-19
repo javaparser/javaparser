@@ -17,9 +17,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -207,11 +205,13 @@ public class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGho
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement statement() {
         return Objects.requireNonNull(statement);
     }

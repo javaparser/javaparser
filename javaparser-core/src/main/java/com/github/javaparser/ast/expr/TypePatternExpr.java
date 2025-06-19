@@ -36,7 +36,6 @@ import com.github.javaparser.metamodel.TypePatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -220,11 +219,13 @@ public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<T
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName name() {
         return Objects.requireNonNull(name);
     }

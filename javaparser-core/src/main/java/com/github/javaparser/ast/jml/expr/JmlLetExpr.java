@@ -16,9 +16,7 @@ import com.github.javaparser.metamodel.JmlLetExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -157,11 +155,13 @@ public class JmlLetExpr extends Expression implements Jmlish {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression body() {
         return Objects.requireNonNull(body);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr variables() {
         return Objects.requireNonNull(variables);
     }

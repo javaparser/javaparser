@@ -20,9 +20,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -280,16 +278,19 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression expression() {
         return Objects.requireNonNull(expression);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlStmtKind kind() {
         return Objects.requireNonNull(kind);
     }

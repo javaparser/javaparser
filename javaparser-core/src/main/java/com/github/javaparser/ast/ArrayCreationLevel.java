@@ -34,9 +34,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -195,11 +193,13 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression dimension() {
         return dimension;
     }

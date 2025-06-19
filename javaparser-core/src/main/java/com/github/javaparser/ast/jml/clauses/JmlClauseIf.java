@@ -15,9 +15,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.JmlClauseIfMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -179,16 +177,19 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression condition() {
         return Objects.requireNonNull(condition);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlClauseKind kind() {
         return Objects.requireNonNull(kind);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression then() {
         return Objects.requireNonNull(then);
     }

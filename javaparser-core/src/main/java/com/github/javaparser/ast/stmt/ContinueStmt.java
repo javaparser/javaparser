@@ -36,7 +36,6 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -182,6 +181,7 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName label() {
         return label;
     }

@@ -16,9 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -182,11 +180,13 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> expressions() {
         return Objects.requireNonNull(expressions);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Operators operators() {
         return Objects.requireNonNull(operators);
     }

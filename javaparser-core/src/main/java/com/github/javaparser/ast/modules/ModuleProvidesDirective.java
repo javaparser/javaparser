@@ -37,7 +37,6 @@ import com.github.javaparser.metamodel.ModuleProvidesDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -213,11 +212,13 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {
         return Objects.requireNonNull(name);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Name> with() {
         return Objects.requireNonNull(with);
     }

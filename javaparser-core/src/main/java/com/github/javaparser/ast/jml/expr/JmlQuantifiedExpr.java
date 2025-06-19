@@ -37,9 +37,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -298,16 +296,19 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlBinder binder() {
         return Objects.requireNonNull(binder);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> expressions() {
         return Objects.requireNonNull(expressions);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> variables() {
         return Objects.requireNonNull(variables);
     }

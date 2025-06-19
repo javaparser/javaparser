@@ -34,9 +34,7 @@ import com.github.javaparser.metamodel.LocalRecordDeclarationStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -149,6 +147,7 @@ public class LocalRecordDeclarationStmt extends Statement {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public RecordDeclaration recordDeclaration() {
         return Objects.requireNonNull(recordDeclaration);
     }

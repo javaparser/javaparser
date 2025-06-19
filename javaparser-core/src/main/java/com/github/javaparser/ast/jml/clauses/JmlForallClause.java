@@ -16,7 +16,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -145,6 +144,7 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> boundedVariables() {
         return Objects.requireNonNull(boundedVariables);
     }

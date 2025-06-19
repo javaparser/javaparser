@@ -16,7 +16,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -162,6 +161,7 @@ public class JmlSignalsOnlyClause extends JmlClause implements MethodContractabl
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Type> types() {
         return Objects.requireNonNull(types);
     }

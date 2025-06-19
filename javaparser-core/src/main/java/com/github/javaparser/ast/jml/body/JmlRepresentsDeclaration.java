@@ -16,9 +16,7 @@ import com.github.javaparser.metamodel.JmlRepresentsDeclarationMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -234,21 +232,25 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression expr() {
         return Objects.requireNonNull(expr);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {
         return Objects.requireNonNull(name);
     }

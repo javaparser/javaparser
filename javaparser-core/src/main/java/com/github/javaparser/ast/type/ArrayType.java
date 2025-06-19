@@ -43,9 +43,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -339,11 +337,13 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type componentType() {
         return Objects.requireNonNull(componentType);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Origin origin() {
         return Objects.requireNonNull(origin);
     }

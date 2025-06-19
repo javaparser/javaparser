@@ -34,7 +34,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -178,11 +177,13 @@ public class ArrayAccessExpr extends Expression {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression index() {
         return Objects.requireNonNull(index);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression name() {
         return Objects.requireNonNull(name);
     }

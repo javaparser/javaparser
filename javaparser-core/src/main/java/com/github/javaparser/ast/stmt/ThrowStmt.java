@@ -36,9 +36,7 @@ import com.github.javaparser.metamodel.ThrowStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -151,6 +149,7 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression expression() {
         return Objects.requireNonNull(expression);
     }

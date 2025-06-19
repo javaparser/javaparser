@@ -38,7 +38,6 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -273,16 +272,19 @@ public class ArrayCreationExpr extends Expression {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type elementType() {
         return Objects.requireNonNull(elementType);
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayInitializerExpr initializer() {
         return initializer;
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ArrayCreationLevel> levels() {
         return Objects.requireNonNull(levels);
     }

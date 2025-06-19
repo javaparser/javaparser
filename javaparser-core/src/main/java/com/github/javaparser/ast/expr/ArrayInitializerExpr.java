@@ -35,7 +35,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -167,6 +166,7 @@ public class ArrayInitializerExpr extends Expression {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> values() {
         return Objects.requireNonNull(values);
     }

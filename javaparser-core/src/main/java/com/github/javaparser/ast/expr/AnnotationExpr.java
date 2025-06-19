@@ -36,7 +36,6 @@ import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarati
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -150,6 +149,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {
         return Objects.requireNonNull(name);
     }

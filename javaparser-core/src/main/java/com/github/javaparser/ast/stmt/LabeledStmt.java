@@ -34,9 +34,7 @@ import com.github.javaparser.metamodel.LabeledStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -178,11 +176,13 @@ public class LabeledStmt extends Statement {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName label() {
         return Objects.requireNonNull(label);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement statement() {
         return Objects.requireNonNull(statement);
     }

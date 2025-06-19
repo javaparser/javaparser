@@ -36,9 +36,7 @@ import com.github.javaparser.metamodel.TryStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -321,21 +319,25 @@ public class TryStmt extends Statement {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<CatchClause> catchClauses() {
         return Objects.requireNonNull(catchClauses);
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt finallyBlock() {
         return finallyBlock;
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> resources() {
         return Objects.requireNonNull(resources);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt tryBlock() {
         return Objects.requireNonNull(tryBlock);
     }

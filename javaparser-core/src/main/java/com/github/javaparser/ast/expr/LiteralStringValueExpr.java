@@ -31,9 +31,7 @@ import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Node;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -111,6 +109,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String value() {
         return Objects.requireNonNull(value);
     }

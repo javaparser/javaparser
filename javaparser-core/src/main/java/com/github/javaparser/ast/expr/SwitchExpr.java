@@ -36,9 +36,7 @@ import com.github.javaparser.metamodel.SwitchExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -212,11 +210,13 @@ public class SwitchExpr extends Expression implements SwitchNode {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SwitchEntry> entries() {
         return Objects.requireNonNull(entries);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression selector() {
         return Objects.requireNonNull(selector);
     }

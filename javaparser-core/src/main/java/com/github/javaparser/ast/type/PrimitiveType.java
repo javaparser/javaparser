@@ -41,9 +41,7 @@ import java.util.function.Consumer;
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -272,6 +270,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Primitive type() {
         return Objects.requireNonNull(type);
     }

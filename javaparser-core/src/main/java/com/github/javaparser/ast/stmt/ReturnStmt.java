@@ -36,7 +36,6 @@ import com.github.javaparser.metamodel.ReturnStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -184,6 +183,7 @@ public class ReturnStmt extends Statement {
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression expression() {
         return expression;
     }

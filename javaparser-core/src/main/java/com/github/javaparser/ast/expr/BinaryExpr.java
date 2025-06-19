@@ -34,9 +34,7 @@ import com.github.javaparser.printer.Stringable;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -268,16 +266,19 @@ public class BinaryExpr extends Expression {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression left() {
         return Objects.requireNonNull(left);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Operator operator() {
         return Objects.requireNonNull(operator);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression right() {
         return Objects.requireNonNull(right);
     }

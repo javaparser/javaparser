@@ -37,7 +37,6 @@ import com.github.javaparser.metamodel.ModuleOpensDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -213,11 +212,13 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Name> moduleNames() {
         return Objects.requireNonNull(moduleNames);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {
         return Objects.requireNonNull(name);
     }

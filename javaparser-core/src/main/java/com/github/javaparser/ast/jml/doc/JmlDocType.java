@@ -16,9 +16,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -161,6 +159,7 @@ public class JmlDocType extends TypeDeclaration<JmlDocType> implements JmlDocCon
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<JmlDoc> jmlComments() {
         return Objects.requireNonNull(jmlComments);
     }

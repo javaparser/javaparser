@@ -38,7 +38,6 @@ import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -219,11 +218,13 @@ public class ModuleExportsDirective extends ModuleDirective implements NodeWithN
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Name> moduleNames() {
         return Objects.requireNonNull(moduleNames);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {
         return Objects.requireNonNull(name);
     }

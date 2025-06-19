@@ -36,9 +36,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -151,6 +149,7 @@ public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Typ
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type type() {
         return Objects.requireNonNull(type);
     }

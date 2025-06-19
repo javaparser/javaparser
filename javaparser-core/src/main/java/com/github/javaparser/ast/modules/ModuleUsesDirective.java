@@ -36,7 +36,6 @@ import com.github.javaparser.metamodel.ModuleUsesDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -183,6 +182,7 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {
         return Objects.requireNonNull(name);
     }

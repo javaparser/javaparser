@@ -32,9 +32,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Node;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -139,6 +137,7 @@ public class BooleanLiteralExpr extends LiteralExpr {
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean value() {
         return Objects.requireNonNull(value);
     }

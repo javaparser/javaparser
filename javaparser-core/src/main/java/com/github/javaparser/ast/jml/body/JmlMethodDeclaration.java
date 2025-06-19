@@ -18,9 +18,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
@@ -215,16 +213,19 @@ public class JmlMethodDeclaration extends JmlClassLevelDeclaration<JmlMethodDecl
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlContract contract() {
         return contract;
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration methodDeclaration() {
         return Objects.requireNonNull(methodDeclaration);
     }

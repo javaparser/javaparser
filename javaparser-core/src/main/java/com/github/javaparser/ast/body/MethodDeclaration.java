@@ -47,9 +47,7 @@ import com.github.javaparser.metamodel.MethodDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
@@ -390,11 +388,13 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt body() {
         return body;
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type type() {
         return Objects.requireNonNull(type);
     }

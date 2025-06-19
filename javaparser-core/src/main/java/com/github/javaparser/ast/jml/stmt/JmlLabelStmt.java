@@ -16,9 +16,7 @@ import com.github.javaparser.metamodel.JmlLabelStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -168,11 +166,13 @@ public class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLab
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName label() {
         return Objects.requireNonNull(label);
     }

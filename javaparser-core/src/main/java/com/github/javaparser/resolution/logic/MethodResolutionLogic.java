@@ -163,16 +163,7 @@ public class MethodResolutionLogic {
                     // for example LambdaConstraintType{bound=TypeVariable {ReflectionTypeParameter{typeVariable=T}}},
                     // LambdaConstraintType{bound=TypeVariable {ReflectionTypeParameter{typeVariable=U}}}
                     // we want to keep this method for future resolution
-                    if (actualArgumentType.isConstraint()
-                            && withWildcardTolerance
-                            && (actualArgumentType.asConstraintType().getBound().isTypeVariable()
-                                    || (!actualArgumentType
-                                                    .asConstraintType()
-                                                    .getBound()
-                                                    .isTypeVariable()
-                                            && expectedDeclaredType.isAssignableBy(actualArgumentType
-                                                    .asConstraintType()
-                                                    .getBound())))) {
+                    if (actualArgumentType.isConstraint() && withWildcardTolerance && (actualArgumentType.asConstraintType().getBound().isTypeVariable() || (!actualArgumentType.asConstraintType().getBound().isTypeVariable() && expectedDeclaredType.isAssignableBy(actualArgumentType.asConstraintType().getBound())))) {
                         needForWildCardTolerance = true;
                         continue;
                     }
@@ -537,11 +528,11 @@ public class MethodResolutionLogic {
     public static SymbolReference<ResolvedMethodDeclaration> findMostApplicable(List<ResolvedMethodDeclaration> methods, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
         // Only consider methods with a matching name
         List<ResolvedMethodDeclaration> // Only consider methods with a matching name
-                // Filters out duplicate ResolvedMethodDeclaration by their signature.
-        applicableMethods = // Filters out duplicate ResolvedMethodDeclaration by their signature.
-                methods.stream().// Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
-        filter(// Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
-                        m -> m.getName().equals(name)).filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature)).filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
+        // Filters out duplicate ResolvedMethodDeclaration by their signature.
+        // Filters out duplicate ResolvedMethodDeclaration by their signature.
+        applicableMethods = // Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
+        methods.stream().// Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
+        filter(m -> m.getName().equals(name)).filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature)).filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
         // If no applicable methods found, return as unsolved.
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved();
@@ -664,10 +655,7 @@ public class MethodResolutionLogic {
         return null;
     }
 
-    static boolean isMoreSpecific(
-            ResolvedMethodLikeDeclaration methodA,
-            ResolvedMethodLikeDeclaration methodB,
-            List<ResolvedType> argumentTypes) {
+    static boolean isMoreSpecific(ResolvedMethodLikeDeclaration methodA, ResolvedMethodLikeDeclaration methodB, List<ResolvedType> argumentTypes) {
         final boolean aVariadic = methodA.hasVariadicParameter();
         final boolean bVariadic = methodB.hasVariadicParameter();
         final int aNumberOfParams = methodA.getNumberOfParams();

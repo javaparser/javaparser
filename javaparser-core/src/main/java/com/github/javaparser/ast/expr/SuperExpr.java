@@ -34,7 +34,6 @@ import com.github.javaparser.metamodel.SuperExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -179,6 +178,7 @@ public class SuperExpr extends Expression {
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name typeName() {
         return typeName;
     }

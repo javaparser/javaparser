@@ -16,9 +16,7 @@ import com.github.javaparser.metamodel.JmlRefiningStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -142,6 +140,7 @@ public class JmlRefiningStmt extends JmlStatement implements NodeWithJmlTags<Jml
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
     }

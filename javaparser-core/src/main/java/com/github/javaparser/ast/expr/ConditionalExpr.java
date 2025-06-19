@@ -34,9 +34,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -210,16 +208,19 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression condition() {
         return Objects.requireNonNull(condition);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression elseExpr() {
         return Objects.requireNonNull(elseExpr);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression thenExpr() {
         return Objects.requireNonNull(thenExpr);
     }

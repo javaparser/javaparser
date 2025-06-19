@@ -39,7 +39,6 @@ import com.github.javaparser.metamodel.RecordPatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -242,11 +241,13 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<PatternExpr> patternList() {
         return Objects.requireNonNull(patternList);
     }

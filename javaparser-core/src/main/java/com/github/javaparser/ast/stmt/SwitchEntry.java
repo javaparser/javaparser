@@ -37,9 +37,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Objects;
-
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
@@ -143,12 +141,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @AllFieldsConstructor
-    public SwitchEntry(
-            final NodeList<Expression> labels,
-            final Type type,
-            final NodeList<Statement> statements,
-            final boolean isDefault,
-            final Expression guard) {
+    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements, final boolean isDefault, final Expression guard) {
         this(null, labels, type, statements, isDefault, guard);
     }
 
@@ -370,21 +363,25 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression guard() {
         return guard;
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> labels() {
         return Objects.requireNonNull(labels);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> statements() {
         return Objects.requireNonNull(statements);
     }
 
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type type() {
         return Objects.requireNonNull(type);
     }

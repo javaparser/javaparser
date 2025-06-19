@@ -62,8 +62,8 @@ public final class FunctionalInterfaceLogic {
         // We need to find all abstract methods
         // Remove methods inherited by Object:
         Set<MethodUsage> // Remove methods inherited by Object:
-                // Consider the case of Comparator which define equals. It would be considered a functional method.
-                methods = typeDeclaration.getAllMethods().stream().filter(m -> m.getDeclaration().isAbstract()).filter(m -> !isPublicMemberOfObject(m)).collect(Collectors.toSet());
+        // Consider the case of Comparator which define equals. It would be considered a functional method.
+        methods = typeDeclaration.getAllMethods().stream().filter(m -> m.getDeclaration().isAbstract()).filter(m -> !isPublicMemberOfObject(m)).collect(Collectors.toSet());
         // TODO a functional interface can have multiple subsignature method with a return-type-substitutable
         // see https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8
         if (methods.size() == 0) {

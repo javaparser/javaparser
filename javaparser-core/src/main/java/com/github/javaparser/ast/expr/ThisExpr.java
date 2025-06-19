@@ -36,7 +36,6 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
-
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -186,6 +185,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     }
 
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name typeName() {
         return typeName;
     }

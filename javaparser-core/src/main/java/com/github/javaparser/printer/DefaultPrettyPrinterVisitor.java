@@ -23,7 +23,6 @@ import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
 import static java.util.stream.Collectors.joining;
-
 import com.github.javaparser.Position;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
@@ -146,8 +145,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
      * If {@code prefixWithASpace} is set, outputs an additional space at the beginning if there are annotations
      * to output.
      */
-    protected void printAnnotations(
-            final NodeList<AnnotationExpr> annotations, boolean prefixWithASpace, final Void arg) {
+    protected void printAnnotations(final NodeList<AnnotationExpr> annotations, boolean prefixWithASpace, final Void arg) {
         if (annotations.isEmpty()) {
             return;
         }
@@ -243,8 +241,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
      * @param separator seperator between the list items
      * @param postfix suffix for the list output
      */
-    protected void printPrePostFixOptionalList(
-            final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
+    protected void printPrePostFixOptionalList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
         if (!args.isEmpty()) {
             printer.print(prefix);
             for (final Iterator<? extends Visitable> i = args.iterator(); i.hasNext(); ) {
@@ -270,8 +267,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
      * @param separator seperator between the list items
      * @param postfix suffix for the list output
      */
-    protected void printPrePostFixRequiredList(
-            final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
+    protected void printPrePostFixRequiredList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
         printer.print(prefix);
         if (!args.isEmpty()) {
             for (final Iterator<? extends Visitable> i = args.iterator(); i.hasNext(); ) {
@@ -2381,10 +2377,13 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
      * Print all orphaned comments coming right before {@code node}.
      */
     protected void printOrphanCommentsBeforeThisChildNode(final Node node) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) return;
-        if (node instanceof Comment) return;
+        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent())
+            return;
+        if (node instanceof Comment)
+            return;
         Node parent = node.getParentNode().orElse(null);
-        if (parent == null) return;
+        if (parent == null)
+            return;
         List<Node> everything = new ArrayList<>(parent.getChildNodes());
         sortByBeginPosition(everything);
         int positionOfTheChild = -1;
@@ -2400,14 +2399,13 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
         int positionOfPreviousChild = -1;
         for (int i = positionOfTheChild - 1; i >= 0 && positionOfPreviousChild == -1; i--) {
-            if (!(everything.get(i) instanceof Comment)) positionOfPreviousChild = i;
+            if (!(everything.get(i) instanceof Comment))
+                positionOfPreviousChild = i;
         }
         for (int i = positionOfPreviousChild + 1; i < positionOfTheChild; i++) {
             Node nodeToPrint = everything.get(i);
             if (!(nodeToPrint instanceof Comment))
-                throw new RuntimeException(
-                        "Expected comment, instead " + nodeToPrint.getClass() + ". Position of previous child: "
-                                + positionOfPreviousChild + ", position of child " + positionOfTheChild);
+                throw new RuntimeException("Expected comment, instead " + nodeToPrint.getClass() + ". Position of previous child: " + positionOfPreviousChild + ", position of child " + positionOfTheChild);
             nodeToPrint.accept(this, null);
         }
     }
@@ -2416,7 +2414,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
      * Print all orphan comments coming at the end of the given {@code node}.
      */
     protected void printOrphanCommentsEnding(final Node node) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) return;
+        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent())
+            return;
         List<Node> everything = new ArrayList<>(node.getChildNodes());
         sortByBeginPosition(everything);
         if (everything.isEmpty()) {
