@@ -675,61 +675,15 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest
 
     @Test
     void testGetAllFields() {
-        JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration)
-                typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
+        Path src = adaptPath("src/test/resources/enums");
+        CombinedTypeSolver combinedtypeSolver = new CombinedTypeSolver();
+        combinedtypeSolver.add(new ReflectionTypeSolver());
+        combinedtypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
 
-        List<ResolvedFieldDeclaration> allFields = constructorDeclaration.getAllFields();
-        assertEquals(16, allFields.size());
-
-        ResolvedFieldDeclaration fieldDeclaration;
-
-        fieldDeclaration = allFields.get(0);
-        assertEquals("modifiers", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(1);
-        assertEquals("typeParameters", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(2);
-        assertEquals("name", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(3);
-        assertEquals("parameters", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(4);
-        assertEquals("throws_", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(5);
-        assertEquals("body", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(6);
-        assertEquals("annotations", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(7);
-        assertEquals("NODE_BY_BEGIN_POSITION", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(8);
-        assertEquals("range", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(9);
-        assertEquals("parentNode", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(10);
-        assertEquals("childrenNodes", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(11);
-        assertEquals("orphanComments", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(12);
-        assertEquals("userData", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(13);
-        assertEquals("comment", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(14);
-        assertEquals("ABSOLUTE_BEGIN_LINE", fieldDeclaration.getName());
-
-        fieldDeclaration = allFields.get(15);
-        assertEquals("ABSOLUTE_END_LINE", fieldDeclaration.getName());
+        JavaParserEnumDeclaration enumDecl = (JavaParserEnumDeclaration) combinedtypeSolver.solveType("COLOR");
+        assertEquals(2, enumDecl.getAllFields().size());
+        assertEquals("int", enumDecl.getAllFields().get(0).getType().describe());
+        assertEquals("int", enumDecl.getAllFields().get(1).getType().describe());
     }
 
     @Test

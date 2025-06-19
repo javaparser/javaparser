@@ -42,6 +42,7 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -74,7 +75,17 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                         MethodUsage methodUsage =
                                 JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = methodCallExpr.getArgumentPosition(wrappedNode, EXCLUDE_ENCLOSED_EXPR);
-                        ResolvedType lambdaType = methodUsage.getParamTypes().get(i);
+                        ResolvedType lambdaOrVarargsType =
+                                MethodResolutionLogic.getMethodUsageExplicitAndVariadicParameterType(methodUsage, i);
+                        ResolvedType lambdaType;
+                        // It's possible that the lambda may be used as a vararg, in which case the resolved type will
+                        // be an array type. In this case, the component type should be used instead when finding the
+                        // functional method below.
+                        if (lambdaOrVarargsType.isArray()) {
+                            lambdaType = lambdaOrVarargsType.asArrayType().getComponentType();
+                        } else {
+                            lambdaType = lambdaOrVarargsType;
+                        }
 
                         // Get the functional method in order for us to resolve it's type arguments properly
                         Optional<MethodUsage> functionalMethodOpt =

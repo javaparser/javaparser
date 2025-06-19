@@ -163,7 +163,7 @@ public class ReshuffledDiffElementExtractor {
                 if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(previousOrderElementsIterator.index()) && DifferenceElementCalculator.matching(ne, pe)) {
                     correspondanceBetweenNextOrderAndPreviousOrder.put(nextOrderElementsIterator.index(), previousOrderElementsIterator.index());
                     // set the position to start on the next {@code nextOrderElementsIterator} iteration
-                    syncNextIndex = nextOrderElementsIterator.index();
+                    syncNextIndex = nextOrderElementsIterator.nextIndex();
                     break;
                 }
             }

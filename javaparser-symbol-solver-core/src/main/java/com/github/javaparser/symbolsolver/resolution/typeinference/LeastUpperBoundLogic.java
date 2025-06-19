@@ -276,6 +276,7 @@ public class LeastUpperBoundLogic {
 
     private Set<ResolvedType> supertypes(ResolvedType type) {
         // How to deal with other types like for example type variable?
+        if (type.isTypeVariable()) return supertypes(type.asTypeVariable().erasure());
         return type.isReferenceType() ? supertypes(type.asReferenceType()) : new LinkedHashSet<>();
     }
 

@@ -23,6 +23,7 @@ import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
 import static java.util.stream.Collectors.joining;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -50,10 +51,6 @@ import com.github.javaparser.printer.configuration.imports.DefaultImportOrdering
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
-import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.*;
-import static java.util.stream.Collectors.joining;
 
 /**
  * Outputs the AST as formatted Java source code.
@@ -62,8 +59,14 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     private static Pattern RTRIM = Pattern.compile("\\s+$");
 
+    /**
+     * The printer configuration.
+     */
     protected final PrinterConfiguration configuration;
 
+    /**
+     * Object for outputting source code.
+     */
     protected final SourcePrinter printer;
 
     public DefaultPrettyPrinterVisitor(PrinterConfiguration configuration) {
@@ -80,12 +83,22 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         return printer.toString();
     }
 
+    /**
+     * Print a list of modifiers on a declaration.
+     *
+     * By default, this simply outputs the string representations of the modifiers separated by spaces.
+     */
     protected void printModifiers(final NodeList<Modifier> modifiers) {
         if (modifiers.size() > 0) {
             printer.print(modifiers.stream().map(Modifier::getKeyword).map(Modifier.Keyword::asString).collect(joining(" ")) + " ");
         }
     }
 
+    /**
+     * Print a list of body declarations.
+     *
+     * By default, this outputs declarations surrounded with a newline before and after.
+     */
     protected void printMembers(final NodeList<BodyDeclaration<?>> members, final Void arg) {
         for (final BodyDeclaration<?> member : members) {
             printer.println();
@@ -94,6 +107,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
+    /**
+     * Print a list of annotations on a member, i.e., a top-level or body declaration.
+     *
+     * By default, this outputs each annotation on a separate line.
+     */
     protected void printMemberAnnotations(final NodeList<AnnotationExpr> annotations, final Void arg) {
         if (annotations.isEmpty()) {
             return;
@@ -104,7 +122,15 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
-    protected void printAnnotations(final NodeList<AnnotationExpr> annotations, boolean prefixWithASpace, final Void arg) {
+    /**
+     * Prints a list of annotations.
+     *
+     * By default, outputs the {@code annotations} followed by spaces.
+     * If {@code prefixWithASpace} is set, outputs an additional space at the beginning if there are annotations
+     * to output.
+     */
+    protected void printAnnotations(
+            final NodeList<AnnotationExpr> annotations, boolean prefixWithASpace, final Void arg) {
         if (annotations.isEmpty()) {
             return;
         }
@@ -117,6 +143,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
+    /**
+     * Print type arguments.
+     *
+     * This outputs type arguments using the {@code <T1, ..., Tn>} syntax.
+     */
     protected void printTypeArgs(final NodeWithTypeArguments<?> nodeWithTypeArguments, final Void arg) {
         NodeList<Type> typeArguments = nodeWithTypeArguments.getTypeArguments().orElse(null);
         if (!isNullOrEmpty(typeArguments)) {
@@ -132,6 +163,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
+    /**
+     * Print type parameters.
+     *
+     * This outputs type parameters using the {@code <T1 [extends ...] [super...], ..., Tn>} syntax.
+     */
     protected void printTypeParameters(final NodeList<TypeParameter> args, final Void arg) {
         if (!isNullOrEmpty(args)) {
             printer.print("<");
@@ -146,6 +182,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
+    /**
+     * Outputs arguments to a method/constructor call.
+     *
+     * This outputs arguments using the {@code (arg1, ..., argn)} syntax,
+     * using either one-line or multi-line argument lists.
+     */
     protected <T extends Expression> void printArguments(final NodeList<T> args, final Void arg) {
         printer.print("(");
         if (!isNullOrEmpty(args)) {
@@ -172,7 +214,20 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.print(")");
     }
 
-    protected void printPrePostFixOptionalList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
+    /**
+     * General list output functionality - no output for empty lists.
+     *
+     * This outputs nothing if {@code args} is empty, and {@code prefix args[0] separator ... separator arg[n] suffix}
+     * otherwise.
+     *
+     * @param args the nodes to output
+     * @param arg ignored
+     * @param prefix prefix for the list output
+     * @param separator seperator between the list items
+     * @param postfix suffix for the list output
+     */
+    protected void printPrePostFixOptionalList(
+            final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
         if (!args.isEmpty()) {
             printer.print(prefix);
             for (final Iterator<? extends Visitable> i = args.iterator(); i.hasNext(); ) {
@@ -186,7 +241,20 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
-    protected void printPrePostFixRequiredList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
+    /**
+     * General list output functionality with output for empty lists.
+     *
+     * This outputs @{code prefix suffix} if {@code args} is empty, and {@code prefix args[0] separator ... separator arg[n] suffix}
+     * otherwise.
+     *
+     * @param args the nodes to output
+     * @param arg ignored
+     * @param prefix prefix for the list output
+     * @param separator seperator between the list items
+     * @param postfix suffix for the list output
+     */
+    protected void printPrePostFixRequiredList(
+            final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
         printer.print(prefix);
         if (!args.isEmpty()) {
             for (final Iterator<? extends Visitable> i = args.iterator(); i.hasNext(); ) {
@@ -200,6 +268,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.print(postfix);
     }
 
+    /**
+     * Output a comment, if any.
+     */
     protected void printComment(final Optional<Comment> comment, final Void arg) {
         comment.ifPresent(c -> c.accept(this, arg));
     }
@@ -605,6 +676,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.print("}");
     }
 
+    /**
+     * Should the given array initializer expression be output on multiple lines,
+     * as an array of annotations?
+     * @return true iff the {@code INDENT_PRINT_ARRAYS_OF_ANNOTATIONS} is set
+     * and the array consists of {@code AnnotationExpr} entries.
+     */
     private boolean doPrintAsArrayOfAnnotations(final ArrayInitializerExpr n) {
         return getOption(ConfigOption.INDENT_PRINT_ARRAYS_OF_ANNOTATIONS).isPresent() && n.getValues().stream().allMatch(s -> s instanceof AnnotationExpr);
     }
@@ -2110,7 +2187,16 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.print("???;");
     }
 
-    private void printImports(NodeList<ImportDeclaration> imports, Void arg) {
+    /**
+     * Print imports using an import ordering strategy.
+     *
+     * Orders imports using the selected ordering strategy, given
+     * by {@code ORDER_IMPORTS} (which forces alphabetic ordering if set),
+     * falling back to {@code SORT_IMPORTS_STRATEGY} (which yields a user-selected ordering),
+     * and finally to {@link DefaultImportOrderingStrategy}, and out them in groups, seperated by
+     * newlines.
+     */
+    protected void printImports(NodeList<ImportDeclaration> imports, Void arg) {
         ImportOrderingStrategy strategy = new DefaultImportOrderingStrategy();
         // Get Import strategy from configuration
         Optional<ConfigurationOption> optionalStrategy = getOption(ConfigOption.SORT_IMPORTS_STRATEGY);
@@ -2135,11 +2221,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
-    private void printOrphanCommentsBeforeThisChildNode(final Node node) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent())
-            return;
-        if (node instanceof Comment)
-            return;
+    /**
+     * Print all orphaned comments coming right before {@code node}.
+     */
+    protected void printOrphanCommentsBeforeThisChildNode(final Node node) {
+        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) return;
+        if (node instanceof Comment) return;
         Node parent = node.getParentNode().orElse(null);
         if (parent == null)
             return;
@@ -2169,9 +2256,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
-    private void printOrphanCommentsEnding(final Node node) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent())
-            return;
+    /**
+     * Print all orphan comments coming at the end of the given {@code node}.
+     */
+    protected void printOrphanCommentsEnding(final Node node) {
+        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) return;
         List<Node> everything = new ArrayList<>(node.getChildNodes());
         sortByBeginPosition(everything);
         if (everything.isEmpty()) {
@@ -2191,17 +2280,26 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
+    /**
+     * Conditionally increase indent.
+     */
     private void indentIf(boolean expr) {
         if (expr)
             printer.indent();
     }
 
+    /**
+     * Conditionally decrease indent.
+     */
     private void unindentIf(boolean expr) {
         if (expr)
             printer.unindent();
     }
 
-    private Optional<ConfigurationOption> getOption(ConfigOption cOption) {
+    /**
+     * Get the value of a given configuration option.
+     */
+    protected Optional<ConfigurationOption> getOption(ConfigOption cOption) {
         return configuration.get(new DefaultConfigurationOption(cOption));
     }
 }

@@ -620,7 +620,7 @@ public class JavaParserFacade {
                 if (parent instanceof TypeDeclaration
                         && ((TypeDeclaration<?>) parent)
                                 .getFullyQualifiedName()
-                                .get()
+                                .orElse("")
                                 .endsWith(className)) {
                     return parent;
                 }

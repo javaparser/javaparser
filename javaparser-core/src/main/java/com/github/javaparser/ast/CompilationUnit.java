@@ -24,7 +24,6 @@ import static com.github.javaparser.JavaToken.Kind.EOF;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
-import static com.github.javaparser.StaticJavaParser.parseImport;
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
@@ -44,6 +43,7 @@ import com.github.javaparser.metamodel.CompilationUnitMetaModel;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.printer.ConfigurablePrinter;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ClassUtils;
@@ -158,7 +158,10 @@ public class CompilationUnit extends Node {
      */
     @Override
     protected Printer getPrinter(PrinterConfiguration config) {
-        Printer printer = getPrinter().setConfiguration(config);
+        Printer printer = getPrinter();
+        if (printer instanceof ConfigurablePrinter) {
+            ((ConfigurablePrinter) printer).setConfiguration(config);
+        }
         printer(printer);
         return printer;
     }
@@ -415,16 +418,7 @@ public class CompilationUnit extends Node {
         if (name == null) {
             return this;
         }
-        final StringBuilder i = new StringBuilder("import ");
-        if (isStatic) {
-            i.append("static ");
-        }
-        i.append(name);
-        if (isAsterisk) {
-            i.append(".*");
-        }
-        i.append(";");
-        return addImport(parseImport(i.toString()));
+        return addImport(new ImportDeclaration(name, isStatic, isAsterisk));
     }
 
     /**

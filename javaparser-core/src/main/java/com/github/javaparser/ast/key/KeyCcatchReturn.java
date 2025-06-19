@@ -11,11 +11,9 @@ import java.util.Optional;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeYCcatchReturnMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.KeyCcatchReturnMetaModel;
-import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 public class KeyCcatchReturn extends KeyCcatchBranch {

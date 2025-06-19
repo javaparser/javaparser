@@ -2,21 +2,20 @@ package com.github.javaparser.ast.key;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.OptionalProperty;
-import java.util.Optional;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeYCcatchBreakMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.KeyCcatchBreakMetaModel;
-import java.util.Objects;
+import com.github.javaparser.metamodel.OptionalProperty;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Optional;
 
 public class KeyCcatchBreak extends KeyCcatchBranch {
 

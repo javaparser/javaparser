@@ -30,9 +30,12 @@ import com.google.common.collect.Sets;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -76,6 +79,33 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
         assertEquals(
                 false, jarTypeSolver.tryToSolveType("com.github.javaparser.Foo").isSolved());
         assertEquals(false, jarTypeSolver.tryToSolveType("Foo").isSolved());
+    }
+
+    @Test
+    void classFileHierarchy(@TempDir Path tempDir) throws IOException {
+        Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
+
+        // Unpack the jar file into a class hierarchy
+        try (JarInputStream jarInputStream = new JarInputStream(Files.newInputStream(pathToJar))) {
+            for (JarEntry entry = jarInputStream.getNextJarEntry();
+                    entry != null;
+                    entry = jarInputStream.getNextJarEntry()) {
+                if (entry.isDirectory()) {
+                    Files.createDirectories(tempDir.resolve(entry.getName()));
+                } else {
+                    Files.copy(jarInputStream, tempDir.resolve(entry.getName()));
+                }
+            }
+        }
+
+        JarTypeSolver jarTypeSolver = new JarTypeSolver(tempDir);
+        assertEquals(
+                true,
+                jarTypeSolver
+                        .tryToSolveType("com.github.javaparser.SourcesHelper")
+                        .isSolved());
+        assertEquals(
+                false, jarTypeSolver.tryToSolveType("com.github.javaparser.Foo").isSolved());
     }
 
     @Test
