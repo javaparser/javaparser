@@ -51,6 +51,7 @@ import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.metamodel.*;
+import com.github.javaparser.printer.ConfigurablePrinter;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
@@ -317,15 +318,20 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     @Override
     public final String toString() {
+        Printer printer = getPrinter();
         if (containsData(LINE_SEPARATOR_KEY)) {
-            Printer printer = getPrinter();
             LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-            PrinterConfiguration config = printer.getConfiguration();
-            config.addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
-            printer.setConfiguration(config);
-            return printer.print(this);
+            if (printer instanceof ConfigurablePrinter) {
+                ConfigurablePrinter configurablePrinter = (ConfigurablePrinter) printer;
+                PrinterConfiguration config = configurablePrinter.getConfiguration();
+                if (config != null) {
+                    config.addOption(new DefaultConfigurationOption(
+                            ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
+                    configurablePrinter.setConfiguration(config);
+                }
+            }
         }
-        return getPrinter().print(this);
+        return printer.print(this);
     }
 
     /**
@@ -333,12 +339,17 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Formatting can be configured with parameter PrinterConfiguration.
      */
     public final String toString(PrinterConfiguration configuration) {
+        Printer printer = getPrinter();
+        if (!(printer instanceof ConfigurablePrinter)) {
+            return printer.print(this);
+        }
+        ConfigurablePrinter configurablePrinter = (ConfigurablePrinter) printer;
         // save the current configuration
-        PrinterConfiguration previousConfiguration = getPrinter().getConfiguration();
+        PrinterConfiguration previousConfiguration = configurablePrinter.getConfiguration();
         // print with the new configuration
         String result = getPrinter(configuration).print(this);
         // restore the previous printer configuration (issue 4163)
-        getPrinter().setConfiguration(previousConfiguration);
+        configurablePrinter.setConfiguration(previousConfiguration);
         return result;
     }
 
@@ -847,8 +858,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public static final DataKey<LineSeparator> LINE_SEPARATOR_KEY = new DataKey<LineSeparator>() {
     };
 
-    protected static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {
-    };
+    // We need to expose it because we will need to use it to inject the printer
+    public static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {};
 
     protected static final DataKey<Boolean> PHANTOM_KEY = new DataKey<Boolean>() {
     };

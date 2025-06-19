@@ -117,8 +117,15 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         Node notMethodNode = parentNode;
         // To avoid loops JP must ensure that the scope of the parent context
         // is not the same as the current node.
+        // For most part, this can be achieved that the scope of the nodes is different,
+        // but in some cases, we may have loops of length > 1. This is the case for expressions
+        // that have something like a "receiver" - field accesses, method calls and the
+        // non-static inner class variant of constructor calls. We handle these by just
+        // skipping all method calls, field accesses, and all constructor calls that have
+        // a receiver (i.e., outer.new Inner()), as identified by hasScope.
         while (notMethodNode instanceof MethodCallExpr
                 || notMethodNode instanceof FieldAccessExpr
+                || (notMethodNode instanceof ObjectCreationExpr && notMethodNode.hasScope())
                 || (notMethodNode != null
                         && notMethodNode.hasScope()
                         && getScope(notMethodNode).equals(wrappedNode))) {

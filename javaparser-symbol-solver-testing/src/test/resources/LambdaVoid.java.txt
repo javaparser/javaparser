@@ -6,7 +6,7 @@ public class Agenda {
     private List<String> persons;
 
     public void lambdaEmpty() {
-        return persons.stream().forEach(p -> {
+        persons.forEach(p -> {
             System.out.println(p);
         });
     }

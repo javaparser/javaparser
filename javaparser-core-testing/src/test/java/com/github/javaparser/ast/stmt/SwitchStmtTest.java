@@ -107,4 +107,11 @@ class SwitchStmtTest {
         assertEquals("CustomDeployTableModel.ARTIFACT_NAME", switchLabel.toString());
         assertTrue(switchLabel.isFieldAccessExpr());
     }
+
+    @Test
+    void issue4607Test() {
+        SwitchStmt switchStmt = parseStatement("switch (o) { case String s when s.length() == 1 -> 0; }")
+                .asSwitchStmt();
+        assertEquals(switchStmt.toString(), switchStmt.clone().toString());
+    }
 }

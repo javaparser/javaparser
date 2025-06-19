@@ -172,6 +172,9 @@ public class TestUtils {
 
             while (ze != null) {
                 final Path newFile = outputFolder.resolve(ze.getName());
+                if (!newFile.normalize().startsWith(outputFolder.normalize())) {
+                    throw new IOException("Bad zip entry");
+                }
 
                 if (ze.isDirectory()) {
                     Log.trace("mkdir %s", newFile::toAbsolutePath);

@@ -25,13 +25,14 @@ import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_16;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
+import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -39,12 +40,19 @@ class Java16ValidatorTest {
 
     private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_16));
 
+    @Test
+    void localInterface() {
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {" + "interface I{}}}"));
+        assertNoProblems(result);
+    }
+
     @Nested
     class Yield {
         @Test
         void yieldAllowed() {
             ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: yield 6;}"));
-            TestUtils.assertNoProblems(result);
+            assertNoProblems(result);
         }
     }
 
@@ -53,13 +61,13 @@ class Java16ValidatorTest {
         @Test
         void patternMatchingAllowed() {
             ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("if (a instanceof String s) {}"));
-            TestUtils.assertNoProblems(result);
+            assertNoProblems(result);
         }
 
         @Test
         void recordPatternsForbidden() {
             ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("if (a instanceof Box(String s)) {}"));
-            TestUtils.assertProblems(
+            assertProblems(
                     result,
                     "(line 1,col 18) Record patterns are not supported. Pay attention that this feature is supported starting from 'JAVA_21' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
         }
@@ -78,7 +86,7 @@ class Java16ValidatorTest {
             void recordUsedAsClassIdentifier() {
                 String s = "public class record {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(
+                assertProblems(
                         result,
                         "(line 1,col 14) 'record' is a restricted identifier and cannot be used for type declarations");
             }
@@ -87,7 +95,7 @@ class Java16ValidatorTest {
             void recordUsedAsEnumIdentifier() {
                 String s = "public enum record {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(
+                assertProblems(
                         result,
                         "(line 1,col 13) 'record' is a restricted identifier and cannot be used for type declarations");
             }
@@ -96,7 +104,7 @@ class Java16ValidatorTest {
             void recordUsedAsRecordIdentifier() {
                 String s = "public record record() {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(
+                assertProblems(
                         result,
                         "(line 1,col 15) 'record' is a restricted identifier and cannot be used for type declarations");
             }
@@ -108,14 +116,14 @@ class Java16ValidatorTest {
             void recordUsedAsFieldIdentifierInClass() {
                 String s = "class X { int record; }";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertNoProblems(result);
+                assertNoProblems(result);
             }
 
             @Test
             void recordUsedAsFieldIdentifierInInterface() {
                 String s = "interface X { int record; }";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertNoProblems(result);
+                assertNoProblems(result);
             }
         }
 
@@ -125,7 +133,7 @@ class Java16ValidatorTest {
             void recordDeclaration() {
                 String s = "record X() { }";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertNoProblems(result);
+                assertNoProblems(result);
             }
         }
     }

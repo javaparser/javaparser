@@ -39,6 +39,7 @@ import com.github.javaparser.resolution.*;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.model.typesystem.LazyType;
@@ -288,6 +289,11 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     }
 
     @Override
+    public ResolvedType visit(TextBlockLiteralExpr node, Boolean solveLambdas) {
+        return stringReferenceType;
+    }
+
+    @Override
     public ResolvedType visit(IntegerLiteralExpr node, Boolean solveLambdas) {
         return ResolvedPrimitiveType.INT;
     }
@@ -479,8 +485,15 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     () -> refMethod.getCorrespondingDeclaration().getName());
 
             // The type parameter referred here should be the java.util.stream.Stream.T
-            ResolvedType result =
-                    refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+            ResolvedType result = MethodResolutionLogic.getMethodsExplicitAndVariadicParameterType(
+                    refMethod.getCorrespondingDeclaration(), pos);
+
+            // It's possible that the lambda may be used as a vararg, in which case the resolved type will be an
+            // array type. In this case, the component type should be used instead when finding the functional
+            // method below.
+            if (result.isArray()) {
+                result = result.asArrayType().getComponentType();
+            }
 
             if (solveLambdas) {
                 if (callExpr.hasScope()) {
@@ -514,8 +527,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             }
             return result;
         }
-        if (demandParentNode(node) instanceof VariableDeclarator) {
-            VariableDeclarator decExpr = (VariableDeclarator) demandParentNode(node);
+        if (parentNode instanceof VariableDeclarator) {
+            VariableDeclarator decExpr = (VariableDeclarator) parentNode;
             ResolvedType result = decExpr.getType().resolve();
 
             if (solveLambdas) {
@@ -523,9 +536,18 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             }
             return result;
         }
-        if (demandParentNode(node) instanceof AssignExpr) {
-            AssignExpr assExpr = (AssignExpr) demandParentNode(node);
+        if (parentNode instanceof AssignExpr) {
+            AssignExpr assExpr = (AssignExpr) parentNode;
             ResolvedType result = assExpr.calculateResolvedType();
+
+            if (solveLambdas) {
+                result = resolveLambda(node, result);
+            }
+            return result;
+        }
+        if (parentNode instanceof ObjectCreationExpr) {
+            ObjectCreationExpr expr = (ObjectCreationExpr) parentNode;
+            ResolvedType result = expr.getType().resolve();
 
             if (solveLambdas) {
                 result = resolveLambda(node, result);
@@ -540,6 +562,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         // We need to replace the type variables
         Context ctx = JavaParserFactory.getContext(node, typeSolver);
         result = result.solveGenericTypes(ctx);
+
+        // It's possible that the lambda may be used as a vararg, in which case the resolved type will be an
+        // array type. In this case, the component type should be used instead when finding the functional
+        // method below.
+        if (result.isArray()) {
+            result = result.asArrayType().getComponentType();
+        }
 
         // We should find out which is the functional method (e.g., apply) and replace the params of the
         // solveLambdas with it, to derive so the values. We should also consider the value returned by the
@@ -624,10 +653,17 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     () -> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
                 MethodUsage usage = facade.solveMethodAsUsage(callExpr);
-                ResolvedType result = usage.getParamType(pos);
+                ResolvedType result = MethodResolutionLogic.getMethodUsageExplicitAndVariadicParameterType(usage, pos);
                 // We need to replace the type variables
                 Context ctx = JavaParserFactory.getContext(node, typeSolver);
                 result = result.solveGenericTypes(ctx);
+
+                // If the MethodReferenceExpr is used as a vararg, then the result will be a ResolvedArrayType, which
+                // cannot be a valid type for a method reference, so it is safe to unwrap it and use the component
+                // type instead.
+                if (result.isArray()) {
+                    result = result.asArrayType().getComponentType();
+                }
 
                 // We should find out which is the functional method (e.g., apply) and replace the params of the
                 // solveLambdas with it, to derive so the values. We should also consider the value returned by the

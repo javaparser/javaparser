@@ -28,6 +28,8 @@ import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.ast.validator.language_level_validations.*;
 import com.github.javaparser.ast.validator.postprocessors.*;
+import com.github.javaparser.printer.lexicalpreservation.DefaultLexicalPreservingPrinter;
+import com.github.javaparser.jml.JmlProcessor;
 import com.github.javaparser.jml.JmlProcessor;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
@@ -381,7 +383,10 @@ public class ParserConfiguration {
             @Override
             public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
                 if (configuration.isLexicalPreservationEnabled()) {
-                    result.ifSuccessful(LexicalPreservingPrinter::setup);
+                    result.ifSuccessful(resultNode -> {
+                        LexicalPreservingPrinter.setup(resultNode);
+                        resultNode.setData(Node.PRINTER_KEY, new DefaultLexicalPreservingPrinter());
+                    });
                 }
             }
         });
