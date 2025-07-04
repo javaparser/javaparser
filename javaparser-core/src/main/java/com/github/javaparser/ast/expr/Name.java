@@ -44,7 +44,7 @@ import java.util.Optional;
  * The rightmost identifier is "identifier",
  * The one to the left of it is "qualifier.identifier", etc.
  * <p>
- * You can construct one from a String with the name(...) method.
+ * You can construct one from a String with the {@link com.github.javaparser.StaticJavaParser#parseName(String)} method.
  *
  * @author Julio Vilmar Gesser
  * @see SimpleName
