@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -101,7 +101,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
-        if (identifier == this.identifier) {
+        if (identifier.equals(this.identifier)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);

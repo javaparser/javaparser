@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -151,7 +151,7 @@ public class MethodReferenceExpr extends Expression
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodReferenceExpr setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
-        if (identifier == this.identifier) {
+        if (identifier.equals(this.identifier)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);

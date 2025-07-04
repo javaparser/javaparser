@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -62,7 +62,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LiteralStringValueExpr setValue(final String value) {
         assertNotNull(value);
-        if (value == this.value) {
+        if (value.equals(this.value)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);

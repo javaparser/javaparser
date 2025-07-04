@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -83,7 +83,7 @@ public abstract class Comment extends Node {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Comment setContent(final String content) {
         assertNotNull(content);
-        if (content == this.content) {
+        if (content.equals(this.content)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
