@@ -151,7 +151,7 @@ public class MethodReferenceExpr extends Expression
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodReferenceExpr setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
-        if (identifier == this.identifier) {
+        if (identifier.equals(this.identifier)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);

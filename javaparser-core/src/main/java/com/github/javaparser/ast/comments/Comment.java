@@ -83,7 +83,7 @@ public abstract class Comment extends Node {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Comment setContent(final String content) {
         assertNotNull(content);
-        if (content == this.content) {
+        if (content.equals(this.content)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);

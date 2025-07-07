@@ -62,7 +62,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LiteralStringValueExpr setValue(final String value) {
         assertNotNull(value);
-        if (value == this.value) {
+        if (value.equals(this.value)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);

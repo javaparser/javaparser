@@ -85,7 +85,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
-        if (identifier == this.identifier) {
+        if (identifier.equals(this.identifier)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);

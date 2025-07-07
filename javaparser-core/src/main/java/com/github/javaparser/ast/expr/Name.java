@@ -101,7 +101,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
-        if (identifier == this.identifier) {
+        if (identifier.equals(this.identifier)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
