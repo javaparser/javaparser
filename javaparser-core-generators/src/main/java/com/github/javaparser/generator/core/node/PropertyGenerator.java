@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -109,7 +109,11 @@ public class PropertyGenerator extends NodeGenerator {
 
         // Check if the new value is the same as the old value
         String returnValue = CodeUtils.castValue("this", setter.getType(), nodeMetaModel.getTypeName());
-        body.addStatement(f("if (%s == this.%s) { return %s; }", name, name, returnValue));
+        if (property.getType().equals(String.class)) {
+            body.addStatement(f("if (%s.equals(this.%s)) { return %s; }", name, name, returnValue));
+        } else {
+            body.addStatement(f("if (%s == this.%s) { return %s; }", name, name, returnValue));
+        }
 
         body.addStatement(f("notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
         if (property.isNode()) {

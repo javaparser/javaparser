@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,11 +24,14 @@ package com.github.javaparser.ast.comments;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
@@ -205,5 +208,19 @@ class CommentTest {
         BlockStmt block = new BlockStmt();
         block.addOrphanComment(new LineComment("TODO"));
         assertTrue(block.toString().contains("TODO"));
+    }
+
+    @Test
+    void issue4791Test() {
+        String a = new String("Hello World");
+        String b = new String("Hello World");
+        LineComment comment = new LineComment(a);
+
+        AstObserver observer = mock(AstObserver.class);
+        comment.register(observer);
+
+        comment.setContent(b);
+
+        verifyNoInteractions(observer);
     }
 }
