@@ -199,8 +199,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             // All objects implicitly extend java.lang.Object -- inject it here (only when this isn't java.lang.Object)
             return Optional.of(object());
         }
-        return Optional.of(
-                toReferenceType(wrappedNode.getExtendedTypes().getFirst().get()));
+        return Optional.of(toReferenceType(wrappedNode.getExtendedTypes().getFirst()));
     }
 
     @Override
