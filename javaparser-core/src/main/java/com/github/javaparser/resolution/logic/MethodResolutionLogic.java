@@ -24,6 +24,7 @@ import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
@@ -65,6 +66,43 @@ public class MethodResolutionLogic {
     public static boolean isApplicable(
             ResolvedMethodDeclaration method, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
         return isApplicable(method, name, argumentsTypes, typeSolver, false);
+    }
+
+    private static boolean isConflictingLambdaType(
+            LambdaArgumentTypePlaceholder lambdaPlaceholder, ResolvedType expectedType) {
+        // TODO: It might be possible to use the resolved type variable here, but that would either require
+        //  a type parameters map to be passed in, or the type variable to be resolved here which could lead
+        //  to duplicated work or maybe infinite recursion.
+        if (!expectedType.isReferenceType()) {
+            return false;
+        }
+        Optional<MethodUsage> maybeFunctionalInterface = FunctionalInterfaceLogic.getFunctionalMethod(expectedType);
+        if (maybeFunctionalInterface.isPresent()) {
+            MethodUsage functionalInterface = maybeFunctionalInterface.get();
+            // If the lambda expression does not have the same number of parameters as the functional interface
+            // method, the lambda cannot implement that interface.
+            if (lambdaPlaceholder.getParameterCount().isPresent()
+                    && functionalInterface.getNoParams()
+                            != lambdaPlaceholder.getParameterCount().get()) {
+                return true;
+            }
+            // If the lambda method has a block body then:
+            //   1. If the block contains a return statement with a returned value, the lambda can only implement
+            //      non-void methods.
+            //   2. If the block contains an empty return statement, or no return statement, the lambda can only
+            //      implement void methods.
+            if (lambdaPlaceholder.bodyBlockHasExplicitNonVoidReturn().isPresent()) {
+                boolean lambdaReturnIsVoid =
+                        !lambdaPlaceholder.bodyBlockHasExplicitNonVoidReturn().get();
+                if (lambdaReturnIsVoid && !functionalInterface.returnType().isVoid()) {
+                    return true;
+                }
+                if (!lambdaReturnIsVoid && functionalInterface.returnType().isVoid()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -145,6 +183,11 @@ public class MethodResolutionLogic {
         for (int i = 0; i < countOfMethodParametersDeclared; i++) {
             ResolvedType expectedDeclaredType = methodDeclaration.getParam(i).getType();
             ResolvedType actualArgumentType = needleArgumentTypes.get(i);
+            if (actualArgumentType instanceof LambdaArgumentTypePlaceholder
+                    && isConflictingLambdaType(
+                            (LambdaArgumentTypePlaceholder) actualArgumentType, expectedDeclaredType)) {
+                return false;
+            }
             if ((expectedDeclaredType.isTypeVariable() && !(expectedDeclaredType.isWildcard()))
                     && expectedDeclaredType.asTypeParameter().declaredOnMethod()) {
                 matchedParameters.put(expectedDeclaredType.asTypeParameter().getName(), actualArgumentType);

@@ -33,6 +33,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.*;
 import com.github.javaparser.resolution.declarations.*;
@@ -264,7 +265,25 @@ public class JavaParserFacade {
             while (parameterValue instanceof EnclosedExpr) {
                 parameterValue = ((EnclosedExpr) parameterValue).getInner();
             }
-            if (parameterValue.isLambdaExpr() || parameterValue.isMethodReferenceExpr()) {
+            if (parameterValue.isLambdaExpr()) {
+                LambdaExpr lambdaExpr = parameterValue.asLambdaExpr();
+                Optional<Boolean> bodyBlockHasExplicitNonVoidReturn;
+                if (!lambdaExpr.getBody().isBlockStmt()) {
+                    bodyBlockHasExplicitNonVoidReturn = Optional.empty();
+                } else {
+                    Optional<ReturnStmt> explicitReturn = lambdaExpr.getBody().findFirst(ReturnStmt.class);
+                    if (explicitReturn.isPresent()) {
+                        bodyBlockHasExplicitNonVoidReturn =
+                                Optional.of(explicitReturn.get().getExpression().isPresent());
+                    } else {
+                        bodyBlockHasExplicitNonVoidReturn = Optional.of(false);
+                    }
+                }
+                LambdaArgumentTypePlaceholder placeholder = new LambdaArgumentTypePlaceholder(
+                        i, lambdaExpr.getParameters().size(), bodyBlockHasExplicitNonVoidReturn);
+                argumentTypes.add(placeholder);
+                placeholders.add(placeholder);
+            } else if (parameterValue.isMethodReferenceExpr()) {
                 LambdaArgumentTypePlaceholder placeholder = new LambdaArgumentTypePlaceholder(i);
                 argumentTypes.add(placeholder);
                 placeholders.add(placeholder);
