@@ -89,6 +89,12 @@ public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration
         if (returnType.describe().equals(otherResolvedType.erasure().describe())) {
             return true;
         }
+        // At this point, R2 is not a type variable and R1 cannot be converted to a
+        // subtype of R2 by unchecked conversion, so if R1 is a type variable,
+        // then it cannot be assumed that it is return type substitutable.
+        if (returnType.isTypeVariable()) {
+            return false;
+        }
         throw new UnsupportedOperationException("Return-Type-Substituable must be implemented on reference type.");
     }
 }

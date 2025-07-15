@@ -33,6 +33,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.*;
 import com.github.javaparser.resolution.declarations.*;
@@ -264,7 +265,36 @@ public class JavaParserFacade {
             while (parameterValue instanceof EnclosedExpr) {
                 parameterValue = ((EnclosedExpr) parameterValue).getInner();
             }
-            if (parameterValue.isLambdaExpr() || parameterValue.isMethodReferenceExpr()) {
+            // In order to resolve a call with a lambda expr as an argument, the functional interface implemented
+            // by that lambda must be determined. This is done by collecting the candidate functional methods in
+            // scope and then excluding non-applicable methods if any of the following hold:
+            //   1. The lambda and the candidate method do not have the same number of arguments/parameters
+            //   2. The lambda has an explicit empty/void return statement `return;` in the body block, but the
+            //      candidate method has a non-void return type.
+            //   3. The lambda has an explicit non-void return statement, e.g. `return x;`, but the candidate
+            //      method has a void return type.
+            // For JavaParser to be able to perform the same filtering, we need to keep track of the number of
+            // arguments to the lambda, as well as whether there is an explicit void/non-void return statement,
+            // so this information is added to the `LambdaArgumentTypePlaceholder` in the block below.
+            if (parameterValue.isLambdaExpr()) {
+                LambdaExpr lambdaExpr = parameterValue.asLambdaExpr();
+                Optional<Boolean> bodyBlockHasExplicitNonVoidReturn;
+                if (!lambdaExpr.getBody().isBlockStmt()) {
+                    bodyBlockHasExplicitNonVoidReturn = Optional.empty();
+                } else {
+                    Optional<ReturnStmt> explicitReturn = lambdaExpr.getBody().findFirst(ReturnStmt.class);
+                    if (explicitReturn.isPresent()) {
+                        bodyBlockHasExplicitNonVoidReturn =
+                                Optional.of(explicitReturn.get().getExpression().isPresent());
+                    } else {
+                        bodyBlockHasExplicitNonVoidReturn = Optional.of(false);
+                    }
+                }
+                LambdaArgumentTypePlaceholder placeholder = new LambdaArgumentTypePlaceholder(
+                        i, lambdaExpr.getParameters().size(), bodyBlockHasExplicitNonVoidReturn);
+                argumentTypes.add(placeholder);
+                placeholders.add(placeholder);
+            } else if (parameterValue.isMethodReferenceExpr()) {
                 LambdaArgumentTypePlaceholder placeholder = new LambdaArgumentTypePlaceholder(i);
                 argumentTypes.add(placeholder);
                 placeholders.add(placeholder);
