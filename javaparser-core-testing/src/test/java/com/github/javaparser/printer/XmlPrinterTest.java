@@ -22,9 +22,12 @@
 package com.github.javaparser.printer;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseType;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.type.Type;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -161,7 +164,19 @@ class XmlPrinterTest {
         String output = xmlOutput.output(expression);
 
         assertXMLEquals(
-                "<root type='BinaryExpr' operator='PLUS'><left type='IntegerLiteralExpr' value='1'></left><right type='IntegerLiteralExpr' value='1'></right></root>",
+                "<root _type='BinaryExpr' operator='PLUS'><left _type='IntegerLiteralExpr' value='1'></left><right _type='IntegerLiteralExpr' value='1'></right></root>",
+                output);
+    }
+
+    @Test
+    void testWithTypeXmlKeyCollision() throws SAXException, IOException {
+        Type type = parseType("int");
+        XmlPrinter xmlOutput = new XmlPrinter(true);
+
+        String output = xmlOutput.output(type);
+
+        assertXMLEquals(
+                "<root _type='PrimitiveType' type='INT'></root>",
                 output);
     }
 
@@ -185,7 +200,7 @@ class XmlPrinterTest {
         String output = xmlOutput.output(expression);
 
         assertXMLEquals(
-                "<root type='MethodCallExpr'><name type='SimpleName' identifier='a'></name><arguments><argument type='IntegerLiteralExpr' value='1'></argument><argument type='IntegerLiteralExpr' value='2'></argument></arguments></root>",
+                "<root _type='MethodCallExpr'><name _type='SimpleName' identifier='a'></name><arguments><argument _type='IntegerLiteralExpr' value='1'></argument><argument _type='IntegerLiteralExpr' value='2'></argument></arguments></root>",
                 output);
     }
 
