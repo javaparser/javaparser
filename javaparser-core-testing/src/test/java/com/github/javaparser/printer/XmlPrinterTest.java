@@ -164,7 +164,12 @@ class XmlPrinterTest {
         String output = xmlOutput.output(expression);
 
         assertXMLEquals(
-                "<root _type='BinaryExpr' operator='PLUS'><left _type='IntegerLiteralExpr' value='1'></left><right _type='IntegerLiteralExpr' value='1'></right></root>",
+                ""
+                        // Expected
+                        + "<root nodeType='BinaryExpr' operator='PLUS'>"
+                        + "<left nodeType='IntegerLiteralExpr' value='1'></left>"
+                        + "<right nodeType='IntegerLiteralExpr' value='1'></right>"
+                        + "</root>",
                 output);
     }
 
@@ -176,7 +181,7 @@ class XmlPrinterTest {
         String output = xmlOutput.output(type);
 
         assertXMLEquals(
-                "<root _type='PrimitiveType' type='INT'></root>",
+                "<root nodeType='PrimitiveType' type='INT'></root>",
                 output);
     }
 
@@ -200,7 +205,15 @@ class XmlPrinterTest {
         String output = xmlOutput.output(expression);
 
         assertXMLEquals(
-                "<root _type='MethodCallExpr'><name _type='SimpleName' identifier='a'></name><arguments><argument _type='IntegerLiteralExpr' value='1'></argument><argument _type='IntegerLiteralExpr' value='2'></argument></arguments></root>",
+                ""
+                        // Expected
+                        + "<root nodeType='MethodCallExpr'>"
+                        + "<name nodeType='SimpleName' identifier='a'></name>"
+                        + "<arguments>"
+                        + "<argument nodeType='IntegerLiteralExpr' value='1'></argument>"
+                        + "<argument nodeType='IntegerLiteralExpr' value='2'></argument>"
+                        + "</arguments>"
+                        + "</root>",
                 output);
     }
 
