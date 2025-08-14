@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -180,9 +179,7 @@ class XmlPrinterTest {
 
         String output = xmlOutput.output(type);
 
-        assertXMLEquals(
-                "<root nodeType='PrimitiveType' type='INT'></root>",
-                output);
+        assertXMLEquals("<root nodeType='PrimitiveType' type='INT'></root>", output);
     }
 
     @Test
