@@ -182,7 +182,7 @@ public class XmlPrinter {
         xmlWriter.writeStartElement(name);
         // Output node type attribute
         if (outputNodeType) {
-            xmlWriter.writeAttribute("type", metaModel.getTypeName());
+            xmlWriter.writeAttribute("nodeType", metaModel.getTypeName());
         }
         try {
             // Output attributes

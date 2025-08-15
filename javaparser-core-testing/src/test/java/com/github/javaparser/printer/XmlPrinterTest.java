@@ -22,9 +22,11 @@
 package com.github.javaparser.printer;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseType;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.type.Type;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -161,8 +163,23 @@ class XmlPrinterTest {
         String output = xmlOutput.output(expression);
 
         assertXMLEquals(
-                "<root type='BinaryExpr' operator='PLUS'><left type='IntegerLiteralExpr' value='1'></left><right type='IntegerLiteralExpr' value='1'></right></root>",
+                ""
+                        // Expected
+                        + "<root nodeType='BinaryExpr' operator='PLUS'>"
+                        + "<left nodeType='IntegerLiteralExpr' value='1'></left>"
+                        + "<right nodeType='IntegerLiteralExpr' value='1'></right>"
+                        + "</root>",
                 output);
+    }
+
+    @Test
+    void testWithTypeXmlKeyCollision() throws SAXException, IOException {
+        Type type = parseType("int");
+        XmlPrinter xmlOutput = new XmlPrinter(true);
+
+        String output = xmlOutput.output(type);
+
+        assertXMLEquals("<root nodeType='PrimitiveType' type='INT'></root>", output);
     }
 
     @Test
@@ -185,7 +202,15 @@ class XmlPrinterTest {
         String output = xmlOutput.output(expression);
 
         assertXMLEquals(
-                "<root type='MethodCallExpr'><name type='SimpleName' identifier='a'></name><arguments><argument type='IntegerLiteralExpr' value='1'></argument><argument type='IntegerLiteralExpr' value='2'></argument></arguments></root>",
+                ""
+                        // Expected
+                        + "<root nodeType='MethodCallExpr'>"
+                        + "<name nodeType='SimpleName' identifier='a'></name>"
+                        + "<arguments>"
+                        + "<argument nodeType='IntegerLiteralExpr' value='1'></argument>"
+                        + "<argument nodeType='IntegerLiteralExpr' value='2'></argument>"
+                        + "</arguments>"
+                        + "</root>",
                 output);
     }
 
