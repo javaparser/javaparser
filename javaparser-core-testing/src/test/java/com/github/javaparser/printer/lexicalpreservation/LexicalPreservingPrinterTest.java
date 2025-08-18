@@ -36,6 +36,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
@@ -1884,5 +1885,133 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         String code = "class A {void foo(int p1, float p2) { }}";
         CompilationUnit cu = StaticJavaParser.parse(code);
         assertNotEquals(code, cu.toString());
+    }
+
+    // This test reproduces the exact issue from #4781
+    @Test
+    public void issue4781() {
+        // Given
+        ParserConfiguration config = new ParserConfiguration();
+        config.setLexicalPreservationEnabled(true);
+
+        CompilationUnit cu =
+                new JavaParser(config).parse("class Foo {\n" + "}").getResult().get();
+
+        // When
+        LexicalPreservingPrinter.setup(cu);
+        cu.getType(0).addField(PrimitiveType.intType(), "foo");
+
+        String actualOutput = LexicalPreservingPrinter.print(cu);
+        String expectedOutput = "class Foo {\n\nint foo;\n}";
+
+        // Then
+        assertEquals(expectedOutput, actualOutput, "Issue #4781: PrimitiveType keyword should not be missing");
+
+        assertTrue(actualOutput.contains("int foo;"), "The primitive type keyword 'int' must be present in the output");
+    }
+
+    @Test
+    public void testAddFieldWithLexicalPreservation() {
+        // Given
+        ParserConfiguration config = new ParserConfiguration();
+        config.setLexicalPreservationEnabled(true);
+
+        CompilationUnit cu =
+                new JavaParser(config).parse("class Foo {\n" + "}").getResult().get();
+
+        LexicalPreservingPrinter.setup(cu);
+
+        // When
+        cu.getType(0).addField(PrimitiveType.intType(), "foo");
+        String result = LexicalPreservingPrinter.print(cu);
+
+        // Then
+        String expected = "class Foo {\n\nint foo;\n}";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testAddMultipleFieldsWithLexicalPreservation() {
+        // Given
+        ParserConfiguration config = new ParserConfiguration();
+        config.setLexicalPreservationEnabled(true);
+
+        CompilationUnit cu = new JavaParser(config)
+                .parse("class TestClass {\n" + "}")
+                .getResult()
+                .get();
+
+        LexicalPreservingPrinter.setup(cu);
+
+        // When
+        cu.getType(0).addField(PrimitiveType.intType(), "number");
+        cu.getType(0).addField(PrimitiveType.booleanType(), "flag");
+        cu.getType(0).addField(PrimitiveType.doubleType(), "value");
+
+        String result = LexicalPreservingPrinter.print(cu);
+
+        // Then
+        assertTrue(result.contains("int number;"), "Should contain int field");
+        assertTrue(result.contains("boolean flag;"), "Should contain boolean field");
+        assertTrue(result.contains("double value;"), "Should contain double field");
+    }
+
+    @Test
+    public void testDifferentPrimitiveTypes() {
+        // Given
+        ParserConfiguration config = new ParserConfiguration();
+        config.setLexicalPreservationEnabled(true);
+
+        CompilationUnit cu = new JavaParser(config)
+                .parse("class PrimitiveTest {\n}")
+                .getResult()
+                .get();
+
+        LexicalPreservingPrinter.setup(cu);
+
+        // When
+        cu.getType(0).addField(PrimitiveType.byteType(), "byteField");
+        cu.getType(0).addField(PrimitiveType.shortType(), "shortField");
+        cu.getType(0).addField(PrimitiveType.intType(), "intField");
+        cu.getType(0).addField(PrimitiveType.longType(), "longField");
+        cu.getType(0).addField(PrimitiveType.floatType(), "floatField");
+        cu.getType(0).addField(PrimitiveType.doubleType(), "doubleField");
+        cu.getType(0).addField(PrimitiveType.booleanType(), "booleanField");
+        cu.getType(0).addField(PrimitiveType.charType(), "charField");
+
+        String result = LexicalPreservingPrinter.print(cu);
+
+        // Then
+        assertTrue(result.contains("byte byteField;"));
+        assertTrue(result.contains("short shortField;"));
+        assertTrue(result.contains("int intField;"));
+        assertTrue(result.contains("long longField;"));
+        assertTrue(result.contains("float floatField;"));
+        assertTrue(result.contains("double doubleField;"));
+        assertTrue(result.contains("boolean booleanField;"));
+        assertTrue(result.contains("char charField;"));
+    }
+
+    @Test
+    public void testWithExistingFields() {
+        // Given
+        ParserConfiguration config = new ParserConfiguration();
+        config.setLexicalPreservationEnabled(true);
+
+        CompilationUnit cu = new JavaParser(config)
+                .parse("class Existing {\n" + "    private String name;\n" + "}")
+                .getResult()
+                .get();
+
+        LexicalPreservingPrinter.setup(cu);
+
+        // When
+        cu.getType(0).addField(PrimitiveType.intType(), "id");
+
+        String result = LexicalPreservingPrinter.print(cu);
+
+        // Then
+        assertTrue(result.contains("private String name;"));
+        assertTrue(result.contains("int id;"));
     }
 }
