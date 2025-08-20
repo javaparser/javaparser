@@ -74,7 +74,6 @@ import java.util.*;
  * 3. Use this printer to generate the modified source code with preserved formatting
  *
  */
-
 public class LexicalPreservingPrinter {
 
     private static String JAVA_UTIL_OPTIONAL = Optional.class.getCanonicalName();
