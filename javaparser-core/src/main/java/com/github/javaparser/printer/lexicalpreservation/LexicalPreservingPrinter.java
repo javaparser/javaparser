@@ -56,9 +56,22 @@ import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 /**
- * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
- * operating on the AST and then used them to reproduce the source code
- * in its original formatting including the AST changes.
+ * The LexicalPreservingPrinter is responsible for maintaining the original formatting
+ * and layout of Java source code when the Abstract Syntax Tree (AST) is modified.
+ *
+ * This printer works by:
+ * 1. Storing the original textual representation alongside the AST nodes
+ * 2. Tracking changes made to the AST through a sophisticated change tracking system
+ * 3. Applying only the necessary modifications while preserving unchanged portions
+ * 4. Maintaining original spacing, comments, and formatting wherever possible
+ *
+ * The lexical preservation is essential for code refactoring tools that need to
+ * modify code while maintaining its original style and readability.
+ *
+ * Usage Pattern:
+ * 1. Setup lexical preservation on a CompilationUnit before making changes
+ * 2. Modify the AST as needed
+ * 3. Use this printer to generate the modified source code with preserved formatting
  */
 public class LexicalPreservingPrinter {
 
@@ -66,6 +79,11 @@ public class LexicalPreservingPrinter {
 
     private static String JAVAPARSER_AST_NODELIST = NodeList.class.getCanonicalName();
 
+    /**
+     * Observer tracks changes made to AST nodes.
+     * The observer is responsible for detecting modifications to specific types
+     * of nodes and updating the lexical preservation data accordingly.
+     */
     private static AstObserver observer;
 
     /**
@@ -79,16 +97,18 @@ public class LexicalPreservingPrinter {
     // Factory methods
     //
     /**
-     * Prepares the node so it can be used in the print methods.
-     * The correct order is:
-     * <ol>
-     * <li>Parse some code</li>
-     * <li>Call this setup method on the result</li>
-     * <li>Make changes to the AST as desired</li>
-     * <li>Use one of the print methods on this class to print out the original source code with your changes added</li>
-     * </ol>
+     * Initializes lexical preservation for the given CompilationUnit.
+     * This method must be called before making any modifications to the AST
+     * if you want to preserve the original formatting.
      *
-     * @return the node passed as a parameter for your convenience.
+     * The setup process involves:
+     * 1. Parsing the original source code into tokens
+     * 2. Creating NodeText representations for each AST node
+     * 3. Establishing relationships between tokens and nodes
+     * 4. Setting up change observers to track future modifications
+     *
+     * @param cu The CompilationUnit to setup for lexical preservation
+     * @return The same CompilationUnit with lexical preservation enabled
      */
     public static <N extends Node> N setup(N node) {
         assertNotNull(node);
@@ -455,6 +475,19 @@ public class LexicalPreservingPrinter {
         }
     }
 
+    /**
+     * Stores the initial textual representation for all nodes in the AST.
+     * This method creates a NodeText object for each node that captures:
+     * - The original tokens associated with the node
+     * - Whitespace and formatting information
+     * - Comment associations
+     * - Token positions and relationships
+     *
+     * This initial storage is crucial for later determining what has changed
+     * and what should be preserved during printing.
+     *
+     * @param cu The root node to process
+     */
     private static void storeInitialText(Node root) {
         Map<Node, List<JavaToken>> tokensByNode = new IdentityHashMap<>();
         // We go over tokens and find to which nodes they belong. Note that we do not traverse the tokens as they were
@@ -484,6 +517,15 @@ public class LexicalPreservingPrinter {
         });
     }
 
+    /**
+     * Recursively stores initial text representation for all child nodes
+     * of the given parent node.
+     *
+     * This method ensures that every node in the AST has its original
+     * textual representation captured for lexical preservation.
+     *
+     * @param node The parent node whose children should be processed
+     */
     private static void storeInitialTextForOneNode(Node node, List<JavaToken> nodeTokens) {
         if (nodeTokens == null) {
             nodeTokens = Collections.emptyList();
@@ -531,7 +573,17 @@ public class LexicalPreservingPrinter {
     // Printing methods
     //
     /**
-     * Print a Node into a String, preserving the lexical information.
+     * Prints the given node to a string while preserving the original formatting
+     * where possible and applying changes where the AST has been modified.
+     *
+     * This method analyzes the changes made to the AST since lexical preservation
+     * was setup and generates output that:
+     * - Preserves original formatting for unchanged portions
+     * - Applies appropriate formatting for new or modified content
+     * - Maintains consistency with the original code style
+     *
+     * @param node The node to print (typically a CompilationUnit)
+     * @return A string representation of the node with preserved formatting
      */
     public static String print(Node node) {
         Printer printer = new DefaultLexicalPreservingPrinter();
