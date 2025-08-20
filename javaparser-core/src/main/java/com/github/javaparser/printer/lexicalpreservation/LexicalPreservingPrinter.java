@@ -72,7 +72,6 @@ import java.util.*;
  * 1. Setup lexical preservation on a CompilationUnit before making changes
  * 2. Modify the AST as needed
  * 3. Use this printer to generate the modified source code with preserved formatting
- *
  */
 public class LexicalPreservingPrinter {
 
