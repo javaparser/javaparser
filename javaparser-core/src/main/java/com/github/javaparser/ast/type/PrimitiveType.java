@@ -35,6 +35,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
+import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -84,7 +85,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return new PrimitiveType(Primitive.DOUBLE);
     }
 
-    public enum Primitive {
+    public enum Primitive implements Stringable {
         BOOLEAN("Boolean", "Z"),
         CHAR("Character", "C"),
         BYTE("Byte", "B"),
