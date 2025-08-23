@@ -598,7 +598,6 @@ public class LexicalPreservingPrinter {
             interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
             return;
         }
-
         if (node instanceof JavadocComment) {
             Comment comment = (JavadocComment) node;
             nodeText.addToken(
