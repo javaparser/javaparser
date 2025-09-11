@@ -183,7 +183,6 @@ class DifferenceElementCalculator {
     List<DifferenceElement> calculate(
             LexicalDifferenceCalculator.CalculatedSyntaxModel original,
             LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
-
         // For performance reasons we use the positions of matching children
         // to guide the calculation of the difference
         //
@@ -311,13 +310,10 @@ class DifferenceElementCalculator {
     private List<DifferenceElement> calculateImpl(
             LexicalDifferenceCalculator.CalculatedSyntaxModel original,
             LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
-
         String key = original.hashCode() + "-" + after.hashCode();
-
         if (cache.containsKey(key)) {
             return cache.get(key);
         }
-
         List<DifferenceElement> result = calculateImpl2(original, after);
         cache.put(key, result);
         return result;
