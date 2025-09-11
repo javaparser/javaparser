@@ -61,7 +61,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                 new LexicalDifferenceCalculator.CalculatedSyntaxModel(Collections.emptyList());
         LexicalDifferenceCalculator.CalculatedSyntaxModel b =
                 new LexicalDifferenceCalculator.CalculatedSyntaxModel(Collections.emptyList());
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(a, b);
+        List<DifferenceElement> differenceElements = new DifferenceElementCalculator().calculate(a, b);
         assertEquals(0, differenceElements.size());
     }
 
@@ -78,7 +78,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                         new CsmChild(n1),
                         new CsmToken(GeneratedJavaParserConstants.RPAREN),
                         new CsmChild(n2)));
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(a, b);
+        List<DifferenceElement> differenceElements = new DifferenceElementCalculator().calculate(a, b);
         assertEquals(4, differenceElements.size());
         assertEquals(added(new CsmToken(GeneratedJavaParserConstants.LPAREN)), differenceElements.get(0));
         assertEquals(added(new CsmChild(n1)), differenceElements.get(1));
@@ -99,7 +99,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                         new CsmChild(n2)));
         LexicalDifferenceCalculator.CalculatedSyntaxModel b =
                 new LexicalDifferenceCalculator.CalculatedSyntaxModel(Collections.emptyList());
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(a, b);
+        List<DifferenceElement> differenceElements = new DifferenceElementCalculator().calculate(a, b);
         assertEquals(4, differenceElements.size());
         assertEquals(removed(new CsmToken(GeneratedJavaParserConstants.LPAREN)), differenceElements.get(0));
         assertEquals(removed(new CsmChild(n1)), differenceElements.get(1));
@@ -117,7 +117,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator()
                 .calculatedSyntaxModelAfterPropertyChange(
                         element, cu, ObservableProperty.PACKAGE_DECLARATION, null, packageDeclaration);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         assertEquals(3, differenceElements.size());
         assertEquals(added(new CsmChild(packageDeclaration)), differenceElements.get(0));
         assertEquals(kept(new CsmChild(cu.getType(0))), differenceElements.get(1));
@@ -138,7 +139,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                         ObservableProperty.MODIFIERS,
                         new NodeList<>(),
                         createModifierList(PUBLIC));
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         DifferenceElementCalculator.removeIndentationElements(differenceElements);
         int i = 0;
         assertEquals(added(new CsmChild(Modifier.publicModifier())), differenceElements.get(i++));
@@ -181,7 +183,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                         ObservableProperty.NAME,
                         annotationDeclaration.getName(),
                         newName);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         DifferenceElementCalculator.removeIndentationElements(differenceElements);
         int i = 0;
         assertEquals(kept(new CsmToken(GeneratedJavaParserConstants.AT)), differenceElements.get(i++));
@@ -219,7 +222,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator()
                 .calculatedSyntaxModelAfterPropertyChange(
                         element, annotationDeclaration, ObservableProperty.COMMENT, null, comment);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         DifferenceElementCalculator.removeIndentationElements(differenceElements);
         int i = 0;
         assertEquals(kept(new CsmChild(Modifier.publicModifier())), differenceElements.get(i++));
@@ -261,7 +265,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                         ObservableProperty.COMMENT,
                         annotationDeclaration.getComment().get(),
                         null);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         DifferenceElementCalculator.removeIndentationElements(differenceElements);
         int i = 0;
         assertEquals(kept(new CsmChild(Modifier.publicModifier())), differenceElements.get(i++));
@@ -303,7 +308,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                         ObservableProperty.MODIFIERS,
                         createModifierList(PUBLIC),
                         new NodeList<>());
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         DifferenceElementCalculator.removeIndentationElements(differenceElements);
         int i = 0;
         assertEquals(removed(new CsmChild(Modifier.publicModifier())), differenceElements.get(i++));
@@ -339,7 +345,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator()
                 .calculatedSyntaxModelAfterPropertyChange(
                         md, ObservableProperty.DEFAULT_VALUE, md.getDefaultValue(), null);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         int i = 0;
         assertEquals(kept(new CsmChild(md.getType())), differenceElements.get(i++));
         assertEquals(kept(new CsmToken(spaceTokenKind())), differenceElements.get(i++));
@@ -362,7 +369,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
         Expression defaultValue = new IntegerLiteralExpr(("10"));
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator()
                 .calculatedSyntaxModelAfterPropertyChange(md, ObservableProperty.DEFAULT_VALUE, null, defaultValue);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         int i = 0;
         assertEquals(kept(new CsmChild(md.getType())), differenceElements.get(i++));
         assertEquals(kept(new CsmToken(spaceTokenKind())), differenceElements.get(i++));
@@ -385,7 +393,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator()
                 .calculatedSyntaxModelAfterPropertyChange(
                         cd, ObservableProperty.MODIFIERS, new NodeList<>(), createModifierList(PUBLIC));
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         int i = 0;
         assertEquals(added(new CsmChild(Modifier.publicModifier())), differenceElements.get(i++));
         assertEquals(added(new CsmToken(spaceTokenKind())), differenceElements.get(i++));
@@ -405,7 +414,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                 new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(ecd);
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator()
                 .calculatedSyntaxModelAfterPropertyChange(ecd, ObservableProperty.NAME, ecd.getName(), newName);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         int i = 0;
         assertEquals(DifferenceElement.removed(new CsmChild(ecd.getName())), differenceElements.get(i++));
         assertEquals(DifferenceElement.added(new CsmChild(newName)), differenceElements.get(i++));
@@ -425,7 +435,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                 .calculatedSyntaxModelForNode(m.getBody().get());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator()
                 .calculatedSyntaxModelAfterListAddition(m.getBody().get(), ObservableProperty.STATEMENTS, 0, s);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         int i = 0;
         assertEquals(
                 DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.LBRACE)), differenceElements.get(i++));
@@ -446,7 +457,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                 new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(md);
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator()
                 .calculatedSyntaxModelAfterListRemoval(md, ObservableProperty.PARAMETERS, 0);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         int i = 0;
         assertEquals(DifferenceElement.kept(new CsmChild(Modifier.publicModifier())), differenceElements.get(i++));
         assertEquals(DifferenceElement.kept(new CsmToken(spaceTokenKind())), differenceElements.get(i++));
@@ -471,7 +483,8 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
                 new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(md);
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator()
                 .calculatedSyntaxModelAfterListAddition(md, ObservableProperty.PARAMETERS, 0, newParameter);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(csmOriginal, csmChanged);
+        List<DifferenceElement> differenceElements =
+                new DifferenceElementCalculator().calculate(csmOriginal, csmChanged);
         int i = 0;
         assertEquals(DifferenceElement.kept(new CsmChild(Modifier.publicModifier())), differenceElements.get(i++));
         assertEquals(DifferenceElement.kept(new CsmToken(spaceTokenKind())), differenceElements.get(i++));
