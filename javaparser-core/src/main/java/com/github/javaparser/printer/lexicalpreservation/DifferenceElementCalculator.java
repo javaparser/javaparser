@@ -26,12 +26,11 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CalculatedSyntaxModel;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 class DifferenceElementCalculator {
+
+    private Map<String, List<DifferenceElement>> cache;
 
     // internally keep track of a node position in a List<CsmElement>
     public static class ChildPositionInfo {
@@ -120,7 +119,19 @@ class DifferenceElementCalculator {
                 a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
     }
 
-    private static boolean replacement(CsmElement a, CsmElement b) {
+    /**
+     * Remove from the difference all the elements related to indentation.
+     * This is mainly intended for test purposes.
+     */
+    static void removeIndentationElements(List<DifferenceElement> elements) {
+        elements.removeIf(el -> el.getElement() instanceof CsmIndent || el.getElement() instanceof CsmUnindent);
+    }
+
+    public DifferenceElementCalculator() {
+        cache = new HashMap<>();
+    }
+
+    private boolean replacement(CsmElement a, CsmElement b) {
         if (a instanceof CsmIndent || b instanceof CsmIndent || a instanceof CsmUnindent || b instanceof CsmUnindent) {
             return false;
         }
@@ -153,7 +164,7 @@ class DifferenceElementCalculator {
     /**
      * Find the positions of all the given children.
      */
-    private static List<ChildPositionInfo> findChildrenPositions(
+    private List<ChildPositionInfo> findChildrenPositions(
             LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel) {
         List<ChildPositionInfo> positions = new ArrayList<>();
         for (int i = 0; i < calculatedSyntaxModel.elements.size(); i++) {
@@ -169,7 +180,7 @@ class DifferenceElementCalculator {
      * Calculate the Difference between two CalculatedSyntaxModel elements, determining which elements were kept,
      * which were added and which were removed.
      */
-    static List<DifferenceElement> calculate(
+    List<DifferenceElement> calculate(
             LexicalDifferenceCalculator.CalculatedSyntaxModel original,
             LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
         // For performance reasons we use the positions of matching children
@@ -262,7 +273,7 @@ class DifferenceElementCalculator {
         return elements;
     }
 
-    private static void considerRemoval(NodeText nodeTextForChild, List<DifferenceElement> elements) {
+    private void considerRemoval(NodeText nodeTextForChild, List<DifferenceElement> elements) {
         for (TextElement el : nodeTextForChild.getElements()) {
             if (el instanceof ChildTextElement) {
                 ChildTextElement cte = (ChildTextElement) el;
@@ -276,7 +287,7 @@ class DifferenceElementCalculator {
         }
     }
 
-    private static int considerRemoval(CsmElement removedElement, int originalIndex, List<DifferenceElement> elements) {
+    private int considerRemoval(CsmElement removedElement, int originalIndex, List<DifferenceElement> elements) {
         boolean dealtWith = false;
         if (removedElement instanceof CsmChild) {
             CsmChild removedChild = (CsmChild) removedElement;
@@ -296,18 +307,34 @@ class DifferenceElementCalculator {
         return originalIndex;
     }
 
-    private static List<DifferenceElement> calculateImpl(
+    private List<DifferenceElement> calculateImpl(
             LexicalDifferenceCalculator.CalculatedSyntaxModel original,
             LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
+        String key = original.hashCode() + "-" + after.hashCode();
+        if (cache.containsKey(key)) {
+            return cache.get(key);
+        }
+        List<DifferenceElement> result = calculateImpl2(original, after);
+        cache.put(key, result);
+        return result;
+    }
+
+    private List<DifferenceElement> calculateImpl2(
+            LexicalDifferenceCalculator.CalculatedSyntaxModel original,
+            LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
+        // This list will hold the final differences between the two models.
         List<DifferenceElement> elements = new LinkedList<>();
+        // Pointers to traverse both sequences (before and after).
         int originalIndex = 0;
         int afterIndex = 0;
         // We move through the two CalculatedSyntaxModel, moving both forward when we have a match
         // and moving just one side forward when we have an element kept or removed
         do {
+            // elements remain only in the original sequence everything left must be marked as removed.
             if (originalIndex < original.elements.size() && afterIndex >= after.elements.size()) {
                 CsmElement removedElement = original.elements.get(originalIndex);
                 originalIndex = considerRemoval(removedElement, originalIndex, elements);
+                // elements remain only in the "after" sequence everything left must be marked as added.
             } else if (originalIndex >= original.elements.size() && afterIndex < after.elements.size()) {
                 elements.add(new Added(after.elements.get(afterIndex)));
                 afterIndex++;
@@ -315,30 +342,39 @@ class DifferenceElementCalculator {
                 CsmElement nextOriginal = original.elements.get(originalIndex);
                 CsmElement nextAfter = after.elements.get(afterIndex);
                 if ((nextOriginal instanceof CsmMix) && (nextAfter instanceof CsmMix)) {
+                    // If sub-elements are identical, mark everything as kept
                     if (((CsmMix) nextAfter).getElements().equals(((CsmMix) nextOriginal).getElements())) {
                         // No reason to deal with a reshuffled, we are just going to keep everything as it is
                         ((CsmMix) nextAfter).getElements().forEach(el -> elements.add(new Kept(el)));
                     } else {
+                        // Otherwise, same type but with shuffled/reorganized content
                         elements.add(new Reshuffled((CsmMix) nextOriginal, (CsmMix) nextAfter));
                     }
                     originalIndex++;
                     afterIndex++;
                 } else if (matching(nextOriginal, nextAfter)) {
+                    // The two elements match according to a custom "matching" rule
                     elements.add(new Kept(nextOriginal));
                     originalIndex++;
                     afterIndex++;
                 } else if (replacement(nextOriginal, nextAfter)) {
+                    // The two elements represent a replacement: remove the old one and add the new one.
                     originalIndex = considerRemoval(nextOriginal, originalIndex, elements);
                     elements.add(new Added(nextAfter));
                     afterIndex++;
+                    // Ambiguous case: it could be either an addition or a removal.
                 } else {
                     // We can try to remove the element or add it and look which one leads to the lower difference
+                    // Try hypothesis A: treat "nextAfter" as an addition
                     List<DifferenceElement> addingElements =
                             calculate(original.from(originalIndex), after.from(afterIndex + 1));
+                    long costAddingElements = cost(addingElements);
+                    // Try hypothesis B: treat "nextOriginal" as a removal
                     List<DifferenceElement> removingElements = null;
-                    if (cost(addingElements) > 0) {
+                    if (costAddingElements > 0) {
                         removingElements = calculate(original.from(originalIndex + 1), after.from(afterIndex));
                     }
+                    // Choose the cheaper option based on cost.
                     if (removingElements == null || cost(removingElements) > cost(addingElements)) {
                         elements.add(new Added(nextAfter));
                         afterIndex++;
@@ -352,15 +388,7 @@ class DifferenceElementCalculator {
         return elements;
     }
 
-    private static long cost(List<DifferenceElement> elements) {
+    private long cost(List<DifferenceElement> elements) {
         return elements.stream().filter(e -> !(e instanceof Kept)).count();
-    }
-
-    /**
-     * Remove from the difference all the elements related to indentation.
-     * This is mainly intended for test purposes.
-     */
-    static void removeIndentationElements(List<DifferenceElement> elements) {
-        elements.removeIf(el -> el.getElement() instanceof CsmIndent || el.getElement() instanceof CsmUnindent);
     }
 }
