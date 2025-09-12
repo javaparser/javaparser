@@ -6848,7 +6848,7 @@ KeyExecCtxtSV ExecutionContextSV() : {}
     }
 }
 
-KeyMethodSignatureSV MethodSignatureSV() : {}
+KeyMethodSignatureSV KeyMethodSignatureSV() : {}
 {
     <SVIDENTIFIER>
     {
