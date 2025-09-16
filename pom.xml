@@ -354,7 +354,8 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.6.0</version>
+                    <!-- This is the last version with Java 8 support -->
+                    <version>3.5.0</version>
                     <configuration>
                         <configLocation>dev-files/JavaParser-CheckStyle.xml</configLocation>
                         <logViolationsToConsole>true</logViolationsToConsole>
@@ -364,7 +365,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>11.0.1</version>
+                            <version>10.26.1</version>
                         </dependency>
                     </dependencies>
                 </plugin>
