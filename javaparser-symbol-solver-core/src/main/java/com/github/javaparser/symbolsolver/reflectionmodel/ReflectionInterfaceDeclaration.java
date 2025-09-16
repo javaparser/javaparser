@@ -138,40 +138,247 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         return clazz.hashCode();
     }
 
-    @Override
+    /**
+     * Solves method usage with proper generic type inference, including support for varargs methods.
+     * This method first resolves the basic method signature, then performs generic type inference
+     * based on the actual parameter types provided at the call site.
+     *
+     * @param name the method name to resolve
+     * @param parameterTypes the actual parameter types at the call site
+     * @param invokationContext the context where the method is invoked
+     * @param typeParameterValues explicit type parameter values (if any)
+     * @return an Optional containing the resolved MethodUsage with inferred types, or empty if resolution fails
+     */
     public Optional<MethodUsage> solveMethodAsUsage(
             String name,
             List<ResolvedType> parameterTypes,
             Context invokationContext,
             List<ResolvedType> typeParameterValues) {
+
         Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(
                 name, parameterTypes, typeSolver, invokationContext, typeParameterValues, this, clazz);
-        if (res.isPresent()) {
-            // We have to replace method type typeParametersValues here
-            InferenceContext inferenceContext = new InferenceContext(typeSolver);
-            MethodUsage methodUsage = res.get();
-            int i = 0;
-            List<ResolvedType> parameters = new LinkedList<>();
-            for (ResolvedType actualType : parameterTypes) {
-                ResolvedType formalType = methodUsage.getParamType(i);
-                // We need to replace the class type typeParametersValues (while we derive the method ones)
 
-                parameters.add(inferenceContext.addPair(formalType, actualType));
-                i++;
-            }
-            try {
-                ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
-                for (int j = 0; j < parameters.size(); j++) {
-                    methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
-                }
-                methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
-                return Optional.of(methodUsage);
-            } catch (ConflictingGenericTypesException e) {
-                return Optional.empty();
-            }
-        } else {
+        if (!res.isPresent()) {
             return res;
         }
+
+        return performTypeInference(res.get(), parameterTypes);
+    }
+
+    /**
+     * Performs generic type inference on a resolved method usage by analyzing the relationship
+     * between formal parameter types and actual parameter types provided at the call site.
+     * Handles both regular methods and varargs methods with appropriate constraint collection.
+     *
+     * @param methodUsage the initially resolved method usage
+     * @param parameterTypes the actual parameter types from the call site
+     * @return an Optional containing the method usage with inferred generic types, or empty if inference fails
+     */
+    private Optional<MethodUsage> performTypeInference(MethodUsage methodUsage, List<ResolvedType> parameterTypes) {
+        try {
+            InferenceContext inferenceContext = new InferenceContext(typeSolver);
+            List<ResolvedType> constraintPairs = collectTypeConstraints(methodUsage, parameterTypes, inferenceContext);
+            return resolveInferredTypes(methodUsage, constraintPairs, inferenceContext);
+        } catch (ConflictingGenericTypesException e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Collects type constraints by comparing formal parameter types with actual parameter types.
+     * Automatically detects whether the method is varargs and delegates to the appropriate
+     * constraint collection strategy. Also validates that parameter counts are compatible.
+     *
+     * @param methodUsage the method usage to analyze
+     * @param parameterTypes the actual parameter types from the call site
+     * @param inferenceContext the inference context for collecting type constraints
+     * @return a list of type constraints that will be used for generic type resolution
+     * @throws IllegalArgumentException if parameter counts are incompatible
+     */
+    private List<ResolvedType> collectTypeConstraints(
+            MethodUsage methodUsage, List<ResolvedType> parameterTypes, InferenceContext inferenceContext) {
+
+        boolean isVarArgs = methodUsage.getDeclaration().hasVariadicParameter();
+        int formalParamCount = methodUsage.getNoParams();
+        int actualParamCount = parameterTypes.size();
+
+        validateParameterCount(isVarArgs, formalParamCount, actualParamCount);
+
+        if (isVarArgs) {
+            return collectVarArgsConstraints(methodUsage, parameterTypes, inferenceContext, formalParamCount);
+        } else {
+            return collectRegularConstraints(methodUsage, parameterTypes, inferenceContext);
+        }
+    }
+
+    /**
+     * Validates that the number of actual parameters is compatible with the method signature.
+     * For regular methods, counts must match exactly. For varargs methods, actual parameter
+     * count must be at least the number of required parameters (formal count - 1).
+     *
+     * @param isVarArgs whether the method is a varargs method
+     * @param formalParamCount the number of formal parameters in the method signature
+     * @param actualParamCount the number of actual parameters provided at the call site
+     * @throws IllegalArgumentException if parameter counts are incompatible
+     */
+    private void validateParameterCount(boolean isVarArgs, int formalParamCount, int actualParamCount) {
+        if (isVarArgs && actualParamCount < formalParamCount - 1) {
+            throw new IllegalArgumentException("Too few parameters for varargs method");
+        }
+        if (!isVarArgs && actualParamCount != formalParamCount) {
+            throw new IllegalArgumentException("Parameter count mismatch for non-varargs method");
+        }
+    }
+
+    /**
+     * Collects type constraints for regular (non-varargs) methods by creating pairs
+     * between each formal parameter type and its corresponding actual parameter type.
+     * This is a straightforward one-to-one mapping since parameter counts must match exactly.
+     *
+     * @param methodUsage the method usage to analyze
+     * @param parameterTypes the actual parameter types from the call site
+     * @param inferenceContext the inference context for collecting constraints
+     * @return a list of type constraints, one for each parameter position
+     */
+    private List<ResolvedType> collectRegularConstraints(
+            MethodUsage methodUsage, List<ResolvedType> parameterTypes, InferenceContext inferenceContext) {
+        List<ResolvedType> constraints = new LinkedList<>();
+
+        for (int i = 0; i < parameterTypes.size(); i++) {
+            ResolvedType formalType = methodUsage.getParamType(i);
+            ResolvedType actualType = parameterTypes.get(i);
+            constraints.add(inferenceContext.addPair(formalType, actualType));
+        }
+
+        return constraints;
+    }
+
+    /**
+     * Collects type constraints for varargs methods. This involves two phases:
+     * 1. Regular parameters: handled like non-varargs methods (one-to-one mapping)
+     * 2. Varargs parameter: handled specially based on how arguments are passed
+     *
+     * The varargs parameter can receive arguments in two ways:
+     * - Direct array passing: method(array) - constraint between array types
+     * - Individual elements: method(elem1, elem2, ...) - constraints between component type and each element
+     *
+     * @param methodUsage the varargs method usage to analyze
+     * @param parameterTypes the actual parameter types from the call site
+     * @param inferenceContext the inference context for collecting constraints
+     * @param formalParamCount the total number of formal parameters (including varargs)
+     * @return a list of type constraints covering both regular and varargs parameters
+     */
+    private List<ResolvedType> collectVarArgsConstraints(
+            MethodUsage methodUsage,
+            List<ResolvedType> parameterTypes,
+            InferenceContext inferenceContext,
+            int formalParamCount) {
+        List<ResolvedType> constraints = new LinkedList<>();
+        int regularParamCount = formalParamCount - 1;
+
+        // Process regular parameters
+        for (int i = 0; i < regularParamCount; i++) {
+            ResolvedType formalType = methodUsage.getParamType(i);
+            ResolvedType actualType = parameterTypes.get(i);
+            constraints.add(inferenceContext.addPair(formalType, actualType));
+        }
+
+        // Process varargs parameter
+        if (formalParamCount > 0) {
+            ResolvedType varargsParamType = methodUsage.getParamType(regularParamCount);
+            processVarArgsParameter(varargsParamType, parameterTypes, regularParamCount, inferenceContext, constraints);
+        }
+
+        return constraints;
+    }
+
+    /**
+     * Processes the varargs parameter by determining how arguments are passed and creating
+     * appropriate type constraints. Handles two scenarios:
+     *
+     * 1. Direct array passing: When exactly one argument is passed to varargs and it's an array,
+     *    creates a constraint between the formal array type and the actual array type.
+     *    Example: method(String[] args) called as method(stringArray)
+     *
+     * 2. Individual element passing: When multiple arguments are passed to varargs,
+     *    creates constraints between the array's component type and each individual argument.
+     *    Example: method(String... args) called as method("a", "b", "c")
+     *
+     * @param varargsParamType the formal type of the varargs parameter (must be an array type)
+     * @param parameterTypes all actual parameter types from the call site
+     * @param regularParamCount the number of regular (non-varargs) parameters
+     * @param inferenceContext the inference context for collecting constraints
+     * @param constraints the constraint list to add new constraints to
+     * @throws IllegalStateException if the varargs parameter is not an array type
+     */
+    private void processVarArgsParameter(
+            ResolvedType varargsParamType,
+            List<ResolvedType> parameterTypes,
+            int regularParamCount,
+            InferenceContext inferenceContext,
+            List<ResolvedType> constraints) {
+        if (!varargsParamType.isArray()) {
+            throw new IllegalStateException("Varargs parameter is not an array type");
+        }
+
+        ResolvedType componentType = varargsParamType.asArrayType().getComponentType();
+        int actualParamCount = parameterTypes.size();
+
+        if (isDirectArrayPassing(parameterTypes, regularParamCount, actualParamCount)) {
+            // Direct array passing: method(array)
+            ResolvedType actualArrayType = parameterTypes.get(regularParamCount);
+            constraints.add(inferenceContext.addPair(varargsParamType, actualArrayType));
+        } else {
+            // Individual elements passing: method(elem1, elem2, ...)
+            for (int i = regularParamCount; i < actualParamCount; i++) {
+                ResolvedType actualType = parameterTypes.get(i);
+                constraints.add(inferenceContext.addPair(componentType, actualType));
+            }
+        }
+    }
+
+    /**
+     * Determines whether arguments are being passed directly as an array to the varargs parameter.
+     * This happens when there is exactly one argument for the varargs parameter and that argument
+     * is an array type. This is a special case that requires different constraint handling.
+     *
+     * @param parameterTypes all actual parameter types from the call site
+     * @param regularParamCount the number of regular (non-varargs) parameters
+     * @param actualParamCount the total number of actual parameters
+     * @return true if a single array is being passed directly to varargs, false otherwise
+     */
+    private boolean isDirectArrayPassing(
+            List<ResolvedType> parameterTypes, int regularParamCount, int actualParamCount) {
+        return actualParamCount == regularParamCount + 1
+                && parameterTypes.get(regularParamCount).isArray();
+    }
+
+    /**
+     * Applies the inferred generic types to the method usage by resolving all collected constraints
+     * and updating both parameter types and return type with their concrete resolved types.
+     * This is the final step that produces a fully resolved MethodUsage with no remaining generic placeholders.
+     *
+     * @param methodUsage the method usage to update with resolved types
+     * @param constraints the collected type constraints from parameter analysis
+     * @param inferenceContext the inference context containing all type relationships
+     * @return an Optional containing the fully resolved MethodUsage
+     * @throws ConflictingGenericTypesException if type constraints are contradictory
+     */
+    private Optional<MethodUsage> resolveInferredTypes(
+            MethodUsage methodUsage, List<ResolvedType> constraints, InferenceContext inferenceContext) {
+        // Resolve return type
+        ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
+
+        // Apply resolved parameter types
+        for (int i = 0; i < constraints.size() && i < methodUsage.getNoParams(); i++) {
+            ResolvedType resolvedParamType = inferenceContext.resolve(constraints.get(i));
+            methodUsage = methodUsage.replaceParamType(i, resolvedParamType);
+        }
+
+        // Apply resolved return type
+        methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
+
+        return Optional.of(methodUsage);
     }
 
     @Override
