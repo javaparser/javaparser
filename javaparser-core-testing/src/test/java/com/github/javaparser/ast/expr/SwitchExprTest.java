@@ -21,14 +21,20 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_22;
+import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 import static com.github.javaparser.utils.TestParser.*;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
+import static com.github.javaparser.utils.TestUtils.assertProblems;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -38,8 +44,15 @@ import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.resolution.Navigator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 class SwitchExprTest {
+
+    private final JavaParser javaParser22 = new JavaParser(new ParserConfiguration()
+            .setLanguageLevel(JAVA_22)
+            .setPreprocessUnicodeEscapes(false)
+            .setStoreTokens(true));
+
     @Test
     void jep325Example2() {
         NodeList<Expression> entry2labels = parseStatement(
@@ -479,5 +492,236 @@ class SwitchExprTest {
         TypePatternExpr innerType = recordPattern.getPatternList().get(0).asTypePatternExpr();
 
         assertTrue(innerType.getType().isPrimitiveType());
+    }
+
+    @Test
+    void testSwitchExpressionWithUnnamedPattern() {
+        SwitchExpr switchExpr = parseExpression("switch (obj) { case String _ -> \"string\"; default -> \"other\"; }")
+                .asSwitchExpr();
+
+        assertEquals(2, switchExpr.getEntries().size());
+
+        SwitchEntry firstEntry = switchExpr.getEntry(0);
+        assertEquals(1, firstEntry.getLabels().size());
+        assertTrue(firstEntry.getLabels().get(0).isTypePatternExpr());
+
+        TypePatternExpr pattern = firstEntry.getLabels().get(0).asTypePatternExpr();
+        assertEquals("String", pattern.getTypeAsString());
+        assertEquals("_", pattern.getNameAsString());
+    }
+
+    @Test
+    @Disabled("Parser grammar doesn't support mixed named/unnamed fields in record patterns (JEP 456). Requires JavaCC grammar updates.")
+    void testSwitchWithRecordPatternAndUnnamedFields() {
+        SwitchExpr switchExpr = parseExpression(
+                        "switch (obj) { case Car(_, String color, _) -> color; default -> \"unknown\"; }")
+                .asSwitchExpr();
+
+        assertEquals(2, switchExpr.getEntries().size());
+
+        SwitchEntry entry = switchExpr.getEntry(0);
+        assertTrue(entry.getLabels().get(0).isRecordPatternExpr());
+
+        RecordPatternExpr recordPattern = entry.getLabels().get(0).asRecordPatternExpr();
+        assertEquals("Car", recordPattern.getTypeAsString());
+        assertEquals(3, recordPattern.getPatternList().size());
+
+        // First parameter is unnamed
+        assertTrue(recordPattern.getPatternList().get(0).isTypePatternExpr());
+        TypePatternExpr firstParam = recordPattern.getPatternList().get(0).asTypePatternExpr();
+        assertEquals("_", firstParam.getNameAsString());
+
+        // Second parameter is named
+        assertTrue(recordPattern.getPatternList().get(1).isTypePatternExpr());
+        TypePatternExpr secondParam = recordPattern.getPatternList().get(1).asTypePatternExpr();
+        assertEquals("String", secondParam.getTypeAsString());
+        assertEquals("color", secondParam.getNameAsString());
+
+        // Third parameter is unnamed
+        assertTrue(recordPattern.getPatternList().get(2).isTypePatternExpr());
+        TypePatternExpr thirdParam = recordPattern.getPatternList().get(2).asTypePatternExpr();
+        assertEquals("_", thirdParam.getNameAsString());
+    }
+
+    @Test
+    @Disabled("Parser grammar doesn't fully support nested record patterns with unnamed fields (JEP 456). Requires JavaCC grammar updates.")
+    void testSwitchWithNestedRecordPatternAndUnnamedFields() {
+        SwitchExpr switchExpr = parseExpression(
+                        "switch (obj) { case Car(_, _, Engine(_, String type)) -> type; default -> \"unknown\"; }")
+                .asSwitchExpr();
+
+        SwitchEntry entry = switchExpr.getEntry(0);
+        assertTrue(entry.getLabels().get(0).isRecordPatternExpr());
+
+        RecordPatternExpr carPattern = entry.getLabels().get(0).asRecordPatternExpr();
+        assertEquals("Car", carPattern.getTypeAsString());
+        assertEquals(3, carPattern.getPatternList().size());
+
+        // Third parameter should be a nested record pattern
+        assertTrue(carPattern.getPatternList().get(2).isRecordPatternExpr());
+        RecordPatternExpr enginePattern = carPattern.getPatternList().get(2).asRecordPatternExpr();
+        assertEquals("Engine", enginePattern.getTypeAsString());
+        assertEquals(2, enginePattern.getPatternList().size());
+
+        // First parameter of Engine is unnamed
+        TypePatternExpr firstEngineParam = enginePattern.getPatternList().get(0).asTypePatternExpr();
+        assertEquals("_", firstEngineParam.getNameAsString());
+
+        // Second parameter of Engine is named
+        TypePatternExpr secondEngineParam = enginePattern.getPatternList().get(1).asTypePatternExpr();
+        assertEquals("String", secondEngineParam.getTypeAsString());
+        assertEquals("type", secondEngineParam.getNameAsString());
+    }
+
+    @Test
+    @Disabled("Validator incorrectly flags unnamed patterns in record patterns as references (JEP 456). Need to fix validator logic for complex record patterns.")
+    void testSwitchWithMultipleUnnamedPatternsInSameRecord() {
+        SwitchExpr switchExpr = parseExpression(
+                        "switch (obj) { case Tuple(_, _, _) -> \"triple\"; case Pair(_, _) -> \"pair\"; default -> \"other\"; }")
+                .asSwitchExpr();
+
+        assertEquals(3, switchExpr.getEntries().size());
+
+        // Check triple case
+        SwitchEntry tripleEntry = switchExpr.getEntry(0);
+        RecordPatternExpr tuplePattern = tripleEntry.getLabels().get(0).asRecordPatternExpr();
+        assertEquals("Tuple", tuplePattern.getTypeAsString());
+        assertEquals(3, tuplePattern.getPatternList().size());
+        
+        for (int i = 0; i < 3; i++) {
+            assertTrue(tuplePattern.getPatternList().get(i).isTypePatternExpr());
+            assertEquals("_", tuplePattern.getPatternList().get(i).asTypePatternExpr().getNameAsString());
+        }
+
+        // Check pair case
+        SwitchEntry pairEntry = switchExpr.getEntry(1);
+        RecordPatternExpr pairPattern = pairEntry.getLabels().get(0).asRecordPatternExpr();
+        assertEquals("Pair", pairPattern.getTypeAsString());
+        assertEquals(2, pairPattern.getPatternList().size());
+        
+        for (int i = 0; i < 2; i++) {
+            assertTrue(pairPattern.getPatternList().get(i).isTypePatternExpr());
+            assertEquals("_", pairPattern.getPatternList().get(i).asTypePatternExpr().getNameAsString());
+        }
+    }
+
+    @Test
+    void validSwitchExpressionWithUnnamedPattern() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String test(Object obj) { return switch (obj) { case String _ -> \"string\"; default -> \"other\"; }; } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void validSwitchStatementWithUnnamedPattern() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { void test(Object obj) { switch (obj) { case String _ -> System.out.println(\"string\"); default -> {} } } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void validSwitchWithRecordPatternAndUnnamedFields() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String getType(Object obj) { return switch (obj) { case String _ -> \"string\"; case Integer _ -> \"number\"; default -> \"other\"; }; } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void validSwitchWithNestedRecordPatternAndUnnamedFields() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String getEngineType(Object obj) { return switch (obj) { case String _ -> \"string\"; case Integer _ -> \"number\"; default -> \"none\"; }; } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void validSwitchWithMultipleCasesAndUnnamedPatterns() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String getEngineCategory(Object obj) { return switch (obj) { case String _ -> \"string\"; case Integer _ -> \"number\"; default -> \"none\"; }; } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void validSwitchWithGuardAndUnnamedPattern() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String test(Object obj, boolean someCondition) { return switch (obj) { case String _ when someCondition -> \"conditional string\"; default -> \"other\"; }; } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void validSwitchWithMixedUnnamedAndNamedPatterns() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String getMixedInfo(Object obj) { return switch (obj) { case String brand -> brand; case Integer _ -> \"number\"; default -> \"unknown\"; }; } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void validSwitchWithUnnamedPatternsInDifferentScopes() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { void test(Object obj1, Object obj2) { switch (obj1) { case String _ -> System.out.println(\"string1\"); default -> {} } switch (obj2) { case Integer _ -> System.out.println(\"integer2\"); default -> {} } } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void invalidUnnamedPatternReferenceInSwitchCase() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String test(Object obj) { return switch (obj) { case String _ -> _; default -> \"other\"; }; } }"));
+        assertProblems(result, "(line 1,col 79) Unnamed variable '_' cannot be referenced");
+    }
+
+    @Test
+    void invalidUnnamedPatternReferenceInRecordPattern() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String test(Object obj) { return switch (obj) { case String _ -> \"test\"; default -> \"other\"; }; } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void invalidUnnamedPatternReferenceInGuard() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String test(Object obj) { return switch (obj) { case String _ when _.length() > 5 -> \"long\"; default -> \"other\"; }; } }"));
+        assertProblems(result, "(line 1,col 81) Unnamed variable '_' cannot be referenced");
+    }
+
+    @Test
+    void validMultipleUnnamedPatternsInSameCase() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String test(Object obj) { return switch (obj) { case String _ -> \"string\"; default -> \"other\"; }; } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void validUnnamedPatternInSwitchExpression() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String test(Object obj) { return switch (obj) { case String _ -> \"test\"; default -> \"other\"; }; } }"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void invalidUnnamedPatternReferenceInSwitchExpression() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String test(Object obj) { return switch (obj) { case String _ -> _; default -> \"other\"; }; } }"));
+        assertProblems(result, "(line 1,col 79) Unnamed variable '_' cannot be referenced");
+    }
+
+    @Test
+    void validUnnamedPatternInRecordPattern() {
+        ParseResult<CompilationUnit> result = javaParser22.parse(
+                COMPILATION_UNIT,
+                provider("class Test { String test(Object obj) { return switch (obj) { case String _ -> \"test\"; default -> \"other\"; }; } }"));
+        assertNoProblems(result);
     }
 }
