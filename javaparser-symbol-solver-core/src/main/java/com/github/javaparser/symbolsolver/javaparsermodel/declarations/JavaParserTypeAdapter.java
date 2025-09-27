@@ -137,6 +137,10 @@ public class JavaParserTypeAdapter<
                         return SymbolReference.solved(new JavaParserAnnotationDeclaration(
                                 (com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
                     }
+                    if (internalType instanceof RecordDeclaration) {
+                        return SymbolReference.solved(new JavaParserRecordDeclaration(
+                                (com.github.javaparser.ast.body.RecordDeclaration) internalType, typeSolver));
+                    }
                     throw new UnsupportedOperationException();
                 }
                 if (name.startsWith(prefix) && name.length() > prefix.length()) {
