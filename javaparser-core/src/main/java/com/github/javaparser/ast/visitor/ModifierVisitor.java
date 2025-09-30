@@ -570,9 +570,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final InstanceOfExpr n, final A arg) {
         Expression expression = (Expression) n.getExpression().accept(this, arg);
-        ComponentPatternExpr pattern = n.getPattern()
-                .map(s -> (ComponentPatternExpr) s.accept(this, arg))
-                .orElse(null);
+        PatternExpr pattern =
+                n.getPattern().map(s -> (PatternExpr) s.accept(this, arg)).orElse(null);
         ReferenceType type = (ReferenceType) n.getType().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expression == null || type == null) return null;

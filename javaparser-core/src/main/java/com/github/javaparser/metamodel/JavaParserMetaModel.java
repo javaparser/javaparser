@@ -1721,8 +1721,8 @@ public final class JavaParserMetaModel {
         instanceOfExprMetaModel.patternPropertyMetaModel = new PropertyMetaModel(
                 instanceOfExprMetaModel,
                 "pattern",
-                com.github.javaparser.ast.expr.ComponentPatternExpr.class,
-                Optional.of(componentPatternExprMetaModel),
+                com.github.javaparser.ast.expr.PatternExpr.class,
+                Optional.of(patternExprMetaModel),
                 true,
                 false,
                 false,
