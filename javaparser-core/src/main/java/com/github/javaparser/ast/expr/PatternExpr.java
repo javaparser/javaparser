@@ -13,12 +13,11 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.TypedPatternExprMetaModel;
+import com.github.javaparser.metamodel.PatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public abstract class TypedPatternExpr extends ComponentPatternExpr
-        implements NodeWithType<ComponentPatternExpr, Type> {
+public abstract class PatternExpr extends ComponentPatternExpr implements NodeWithType<ComponentPatternExpr, Type> {
 
     /**
      * The types of record patters and top-level type patterns must be reference types, but nested type patterns
@@ -27,13 +26,13 @@ public abstract class TypedPatternExpr extends ComponentPatternExpr
     private Type type;
 
     @AllFieldsConstructor
-    public TypedPatternExpr(Type type) {}
+    public PatternExpr(Type type) {}
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TypedPatternExpr(TokenRange tokenRange, Type type) {
+    public PatternExpr(TokenRange tokenRange, Type type) {
         super(tokenRange);
         setType(type);
         customInitialization();
@@ -45,7 +44,7 @@ public abstract class TypedPatternExpr extends ComponentPatternExpr
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TypedPatternExpr setType(final Type type) {
+    public PatternExpr setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -67,25 +66,25 @@ public abstract class TypedPatternExpr extends ComponentPatternExpr
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isTypedPatternExpr() {
+    public boolean isPatternExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public TypedPatternExpr asTypedPatternExpr() {
+    public PatternExpr asPatternExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<TypedPatternExpr> toTypedPatternExpr() {
+    public Optional<PatternExpr> toPatternExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifTypedPatternExpr(Consumer<TypedPatternExpr> action) {
+    public void ifPatternExpr(Consumer<PatternExpr> action) {
         action.accept(this);
     }
 
@@ -104,13 +103,13 @@ public abstract class TypedPatternExpr extends ComponentPatternExpr
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public TypedPatternExpr clone() {
-        return (TypedPatternExpr) accept(new CloneVisitor(), null);
+    public PatternExpr clone() {
+        return (PatternExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public TypedPatternExprMetaModel getMetaModel() {
-        return JavaParserMetaModel.typedPatternExprMetaModel;
+    public PatternExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.patternExprMetaModel;
     }
 }

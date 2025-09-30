@@ -946,21 +946,21 @@ public abstract class Expression extends Node {
     public void ifMatchAllPatternExpr(Consumer<MatchAllPatternExpr> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isTypedPatternExpr() {
+    public boolean isPatternExpr() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public TypedPatternExpr asTypedPatternExpr() {
+    public PatternExpr asPatternExpr() {
         throw new IllegalStateException(
-                f("%s is not TypedPatternExpr, it is %s", this, this.getClass().getSimpleName()));
+                f("%s is not PatternExpr, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<TypedPatternExpr> toTypedPatternExpr() {
+    public Optional<PatternExpr> toPatternExpr() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifTypedPatternExpr(Consumer<TypedPatternExpr> action) {}
+    public void ifPatternExpr(Consumer<PatternExpr> action) {}
 }

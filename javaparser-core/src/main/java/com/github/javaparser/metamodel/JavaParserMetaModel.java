@@ -360,11 +360,11 @@ public final class JavaParserMetaModel {
         objectCreationExprMetaModel
                 .getConstructorParameters()
                 .add(objectCreationExprMetaModel.anonymousClassBodyPropertyMetaModel);
-        typedPatternExprMetaModel.getConstructorParameters().add(typedPatternExprMetaModel.typePropertyMetaModel);
+        patternExprMetaModel.getConstructorParameters().add(patternExprMetaModel.typePropertyMetaModel);
         recordPatternExprMetaModel
                 .getConstructorParameters()
                 .add(recordPatternExprMetaModel.modifiersPropertyMetaModel);
-        recordPatternExprMetaModel.getConstructorParameters().add(typedPatternExprMetaModel.typePropertyMetaModel);
+        recordPatternExprMetaModel.getConstructorParameters().add(patternExprMetaModel.typePropertyMetaModel);
         recordPatternExprMetaModel
                 .getConstructorParameters()
                 .add(recordPatternExprMetaModel.patternListPropertyMetaModel);
@@ -384,7 +384,7 @@ public final class JavaParserMetaModel {
         thisExprMetaModel.getConstructorParameters().add(thisExprMetaModel.typeNamePropertyMetaModel);
         typeExprMetaModel.getConstructorParameters().add(typeExprMetaModel.typePropertyMetaModel);
         typePatternExprMetaModel.getConstructorParameters().add(typePatternExprMetaModel.modifiersPropertyMetaModel);
-        typePatternExprMetaModel.getConstructorParameters().add(typedPatternExprMetaModel.typePropertyMetaModel);
+        typePatternExprMetaModel.getConstructorParameters().add(patternExprMetaModel.typePropertyMetaModel);
         typePatternExprMetaModel.getConstructorParameters().add(typePatternExprMetaModel.namePropertyMetaModel);
         unaryExprMetaModel.getConstructorParameters().add(unaryExprMetaModel.expressionPropertyMetaModel);
         unaryExprMetaModel.getConstructorParameters().add(unaryExprMetaModel.operatorPropertyMetaModel);
@@ -594,6 +594,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(objectCreationExprMetaModel);
         nodeMetaModels.add(packageDeclarationMetaModel);
         nodeMetaModels.add(parameterMetaModel);
+        nodeMetaModels.add(patternExprMetaModel);
         nodeMetaModels.add(primitiveTypeMetaModel);
         nodeMetaModels.add(receiverParameterMetaModel);
         nodeMetaModels.add(recordDeclarationMetaModel);
@@ -618,7 +619,6 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(typeMetaModel);
         nodeMetaModels.add(typeParameterMetaModel);
         nodeMetaModels.add(typePatternExprMetaModel);
-        nodeMetaModels.add(typedPatternExprMetaModel);
         nodeMetaModels.add(unaryExprMetaModel);
         nodeMetaModels.add(unionTypeMetaModel);
         nodeMetaModels.add(unknownTypeMetaModel);
@@ -2009,8 +2009,8 @@ public final class JavaParserMetaModel {
         objectCreationExprMetaModel
                 .getDerivedPropertyMetaModels()
                 .add(objectCreationExprMetaModel.usingDiamondOperatorPropertyMetaModel);
-        typedPatternExprMetaModel.typePropertyMetaModel = new PropertyMetaModel(
-                typedPatternExprMetaModel,
+        patternExprMetaModel.typePropertyMetaModel = new PropertyMetaModel(
+                patternExprMetaModel,
                 "type",
                 com.github.javaparser.ast.type.Type.class,
                 Optional.of(typeMetaModel),
@@ -2018,7 +2018,7 @@ public final class JavaParserMetaModel {
                 false,
                 false,
                 false);
-        typedPatternExprMetaModel.getDeclaredPropertyMetaModels().add(typedPatternExprMetaModel.typePropertyMetaModel);
+        patternExprMetaModel.getDeclaredPropertyMetaModels().add(patternExprMetaModel.typePropertyMetaModel);
         recordPatternExprMetaModel.modifiersPropertyMetaModel = new PropertyMetaModel(
                 recordPatternExprMetaModel,
                 "modifiers",
@@ -3227,12 +3227,12 @@ public final class JavaParserMetaModel {
             new ComponentPatternExprMetaModel(Optional.of(expressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final TypedPatternExprMetaModel typedPatternExprMetaModel =
-            new TypedPatternExprMetaModel(Optional.of(componentPatternExprMetaModel));
+    public static final PatternExprMetaModel patternExprMetaModel =
+            new PatternExprMetaModel(Optional.of(componentPatternExprMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final RecordPatternExprMetaModel recordPatternExprMetaModel =
-            new RecordPatternExprMetaModel(Optional.of(typedPatternExprMetaModel));
+            new RecordPatternExprMetaModel(Optional.of(patternExprMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final SingleMemberAnnotationExprMetaModel singleMemberAnnotationExprMetaModel =
@@ -3261,7 +3261,7 @@ public final class JavaParserMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final TypePatternExprMetaModel typePatternExprMetaModel =
-            new TypePatternExprMetaModel(Optional.of(typedPatternExprMetaModel));
+            new TypePatternExprMetaModel(Optional.of(patternExprMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final UnaryExprMetaModel unaryExprMetaModel =

@@ -22,7 +22,7 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.TypedPatternExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
 import java.util.Optional;
 
 /**
@@ -35,21 +35,15 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class TypedPatternExprMetaModel extends ComponentPatternExprMetaModel {
+public class PatternExprMetaModel extends ComponentPatternExprMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    TypedPatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                TypedPatternExpr.class,
-                "TypedPatternExpr",
-                "com.github.javaparser.ast.expr",
-                true,
-                false);
+    PatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, PatternExpr.class, "PatternExpr", "com.github.javaparser.ast.expr", true, false);
     }
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    protected TypedPatternExprMetaModel(
+    protected PatternExprMetaModel(
             Optional<BaseNodeMetaModel> superNodeMetaModel,
             Class<? extends Node> type,
             String name,

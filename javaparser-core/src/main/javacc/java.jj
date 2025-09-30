@@ -3322,9 +3322,9 @@ Expression EqualityExpression():
 }
 
 
-TypedPatternExpr TypedPatternExpression():
+PatternExpr PatternExpression():
 {
-  TypedPatternExpr ret;
+  PatternExpr ret;
 }
 {
 	(
@@ -3345,7 +3345,7 @@ ComponentPatternExpr ComponentPatternExpression():
 	    LOOKAHEAD(MatchAllPatternExpression())
 	    ret = MatchAllPatternExpression()
 	  |
-        ret = TypedPatternExpression()
+        ret = PatternExpression()
 	)
     { return ret; }
 }
@@ -3445,15 +3445,15 @@ Expression InstanceOfExpression():
     Expression ret;
     ReferenceType type;
     NodeList<AnnotationExpr> annotations;
-    TypedPatternExpr pattern;
+    PatternExpr pattern;
 }
 {
     ret = RelationalExpression()
     [
         "instanceof"
         (
-            LOOKAHEAD(TypedPatternExpression())
-            pattern = TypedPatternExpression()
+            LOOKAHEAD(PatternExpression())
+            pattern = PatternExpression()
             // From the JLS https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-Pattern, the type of
             // a top-level pattern must be a reference type. This means that converting the pattern type to a
             // reference type here is always safe if the code being parsed compiles.
@@ -4722,8 +4722,8 @@ SwitchEntry SwitchEntry():
             * This lookahead is necessary to avoid ambiguity with the ConditionalExpression branch
             * below.
             */
-            LOOKAHEAD(TypedPatternExpression())
-            label = TypedPatternExpression() { labels = add(labels, label); }
+            LOOKAHEAD(PatternExpression())
+            label = PatternExpression() { labels = add(labels, label); }
             [
               "when"
               guard = ConditionalExpression()
