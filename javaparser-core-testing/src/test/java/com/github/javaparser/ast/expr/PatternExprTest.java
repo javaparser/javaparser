@@ -119,4 +119,26 @@ public class PatternExprTest {
         RecordPatternExpr newRecordPattern = recordPattern.clone();
         assertEquals(recordPattern.getTypeAsString(), newRecordPattern.getTypeAsString());
     }
+
+    @Test
+    public void matchAllPatternsInRecordListShouldWork() {
+        Expression expr = parseExpression("x instanceof Foo(_)");
+
+        assertTrue(expr.isInstanceOfExpr());
+
+        InstanceOfExpr instanceOfExpr = expr.asInstanceOfExpr();
+
+        assertTrue(instanceOfExpr.getPattern().isPresent());
+        PatternExpr pattern = instanceOfExpr.getPattern().get();
+
+        assertTrue(pattern.isRecordPatternExpr());
+        assertTrue(pattern.toRecordPatternExpr().isPresent());
+        RecordPatternExpr recordPattern = pattern.asRecordPatternExpr();
+
+        NodeList<PatternExpr> patternList = recordPattern.getPatternList();
+        assertTrue(patternList.getFirst().isPresent());
+
+        PatternExpr childPattern = patternList.getFirst().get();
+        assertTrue(childPattern.isMatchAllPatternExpr());
+    }
 }

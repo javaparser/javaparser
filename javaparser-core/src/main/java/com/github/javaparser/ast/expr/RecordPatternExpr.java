@@ -76,7 +76,7 @@ import java.util.function.Consumer;
  * @see com.github.javaparser.ast.expr.TypePatternExpr
  * @see <a href="https://openjdk.org/jeps/440">JEP 440: Record Patterns</a>
  */
-public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModifier<RecordPatternExpr> {
+public class RecordPatternExpr extends TypedPatternExpr implements NodeWithFinalModifier<RecordPatternExpr> {
 
     private NodeList<Modifier> modifiers;
 

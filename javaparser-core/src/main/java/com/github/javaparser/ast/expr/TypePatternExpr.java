@@ -71,7 +71,7 @@ import java.util.function.Consumer;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public class TypePatternExpr extends PatternExpr
+public class TypePatternExpr extends TypedPatternExpr
         implements NodeWithSimpleName<TypePatternExpr>, NodeWithFinalModifier<TypePatternExpr> {
 
     private NodeList<Modifier> modifiers;

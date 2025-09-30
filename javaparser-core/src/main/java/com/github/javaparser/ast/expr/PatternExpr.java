@@ -20,14 +20,9 @@
  */
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
-import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -66,12 +61,10 @@ import java.util.function.Consumer;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public abstract class PatternExpr extends Expression implements NodeWithType<PatternExpr, Type> {
-
-    private Type type;
+public abstract class PatternExpr extends Expression {
 
     @AllFieldsConstructor
-    public PatternExpr(final Type type) {}
+    public PatternExpr() {}
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -118,48 +111,12 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
         customInitialization();
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PatternExpr setType(final Type type) {
-        assertNotNull(type);
-        if (type == this.type) {
-            return this;
-        }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) this.type.setParentNode(null);
-        this.type = type;
-        setAsParentNodeOf(type);
-        return this;
-    }
-
-    /**
-     * The types of record patters and top-level type patterns must be reference types, but nested type patterns
-     * can also have primitive types.
-     */
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type getType() {
-        return type;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null) {
-            return false;
-        }
-        if (node == type) {
-            setType((Type) replacementNode);
-            return true;
-        }
-        return super.replace(node, replacementNode);
-    }
-
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public PatternExpr(TokenRange tokenRange, Type type) {
         super(tokenRange);
-        setType(type);
         customInitialization();
     }
 }
