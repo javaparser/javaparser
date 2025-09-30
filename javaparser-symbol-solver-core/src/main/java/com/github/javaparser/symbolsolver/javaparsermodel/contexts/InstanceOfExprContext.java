@@ -20,8 +20,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.expr.ComponentPatternExpr;
 import com.github.javaparser.ast.expr.InstanceOfExpr;
-import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
@@ -43,7 +43,7 @@ public class InstanceOfExprContext extends ExpressionContext<InstanceOfExpr> {
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         // TODO: Add PatternExprContext and solve in that
-        Optional<PatternExpr> optionalPatternExpr = wrappedNode.getPattern();
+        Optional<ComponentPatternExpr> optionalPatternExpr = wrappedNode.getPattern();
         if (optionalPatternExpr.isPresent() && (optionalPatternExpr.get().isTypePatternExpr())) {
             TypePatternExpr typePatternExpr = optionalPatternExpr.get().asTypePatternExpr();
             if (typePatternExpr.getNameAsString().equals(name)) {

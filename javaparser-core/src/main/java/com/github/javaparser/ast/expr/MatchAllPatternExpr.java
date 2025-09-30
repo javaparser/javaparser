@@ -18,7 +18,7 @@ import com.github.javaparser.metamodel.MatchAllPatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class MatchAllPatternExpr extends PatternExpr implements NodeWithFinalModifier<MatchAllPatternExpr> {
+public class MatchAllPatternExpr extends ComponentPatternExpr implements NodeWithFinalModifier<MatchAllPatternExpr> {
 
     public static final String UNNAMED_PATTERN_SYMBOL = "_";
 

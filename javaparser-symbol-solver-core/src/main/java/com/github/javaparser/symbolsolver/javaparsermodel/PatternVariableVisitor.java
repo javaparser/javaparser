@@ -124,11 +124,11 @@ public class PatternVariableVisitor extends GenericVisitorWithDefaults<PatternVa
         LinkedList<TypePatternExpr> variablesIntroducedIfFalse = new LinkedList<>();
 
         instanceOfExpr.getPattern().ifPresent(patternExpr -> {
-            Queue<PatternExpr> patternQueue = new ArrayDeque<>();
+            Queue<ComponentPatternExpr> patternQueue = new ArrayDeque<>();
             patternQueue.add(patternExpr);
 
             while (!patternQueue.isEmpty()) {
-                PatternExpr toCheck = patternQueue.remove();
+                ComponentPatternExpr toCheck = patternQueue.remove();
                 if (toCheck.isTypePatternExpr()) {
                     variablesIntroducedIfTrue.add(toCheck.asTypePatternExpr());
                 } else if (toCheck.isRecordPatternExpr()) {

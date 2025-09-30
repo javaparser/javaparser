@@ -72,7 +72,7 @@ import java.util.function.Consumer;
  * }
  * </code></pre>
  *
- * @see com.github.javaparser.ast.expr.PatternExpr
+ * @see ComponentPatternExpr
  * @see com.github.javaparser.ast.expr.TypePatternExpr
  * @see <a href="https://openjdk.org/jeps/440">JEP 440: Record Patterns</a>
  */
@@ -80,7 +80,7 @@ public class RecordPatternExpr extends TypedPatternExpr implements NodeWithFinal
 
     private NodeList<Modifier> modifiers;
 
-    private NodeList<PatternExpr> patternList;
+    private NodeList<ComponentPatternExpr> patternList;
 
     public RecordPatternExpr() {
         this(new NodeList<>(), new ClassOrInterfaceType(), new NodeList<>());
@@ -88,7 +88,7 @@ public class RecordPatternExpr extends TypedPatternExpr implements NodeWithFinal
 
     @AllFieldsConstructor
     public RecordPatternExpr(
-            final NodeList<Modifier> modifiers, final Type type, final NodeList<PatternExpr> patternList) {
+            final NodeList<Modifier> modifiers, final Type type, final NodeList<ComponentPatternExpr> patternList) {
         this(null, modifiers, type, patternList);
     }
 
@@ -156,12 +156,12 @@ public class RecordPatternExpr extends TypedPatternExpr implements NodeWithFinal
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<PatternExpr> getPatternList() {
+    public NodeList<ComponentPatternExpr> getPatternList() {
         return patternList;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordPatternExpr setPatternList(final NodeList<PatternExpr> patternList) {
+    public RecordPatternExpr setPatternList(final NodeList<ComponentPatternExpr> patternList) {
         assertNotNull(patternList);
         if (patternList == this.patternList) {
             return this;
@@ -208,7 +208,7 @@ public class RecordPatternExpr extends TypedPatternExpr implements NodeWithFinal
         }
         for (int i = 0; i < patternList.size(); i++) {
             if (patternList.get(i) == node) {
-                patternList.set(i, (PatternExpr) replacementNode);
+                patternList.set(i, (ComponentPatternExpr) replacementNode);
                 return true;
             }
         }
@@ -232,7 +232,10 @@ public class RecordPatternExpr extends TypedPatternExpr implements NodeWithFinal
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public RecordPatternExpr(
-            TokenRange tokenRange, NodeList<Modifier> modifiers, Type type, NodeList<PatternExpr> patternList) {
+            TokenRange tokenRange,
+            NodeList<Modifier> modifiers,
+            Type type,
+            NodeList<ComponentPatternExpr> patternList) {
         super(tokenRange, type);
         setModifiers(modifiers);
         setPatternList(patternList);

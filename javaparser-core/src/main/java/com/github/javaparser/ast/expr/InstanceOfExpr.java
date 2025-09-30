@@ -91,7 +91,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  *
- * @see PatternExpr
+ * @see ComponentPatternExpr
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
@@ -101,7 +101,7 @@ public class InstanceOfExpr extends Expression
     private Expression expression;
 
     @OptionalProperty
-    private PatternExpr pattern;
+    private ComponentPatternExpr pattern;
 
     private ReferenceType type;
 
@@ -114,7 +114,7 @@ public class InstanceOfExpr extends Expression
     }
 
     @AllFieldsConstructor
-    public InstanceOfExpr(final Expression expression, final ReferenceType type, final PatternExpr pattern) {
+    public InstanceOfExpr(final Expression expression, final ReferenceType type, final ComponentPatternExpr pattern) {
         this(null, expression, type, pattern);
     }
 
@@ -122,7 +122,8 @@ public class InstanceOfExpr extends Expression
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public InstanceOfExpr(TokenRange tokenRange, Expression expression, ReferenceType type, PatternExpr pattern) {
+    public InstanceOfExpr(
+            TokenRange tokenRange, Expression expression, ReferenceType type, ComponentPatternExpr pattern) {
         super(tokenRange);
         setExpression(expression);
         setType(type);
@@ -184,7 +185,7 @@ public class InstanceOfExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<PatternExpr> getPattern() {
+    public Optional<ComponentPatternExpr> getPattern() {
         return Optional.ofNullable(pattern);
     }
 
@@ -222,7 +223,7 @@ public class InstanceOfExpr extends Expression
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public InstanceOfExpr removePattern() {
-        return setPattern((PatternExpr) null);
+        return setPattern((ComponentPatternExpr) null);
     }
 
     @Override
@@ -237,7 +238,7 @@ public class InstanceOfExpr extends Expression
         }
         if (pattern != null) {
             if (node == pattern) {
-                setPattern((PatternExpr) replacementNode);
+                setPattern((ComponentPatternExpr) replacementNode);
                 return true;
             }
         }
@@ -262,7 +263,7 @@ public class InstanceOfExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public InstanceOfExpr setPattern(final PatternExpr pattern) {
+    public InstanceOfExpr setPattern(final ComponentPatternExpr pattern) {
         if (pattern == this.pattern) {
             return this;
         }

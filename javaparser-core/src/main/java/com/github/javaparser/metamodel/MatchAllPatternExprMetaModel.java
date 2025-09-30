@@ -34,7 +34,7 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class MatchAllPatternExprMetaModel extends PatternExprMetaModel {
+public class MatchAllPatternExprMetaModel extends ComponentPatternExprMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     MatchAllPatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {

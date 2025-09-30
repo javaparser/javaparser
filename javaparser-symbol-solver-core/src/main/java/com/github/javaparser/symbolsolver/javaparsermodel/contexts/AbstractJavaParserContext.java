@@ -317,13 +317,13 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
      * @param patternExpr the root of the pattern tree to traverse
      * @return all type pattern expressions discovered in the tree
      */
-    public List<TypePatternExpr> typePatternExprsDiscoveredInPattern(PatternExpr patternExpr) {
+    public List<TypePatternExpr> typePatternExprsDiscoveredInPattern(ComponentPatternExpr patternExpr) {
         List<TypePatternExpr> discoveredTypePatterns = new ArrayList<>();
-        Queue<PatternExpr> patternsToCheck = new ArrayDeque<>();
+        Queue<ComponentPatternExpr> patternsToCheck = new ArrayDeque<>();
         patternsToCheck.add(patternExpr);
 
         while (!patternsToCheck.isEmpty()) {
-            PatternExpr patternToCheck = patternsToCheck.remove();
+            ComponentPatternExpr patternToCheck = patternsToCheck.remove();
 
             if (patternToCheck.isTypePatternExpr()) {
                 discoveredTypePatterns.add(patternToCheck.asTypePatternExpr());

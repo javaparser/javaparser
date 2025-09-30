@@ -17,7 +17,8 @@ import com.github.javaparser.metamodel.TypedPatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public abstract class TypedPatternExpr extends PatternExpr implements NodeWithType<PatternExpr, Type> {
+public abstract class TypedPatternExpr extends ComponentPatternExpr
+        implements NodeWithType<ComponentPatternExpr, Type> {
 
     /**
      * The types of record patters and top-level type patterns must be reference types, but nested type patterns

@@ -3336,9 +3336,9 @@ TypedPatternExpr TypedPatternExpression():
     { return ret; }
 }
 
-PatternExpr PatternExpression():
+ComponentPatternExpr ComponentPatternExpression():
 {
-    PatternExpr ret;
+    ComponentPatternExpr ret;
 }
 {
 	(
@@ -3384,7 +3384,7 @@ RecordPatternExpr RecordPatternExpression():
 {
 	ModifierHolder modifier;
 	ReferenceType type;
-	NodeList<PatternExpr> patternList;
+	NodeList<ComponentPatternExpr> patternList;
 }
 {
 	modifier = Modifiers()
@@ -3410,17 +3410,17 @@ modifier = Modifiers()
  *     Pattern {, Pattern }
  * </code></pre>
  */
-NodeList<PatternExpr> PatternList():
+NodeList<ComponentPatternExpr> PatternList():
 {
-    PatternExpr pattern;
-	NodeList<PatternExpr> ret = new NodeList<>();
+    ComponentPatternExpr pattern;
+	NodeList<ComponentPatternExpr> ret = new NodeList<>();
 }
 {
 	"("
-    pattern = PatternExpression() { ret.add(pattern); }
+    pattern = ComponentPatternExpression() { ret.add(pattern); }
     (
         ","
-        pattern = PatternExpression() { ret.add(pattern); }
+        pattern = ComponentPatternExpression() { ret.add(pattern); }
     )*
 	")"
     { return ret; }
@@ -4722,8 +4722,8 @@ SwitchEntry SwitchEntry():
             * This lookahead is necessary to avoid ambiguity with the ConditionalExpression branch
             * below.
             */
-            LOOKAHEAD(PatternExpression())
-            label = PatternExpression() { labels = add(labels, label); }
+            LOOKAHEAD(TypedPatternExpression())
+            label = TypedPatternExpression() { labels = add(labels, label); }
             [
               "when"
               guard = ConditionalExpression()

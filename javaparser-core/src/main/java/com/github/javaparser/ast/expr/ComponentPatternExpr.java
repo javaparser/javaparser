@@ -23,10 +23,9 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ComponentPatternExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.PatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -61,61 +60,52 @@ import java.util.function.Consumer;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public abstract class PatternExpr extends Expression {
+public abstract class ComponentPatternExpr extends Expression {
 
     @AllFieldsConstructor
-    public PatternExpr() {}
+    public ComponentPatternExpr() {}
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isPatternExpr() {
+    public boolean isComponentPatternExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public PatternExpr asPatternExpr() {
+    public ComponentPatternExpr asComponentPatternExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<PatternExpr> toPatternExpr() {
+    public Optional<ComponentPatternExpr> toComponentPatternExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifPatternExpr(Consumer<PatternExpr> action) {
+    public void ifComponentPatternExpr(Consumer<ComponentPatternExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public PatternExpr clone() {
-        return (PatternExpr) accept(new CloneVisitor(), null);
+    public ComponentPatternExpr clone() {
+        return (ComponentPatternExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public PatternExprMetaModel getMetaModel() {
-        return JavaParserMetaModel.patternExprMetaModel;
+    public ComponentPatternExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.componentPatternExprMetaModel;
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PatternExpr(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PatternExpr(TokenRange tokenRange, Type type) {
+    public ComponentPatternExpr(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
