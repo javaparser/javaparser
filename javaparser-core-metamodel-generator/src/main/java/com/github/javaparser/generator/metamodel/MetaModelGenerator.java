@@ -31,6 +31,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.CompactConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.MatchAllPatternExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
@@ -138,6 +139,7 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.expr.NullLiteralExpr.class);
             add(com.github.javaparser.ast.expr.ObjectCreationExpr.class);
             add(com.github.javaparser.ast.expr.PatternExpr.class);
+            add(com.github.javaparser.ast.expr.TypedPatternExpr.class);
             add(com.github.javaparser.ast.expr.RecordPatternExpr.class);
             add(com.github.javaparser.ast.expr.SingleMemberAnnotationExpr.class);
             add(com.github.javaparser.ast.expr.SimpleName.class);
@@ -148,6 +150,7 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.expr.TypeExpr.class);
             add(com.github.javaparser.ast.expr.TypePatternExpr.class);
             add(com.github.javaparser.ast.expr.UnaryExpr.class);
+            add(MatchAllPatternExpr.class);
             add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
 
             add(com.github.javaparser.ast.stmt.AssertStmt.class);

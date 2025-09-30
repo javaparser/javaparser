@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.expr.TypePatternExpr;
+import com.github.javaparser.ast.expr.MatchAllPatternExpr;
 import java.util.Optional;
 
 /**
@@ -34,20 +34,18 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class TypePatternExprMetaModel extends TypedPatternExprMetaModel {
+public class MatchAllPatternExprMetaModel extends PatternExprMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    TypePatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+    MatchAllPatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(
                 superBaseNodeMetaModel,
-                TypePatternExpr.class,
-                "TypePatternExpr",
+                MatchAllPatternExpr.class,
+                "MatchAllPatternExpr",
                 "com.github.javaparser.ast.expr",
                 false,
                 false);
     }
 
     public PropertyMetaModel modifiersPropertyMetaModel;
-
-    public PropertyMetaModel namePropertyMetaModel;
 }

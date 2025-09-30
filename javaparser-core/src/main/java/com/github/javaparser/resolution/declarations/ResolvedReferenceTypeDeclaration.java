@@ -377,11 +377,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     default boolean isJavaLangObject() {
-        return this.isClass()
-                && !isAnonymousClass()
-                && // Consider anonymous classes
-                hasName()
-                && JAVA_LANG_OBJECT.equals(getQualifiedName());
+        return // Consider anonymous classes
+        this.isClass() && !isAnonymousClass() && hasName() && JAVA_LANG_OBJECT.equals(getQualifiedName());
     }
 
     /**

@@ -52,6 +52,4 @@ public class PatternExprMetaModel extends ExpressionMetaModel {
             boolean hasWildcard) {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
-
-    public PropertyMetaModel typePropertyMetaModel;
 }

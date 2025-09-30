@@ -1316,4 +1316,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setComment(comment);
         return n;
     }
+
+    @Override
+    public Visitable visit(final MatchAllPatternExpr n, final A arg) {
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setModifiers(modifiers);
+        n.setComment(comment);
+        return n;
+    }
 }

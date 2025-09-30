@@ -82,6 +82,7 @@ public abstract class TypedPatternExpr extends PatternExpr implements NodeWithTy
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypedPatternExpr(Consumer<TypedPatternExpr> action) {
         action.accept(this);

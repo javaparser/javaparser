@@ -243,4 +243,6 @@ public interface GenericVisitor<R, A> {
     R visit(TypePatternExpr n, A arg);
 
     R visit(RecordPatternExpr n, A arg);
+
+    R visit(MatchAllPatternExpr n, A arg);
 }

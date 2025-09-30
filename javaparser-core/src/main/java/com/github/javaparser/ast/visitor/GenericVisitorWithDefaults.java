@@ -554,4 +554,9 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     public R visit(final RecordPatternExpr n, final A arg) {
         return defaultAction(n, arg);
     }
+
+    @Override
+    public R visit(final MatchAllPatternExpr n, final A arg) {
+        return defaultAction(n, arg);
+    }
 }

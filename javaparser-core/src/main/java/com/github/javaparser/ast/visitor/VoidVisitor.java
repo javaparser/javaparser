@@ -238,4 +238,6 @@ public interface VoidVisitor<A> {
     void visit(TypePatternExpr n, A arg);
 
     void visit(RecordPatternExpr n, A arg);
+
+    void visit(MatchAllPatternExpr n, A arg);
 }
