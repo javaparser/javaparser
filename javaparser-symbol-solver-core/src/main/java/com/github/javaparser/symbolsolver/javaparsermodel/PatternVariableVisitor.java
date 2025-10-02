@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import static com.github.javaparser.ast.expr.MatchAllPatternExpr.UNNAMED_PLACEHOLDER;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.visitor.GenericVisitorWithDefaults;
@@ -130,10 +132,12 @@ public class PatternVariableVisitor extends GenericVisitorWithDefaults<PatternVa
             while (!patternQueue.isEmpty()) {
                 ComponentPatternExpr toCheck = patternQueue.remove();
                 if (toCheck.isTypePatternExpr()) {
-                    variablesIntroducedIfTrue.add(toCheck.asTypePatternExpr());
+                    if (!toCheck.asTypePatternExpr().getNameAsString().equals(UNNAMED_PLACEHOLDER)) {
+                        variablesIntroducedIfTrue.add(toCheck.asTypePatternExpr());
+                    }
                 } else if (toCheck.isRecordPatternExpr()) {
                     patternQueue.addAll(toCheck.asRecordPatternExpr().getPatternList());
-                } else {
+                } else if (!toCheck.isMatchAllPatternExpr()) {
                     throw new IllegalStateException("Found illegal pattern type in InstanceOf"
                             + toCheck.getClass().getCanonicalName());
                 }

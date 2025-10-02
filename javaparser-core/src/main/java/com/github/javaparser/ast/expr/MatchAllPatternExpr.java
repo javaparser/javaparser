@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 
 public class MatchAllPatternExpr extends ComponentPatternExpr implements NodeWithFinalModifier<MatchAllPatternExpr> {
 
-    public static final String UNNAMED_PATTERN_SYMBOL = "_";
+    public static final String UNNAMED_PLACEHOLDER = "_";
 
     private NodeList<Modifier> modifiers;
 

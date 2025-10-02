@@ -769,7 +769,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final MatchAllPatternExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-        printer.print(MatchAllPatternExpr.UNNAMED_PATTERN_SYMBOL);
+        printer.print(MatchAllPatternExpr.UNNAMED_PLACEHOLDER);
     }
 
     @Override
