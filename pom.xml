@@ -183,18 +183,15 @@
 			<plugin>
 					<groupId>org.sonatype.central</groupId>
 					<artifactId>central-publishing-maven-plugin</artifactId>
-					<version>0.9.0</version>
-					<extensions>true</extensions>
 					<configuration>
-						<publishingServerId>central</publishingServerId>
-						<!-- Automatic publication after validation -->
-						<autoPublish>true</autoPublish>
-						<!-- Wait until the publication is effective -->
-						<waitUntil>published</waitUntil>
-						<!-- Readable name to identify the deployment -->
-						<deploymentName>${project.artifactId}-${project.version}</deploymentName>
+						<excludeArtifacts>
+							<excludeArtifact>com.github.javaparser:javaparser-core-testing</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-core-testing-bdd</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-symbol-solver-testing</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-core-metamodel-generator</excludeArtifact>
+						</excludeArtifacts>
 					</configuration>
-				</plugin>
+			</plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -271,13 +268,16 @@
 				<plugin>
 					<groupId>org.sonatype.central</groupId>
 					<artifactId>central-publishing-maven-plugin</artifactId>
+					<version>0.9.0</version>
+					<extensions>true</extensions>
 					<configuration>
-						<excludeArtifacts>
-							<excludeArtifact>com.github.javaparser:javaparser-core-testing</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-core-testing-bdd</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-symbol-solver-testing</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-core-metamodel-generator</excludeArtifact>
-						</excludeArtifacts>
+						<publishingServerId>central</publishingServerId>
+						<!-- Automatic publication after validation -->
+						<autoPublish>true</autoPublish>
+						<!-- Wait until the publication is effective -->
+						<waitUntil>published</waitUntil>
+						<!-- Readable name to identify the deployment -->
+						<deploymentName>${project.artifactId}-${project.version}</deploymentName>
 					</configuration>
 				</plugin>
                 <plugin>
