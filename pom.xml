@@ -273,10 +273,10 @@
 					<artifactId>central-publishing-maven-plugin</artifactId>
 					<configuration>
 						<excludeArtifacts>
-							<excludeArtifact>javaparser-core-testing</excludeArtifact>
-							<excludeArtifact>javaparser-core-testing-bdd</excludeArtifact>
-							<excludeArtifact>javaparser-symbol-solver-testing</excludeArtifact>
-							<excludeArtifact>javaparser-core-metamodel-generator</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-core-testing</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-core-testing-bdd</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-symbol-solver-testing</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-core-metamodel-generator</excludeArtifact>
 						</excludeArtifacts>
 					</configuration>
 				</plugin>
