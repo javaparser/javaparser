@@ -8,6 +8,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javaparser-symbol-solver-testing</artifactId>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<url>https://github.com/javaparser</url>
     <description>A Symbol Solver for Java, built on top of JavaParser (tests)</description>
 
     <licenses>

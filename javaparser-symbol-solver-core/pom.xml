@@ -9,6 +9,8 @@
 
     <artifactId>javaparser-symbol-solver-core</artifactId>
     <packaging>jar</packaging>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<url>https://github.com/javaparser</url>
     <description>A Symbol Solver for Java, built on top of JavaParser (core)</description>
 
     <licenses>
