@@ -235,6 +235,19 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
+					<version>3.1.4</version>
+					<executions>
+						<execution>
+							<id>default-deploy</id>
+							<phase>deploy</phase>
+							<goals>
+								<goal>deploy</goal>
+							</goals>
+							<configuration>
+								<skip>true</skip>
+							</configuration>
+						</execution>
+					</executions>
 					<configuration>
 						<skip>true</skip>
 					</configuration>
@@ -253,6 +266,13 @@
 						<waitUntil>published</waitUntil>
 						<!-- Readable name to identify the deployment -->
 						<deploymentName>${project.artifactId}-${project.version}</deploymentName>
+
+						<excludeArtifacts>
+							<excludeArtifact>javaparser-core-testing</excludeArtifact>
+							<excludeArtifact>javaparser-core-testing-bdd</excludeArtifact>
+							<excludeArtifact>javaparser-symbol-solver-testing</excludeArtifact>
+							<excludeArtifact>javaparser-core-metamodel-generator</excludeArtifact>
+						</excludeArtifacts>
 					</configuration>
 				</plugin>
                 <plugin>
@@ -335,11 +355,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>3.6.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.1.4</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
