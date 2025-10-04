@@ -166,18 +166,7 @@
     </issueManagement>
 
     <distributionManagement>
-        <!-- https://docs.github.com/en/actions/guides/publishing-java-packages-with-maven#publishing-packages-to-the-maven-central-repository -->
-        <!-- https://blog.sonatype.com/what-publishers-need-to-know-about-migrating-from-jcenter-/-bintray-to-the-central-repository -->
-        <!-- New: Publishing directly to Sonatype OSSRH (OSS Repository Hosting), for release to Maven Central -->
-        <!-- URLs available from: https://central.sonatype.org/pages/ossrh-guide.html#accessing-repositories -->
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
+	<!-- According to the documentation https://central.sonatype.org/publish/publish-portal-maven/, it is no longer necessary to configure a repository -->
     </distributionManagement>
 
 
@@ -240,8 +229,34 @@
                         <releaseProfiles>run-release</releaseProfiles>
                         <!-- Disable pushing of changes (i.e. false, for local testing) -->
                         <pushChanges>false</pushChanges>
+						<!-- NEW: Disable deployment during release:perform -->
+						<goals>deploy</goals>
                     </configuration>
                 </plugin>
+				<!-- NEW: Disable the old maven-deploy-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+				<!-- NEW: Plugin for publishing to Maven Central -->
+				<plugin>
+					<groupId>org.sonatype.central</groupId>
+					<artifactId>central-publishing-maven-plugin</artifactId>
+					<version>0.9.0</version>
+					<extensions>true</extensions>
+					<configuration>
+						<publishingServerId>central</publishingServerId>
+						<!-- Automatic publication after validation -->
+						<autoPublish>true</autoPublish>
+						<!-- Wait until the publication is effective -->
+						<waitUntil>published</waitUntil>
+						<!-- Readable name to identify the deployment -->
+						<deploymentName>${project.artifactId}-${project.version}</deploymentName>
+					</configuration>
+				</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
