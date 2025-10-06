@@ -997,6 +997,17 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
+    void wrapInJmlIfNeededBlock(Runnable run) {
+        boolean b = inJmlComment();
+        if (!b) {
+            startJmlComment(false, new NodeList<>());
+            run.run();
+            endJmlComment();
+        } else {
+            run.run();
+        }
+    }
+
     @Override
     public void visit(JmlCallableClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
@@ -1031,58 +1042,61 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlClassExprDeclaration n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printModifiers(n.getModifiers());
-        printer.print("invariant ");
-        n.getInvariant().accept(this, arg);
-        printer.print(";");
+        wrapInJmlIfNeeded(() -> {
+            printOrphanCommentsBeforeThisChildNode(n);
+            printModifiers(n.getModifiers());
+            printer.print("invariant ");
+            n.getInvariant().accept(this, arg);
+            printer.print(";");
+        });
     }
 
     @Override
     public void visit(JmlClassAccessibleDeclaration n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        printModifiers(n.getModifiers());
-        printer.print("accessible");
-        printer.print(" ");
-        n.getVariable().accept(this, arg);
-        printer.print(" : ");
-        printList(n.getExpressions(), ", ");
-        if (n.getMeasuredBy().isPresent()) {
-            printer.print("\\measured_by");
-            n.getMeasuredBy().get().accept(this, arg);
-        }
-        printer.print(";");
+        wrapInJmlIfNeeded(() -> {
+            printModifiers(n.getModifiers());
+            printer.print("accessible");
+            printer.print(" ");
+            n.getVariable().accept(this, arg);
+            printer.print(" : ");
+            printList(n.getExpressions(), ", ");
+            if (n.getMeasuredBy().isPresent()) {
+                printer.print("\\measured_by");
+                n.getMeasuredBy().get().accept(this, arg);
+            }
+            printer.print(";");
+        });
     }
 
     @Override
     public void visit(JmlRepresentsDeclaration n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printModifiers(n.getModifiers());
-        printer.print("represents");
-        printer.print(" ");
-        n.getName().accept(this, arg);
-        printer.print(" = ");
-        n.getExpr().accept(this, arg);
-        printer.print(";");
+        wrapInJmlIfNeeded(() -> {
+            printOrphanCommentsBeforeThisChildNode(n);
+            printModifiers(n.getModifiers());
+            printer.print("represents");
+            printer.print(" ");
+            n.getName().accept(this, arg);
+            printer.print(" = ");
+            n.getExpr().accept(this, arg);
+            printer.print(";");
+        });
     }
 
     @Override
     public void visit(JmlContract n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        boolean openedJml = inJmlComment();
-        if (!openedJml)
-            startJmlComment(false, n.getJmlTags());
-        printModifiers(n.getModifiers());
-        printer.print(" ");
-        printer.print(n.getBehavior().jmlSymbol());
-        printer.indent();
-        printer.println();
-        printList(n.getClauses(), "");
-        printer.indent();
-        printList(n.getSubContracts(), "", "", "", "{|\n", "|}");
-        printer.unindent().unindent();
-        if (!openedJml)
-            endJmlComment();
+        wrapInJmlIfNeededBlock(() -> {
+            printModifiers(n.getModifiers());
+            printer.print(" ");
+            printer.print(n.getBehavior().jmlSymbol());
+            printer.indent();
+            printer.println();
+            printList(n.getClauses(), "");
+            printer.indent();
+            printList(n.getSubContracts(), "", "", "", "{|\n", "|}");
+            printer.unindent().unindent();
+        });
     }
 
     private void endJmlComment() {
@@ -1176,9 +1190,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlFieldDeclaration n, Void arg) {
-        startJmlComment(false, new NodeList<>());
-        n.getDecl().accept(this, null);
-        endJmlComment();
+        wrapInJmlIfNeeded(() -> {
+            n.getDecl().accept(this, null);
+        });
     }
 
     @Override
