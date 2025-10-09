@@ -42,8 +42,14 @@ import java.util.function.Consumer;
  * In Java 21, support for pattern matching was extended to switch expressions and {@code Record Patterns}
  * were introduced. Since {@code Record Patterns} and {@code TypePatterns} can be used interchangeably, the
  * {@code PatternExpr} class is used as a common parent for both in the JavaParser AST.
+ * <h2>Java22</h2>
+ * Java 22 added support for match-all pattern expressions that do not have types and cannot be used as
+ * top-level patterns. This required a change to the pattern representation in JavaParser. Following the
+ * naming convention and structure of the JLS, {@code ComponentPatternExpr} is now the base class for all pattern
+ * expressions. A {@code ComponentPatternExpr} can either be a {@code MatchAllPatternExpr}, or a {@code PatternExpr}.
+ * {@code PatternExpr} can then be either a {@code TypePatternExpr} or a {@code RecordPatternExpr}.
  *
- * <h3>JDK21 Grammar</h3>
+ * <h3>JDK22 Grammar</h3>
  * <br>
  * <pre><code>Pattern:
  *     TypePattern
@@ -51,9 +57,14 @@ import java.util.function.Consumer;
  * TypePattern:
  *     LocalVariableDeclaration
  * RecordPattern:
- *     ReferenceType ( [PatternList] )
- * PatternList:
- *     Pattern {, Pattern }</code></pre>
+ *     ReferenceType ( [ComponentPatternList] )
+ * ComponentPatternList:
+ *     ComponentPattern {, ComponentPattern }
+ * ComponentPattern:
+ *     Pattern
+ *     MatchAllPattern
+ * MatchAllPattern:
+ *     _</code></pre>
  *
  * @author Johannes Coetzee
  *

@@ -3322,6 +3322,14 @@ Expression EqualityExpression():
 }
 
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * <pre>{@code
+ *     Pattern:
+ *       TypePattern
+ *       RecordPattern
+ * }<pre>
+ */
 PatternExpr PatternExpression():
 {
   PatternExpr ret;
@@ -3336,6 +3344,15 @@ PatternExpr PatternExpression():
     { return ret; }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * https://openjdk.org/jeps/456
+ * <pre>{@code
+ *     ComponentPattern:
+ *       Pattern
+ *       MatchAllPattern
+ * }<pre>
+ */
 ComponentPatternExpr ComponentPatternExpression():
 {
     ComponentPatternExpr ret;
@@ -3354,8 +3371,8 @@ ComponentPatternExpr ComponentPatternExpression():
  * https://openjdk.java.net/jeps/375
  * The instanceof grammar is extended accordingly:
  * <pre>{@code
- *     Pattern:
- *         ReferenceType Identifier
+ *     TypePattern:
+ *         LocalVariableDeclaration
  * }<pre>
  */
 TypePatternExpr TypePatternExpression():
@@ -3373,11 +3390,12 @@ TypePatternExpr TypePatternExpression():
 
 /**
  * https://openjdk.org/jeps/440
+ * https://openjdk.org/jeps/456
  * <pre><code>
  * RecordPattern:
- *     ReferenceType ( [PatternList] )
- * PatternList:
- *     Pattern {, Pattern }
+ *     ReferenceType ( [ComponentPatternList] )
+ * ComponentPatternList:
+ *     ComponentPattern {, ComponentPattern }
  * </code></pre>
  */
 RecordPatternExpr RecordPatternExpression():
@@ -3393,14 +3411,22 @@ RecordPatternExpr RecordPatternExpression():
 	{ return new RecordPatternExpr(range(type, token()), modifier.modifiers, type, patternList); }
 }
 
+/**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * https://openjdk.org/jeps/456
+ * <pre>{@code
+ *     MatchAllPattern:
+ *       _
+ * }<pre>
+ */
 MatchAllPatternExpr MatchAllPatternExpression():
 {
 ModifierHolder modifier;
 }
 {
-modifier = Modifiers()
-"_"
-{return new MatchAllPatternExpr(range(token(), token()), modifier.modifiers); }
+    modifier = Modifiers()
+    "_"
+    { return new MatchAllPatternExpr(range(token(), token()), modifier.modifiers); }
 }
 
 /**
