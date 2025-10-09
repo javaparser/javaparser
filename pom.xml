@@ -147,7 +147,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <byte-buddy.version>1.17.7</byte-buddy.version>
+        <byte-buddy.version>1.17.8</byte-buddy.version>
         <argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'</argLine>
         <build.timestamp>2025-10-04T00:00:00Z</build.timestamp>
         <jacoco.javaagent/>
