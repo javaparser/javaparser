@@ -511,6 +511,9 @@ public class ConcreteSyntaxModel {
                 MarkerAnnotationExpr.class,
                 sequence(comment(), token(GeneratedJavaParserConstants.AT), attribute(ObservableProperty.NAME)));
         concreteSyntaxModelByClass.put(
+                MatchAllPatternExpr.class,
+                sequence(comment(), token(GeneratedJavaParserConstants.UNNAMED_PLACEHOLDER)));
+        concreteSyntaxModelByClass.put(
                 MemberValuePair.class,
                 sequence(
                         comment(),

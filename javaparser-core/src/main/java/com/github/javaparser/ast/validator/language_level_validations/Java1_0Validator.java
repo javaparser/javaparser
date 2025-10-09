@@ -245,7 +245,7 @@ public class Java1_0Validator extends Validators {
     });
 
     final Validator noSwitchPatterns = new SingleNodeTypeValidator<>(SwitchEntry.class, (n, reporter) -> {
-        if (n.getGuard().isPresent() || n.getLabels().stream().anyMatch(expr -> expr.isPatternExpr())) {
+        if (n.getGuard().isPresent() || n.getLabels().stream().anyMatch(expr -> expr.isComponentPatternExpr())) {
             reporter.report(
                     n,
                     new UpgradeJavaMessage(

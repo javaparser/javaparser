@@ -638,6 +638,21 @@ class PrettyPrinterTest {
     }
 
     @Test
+    public void testSwitchUnnamedPattern() {
+        String code = "class Foo {\n" + "\n"
+                + "    void foo(Integer arg) {\n"
+                + "        switch(foo) {\n"
+                + "            case String _ ->\n"
+                + "                System.out.println(42);\n"
+                + "        }\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
     public void testSwitchPatternWithGuard() {
         String code = "class Foo {\n" + "\n"
                 + "    void foo(Integer arg) {\n"
@@ -658,6 +673,21 @@ class PrettyPrinterTest {
                 + "    void foo(Integer arg) {\n"
                 + "        switch(foo) {\n"
                 + "            case TwoBox(String s, Box(Integer i)) ->\n"
+                + "                System.out.println(s);\n"
+                + "        }\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void testUnnamedPattern() {
+        String code = "class Foo {\n" + "\n"
+                + "    void foo(Integer arg) {\n"
+                + "        switch(foo) {\n"
+                + "            case TwoBox(String s, Box(_)) ->\n"
                 + "                System.out.println(s);\n"
                 + "        }\n"
                 + "    }\n"

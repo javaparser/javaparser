@@ -603,4 +603,9 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
                 + (n.getPatternList().accept(this, arg)) * 31
                 + (n.getType().accept(this, arg));
     }
+
+    @Override
+    public Integer visit(final MatchAllPatternExpr n, final Void arg) {
+        return (n.getModifiers().accept(this, arg));
+    }
 }

@@ -729,4 +729,10 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
                 + (n.getType().accept(this, arg)) * 31
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
+
+    @Override
+    public Integer visit(final MatchAllPatternExpr n, final Void arg) {
+        return (n.getModifiers().accept(this, arg)) * 31
+                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
 }

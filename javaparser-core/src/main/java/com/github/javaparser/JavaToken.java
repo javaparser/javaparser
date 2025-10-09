@@ -362,7 +362,7 @@ public class JavaToken {
         TEXT_BLOCK_LITERAL(96),
         TEXT_BLOCK_CONTENT(97),
         IDENTIFIER(98),
-        LETTER(99),
+        NON_UNDERSCORE_LETTER(99),
         PART_LETTER(100),
         LPAREN(101),
         RPAREN(102),
@@ -414,7 +414,8 @@ public class JavaToken {
         RUNSIGNEDSHIFT(148),
         RSIGNEDSHIFT(149),
         GT(150),
-        CTRL_Z(151);
+        CTRL_Z(151),
+        UNNAMED_PLACEHOLDER(152);
 
         private final int kind;
 
@@ -424,6 +425,8 @@ public class JavaToken {
 
         public static Kind valueOf(int kind) {
             switch (kind) {
+                case 152:
+                    return UNNAMED_PLACEHOLDER;
                 case 151:
                     return CTRL_Z;
                 case 150:
@@ -529,7 +532,7 @@ public class JavaToken {
                 case 100:
                     return PART_LETTER;
                 case 99:
-                    return LETTER;
+                    return NON_UNDERSCORE_LETTER;
                 case 98:
                     return IDENTIFIER;
                 case 97:

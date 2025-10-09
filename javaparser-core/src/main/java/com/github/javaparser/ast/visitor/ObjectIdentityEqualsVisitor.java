@@ -547,4 +547,9 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     public Boolean visit(final RecordPatternExpr n, final Visitable arg) {
         return n == arg;
     }
+
+    @Override
+    public Boolean visit(final MatchAllPatternExpr n, final Visitable arg) {
+        return n == arg;
+    }
 }

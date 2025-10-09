@@ -1081,4 +1081,12 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getComment(), n2.getComment())) return false;
         return true;
     }
+
+    @Override
+    public Boolean visit(final MatchAllPatternExpr n, final Visitable arg) {
+        final MatchAllPatternExpr n2 = (MatchAllPatternExpr) arg;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) return false;
+        if (!nodeEquals(n.getComment(), n2.getComment())) return false;
+        return true;
+    }
 }

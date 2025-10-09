@@ -108,8 +108,8 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
     @Override
     public List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
         return wrappedNode.getLabels().stream()
-                .filter(label -> label.isPatternExpr())
-                .flatMap(label -> typePatternExprsDiscoveredInPattern(label.asPatternExpr()).stream())
+                .filter(label -> label.isComponentPatternExpr())
+                .flatMap(label -> typePatternExprsDiscoveredInPattern(label.asComponentPatternExpr()).stream())
                 .collect(Collectors.toList());
     }
 }

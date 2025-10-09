@@ -43,6 +43,7 @@ public class InstanceOfExprContext extends ExpressionContext<InstanceOfExpr> {
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         // TODO: Add PatternExprContext and solve in that
+        // TODO Look for the resolved pattern in the record pattern tree
         Optional<PatternExpr> optionalPatternExpr = wrappedNode.getPattern();
         if (optionalPatternExpr.isPresent() && (optionalPatternExpr.get().isTypePatternExpr())) {
             TypePatternExpr typePatternExpr = optionalPatternExpr.get().asTypePatternExpr();

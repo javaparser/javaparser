@@ -672,13 +672,13 @@ public class MethodResolutionLogic {
             List<ResolvedType> argumentsTypes,
             TypeSolver typeSolver,
             boolean wildcardTolerance) {
+        // Only consider methods with a matching name
+        // Filters out duplicate ResolvedMethodDeclaration by their signature.
+        // Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
         List<ResolvedMethodDeclaration> applicableMethods = methods.stream()
-                . // Only consider methods with a matching name
-                filter(m -> m.getName().equals(name))
-                . // Filters out duplicate ResolvedMethodDeclaration by their signature.
-                filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature))
-                . // Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
-                filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
+                .filter(m -> m.getName().equals(name))
+                .filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature))
+                .filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
                 .collect(Collectors.toList());
         // If no applicable methods found, return as unsolved.
         if (applicableMethods.isEmpty()) {

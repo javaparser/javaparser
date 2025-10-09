@@ -774,10 +774,13 @@ MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
 
 TOKEN :
 {
-  < IDENTIFIER: <LETTER> (<PART_LETTER>)* >
+  < IDENTIFIER:
+      <NON_UNDERSCORE_LETTER> (<PART_LETTER>)*
+    | "\u005f" (<PART_LETTER>)+
+  >
 |
-  < #LETTER: [
-         "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
+  < #NON_UNDERSCORE_LETTER: [
+         "\u0024",  "\u0041"-"\u005a",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
          "\u00ba",  "\u00c0"-"\u00d6",  "\u00d8"-"\u00f6",  "\u00f8"-"\u02c1",  "\u02c6"-"\u02d1",  "\u02e0"-"\u02e4",
          "\u02ec",  "\u02ee",  "\u0370"-"\u0374",  "\u0376"-"\u0377",  "\u037a"-"\u037d",  "\u037f",  "\u0386",
          "\u0388"-"\u038a",  "\u038c",  "\u038e"-"\u03a1",  "\u03a3"-"\u03f5",  "\u03f7"-"\u0481",  "\u048a"-"\u052f",
@@ -1047,6 +1050,8 @@ TOKEN :
 }
 
 TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
+
+TOKEN: { <UNNAMED_PLACEHOLDER: "_" > }
 
 
 /*************************************************************************************************************
@@ -2985,7 +2990,7 @@ String Identifier():
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
-        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> |
+        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> | "_" |
         // An actual plain old identifier
         <IDENTIFIER>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
@@ -3316,9 +3321,18 @@ Expression EqualityExpression():
     { return ret; }
 }
 
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * <pre>{@code
+ *     Pattern:
+ *       TypePattern
+ *       RecordPattern
+ * }<pre>
+ */
 PatternExpr PatternExpression():
 {
-    PatternExpr ret;
+  PatternExpr ret;
 }
 {
 	(
@@ -3331,11 +3345,34 @@ PatternExpr PatternExpression():
 }
 
 /**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * https://openjdk.org/jeps/456
+ * <pre>{@code
+ *     ComponentPattern:
+ *       Pattern
+ *       MatchAllPattern
+ * }<pre>
+ */
+ComponentPatternExpr ComponentPatternExpression():
+{
+    ComponentPatternExpr ret;
+}
+{
+	(
+	    LOOKAHEAD(MatchAllPatternExpression())
+	    ret = MatchAllPatternExpression()
+	  |
+        ret = PatternExpression()
+	)
+    { return ret; }
+}
+
+/**
  * https://openjdk.java.net/jeps/375
  * The instanceof grammar is extended accordingly:
  * <pre>{@code
- *     Pattern:
- *         ReferenceType Identifier
+ *     TypePattern:
+ *         LocalVariableDeclaration
  * }<pre>
  */
 TypePatternExpr TypePatternExpression():
@@ -3353,18 +3390,19 @@ TypePatternExpr TypePatternExpression():
 
 /**
  * https://openjdk.org/jeps/440
+ * https://openjdk.org/jeps/456
  * <pre><code>
  * RecordPattern:
- *     ReferenceType ( [PatternList] )
- * PatternList:
- *     Pattern {, Pattern }
+ *     ReferenceType ( [ComponentPatternList] )
+ * ComponentPatternList:
+ *     ComponentPattern {, ComponentPattern }
  * </code></pre>
  */
 RecordPatternExpr RecordPatternExpression():
 {
 	ModifierHolder modifier;
 	ReferenceType type;
-	NodeList<PatternExpr> patternList;
+	NodeList<ComponentPatternExpr> patternList;
 }
 {
 	modifier = Modifiers()
@@ -3374,23 +3412,41 @@ RecordPatternExpr RecordPatternExpression():
 }
 
 /**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * https://openjdk.org/jeps/456
+ * <pre>{@code
+ *     MatchAllPattern:
+ *       _
+ * }<pre>
+ */
+MatchAllPatternExpr MatchAllPatternExpression():
+{
+ModifierHolder modifier;
+}
+{
+    modifier = Modifiers()
+    "_"
+    { return new MatchAllPatternExpr(range(token(), token()), modifier.modifiers); }
+}
+
+/**
  * https://openjdk.org/jeps/440
  * <pre><code>
  * PatternList:
  *     Pattern {, Pattern }
  * </code></pre>
  */
-NodeList<PatternExpr> PatternList():
+NodeList<ComponentPatternExpr> PatternList():
 {
-    PatternExpr pattern;
-	NodeList<PatternExpr> ret = new NodeList<>();
+    ComponentPatternExpr pattern;
+	NodeList<ComponentPatternExpr> ret = new NodeList<>();
 }
 {
 	"("
-    pattern = PatternExpression() { ret.add(pattern); }
+    pattern = ComponentPatternExpression() { ret.add(pattern); }
     (
         ","
-        pattern = PatternExpression() { ret.add(pattern); }
+        pattern = ComponentPatternExpression() { ret.add(pattern); }
     )*
 	")"
     { return ret; }

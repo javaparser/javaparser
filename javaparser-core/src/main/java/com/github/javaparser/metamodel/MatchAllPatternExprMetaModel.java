@@ -21,8 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.MatchAllPatternExpr;
 import java.util.Optional;
 
 /**
@@ -35,23 +34,18 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class PatternExprMetaModel extends ComponentPatternExprMetaModel {
+public class MatchAllPatternExprMetaModel extends ComponentPatternExprMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    PatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, PatternExpr.class, "PatternExpr", "com.github.javaparser.ast.expr", true, false);
+    MatchAllPatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(
+                superBaseNodeMetaModel,
+                MatchAllPatternExpr.class,
+                "MatchAllPatternExpr",
+                "com.github.javaparser.ast.expr",
+                false,
+                false);
     }
 
-    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    protected PatternExprMetaModel(
-            Optional<BaseNodeMetaModel> superNodeMetaModel,
-            Class<? extends Node> type,
-            String name,
-            String packageName,
-            boolean isAbstract,
-            boolean hasWildcard) {
-        super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
-    }
-
-    public PropertyMetaModel typePropertyMetaModel;
+    public PropertyMetaModel modifiersPropertyMetaModel;
 }

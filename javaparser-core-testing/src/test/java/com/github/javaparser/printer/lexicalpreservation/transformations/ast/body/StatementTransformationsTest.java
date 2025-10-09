@@ -135,6 +135,77 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
     }
 
     @Test
+    void switchWithMatchAllPatternPreserved() {
+        String code = "switch (a) { case OldBox (TwoBox(String s, Box (_))) -> System.out.println(i); }";
+        Statement stmt = consider(code);
+        NodeList<SwitchEntry> entries = stmt.asSwitchStmt().getEntries();
+        entries.get(0).getLabels().get(0).asRecordPatternExpr().setType("NewBox");
+        NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
+        statements.set(0, statements.get(0).clone());
+        assertTransformedToString(code.replaceAll("OldBox", "NewBox"), stmt);
+    }
+
+    @Test
+    void matchAllPatternAdded() {
+        String originalCode = "class A {\n"
+                + "		void m(int year) { \n"
+                + "			return switch (year) {\n"
+                + "				case Box(String s) -> new Object();\n"
+                + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
+                + "			};\n"
+                + "		}\n"
+                + "	}";
+        String expectedCode = "switch (year) {\n"
+                + "				case Box(_) -> new Object();\n"
+                + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
+                + "			}";
+        ParserConfiguration config = new ParserConfiguration();
+        config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = LexicalPreservingPrinter.setup(StaticJavaParser.parse(originalCode));
+        SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
+        NodeList<SwitchEntry> entries = switchExpr.getEntries();
+
+        RecordPatternExpr label = entries.get(0).getLabels().get(0).asRecordPatternExpr();
+        NodeList<ComponentPatternExpr> newPatternList = NodeList.nodeList(new MatchAllPatternExpr(new NodeList<>()));
+        label.setPatternList(newPatternList);
+
+        String output = LexicalPreservingPrinter.print(switchExpr);
+
+        assertEqualsStringIgnoringEol(expectedCode, output);
+    }
+
+    @Test
+    void unnamedTypePatternAdded() {
+        String originalCode = "class A {\n"
+                + "		void m(int year) { \n"
+                + "			return switch (year) {\n"
+                + "				case Box(String s) -> new Object();\n"
+                + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
+                + "			};\n"
+                + "		}\n"
+                + "	}";
+        String expectedCode = "switch (year) {\n"
+                + "				case Box(String _) -> new Object();\n"
+                + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
+                + "			}";
+        ParserConfiguration config = new ParserConfiguration();
+        config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = LexicalPreservingPrinter.setup(StaticJavaParser.parse(originalCode));
+        SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
+        NodeList<SwitchEntry> entries = switchExpr.getEntries();
+
+        RecordPatternExpr label = entries.get(0).getLabels().get(0).asRecordPatternExpr();
+        TypePatternExpr typePatternExpr = label.getPatternList().get(0).asTypePatternExpr();
+        typePatternExpr.setName("_");
+
+        String output = LexicalPreservingPrinter.print(switchExpr);
+
+        assertEqualsStringIgnoringEol(expectedCode, output);
+    }
+
+    @Test
     void issue4646() {
         String originalCode = "class A {\n"
                 + "		void m(int year) { \n"

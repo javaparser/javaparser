@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -30,48 +29,63 @@ import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
- * <h1>Pattern Matching in Java</h1>
- *
- * <h2>Java 1.0 to 13</h2>
- * Not available.
- * <br>
- * <h2>Java 14</h2>
- * Java 14 introduced TypePatterns with simple pattern matching in {@code instanceof} expressions.
- * @see com.github.javaparser.ast.expr.TypePatternExpr
- * <h2>Java 21</h2>
- * In Java 21, support for pattern matching was extended to switch expressions and {@code Record Patterns}
- * were introduced. Since {@code Record Patterns} and {@code TypePatterns} can be used interchangeably, the
- * {@code PatternExpr} class is used as a common parent for both in the JavaParser AST.
- *
- * <h3>JDK21 Grammar</h3>
- * <br>
- * <pre><code>Pattern:
- *     TypePattern
- *     RecordPattern
- * TypePattern:
- *     LocalVariableDeclaration
- * RecordPattern:
- *     ReferenceType ( [PatternList] )
- * PatternList:
- *     Pattern {, Pattern }</code></pre>
- *
- * @author Johannes Coetzee
- *
- * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
- * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
+ * PatternExpr serves as the abstract base class for typed pattern expressions. These patterns may be used as top-level
+ * patterns in instanceof expressions and switch labels.
  */
-public abstract class PatternExpr extends Expression implements NodeWithType<PatternExpr, Type> {
+public abstract class PatternExpr extends ComponentPatternExpr implements NodeWithType<ComponentPatternExpr, Type> {
 
+    /**
+     * The types of record patters and top-level type patterns must be reference types, but nested type patterns
+     * can also have primitive types.
+     */
     private Type type;
 
     @AllFieldsConstructor
-    public PatternExpr(final Type type) {}
+    public PatternExpr(Type type) {}
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public PatternExpr(TokenRange tokenRange, Type type) {
+        super(tokenRange);
+        setType(type);
+        customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type getType() {
+        return type;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public PatternExpr setType(final Type type) {
+        assertNotNull(type);
+        if (type == this.type) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null) this.type.setParentNode(null);
+        this.type = type;
+        setAsParentNodeOf(type);
+        return this;
+    }
+
+    @Override
+    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+        return null;
+    }
+
+    @Override
+    public <A> void accept(VoidVisitor<A> v, A arg) {}
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -98,49 +112,6 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public PatternExpr clone() {
-        return (PatternExpr) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public PatternExprMetaModel getMetaModel() {
-        return JavaParserMetaModel.patternExprMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PatternExpr(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PatternExpr setType(final Type type) {
-        assertNotNull(type);
-        if (type == this.type) {
-            return this;
-        }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) this.type.setParentNode(null);
-        this.type = type;
-        setAsParentNodeOf(type);
-        return this;
-    }
-
-    /**
-     * The types of record patters and top-level type patterns must be reference types, but nested type patterns
-     * can also have primitive types.
-     */
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type getType() {
-        return type;
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
@@ -153,13 +124,15 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
         return super.replace(node, replacementNode);
     }
 
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PatternExpr(TokenRange tokenRange, Type type) {
-        super(tokenRange);
-        setType(type);
-        customInitialization();
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
+    public PatternExpr clone() {
+        return (PatternExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public PatternExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.patternExprMetaModel;
     }
 }

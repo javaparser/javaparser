@@ -576,10 +576,8 @@ public abstract class ResolvedReferenceType
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     public boolean isJavaLangObject() {
-        return this.isReferenceType()
-                && // Consider anonymous classes
-                hasName()
-                && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return // Consider anonymous classes
+        this.isReferenceType() && hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -587,10 +585,8 @@ public abstract class ResolvedReferenceType
      * @see ResolvedReferenceTypeDeclaration#isJavaLangEnum()
      */
     public boolean isJavaLangEnum() {
-        return this.isReferenceType()
-                && // Consider anonymous classes
-                hasName()
-                && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return // Consider anonymous classes
+        this.isReferenceType() && hasName() && getQualifiedName().equals(JAVA_LANG_ENUM);
     }
 
     /**
@@ -598,10 +594,8 @@ public abstract class ResolvedReferenceType
      * @see ResolvedReferenceTypeDeclaration#isJavaLangRecord()
      */
     public boolean isJavaLangRecord() {
-        return this.isReferenceType()
-                && // Consider anonymous classes
-                hasName()
-                && getQualifiedName().equals(JAVA_LANG_RECORD);
+        return // Consider anonymous classes
+        this.isReferenceType() && hasName() && getQualifiedName().equals(JAVA_LANG_RECORD);
     }
 
     // /
