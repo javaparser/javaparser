@@ -25,6 +25,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -240,4 +241,6 @@ public interface VoidVisitor<A> {
     void visit(RecordPatternExpr n, A arg);
 
     void visit(MatchAllPatternExpr n, A arg);
+
+    void visit(MarkdownComment n, A arg);
 }
