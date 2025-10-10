@@ -110,6 +110,7 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.comments.BlockComment.class);
             add(com.github.javaparser.ast.comments.JavadocComment.class);
             add(com.github.javaparser.ast.comments.LineComment.class);
+            add(com.github.javaparser.ast.comments.MarkdownComment.class);
 
             add(com.github.javaparser.ast.expr.ArrayAccessExpr.class);
             add(com.github.javaparser.ast.expr.ArrayCreationExpr.class);
