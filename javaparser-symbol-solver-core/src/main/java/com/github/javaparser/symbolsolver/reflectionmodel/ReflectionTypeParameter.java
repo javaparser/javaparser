@@ -118,7 +118,7 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
 
     @Override
     public String toString() {
-        return "ReflectionTypeParameter{" + "typeVariable=" + typeVariable + '}';
+        return getClass().getSimpleName() + "{" + "typeVariable=" + typeVariable + '}';
     }
 
     @Override

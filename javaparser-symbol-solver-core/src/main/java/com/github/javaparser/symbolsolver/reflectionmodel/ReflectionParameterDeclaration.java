@@ -69,7 +69,7 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
 
     @Override
     public String toString() {
-        return "ReflectionParameterDeclaration{" + "type=" + type + ", name=" + name + '}';
+        return getClass().getSimpleName() + "{" + "type=" + type + ", name=" + name + '}';
     }
 
     @Override
