@@ -21,10 +21,12 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
@@ -32,12 +34,60 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
  * Base class for {@link com.github.javaparser.GeneratedJavaParserTokenManager}
  */
 abstract class GeneratedJavaParserTokenManagerBase {
+    private static Pattern markdownLinePattern = Pattern.compile("^\\s*///(.*)$");
     /**
      * Create a TokenRange that spans exactly one token
      */
     private static TokenRange tokenRange(Token token) {
         JavaToken javaToken = token.javaToken;
         return new TokenRange(javaToken, javaToken);
+    }
+
+    static boolean isMarkdownCommentLineCandidate(Token token) {
+        return token.kind == SINGLE_LINE_COMMENT && token.image.startsWith("///");
+    }
+
+    static MarkdownComment createMarkdownCommentFromTokenList(ArrayDeque<Token> tokens) {
+        if (tokens.isEmpty()) {
+            throw new IllegalArgumentException("Cannot create markdown comment from empty token list");
+        }
+
+        TokenRange range = new TokenRange(
+                tokens.peekFirst().javaToken,
+                tokens.peekLast().javaToken
+        );
+
+        ArrayList<String> commentLines = new ArrayList<>();
+        for (Token token : tokens) {
+            Matcher matcher = markdownLinePattern.matcher(token.image);
+            if (matcher.matches()) {
+                commentLines.add(matcher.group(1));
+            } else {
+                commentLines.add(token.image);
+            }
+        }
+
+        int shortestWhitespacePrefix = Integer.MAX_VALUE;
+        for (String line : commentLines) {
+            for (int i = 0; i < line.length(); i++) {
+                if (!Character.isWhitespace(line.charAt(i))) {
+                    shortestWhitespacePrefix = Math.min(shortestWhitespacePrefix, i);
+                    break;
+                }
+            }
+        }
+
+        StringBuilder contentBuilder = new StringBuilder();
+
+        for (String line : commentLines) {
+            if (line.trim().isEmpty()) {
+                contentBuilder.append(line);
+            } else {
+                contentBuilder.append(line.substring(shortestWhitespacePrefix));
+            }
+        }
+
+        return new MarkdownComment(range, contentBuilder.toString());
     }
 
     /**

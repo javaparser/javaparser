@@ -64,7 +64,7 @@ public class MarkdownComment extends Comment {
 
     @Override
     public String getHeader() {
-        return "///";
+        return "/// ";
     }
 
     @Override
@@ -86,8 +86,24 @@ public class MarkdownComment extends Comment {
 
     @Override
     public String asString() {
-        // Return sensible string here
-        return getContent();
+        String content = getContent();
+        String lineSeparator;
+        // Try to preserve line separators
+        if (content.contains("\r\n")) {
+            lineSeparator = "\r\n";
+        } else if (content.contains("\n")) {
+            lineSeparator = "\n";
+        } else {
+            lineSeparator = "\r";
+        }
+        String[] lines = content.split(lineSeparator);
+        StringBuilder builder = new StringBuilder();
+        for (String line : lines) {
+            builder.append(getHeader());
+            builder.append(line);
+            builder.append(lineSeparator);
+        }
+        return builder.toString();
     }
 
     @Override
