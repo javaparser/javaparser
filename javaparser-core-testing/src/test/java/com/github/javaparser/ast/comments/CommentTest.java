@@ -283,8 +283,8 @@ class CommentTest {
                 + " // and single line comments\n"
                 + "\n"
                 + " and empty lines preceded by ///\n"
-                + " without issues\n";
-        assertEquals(expectedContent, comment.getContent());
+                + " without issues";
+        assertEquals(expectedContent, comment.getMarkdownContent());
     }
 
     @Test
@@ -303,7 +303,7 @@ class CommentTest {
 
         MarkdownComment comment = testMethod.getComment().get().asMarkdownComment();
 
-        String comment2Expectation = "/// \n" + "/// and empty lines preceded by ///\n" + "/// without issues\n";
+        String comment2Expectation = "///\n" + "  /// and empty lines preceded by ///\n" + "  /// without issues\n";
         assertEqualsStringIgnoringEol(comment2Expectation, comment.asString());
 
         List<Comment> orphanComments = cu.findFirst(TypeDeclaration.class).get().getOrphanComments();
@@ -311,10 +311,10 @@ class CommentTest {
         assertEquals(1, orphanComments.size());
         assertInstanceOf(MarkdownComment.class, orphanComments.get(0));
 
-        String comment1Expectation = "/// This is a markdown comment test. It should\n" + "/// /**\n"
-                + "///  * Handle multiline comments.\n"
-                + "///  */\n"
-                + "/// // and single line comments\n";
+        String comment1Expectation = "/// This is a markdown comment test. It should\n" + "  /// /**\n"
+                + "  ///  * Handle multiline comments.\n"
+                + "  ///  */\n"
+                + "  /// // and single line comments\n";
         assertEqualsStringIgnoringEol(comment1Expectation, orphanComments.get(0).asString());
     }
 
@@ -330,7 +330,8 @@ class CommentTest {
 
         MarkdownComment comment = testMethod.getComment().get().asMarkdownComment();
 
-        assertEqualsStringIgnoringEol("this is a single-line markdown comment test\n", comment.getContent());
+        assertEqualsStringIgnoringEol("/// this is a single-line markdown comment test\n", comment.getContent());
+        assertEqualsStringIgnoringEol("this is a single-line markdown comment test", comment.getMarkdownContent());
         assertEqualsStringIgnoringEol("/// this is a single-line markdown comment test\n", comment.asString());
     }
 
@@ -352,7 +353,10 @@ class CommentTest {
 
         MarkdownComment comment = testMethod.getComment().get().asMarkdownComment();
 
-        String expectedContent = "\n" + "and empty lines preceded by ///\n" + "without issues\n";
+        String expectedMarkdownContent = "\n" + "and empty lines preceded by ///\n" + "without issues";
+        assertEquals(expectedMarkdownContent, comment.getMarkdownContent());
+
+        String expectedContent = "///\n  ///  and empty lines preceded by ///\n  ///  without issues\n";
         assertEquals(expectedContent, comment.getContent());
 
         List<Comment> orphanComments = cu.findFirst(TypeDeclaration.class).get().getOrphanComments();
@@ -361,9 +365,10 @@ class CommentTest {
 
         assertInstanceOf(MarkdownComment.class, orphanComments.get(0));
         String expectedFirstOrphanContent =
-                "This is a markdown comment test. It should\n" + "/**\n" + " * Handle multiline comments.\n" + " */\n";
+                "This is a markdown comment test. It should\n" + "/**\n" + " * Handle multiline comments.\n" + " */";
         assertEqualsStringIgnoringEol(
-                expectedFirstOrphanContent, orphanComments.get(0).getContent());
+                expectedFirstOrphanContent,
+                orphanComments.get(0).asMarkdownComment().getMarkdownContent());
 
         assertInstanceOf(LineComment.class, orphanComments.get(1));
         assertEqualsStringIgnoringEol(

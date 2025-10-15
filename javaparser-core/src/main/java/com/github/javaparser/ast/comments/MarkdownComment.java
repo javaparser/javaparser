@@ -28,8 +28,13 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.MarkdownCommentMetaModel;
+import com.github.javaparser.utils.LineSeparator;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * https://openjdk.org/jeps/467 added support for markdown JavaDoc comments
@@ -43,6 +48,8 @@ import java.util.function.Consumer;
  * start of each line.
  */
 public class MarkdownComment extends Comment {
+
+    private static Pattern markdownLinePattern = Pattern.compile("^\\s*///(.*)$");
 
     public MarkdownComment() {
         this(null, "empty");
@@ -62,9 +69,69 @@ public class MarkdownComment extends Comment {
         customInitialization();
     }
 
+    /**
+     * Returns the Markdown content of this comment as defined in <a href="https://openjdk.org/jeps/467">JEP 467</a>:
+     * <blockquote cite="https://openjdk.org/jeps/467">
+     *     Because horizontal whitespace at the beginning and end of each line of Markdown text may be significant,
+     *     the content of a Markdown documentation comment is determined as follows:
+     *     -- Any leading whitespace and the three initial / characters are removed from each line.
+     *     -- The lines are shifted left, by removing leading whitespace characters, until the non-blank line with the
+     *        least leading whitespace has no remaining leading whitespace.
+     *     -- Additional leading whitespace and any trailing whitespace in each line is preserved, because it may be
+     *        significant. For example, whitespace at the beginning of a line may indicate an indented code block or the
+     *        continuation of a list item, and whitespace at the end of a line may indicate a hard line break.
+     *     </blockquote>
+     * @return
+     */
+    public String getMarkdownContent() {
+        String content = getContent();
+        LineSeparator lineSeparator = LineSeparator.detect(content);
+        ArrayList<String> commentLines = new ArrayList<>();
+        if (lineSeparator == LineSeparator.CR
+                || lineSeparator == LineSeparator.LF
+                || lineSeparator == LineSeparator.CRLF) {
+            commentLines.addAll(Arrays.asList(content.split(lineSeparator.asRawString())));
+        } else if (lineSeparator == LineSeparator.NONE) {
+            commentLines.add(content);
+        } else {
+            // TODO
+        }
+        ArrayList<String> formattedLines = new ArrayList<>();
+        for (String line : commentLines) {
+            Matcher matcher = markdownLinePattern.matcher(line);
+            if (matcher.matches()) {
+                formattedLines.add(matcher.group(1));
+            } else {
+                formattedLines.add(line);
+            }
+        }
+        int shortestWhitespacePrefix = Integer.MAX_VALUE;
+        for (String line : formattedLines) {
+            for (int i = 0; i < line.length(); i++) {
+                if (!Character.isWhitespace(line.charAt(i))) {
+                    shortestWhitespacePrefix = Math.min(shortestWhitespacePrefix, i);
+                    break;
+                }
+            }
+        }
+        StringBuilder contentBuilder = new StringBuilder();
+        for (int i = 0; i < formattedLines.size(); i++) {
+            String line = formattedLines.get(i);
+            if (line.trim().isEmpty()) {
+                contentBuilder.append(line);
+            } else {
+                contentBuilder.append(line.substring(shortestWhitespacePrefix));
+            }
+            if (i != formattedLines.size() - 1) {
+                contentBuilder.append(lineSeparator.asRawString());
+            }
+        }
+        return contentBuilder.toString();
+    }
+
     @Override
     public String getHeader() {
-        return "/// ";
+        return "";
     }
 
     @Override

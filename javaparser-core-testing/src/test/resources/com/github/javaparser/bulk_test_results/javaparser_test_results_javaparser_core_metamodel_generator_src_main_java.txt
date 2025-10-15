@@ -1,1 +1,19 @@
-0 problems in 0 files
+com/github/javaparser/generator/AbstractGenerator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/generator/metamodel/AstTypeAnalysis.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/generator/metamodel/InitializeConstructorParametersStatementsGenerator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/generator/metamodel/InitializePropertyMetaModelsStatementsGenerator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/generator/metamodel/MetaModelGenerator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/generator/metamodel/NodeMetaModelGenerator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+6 problems in 6 files

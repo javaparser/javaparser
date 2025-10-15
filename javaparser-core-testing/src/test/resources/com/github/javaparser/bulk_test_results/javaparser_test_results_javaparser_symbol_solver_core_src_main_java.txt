@@ -1,1 +1,511 @@
-0 problems in 0 files
+com/github/javaparser/symbolsolver/cache/DefaultCacheStats.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/cache/GuavaCache.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/cache/InMemoryCache.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/cache/NoCache.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/core/resolution/MethodUsageResolutionCapability.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/core/resolution/SymbolResolutionCapability.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/core/resolution/TypeVariableResolutionCapability.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/declarations/common/MethodDeclarationCommonLogic.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparser/package-info.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/AbstractJavaParserContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/AbstractMethodLikeDeclarationContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/AnnotationDeclarationContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/AnonymousClassDeclarationContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/ArrayAccessExprContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/BinaryExprContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/BlockStmtContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/CatchClauseContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/ClassOrInterfaceDeclarationContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/ClassOrInterfaceDeclarationExtendsContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/CompilationUnitContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/ConditionalExprContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/ConstructorContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/ContextHelper.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/DoStatementContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/EnclosedExprContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/EnumDeclarationContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/ExpressionContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/FieldAccessContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/ForEachStatementContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/ForStatementContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/IfStatementContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/InstanceOfExprContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/JavaParserTypeDeclarationAdapter.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/LambdaExprContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/MethodCallExprContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/MethodContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/MethodReferenceExprContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/ObjectCreationContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/RecordDeclarationContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/StatementContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/SwitchEntryContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/TryWithResourceContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/UnaryExprContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/VariableDeclarationExprContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/VariableDeclaratorContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/contexts/WhileStatementContext.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/AstResolutionUtils.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/DefaultConstructorDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserAnnotationDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserAnnotationMemberDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserAnonymousClassDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserClassDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserConstructorDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserEnumConstantDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserEnumDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserFieldDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserInterfaceDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserMethodDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserParameterDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserRecordDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserSymbolDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserTypeAdapter.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserTypeParameter.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserTypePatternDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserTypeVariableDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarations/JavaParserVariableDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarators/AbstractSymbolDeclarator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarators/FieldSymbolDeclarator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarators/NoSymbolDeclarator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarators/ParameterSymbolDeclarator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarators/TypePatternSymbolDeclarator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/declarators/VariableSymbolDeclarator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/DefaultVisitorAdapter.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/FailureHandler.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/JavaParserFacade.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/JavaParserFactory.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/NormalCompletionVisitor.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/package-info.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/PatternVariableResult.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/PatternVariableVisitor.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javaparsermodel/TypeExtractor.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistAnnotationDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistAnnotationMemberDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistClassDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistConstructorDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistEnumConstantDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistEnumDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistFactory.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistFieldDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistInterfaceDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistMethodDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistMethodLikeDeclarationAdapter.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistParameterDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistRecordDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistTypeDeclarationAdapter.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistTypeParameter.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/JavassistUtils.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/javassistmodel/package-info.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/JavaSymbolSolver.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/logic/AbstractClassDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/logic/AbstractTypeDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/logic/ObjectProvider.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/comparators/ClassComparator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/comparators/MethodComparator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/comparators/ParameterComparator.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/package-info.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionAnnotationDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionAnnotationMemberDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionClassAdapter.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionClassDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionConstructorDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionEnumConstantDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionEnumDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionFactory.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionFieldDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionInterfaceDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionMethodDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionMethodResolutionLogic.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionParameterDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionPatternDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionRecordDeclaration.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/reflectionmodel/ReflectionTypeParameter.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/naming/NameCategory.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/naming/NameLogic.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/naming/NameRole.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/promotion/BooleanConditionalExprHandler.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/promotion/ConditionalExprResolver.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/promotion/NumericConditionalExprHandler.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/promotion/ReferenceConditionalExprHandler.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/SymbolSolver.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/Bound.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/bounds/CapturesBound.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/bounds/FalseBound.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/bounds/SameAsBound.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/bounds/SubtypeOfBound.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/bounds/ThrowsBound.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/BoundSet.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/ConstraintFormula.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/constraintformulas/ExpressionCompatibleWithType.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/constraintformulas/LambdaThrowsCompatibleWithType.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/constraintformulas/MethodReferenceThrowsCompatibleWithType.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/constraintformulas/TypeCompatibleWithType.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/constraintformulas/TypeContainedByType.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/constraintformulas/TypeSameAsType.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/constraintformulas/TypeSubtypeOfType.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/ConstraintFormulaSet.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/ControlFlowLogic.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/InferenceVariable.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/InferenceVariableSubstitution.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/Instantiation.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/InstantiationSet.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/LeastUpperBoundLogic.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/MethodType.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/ProperLowerBound.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/ProperUpperBound.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/Substitution.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/TypeHelper.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/TypeInference.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typeinference/TypeInferenceCache.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typesolvers/AarTypeSolver.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typesolvers/ClassLoaderTypeSolver.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typesolvers/CombinedTypeSolver.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typesolvers/JarTypeSolver.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typesolvers/JavaParserTypeSolver.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typesolvers/MemoryTypeSolver.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typesolvers/ReflectionTypeSolver.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/resolution/typesolvers/TypeSolverBuilder.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/SourceFileInfoExtractor.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/utils/FileUtils.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+com/github/javaparser/symbolsolver/utils/SymbolSolverCollectionStrategy.java
+createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens
+
+170 problems in 170 files

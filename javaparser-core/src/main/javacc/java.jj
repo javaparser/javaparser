@@ -236,6 +236,9 @@ TOKEN_MGR_DECLS :
     }
 
     private void createMarkdownComment() {
+        while (!markdownCommentTokens.isEmpty() && TokenTypes.isWhitespace(markdownCommentTokens.peekFirst().kind)) {
+            markdownCommentTokens.removeFirst();
+        }
         if (!markdownCommentTokens.isEmpty()) {
             MarkdownComment comment = createMarkdownCommentFromTokenList(markdownCommentTokens);
             markdownCommentTokens.clear();
@@ -280,6 +283,8 @@ TOKEN_MGR_DECLS :
                 expectMarkdownComment = true;
             } else if (expectMarkdownComment && isMarkdownCommentLineCandidate(token)) {
                 expectEndOfMarkdownLine = true;
+                markdownCommentTokens.add(token);
+            } else if (expectMarkdownComment && TokenTypes.isWhitespaceButNotEndOfLine(token.kind)) {
                 markdownCommentTokens.add(token);
             } else if(TokenTypes.isComment(token.kind)) {
                 createMarkdownComment();
