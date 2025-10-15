@@ -37,6 +37,7 @@ import java.nio.charset.Charset;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
@@ -48,6 +49,11 @@ import java.util.concurrent.RecursiveAction;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.Optional;
+
+
+
+
 
 /**
  * A collection of Java source files located in one directory and its subdirectories on the file system. The root directory
@@ -477,18 +483,104 @@ public class SourceRoot {
     }
 
     /**
-     * Save all previously parsed files back to a new path.
-     * @param root the root of the java packages
-     * @param encoding the encoding to use while saving the file
+     * Computes the normalized output path under the given newRoot.
+     *
+     * Rules:
+     * - If the cache key is relative, resolve it under newRoot.
+     * - If the key is absolute and under oldRoot, relativize it against oldRoot and then resolve under newRoot.
+     * - If the key is absolute but outside oldRoot, derive a stable relative path:
+     *   use src/main/java/<package>/<PrimaryType>.java when unit is present,
+     *   otherwise use src/main/java/<filename>.
+     *
+     * Visibility: package-private for testability.
+     *
+     * @param newRoot the destination root directory
+     * @param oldRoot the original source root
+     * @param key     the cached path key (may be relative or absolute)
+     * @param unit    the compilation unit if available
+     * @return the resolved and normalized target path under newRoot
      */
+
+
+    static Path resolveSavePath(Path newRoot, Path oldRoot, Path key, Optional<CompilationUnit> unit) {
+        // Normalize everything to be robust across platforms.
+        final Path normNewRoot = newRoot.normalize();
+        final Path normOldRoot = oldRoot.normalize();
+        final Path normKey     = key.normalize();
+
+        final Path absOld = normOldRoot.toAbsolutePath();
+        final Path absKey = normKey.toAbsolutePath();
+
+        // On Windows, a path like "\foo\bar" may not be "absolute" but still has a root.
+        final boolean hasRoot  = normKey.getRoot() != null;
+        final boolean underOld = absKey.startsWith(absOld);
+
+        final Path relative;
+        if (underOld) {
+            // Case 1: absolute key under the original root -> re-root by relativizing.
+            relative = absOld.relativize(absKey);
+        } else if (hasRoot) {
+            // Case 2: absolute (has root) but outside old root -> derive a stable relative path.
+            if (unit.isPresent()) {
+                CompilationUnit cu = unit.get();
+
+                // Prefer declared package path; empty string means default package.
+                String pkgPath = cu.getPackageDeclaration()
+                        .map(pd -> pd.getNameAsString().replace('.', '/'))
+                        .orElse("");
+
+                // Derive a sensible type name:
+                // 1) use primary type name if available,
+                // 2) otherwise use the first declared type's name,
+                // 3) finally fall back to "Unknown".
+                String typeName = cu.getPrimaryTypeName()
+                        .orElseGet(() -> cu.getPrimaryType()
+                                .map(t -> t.getNameAsString())
+                                .orElseGet(() -> cu.getTypes().isEmpty()
+                                        ? "Unknown"
+                                        : cu.getType(0).getNameAsString()));
+
+                relative = Paths.get("src/main/java").resolve(pkgPath).resolve(typeName + ".java");
+            } else {
+                // No CU available: at least preserve the filename under src/main/java.
+                relative = Paths.get("src/main/java").resolve(normKey.getFileName());
+            }
+        } else {
+            // Case 3: already relative -> keep as-is under the new root.
+            relative = normKey;
+        }
+
+        // Do not force absolute; tests expect a normalized path anchored at newRoot.
+        return normNewRoot.resolve(relative).normalize();
+    }
+
+
+    /**
+     * Saves all cached compilation units under the specified root directory.
+     *
+     * Path resolution:
+     * - Relative keys are resolved under the provided root.
+     * - Absolute keys under this SourceRoot's old root are relativized before resolving under the new root.
+     * - Absolute keys outside the old root use a stable derived path based on package and primary type name.
+     *
+     * @param root     the destination directory to save all files
+     * @param encoding the character encoding used when writing files
+     * @return this SourceRoot instance
+     */
+
     public SourceRoot saveAll(Path root, Charset encoding) {
         assertNotNull(root);
         Log.info("Saving all files (%s) to %s", cache::size, () -> root);
-        for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : cache.entrySet()) {
-            final Path path = root.resolve(cu.getKey());
-            if (cu.getValue().getResult().isPresent()) {
-                Log.trace("Saving %s", () -> path);
-                save(cu.getValue().getResult().get(), path, encoding);
+
+        final Path oldRoot = getRoot();
+        for (Map.Entry<Path, ParseResult<CompilationUnit>> entry : cache.entrySet()) {
+            final Path key = entry.getKey();
+            final Optional<CompilationUnit> unit = entry.getValue().getResult();
+            final Path target = resolveSavePath(root, oldRoot, key, unit);
+
+            if (unit.isPresent()) {
+                Log.trace("Saving %s", () -> target);
+                save(unit.get(), target, encoding);
             }
         }
         return this;
