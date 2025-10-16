@@ -1,56 +1,46 @@
 package com.github.javaparser.utils;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SourceRootPathResolutionTest {
 
-    @Test
-    void relativeKey_resolvesUnderNewRoot() {
-        Path newRoot = Paths.get("/out");
-        Path oldRoot = Paths.get("/proj");
-        Path key = Paths.get("src/main/java/p/A.java");
+    private static Path N(Path p) { return p.toAbsolutePath().normalize(); }
 
-        Path result = SourceRoot.resolveSavePath(newRoot, oldRoot, key, Optional.empty());
-        assertEquals(Paths.get("/out/src/main/java/p/A.java"), result);
+    @Test
+    void relative_is_resolved_under_newRoot_currentBehaviour() throws IOException {
+
+        Path srcRoot = Files.createTempDirectory("jp-src-");
+        Path newRoot = Files.createTempDirectory("jp-out-");
+
+        SourceRoot sr = new SourceRoot(srcRoot);
+
+        Path key = Paths.get("pkg").resolve("A.java");
+
+        Path got = sr.resolveSavePath(newRoot, key);
+
+        assertEquals(N(newRoot.resolve(key)), N(got));
     }
 
     @Test
-    void absoluteUnderOldRoot_isRelativizedThenReRooted() {
-        Path newRoot = Paths.get("/out");
-        Path oldRoot = Paths.get("/proj");
-        Path key = Paths.get("/proj/src/main/java/p/A.java");
+    void absolute_is_returned_as_is_currentBehaviour() throws IOException {
+        Path srcRoot = Files.createTempDirectory("jp-src-");
+        Path newRoot = Files.createTempDirectory("jp-out-");
 
-        Path result = SourceRoot.resolveSavePath(newRoot, oldRoot, key, Optional.empty());
-        assertEquals(Paths.get("/out/src/main/java/p/A.java"), result);
-    }
+        SourceRoot sr = new SourceRoot(srcRoot);
 
-    @Test
-    void absoluteOutsideOldRoot_usesPackageAndPrimaryType() {
-        Path newRoot = Paths.get("/out");
-        Path oldRoot = Paths.get("/proj");
-        Path key = Paths.get("/somewhere/else/X.java");
 
-        CompilationUnit cu = StaticJavaParser.parse("package p.q; public class A {}");
-        Path result = SourceRoot.resolveSavePath(newRoot, oldRoot, key, Optional.of(cu));
+        Path absDir = Files.createTempDirectory("jp-abs-");
+        Path key = absDir.resolve("X.java").toAbsolutePath();
 
-        assertEquals(Paths.get("/out/src/main/java/p/q/A.java"), result);
-    }
+        Path got = sr.resolveSavePath(newRoot, key);
 
-    @Test
-    void absoluteOutsideOldRoot_withoutCu_usesFilename() {
-        Path newRoot = Paths.get("/out");
-        Path oldRoot = Paths.get("/proj");
-        Path key = Paths.get("/somewhere/else/X.java");
-
-        Path result = SourceRoot.resolveSavePath(newRoot, oldRoot, key, Optional.empty());
-        assertEquals(Paths.get("/out/src/main/java/X.java"), result);
+        assertEquals(N(key), N(got));
     }
 }
