@@ -330,7 +330,7 @@ class CommentTest {
 
         MarkdownComment comment = testMethod.getComment().get().asMarkdownComment();
 
-        assertEqualsStringIgnoringEol("/// this is a single-line markdown comment test\n", comment.getContent());
+        assertEqualsStringIgnoringEol("/// this is a single-line markdown comment test", comment.getContent());
         assertEqualsStringIgnoringEol("this is a single-line markdown comment test", comment.getMarkdownContent());
         assertEqualsStringIgnoringEol("/// this is a single-line markdown comment test\n", comment.asString());
     }
@@ -356,7 +356,7 @@ class CommentTest {
         String expectedMarkdownContent = "\n" + "and empty lines preceded by ///\n" + "without issues";
         assertEquals(expectedMarkdownContent, comment.getMarkdownContent());
 
-        String expectedContent = "///\n  ///  and empty lines preceded by ///\n  ///  without issues\n";
+        String expectedContent = "///\n  ///  and empty lines preceded by ///\n  ///  without issues";
         assertEquals(expectedContent, comment.getContent());
 
         List<Comment> orphanComments = cu.findFirst(TypeDeclaration.class).get().getOrphanComments();
@@ -373,5 +373,22 @@ class CommentTest {
         assertInstanceOf(LineComment.class, orphanComments.get(1));
         assertEqualsStringIgnoringEol(
                 " split by single line comments", orphanComments.get(1).getContent());
+    }
+
+    @Test
+    void testTraditionalJavadocComment() {
+        CompilationUnit cu = parse("class Test {\n" + "  /**\n"
+                + "   * This is a traditional javadoc comment\n"
+                + "   */\n"
+                + "  void test() {}\n"
+                + "}");
+
+        MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
+
+        assertTrue(testMethod.getComment().isPresent());
+        assertInstanceOf(JavadocComment.class, testMethod.getComment().get());
+
+        String expectedContent = "\n   * This is a traditional javadoc comment\n   ";
+        assertEquals(expectedContent, testMethod.getComment().get().getContent());
     }
 }

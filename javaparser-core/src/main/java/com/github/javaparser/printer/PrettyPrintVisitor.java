@@ -1700,8 +1700,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             return;
         }
         final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
-        // as MarkdownComment should not be formatted, -1 to preserve any trailing empty line if present
-        String[] lines = commentContent.split("\\R", -1);
+        String[] lines = commentContent.split("\\R");
         for (int i = 0; i < (lines.length - 1); i++) {
             printer.print(n.getHeader());
             printer.print(lines[i]);
@@ -1710,9 +1709,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             // at the next print call.
             printer.print(configuration.getEndOfLineCharacter());
         }
-        // last line is not followed by a newline
         printer.print(n.getHeader());
-        printer.print(lines[lines.length - 1]);
+        printer.println(lines[lines.length - 1]);
     }
 
     @Override
