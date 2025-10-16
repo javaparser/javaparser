@@ -37,7 +37,6 @@ import java.nio.charset.Charset;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
@@ -49,7 +48,6 @@ import java.util.concurrent.RecursiveAction;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.Optional;
 
 /**
  * A collection of Java source files located in one directory and its subdirectories on the file system. The root directory
@@ -479,31 +477,39 @@ public class SourceRoot {
     }
 
     /**
-     * Save all previously parsed files back to a new path.
-     * @param root the root of the java packages
-     * @param encoding the encoding to use while saving the file
+     * Saves all cached compilation units under the specified root directory.
+     *
+     * Relative keys are resolved under the provided root.
+     * Absolute keys are returned unchanged (normalized), following java.nio.file.Path.resolve semantics.
+     *
+     * @param root the destination directory to save all files
+     * @param encoding the character encoding used when writing files
+     * @return this SourceRoot instance
      */
     public SourceRoot saveAll(Path root, Charset encoding) {
         assertNotNull(root);
         Log.info("Saving all files (%s) to %s", cache::size, () -> root);
 
-        for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : cache.entrySet()) {
-            final Path target = resolveSavePath(root, cu.getKey());
-            if (cu.getValue().getResult().isPresent()) {
+        for (Map.Entry<Path, ParseResult<CompilationUnit>> e : cache.entrySet()) {
+            final Path target = resolveSavePath(root, e.getKey());
+            e.getValue().getResult().ifPresent(cu -> {
                 Log.trace("Saving %s", () -> target);
-                save(cu.getValue().getResult().get(), target, encoding);
-            }
+                save(cu, target, encoding);
+            });
         }
         return this;
     }
 
+// package-visible for unit tests
     /**
-     * Computes the target path following Path.resolve semantics.
-     * This refactor-only version preserves current behaviour.
+     * Computes the normalized target path following Path.resolve semantics.
+     *
+     * If key is relative, it is resolved under newRoot.
+     * If key is absolute, it is returned unchanged (normalized).
      *
      * @param newRoot the destination root directory
-     * @param key     the cached path key (relative or absolute)
-     * @return newRoot.resolve(key) (Path.resolve semantics)
+     * @param key the cached path key (relative or absolute)
+     * @return the resolved and normalized target path
      */
     Path resolveSavePath(Path newRoot, Path key) {
         if (newRoot == null || key == null) {
@@ -513,6 +519,7 @@ public class SourceRoot {
                 ? key.normalize()
                 : newRoot.resolve(key).normalize();
     }
+
     /**
      * Save all previously parsed files back to a new path.
      * @param root the root of the java packages
