@@ -131,7 +131,8 @@ public class SourceRoot {
         final Path path = root.resolve(relativePath);
         Log.trace("Parsing %s", () -> path);
         final ParseResult<CompilationUnit> result = new JavaParser(configuration)
-                .parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
+                .parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()))
+                .setSourcePath(path);
         result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
         cache.put(relativePath, result);
         return result;
@@ -277,7 +278,8 @@ public class SourceRoot {
         Path localPath = root.relativize(absolutePath);
         Log.trace("Parsing %s", () -> localPath);
         ParseResult<CompilationUnit> result = new JavaParser(configuration)
-                .parse(COMPILATION_UNIT, provider(absolutePath, configuration.getCharacterEncoding()));
+                .parse(COMPILATION_UNIT, provider(absolutePath, configuration.getCharacterEncoding()))
+                .setSourcePath(absolutePath);
         result.getResult().ifPresent(cu -> cu.setStorage(absolutePath, configuration.getCharacterEncoding()));
         switch (callback.process(localPath, absolutePath, result)) {
             case SAVE:
