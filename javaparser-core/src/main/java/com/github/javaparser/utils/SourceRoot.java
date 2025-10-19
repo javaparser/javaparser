@@ -478,21 +478,23 @@ public class SourceRoot {
     }
 
     /**
-     * Saves all cached compilation units under the specified root directory.
+     * Saves all cached compilation units to the specified root directory.
      *
-     * Relative keys are resolved under the provided root.
-     * Absolute keys are returned unchanged (normalized), following java.nio.file.Path.resolve semantics.
+     * Path resolution follows java.nio.file.Path.resolve semantics:
+     * - Relative paths are resolved against the provided root.
+     * - Absolute paths remain unchanged (only normalized).
      *
-     * @param root the destination directory to save all files
+     * @param root the destination root directory
      * @param encoding the character encoding used when writing files
      * @return this SourceRoot instance
+     * @throws NullPointerException if root is null
      */
     public SourceRoot saveAll(Path root, Charset encoding) {
         assertNotNull(root);
         Log.info("Saving all files (%s) to %s", cache::size, () -> root);
 
         for (Map.Entry<Path, ParseResult<CompilationUnit>> e : cache.entrySet()) {
-            final Path target = resolveSavePath(root, e.getKey());
+            final Path target = resolvePath(root, e.getKey());
             e.getValue().getResult().ifPresent(cu -> {
                 Log.trace("Saving %s", () -> target);
                 save(cu, target, encoding);
@@ -501,24 +503,26 @@ public class SourceRoot {
         return this;
     }
 
-// package-visible for unit tests
+
     /**
-     * Computes the normalized target path following Path.resolve semantics.
+     * Resolves and normalizes a cached path using java.nio.file.Path.resolve semantics.
      *
-     * If key is relative, it is resolved under newRoot.
-     * If key is absolute, it is returned unchanged (normalized).
+     * Rules:
+     * - If cachedPath is relative, it is resolved under newRoot.
+     * - If cachedPath is absolute, it is returned unchanged (only normalized).
      *
-     * @param newRoot the destination root directory
-     * @param key the cached path key (relative or absolute)
+     * @param newRoot the root directory used for resolution
+     * @param cachedPath the original cached path (relative or absolute)
      * @return the resolved and normalized target path
+     * @throws NullPointerException if either argument is null
      */
-    Path resolveSavePath(Path newRoot, Path key) {
-        if (newRoot == null || key == null) {
-            throw new NullPointerException("newRoot/key must not be null");
+    Path resolvePath(Path newRoot, Path cachedPath) {
+        if (newRoot == null || cachedPath == null) {
+            throw new NullPointerException("newRoot/cachedPath must not be null");
         }
-        return key.isAbsolute()
-                ? key.normalize()
-                : newRoot.resolve(key).normalize();
+        return cachedPath.isAbsolute()
+                ? cachedPath.normalize()
+                : newRoot.resolve(cachedPath).normalize();
     }
 
     /**

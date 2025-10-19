@@ -127,4 +127,51 @@ class SourceRootTest {
             assertTrue(root.isSensibleDirectoryToEnter(root.getRoot()));
         }
     }
+
+    private static Path normalizePath(Path p) {
+        return p.toAbsolutePath().normalize();
+    }
+
+    @Test
+    void resolvePath_resolves_relative_under_newRoot() {
+        Path newRoot = Paths.get("new-root");
+        SourceRoot sr = new SourceRoot(root);
+
+        Path relKey = Paths.get("pkg/A.java");
+        Path got = sr.resolvePath(newRoot, relKey);
+
+        assertEquals(normalizePath(newRoot.resolve(relKey)), normalizePath(got));
+    }
+
+    @Test
+    void resolvePath_returns_absolute_unchanged() {
+        Path newRoot = Paths.get("new-root");
+        SourceRoot sr = new SourceRoot(root);
+
+        Path absKey = root.toAbsolutePath().resolve("pkg/B.java");
+        Path got = sr.resolvePath(newRoot, absKey);
+
+        assertEquals(normalizePath(absKey), normalizePath(got));
+    }
+
+    @Test
+    void saveAll_uses_resolution_for_relative_and_absolute_keys() throws Exception {
+        Path oldRoot = Files.createTempDirectory("jp-old-");
+        Path newRoot = Files.createTempDirectory("jp-new-");
+        SourceRoot sr = new SourceRoot(oldRoot);
+
+        CompilationUnit cuRel = new CompilationUnit();
+        sr.add("pkg", "Rel.java", cuRel);
+        Path expectedRelTarget = normalizePath(newRoot.resolve("pkg/Rel.java"));
+        assertEquals(expectedRelTarget,
+                normalizePath(sr.resolvePath(newRoot, Paths.get("pkg/Rel.java"))));
+
+        Path absKey = oldRoot.resolve("pkg/Abs.java").toAbsolutePath();
+        Files.createDirectories(absKey.getParent());
+        CompilationUnit cuAbs = new CompilationUnit();
+        cuAbs.setStorage(absKey, java.nio.charset.StandardCharsets.UTF_8);
+        sr.add(cuAbs);
+        Path expectedAbsTarget = normalizePath(absKey);
+        assertEquals(expectedAbsTarget, normalizePath(sr.resolvePath(newRoot, absKey)));
+    }
 }
