@@ -400,14 +400,13 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testToStringShouldUseCorrectClassName() {
-        ReflectionRecordDeclaration decl =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration decl = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
 
         String result = decl.toString();
         System.out.println("toString() output = " + result);
 
-        assertTrue(result.contains("ReflectionRecordDeclaration"),
+        assertTrue(
+                result.contains("ReflectionRecordDeclaration"),
                 "Expected 'ReflectionRecordDeclaration' in toString(), but got: " + result);
     }
-
 }
