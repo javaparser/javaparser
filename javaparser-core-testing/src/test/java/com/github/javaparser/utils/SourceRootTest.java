@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.ConfigurablePrinter;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
@@ -35,6 +36,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -126,5 +128,35 @@ class SourceRootTest {
             SourceRoot root = new SourceRoot(Paths.get("tests/01"));
             assertTrue(root.isSensibleDirectoryToEnter(root.getRoot()));
         }
+    }
+
+    @Test
+    void getSourcePathTest() throws IOException {
+        Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class)
+                .resolve("src/test/resources/com/github/javaparser/utils/.abc");
+        SourceRoot sr = new SourceRoot(path);
+        List<ParseResult<CompilationUnit>> results = sr.tryToParse("");
+        Path filePath = path.resolve("bla.java");
+        // Assert for getSourcePath:
+        assertEquals(1, results.size());
+        ParseResult<CompilationUnit> r = results.get(0);
+        assertTrue(r.getSourcePath().isPresent(), "Expected source path to be present");
+        assertEquals(filePath.toAbsolutePath(), r.getSourcePath().get());
+    }
+
+    @Test
+    void sourcePathToStringTest() {
+        Problem problem = new Problem("problem", null, null);
+        // sourcePath not set -> no " for <path>" in message
+        ParseResult<CompilationUnit> r = new ParseResult<>(null, Collections.singletonList(problem), null);
+        assertFalse(r.getSourcePath().isPresent());
+        String s = r.toString();
+        assertFalse(s.contains(" for "));
+        // sourcePath set -> message contains " for <path>"
+        Path p = Paths.get("SomeFile.java").toAbsolutePath();
+        ParseResult<CompilationUnit> r2 = new ParseResult<>(null, Collections.singletonList(problem), null);
+        r2.setSourcePath(p);
+        assertTrue(r2.getSourcePath().isPresent());
+        assertTrue(r2.toString().startsWith("Parsing failed for " + p));
     }
 }
