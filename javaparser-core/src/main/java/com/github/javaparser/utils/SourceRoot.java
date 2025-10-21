@@ -20,8 +20,6 @@
  */
 package com.github.javaparser.utils;
 
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.nio.file.FileVisitResult.*;
@@ -130,10 +128,7 @@ public class SourceRoot {
         }
         final Path path = root.resolve(relativePath);
         Log.trace("Parsing %s", () -> path);
-        final ParseResult<CompilationUnit> result = new JavaParser(configuration)
-                .parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()))
-                .setSourcePath(path);
-        result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
+        final ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(path);
         cache.put(relativePath, result);
         return result;
     }
@@ -277,10 +272,7 @@ public class SourceRoot {
             throws IOException {
         Path localPath = root.relativize(absolutePath);
         Log.trace("Parsing %s", () -> localPath);
-        ParseResult<CompilationUnit> result = new JavaParser(configuration)
-                .parse(COMPILATION_UNIT, provider(absolutePath, configuration.getCharacterEncoding()))
-                .setSourcePath(absolutePath);
-        result.getResult().ifPresent(cu -> cu.setStorage(absolutePath, configuration.getCharacterEncoding()));
+        ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(absolutePath);
         switch (callback.process(localPath, absolutePath, result)) {
             case SAVE:
                 result.getResult().ifPresent(cu -> save(cu, absolutePath));
