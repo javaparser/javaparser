@@ -305,6 +305,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     public Integer visit(final ImportDeclaration n, final Void arg) {
         return (n.isAsterisk() ? 1 : 0) * 31
+                + (n.isModule() ? 1 : 0) * 31
                 + (n.isStatic() ? 1 : 0) * 31
                 + (n.getName().accept(this, arg)) * 31
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
