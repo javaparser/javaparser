@@ -27,8 +27,8 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.printer.ConfigurablePrinter;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
@@ -42,6 +42,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
@@ -174,7 +175,6 @@ class SourceRootTest {
     @Test
     void resolvePathKeepsAbsolutePath() {
         SourceRoot sr = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class));
-
         Path abs = Paths.get("absdir/../absdir/B.java").toAbsolutePath();
         Path newRoot = Paths.get("anotherRoot");
         Path got = sr.resolvePath(newRoot, abs);
@@ -190,44 +190,32 @@ class SourceRootTest {
     }
 
     @Test
-    void saveAllPreservesAbsolutePaths() throws Exception {
-        Path tmp = Files.createTempDirectory("jp-core-");
+    void saveAllPreservesAbsolutePaths(@TempDir Path tmp) throws Exception {
         Path oldRoot = tmp.resolve("old");
         Path newRoot = tmp.resolve("new");
-
         Files.createDirectories(oldRoot);
 
         SourceRoot sr = new SourceRoot(oldRoot);
-        CompilationUnit cuRel = new CompilationUnit();
-        cuRel.setPackageDeclaration("p");
-        ClassOrInterfaceDeclaration rDecl = new ClassOrInterfaceDeclaration();
-        rDecl.setName("R");
-        rDecl.setInterface(false);
-        cuRel.addType(rDecl);
-        sr.add("p", "R.java", cuRel);
 
+        // relative key -> saved under newRoot
+        CompilationUnit cuRel = StaticJavaParser.parse("package p; class R {}");
+        sr.add("p", "R.java", cuRel);
         Path expectedRelativeTarget =
                 newRoot.resolve("p/R.java").toAbsolutePath().normalize();
-        assertFalse(Files.exists(expectedRelativeTarget.getParent()), "parent dir should not exist before save");
+        assertFalse(Files.exists(expectedRelativeTarget.getParent()));
 
-        Path absDir = tmp.resolve("abs");
-        Path absPath = absDir.resolve("X.java").toAbsolutePath();
-        CompilationUnit cuAbs = new CompilationUnit();
-        cuAbs.setPackageDeclaration("abs");
-        ClassOrInterfaceDeclaration xDecl = new ClassOrInterfaceDeclaration();
-        xDecl.setName("X");
-        xDecl.setInterface(false);
-        cuAbs.addType(xDecl);
+        // absolute key -> remains at absolute path
+        Path absPath = tmp.resolve("abs/X.java").toAbsolutePath();
+        Files.createDirectories(absPath.getParent());
+        CompilationUnit cuAbs = StaticJavaParser.parse("package abs; class X {}");
         cuAbs.setStorage(absPath, StandardCharsets.UTF_8);
         sr.add(cuAbs);
 
         sr.saveAll(newRoot, StandardCharsets.UTF_8);
 
-        assertTrue(Files.isDirectory(expectedRelativeTarget.getParent()), "parent directory should be created");
-        assertTrue(Files.isRegularFile(expectedRelativeTarget), "relative CU should be saved under newRoot");
-
-        assertTrue(Files.isRegularFile(absPath), "absolute-storage CU should be saved at its absolute path");
-
+        assertTrue(Files.isDirectory(expectedRelativeTarget.getParent()));
+        assertTrue(Files.isRegularFile(expectedRelativeTarget));
+        assertTrue(Files.isRegularFile(absPath));
         assertTrue(Files.size(expectedRelativeTarget) > 0);
         assertTrue(Files.size(absPath) > 0);
     }
