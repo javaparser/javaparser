@@ -27,12 +27,14 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.ConfigurablePrinter;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +42,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
@@ -158,5 +161,59 @@ class SourceRootTest {
         r2.setSourcePath(p);
         assertTrue(r2.getSourcePath().isPresent());
         assertTrue(r2.toString().startsWith("Parsing failed for " + p));
+    }
+
+    @Test
+    void resolvePathRelativeToNewRoot() {
+        SourceRoot sr = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class));
+        Path newRoot = Paths.get("root");
+        Path relative = Paths.get("pkg/../pkg/A.java");
+        Path got = sr.resolvePath(newRoot, relative);
+        assertEquals(newRoot.resolve("pkg/A.java").normalize(), got);
+    }
+
+    @Test
+    void resolvePathKeepsAbsolutePath() {
+        SourceRoot sr = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class));
+        Path abs = Paths.get("absdir/../absdir/B.java").toAbsolutePath();
+        Path newRoot = Paths.get("anotherRoot");
+        Path got = sr.resolvePath(newRoot, abs);
+        assertEquals(abs.normalize(), got, "absolute path must not be re-rooted");
+    }
+
+    @Test
+    void resolvePathNullArgsThrowException() {
+        SourceRoot sr = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class));
+        Path p = Paths.get("pkg/C.java");
+        assertThrows(NullPointerException.class, () -> sr.resolvePath(null, p));
+        assertThrows(NullPointerException.class, () -> sr.resolvePath(Paths.get("root"), null));
+    }
+
+    @Test
+    void saveAllPreservesAbsolutePaths(@TempDir Path oldRoot, @TempDir Path newRoot, @TempDir Path absDir)
+            throws Exception {
+
+        SourceRoot sr = new SourceRoot(oldRoot);
+
+        // relative key -> saved under newRoot
+        CompilationUnit cuRel = StaticJavaParser.parse("package p; class R {}");
+        sr.add("p", "R.java", cuRel);
+        Path expectedRelativeTarget =
+                newRoot.resolve("p/R.java").toAbsolutePath().normalize();
+        assertFalse(Files.exists(expectedRelativeTarget.getParent()));
+
+        // absolute key -> remains at absolute path
+        Path absPath = absDir.resolve("X.java").toAbsolutePath();
+        CompilationUnit cuAbs = StaticJavaParser.parse("package abs; class X {}");
+        cuAbs.setStorage(absPath, StandardCharsets.UTF_8);
+        sr.add(cuAbs);
+
+        sr.saveAll(newRoot, StandardCharsets.UTF_8);
+
+        assertTrue(Files.isDirectory(expectedRelativeTarget.getParent()));
+        assertTrue(Files.isRegularFile(expectedRelativeTarget));
+        assertTrue(Files.isRegularFile(absPath));
+        assertTrue(Files.size(expectedRelativeTarget) > 0);
+        assertTrue(Files.size(absPath) > 0);
     }
 }
