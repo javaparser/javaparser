@@ -205,7 +205,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
 
     @Override
     public String toString() {
-        return "ReflectionClassDeclaration{" + "clazz=" + getId() + '}';
+        return getClass().getSimpleName() + "{" + "clazz=" + getId() + '}';
     }
 
     public ResolvedType getUsage(Node node) {
