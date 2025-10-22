@@ -485,7 +485,6 @@ public class SourceRoot {
     public SourceRoot saveAll(Path root, Charset encoding) {
         assertNotNull(root);
         Log.info("Saving all files (%s) to %s", cache::size, () -> root);
-
         for (Map.Entry<Path, ParseResult<CompilationUnit>> e : cache.entrySet()) {
             final Path target = resolvePath(root, e.getKey());
             e.getValue().getResult().ifPresent(cu -> {
