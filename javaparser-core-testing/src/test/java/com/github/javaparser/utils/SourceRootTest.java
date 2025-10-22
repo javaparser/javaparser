@@ -190,10 +190,8 @@ class SourceRootTest {
     }
 
     @Test
-    void saveAllPreservesAbsolutePaths(@TempDir Path tmp) throws Exception {
-        Path oldRoot = tmp.resolve("old");
-        Path newRoot = tmp.resolve("new");
-        Files.createDirectories(oldRoot);
+    void saveAllPreservesAbsolutePaths(@TempDir Path oldRoot, @TempDir Path newRoot, @TempDir Path absDir)
+            throws Exception {
 
         SourceRoot sr = new SourceRoot(oldRoot);
 
@@ -205,8 +203,7 @@ class SourceRootTest {
         assertFalse(Files.exists(expectedRelativeTarget.getParent()));
 
         // absolute key -> remains at absolute path
-        Path absPath = tmp.resolve("abs/X.java").toAbsolutePath();
-        Files.createDirectories(absPath.getParent());
+        Path absPath = absDir.resolve("X.java").toAbsolutePath();
         CompilationUnit cuAbs = StaticJavaParser.parse("package abs; class X {}");
         cuAbs.setStorage(absPath, StandardCharsets.UTF_8);
         sr.add(cuAbs);
