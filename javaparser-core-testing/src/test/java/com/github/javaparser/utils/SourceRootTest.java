@@ -28,11 +28,13 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.printer.ConfigurablePrinter;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -158,5 +160,75 @@ class SourceRootTest {
         r2.setSourcePath(p);
         assertTrue(r2.getSourcePath().isPresent());
         assertTrue(r2.toString().startsWith("Parsing failed for " + p));
+    }
+
+    @Test
+    void resolvePathRelativeToNewRoot() {
+        SourceRoot sr = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class));
+        Path newRoot = Paths.get("root");
+        Path relative = Paths.get("pkg/../pkg/A.java");
+        Path got = sr.resolvePath(newRoot, relative);
+        assertEquals(newRoot.resolve("pkg/A.java").normalize(), got);
+    }
+
+    @Test
+    void resolvePathKeepsAbsolutePath() {
+        SourceRoot sr = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class));
+
+        Path abs = Paths.get("absdir/../absdir/B.java").toAbsolutePath();
+        Path newRoot = Paths.get("anotherRoot");
+        Path got = sr.resolvePath(newRoot, abs);
+        assertEquals(abs.normalize(), got, "absolute path must not be re-rooted");
+    }
+
+    @Test
+    void resolvePathNullArgsThrowException() {
+        SourceRoot sr = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class));
+        Path p = Paths.get("pkg/C.java");
+        assertThrows(NullPointerException.class, () -> sr.resolvePath(null, p));
+        assertThrows(NullPointerException.class, () -> sr.resolvePath(Paths.get("root"), null));
+    }
+
+    @Test
+    void saveAllPreservesAbsolutePaths() throws Exception {
+        Path tmp = Files.createTempDirectory("jp-core-");
+        Path oldRoot = tmp.resolve("old");
+        Path newRoot = tmp.resolve("new");
+
+        Files.createDirectories(oldRoot);
+
+        SourceRoot sr = new SourceRoot(oldRoot);
+        CompilationUnit cuRel = new CompilationUnit();
+        cuRel.setPackageDeclaration("p");
+        ClassOrInterfaceDeclaration rDecl = new ClassOrInterfaceDeclaration();
+        rDecl.setName("R");
+        rDecl.setInterface(false);
+        cuRel.addType(rDecl);
+        sr.add("p", "R.java", cuRel);
+
+        Path expectedRelativeTarget =
+                newRoot.resolve("p/R.java").toAbsolutePath().normalize();
+        assertFalse(Files.exists(expectedRelativeTarget.getParent()), "parent dir should not exist before save");
+
+        Path absDir = tmp.resolve("abs");
+        Path absPath = absDir.resolve("X.java").toAbsolutePath();
+        CompilationUnit cuAbs = new CompilationUnit();
+        cuAbs.setPackageDeclaration("abs");
+        ClassOrInterfaceDeclaration xDecl = new ClassOrInterfaceDeclaration();
+        xDecl.setName("X");
+        xDecl.setInterface(false);
+        cuAbs.addType(xDecl);
+        cuAbs.setStorage(absPath, StandardCharsets.UTF_8);
+        sr.add(cuAbs);
+
+        sr.saveAll(newRoot, StandardCharsets.UTF_8);
+
+        assertTrue(Files.isDirectory(expectedRelativeTarget.getParent()), "parent directory should be created");
+        assertTrue(Files.isRegularFile(expectedRelativeTarget), "relative CU should be saved under newRoot");
+
+        assertTrue(Files.isRegularFile(absPath), "absolute-storage CU should be saved at its absolute path");
+
+        assertTrue(Files.size(expectedRelativeTarget) > 0);
+        assertTrue(Files.size(absPath) > 0);
     }
 }
