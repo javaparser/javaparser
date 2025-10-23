@@ -399,7 +399,7 @@
   Line 593) n ==> com.github.javaparser.ast.expr.InstanceOfExpr
   Line 597) n ==> com.github.javaparser.ast.expr.IntegerLiteralExpr
   Line 601) n ==> com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr
-  Line 605) n ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 605) n ==> com.github.javaparser.ast.comments.JavadocComment
   Line 609) n.setStmt((Statement) n.getStmt().accept(this, arg)) ==> void
   Line 610) n ==> com.github.javaparser.ast.stmt.LabeledStmt
   Line 614) n ==> com.github.javaparser.ast.expr.LongLiteralExpr

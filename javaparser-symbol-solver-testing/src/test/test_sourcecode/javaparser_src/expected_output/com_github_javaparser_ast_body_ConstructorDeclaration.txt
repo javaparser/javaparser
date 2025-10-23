@@ -85,5 +85,5 @@
   Line 213) sb.toString() ==> java.lang.String
   Line 218) getDeclarationAsString(includingModifiers, includingThrows, true) ==> java.lang.String
   Line 223) getDeclarationAsString(true, true, true) ==> java.lang.String
-  Line 228) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
-  Line 233) javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 228) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 233) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

@@ -37,5 +37,5 @@
   Line 116) this.name = name ==> java.lang.String
   Line 120) this.type = type ==> com.github.javaparser.ast.type.Type
   Line 121) setAsParentNodeOf(type) ==> void
-  Line 126) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
-  Line 131) javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 126) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 131) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

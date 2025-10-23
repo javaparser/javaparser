@@ -30,5 +30,5 @@
   Line 94) this.classBody = classBody ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
   Line 95) setAsParentNodeOf(this.classBody) ==> void
   Line 99) this.name = name ==> java.lang.String
-  Line 104) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
-  Line 109) javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 104) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 109) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

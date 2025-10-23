@@ -44,5 +44,5 @@
   Line 114) this.interface_ = interface_ ==> boolean
   Line 118) this.typeParameters = typeParameters ==> java.util.List<com.github.javaparser.ast.TypeParameter>
   Line 119) setAsParentNodeOf(this.typeParameters) ==> void
-  Line 124) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
-  Line 129) javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 124) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 129) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

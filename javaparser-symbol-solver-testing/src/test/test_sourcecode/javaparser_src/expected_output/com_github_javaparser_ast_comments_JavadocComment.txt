@@ -1,5 +1,5 @@
 
-[ Class com.github.javaparser.ast.comments.TraditionalJavadocComment ]
+[ Class com.github.javaparser.ast.comments.JavadocComment ]
   superclass: com.github.javaparser.ast.comments.Comment
   superclass: com.github.javaparser.ast.Node
   superclass: java.lang.Object
