@@ -37,7 +37,7 @@ import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -226,7 +226,7 @@ class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
         considerExample("AnnotationDeclaration_Example3_original");
         AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration) cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
-        JavadocComment comment = new JavadocComment("Cool this annotation!");
+        TraditionalJavadocComment comment = new TraditionalJavadocComment("Cool this annotation!");
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator()
                 .calculatedSyntaxModelAfterPropertyChange(
                         element, annotationDeclaration, ObservableProperty.COMMENT, null, comment);

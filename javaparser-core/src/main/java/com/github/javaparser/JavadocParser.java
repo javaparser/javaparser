@@ -44,11 +44,16 @@ class JavadocParser {
     private static Pattern BLOCK_PATTERN = Pattern.compile("^\\s*" + BLOCK_TAG_PREFIX, Pattern.MULTILINE);
 
     public static Javadoc parse(JavadocComment comment) {
-        return parse(comment.getContent());
+        return parse(comment.getContent(), comment.isMarkdownComment());
     }
 
     public static Javadoc parse(String commentContent) {
-        List<String> cleanLines = cleanLines(normalizeEolInTextBlock(commentContent, LineSeparator.SYSTEM));
+        return parse(commentContent, false);
+    }
+
+    public static Javadoc parse(String commentContent, boolean isMarkdownComment) {
+        List<String> cleanLines =
+                cleanLines(normalizeEolInTextBlock(commentContent, LineSeparator.SYSTEM), isMarkdownComment);
         int indexOfFirstBlockTag = cleanLines.stream()
                 .filter(JavadocParser::isABlockLine)
                 .map(cleanLines::indexOf)
@@ -75,7 +80,7 @@ class JavadocParser {
                     .map(s -> BLOCK_TAG_PREFIX + s)
                     .collect(Collectors.toList());
         }
-        Javadoc document = new Javadoc(JavadocDescription.parseText(descriptionText));
+        Javadoc document = new Javadoc(JavadocDescription.parseText(descriptionText), isMarkdownComment);
         blockLines.forEach(l -> document.addBlockTag(parseBlockTag(l)));
         return document;
     }
@@ -98,24 +103,24 @@ class JavadocParser {
         return string;
     }
 
-    private static List<String> cleanLines(String content) {
+    private static List<String> cleanLines(String content, boolean isMarkdownComment) {
         String[] lines = content.split(LineSeparator.SYSTEM.asRawString());
         if (lines.length == 0) {
             return Collections.emptyList();
         }
         List<String> cleanedLines = Arrays.stream(lines)
                 .map(l -> {
-                    int asteriskIndex = startsWithAsterisk(l);
-                    if (asteriskIndex == -1) {
+                    int asteriskOrLastMdSlashIndex = startsWithAsteriskOrMdSlash(l);
+                    if (asteriskOrLastMdSlashIndex == -1) {
                         return l;
                     }
-                    if (l.length() > (asteriskIndex + 1)) {
-                        char c = l.charAt(asteriskIndex + 1);
+                    if (l.length() > (asteriskOrLastMdSlashIndex + 1)) {
+                        char c = l.charAt(asteriskOrLastMdSlashIndex + 1);
                         if (c == ' ' || c == '\t') {
-                            return l.substring(asteriskIndex + 2);
+                            return l.substring(asteriskOrLastMdSlashIndex + 2);
                         }
                     }
-                    return l.substring(asteriskIndex + 1);
+                    return l.substring(asteriskOrLastMdSlashIndex + 1);
                 })
                 .collect(Collectors.toList());
         // lines containing only whitespace are normalized to empty lines
@@ -138,16 +143,20 @@ class JavadocParser {
     }
 
     // Visible for testing
-    static int startsWithAsterisk(String line) {
-        if (line.startsWith("*")) {
-            return 0;
-        }
-        if ((line.startsWith(" ") || line.startsWith("\t")) && line.length() > 1) {
-            int res = startsWithAsterisk(line.substring(1));
-            if (res == -1) {
+    static int startsWithAsteriskOrMdSlash(String line) {
+        for (int i = 0, mdSlashCount = 0; i < line.length(); i++) {
+            char currentChar = line.charAt(i);
+            if (currentChar == '/') {
+                if (mdSlashCount == 2) {
+                    return i;
+                } else {
+                    mdSlashCount++;
+                }
+            } else if (currentChar == '*' && mdSlashCount == 0) {
+                return i;
+            } else if (currentChar != ' ' && currentChar != '\t') {
                 return -1;
             }
-            return 1 + res;
         }
         return -1;
     }

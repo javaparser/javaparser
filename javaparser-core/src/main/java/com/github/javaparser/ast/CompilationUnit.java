@@ -32,7 +32,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
@@ -193,7 +193,7 @@ public class CompilationUnit extends Node {
      * If there is no comment, an empty list is returned.
      *
      * @return list with all comments of this compilation unit.
-     * @see JavadocComment
+     * @see TraditionalJavadocComment
      * @see com.github.javaparser.ast.comments.LineComment
      * @see com.github.javaparser.ast.comments.BlockComment
      */

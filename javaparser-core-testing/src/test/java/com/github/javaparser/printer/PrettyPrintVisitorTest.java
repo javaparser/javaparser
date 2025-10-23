@@ -521,4 +521,17 @@ class PrettyPrintVisitorTest extends TestParser {
 
         assertEqualsStringIgnoringEol(expected, cu.toString());
     }
+
+    @Test
+    public void testMarkdownComment() {
+        String code = "class Foo {\n" + "\n"
+                + "    /// This is a markdown comment\n"
+                + "    /// for the foo method\n"
+                + "    void foo(Integer arg) {\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
 }
