@@ -47,7 +47,7 @@ import java.util.regex.Pattern;
  * of these comments, since the header is no longer only applied to the start of the comment, but rather to the
  * start of each line.
  */
-public class MarkdownComment extends Comment {
+public class MarkdownComment extends JavadocComment {
 
     private static Pattern markdownLinePattern = Pattern.compile("^\\s*///(.*)$");
 
