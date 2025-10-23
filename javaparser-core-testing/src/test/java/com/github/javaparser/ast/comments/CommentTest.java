@@ -254,7 +254,7 @@ class CommentTest {
 
         assertTrue(testMethod.getJavadocComment().isPresent());
 
-        TraditionalJavadocComment comment = testMethod.getJavadocComment().get();
+        JavadocComment comment = testMethod.getJavadocComment().get();
 
         assertEqualsStringIgnoringEol(commentCode, comment.getContent());
     }

@@ -71,8 +71,9 @@ public class TraditionalJavadocComment extends JavadocComment {
         v.visit(this, arg);
     }
 
+    @Override
     public Javadoc parse() {
-        return parseJavadoc(getContent());
+        return parseJavadoc(getContent(), false);
     }
 
     @Override

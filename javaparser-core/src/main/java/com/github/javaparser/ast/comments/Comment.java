@@ -41,6 +41,7 @@ import java.util.function.Consumer;
  * @author Julio Vilmar Gesser
  * @see BlockComment
  * @see LineComment
+ * @see MarkdownComment
  * @see TraditionalJavadocComment
  */
 public abstract class Comment extends Node {

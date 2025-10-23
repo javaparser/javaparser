@@ -20,10 +20,13 @@
  */
 package com.github.javaparser.ast.comments;
 
+import static com.github.javaparser.StaticJavaParser.parseJavadoc;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JavadocCommentMetaModel;
 import java.util.Optional;
@@ -83,5 +86,9 @@ public abstract class JavadocComment extends Comment {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JavadocCommentMetaModel getMetaModel() {
         return JavaParserMetaModel.javadocCommentMetaModel;
+    }
+
+    public Javadoc parse() {
+        return parseJavadoc(getContent(), this.isMarkdownComment());
     }
 }
