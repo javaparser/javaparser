@@ -55,10 +55,10 @@ public class CommentsCollection {
                 .collect(Collectors.toCollection(() -> new TreeSet<>(NODE_BY_BEGIN_POSITION)));
     }
 
-    public Set<TraditionalJavadocComment> getJavadocComments() {
+    public Set<JavadocComment> getJavadocComments() {
         return comments.stream()
-                .filter(comment -> comment instanceof TraditionalJavadocComment)
-                .map(comment -> (TraditionalJavadocComment) comment)
+                .filter(comment -> comment instanceof JavadocComment)
+                .map(comment -> (JavadocComment) comment)
                 .collect(Collectors.toCollection(() -> new TreeSet<>(NODE_BY_BEGIN_POSITION)));
     }
 

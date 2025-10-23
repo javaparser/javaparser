@@ -22,6 +22,7 @@ package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
 import java.util.Optional;
@@ -41,10 +42,9 @@ public interface NodeWithJavadoc<N extends Node> {
      *
      * @return The JavadocComment for this node wrapped in an optional as it may be absent.
      */
-    default Optional<TraditionalJavadocComment> getJavadocComment() {
-        return getComment()
-                .filter(comment -> comment instanceof TraditionalJavadocComment)
-                .map(comment -> (TraditionalJavadocComment) comment);
+    default Optional<JavadocComment> getJavadocComment() {
+        return getComment().filter(comment -> comment instanceof JavadocComment).map(comment ->
+                (JavadocComment) comment);
     }
 
     /**
@@ -53,20 +53,17 @@ public interface NodeWithJavadoc<N extends Node> {
      * @return The Javadoc for this node wrapped in an optional as it may be absent.
      */
     default Optional<Javadoc> getJavadoc() {
-        return getJavadocComment().map(TraditionalJavadocComment::parse);
+        return getJavadocComment().map(JavadocComment::parse);
     }
 
     /**
-     * Use this to store additional information to this node.
-     *
-     * @param comment to be set
+     * Set a JavadocComment for this node
      */
-    @SuppressWarnings("unchecked")
     default N setJavadocComment(String comment) {
         return setJavadocComment(new TraditionalJavadocComment(comment));
     }
 
-    default N setJavadocComment(TraditionalJavadocComment comment) {
+    default N setJavadocComment(JavadocComment comment) {
         setComment(comment);
         return (N) this;
     }
@@ -84,6 +81,6 @@ public interface NodeWithJavadoc<N extends Node> {
     }
 
     default boolean hasJavaDocComment() {
-        return getComment().isPresent() && getComment().get() instanceof TraditionalJavadocComment;
+        return getComment().isPresent() && getComment().get() instanceof JavadocComment;
     }
 }

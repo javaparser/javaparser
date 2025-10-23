@@ -22,7 +22,7 @@ package com.github.javaparser;
 
 import static com.github.javaparser.utils.Utils.*;
 
-import com.github.javaparser.ast.comments.TraditionalJavadocComment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
@@ -43,7 +43,7 @@ class JavadocParser {
 
     private static Pattern BLOCK_PATTERN = Pattern.compile("^\\s*" + BLOCK_TAG_PREFIX, Pattern.MULTILINE);
 
-    public static Javadoc parse(TraditionalJavadocComment comment) {
+    public static Javadoc parse(JavadocComment comment) {
         return parse(comment.getContent());
     }
 

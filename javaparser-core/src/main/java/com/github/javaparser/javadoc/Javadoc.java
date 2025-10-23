@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.javadoc;
 
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.utils.LineSeparator;
@@ -96,14 +97,14 @@ public class Javadoc {
     /**
      * Create a JavadocComment, by formatting the text of the Javadoc using no indentation (expecting the pretty printer to do the formatting.)
      */
-    public TraditionalJavadocComment toComment() {
+    public JavadocComment toComment() {
         return toComment("");
     }
 
     /**
      * Create a JavadocComment, by formatting the text of the Javadoc using the given indentation.
      */
-    public TraditionalJavadocComment toComment(String indentation) {
+    public JavadocComment toComment(String indentation) {
         for (char c : indentation.toCharArray()) {
             if (!Character.isWhitespace(c)) {
                 throw new IllegalArgumentException(
