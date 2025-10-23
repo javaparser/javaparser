@@ -66,6 +66,22 @@ public class ClassLoaderTypeSolver implements TypeSolver {
     }
 
     @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+        if (filterName(qualifiedModuleName)) {
+            try {
+                if (classLoader == null) {
+                    throw new RuntimeException(
+                            "The ClassLoaderTypeSolver has been probably loaded through the bootstrap class loader. This usage is not supported by the JavaSymbolSolver");
+                }
+            } catch (NoClassDefFoundError e) {
+                return SymbolReference.unsolved();
+            }
+        } else {
+            return SymbolReference.unsolved();
+        }
+    }
+
+    @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         if (filterName(name)) {
             try {

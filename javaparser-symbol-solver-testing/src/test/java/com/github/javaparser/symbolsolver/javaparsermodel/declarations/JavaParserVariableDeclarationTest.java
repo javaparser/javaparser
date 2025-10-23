@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParserAdapter;
@@ -87,5 +88,24 @@ class JavaParserVariableDeclarationTest extends AbstractResolutionTest implement
         String decl = rvd.asField().toAst().get().toString();
 
         assertTrue("int x = 0;".equals(decl));
+    }
+
+    @Test
+    void testJavaBaseModuleImport() {
+        String code = "import module java.base;\n" +
+                "\n" +
+                "public class Test {\n" +
+                "  void foo() {\n" +
+                "    List<String> l = new ArrayList<>();\n" +
+                "  }\n" +
+                "}";
+
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver())).parse(code);
+
+        List<VariableDeclarator> variables = cu.findAll(VariableDeclarator.class);
+
+        ResolvedValueDeclaration rvd = variables.get(0).resolve();
+
+        assertEquals("java.util.List<java.lang.String>", rvd.getType().describe());
     }
 }
