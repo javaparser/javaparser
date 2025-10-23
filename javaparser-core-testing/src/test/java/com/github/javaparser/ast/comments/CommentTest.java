@@ -349,6 +349,7 @@ class CommentTest {
         MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
 
         assertTrue(testMethod.getComment().isPresent());
+        assertTrue(testMethod.getJavadocComment().isPresent());
         assertInstanceOf(MarkdownComment.class, testMethod.getComment().get());
 
         MarkdownComment comment = testMethod.getComment().get().asMarkdownComment();
