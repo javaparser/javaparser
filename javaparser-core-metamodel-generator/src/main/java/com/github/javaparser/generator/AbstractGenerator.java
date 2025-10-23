@@ -33,7 +33,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
@@ -121,8 +121,8 @@ public abstract class AbstractGenerator {
             // Attempt to retain any existing javadoc.
 
             // TODO: Confirm what is done with normal comments...
-            Optional<JavadocComment> callableJavadocComment = callable.getJavadocComment();
-            Optional<JavadocComment> existingCallableJavadocComment = existingCallable.getJavadocComment();
+            Optional<TraditionalJavadocComment> callableJavadocComment = callable.getJavadocComment();
+            Optional<TraditionalJavadocComment> existingCallableJavadocComment = existingCallable.getJavadocComment();
 
             Optional<Comment> callableComment = callable.getComment();
             Optional<Comment> existingCallableComment = existingCallable.getComment();

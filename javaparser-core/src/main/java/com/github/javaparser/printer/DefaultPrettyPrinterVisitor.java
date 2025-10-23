@@ -435,7 +435,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(final JavadocComment n, final Void arg) {
+    public void visit(final TraditionalJavadocComment n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         if (getOption(ConfigOption.PRINT_COMMENTS).isPresent()
                 && getOption(ConfigOption.PRINT_JAVADOC).isPresent()) {

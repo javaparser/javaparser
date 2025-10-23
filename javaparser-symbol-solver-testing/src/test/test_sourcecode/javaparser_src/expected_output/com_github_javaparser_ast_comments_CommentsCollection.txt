@@ -3,10 +3,10 @@
   superclass: java.lang.Object
   Line 31) new LinkedList<LineComment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.LineComment>
   Line 32) new LinkedList<BlockComment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.BlockComment>
-  Line 33) new LinkedList<JavadocComment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.JavadocComment>
+  Line 33) new LinkedList<JavadocComment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.TraditionalJavadocComment>
   Line 36) lineComments ==> java.util.List<com.github.javaparser.ast.comments.LineComment>
   Line 40) blockComments ==> java.util.List<com.github.javaparser.ast.comments.BlockComment>
-  Line 44) javadocComments ==> java.util.List<com.github.javaparser.ast.comments.JavadocComment>
+  Line 44) javadocComments ==> java.util.List<com.github.javaparser.ast.comments.TraditionalJavadocComment>
   Line 48) this.lineComments.add(lineComment) ==> boolean
   Line 52) this.blockComments.add(blockComment) ==> boolean
   Line 56) this.javadocComments.add(javadocComment) ==> boolean
@@ -32,8 +32,8 @@
   Line 92) blockComments ==> java.util.List<com.github.javaparser.ast.comments.BlockComment>
   Line 93) !other.contains(comment) ==> boolean
   Line 94) result.blockComments.add(comment) ==> boolean
-  Line 97) JavadocComment comment ==> com.github.javaparser.ast.comments.JavadocComment
-  Line 97) javadocComments ==> java.util.List<com.github.javaparser.ast.comments.JavadocComment>
+  Line 97) JavadocComment comment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 97) javadocComments ==> java.util.List<com.github.javaparser.ast.comments.TraditionalJavadocComment>
   Line 98) !other.contains(comment) ==> boolean
   Line 99) result.javadocComments.add(comment) ==> boolean
   Line 102) result ==> com.github.javaparser.ast.comments.CommentsCollection

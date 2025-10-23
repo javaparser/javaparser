@@ -432,7 +432,7 @@ public class LexicalPreservingPrinter {
 
         private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<TokenTextElement> matchingTokens;
-            if (oldValue instanceof JavadocComment) {
+            if (oldValue instanceof TraditionalJavadocComment) {
                 matchingTokens = nodeText.getElements().stream()
                         .filter(e -> e.isToken(JAVADOC_COMMENT))
                         .map(e -> (TokenTextElement) e)
@@ -690,10 +690,11 @@ public class LexicalPreservingPrinter {
             interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
             return;
         }
-        if (node instanceof JavadocComment) {
-            Comment comment = (JavadocComment) node;
+        if (node instanceof TraditionalJavadocComment) {
+            Comment comment = (TraditionalJavadocComment) node;
             nodeText.addToken(
-                    JAVADOC_COMMENT, comment.getHeader() + ((JavadocComment) node).getContent() + comment.getFooter());
+                    JAVADOC_COMMENT,
+                    comment.getHeader() + ((TraditionalJavadocComment) node).getContent() + comment.getFooter());
             return;
         }
         if (node instanceof BlockComment) {

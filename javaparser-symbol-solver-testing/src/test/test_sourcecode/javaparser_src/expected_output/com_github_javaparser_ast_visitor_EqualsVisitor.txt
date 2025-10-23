@@ -261,8 +261,8 @@
   Line 588) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
   Line 589) Boolean.FALSE ==> java.lang.Boolean
   Line 592) Boolean.TRUE ==> java.lang.Boolean
-  Line 596) final JavadocComment n2 = (JavadocComment) arg ==> com.github.javaparser.ast.comments.JavadocComment
-  Line 596) (JavadocComment) arg ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 596) final JavadocComment n2 = (JavadocComment) arg ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 596) (JavadocComment) arg ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
   Line 598) !objEquals(n1.getContent(), n2.getContent()) ==> boolean
   Line 599) Boolean.FALSE ==> java.lang.Boolean
   Line 602) Boolean.TRUE ==> java.lang.Boolean

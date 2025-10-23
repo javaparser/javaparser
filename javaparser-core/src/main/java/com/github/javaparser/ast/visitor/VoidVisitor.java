@@ -23,9 +23,9 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -124,7 +124,7 @@ public interface VoidVisitor<A> {
 
     void visit(IntersectionType n, A arg);
 
-    void visit(JavadocComment n, A arg);
+    void visit(TraditionalJavadocComment n, A arg);
 
     void visit(LabeledStmt n, A arg);
 

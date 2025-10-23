@@ -23,9 +23,9 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -315,8 +315,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final JavadocComment n, final Visitable arg) {
-        final JavadocComment n2 = (JavadocComment) arg;
+    public Boolean visit(final TraditionalJavadocComment n, final Visitable arg) {
+        final TraditionalJavadocComment n2 = (TraditionalJavadocComment) arg;
         if (!objEquals(n.getContent(), n2.getContent())) return false;
         if (!nodeEquals(n.getComment(), n2.getComment())) return false;
         return true;

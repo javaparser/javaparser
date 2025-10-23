@@ -37,5 +37,5 @@
   Line 110) setAsParentNodeOf(this.type) ==> void
   Line 114) this.variables = variables ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
   Line 115) setAsParentNodeOf(this.variables) ==> void
-  Line 120) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
-  Line 125) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 120) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 125) javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment

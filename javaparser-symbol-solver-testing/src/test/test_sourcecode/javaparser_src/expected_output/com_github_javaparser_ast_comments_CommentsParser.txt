@@ -65,8 +65,8 @@
   Line 111) String content = currentContent.deleteCharAt(currentContent.toString().length() - 1).toString() ==> java.lang.String
   Line 111) currentContent.deleteCharAt(currentContent.toString().length() - 1).toString() ==> java.lang.String
   Line 113) content.startsWith("*") ==> boolean
-  Line 114) JavadocComment javadocComment = new JavadocComment() ==> com.github.javaparser.ast.comments.JavadocComment
-  Line 114) new JavadocComment() ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 114) JavadocComment javadocComment = new JavadocComment() ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 114) new JavadocComment() ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
   Line 115) javadocComment.setContent(content.substring(1)) ==> void
   Line 116) javadocComment.setBeginLine(currentBlockComment.getBeginLine()) ==> void
   Line 117) javadocComment.setBeginColumn(currentBlockComment.getBeginColumn()) ==> void

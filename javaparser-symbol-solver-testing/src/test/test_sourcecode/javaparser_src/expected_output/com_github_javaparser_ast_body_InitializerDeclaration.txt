@@ -23,5 +23,5 @@
   Line 73) this.block = block ==> com.github.javaparser.ast.stmt.BlockStmt
   Line 74) setAsParentNodeOf(this.block) ==> void
   Line 78) this.isStatic = isStatic ==> boolean
-  Line 83) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
-  Line 88) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 83) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 88) javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment

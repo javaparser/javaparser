@@ -116,5 +116,5 @@
   Line 286) sb.append(", ") ==> java.lang.StringBuffer
   Line 288) sb.append(thr.toStringWithoutComments()) ==> java.lang.StringBuffer
   Line 291) sb.toString() ==> java.lang.String
-  Line 296) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
-  Line 301) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 296) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment
+  Line 301) javadocComment ==> com.github.javaparser.ast.comments.TraditionalJavadocComment

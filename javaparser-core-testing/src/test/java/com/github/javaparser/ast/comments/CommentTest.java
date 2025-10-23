@@ -254,7 +254,7 @@ class CommentTest {
 
         assertTrue(testMethod.getJavadocComment().isPresent());
 
-        JavadocComment comment = testMethod.getJavadocComment().get();
+        TraditionalJavadocComment comment = testMethod.getJavadocComment().get();
 
         assertEqualsStringIgnoringEol(commentCode, comment.getContent());
     }
@@ -386,7 +386,8 @@ class CommentTest {
         MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
 
         assertTrue(testMethod.getComment().isPresent());
-        assertInstanceOf(JavadocComment.class, testMethod.getComment().get());
+        assertInstanceOf(
+                TraditionalJavadocComment.class, testMethod.getComment().get());
 
         String expectedContent = "\n   * This is a traditional javadoc comment\n   ";
         assertEquals(expectedContent, testMethod.getComment().get().getContent());

@@ -139,7 +139,8 @@ public class CommentParsingSteps {
 
     @Then("Javadoc comment $position is \"$expectedContent\"")
     public void thenJavadocCommentIs(int position, String expectedContent) {
-        JavadocComment commentUnderTest = getCommentAt(commentsCollection.getJavadocComments(), position - 1);
+        TraditionalJavadocComment commentUnderTest =
+                getCommentAt(commentsCollection.getJavadocComments(), position - 1);
 
         assertThat(commentUnderTest.getContent(), is(equalToCompressingWhiteSpace(expectedContent)));
     }
