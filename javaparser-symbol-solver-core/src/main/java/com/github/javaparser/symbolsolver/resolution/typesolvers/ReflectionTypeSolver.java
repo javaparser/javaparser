@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -77,6 +79,22 @@ public class ReflectionTypeSolver extends ClassLoaderTypeSolver {
     public ReflectionTypeSolver(Predicate<String> classFilter) {
         super(ReflectionTypeSolver.class.getClassLoader());
         this.classFilter = classFilter;
+
+        HashSet<Object> moduleLayers = new HashSet<>();
+        try {
+            /* This code is equivalent to the snippet below, but is done with reflection to maintain compatibility with
+             * Java 8
+             *
+             * ModuleLayer bootModuleLayer = ModuleLayer.boot();
+             * moduleLayers.add(bootModuleLayer)
+             */
+            Class<?> moduleLayerClass = Class.forName("java.lang.ModuleLayer");
+            Object bootModuleLayer = moduleLayerClass.getDeclaredMethod("boot").invoke(moduleLayerClass);
+            moduleLayers.add(bootModuleLayer);
+            addModuleLayers(moduleLayers);
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            // Expected for Java 8, so do nothing
+        }
     }
 
     /**

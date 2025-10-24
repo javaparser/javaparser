@@ -309,4 +309,9 @@ public class JavaParserTypeSolver implements TypeSolver {
 
         return SymbolReference.unsolved();
     }
+
+    @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+        throw new UnsupportedOperationException("Resolving types in modules not yet supported by JavaParserTypeSolver");
+    }
 }

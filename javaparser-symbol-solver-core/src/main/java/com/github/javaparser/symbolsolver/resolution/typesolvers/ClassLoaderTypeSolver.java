@@ -25,8 +25,10 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
-import java.util.Objects;
-import java.util.Optional;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * This TypeSolver wraps a ClassLoader. It can solve all types that the given ClassLoader can load.
@@ -39,9 +41,60 @@ public class ClassLoaderTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
     private ClassLoader classLoader;
+    private HashMap<String, Set<String>> modulePackages;
 
     public ClassLoaderTypeSolver(ClassLoader classLoader) {
         this.classLoader = classLoader;
+        this.modulePackages = new HashMap<>();
+    }
+
+    /**
+     * Create a ClassLoaderTypeSolver with a list of module layers to check when solving types in modules. If
+     * moduleLayers is empty, tryToSolveTypeInModule will always return SymbolReference.unsolved
+     *
+     * @param classLoader the ClassLoader that should be used for type solving
+     * @param moduleLayers MUST be {@code Iterable<java.lang.ModuleLayer>}. Object is only used in the signature for
+     *                     Java 8 compatibility.
+     */
+    public ClassLoaderTypeSolver(ClassLoader classLoader, Iterable<Object> moduleLayers) {
+        this(classLoader);
+        addModuleLayers(moduleLayers);
+    }
+
+    public void addModuleLayers(Iterable<Object> moduleLayers) {
+        for (Object moduleLayer : moduleLayers) {
+            if (!moduleLayer.getClass().getCanonicalName().equals("java.lang.ModuleLayer")) {
+                continue;
+            }
+            try {
+                /* This code is equivalent to the snippet below, but is done with reflection to maintain compatibility
+                 * with Java 8
+                 *
+                 * Set<Module> modulesSet = moduleLayer.modules();
+                 *
+                 * for (Module module : modulesSet) {
+                 *   String name = module.getName();
+                 *   Set<String> packages = module.getPackages();
+                 *
+                 *   ...
+                 * }
+                 */
+                Set<Object> modulesSet = (Set<Object>) moduleLayer.getClass().getMethod("modules").invoke(moduleLayer);
+
+                for (Object module : modulesSet) {
+                    String name = module.getClass().getMethod("getName").invoke(module).toString();
+                    Set<String> packages = (Set<String>) module.getClass().getMethod("getPackages").invoke(module);
+
+                    if (modulePackages.containsKey(name)) {
+                        modulePackages.get(name).addAll(packages);
+                    } else {
+                        modulePackages.put(name, packages);
+                    }
+                }
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                // Expected for Java 8, so do nothing
+            }
+        }
     }
 
     @Override
@@ -68,17 +121,24 @@ public class ClassLoaderTypeSolver implements TypeSolver {
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
         if (filterName(qualifiedModuleName)) {
-            try {
                 if (classLoader == null) {
                     throw new RuntimeException(
                             "The ClassLoaderTypeSolver has been probably loaded through the bootstrap class loader. This usage is not supported by the JavaSymbolSolver");
                 }
-            } catch (NoClassDefFoundError e) {
+                if (modulePackages.containsKey(qualifiedModuleName)) {
+                    Set<String> packages = modulePackages.get(qualifiedModuleName);
+
+                    for (String packageName : packages) {
+                        String className = packageName + "." + simpleTypeName;
+                        SymbolReference<ResolvedReferenceTypeDeclaration> maybeSolved = tryToSolveType(className);
+                        if (maybeSolved.isSolved()) {
+                            return maybeSolved;
+                        }
+                    }
+                }
                 return SymbolReference.unsolved();
-            }
-        } else {
-            return SymbolReference.unsolved();
         }
+        return SymbolReference.unsolved();
     }
 
     @Override

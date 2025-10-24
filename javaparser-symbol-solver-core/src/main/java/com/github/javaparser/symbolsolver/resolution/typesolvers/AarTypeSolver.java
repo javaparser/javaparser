@@ -74,4 +74,9 @@ public class AarTypeSolver implements TypeSolver {
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         return delegate.tryToSolveType(name);
     }
+
+    @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+        throw new UnsupportedOperationException("Resolving types in modules not yet supported by AarTypeSolver");
+    }
 }

@@ -78,6 +78,11 @@ class Issue1814Test extends AbstractResolutionTest {
 
                 return SymbolReference.unsolved();
             }
+
+            @Override
+            public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+                throw new UnsupportedOperationException();
+            }
         };
 
         ParserConfiguration config = new ParserConfiguration();

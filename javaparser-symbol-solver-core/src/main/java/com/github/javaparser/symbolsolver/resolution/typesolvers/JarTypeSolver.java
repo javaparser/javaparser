@@ -326,4 +326,9 @@ public class JarTypeSolver implements TypeSolver {
         }
         throw new UnsolvedSymbolException(name);
     }
+
+    @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+        throw new UnsupportedOperationException("Resolving types in modules not yet supported by JarTypeSolver");
+    }
 }

@@ -176,6 +176,44 @@ public class CombinedTypeSolver implements TypeSolver {
         return unsolvedSymbol;
     }
 
+    /**
+     * Create the key that should be used for module cache lookups.
+     */
+    public static String createModuleTypeName(String moduleQualifiedName, String simpleTypeName) {
+        return String.format("<%s>.%s", moduleQualifiedName, simpleTypeName);
+    }
+
+    @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String moduleQualifiedName, String simpleTypeName) {
+        String cacheName = createModuleTypeName(moduleQualifiedName, simpleTypeName);
+
+        Optional<SymbolReference<ResolvedReferenceTypeDeclaration>> cachedType = typeCache.get(cacheName);
+        if (cachedType.isPresent()) {
+            return cachedType.get();
+        }
+
+        for (TypeSolver ts : elements) {
+            try {
+                SymbolReference<ResolvedReferenceTypeDeclaration> res =
+                        ts.tryToSolveTypeInModule(moduleQualifiedName, simpleTypeName);
+                if (res.isSolved()) {
+                    typeCache.put(cacheName, res);
+                    return res;
+                }
+            } catch (Exception e) {
+                if (!exceptionHandler.test(e)) { // we shouldn't ignore this exception
+                    throw e;
+                }
+            }
+        }
+
+        // When unable to solve, cache the value with unsolved symbol
+        SymbolReference<ResolvedReferenceTypeDeclaration> unsolvedSymbol = SymbolReference.unsolved();
+        typeCache.put(cacheName, unsolvedSymbol);
+        return unsolvedSymbol;
+    }
+
     @Override
     public ResolvedReferenceTypeDeclaration solveType(String name) throws UnsolvedSymbolException {
         SymbolReference<ResolvedReferenceTypeDeclaration> res = tryToSolveType(name);
@@ -183,6 +221,17 @@ public class CombinedTypeSolver implements TypeSolver {
             return res.getCorrespondingDeclaration();
         }
         throw new UnsolvedSymbolException(name);
+    }
+
+    @Override
+    public ResolvedReferenceTypeDeclaration solveTypeInModule(String moduleQualifiedName, String simpleTypeName)
+            throws UnsolvedSymbolException {
+        SymbolReference<ResolvedReferenceTypeDeclaration> res =
+                tryToSolveTypeInModule(moduleQualifiedName, simpleTypeName);
+        if (res.isSolved()) {
+            return res.getCorrespondingDeclaration();
+        }
+        throw new UnsolvedSymbolException("module=" + moduleQualifiedName + " type=" + simpleTypeName);
     }
 
     /**
