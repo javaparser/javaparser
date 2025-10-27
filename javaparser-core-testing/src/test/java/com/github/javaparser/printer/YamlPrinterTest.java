@@ -75,6 +75,7 @@ class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         CompilationUnit computationUnit = parse(code);
         String output = yamlPrinter.output(computationUnit);
-        assertEqualsStringIgnoringEol(read("yamlParsingJavadocWithQuoteAndNewline.yaml"), output);
+        assertEqualsStringIgnoringEol(
+                read("yamlParsingJavadocWithQuoteAndNewline.yaml").trim(), output);
     }
 }

@@ -200,6 +200,9 @@ TOKEN_MGR_DECLS :
     private Stack<Token> tokenWorkStack = new Stack<Token>();
     private boolean storeTokens;
     private boolean yieldSupported = false;
+    private ArrayDeque<Token> markdownCommentTokens = new ArrayDeque<Token>();
+    boolean expectMarkdownComment;
+    boolean expectEndOfMarkdownLine;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -232,6 +235,21 @@ TOKEN_MGR_DECLS :
         yieldSupported = true;
     }
 
+    private void createMarkdownComment() {
+        while (!markdownCommentTokens.isEmpty() && TokenTypes.isWhitespace(markdownCommentTokens.peekFirst().kind)) {
+            markdownCommentTokens.removeFirst();
+        }
+        if (!markdownCommentTokens.isEmpty()) {
+            MarkdownComment comment = createMarkdownCommentFromTokenList(markdownCommentTokens);
+            markdownCommentTokens.clear();
+
+            expectMarkdownComment = true;
+            expectEndOfMarkdownLine = false;
+
+            commentsCollection.addComment(comment);
+        }
+    }
+
     private void CommonTokenAction(Token token) {
         // Use an intermediary stack to avoid recursion, see issue 1003
         do {
@@ -240,6 +258,9 @@ TOKEN_MGR_DECLS :
         } while (token != null);
 
         // The stack is now filled with tokens in left-to-right order. Process them.
+        expectMarkdownComment = true;
+        expectEndOfMarkdownLine = false;
+
         while(!tokenWorkStack.empty()) {
             token = tokenWorkStack.pop();
             token.javaToken = new JavaToken(token, tokens);
@@ -252,9 +273,26 @@ TOKEN_MGR_DECLS :
                 homeToken = token.javaToken;
             }
 
-            if(TokenTypes.isComment(token.kind)) {
+            if (TokenTypes.isEndOfLineToken(token.kind)) {
+                if (expectEndOfMarkdownLine) {
+                    markdownCommentTokens.add(token);
+                    expectEndOfMarkdownLine = false;
+                } else {
+                    createMarkdownComment();
+                }
+                expectMarkdownComment = true;
+            } else if (expectMarkdownComment && isMarkdownCommentLineCandidate(token)) {
+                expectEndOfMarkdownLine = true;
+                markdownCommentTokens.add(token);
+            } else if (expectMarkdownComment && TokenTypes.isWhitespaceButNotEndOfLine(token.kind)) {
+                markdownCommentTokens.add(token);
+            } else if(TokenTypes.isComment(token.kind)) {
+                createMarkdownComment();
                 Comment comment = createCommentFromToken(token);
                 commentsCollection.addComment(comment);
+            } else if (!TokenTypes.isWhitespace(token.kind)) {
+                expectMarkdownComment = false;
+                createMarkdownComment();
             }
         }
     }

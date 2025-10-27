@@ -31,6 +31,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.javadoc.Javadoc;
@@ -42,6 +43,7 @@ import com.github.javaparser.printer.configuration.Indentation;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.LineSeparator;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class CommentTest {
@@ -222,5 +224,173 @@ class CommentTest {
         comment.setContent(b);
 
         verifyNoInteractions(observer);
+    }
+
+    @Test
+    void testSingleLineCommentContent() {
+        CompilationUnit cu = parse("class Test {\n" + "  // this is a single line comment\n"
+                + "  // and so is this\n"
+                + "  void test() {}\n"
+                + "}");
+
+        MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
+
+        Comment secondComment = testMethod.getComment().get();
+
+        assertEqualsStringIgnoringEol(" and so is this", secondComment.getContent());
+
+        List<Comment> orphanComments = cu.findFirst(TypeDeclaration.class).get().getOrphanComments();
+        assertEquals(1, orphanComments.size());
+        assertEqualsStringIgnoringEol(
+                " this is a single line comment", orphanComments.get(0).getContent());
+    }
+
+    @Test
+    void testJavadocCommentContent() {
+        String commentCode = "\n   * This is a regular {@code JavaDoc comment}\n   * @see some reference\n    ";
+        CompilationUnit cu = parse("class Test {\n" + "  /**" + commentCode + "*/\n" + "  void test() {}\n" + "}");
+
+        MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
+
+        assertTrue(testMethod.getJavadocComment().isPresent());
+
+        JavadocComment comment = testMethod.getJavadocComment().get();
+
+        assertEqualsStringIgnoringEol(commentCode, comment.getContent());
+    }
+
+    @Test
+    void testSingleMarkdownComment() {
+        String commentCode = "  /// This is a markdown comment test. It should\n" + "  /// /**\n"
+                + "  ///  * Handle multiline comments.\n"
+                + "  ///  */\n"
+                + "  ///  // and single line comments\n"
+                + "  ///\n"
+                + "  ///  and empty lines preceded by ///\n"
+                + "  ///  without issues\n";
+        CompilationUnit cu = parse("class Test {\n" + commentCode + "  void test() {}\n" + "}");
+
+        MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
+
+        assertTrue(testMethod.getComment().isPresent());
+        assertInstanceOf(MarkdownComment.class, testMethod.getComment().get());
+
+        MarkdownComment comment = testMethod.getComment().get().asMarkdownComment();
+
+        String expectedContent = "This is a markdown comment test. It should\n" + "/**\n"
+                + " * Handle multiline comments.\n"
+                + " */\n"
+                + " // and single line comments\n"
+                + "\n"
+                + " and empty lines preceded by ///\n"
+                + " without issues";
+        assertEquals(expectedContent, comment.getMarkdownContent());
+    }
+
+    @Test
+    void testMultipleMarkdownComments() {
+        String comment1Code = "  /// This is a markdown comment test. It should\n" + "  /// /**\n"
+                + "  ///  * Handle multiline comments.\n"
+                + "  ///  */\n"
+                + "  /// // and single line comments\n";
+        String comment2Code = "  ///\n" + "  /// and empty lines preceded by ///\n" + "  /// without issues\n";
+        CompilationUnit cu = parse("class Test {\n" + comment1Code + "\n" + comment2Code + "  void test() {}\n" + "}");
+
+        MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
+
+        assertTrue(testMethod.getComment().isPresent());
+        assertInstanceOf(MarkdownComment.class, testMethod.getComment().get());
+
+        MarkdownComment comment = testMethod.getComment().get().asMarkdownComment();
+
+        String comment2Expectation = "///\n" + "  /// and empty lines preceded by ///\n" + "  /// without issues\n";
+        assertEqualsStringIgnoringEol(comment2Expectation, comment.asString());
+
+        List<Comment> orphanComments = cu.findFirst(TypeDeclaration.class).get().getOrphanComments();
+
+        assertEquals(1, orphanComments.size());
+        assertInstanceOf(MarkdownComment.class, orphanComments.get(0));
+
+        String comment1Expectation = "/// This is a markdown comment test. It should\n" + "  /// /**\n"
+                + "  ///  * Handle multiline comments.\n"
+                + "  ///  */\n"
+                + "  /// // and single line comments\n";
+        assertEqualsStringIgnoringEol(comment1Expectation, orphanComments.get(0).asString());
+    }
+
+    @Test
+    void markdownCommentShouldNotHaveSingleLineContent() {
+        CompilationUnit cu = parse(
+                "class Test {\n" + "  /// this is a single-line markdown comment test\n" + "  void test() {}\n" + "}");
+
+        MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
+
+        assertTrue(testMethod.getComment().isPresent());
+        assertInstanceOf(MarkdownComment.class, testMethod.getComment().get());
+
+        MarkdownComment comment = testMethod.getComment().get().asMarkdownComment();
+
+        assertEqualsStringIgnoringEol("/// this is a single-line markdown comment test", comment.getContent());
+        assertEqualsStringIgnoringEol("this is a single-line markdown comment test", comment.getMarkdownContent());
+        assertEqualsStringIgnoringEol("/// this is a single-line markdown comment test\n", comment.asString());
+    }
+
+    @Test
+    void testSplitMarkdownComment1() {
+        String commentCode = "  /// This is a markdown comment test. It should\n" + "  /// /**\n"
+                + "  ///  * Handle multiline comments.\n"
+                + "  ///  */\n"
+                + "  // split by single line comments\n"
+                + "  ///\n"
+                + "  ///  and empty lines preceded by ///\n"
+                + "  ///  without issues\n";
+        CompilationUnit cu = parse("class Test {\n" + commentCode + "  void test() {}\n" + "}");
+
+        MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
+
+        assertTrue(testMethod.getComment().isPresent());
+        assertTrue(testMethod.getJavadocComment().isPresent());
+        assertInstanceOf(MarkdownComment.class, testMethod.getComment().get());
+
+        MarkdownComment comment = testMethod.getComment().get().asMarkdownComment();
+
+        String expectedMarkdownContent = "\n" + "and empty lines preceded by ///\n" + "without issues";
+        assertEquals(expectedMarkdownContent, comment.getMarkdownContent());
+
+        String expectedContent = "///\n  ///  and empty lines preceded by ///\n  ///  without issues";
+        assertEquals(expectedContent, comment.getContent());
+
+        List<Comment> orphanComments = cu.findFirst(TypeDeclaration.class).get().getOrphanComments();
+
+        assertEquals(2, orphanComments.size());
+
+        assertInstanceOf(MarkdownComment.class, orphanComments.get(0));
+        String expectedFirstOrphanContent =
+                "This is a markdown comment test. It should\n" + "/**\n" + " * Handle multiline comments.\n" + " */";
+        assertEqualsStringIgnoringEol(
+                expectedFirstOrphanContent,
+                orphanComments.get(0).asMarkdownComment().getMarkdownContent());
+
+        assertInstanceOf(LineComment.class, orphanComments.get(1));
+        assertEqualsStringIgnoringEol(
+                " split by single line comments", orphanComments.get(1).getContent());
+    }
+
+    @Test
+    void testTraditionalJavadocComment() {
+        CompilationUnit cu = parse("class Test {\n" + "  /**\n"
+                + "   * This is a traditional javadoc comment\n"
+                + "   */\n"
+                + "  void test() {}\n"
+                + "}");
+
+        MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
+
+        assertTrue(testMethod.getComment().isPresent());
+        assertInstanceOf(
+                TraditionalJavadocComment.class, testMethod.getComment().get());
+
+        String expectedContent = "\n   * This is a traditional javadoc comment\n   ";
+        assertEquals(expectedContent, testMethod.getComment().get().getContent());
     }
 }

@@ -21,6 +21,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -160,6 +161,12 @@ class NodeText {
         int index = findElement(position, 0);
         elements.remove(index);
         elements.add(index, newElement);
+    }
+
+    void replace(TextElementMatcher position, Collection<? extends TextElement> newElements) {
+        int index = findElement(position, 0);
+        elements.remove(index);
+        elements.addAll(index, newElements);
     }
 
     //

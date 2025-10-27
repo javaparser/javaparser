@@ -32,6 +32,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.comments.MarkdownComment;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -68,7 +69,6 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
     // JavaDoc
 
-    @Disabled
     @Test
     void removingDuplicateJavaDocComment() {
         // Arrange
@@ -154,9 +154,102 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
                 result);
     }
 
+    @Test
+    void replacingDuplicateMarkdownComment() {
+        // Arrange
+        considerCode("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  ///"
+                + LineSeparator.SYSTEM + "  /// Comment A"
+                + LineSeparator.SYSTEM + "  ///"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  ///"
+                + LineSeparator.SYSTEM + "  /// Comment A"
+                + LineSeparator.SYSTEM + "  ///"
+                + LineSeparator.SYSTEM + "  public void anotherMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
+
+        MethodDeclaration methodDeclaration =
+                cu.findAll(MethodDeclaration.class).get(1);
+
+        // Act
+        methodDeclaration.setComment(new MarkdownComment("///\n  /// Change Markdown\n  ///"));
+
+        // Assert
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n" + "\n"
+                        + "  ///\n"
+                        + "  /// Comment A\n"
+                        + "  ///\n"
+                        + "  public void oneMethod() {\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  ///\n"
+                        + "  /// Change Markdown\n"
+                        + "  ///\n"
+                        + "  public void anotherMethod() {\n"
+                        + "  }\n"
+                        + "}\n",
+                result);
+    }
+
+    @Test
+    void removingMarkdownComment() {
+        // Arrange
+        considerCode("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  ///"
+                + LineSeparator.SYSTEM + "  /// Comment A"
+                + LineSeparator.SYSTEM + "  ///"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
+
+        MethodDeclaration methodDeclaration =
+                cu.findAll(MethodDeclaration.class).get(0);
+
+        // Act
+        methodDeclaration.removeComment();
+        // Assert
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n" + "\n" + "  public void oneMethod() {\n" + "  }\n" + "}\n", result);
+    }
+
+    @Test
+    void addingMarkdownComment() {
+        // Arrange
+        considerCode("public class MyClass {"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
+
+        MethodDeclaration methodDeclaration =
+                cu.findAll(MethodDeclaration.class).get(0);
+
+        // Act
+        MarkdownComment markdownComment = new MarkdownComment("///\n  /// Comment A\n  ///");
+        methodDeclaration.setComment(markdownComment);
+        // Assert
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n"
+                        + "  ///\n"
+                        + "  /// Comment A\n"
+                        + "  ///\n"
+                        + "  public void oneMethod() {\n"
+                        + "  }\n"
+                        + "}\n",
+                result);
+    }
+
     // Comments
 
-    @Disabled
     @Test
     void removingDuplicateComment() {
         // Arrange

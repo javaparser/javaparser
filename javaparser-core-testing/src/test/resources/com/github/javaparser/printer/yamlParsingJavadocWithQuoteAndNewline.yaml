@@ -5,7 +5,7 @@ root(Type=CompilationUnit):
             isInterface: "false"
             name(Type=SimpleName): 
                 identifier: "Dog"
-            comment(Type=JavadocComment): 
+            comment(Type=TraditionalJavadocComment): 
                 content: "\n * \" this comment contains a quote and newlines\n "
             modifiers: 
                 - modifier(Type=Modifier): 
