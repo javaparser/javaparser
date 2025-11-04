@@ -41,7 +41,7 @@ import java.util.function.Consumer;
  * @author Julio Vilmar Gesser
  * @see BlockComment
  * @see LineComment
- * @see JavadocComment
+ * @see TraditionalJavadocComment
  */
 public abstract class Comment extends Node {
 
@@ -187,21 +187,22 @@ public abstract class Comment extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJavadocComment() {
+    public boolean isTraditionalJavadocComment() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JavadocComment asJavadocComment() {
-        throw new IllegalStateException(
-                f("%s is not JavadocComment, it is %s", this, this.getClass().getSimpleName()));
+    public TraditionalJavadocComment asTraditionalJavadocComment() {
+        throw new IllegalStateException(f(
+                "%s is not TraditionalJavadocComment, it is %s",
+                this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBlockComment(Consumer<BlockComment> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJavadocComment(Consumer<JavadocComment> action) {}
+    public void ifTraditionalJavadocComment(Consumer<TraditionalJavadocComment> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLineComment(Consumer<LineComment> action) {}
@@ -212,7 +213,7 @@ public abstract class Comment extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JavadocComment> toJavadocComment() {
+    public Optional<TraditionalJavadocComment> toTraditionalJavadocComment() {
         return Optional.empty();
     }
 

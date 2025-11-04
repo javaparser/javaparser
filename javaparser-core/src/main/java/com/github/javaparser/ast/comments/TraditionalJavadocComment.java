@@ -30,7 +30,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.JavadocCommentMetaModel;
+import com.github.javaparser.metamodel.TraditionalJavadocCommentMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -39,14 +39,14 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public class JavadocComment extends Comment {
+public class TraditionalJavadocComment extends Comment {
 
-    public JavadocComment() {
+    public TraditionalJavadocComment() {
         this(null, "empty");
     }
 
     @AllFieldsConstructor
-    public JavadocComment(String content) {
+    public TraditionalJavadocComment(String content) {
         this(null, content);
     }
 
@@ -54,7 +54,7 @@ public class JavadocComment extends Comment {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JavadocComment(TokenRange tokenRange, String content) {
+    public TraditionalJavadocComment(TokenRange tokenRange, String content) {
         super(tokenRange, content);
         customInitialization();
     }
@@ -77,37 +77,37 @@ public class JavadocComment extends Comment {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JavadocComment clone() {
-        return (JavadocComment) accept(new CloneVisitor(), null);
+    public TraditionalJavadocComment clone() {
+        return (TraditionalJavadocComment) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JavadocCommentMetaModel getMetaModel() {
-        return JavaParserMetaModel.javadocCommentMetaModel;
+    public TraditionalJavadocCommentMetaModel getMetaModel() {
+        return JavaParserMetaModel.traditionalJavadocCommentMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJavadocComment() {
+    public boolean isTraditionalJavadocComment() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JavadocComment asJavadocComment() {
+    public TraditionalJavadocComment asTraditionalJavadocComment() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJavadocComment(Consumer<JavadocComment> action) {
+    public void ifTraditionalJavadocComment(Consumer<TraditionalJavadocComment> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JavadocComment> toJavadocComment() {
+    public Optional<TraditionalJavadocComment> toTraditionalJavadocComment() {
         return Optional.of(this);
     }
 

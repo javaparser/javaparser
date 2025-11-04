@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import java.util.Optional;
 
 /**
@@ -34,14 +34,14 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class JavadocCommentMetaModel extends CommentMetaModel {
+public class TraditionalJavadocCommentMetaModel extends CommentMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    JavadocCommentMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+    TraditionalJavadocCommentMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(
                 superBaseNodeMetaModel,
-                JavadocComment.class,
-                "JavadocComment",
+                TraditionalJavadocComment.class,
+                "TraditionalJavadocComment",
                 "com.github.javaparser.ast.comments",
                 false,
                 false);

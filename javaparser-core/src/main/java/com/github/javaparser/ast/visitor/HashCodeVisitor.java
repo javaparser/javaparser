@@ -23,8 +23,8 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -334,7 +334,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
-    public Integer visit(final JavadocComment n, final Void arg) {
+    public Integer visit(final TraditionalJavadocComment n, final Void arg) {
         return (n.getContent().hashCode()) * 31
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
