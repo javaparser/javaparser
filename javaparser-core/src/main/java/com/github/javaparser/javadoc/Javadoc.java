@@ -21,6 +21,7 @@
 package com.github.javaparser.javadoc;
 
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
 import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.utils.LineSeparator;
@@ -41,9 +42,16 @@ public class Javadoc {
 
     private List<JavadocBlockTag> blockTags;
 
+    private boolean isMarkdownComment;
+
     public Javadoc(JavadocDescription description) {
         this.description = description;
         this.blockTags = new LinkedList<>();
+    }
+
+    public Javadoc(JavadocDescription description, boolean isMarkdownComment) {
+        this(description);
+        this.isMarkdownComment = isMarkdownComment;
     }
 
     public Javadoc addBlockTag(JavadocBlockTag blockTag) {
@@ -114,17 +122,22 @@ public class Javadoc {
         StringBuilder sb = new StringBuilder();
         sb.append(LineSeparator.SYSTEM);
         final String text = toText();
+        String commentPrefix = isMarkdownComment ? "/// " : " * ";
         if (!text.isEmpty()) {
             for (String line : text.split(LineSeparator.SYSTEM.asRawString())) {
                 sb.append(indentation);
-                sb.append(" * ");
+                sb.append(commentPrefix);
                 sb.append(line);
                 sb.append(LineSeparator.SYSTEM);
             }
         }
-        sb.append(indentation);
-        sb.append(" ");
-        return new TraditionalJavadocComment(sb.toString());
+        if (isMarkdownComment) {
+            return new MarkdownComment(sb.toString());
+        } else {
+            sb.append(indentation);
+            sb.append(" ");
+            return new TraditionalJavadocComment(sb.toString());
+        }
     }
 
     public JavadocDescription getDescription() {

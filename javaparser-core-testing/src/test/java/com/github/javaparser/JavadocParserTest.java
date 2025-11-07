@@ -167,21 +167,21 @@ class JavadocParserTest {
 
     @Test
     void startsWithAsteriskEmpty() {
-        assertEquals(-1, JavadocParser.startsWithAsterisk(""));
+        assertEquals(-1, JavadocParser.startsWithAsteriskOrMdSlash(""));
     }
 
     @Test
     void startsWithAsteriskNoAsterisk() {
-        assertEquals(-1, JavadocParser.startsWithAsterisk(" ciao"));
+        assertEquals(-1, JavadocParser.startsWithAsteriskOrMdSlash(" ciao"));
     }
 
     @Test
     void startsWithAsteriskAtTheBeginning() {
-        assertEquals(0, JavadocParser.startsWithAsterisk("* ciao"));
+        assertEquals(0, JavadocParser.startsWithAsteriskOrMdSlash("* ciao"));
     }
 
     @Test
     void startsWithAsteriskAfterSpaces() {
-        assertEquals(3, JavadocParser.startsWithAsterisk("   * ciao"));
+        assertEquals(3, JavadocParser.startsWithAsteriskOrMdSlash("   * ciao"));
     }
 }

@@ -24,6 +24,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
 import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
@@ -607,5 +608,10 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final MatchAllPatternExpr n, final Void arg) {
         return (n.getModifiers().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final MarkdownComment n, final Void arg) {
+        return (n.getContent().hashCode());
     }
 }

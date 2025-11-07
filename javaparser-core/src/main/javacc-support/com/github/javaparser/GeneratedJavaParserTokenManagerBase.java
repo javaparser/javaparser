@@ -21,10 +21,9 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.TraditionalJavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
+
+import java.util.ArrayDeque;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
@@ -38,6 +37,51 @@ abstract class GeneratedJavaParserTokenManagerBase {
     private static TokenRange tokenRange(Token token) {
         JavaToken javaToken = token.javaToken;
         return new TokenRange(javaToken, javaToken);
+    }
+
+    static boolean isMarkdownCommentLineCandidate(Token token) {
+        return token.kind == SINGLE_LINE_COMMENT && token.image.startsWith("///");
+    }
+
+    static MarkdownComment createMarkdownCommentFromTokenList(ArrayDeque<Token> tokens) {
+        if (tokens.isEmpty()) {
+            throw new IllegalArgumentException("Cannot create markdown comment from empty token list");
+        }
+
+        // After the last comment token, only one EOL whitespace token should be included. Everything after that
+        // should be filtered out.
+        while (!tokens.isEmpty() && TokenTypes.isWhitespace(tokens.peekLast().kind)) {
+            Token lastToken = tokens.removeLast();
+
+
+            if (TokenTypes.isComment(lastToken.kind)) {
+                tokens.addLast(lastToken);
+                break;
+            } else {
+                if (tokens.isEmpty()) {
+                    throw new IllegalArgumentException("createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens");
+                }
+
+                if (TokenTypes.isEndOfLineToken(lastToken.kind)) {
+                    if (TokenTypes.isComment(tokens.peekLast().kind)) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        TokenRange range = new TokenRange(
+                tokens.peekFirst().javaToken,
+                tokens.peekLast().javaToken
+        );
+
+        StringBuilder contentBuilder = new StringBuilder();
+
+        for (Token token : tokens) {
+            contentBuilder.append(token.image);
+        }
+
+        return new MarkdownComment(range, contentBuilder.toString());
     }
 
     /**

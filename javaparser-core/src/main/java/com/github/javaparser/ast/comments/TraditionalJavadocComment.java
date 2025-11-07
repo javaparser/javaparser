@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -73,7 +73,7 @@ public class TraditionalJavadocComment extends JavadocComment {
 
     @Override
     public Javadoc parse() {
-        return parseJavadoc(getContent());
+        return parseJavadoc(getContent(), false);
     }
 
     @Override

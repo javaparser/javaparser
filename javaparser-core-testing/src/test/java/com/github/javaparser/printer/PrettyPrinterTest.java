@@ -696,4 +696,29 @@ class PrettyPrinterTest {
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
     }
+
+    @Test
+    public void testMarkdownComment() {
+        String code = "class Foo {\n" + "\n"
+                + "    /// This is a markdown comment\n"
+                + "    /// for the foo method\n"
+                + "    void foo(Integer arg) {\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void testSingleLineComment() {
+        String code = "class Foo {\n" + "\n"
+                + "    // This is a single line comment for the foo method\n"
+                + "    void foo(Integer arg) {\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
 }
