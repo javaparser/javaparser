@@ -278,8 +278,9 @@ public final class JavaParserMetaModel {
                 .getConstructorParameters()
                 .add(variableDeclaratorMetaModel.initializerPropertyMetaModel);
         commentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
-        blockCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         javadocCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
+        blockCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
+        traditionalJavadocCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         lineCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         arrayAccessExprMetaModel.getConstructorParameters().add(arrayAccessExprMetaModel.namePropertyMetaModel);
         arrayAccessExprMetaModel.getConstructorParameters().add(arrayAccessExprMetaModel.indexPropertyMetaModel);
@@ -613,6 +614,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(textBlockLiteralExprMetaModel);
         nodeMetaModels.add(thisExprMetaModel);
         nodeMetaModels.add(throwStmtMetaModel);
+        nodeMetaModels.add(traditionalJavadocCommentMetaModel);
         nodeMetaModels.add(tryStmtMetaModel);
         nodeMetaModels.add(typeDeclarationMetaModel);
         nodeMetaModels.add(typeExprMetaModel);
@@ -3110,12 +3112,16 @@ public final class JavaParserMetaModel {
     public static final CommentMetaModel commentMetaModel = new CommentMetaModel(Optional.of(nodeMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final JavadocCommentMetaModel javadocCommentMetaModel =
+            new JavadocCommentMetaModel(Optional.of(commentMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final BlockCommentMetaModel blockCommentMetaModel =
             new BlockCommentMetaModel(Optional.of(commentMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final JavadocCommentMetaModel javadocCommentMetaModel =
-            new JavadocCommentMetaModel(Optional.of(commentMetaModel));
+    public static final TraditionalJavadocCommentMetaModel traditionalJavadocCommentMetaModel =
+            new TraditionalJavadocCommentMetaModel(Optional.of(javadocCommentMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LineCommentMetaModel lineCommentMetaModel =

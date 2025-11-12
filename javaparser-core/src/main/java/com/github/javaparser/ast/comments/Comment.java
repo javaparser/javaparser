@@ -41,7 +41,7 @@ import java.util.function.Consumer;
  * @author Julio Vilmar Gesser
  * @see BlockComment
  * @see LineComment
- * @see JavadocComment
+ * @see TraditionalJavadocComment
  */
 public abstract class Comment extends Node {
 
@@ -237,4 +237,24 @@ public abstract class Comment extends Node {
     public String asString() {
         return getHeader() + getContent() + getFooter();
     }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isTraditionalJavadocComment() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public TraditionalJavadocComment asTraditionalJavadocComment() {
+        throw new IllegalStateException(f(
+                "%s is not TraditionalJavadocComment, it is %s",
+                this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<TraditionalJavadocComment> toTraditionalJavadocComment() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifTraditionalJavadocComment(Consumer<TraditionalJavadocComment> action) {}
 }

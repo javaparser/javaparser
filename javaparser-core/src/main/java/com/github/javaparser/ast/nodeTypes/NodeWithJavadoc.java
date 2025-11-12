@@ -23,6 +23,7 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
 import java.util.Optional;
 
@@ -56,13 +57,10 @@ public interface NodeWithJavadoc<N extends Node> {
     }
 
     /**
-     * Use this to store additional information to this node.
-     *
-     * @param comment to be set
+     * Set a JavadocComment for this node
      */
-    @SuppressWarnings("unchecked")
     default N setJavadocComment(String comment) {
-        return setJavadocComment(new JavadocComment(comment));
+        return setJavadocComment(new TraditionalJavadocComment(comment));
     }
 
     default N setJavadocComment(JavadocComment comment) {

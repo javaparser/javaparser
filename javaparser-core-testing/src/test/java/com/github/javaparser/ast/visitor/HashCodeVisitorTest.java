@@ -30,8 +30,8 @@ import static org.mockito.Mockito.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -468,7 +468,7 @@ class HashCodeVisitorTest {
 
     @Test
     void testVisitJavadocComment() {
-        JavadocComment node = spy(new JavadocComment());
+        TraditionalJavadocComment node = spy(new TraditionalJavadocComment());
         HashCodeVisitor.hashCode(node);
         verify(node, times(1)).getContent();
         verify(node, times(1)).getComment();

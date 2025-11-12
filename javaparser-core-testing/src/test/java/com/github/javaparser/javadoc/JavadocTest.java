@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
@@ -67,7 +67,7 @@ class JavadocTest {
     @Test
     void toCommentForEmptyJavadoc() {
         Javadoc javadoc = new Javadoc(new JavadocDescription());
-        assertEquals(new JavadocComment("" + LineSeparator.SYSTEM + "\t\t "), javadoc.toComment("\t\t"));
+        assertEquals(new TraditionalJavadocComment("" + LineSeparator.SYSTEM + "\t\t "), javadoc.toComment("\t\t"));
     }
 
     @Test
@@ -75,7 +75,7 @@ class JavadocTest {
         Javadoc javadoc =
                 new Javadoc(JavadocDescription.parseText("first line" + LineSeparator.SYSTEM + "second line"));
         assertEquals(
-                new JavadocComment("" + LineSeparator.SYSTEM + "\t\t * first line" + LineSeparator.SYSTEM
+                new TraditionalJavadocComment("" + LineSeparator.SYSTEM + "\t\t * first line" + LineSeparator.SYSTEM
                         + "\t\t * second line" + LineSeparator.SYSTEM + "\t\t "),
                 javadoc.toComment("\t\t"));
     }
@@ -86,7 +86,7 @@ class JavadocTest {
                 new Javadoc(JavadocDescription.parseText("first line" + LineSeparator.SYSTEM + "second line"));
         javadoc.addBlockTag("foo", "something useful");
         assertEquals(
-                new JavadocComment("" + LineSeparator.SYSTEM + "\t\t * first line" + LineSeparator.SYSTEM
+                new TraditionalJavadocComment("" + LineSeparator.SYSTEM + "\t\t * first line" + LineSeparator.SYSTEM
                         + "\t\t * second line" + LineSeparator.SYSTEM + "\t\t * " + LineSeparator.SYSTEM
                         + "\t\t * @foo something useful" + LineSeparator.SYSTEM + "\t\t "),
                 javadoc.toComment("\t\t"));

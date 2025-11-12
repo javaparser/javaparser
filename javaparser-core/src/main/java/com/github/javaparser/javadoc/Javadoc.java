@@ -21,6 +21,7 @@
 package com.github.javaparser.javadoc;
 
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.utils.LineSeparator;
 import java.util.LinkedList;
@@ -123,7 +124,7 @@ public class Javadoc {
         }
         sb.append(indentation);
         sb.append(" ");
-        return new JavadocComment(sb.toString());
+        return new TraditionalJavadocComment(sb.toString());
     }
 
     public JavadocDescription getDescription() {
