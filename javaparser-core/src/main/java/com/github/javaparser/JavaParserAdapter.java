@@ -148,8 +148,8 @@ public class JavaParserAdapter {
         return handleResult(getParser().parseVariableDeclarationExpr(declaration));
     }
 
-    public Javadoc parseJavadoc(String content) {
-        return JavadocParser.parse(content);
+    public Javadoc parseJavadoc(String content, boolean isMarkdownComment) {
+        return JavadocParser.parse(content, isMarkdownComment);
     }
 
     public ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(String statement) {
