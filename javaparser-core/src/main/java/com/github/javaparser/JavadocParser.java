@@ -142,7 +142,12 @@ class JavadocParser {
         return cleanedLines;
     }
 
-    // Visible for testing
+    /**
+     * Given a line in a block or markdown comment, this method finds the index of the * or / at the start of the line.
+     * For markdown comments where lines start with ///, this would be the index of the third /. This is used to strip
+     * the relevant prefix string when cleaning lines as part of the Javadoc parsing process.
+     * It is made visible for testing
+     */
     static int startsWithAsteriskOrMdSlash(String line) {
         for (int i = 0, mdSlashCount = 0; i < line.length(); i++) {
             char currentChar = line.charAt(i);

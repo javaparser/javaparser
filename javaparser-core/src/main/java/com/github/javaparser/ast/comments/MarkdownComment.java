@@ -81,23 +81,15 @@ public class MarkdownComment extends JavadocComment {
      *        significant. For example, whitespace at the beginning of a line may indicate an indented code block or the
      *        continuation of a list item, and whitespace at the end of a line may indicate a hard line break.
      *     </blockquote>
-     * @return
      */
     public String getMarkdownContent() {
         String content = getContent();
-        LineSeparator lineSeparator = LineSeparator.detect(content);
+        // Start by isolating the lines to make calculating and stripping leading whitespace easier
         ArrayList<String> commentLines = new ArrayList<>();
-        if (lineSeparator == LineSeparator.CR
-                || lineSeparator == LineSeparator.LF
-                || lineSeparator == LineSeparator.CRLF) {
-            commentLines.addAll(Arrays.asList(content.split(lineSeparator.asRawString())));
-        } else if (lineSeparator == LineSeparator.NONE) {
-            commentLines.add(content);
-        } else {
-            // TODO
-        }
+        commentLines.addAll(Arrays.asList(content.split("(\r\n|\r|\n)")));
         ArrayList<String> formattedLines = new ArrayList<>();
         for (String line : commentLines) {
+            // Use pattern matching to strip leading whitespace followed by /// for each of the lines.
             Matcher matcher = markdownLinePattern.matcher(line);
             if (matcher.matches()) {
                 formattedLines.add(matcher.group(1));
@@ -105,6 +97,12 @@ public class MarkdownComment extends JavadocComment {
                 formattedLines.add(line);
             }
         }
+        // Find the length of the shortest whitespace prefix for all the lines so that this can be stripped according
+        // to the Java specification. For example, treating . as whitespace in the example below, 2 spaces will be
+        // stripped:
+        // ///....prefix_length=4
+        // ///......prefix_length=8
+        // ///..prefix_length=2
         int shortestWhitespacePrefix = Integer.MAX_VALUE;
         for (String line : formattedLines) {
             for (int i = 0; i < line.length(); i++) {
@@ -115,6 +113,9 @@ public class MarkdownComment extends JavadocComment {
             }
         }
         StringBuilder contentBuilder = new StringBuilder();
+        LineSeparator lineSeparator = LineSeparator.detect(content);
+        // Reassemble the content with the whitespace prefix stripped and without adding back the /// removed by the
+        // pattern match above.
         for (int i = 0; i < formattedLines.size(); i++) {
             String line = formattedLines.get(i);
             if (line.trim().isEmpty()) {
@@ -129,11 +130,27 @@ public class MarkdownComment extends JavadocComment {
         return contentBuilder.toString();
     }
 
+    /**
+     * For other comment types, the header is the character sequence that starts the comment, i.e. /* for block
+     * comments and // for line comments and the footer is the character sequence that ends the comment, i.e. * / for
+     * block comments, but empty for line comments. These comments can then be reconstructed with
+     *   c.getHeader() + c.getContent() + c.getFooter().
+     * For Markdown comments, this model doesn't fit as well, since the header is now a character sequence that
+     * appears at the start of each line. For ease of use, the leading /// is now included in the comment content,
+     * returned by the getContent() method, while the getMarkdownContent() method returns the comment content with the
+     * leading /// stripped from each line.
+     *
+     * @return the empty string
+     */
     @Override
     public String getHeader() {
         return "";
     }
 
+    /**
+     * Markdown comments are not terminated by a specific character sequence, so just use the empty string as a footer.
+     * @return the empty string
+     */
     @Override
     public String getFooter() {
         return "";
@@ -154,15 +171,8 @@ public class MarkdownComment extends JavadocComment {
     @Override
     public String asString() {
         String content = getContent();
-        String lineSeparator;
         // Try to preserve line separators
-        if (content.contains("\r\n")) {
-            lineSeparator = "\r\n";
-        } else if (content.contains("\n")) {
-            lineSeparator = "\n";
-        } else {
-            lineSeparator = "\r";
-        }
+        String lineSeparator = getLineEndingStyle().asRawString();
         String[] lines = content.split(lineSeparator);
         StringBuilder builder = new StringBuilder();
         for (String line : lines) {

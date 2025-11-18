@@ -64,7 +64,6 @@ abstract class GeneratedJavaParserTokenManagerBase {
 
                 if (TokenTypes.isEndOfLineToken(lastToken.kind)) {
                     if (TokenTypes.isComment(tokens.peekLast().kind)) {
-                        // tokens.addLast(lastToken);
                         break;
                     }
                 }

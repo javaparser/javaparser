@@ -292,6 +292,13 @@ public class LexicalPreservingPrinter {
             }
         }
 
+        /**
+         * Comments must be converted to TokenTextElements that the LPP can work with. For the other comments this is
+         * simple since there is a TokenType corresponding to them. A TokenTextElement can just be created from the
+         * header, footer, and content of the comment. This is not the case for MarkdownComments, however, since a
+         * MarkdownComment is made up of a sequence of whitespace and line comment tokens. This sequence is therefore
+         * manually reconstructed from the comment content.
+         */
         private List<TokenTextElement> convertMarkdownCommentContentToTokens(MarkdownComment comment) {
             ArrayList<TokenTextElement> tokens = new ArrayList<>();
             String content = comment.getContent();
@@ -336,19 +343,6 @@ public class LexicalPreservingPrinter {
                         MULTI_LINE_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
                 tokens.add(t);
             } else if (newComment.isMarkdownComment()) {
-                // TODO construct token list
-                // String[] lines = newComment.getContent().split("\\R");
-                // for (String line : newComment.getContent().split("\\R")) {
-                //     for (int i = 0; i < line.length(); i++) {
-                //         if (line.charAt(i) == '/') {
-                //             TokenTextElement t = new TokenTextElement(SINGLE_LINE_COMMENT, line.substring(i));
-                //             tokens.add(t);
-                //             break;
-                //         } else {
-                //             tokens.add(new TokenTextElement(SPACE, Character.toString(line.charAt(i))));
-                //         }
-                //     }
-                // }
                 tokens.addAll(convertMarkdownCommentContentToTokens(newComment.asMarkdownComment()));
             } else {
                 throw new UnsupportedOperationException(
@@ -445,6 +439,9 @@ public class LexicalPreservingPrinter {
                         .filter(t -> t.getText().equals(oldValue.asString()))
                         .collect(toList());
             } else if (oldValue instanceof MarkdownComment) {
+                // Because a MarkdownComment consists of a sequence of tokens (as opposed to the other comment types
+                // which consist of a single token), all the tokens making up the MarkdownComment need to be found to
+                // be able to correctly replace or delete it.
                 matchingTokens = new ArrayList<>();
                 ArrayList<TextElement> maybeMatchingTokens = new ArrayList<>();
                 boolean inMatch = false;
@@ -452,6 +449,11 @@ public class LexicalPreservingPrinter {
                 List<TextElement> textElements = nodeText.getElements();
                 for (TextElement textElement : textElements) {
                     if (inMatch) {
+                        // If a matching start has been found, then add all following tokens to maybeMatchingTokens
+                        // until either a matching end is found, at which point the token range is added to
+                        // matchingTokens, or a non-whitespace, non-comment token is found at which point we know the
+                        // maybeMatchingTokens do not actually match the markdown comment (just some prefix of it), so
+                        // maybeMatchingTokens is cleared.
                         maybeMatchingTokens.add(textElement);
                         if (textElement.isToken(SINGLE_LINE_COMMENT) && oldContent.endsWith(textElement.expand())) {
                             // We have a matching start and end, so check that the full text matches.
@@ -473,6 +475,8 @@ public class LexicalPreservingPrinter {
                         }
                     } else if (textElement.isToken(SINGLE_LINE_COMMENT)
                             && oldContent.startsWith(((TokenTextElement) textElement).getText())) {
+                        // Found a line comment that matches the first line of the markdown comment, so start looking
+                        // for the rest of the comment.
                         maybeMatchingTokens.add(textElement);
                         inMatch = true;
                     }

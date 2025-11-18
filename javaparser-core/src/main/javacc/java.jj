@@ -257,10 +257,15 @@ TOKEN_MGR_DECLS :
             token = token.specialToken;
         } while (token != null);
 
-        // The stack is now filled with tokens in left-to-right order. Process them.
+        // A /// sequence only indicates the start of a markdown comment if it is only preceded by whitespace characters
+        // in the line. This variable is used to keep track of this.
         expectMarkdownComment = true;
+        // A newline token only indicates the end of the markdown comment if it is not preceded by a line comment (e.g.
+        // the second of two consecutive newlines would end the comment). This variable keeps track of whether the next
+        // newline should end the markdown comment (if currently processing one).
         expectEndOfMarkdownLine = false;
 
+        // The stack is now filled with tokens in left-to-right order. Process them.
         while(!tokenWorkStack.empty()) {
             token = tokenWorkStack.pop();
             token.javaToken = new JavaToken(token, tokens);
@@ -273,24 +278,55 @@ TOKEN_MGR_DECLS :
                 homeToken = token.javaToken;
             }
 
+            // While processing the list of tokens, markdown comments are constructed from consecutive line comments
+            // starting with ///. This is done using effectively a second state machine on top of the javacc. The core
+            // observation is that the start of a markdown comment line must be preceded by only whitespace. When
+            // the processing of the token stream starts, EXPECT_MARKDOWN_COMMENT = true since no non-whitespace tokens
+            // have been processed. Processing then proceeds as follows:
+            //  1. If a non-whitespace, non-line-comment token is read, then a markdown comment cannot start on that
+            //     line. Continue reading tokens until the newline while not expecting markdown comments.
+            //  2. If only whitespace tokens have been processed on a line, followed by a line comment starting with
+            //     ///, start processing a markdown comment.
+            //  3. While processing a markdown comment, add all whitespace tokens and line comments to the
+            //     markdownCommentTokens. These will be used to construct the markdown comment later.
+            //  4. If a newline is read while processing a markdown comment, then either the next line will continue
+            //     the comment (i.e. the newline is followed by only non-newline whitespace characters before the
+            //     next line comment starting with ///), or the markdown comment will be ended by another newline
+            //     or non-line-comment.
+            //  5. If the markdown comment is ended, use the markdownCommentTokens buffer to create the actual markdown
+            //     comment node.
             if (TokenTypes.isEndOfLineToken(token.kind)) {
                 if (expectEndOfMarkdownLine) {
+                    // A newline is processed, but it's the first newline after a markdown comment line
+                    // (expectEndOfMarkdownComment is still true), so it does not end the comment yet.
                     markdownCommentTokens.add(token);
                     expectEndOfMarkdownLine = false;
                 } else {
+                    // A newline is processed, but it's not the first newline after a markdown comment line, so
+                    // create the comment now.
                     createMarkdownComment();
                 }
+                // A new line is started, so until a non-whitespace non-line-comment token is processed, expect a new
+                // markdown comment.
                 expectMarkdownComment = true;
             } else if (expectMarkdownComment && isMarkdownCommentLineCandidate(token)) {
+                // The next markdown line comment is processed, so add it to the buffer.
                 expectEndOfMarkdownLine = true;
                 markdownCommentTokens.add(token);
             } else if (expectMarkdownComment && TokenTypes.isWhitespaceButNotEndOfLine(token.kind)) {
+                // Non-newline whitespace characters are always included in the token range for the markdown comment, so
+                // add them to the buffer
                 markdownCommentTokens.add(token);
             } else if(TokenTypes.isComment(token.kind)) {
+                // A comment token is found, but not one that is a markdown line candidate (those are handled in an
+                // else above). This could be a line comment not starting with ///, or a block comment. At this point,
+                // end the markdown comment and handle the other comment separately.
                 createMarkdownComment();
                 Comment comment = createCommentFromToken(token);
                 commentsCollection.addComment(comment);
             } else if (!TokenTypes.isWhitespace(token.kind)) {
+                // Any non-whitespace token ends the markdown comment. If the markdownCommentTokens buffer is empty or
+                // only contains whitespace, it is simply cleared.
                 expectMarkdownComment = false;
                 createMarkdownComment();
             }
