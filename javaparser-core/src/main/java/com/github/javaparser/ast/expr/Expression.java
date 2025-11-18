@@ -852,7 +852,7 @@ public abstract class Expression extends Node {
     /*
      * returns true if the scope of this expression does not define an type argument or if the expression has not a scope (the expression is not qualified)
      * or if there is a scope it uses <> to elide class type arguments
-     * For exemple :
+     * For example :
      * m()      ==> true because there is no scope
      * a.m()    ==> true because the scope has no type arguments
      * a<>.m()  ==> true because the type argument is elided
