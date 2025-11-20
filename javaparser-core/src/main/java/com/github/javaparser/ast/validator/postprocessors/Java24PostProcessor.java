@@ -25,5 +25,4 @@ package com.github.javaparser.ast.validator.postprocessors;
  * Post-processor for Java 24 language features.
  * Java 24 does not introduce new syntax changes requiring post-processing.
  */
-public class Java24PostProcessor extends Java23PostProcessor {
-}
+public class Java24PostProcessor extends Java23PostProcessor {}
