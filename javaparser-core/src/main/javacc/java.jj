@@ -1172,7 +1172,14 @@ public CompilationUnit CompilationUnit():
                     compactMembers
                 );
                 compactClass.setCompact(true);
-                types = add(types, compactClass);
+
+                // Add compact class at the beginning of types list
+                NodeList<TypeDeclaration<?>> newTypes = emptyNodeList();
+                newTypes = add(newTypes, compactClass);
+                for (TypeDeclaration<?> type : types) {
+                    newTypes = add(newTypes, type);
+                }
+                types = newTypes;
             }
             return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module);
         }
