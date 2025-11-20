@@ -386,6 +386,21 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         return this;
     }
 
+    /**
+     * Returns the name of this class as a string.
+     * For compact classes (JEP 512), this returns an empty string to indicate the implicit/unnamed class.
+     *
+     * @return the class name, or empty string for compact classes
+     * @since 3.27.2
+     */
+    @Override
+    public String getNameAsString() {
+        if (isCompact) {
+            return "";
+        }
+        return super.getNameAsString();
+    }
+
     @Override
     public ResolvedReferenceTypeDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedReferenceTypeDeclaration.class);
