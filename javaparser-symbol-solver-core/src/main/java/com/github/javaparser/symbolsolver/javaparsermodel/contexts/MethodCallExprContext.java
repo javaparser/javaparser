@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get;
+
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -63,7 +67,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
         // Method calls can have generic types defined, for example: {@code expr.<T1, T2>method(x, y, z);} or {@code
         // super.<T, E>check2(val1, val2).}
-        ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(nodeScope.get());
+        ResolvedType typeOfScope = get(typeSolver).getType(nodeScope.get());
         Optional<ResolvedType> resolvedType = typeOfScope.asReferenceType().getGenericParameterByName(name);
 
         // TODO/FIXME: Consider if we should check if the result is present, else delegate "up" the context chain (e.g.
@@ -101,10 +105,10 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             }
 
             // Scope is present -- search/solve within that type
-            typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
+            typeOfScope = get(typeSolver).getType(scope);
         } else {
             // Scope not present -- search/solve within itself.
-            typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
+            typeOfScope = get(typeSolver).getTypeOfThisIn(wrappedNode);
         }
 
         // we can replace the parameter types from the scope into the typeParametersValues
@@ -131,7 +135,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             final List<ResolvedType> typeArguments = new ArrayList<>();
             for (com.github.javaparser.ast.type.Type ty :
                     wrappedNode.getTypeArguments().get()) {
-                typeArguments.add(JavaParserFacade.get(typeSolver).convertToUsage(ty));
+                typeArguments.add(get(typeSolver).convertToUsage(ty));
             }
 
             List<ResolvedTypeParameterDeclaration> tyParamDecls =
@@ -149,25 +153,134 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
 
-        if (rrtds.isEmpty()) {
-            // if the bounds of a type parameter are empty, then the bound is implicitly "extends Object"
-            // we don't make this _ex_plicit in the data representation because that would affect codegen
-            // and make everything generate like <T extends Object> instead of <T>
-            // https://github.com/javaparser/javaparser/issues/2044
-            rrtds = Collections.singleton(typeSolver.getSolvedJavaLangObject());
-        }
+        boolean isScopePresent = wrappedNode.getScope().isPresent();
 
-        for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
-            SymbolReference<ResolvedMethodDeclaration> res =
-                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
-            if (res.isSolved()) {
-                return res;
+        if (isScopePresent) {
+            Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
+            if (rrtds.isEmpty()) {
+                rrtds = java.util.Collections.singleton(typeSolver.getSolvedJavaLangObject());
+            }
+            for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
+                SymbolReference<ResolvedMethodDeclaration> res =
+                        MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, staticOnly);
+                if (res.isSolved()) return res;
             }
         }
 
+        if (!wrappedNode.getScope().isPresent()) {
+
+            boolean barrier = isStaticContext(wrappedNode);
+            Optional<Node> cur = Optional.of(wrappedNode);
+
+            while (cur.isPresent()) {
+                Node node = cur.get();
+
+                boolean[] crossed = {false};
+                Node typeNode = nextLexicalType(node, crossed);
+
+                if (typeNode != null) {
+                    barrier = barrier || isStaticContext(typeNode);
+                    if (crossed[0]) barrier = true;
+                } else {
+                    if (isStaticContext(node)) barrier = true;
+                }
+
+                if (!barrier) {
+                    Optional<ResolvedReferenceTypeDeclaration> thisDecl = safeThisDeclaration(node);
+                    if (thisDecl.isPresent()) {
+                        SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
+                                thisDecl.get(), name, argumentsTypes, staticOnly);
+                        if (res.isSolved()) {
+                            // Ensures double anonymous enclosures are checked. Checks all ancestors
+                            ResolvedMethodDeclaration m = res.getCorrespondingDeclaration();
+
+                            String declarationQN = m.declaringType().getQualifiedName();
+                            String thisQN = thisDecl.get().getQualifiedName();
+
+                            boolean onThisOrAncestor = declarationQN.equals(thisQN)
+                                    || thisDecl.get().getAllAncestors().stream()
+                                            .map(ResolvedReferenceType::getQualifiedName)
+                                            .anyMatch(declarationQN::equals);
+                            if (onThisOrAncestor) {
+                                return res;
+                            }
+                        }
+                    }
+                }
+
+                if (typeNode != null) {
+
+                    barrier = barrier || crossed[0];
+
+                    ResolvedReferenceTypeDeclaration d;
+                    if (typeNode instanceof ClassOrInterfaceDeclaration) {
+                        d = JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) typeNode);
+                    } else if (typeNode instanceof EnumDeclaration) {
+                        d = JavaParserFacade.get(typeSolver).getTypeDeclaration((EnumDeclaration) typeNode);
+                    } else {
+                        d = JavaParserFacade.get(typeSolver).getTypeDeclaration((RecordDeclaration) typeNode);
+                    }
+                    SymbolReference<ResolvedMethodDeclaration> res =
+                            MethodResolutionLogic.solveMethodInType(d, name, argumentsTypes, barrier || staticOnly);
+                    if (res.isSolved()) {
+                        ResolvedMethodDeclaration m = res.getCorrespondingDeclaration();
+                        return res;
+                    }
+
+                    cur = typeNode.getParentNode();
+                    continue;
+                }
+
+                cur = node.getParentNode();
+            }
+        }
         return SymbolReference.unsolved();
+    }
+
+    private static boolean isStaticContext(Node start) {
+        for (Node cur = start; cur != null; cur = cur.getParentNode().orElse(null)) {
+            if (cur instanceof MethodDeclaration) return ((MethodDeclaration) cur).isStatic();
+            if (cur instanceof InitializerDeclaration) {
+                return ((InitializerDeclaration) cur).isStatic();
+            }
+            if (cur instanceof FieldDeclaration) {
+                return ((FieldDeclaration) cur).isStatic();
+            }
+        }
+        return false;
+    }
+
+    private static Node nextLexicalType(Node start, boolean[] barrierFlag) {
+        Node cur = start;
+        boolean crossed = false;
+
+        while (cur != null) {
+            if (cur instanceof ClassOrInterfaceDeclaration
+                    || cur instanceof EnumDeclaration
+                    || cur instanceof RecordDeclaration) {
+                barrierFlag[0] = crossed;
+                return cur;
+            }
+            if (isStaticContext(cur)) {
+                crossed = true;
+            }
+            cur = cur.getParentNode().orElse(null);
+        }
+
+        barrierFlag[0] = crossed;
+        return null;
+    }
+
+    private Optional<ResolvedReferenceTypeDeclaration> safeThisDeclaration(Node node) {
+        try {
+            ResolvedType t = JavaParserFacade.get(typeSolver).getTypeOfThisIn(node);
+            if (t.isReferenceType()) {
+                return t.asReferenceType().getTypeDeclaration();
+            }
+        } catch (RuntimeException ignored) {
+        }
+        return Optional.empty();
     }
 
     ///
