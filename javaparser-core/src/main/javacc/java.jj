@@ -1130,15 +1130,7 @@ public CompilationUnit CompilationUnit():
             (
                 modifier = Modifiers()
                 (
-                    // Try to parse as compact class member (top-level method/field)
-                    // Use syntactic LOOKAHEAD to distinguish
-                    LOOKAHEAD(CompactClassMember(modifier))
-                    member = CompactClassMember(modifier)
-                    {
-                        compactMembers = add(compactMembers, member);
-                    }
-                 |
-                    // Regular type declarations
+                    // Regular type declarations - must come FIRST to avoid conflicts
                     typeDeclaration = ClassOrInterfaceDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
                     typeDeclaration = RecordDeclaration(modifier)  { types = add(types, typeDeclaration); }
@@ -1148,6 +1140,13 @@ public CompilationUnit CompilationUnit():
                     typeDeclaration = AnnotationTypeDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
                     module = ModuleDeclaration(modifier)
+                 |
+                    // Try to parse as compact class member (top-level method/field)
+                    // This comes LAST as a fallback
+                    member = CompactClassMember(modifier)
+                    {
+                        compactMembers = add(compactMembers, member);
+                    }
                  |
                     ";"
                 )
