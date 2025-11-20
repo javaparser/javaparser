@@ -1119,7 +1119,6 @@ public CompilationUnit CompilationUnit():
     ModuleDeclaration module = null;
     NodeList<BodyDeclaration<?>> compactMembers = emptyNodeList();
     BodyDeclaration<?> member = null;
-    boolean hasCompactMembers = false;
 }
 {
     try {
@@ -1132,14 +1131,12 @@ public CompilationUnit CompilationUnit():
                 modifier = Modifiers()
                 (
                     // Try to parse as compact class member (top-level method/field)
-                    LOOKAHEAD({ !hasCompactMembers && types.isEmpty() && module == null })
-                    (
-                        member = CompactClassMember(modifier)
-                        {
-                            compactMembers = add(compactMembers, member);
-                            hasCompactMembers = true;
-                        }
-                    )
+                    // Use syntactic LOOKAHEAD to distinguish
+                    LOOKAHEAD(CompactClassMember(modifier))
+                    member = CompactClassMember(modifier)
+                    {
+                        compactMembers = add(compactMembers, member);
+                    }
                  |
                     // Regular type declarations
                     typeDeclaration = ClassOrInterfaceDeclaration(modifier) { types = add(types, typeDeclaration); }
@@ -1159,7 +1156,7 @@ public CompilationUnit CompilationUnit():
         (<EOF> | <CTRL_Z>)
         {
             // If we found compact class members, wrap them in an implicit class
-            if (hasCompactMembers) {
+            if (!compactMembers.isEmpty()) {
                 SimpleName implicitClassName = new SimpleName("");
                 ClassOrInterfaceDeclaration compactClass = new ClassOrInterfaceDeclaration(
                     range(token_source.getHomeToken(), token()),
