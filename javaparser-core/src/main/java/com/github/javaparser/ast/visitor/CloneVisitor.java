@@ -25,6 +25,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
 import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
@@ -1371,6 +1372,16 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         MatchAllPatternExpr r = new MatchAllPatternExpr(n.getTokenRange().orElse(null), modifiers);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final MarkdownComment n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        MarkdownComment r = new MarkdownComment(n.getTokenRange().orElse(null), n.getContent());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

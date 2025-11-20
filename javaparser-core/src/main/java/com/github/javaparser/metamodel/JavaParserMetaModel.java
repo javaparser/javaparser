@@ -282,6 +282,7 @@ public final class JavaParserMetaModel {
         blockCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         traditionalJavadocCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         lineCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
+        markdownCommentMetaModel.getConstructorParameters().add(commentMetaModel.contentPropertyMetaModel);
         arrayAccessExprMetaModel.getConstructorParameters().add(arrayAccessExprMetaModel.namePropertyMetaModel);
         arrayAccessExprMetaModel.getConstructorParameters().add(arrayAccessExprMetaModel.indexPropertyMetaModel);
         arrayCreationExprMetaModel
@@ -573,6 +574,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(localClassDeclarationStmtMetaModel);
         nodeMetaModels.add(localRecordDeclarationStmtMetaModel);
         nodeMetaModels.add(longLiteralExprMetaModel);
+        nodeMetaModels.add(markdownCommentMetaModel);
         nodeMetaModels.add(markerAnnotationExprMetaModel);
         nodeMetaModels.add(matchAllPatternExprMetaModel);
         nodeMetaModels.add(memberValuePairMetaModel);
@@ -3126,6 +3128,10 @@ public final class JavaParserMetaModel {
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LineCommentMetaModel lineCommentMetaModel =
             new LineCommentMetaModel(Optional.of(commentMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final MarkdownCommentMetaModel markdownCommentMetaModel =
+            new MarkdownCommentMetaModel(Optional.of(javadocCommentMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ArrayAccessExprMetaModel arrayAccessExprMetaModel =

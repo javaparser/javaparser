@@ -28,10 +28,7 @@ import static java.util.stream.Collectors.joining;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.comments.TraditionalJavadocComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.nodeTypes.*;
@@ -1695,6 +1692,25 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         // last line is not followed by a newline, and simply terminated with `*/`
         printer.print(lines[lines.length - 1]);
         printer.println(n.getFooter());
+    }
+
+    @Override
+    public void visit(final MarkdownComment n, final Void arg) {
+        if (configuration.isIgnoreComments()) {
+            return;
+        }
+        final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
+        String[] lines = commentContent.split("\\R");
+        for (int i = 0; i < (lines.length - 1); i++) {
+            printer.print(n.getHeader());
+            printer.print(lines[i]);
+            // Avoids introducing indentation in markdown comments. ie: do not use println() as it would trigger
+            // indentation
+            // at the next print call.
+            printer.print(configuration.getEndOfLineCharacter());
+        }
+        printer.print(n.getHeader());
+        printer.println(lines[lines.length - 1]);
     }
 
     @Override

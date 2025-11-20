@@ -89,6 +89,6 @@ public abstract class JavadocComment extends Comment {
     }
 
     public Javadoc parse() {
-        return parseJavadoc(getContent());
+        return parseJavadoc(getContent(), this.isMarkdownComment());
     }
 }

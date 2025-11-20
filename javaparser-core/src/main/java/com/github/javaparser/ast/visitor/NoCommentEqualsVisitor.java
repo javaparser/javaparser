@@ -24,6 +24,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
 import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
@@ -935,6 +936,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     public Boolean visit(final MatchAllPatternExpr n, final Visitable arg) {
         final MatchAllPatternExpr n2 = (MatchAllPatternExpr) arg;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers())) return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final MarkdownComment n, final Visitable arg) {
+        final MarkdownComment n2 = (MarkdownComment) arg;
+        if (!objEquals(n.getContent(), n2.getContent())) return false;
         return true;
     }
 }
