@@ -31,7 +31,6 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.utils.SourceRoot;
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,9 +68,12 @@ public final class GeneratorTestHelper {
      * @return A SourceRoot pointing to the test resources
      */
     public static SourceRoot createTestSourceRoot(Class<?> testClass, String subdirectory) {
-        String resourcesFolderPath = testClass.getCanonicalName().replace(".", File.separator);
-        String basePath = Paths.get("src", "test", "resources").toString();
-        Path testPath = Paths.get(basePath, resourcesFolderPath, subdirectory);
+        String[] packageParts = testClass.getCanonicalName().split("\\.");
+        Path testPath = Paths.get("src", "test", "resources");
+        for (String part : packageParts) {
+            testPath = testPath.resolve(part);
+        }
+        testPath = testPath.resolve(subdirectory);
         return new SourceRoot(testPath);
     }
 

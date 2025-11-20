@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.utils.SourceRoot;
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -39,11 +38,13 @@ class NotNullGeneratorTest {
     void testExecutionOfGenerator() throws Exception {
 
         // Setup the
-        String resourcesFolderPath = getClass().getCanonicalName().replace(".", File.separator);
-
-        String basePath = Paths.get("src", "test", "resources").toString();
-        Path originalFile = Paths.get(basePath, resourcesFolderPath, "original");
-        Path expectedFile = Paths.get(basePath, resourcesFolderPath, "expected");
+        String[] packageParts = getClass().getCanonicalName().split("\\.");
+        Path basePath = Paths.get("src", "test", "resources");
+        for (String part : packageParts) {
+            basePath = basePath.resolve(part);
+        }
+        Path originalFile = basePath.resolve("original");
+        Path expectedFile = basePath.resolve("expected");
 
         SourceRoot originalSources = new SourceRoot(originalFile);
         SourceRoot expectedSources = new SourceRoot(expectedFile);
