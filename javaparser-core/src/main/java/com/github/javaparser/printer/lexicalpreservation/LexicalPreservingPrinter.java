@@ -36,8 +36,8 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -284,7 +284,7 @@ public class LexicalPreservingPrinter {
         }
 
         private TokenTextElement makeCommentToken(Comment newComment) {
-            if (newComment.isJavadocComment()) {
+            if (newComment.isTraditionalJavadocComment()) {
                 return new TokenTextElement(
                         JAVADOC_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
             }
@@ -371,7 +371,7 @@ public class LexicalPreservingPrinter {
 
         private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<TokenTextElement> matchingTokens;
-            if (oldValue instanceof JavadocComment) {
+            if (oldValue instanceof TraditionalJavadocComment) {
                 matchingTokens = nodeText.getElements().stream()
                         .filter(e -> e.isToken(JAVADOC_COMMENT))
                         .map(e -> (TokenTextElement) e)
@@ -597,10 +597,11 @@ public class LexicalPreservingPrinter {
             interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
             return;
         }
-        if (node instanceof JavadocComment) {
-            Comment comment = (JavadocComment) node;
+        if (node instanceof TraditionalJavadocComment) {
+            Comment comment = (TraditionalJavadocComment) node;
             nodeText.addToken(
-                    JAVADOC_COMMENT, comment.getHeader() + ((JavadocComment) node).getContent() + comment.getFooter());
+                    JAVADOC_COMMENT,
+                    comment.getHeader() + ((TraditionalJavadocComment) node).getContent() + comment.getFooter());
             return;
         }
         if (node instanceof BlockComment) {

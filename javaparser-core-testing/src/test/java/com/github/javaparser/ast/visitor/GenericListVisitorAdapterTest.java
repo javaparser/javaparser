@@ -28,8 +28,8 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -1133,7 +1133,7 @@ class GenericListVisitorAdapterTest {
     void visit_GivenJavadocComment() {
         // Given
         Object argument = mock(Object.class);
-        JavadocComment node = mock(JavadocComment.class);
+        TraditionalJavadocComment node = mock(TraditionalJavadocComment.class);
 
         // When
         Mockito.when(node.getComment()).thenReturn(Optional.of(mock(Comment.class)));
