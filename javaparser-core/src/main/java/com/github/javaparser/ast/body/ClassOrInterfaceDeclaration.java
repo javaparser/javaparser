@@ -60,6 +60,8 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
 
     private boolean isInterface;
 
+    private boolean isCompact;
+
     private NodeList<TypeParameter> typeParameters;
 
     // Can contain more than one item if this is an interface
@@ -362,6 +364,26 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassOrInterfaceDeclaration(Consumer<ClassOrInterfaceDeclaration> action) {
         action.accept(this);
+    }
+
+    /**
+     * @return true if this is a compact class (JEP 512 - implicit class from top-level members)
+     * @since 3.27.2
+     */
+    public boolean isCompact() {
+        return isCompact;
+    }
+
+    /**
+     * Sets whether this is a compact class (JEP 512 - implicit class from top-level members).
+     *
+     * @param isCompact true if compact, false otherwise
+     * @return this declaration
+     * @since 3.27.2
+     */
+    public ClassOrInterfaceDeclaration setCompact(final boolean isCompact) {
+        this.isCompact = isCompact;
+        return this;
     }
 
     @Override
