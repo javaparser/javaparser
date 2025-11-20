@@ -43,6 +43,8 @@ class NotNullGeneratorTest {
         for (String part : packageParts) {
             basePath = basePath.resolve(part);
         }
+        // Normalize the path to handle Windows path separators correctly
+        basePath = basePath.normalize();
         Path originalFile = basePath.resolve("original");
         Path expectedFile = basePath.resolve("expected");
 

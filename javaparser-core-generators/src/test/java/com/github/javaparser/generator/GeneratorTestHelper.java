@@ -74,6 +74,8 @@ public final class GeneratorTestHelper {
             testPath = testPath.resolve(part);
         }
         testPath = testPath.resolve(subdirectory);
+        // Normalize the path to handle Windows path separators correctly
+        testPath = testPath.normalize();
         return new SourceRoot(testPath);
     }
 
