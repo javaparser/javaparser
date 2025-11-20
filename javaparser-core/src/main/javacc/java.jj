@@ -1117,6 +1117,9 @@ public CompilationUnit CompilationUnit():
     ModifierHolder modifier;
     TypeDeclaration<?> typeDeclaration = null;
     ModuleDeclaration module = null;
+    NodeList<BodyDeclaration<?>> compactMembers = emptyNodeList();
+    BodyDeclaration<?> member = null;
+    boolean hasCompactMembers = false;
 }
 {
     try {
@@ -1128,6 +1131,17 @@ public CompilationUnit CompilationUnit():
             (
                 modifier = Modifiers()
                 (
+                    // Try to parse as compact class member (top-level method/field)
+                    LOOKAHEAD({ !hasCompactMembers && types.isEmpty() && module == null })
+                    (
+                        member = CompactClassMember(modifier)
+                        {
+                            compactMembers = add(compactMembers, member);
+                            hasCompactMembers = true;
+                        }
+                    )
+                 |
+                    // Regular type declarations
                     typeDeclaration = ClassOrInterfaceDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
                     typeDeclaration = RecordDeclaration(modifier)  { types = add(types, typeDeclaration); }
@@ -1143,13 +1157,51 @@ public CompilationUnit CompilationUnit():
             )
         )*
         (<EOF> | <CTRL_Z>)
-        { return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module); }
+        {
+            // If we found compact class members, wrap them in an implicit class
+            if (hasCompactMembers) {
+                SimpleName implicitClassName = new SimpleName("");
+                ClassOrInterfaceDeclaration compactClass = new ClassOrInterfaceDeclaration(
+                    range(token_source.getHomeToken(), token()),
+                    new NodeList<Modifier>(),
+                    new NodeList<AnnotationExpr>(),
+                    false, // not an interface
+                    implicitClassName,
+                    new NodeList<TypeParameter>(),
+                    new NodeList<ClassOrInterfaceType>(),
+                    new NodeList<ClassOrInterfaceType>(),
+                    new NodeList<ClassOrInterfaceType>(),
+                    compactMembers
+                );
+                compactClass.setCompact(true);
+                types = add(types, compactClass);
+            }
+            return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module);
+        }
     } catch (ParseException e) {
         recover(EOF, e);
         final CompilationUnit compilationUnit = new CompilationUnit(range(token_source.getHomeToken(), token()), null, new NodeList<ImportDeclaration>(), new NodeList<TypeDeclaration<?>>(), null);
         compilationUnit.setParsed(UNPARSABLE);
         return compilationUnit;
     }
+}
+
+/**
+ * Parses a compact class member (JEP 512) - either a method or field at the top level.
+ * This is used when parsing compact source files with implicit classes.
+ */
+BodyDeclaration<?> CompactClassMember(ModifierHolder modifier):
+{
+    BodyDeclaration<?> member;
+}
+{
+    (
+        LOOKAHEAD(FieldDeclaration(modifier))
+        member = FieldDeclaration(modifier)
+     |
+        member = MethodDeclaration(modifier)
+    )
+    { return member; }
 }
 
 /**
