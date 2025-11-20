@@ -98,32 +98,29 @@ class LanguageLevelTest {
     }
 
     @Test
-    void java23ValidatorIsNotNull() {
-        assertNotNull(JAVA_23.validator);
+    void java23ParsingWorksWithVariousConstructs() {
+        JavaParser parser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_23));
+        ParseResult<CompilationUnit> result =
+                parser.parse(COMPILATION_UNIT, provider("record Point(int x, int y) { void test() { } }"));
+        assertTrue(result.isSuccessful());
+        assertEquals(0, result.getProblems().size());
     }
 
     @Test
-    void java24ValidatorIsNotNull() {
-        assertNotNull(JAVA_24.validator);
+    void java24ParsingWorksWithVariousConstructs() {
+        JavaParser parser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_24));
+        ParseResult<CompilationUnit> result =
+                parser.parse(COMPILATION_UNIT, provider("record Point(int x, int y) { void test() { } }"));
+        assertTrue(result.isSuccessful());
+        assertEquals(0, result.getProblems().size());
     }
 
     @Test
-    void java25ValidatorIsNotNull() {
-        assertNotNull(JAVA_25.validator);
-    }
-
-    @Test
-    void java23PostProcessorIsNotNull() {
-        assertNotNull(JAVA_23.postProcessor);
-    }
-
-    @Test
-    void java24PostProcessorIsNotNull() {
-        assertNotNull(JAVA_24.postProcessor);
-    }
-
-    @Test
-    void java25PostProcessorIsNotNull() {
-        assertNotNull(JAVA_25.postProcessor);
+    void java25ParsingWorksWithVariousConstructs() {
+        JavaParser parser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_25));
+        ParseResult<CompilationUnit> result =
+                parser.parse(COMPILATION_UNIT, provider("record Point(int x, int y) { void test() { } }"));
+        assertTrue(result.isSuccessful());
+        assertEquals(0, result.getProblems().size());
     }
 }
