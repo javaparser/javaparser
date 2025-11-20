@@ -14,7 +14,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2667378.svg)](https://doi.org/10.5281/zenodo.2667378)
 
 
-This project contains a set of libraries implementing a Java 1.0 - Java 21 Parser with advanced analysis functionalities.
+This project contains a set of libraries implementing a Java 1.0 - Java 22 Parser with advanced analysis functionalities.
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
