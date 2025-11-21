@@ -134,7 +134,9 @@ public class FlexibleConstructorTest {
                 "    }\n" +
                 "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
-        assertProblems(result, "(line 3,col 9) Statements before super() or this() cannot reference the current instance ('this').");
+        assertProblems(
+                result,
+                "(line 3,col 9) Statements before super() or this() cannot reference the current instance ('this').");
     }
 
     @Test
@@ -147,7 +149,9 @@ public class FlexibleConstructorTest {
                 "    }\n" +
                 "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
-        assertProblems(result, "(line 4,col 9) Statements before super() or this() cannot reference the current instance ('this').");
+        assertProblems(
+                result,
+                "(line 4,col 9) Statements before super() or this() cannot reference the current instance ('this').");
     }
 
     @Test
@@ -160,7 +164,8 @@ public class FlexibleConstructorTest {
                 "    }\n" +
                 "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
-        assertProblems(result, "(line 5,col 9) Only one super() or this() call is allowed per constructor.");
+        assertProblems(
+                result, "(line 5,col 9) Only one super() or this() call is allowed per constructor.");
     }
 
     @Test
@@ -174,6 +179,8 @@ public class FlexibleConstructorTest {
                 "    }\n" +
                 "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
-        assertProblems(result, "(line 5,col 9) Statements before super() or this() cannot reference the current instance ('this').");
+        assertProblems(
+                result,
+                "(line 5,col 9) Statements before super() or this() cannot reference the current instance ('this').");
     }
 }
