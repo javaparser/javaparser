@@ -188,7 +188,12 @@ public class ParserConfiguration {
          */
         JAVA_22(new Java22Validator(), new Java22PostProcessor()),
         /**
-         * Java 25 (JEP 513: Flexible Constructor Bodies)
+         * Java 25
+         * Implements:
+         * - JEP 512: Compact Source Files and Instance Main Methods
+         * - JEP 513: Flexible Constructor Bodies
+         *
+         * Note: JEP 511 (Module Import Declarations) is not yet implemented.
          */
         JAVA_25(new Java25Validator(), new Java25PostProcessor());
 

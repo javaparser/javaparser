@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
@@ -17,10 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.validator.postprocessors;
 
 /**
- * Post-processor for Java 25.
+ * Post-processor for Java 25 language features.
+ *
+ * Implements:
+ * - JEP 512: Compact Source Files and Instance Main Methods
+ * - JEP 513: Flexible Constructor Bodies
  *
  * @since 3.27.0
  */

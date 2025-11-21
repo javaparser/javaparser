@@ -69,6 +69,14 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
 
     private NodeList<ClassOrInterfaceType> permittedTypes;
 
+    /**
+     * Indicates whether this is a compact class (JEP 512 - implicit class from top-level members).
+     * Compact classes are created when parsing top-level methods and fields without an explicit class wrapper.
+     *
+     * @since 3.27.2
+     */
+    private boolean isCompact;
+
     public ClassOrInterfaceDeclaration() {
         this(
                 null,
@@ -362,6 +370,43 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassOrInterfaceDeclaration(Consumer<ClassOrInterfaceDeclaration> action) {
         action.accept(this);
+    }
+
+    /**
+     * Returns whether this is a compact class (JEP 512 - implicit class from top-level members).
+     *
+     * @return true if compact, false otherwise
+     * @since 3.27.2
+     */
+    public boolean isCompact() {
+        return isCompact;
+    }
+
+    /**
+     * Sets whether this is a compact class (JEP 512 - implicit class from top-level members).
+     *
+     * @param isCompact true if compact, false otherwise
+     * @return this declaration
+     * @since 3.27.2
+     */
+    public ClassOrInterfaceDeclaration setCompact(final boolean isCompact) {
+        this.isCompact = isCompact;
+        return this;
+    }
+
+    /**
+     * Returns the name of this class as a string.
+     * For compact classes (JEP 512), this returns an empty string to indicate the implicit/unnamed class.
+     *
+     * @return the class name, or empty string for compact classes
+     * @since 3.27.2
+     */
+    @Override
+    public String getNameAsString() {
+        if (isCompact) {
+            return "";
+        }
+        return super.getNameAsString();
     }
 
     @Override
