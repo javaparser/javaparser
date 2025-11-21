@@ -46,8 +46,8 @@ class Java24ValidatorTest {
 
     @Test
     void basicParsing() {
-        ParseResult<CompilationUnit> result = javaParser.parse(
-                COMPILATION_UNIT, provider("class X { void m() { System.out.println(\"Hello\"); } }"));
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X { void m() { System.out.println(\"Hello\"); } }"));
         assertNoProblems(result);
     }
 
@@ -60,8 +60,7 @@ class Java24ValidatorTest {
     @Test
     void switchExpressionSupported() {
         ParseResult<Statement> result = javaParser.parse(
-                STATEMENT,
-                provider("int result = switch(x) { case 1 -> 10; case 2 -> 20; default -> 0; };"));
+                STATEMENT, provider("int result = switch(x) { case 1 -> 10; case 2 -> 20; default -> 0; };"));
         assertNoProblems(result);
     }
 
