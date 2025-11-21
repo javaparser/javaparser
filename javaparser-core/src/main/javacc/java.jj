@@ -2456,7 +2456,6 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
     SimpleName name;
     Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
     NodeList<ReferenceType> throws_ = emptyNodeList();
-    ExplicitConstructorInvocationStmt exConsInv = null;
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
@@ -2473,17 +2472,12 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
     "{" { blockBegin=token(); }
-    [
-        LOOKAHEAD(ExplicitConstructorInvocation())
-        exConsInv = ExplicitConstructorInvocation()
-    ]
+    // JEP 513: Flexible Constructor Bodies
+    // ExplicitConstructorInvocation can now appear anywhere in the body, not just at the beginning
     stmts = Statements()
     "}"
 
     {
-        if (exConsInv != null) {
-            stmts = prepend(stmts, exConsInv);
-        }
         return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);
     }
 }
@@ -4478,6 +4472,11 @@ Statement BlockStatement():
             LOOKAHEAD( Modifiers() "record" SimpleName() [ TypeParameters() ] Parameters() )
             modifier = Modifiers()
             recordDeclaration = RecordDeclaration(modifier) { ret = new LocalRecordDeclarationStmt(range(recordDeclaration, token()), recordDeclaration); }
+         |
+            // JEP 513: Flexible Constructor Bodies - allow ExplicitConstructorInvocation as a statement
+            // Validation will ensure this only appears in constructor bodies
+            LOOKAHEAD( ExplicitConstructorInvocation() )
+            ret = ExplicitConstructorInvocation()
          |
             // try yield statement separate from more general Statement() because yield is not a keyword but
             // just a restricted identifier and a yield statement can be confused with VariableDeclarationExpression sometimes
