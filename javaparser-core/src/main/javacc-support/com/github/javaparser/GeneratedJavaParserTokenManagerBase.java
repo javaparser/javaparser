@@ -21,10 +21,9 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
+
+import java.util.ArrayDeque;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
@@ -40,6 +39,51 @@ abstract class GeneratedJavaParserTokenManagerBase {
         return new TokenRange(javaToken, javaToken);
     }
 
+    static boolean isMarkdownCommentLineCandidate(Token token) {
+        return token.kind == SINGLE_LINE_COMMENT && token.image.startsWith("///");
+    }
+
+    static MarkdownComment createMarkdownCommentFromTokenList(ArrayDeque<Token> tokens) {
+        if (tokens.isEmpty()) {
+            throw new IllegalArgumentException("Cannot create markdown comment from empty token list");
+        }
+
+        // After the last comment token, only one EOL whitespace token should be included. Everything after that
+        // should be filtered out.
+        while (!tokens.isEmpty() && TokenTypes.isWhitespace(tokens.peekLast().kind)) {
+            Token lastToken = tokens.removeLast();
+
+
+            if (TokenTypes.isComment(lastToken.kind)) {
+                tokens.addLast(lastToken);
+                break;
+            } else {
+                if (tokens.isEmpty()) {
+                    throw new IllegalArgumentException("createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens");
+                }
+
+                if (TokenTypes.isEndOfLineToken(lastToken.kind)) {
+                    if (TokenTypes.isComment(tokens.peekLast().kind)) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        TokenRange range = new TokenRange(
+                tokens.peekFirst().javaToken,
+                tokens.peekLast().javaToken
+        );
+
+        StringBuilder contentBuilder = new StringBuilder();
+
+        for (Token token : tokens) {
+            contentBuilder.append(token.image);
+        }
+
+        return new MarkdownComment(range, contentBuilder.toString());
+    }
+
     /**
      * Since comments are completely captured in a single token, including their delimiters, deconstruct them here so we
      * can turn them into nodes later on.
@@ -47,7 +91,7 @@ abstract class GeneratedJavaParserTokenManagerBase {
     static Comment createCommentFromToken(Token token) {
         String commentText = token.image;
         if (token.kind == JAVADOC_COMMENT) {
-            return new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
+            return new TraditionalJavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
         } else if (token.kind == MULTI_LINE_COMMENT) {
             return new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
         } else if (token.kind == SINGLE_LINE_COMMENT) {

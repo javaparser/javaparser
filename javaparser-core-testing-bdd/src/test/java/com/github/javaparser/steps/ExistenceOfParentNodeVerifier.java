@@ -32,8 +32,8 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -280,7 +280,7 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(JavadocComment n, Void arg) {
+        public void visit(TraditionalJavadocComment n, Void arg) {
             super.visit(n, arg);
         }
 
