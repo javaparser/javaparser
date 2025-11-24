@@ -26,6 +26,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
+import com.github.javaparser.utils.Pair;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +36,10 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import javassist.ClassPool;
+import javassist.CtClass;
 import javassist.NotFoundException;
+import javassist.bytecode.ClassFile;
+import javassist.bytecode.ConstPool;
 
 /**
  * Will let the symbol solver look inside a jar file while solving types.
@@ -45,6 +49,7 @@ import javassist.NotFoundException;
 public class JarTypeSolver implements TypeSolver {
 
     private static final String CLASS_EXTENSION = ".class";
+    private static final String MODULE_INFO_CLASS_NAME = "module-info";
 
     /**
      * @deprecated Use of this static method (previously following singleton pattern) is strongly discouraged
@@ -96,6 +101,7 @@ public class JarTypeSolver implements TypeSolver {
 
     private final ClassPool classPool = new ClassPool();
     private final Map<String, String> knownClasses = new HashMap<>();
+    private Optional<Pair<String, List<String>>> moduleToExportedPackages = Optional.empty();
 
     private TypeSolver parent;
 
@@ -184,12 +190,66 @@ public class JarTypeSolver implements TypeSolver {
         try {
             classPool.appendClassPath(pathToJarOrClassFileHierarchy);
             registerKnownClassesFor(pathToJarOrClassFileHierarchy);
+            registerModuleInfo();
         } catch (NotFoundException e) {
             // If JavaAssist throws a NotFoundException we should notify the user
             // with a FileNotFoundException.
             FileNotFoundException jarNotFound = new FileNotFoundException(e.getMessage());
             jarNotFound.initCause(e);
             throw jarNotFound;
+        }
+    }
+
+    private void registerModuleInfo() {
+        if (knownClasses.containsKey(MODULE_INFO_CLASS_NAME)) {
+            CtClass moduleInfo = getClassFromPool(MODULE_INFO_CLASS_NAME);
+
+            ClassFile classFile = moduleInfo.getClassFile();
+            ConstPool constPool = classFile.getConstPool();
+
+            byte[] moduleAttribute = moduleInfo.getAttribute("Module");
+
+            // The first 2 bytes give the module_name_index, which is needed to get the module name from the constPool
+            int attrIdx = 0;
+            int moduleNameIndex = moduleAttribute[attrIdx++] << 16;
+            moduleNameIndex |= moduleAttribute[attrIdx++];
+
+            String moduleName = constPool.getModuleInfo(moduleNameIndex);
+            ArrayList<String> exportedPackages = new ArrayList<>();
+
+            // The next 4 bytes consist of the module_flags and module_version_index, neither of which
+            // are relevant here.
+            attrIdx += 4;
+
+            // The next 2 bytes are the requires_count
+            int requiresCount = moduleAttribute[attrIdx++] << 16;
+            requiresCount |= moduleAttribute[attrIdx++];
+
+            // Skip the requires table. Each require structure consists of 6 bytes.
+            attrIdx += requiresCount * 6;
+
+            // The next 2 bytes are the exports count
+            int exportsCount = moduleAttribute[attrIdx++] << 16;
+            exportsCount |= moduleAttribute[attrIdx++];
+
+            for (int i = 0; i < exportsCount; i++) {
+                int exportsIndex = moduleAttribute[attrIdx++] << 16;
+                exportsIndex = moduleAttribute[attrIdx++];
+                String exportedPackageName =
+                        constPool.getPackageInfo(exportsIndex).replace('/', '.');
+                exportedPackages.add(exportedPackageName);
+                // Skip the 2 byte exports_flags
+                attrIdx += 2;
+                // The next 2 bytes are the exports to count. Need this to skip the exports to table for now, but
+                // could use them for better resolution.
+                int exportsToCount = moduleAttribute[attrIdx++] << 16;
+                exportsToCount |= moduleAttribute[attrIdx++];
+                // TODO Eventually check exportedTo to see if this is valid
+                // For now, skip each 2 byte exports_to
+                attrIdx += 2 + exportsToCount;
+            }
+
+            moduleToExportedPackages = Optional.of(new Pair<>(moduleName, exportedPackages));
         }
     }
 
@@ -327,8 +387,42 @@ public class JarTypeSolver implements TypeSolver {
         throw new UnsolvedSymbolException(name);
     }
 
+    private CtClass getClassFromPool(String className) {
+        try {
+            return classPool.get(className);
+        } catch (NotFoundException e) {
+            // The names in stored key should always be resolved.
+            // But if for some reason this happen, the user is notified.
+            throw new IllegalStateException(String.format(
+                    "Unable to get class with name %s from class pool."
+                            + "This was not suppose to happen, please report at https://github.com/javaparser/javaparser/issues",
+                    "module-info"));
+        }
+    }
+
+    /**
+     * https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-4.html#jvms-4.7.25
+     * @param qualifiedModuleName
+     * @param simpleTypeName
+     * @return
+     */
     @Override
-    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
-        throw new UnsupportedOperationException("Resolving types in modules not yet supported by JarTypeSolver");
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName) {
+        if (moduleToExportedPackages.isPresent()) {
+            String moduleName = moduleToExportedPackages.get().a;
+            List<String> exportedPackages = moduleToExportedPackages.get().b;
+
+            if (moduleName.equals(qualifiedModuleName)) {
+                for (String packageName : exportedPackages) {
+                    SymbolReference<ResolvedReferenceTypeDeclaration> maybeSolved =
+                            tryToSolveType(packageName + "." + simpleTypeName);
+                    if (maybeSolved.isSolved()) {
+                        return maybeSolved;
+                    }
+                }
+            }
+        }
+        return SymbolReference.unsolved();
     }
 }
