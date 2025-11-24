@@ -28,6 +28,8 @@ import static com.github.javaparser.Providers.provider;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.modules.ModuleDeclaration;
+import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.cache.Cache;
@@ -43,10 +45,9 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Defines a directory containing source code that should be used for solving symbols.
@@ -64,6 +65,7 @@ public class JavaParserTypeSolver implements TypeSolver {
     private final Cache<Path, Optional<CompilationUnit>> parsedFiles;
     private final Cache<Path, List<CompilationUnit>> parsedDirectories;
     private final Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypes;
+    private final HashMap<String, List<String>> modulesToExportedPackages;
     private static final int CACHE_SIZE_UNSET = -1;
 
     public JavaParserTypeSolver(File srcDir) {
@@ -114,6 +116,31 @@ public class JavaParserTypeSolver implements TypeSolver {
         parsedFiles = BuildCache(cacheSizeLimit);
         parsedDirectories = BuildCache(cacheSizeLimit);
         foundTypes = BuildCache(cacheSizeLimit);
+        modulesToExportedPackages = new HashMap<>();
+        populateModuleInfoCache(srcDir);
+    }
+
+    private void populateModuleInfoCache(Path srcDir) {
+        try (Stream<Path> files = Files.walk(srcDir)) {
+            List<ModuleDeclaration> modules = files.filter(path -> path.endsWith("module-info.java"))
+                    .map(this::parse)
+                    .filter(cu -> cu.isPresent() && cu.get().getModule().isPresent())
+                    .map(cu -> cu.get().getModule().get())
+                    .collect(Collectors.toList());
+
+            for (ModuleDeclaration module : modules) {
+                ArrayList<String> exportedPackages = new ArrayList<>();
+                for (ModuleDirective directive : module.getDirectives()) {
+                    if (directive.isModuleExportsDirective()) {
+                        exportedPackages.add(
+                                directive.asModuleExportsDirective().getNameAsString());
+                    }
+                }
+                modulesToExportedPackages.put(module.getNameAsString(), exportedPackages);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -147,6 +174,8 @@ public class JavaParserTypeSolver implements TypeSolver {
         this.parsedFiles = parsedFilesCache;
         this.parsedDirectories = parsedDirectoriesCache;
         this.foundTypes = foundTypesCache;
+        modulesToExportedPackages = new HashMap<>();
+        populateModuleInfoCache(srcDir);
     }
 
     @Override
@@ -311,7 +340,17 @@ public class JavaParserTypeSolver implements TypeSolver {
     }
 
     @Override
-    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
-        throw new UnsupportedOperationException("Resolving types in modules not yet supported by JavaParserTypeSolver");
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName) {
+        if (modulesToExportedPackages.containsKey(qualifiedModuleName)) {
+            for (String packageCandidate : modulesToExportedPackages.get(qualifiedModuleName)) {
+                SymbolReference<ResolvedReferenceTypeDeclaration> maybeType =
+                        tryToSolveType(packageCandidate + "." + simpleTypeName);
+                if (maybeType.isSolved()) {
+                    return maybeType;
+                }
+            }
+        }
+        return SymbolReference.unsolved();
     }
 }
