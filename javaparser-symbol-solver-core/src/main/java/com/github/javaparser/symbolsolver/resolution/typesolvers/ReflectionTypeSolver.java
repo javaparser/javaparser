@@ -92,7 +92,10 @@ public class ReflectionTypeSolver extends ClassLoaderTypeSolver {
             Object bootModuleLayer = moduleLayerClass.getDeclaredMethod("boot").invoke(moduleLayerClass);
             moduleLayers.add(bootModuleLayer);
             addModuleLayers(moduleLayers);
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (ClassNotFoundException
+                | NoSuchMethodException
+                | IllegalAccessException
+                | InvocationTargetException e) {
             // Expected for Java 8, so do nothing
         }
     }

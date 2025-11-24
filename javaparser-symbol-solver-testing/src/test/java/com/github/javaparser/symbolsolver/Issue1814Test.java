@@ -80,7 +80,8 @@ class Issue1814Test extends AbstractResolutionTest {
             }
 
             @Override
-            public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+            public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+                    String qualifiedModuleName, String simpleTypeName) {
                 throw new UnsupportedOperationException();
             }
         };

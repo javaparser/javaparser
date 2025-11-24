@@ -33,10 +33,14 @@ import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclarationTest;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
 
 class JavaParserVariableDeclarationTest extends AbstractResolutionTest implements ResolvedValueDeclarationTest {
 
@@ -91,21 +95,49 @@ class JavaParserVariableDeclarationTest extends AbstractResolutionTest implement
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_9)
     void testJavaBaseModuleImport() {
-        String code = "import module java.base;\n" +
-                "\n" +
-                "public class Test {\n" +
-                "  void foo() {\n" +
-                "    List<String> l = new ArrayList<>();\n" +
-                "  }\n" +
-                "}";
+        String code = "import module java.base;\n" + "\n"
+                + "public class Test {\n"
+                + "  void foo() {\n"
+                + "    List<String> l = new ArrayList<>();\n"
+                + "  }\n"
+                + "}";
 
-        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver())).parse(code);
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
+                .parse(code);
 
         List<VariableDeclarator> variables = cu.findAll(VariableDeclarator.class);
 
         ResolvedValueDeclaration rvd = variables.get(0).resolve();
 
         assertEquals("java.util.List<java.lang.String>", rvd.getType().describe());
+    }
+
+    @Test
+    void testJavaModuleImportFromSource() {
+        String code = "import module com.github.javaparser.testmodule;\n" + "\n"
+                + "public class Test {\n"
+                + "  void foo() {\n"
+                + "    TestClass t = new TestClass();\n"
+                + "  }\n"
+                + "}";
+
+        Path moduleCode =
+                adaptPath("src/test/resources/modules/moduletest/src/main/java/com.github.javaparser.testmodule");
+
+        JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(moduleCode);
+        CombinedTypeSolver combinedTypeSolver =
+                new CombinedTypeSolver(javaParserTypeSolver, new ReflectionTypeSolver());
+
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(combinedTypeSolver))
+                .parse(code);
+
+        List<VariableDeclarator> variables = cu.findAll(VariableDeclarator.class);
+
+        ResolvedValueDeclaration rvd = variables.get(0).resolve();
+
+        assertEquals(
+                "com.github.javaparser.testpackage.TestClass", rvd.getType().describe());
     }
 }

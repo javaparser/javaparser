@@ -25,9 +25,7 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
-
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -79,11 +77,16 @@ public class ClassLoaderTypeSolver implements TypeSolver {
                  *   ...
                  * }
                  */
-                Set<Object> modulesSet = (Set<Object>) moduleLayer.getClass().getMethod("modules").invoke(moduleLayer);
+                Set<Object> modulesSet = (Set<Object>)
+                        moduleLayer.getClass().getMethod("modules").invoke(moduleLayer);
 
                 for (Object module : modulesSet) {
-                    String name = module.getClass().getMethod("getName").invoke(module).toString();
-                    Set<String> packages = (Set<String>) module.getClass().getMethod("getPackages").invoke(module);
+                    String name = module.getClass()
+                            .getMethod("getName")
+                            .invoke(module)
+                            .toString();
+                    Set<String> packages = (Set<String>)
+                            module.getClass().getMethod("getPackages").invoke(module);
 
                     if (modulePackages.containsKey(name)) {
                         modulePackages.get(name).addAll(packages);
@@ -119,24 +122,25 @@ public class ClassLoaderTypeSolver implements TypeSolver {
     }
 
     @Override
-    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName) {
         if (filterName(qualifiedModuleName)) {
-                if (classLoader == null) {
-                    throw new RuntimeException(
-                            "The ClassLoaderTypeSolver has been probably loaded through the bootstrap class loader. This usage is not supported by the JavaSymbolSolver");
-                }
-                if (modulePackages.containsKey(qualifiedModuleName)) {
-                    Set<String> packages = modulePackages.get(qualifiedModuleName);
+            if (classLoader == null) {
+                throw new RuntimeException(
+                        "The ClassLoaderTypeSolver has been probably loaded through the bootstrap class loader. This usage is not supported by the JavaSymbolSolver");
+            }
+            if (modulePackages.containsKey(qualifiedModuleName)) {
+                Set<String> packages = modulePackages.get(qualifiedModuleName);
 
-                    for (String packageName : packages) {
-                        String className = packageName + "." + simpleTypeName;
-                        SymbolReference<ResolvedReferenceTypeDeclaration> maybeSolved = tryToSolveType(className);
-                        if (maybeSolved.isSolved()) {
-                            return maybeSolved;
-                        }
+                for (String packageName : packages) {
+                    String className = packageName + "." + simpleTypeName;
+                    SymbolReference<ResolvedReferenceTypeDeclaration> maybeSolved = tryToSolveType(className);
+                    if (maybeSolved.isSolved()) {
+                        return maybeSolved;
                     }
                 }
-                return SymbolReference.unsolved();
+            }
+            return SymbolReference.unsolved();
         }
         return SymbolReference.unsolved();
     }
