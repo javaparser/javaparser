@@ -44,69 +44,64 @@ public class FlexibleConstructorTest {
 
     @Test
     void validationBeforeSuperCall() {
-        String code = "class Example {\n" +
-                "    Example(int value) {\n" +
-                "        if (value < 0) {\n" +
-                "            throw new IllegalArgumentException();\n" +
-                "        }\n" +
-                "        super();\n" +
-                "    }\n" +
-                "}";
+        String code = "class Example {\n" + "    Example(int value) {\n"
+                + "        if (value < 0) {\n"
+                + "            throw new IllegalArgumentException();\n"
+                + "        }\n"
+                + "        super();\n"
+                + "    }\n"
+                + "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertNoProblems(result);
     }
 
     @Test
     void fieldInitializationBeforeSuperCall() {
-        String code = "class Example {\n" +
-                "    private final int value;\n" +
-                "    Example(int v) {\n" +
-                "        value = v * 2;\n" +
-                "        super();\n" +
-                "    }\n" +
-                "}";
+        String code = "class Example {\n" + "    private final int value;\n"
+                + "    Example(int v) {\n"
+                + "        value = v * 2;\n"
+                + "        super();\n"
+                + "    }\n"
+                + "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertNoProblems(result);
     }
 
     @Test
     void multipleStatementsBeforeSuperCall() {
-        String code = "class Example {\n" +
-                "    Example(String s) {\n" +
-                "        int len = s.length();\n" +
-                "        if (len > 100) {\n" +
-                "            s = s.substring(0, 100);\n" +
-                "        }\n" +
-                "        super();\n" +
-                "    }\n" +
-                "}";
+        String code = "class Example {\n" + "    Example(String s) {\n"
+                + "        int len = s.length();\n"
+                + "        if (len > 100) {\n"
+                + "            s = s.substring(0, 100);\n"
+                + "        }\n"
+                + "        super();\n"
+                + "    }\n"
+                + "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertNoProblems(result);
     }
 
     @Test
     void statementsBeforeThisCall() {
-        String code = "class Example {\n" +
-                "    Example() { }\n" +
-                "    Example(int value) {\n" +
-                "        if (value < 0) {\n" +
-                "            value = 0;\n" +
-                "        }\n" +
-                "        this();\n" +
-                "    }\n" +
-                "}";
+        String code = "class Example {\n" + "    Example() { }\n"
+                + "    Example(int value) {\n"
+                + "        if (value < 0) {\n"
+                + "            value = 0;\n"
+                + "        }\n"
+                + "        this();\n"
+                + "    }\n"
+                + "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertNoProblems(result);
     }
 
     @Test
     void statementsAfterSuperCall() {
-        String code = "class Example {\n" +
-                "    Example() {\n" +
-                "        super();\n" +
-                "        System.out.println(\"Constructed\");\n" +
-                "    }\n" +
-                "}";
+        String code = "class Example {\n" + "    Example() {\n"
+                + "        super();\n"
+                + "        System.out.println(\"Constructed\");\n"
+                + "    }\n"
+                + "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertNoProblems(result);
     }
@@ -114,11 +109,8 @@ public class FlexibleConstructorTest {
     @Test
     void constructorWithoutExplicitCall() {
         // No super/this call - prologue validation doesn't apply
-        String code = "class Example {\n" +
-                "    Example() {\n" +
-                "        System.out.println(this);\n" +
-                "    }\n" +
-                "}";
+        String code =
+                "class Example {\n" + "    Example() {\n" + "        System.out.println(this);\n" + "    }\n" + "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertNoProblems(result);
     }
@@ -127,12 +119,11 @@ public class FlexibleConstructorTest {
 
     @Test
     void thisReferenceInPrologueNotAllowed() {
-        String code = "class Example {\n" +
-                "    Example() {\n" +
-                "        System.out.println(this);\n" +
-                "        super();\n" +
-                "    }\n" +
-                "}";
+        String code = "class Example {\n" + "    Example() {\n"
+                + "        System.out.println(this);\n"
+                + "        super();\n"
+                + "    }\n"
+                + "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertProblems(
                 result,
@@ -141,13 +132,12 @@ public class FlexibleConstructorTest {
 
     @Test
     void thisMethodCallInPrologueNotAllowed() {
-        String code = "class Example {\n" +
-                "    void helper() { }\n" +
-                "    Example() {\n" +
-                "        this.helper();\n" +
-                "        super();\n" +
-                "    }\n" +
-                "}";
+        String code = "class Example {\n" + "    void helper() { }\n"
+                + "    Example() {\n"
+                + "        this.helper();\n"
+                + "        super();\n"
+                + "    }\n"
+                + "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertProblems(
                 result,
@@ -156,28 +146,25 @@ public class FlexibleConstructorTest {
 
     @Test
     void multipleExplicitConstructorCalls() {
-        String code = "class Example {\n" +
-                "    Example() { }\n" +
-                "    Example(int x) {\n" +
-                "        super();\n" +
-                "        this();\n" +
-                "    }\n" +
-                "}";
+        String code = "class Example {\n" + "    Example() { }\n"
+                + "    Example(int x) {\n"
+                + "        super();\n"
+                + "        this();\n"
+                + "    }\n"
+                + "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
-        assertProblems(
-                result, "(line 5,col 9) Only one super() or this() call is allowed per constructor.");
+        assertProblems(result, "(line 5,col 9) Only one super() or this() call is allowed per constructor.");
     }
 
     @Test
     void thisInFieldInitializerBeforeSuper() {
-        String code = "class Example {\n" +
-                "    private int value;\n" +
-                "    private int getValue() { return 42; }\n" +
-                "    Example() {\n" +
-                "        value = this.getValue();\n" +
-                "        super();\n" +
-                "    }\n" +
-                "}";
+        String code = "class Example {\n" + "    private int value;\n"
+                + "    private int getValue() { return 42; }\n"
+                + "    Example() {\n"
+                + "        value = this.getValue();\n"
+                + "        super();\n"
+                + "    }\n"
+                + "}";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertProblems(
                 result,

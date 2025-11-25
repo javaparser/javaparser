@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations.chunks;
 
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -28,7 +27,6 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.TypedValidator;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
 import java.util.Optional;
 
 /**
@@ -45,7 +43,6 @@ public class FlexibleConstructorValidator implements TypedValidator<ConstructorD
     @Override
     public void accept(ConstructorDeclaration constructor, ProblemReporter reporter) {
         Optional<ExplicitConstructorInvocationStmt> explicitInvocation = findExplicitConstructorInvocation(constructor);
-
         if (explicitInvocation.isPresent()) {
             validatePrologue(constructor, explicitInvocation.get(), reporter);
         }
@@ -54,7 +51,8 @@ public class FlexibleConstructorValidator implements TypedValidator<ConstructorD
     /**
      * Find the explicit constructor invocation (super/this call) in the constructor body.
      */
-    private Optional<ExplicitConstructorInvocationStmt> findExplicitConstructorInvocation(ConstructorDeclaration constructor) {
+    private Optional<ExplicitConstructorInvocationStmt> findExplicitConstructorInvocation(
+            ConstructorDeclaration constructor) {
         for (Statement stmt : constructor.getBody().getStatements()) {
             if (stmt instanceof ExplicitConstructorInvocationStmt) {
                 return Optional.of((ExplicitConstructorInvocationStmt) stmt);
@@ -67,24 +65,24 @@ public class FlexibleConstructorValidator implements TypedValidator<ConstructorD
      * Validate the prologue (statements before super/this call).
      * These statements must not reference 'this'.
      */
-    private void validatePrologue(ConstructorDeclaration constructor, ExplicitConstructorInvocationStmt explicitInvocation, ProblemReporter reporter) {
+    private void validatePrologue(
+            ConstructorDeclaration constructor,
+            ExplicitConstructorInvocationStmt explicitInvocation,
+            ProblemReporter reporter) {
         boolean foundExplicitInvocation = false;
-
         for (Statement stmt : constructor.getBody().getStatements()) {
             if (stmt == explicitInvocation) {
                 foundExplicitInvocation = true;
                 break;
             }
-
             // This statement is in the prologue - check for 'this' references
             ThisReferenceDetector detector = new ThisReferenceDetector();
             stmt.accept(detector, null);
-
             if (detector.foundThisReference) {
-                reporter.report(stmt, "Statements before super() or this() cannot reference the current instance ('this').");
+                reporter.report(
+                        stmt, "Statements before super() or this() cannot reference the current instance ('this').");
             }
         }
-
         // Check if there are any statements after the explicit invocation that also contain an explicit invocation
         if (foundExplicitInvocation) {
             boolean inEpilogue = false;
@@ -93,7 +91,6 @@ public class FlexibleConstructorValidator implements TypedValidator<ConstructorD
                     inEpilogue = true;
                     continue;
                 }
-
                 if (inEpilogue && stmt instanceof ExplicitConstructorInvocationStmt) {
                     reporter.report(stmt, "Only one super() or this() call is allowed per constructor.");
                 }
@@ -105,6 +102,7 @@ public class FlexibleConstructorValidator implements TypedValidator<ConstructorD
      * Visitor to detect 'this' references in statements.
      */
     private static class ThisReferenceDetector extends VoidVisitorAdapter<Void> {
+
         boolean foundThisReference = false;
 
         @Override
