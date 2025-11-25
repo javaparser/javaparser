@@ -237,9 +237,7 @@ class CompactClassTest {
         String code = "String main() { return \"invalid\"; }";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
 
-        assertProblems(
-                result,
-                "(line 1,col 1) Main method must have return type 'void' or 'int', found: 'String'.");
+        assertProblems(result, "(line 1,col 1) Main method must have return type 'void' or 'int', found: 'String'.");
     }
 
     @Test
@@ -248,8 +246,7 @@ class CompactClassTest {
         String code = "void main(String[] args, int x) { }";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
 
-        assertProblems(
-                result, "(line 1,col 1) Main method must have zero or one parameter (String[]).");
+        assertProblems(result, "(line 1,col 1) Main method must have zero or one parameter (String[]).");
     }
 
     @Test
@@ -258,8 +255,7 @@ class CompactClassTest {
         String code = "void main(int[] args) { }";
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
 
-        assertProblems(
-                result, "(line 1,col 1) Main method parameter must be 'String[]', found: 'int[]'.");
+        assertProblems(result, "(line 1,col 1) Main method parameter must be 'String[]', found: 'int[]'.");
     }
 
     // ==================== Validation Tests: Compact Class Restrictions ====================

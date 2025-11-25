@@ -63,12 +63,10 @@ public class CompactClassValidator implements TypedValidator<ClassOrInterfaceDec
         if (!node.getExtendedTypes().isEmpty()) {
             reporter.report(node, "Compact classes cannot extend other classes.");
         }
-
         // Check for implements clause
         if (!node.getImplementedTypes().isEmpty()) {
             reporter.report(node, "Compact classes cannot implement interfaces.");
         }
-
         // Check for explicit abstract modifier (compact classes are implicitly final)
         if (node.getModifiers().contains(Modifier.abstractModifier())) {
             reporter.report(node, "Compact classes cannot be declared as abstract.");
@@ -111,7 +109,6 @@ public class CompactClassValidator implements TypedValidator<ClassOrInterfaceDec
                     String.format("Main method must have return type 'void' or 'int', found: '%s'.", returnType));
             return;
         }
-
         // Check parameters (must be empty or String[])
         int paramCount = method.getParameters().size();
         if (paramCount == 0) {
@@ -120,7 +117,8 @@ public class CompactClassValidator implements TypedValidator<ClassOrInterfaceDec
         } else if (paramCount == 1) {
             // Must be String[] or String...
             String paramType = method.getParameter(0).getTypeAsString();
-            String paramTypeCleaned = paramType.replace("...", "[]"); // Handle varargs
+            // Handle varargs
+            String paramTypeCleaned = paramType.replace("...", "[]");
             if (!paramTypeCleaned.equals("String[]")) {
                 reporter.report(
                         method, String.format("Main method parameter must be 'String[]', found: '%s'.", paramType));

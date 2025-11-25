@@ -378,6 +378,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
      * @return true if compact, false otherwise
      * @since 3.27.2
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isCompact() {
         return isCompact;
     }
@@ -389,7 +390,12 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
      * @return this declaration
      * @since 3.27.2
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setCompact(final boolean isCompact) {
+        if (isCompact == this.isCompact) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.COMPACT, this.isCompact, isCompact);
         this.isCompact = isCompact;
         return this;
     }
