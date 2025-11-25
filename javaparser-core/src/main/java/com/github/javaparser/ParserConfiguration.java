@@ -188,6 +188,14 @@ public class ParserConfiguration {
          */
         JAVA_22(new Java22Validator(), new Java22PostProcessor()),
         /**
+         * Java 23
+         */
+        JAVA_23(new Java23Validator(), new Java23PostProcessor()),
+        /**
+         * Java 24
+         */
+        JAVA_24(new Java24Validator(), new Java24PostProcessor()),
+        /**
          * Java 25
          * Implements:
          * - JEP 512: Compact Source Files and Instance Main Methods
@@ -239,6 +247,8 @@ public class ParserConfiguration {
             JAVA_20,
             JAVA_21,
             JAVA_22,
+            JAVA_23,
+            JAVA_24,
             JAVA_25
         };
 
