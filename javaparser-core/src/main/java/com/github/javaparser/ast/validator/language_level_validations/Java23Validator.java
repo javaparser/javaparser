@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
@@ -27,6 +26,7 @@ package com.github.javaparser.ast.validator.language_level_validations;
  * so this validator simply extends Java 22.
  */
 public class Java23Validator extends Java22Validator {
+
     public Java23Validator() {
         super();
     }
