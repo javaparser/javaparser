@@ -1191,6 +1191,8 @@ public CompilationUnit CompilationUnit():
     ModifierHolder modifier;
     TypeDeclaration<?> typeDeclaration = null;
     ModuleDeclaration module = null;
+    NodeList<BodyDeclaration<?>> compactMembers = emptyNodeList();
+    BodyDeclaration<?> member = null;
 }
 {
     try {
@@ -1202,28 +1204,90 @@ public CompilationUnit CompilationUnit():
             (
                 modifier = Modifiers()
                 (
+                    // Type declarations - check for keywords first
+                    LOOKAHEAD( "class" | "interface" )
                     typeDeclaration = ClassOrInterfaceDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
+                    LOOKAHEAD( "record" )
                     typeDeclaration = RecordDeclaration(modifier)  { types = add(types, typeDeclaration); }
                  |
+                    LOOKAHEAD( "enum" )
                     typeDeclaration = EnumDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
+                    LOOKAHEAD( "@" "interface" )
                     typeDeclaration = AnnotationTypeDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
+                    LOOKAHEAD( "open" | "module" )
                     module = ModuleDeclaration(modifier)
+                 |
+                    // Compact class member fallback - when no type declaration keyword found
+                    member = CompactClassMember(modifier)
+                    {
+                        compactMembers = add(compactMembers, member);
+                    }
                  |
                     ";"
                 )
             )
         )*
         (<EOF> | <CTRL_Z>)
-        { return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module); }
+        {
+            // If we found compact class members, wrap them in an implicit class
+            if (!compactMembers.isEmpty()) {
+                // Use a placeholder name since SimpleName doesn't allow empty strings
+                // The getNameAsString() method in ClassOrInterfaceDeclaration will return "" for compact classes
+                SimpleName implicitClassName = new SimpleName("$CompactClass");
+                ClassOrInterfaceDeclaration compactClass = new ClassOrInterfaceDeclaration(
+                    range(token_source.getHomeToken(), token()),
+                    new NodeList<Modifier>(),
+                    new NodeList<AnnotationExpr>(),
+                    false, // not an interface
+                    implicitClassName,
+                    new NodeList<TypeParameter>(),
+                    new NodeList<ClassOrInterfaceType>(),
+                    new NodeList<ClassOrInterfaceType>(),
+                    new NodeList<ClassOrInterfaceType>(),
+                    compactMembers
+                );
+                compactClass.setCompact(true);
+
+                // Add compact class at the beginning of types list
+                NodeList<TypeDeclaration<?>> newTypes = emptyNodeList();
+                newTypes = add(newTypes, compactClass);
+                for (TypeDeclaration<?> type : types) {
+                    newTypes = add(newTypes, type);
+                }
+                types = newTypes;
+            }
+            return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module);
+        }
     } catch (ParseException e) {
         recover(EOF, e);
         final CompilationUnit compilationUnit = new CompilationUnit(range(token_source.getHomeToken(), token()), null, new NodeList<ImportDeclaration>(), new NodeList<TypeDeclaration<?>>(), null);
         compilationUnit.setParsed(UNPARSABLE);
         return compilationUnit;
     }
+}
+
+/**
+ * Parses a compact class member (JEP 512) - either a method or field at the top level.
+ * This is used when parsing compact source files with implicit classes.
+ */
+BodyDeclaration<?> CompactClassMember(ModifierHolder modifier):
+{
+    BodyDeclaration<?> member;
+}
+{
+    // Use numerical LOOKAHEAD to distinguish between field and method
+    // Fields: Type Identifier = ... or Type Identifier ; or Type Identifier ,
+    // Methods: Type Identifier ( ...
+    (
+        LOOKAHEAD(3)
+        member = FieldDeclaration(modifier)
+     |
+        member = MethodDeclaration(modifier)
+    )
+    { return member; }
 }
 
 /**
