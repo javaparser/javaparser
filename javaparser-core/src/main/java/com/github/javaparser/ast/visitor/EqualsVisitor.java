@@ -182,6 +182,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final ClassOrInterfaceDeclaration n2 = (ClassOrInterfaceDeclaration) arg;
         if (!nodesEquals(n.getExtendedTypes(), n2.getExtendedTypes())) return false;
         if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes())) return false;
+        if (!objEquals(n.isCompact(), n2.isCompact())) return false;
         if (!objEquals(n.isInterface(), n2.isInterface())) return false;
         if (!nodesEquals(n.getPermittedTypes(), n2.getPermittedTypes())) return false;
         if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters())) return false;

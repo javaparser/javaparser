@@ -2,6 +2,7 @@
 root(Type=CompilationUnit): 
     types: 
         - type(Type=ClassOrInterfaceDeclaration): 
+            isCompact: "false"
             isInterface: "false"
             name(Type=SimpleName): 
                 identifier: "Dog"
