@@ -1114,6 +1114,10 @@ public class ConcreteSyntaxModel {
                                 ObservableProperty.STATIC,
                                 FLAG,
                                 sequence(token(GeneratedJavaParserConstants.STATIC), space())),
+                        conditional(
+                                ObservableProperty.MODULE,
+                                FLAG,
+                                sequence(token(GeneratedJavaParserConstants.MODULE), space())),
                         child(ObservableProperty.NAME),
                         conditional(
                                 ASTERISK,
