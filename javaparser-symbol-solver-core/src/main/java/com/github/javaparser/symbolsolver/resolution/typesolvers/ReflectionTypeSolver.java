@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.symbolsolver.utils.ModuleLayerHelper;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -77,6 +80,13 @@ public class ReflectionTypeSolver extends ClassLoaderTypeSolver {
     public ReflectionTypeSolver(Predicate<String> classFilter) {
         super(ReflectionTypeSolver.class.getClassLoader());
         this.classFilter = classFilter;
+
+        Optional<Object> bootModuleLayer = ModuleLayerHelper.getBootModuleLayer();
+        if (bootModuleLayer.isPresent()) {
+            ArrayList<Object> moduleLayers = new ArrayList<>(1);
+            moduleLayers.add(bootModuleLayer.get());
+            setModulePackagesFromLayers(moduleLayers);
+        }
     }
 
     /**

@@ -74,4 +74,10 @@ public class AarTypeSolver implements TypeSolver {
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         return delegate.tryToSolveType(name);
     }
+
+    @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName) {
+        return delegate.tryToSolveTypeInModule(qualifiedModuleName, simpleTypeName);
+    }
 }
