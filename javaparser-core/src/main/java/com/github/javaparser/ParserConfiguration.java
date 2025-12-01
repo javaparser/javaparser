@@ -194,7 +194,11 @@ public class ParserConfiguration {
         /**
          * Java 24
          */
-        JAVA_24(new Java24Validator(), new Java24PostProcessor());
+        JAVA_24(new Java24Validator(), new Java24PostProcessor()),
+        /**
+         * Java 25
+         */
+        JAVA_25(new Java25Validator(), new Java25PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.

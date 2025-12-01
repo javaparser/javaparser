@@ -31,6 +31,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
@@ -128,5 +129,14 @@ class Java1_0ValidatorTest {
     void emptyBreakAllowed() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: break;}"));
         assertNoProblems(result);
+    }
+
+    @Test
+    void moduleImportNotAllowed() {
+        ParseResult<ImportDeclaration> result =
+                javaParser.parse(IMPORT_DECLARATION, provider("import module java.base;"));
+        assertProblems(
+                result,
+                "(line 1,col 1) Module imports are not supported Pay attention that this feature is supported starting from 'JAVA_25' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 }

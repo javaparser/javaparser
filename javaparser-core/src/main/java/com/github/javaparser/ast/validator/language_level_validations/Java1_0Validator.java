@@ -262,6 +262,15 @@ public class Java1_0Validator extends Validators {
         }
     });
 
+    final Validator noModuleImports = new TreeVisitorValidator((node, reporter) -> {
+        if (node instanceof ImportDeclaration && ((ImportDeclaration) node).isModule()) {
+            reporter.report(
+                    node,
+                    new UpgradeJavaMessage(
+                            "Module imports are not supported", ParserConfiguration.LanguageLevel.JAVA_25));
+        }
+    });
+
     public Java1_0Validator() {
         super(new CommonValidators());
         add(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
@@ -291,5 +300,6 @@ public class Java1_0Validator extends Validators {
         add(noSwitchNullDefault);
         add(noSwitchPatterns);
         add(noRecordPatterns);
+        add(noModuleImports);
     }
 }
