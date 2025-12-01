@@ -94,6 +94,7 @@ public final class JavaParserMetaModel {
         importDeclarationMetaModel
                 .getConstructorParameters()
                 .add(importDeclarationMetaModel.isAsteriskPropertyMetaModel);
+        importDeclarationMetaModel.getConstructorParameters().add(importDeclarationMetaModel.isModulePropertyMetaModel);
         modifierMetaModel.getConstructorParameters().add(modifierMetaModel.keywordPropertyMetaModel);
         packageDeclarationMetaModel
                 .getConstructorParameters()
@@ -908,6 +909,11 @@ public final class JavaParserMetaModel {
         importDeclarationMetaModel
                 .getDeclaredPropertyMetaModels()
                 .add(importDeclarationMetaModel.isAsteriskPropertyMetaModel);
+        importDeclarationMetaModel.isModulePropertyMetaModel = new PropertyMetaModel(
+                importDeclarationMetaModel, "isModule", boolean.class, Optional.empty(), false, false, false, false);
+        importDeclarationMetaModel
+                .getDeclaredPropertyMetaModels()
+                .add(importDeclarationMetaModel.isModulePropertyMetaModel);
         importDeclarationMetaModel.isStaticPropertyMetaModel = new PropertyMetaModel(
                 importDeclarationMetaModel, "isStatic", boolean.class, Optional.empty(), false, false, false, false);
         importDeclarationMetaModel
