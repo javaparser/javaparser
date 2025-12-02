@@ -1192,7 +1192,7 @@ public CompilationUnit CompilationUnit():
     TypeDeclaration<?> typeDeclaration = null;
     ModuleDeclaration module = null;
     NodeList<BodyDeclaration<?>> compactMembers = emptyNodeList();
-    BodyDeclaration<?> member = null;
+    BodyDeclaration<?> compactMemberDecl = null;
 }
 {
     try {
@@ -1221,9 +1221,9 @@ public CompilationUnit CompilationUnit():
                     module = ModuleDeclaration(modifier)
                  |
                     // Compact class member fallback - when no type declaration keyword found
-                    member = CompactClassMember(modifier)
+                    compactMemberDecl = CompactClassMember(modifier)
                     {
-                        compactMembers = add(compactMembers, member);
+                        compactMembers = add(compactMembers, compactMemberDecl);
                     }
                  |
                     ";"
@@ -1251,12 +1251,31 @@ public CompilationUnit CompilationUnit():
                 );
                 compactClass.setCompact(true);
 
-                // Add compact class at the beginning of types list
+                // Add regular classes as nested members of the compact class
+                NodeList<BodyDeclaration<?>> compactMembersWithNestedClasses = new NodeList<>();
+                for (BodyDeclaration<?> member : compactMembers) {
+                    compactMembersWithNestedClasses = add(compactMembersWithNestedClasses, member);
+                }
+                // Regular classes should be nested inside the compact class (JLS 8.1.8)
+                for (TypeDeclaration<?> type : types) {
+                    // Convert TypeDeclaration to BodyDeclaration using appropriate casting
+                    if (type instanceof ClassOrInterfaceDeclaration) {
+                        compactMembersWithNestedClasses = add(compactMembersWithNestedClasses, (ClassOrInterfaceDeclaration) type);
+                    } else if (type instanceof RecordDeclaration) {
+                        compactMembersWithNestedClasses = add(compactMembersWithNestedClasses, (RecordDeclaration) type);
+                    } else if (type instanceof EnumDeclaration) {
+                        compactMembersWithNestedClasses = add(compactMembersWithNestedClasses, (EnumDeclaration) type);
+                    } else if (type instanceof AnnotationDeclaration) {
+                        compactMembersWithNestedClasses = add(compactMembersWithNestedClasses, (AnnotationDeclaration) type);
+                    }
+                }
+                
+                // Update compact class with its nested members
+                compactClass.setMembers(compactMembersWithNestedClasses);
+
+                // Add compact class as the only top-level type
                 NodeList<TypeDeclaration<?>> newTypes = emptyNodeList();
                 newTypes = add(newTypes, compactClass);
-                for (TypeDeclaration<?> type : types) {
-                    newTypes = add(newTypes, type);
-                }
                 types = newTypes;
             }
             return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module);

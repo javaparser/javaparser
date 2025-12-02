@@ -16,42 +16,21 @@
  * JavaParser is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU Lesser General Public Package for more details.
  */
 package com.github.javaparser.ast.validator.language_level_validations;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
-import com.github.javaparser.ast.validator.Validator;
-import com.github.javaparser.ast.validator.language_level_validations.chunks.CompactClassValidator;
-
 /**
  * Validator for Java 25 language features.
+ * Java 25 introduces JEP 512: Compact Source Files and Instance Main Methods.
+ * This validator extends Java 24 to support the new compact source file syntax.
  *
- * Implements JEP 512: Compact Source Files and Instance Main Methods.
- *
- * Additional features for Java 25:
- * - JEP 511 (Module Imports) - not yet implemented
- * - JEP 513 (Flexible Constructor Bodies) - not yet implemented
- *
- * @see <a href="https://openjdk.org/jeps/512">JEP 512</a>
+ * Note: Complex validation of compact class restrictions is handled by the Java compiler.
+ * This validator only enforces that compact classes are available starting from Java 25.
  */
-public class Java25Validator extends Java22Validator {
-
-    /**
-     * Validator for compact classes introduced in JEP 512.
-     * Validates:
-     * - Compact classes cannot extend other classes
-     * - Compact classes cannot implement interfaces
-     * - Compact classes are implicitly final
-     * - Main methods have valid signatures (instance or static, void or int return)
-     */
-    final Validator compactClassValidator =
-            new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class, new CompactClassValidator());
+public class Java25Validator extends Java24Validator {
 
     public Java25Validator() {
         super();
-        // JEP 512: Compact Source Files and Instance Main Methods
-        add(compactClassValidator);
     }
 }

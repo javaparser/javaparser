@@ -391,6 +391,11 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
      * @since 3.27.2
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public boolean getIsCompact() {
+        return isCompact;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setCompact(final boolean isCompact) {
         if (isCompact == this.isCompact) {
             return this;
@@ -407,14 +412,6 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
      * @return the class name, or empty string for compact classes
      * @since 3.27.2
      */
-    @Override
-    public String getNameAsString() {
-        if (isCompact) {
-            return "";
-        }
-        return super.getNameAsString();
-    }
-
     @Override
     public ResolvedReferenceTypeDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedReferenceTypeDeclaration.class);

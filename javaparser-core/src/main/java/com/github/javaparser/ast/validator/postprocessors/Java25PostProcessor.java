@@ -16,12 +16,13 @@
  * JavaParser is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU Lesser General Public Package for more details.
  */
 package com.github.javaparser.ast.validator.postprocessors;
 
 /**
  * Post-processor for Java 25 language features.
- * Currently extends Java 22 post-processor as JEP 512 (Compact Source Files) is being implemented.
+ * Java 25 introduces JEP 512: Compact Source Files and Instance Main Methods,
+ * which does not require specific post-processing beyond validation.
  */
-public class Java25PostProcessor extends Java22PostProcessor {}
+public class Java25PostProcessor extends Java24PostProcessor {}
