@@ -235,8 +235,6 @@ public class Java1_0Validator extends Validators {
                     new UpgradeJavaMessage(
                             "Permitted sub-classes are not supported.", ParserConfiguration.LanguageLevel.JAVA_17)));
 
-    
-
     final Validator noSwitchNullDefault = new SingleNodeTypeValidator<>(SwitchEntry.class, (n, reporter) -> {
         if (n.getLabels().isNonEmpty() && n.isDefault()) {
             reporter.report(
