@@ -235,13 +235,7 @@ public class Java1_0Validator extends Validators {
                     new UpgradeJavaMessage(
                             "Permitted sub-classes are not supported.", ParserConfiguration.LanguageLevel.JAVA_17)));
 
-    final Validator noCompactClasses = new SimpleValidator<>(
-            ClassOrInterfaceDeclaration.class,
-            ClassOrInterfaceDeclaration::getIsCompact,
-            (n, reporter) -> reporter.report(
-                    n,
-                    new UpgradeJavaMessage(
-                            "Compact source files are not supported.", ParserConfiguration.LanguageLevel.JAVA_25)));
+    
 
     final Validator noSwitchNullDefault = new SingleNodeTypeValidator<>(SwitchEntry.class, (n, reporter) -> {
         if (n.getLabels().isNonEmpty() && n.isDefault()) {
@@ -295,7 +289,6 @@ public class Java1_0Validator extends Validators {
         add(noTextBlockLiteral);
         add(noRecordDeclaration);
         add(noSealedClasses);
-        add(noCompactClasses);
         add(noPermitsListInClasses);
         add(noSwitchNullDefault);
         add(noSwitchPatterns);

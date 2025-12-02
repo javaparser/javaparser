@@ -20,17 +20,23 @@
  */
 package com.github.javaparser.ast.validator.language_level_validations;
 
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.CompactClassValidator;
+
 /**
  * Validator for Java 25 language features.
  * Java 25 introduces JEP 512: Compact Source Files and Instance Main Methods.
  * This validator extends Java 24 to support the new compact source file syntax.
  *
- * Note: Complex validation of compact class restrictions is handled by the Java compiler.
- * This validator only enforces that compact classes are available starting from Java 25.
+ * Uses CompactClassValidator for comprehensive validation of:
+ * - Compact class restrictions (cannot extend/implement, implicitly final)
+ * - Flexible main method signatures (static/instance, void/int, with/without String[] args)
  */
 public class Java25Validator extends Java24Validator {
 
     public Java25Validator() {
         super();
+        add(new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class, new CompactClassValidator()));
     }
 }
