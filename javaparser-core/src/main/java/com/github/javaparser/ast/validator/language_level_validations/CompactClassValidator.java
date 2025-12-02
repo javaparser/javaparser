@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.ast.validator.language_level_validations.chunks;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -48,8 +48,10 @@ public class CompactClassValidator implements TypedValidator<ClassOrInterfaceDec
     public void accept(ClassOrInterfaceDeclaration node, ProblemReporter reporter) {
         if (node.isCompact()) {
             validateCompactClassRestrictions(node, reporter);
-            validateMainMethods(node, reporter);
         }
+        // Always validate main methods, not just for compact classes
+        // JEP 512 allows flexible main method signatures in all classes
+        validateMainMethods(node, reporter);
     }
 
     /**
