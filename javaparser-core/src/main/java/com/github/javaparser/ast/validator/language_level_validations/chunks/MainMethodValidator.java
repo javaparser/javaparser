@@ -61,7 +61,6 @@ public class MainMethodValidator implements TypedValidator<MethodDeclaration> {
         if (!method.getNameAsString().equals("main")) {
             return;
         }
-
         // Check return type (must be void or int)
         String returnType = method.getTypeAsString();
         if (!returnType.equals("void") && !returnType.equals("int")) {

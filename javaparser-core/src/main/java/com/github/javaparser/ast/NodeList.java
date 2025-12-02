@@ -185,6 +185,9 @@ public class NodeList<N extends Node>
 
     /**
      * Inserts the node before all other nodes.
+     *
+     * @param node the node to add
+     * @return this list (for method chaining)
      */
     public NodeList<N> addFirst(N node) {
         add(0, node);
@@ -192,7 +195,10 @@ public class NodeList<N extends Node>
     }
 
     /**
-     * Inserts the node after all other nodes. (This is simply an alias for add.)
+     * Inserts the node after all other nodes.
+     *
+     * @param node the node to add
+     * @return this list (for method chaining)
      */
     public NodeList<N> addLast(N node) {
         add(node);

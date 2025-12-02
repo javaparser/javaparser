@@ -37,6 +37,9 @@ public class Java25Validator extends Java24Validator {
 
     public Java25Validator() {
         super();
+        // Remove the validator that disallows compact classes
+        remove(noCompactClasses);
+        // Add comprehensive compact class validation
         add(new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class, new CompactClassValidator()));
     }
 }

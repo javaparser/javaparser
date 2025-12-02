@@ -50,7 +50,6 @@ public class CompactClassValidator implements TypedValidator<ClassOrInterfaceDec
         if (node.isCompact()) {
             validateCompactClassRestrictions(node, reporter);
         }
-        
         // Validate main methods (for ALL classes, not just compact)
         validateMainMethods(node, reporter);
     }
