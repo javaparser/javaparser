@@ -46,10 +46,13 @@ public class CompactClassValidator implements TypedValidator<ClassOrInterfaceDec
 
     @Override
     public void accept(ClassOrInterfaceDeclaration node, ProblemReporter reporter) {
+        // Validate compact class restrictions (only for compact classes)
         if (node.isCompact()) {
             validateCompactClassRestrictions(node, reporter);
-            validateMainMethods(node, reporter);
         }
+        
+        // Validate main methods (for ALL classes, not just compact)
+        validateMainMethods(node, reporter);
     }
 
     /**
