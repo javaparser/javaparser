@@ -77,19 +77,15 @@ class CompactClassTest {
 
     @Test
     void testInvalidMainMethodWithExtraParameters() {
-        // JEP 512 only allows void main() or void main(String[] args) - Johannes' implementation validates this
         JavaParser parser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_25));
         String code = "void main(String[] args, int x) { }";
         ParseResult<CompilationUnit> result = parser.parse(code);
-        // Johannes' MainMethodValidator should reject this as invalid main method signature
         assertTrue(result.getProblems().stream()
                 .anyMatch(p -> p.getMessage().contains("Main method must have zero or one parameter")));
     }
 
     @Test
     void testMixedCompactAndRegularClasses() {
-        // Test that regular classes are nested inside compact classes when mixed
-        // Johannes' implementation may have different structure than original tests expected
         JavaParser parser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_25));
         String code = "void main() { } class Helper { }";
         ParseResult<CompilationUnit> result = parser.parse(code);
@@ -97,9 +93,8 @@ class CompactClassTest {
         assertTrue(result.isSuccessful());
 
         CompilationUnit cu = result.getResult().get();
-        // Check that parsing succeeded - actual structure may vary with Johannes' implementation
-        assertTrue(cu.getTypes().size() >= 1); // At least one type exists
-        assertTrue(result.getProblems().isEmpty()); // No parse problems
+        assertTrue(cu.getTypes().size() >= 1);
+        assertTrue(result.getProblems().isEmpty());
     }
 
     @Test
@@ -114,12 +109,9 @@ class CompactClassTest {
 
     @Test
     void testCompactClassValidationForOlderVersions() {
-        // Compact classes should be rejected for Java 24 and earlier
         JavaParser parser24 = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_24));
-        String code = "class Test { void main() { } }"; // Actual class declaration
+        String code = "class Test { void main() { } }";
         ParseResult<CompilationUnit> result = parser24.parse(code);
-        // This should fail because no compact class declaration allowed in Java 24
-        // The grammar treats top-level methods as compact class, so this should trigger the validation
         assertProblems(result);
     }
 
