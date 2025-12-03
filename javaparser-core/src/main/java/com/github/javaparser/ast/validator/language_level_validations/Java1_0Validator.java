@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -235,6 +235,14 @@ public class Java1_0Validator extends Validators {
                     new UpgradeJavaMessage(
                             "Permitted sub-classes are not supported.", ParserConfiguration.LanguageLevel.JAVA_17)));
 
+    final Validator noCompactClasses = new SimpleValidator<>(
+            ClassOrInterfaceDeclaration.class,
+            ClassOrInterfaceDeclaration::getIsCompact,
+            (n, reporter) -> reporter.report(
+                    n,
+                    new UpgradeJavaMessage(
+                            "Compact source files are not supported.", ParserConfiguration.LanguageLevel.JAVA_25)));
+
     final Validator noSwitchNullDefault = new SingleNodeTypeValidator<>(SwitchEntry.class, (n, reporter) -> {
         if (n.getLabels().isNonEmpty() && n.isDefault()) {
             reporter.report(
@@ -287,6 +295,7 @@ public class Java1_0Validator extends Validators {
         add(noTextBlockLiteral);
         add(noRecordDeclaration);
         add(noSealedClasses);
+        add(noCompactClasses);
         add(noPermitsListInClasses);
         add(noSwitchNullDefault);
         add(noSwitchPatterns);

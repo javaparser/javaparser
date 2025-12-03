@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -68,6 +68,14 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     private NodeList<ClassOrInterfaceType> implementedTypes;
 
     private NodeList<ClassOrInterfaceType> permittedTypes;
+
+    /**
+     * Indicates whether this is a compact class (JEP 512 - implicit class from top-level members).
+     * Compact classes are created when parsing top-level methods and fields without an explicit class wrapper.
+     *
+     * @since 3.27.2
+     */
+    private boolean isCompact;
 
     public ClassOrInterfaceDeclaration() {
         this(
@@ -364,6 +372,46 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         action.accept(this);
     }
 
+    /**
+     * Returns whether this is a compact class (JEP 512 - implicit class from top-level members).
+     *
+     * @return true if compact, false otherwise
+     * @since 3.27.2
+     */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public boolean isCompact() {
+        return isCompact;
+    }
+
+    /**
+     * Sets whether this is a compact class (JEP 512 - implicit class from top-level members).
+     *
+     * @param isCompact true if compact, false otherwise
+     * @return this declaration
+     * @since 3.27.2
+     */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public boolean getIsCompact() {
+        return isCompact;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ClassOrInterfaceDeclaration setCompact(final boolean isCompact) {
+        if (isCompact == this.isCompact) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.COMPACT, this.isCompact, isCompact);
+        this.isCompact = isCompact;
+        return this;
+    }
+
+    /**
+     * Returns the name of this class as a string.
+     * For compact classes (JEP 512), this returns an empty string to indicate the implicit/unnamed class.
+     *
+     * @return the class name, or empty string for compact classes
+     * @since 3.27.2
+     */
     @Override
     public ResolvedReferenceTypeDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedReferenceTypeDeclaration.class);
