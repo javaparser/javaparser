@@ -218,6 +218,17 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
 
+        // look into module imports on demand
+        for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+            if (importDecl.isModule()) {
+                SymbolReference<ResolvedReferenceTypeDeclaration> ref =
+                        typeSolver.tryToSolveTypeInModule(importDecl.getNameAsString(), name);
+                if (ref != null && ref.isSolved()) {
+                    return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
+                }
+            }
+        }
+
         // Look in the java.lang package
         SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(DEFAULT_PACKAGE + "." + name);
         if (ref != null && ref.isSolved()) {

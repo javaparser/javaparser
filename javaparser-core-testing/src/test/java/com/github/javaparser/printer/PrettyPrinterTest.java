@@ -71,7 +71,7 @@ class PrettyPrinterTest {
 
     @BeforeEach
     public void setLanguageLevel() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
     }
 
     @AfterEach
@@ -717,6 +717,14 @@ class PrettyPrinterTest {
                 + "    void foo(Integer arg) {\n"
                 + "    }\n"
                 + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void testModuleImport() {
+        String code = "import module java.base;\n\n" + "class Foo {\n" + "}\n";
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));

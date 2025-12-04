@@ -1792,6 +1792,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.isStatic()) {
             printer.print("static ");
         }
+        if (n.isModule()) {
+            printer.print("module ");
+        }
         n.getName().accept(this, arg);
         if (n.isAsterisk()) {
             printer.print(".*");

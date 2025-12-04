@@ -26,6 +26,7 @@ import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEo
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -44,9 +45,14 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.TestParser;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class PrettyPrintVisitorTest extends TestParser {
+    @BeforeAll
+    static void initParser() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+    }
 
     private Optional<ConfigurationOption> getOption(PrinterConfiguration config, ConfigOption cOption) {
         return config.get(new DefaultConfigurationOption(cOption));
@@ -530,6 +536,14 @@ class PrettyPrintVisitorTest extends TestParser {
                 + "    void foo(Integer arg) {\n"
                 + "    }\n"
                 + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    public void testModuleImport() {
+        String code = "import module java.base;\n\n" + "class Foo {\n" + "}\n";
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
