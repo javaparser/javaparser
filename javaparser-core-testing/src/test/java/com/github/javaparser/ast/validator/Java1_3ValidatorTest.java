@@ -24,6 +24,7 @@ package com.github.javaparser.ast.validator;
 import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_1_3;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 import com.github.javaparser.JavaParser;
@@ -41,5 +42,11 @@ class Java1_3ValidatorTest {
         assertProblems(
                 result,
                 "(line 1,col 1) 'assert' keyword is not supported. Pay attention that this feature is supported starting from 'JAVA_1_4' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+    }
+
+    @Test
+    void assertIsValideIdentifierBeforeJAVA_1_4() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("String assert;"));
+        assertNoProblems(result);
     }
 }
