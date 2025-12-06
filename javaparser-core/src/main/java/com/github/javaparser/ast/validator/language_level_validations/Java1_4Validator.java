@@ -28,5 +28,6 @@ public class Java1_4Validator extends Java1_3Validator {
     public Java1_4Validator() {
         super();
         remove(noAssertKeyword);
+        add(noAssertIdentifer);
     }
 }

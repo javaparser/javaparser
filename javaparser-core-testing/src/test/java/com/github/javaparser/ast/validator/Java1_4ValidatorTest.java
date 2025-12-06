@@ -45,6 +45,14 @@ class Java1_4ValidatorTest {
     }
 
     @Test
+    void assertIsNotValideIdentifierSinceJAVA_1_4() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("String assert;"));
+        assertProblems(
+                result,
+                "(line 1,col 8) 'assert' identifier is not supported. Pay attention that this feature is no longer supported since 'JAVA_1_4' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+    }
+
+    @Test
     void noGenerics() {
         ParseResult<CompilationUnit> result =
                 javaParser.parse(COMPILATION_UNIT, provider("class X<A>{List<String> b;}"));

@@ -3066,7 +3066,7 @@ String Identifier():
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
-        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> | "_" |
+        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> | "_" | <ASSERT> |
         // An actual plain old identifier
         <IDENTIFIER>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
@@ -4559,6 +4559,10 @@ Statement BlockStatement():
             // just a restricted identifier and a yield statement can be confused with VariableDeclarationExpression sometimes
             LOOKAHEAD( YieldStatement() )
             ret = YieldStatement()
+         |
+         	// try assert statement separate from more general Statement() because assert can be confused with VariableDeclarationExpression sometimes
+            LOOKAHEAD( AssertStatement() )
+            ret = AssertStatement()
          |
             LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()
