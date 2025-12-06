@@ -58,6 +58,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 SymbolResolutionCapability {
 
     private static final String VALUES = "values";
+    private static final String VALUE_OF = "valueOf";
 
     private TypeSolver typeSolver;
     private EnumDeclaration wrappedNode;
@@ -193,6 +194,13 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (VALUES.equals(name) && argumentTypes.isEmpty()) {
             return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver)));
         }
+        if (VALUE_OF.equals(name) && argumentTypes.size() == 1) {
+            ResolvedType argument = argumentTypes.get(0);
+            if (argument.isReferenceType()
+                    && "java.lang.String".equals(argument.asReferenceType().getQualifiedName())) {
+                return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver)));
+            }
+        }
         return getContext().solveMethodAsUsage(name, argumentTypes);
     }
 
@@ -202,7 +210,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (VALUES.equals(name) && argumentsTypes.isEmpty()) {
             return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver));
         }
-        if ("valueOf".equals(name) && argumentsTypes.size() == 1) {
+        if (VALUE_OF.equals(name) && argumentsTypes.size() == 1) {
             ResolvedType argument = argumentsTypes.get(0);
             if (argument.isReferenceType()
                     && "java.lang.String".equals(argument.asReferenceType().getQualifiedName())) {
