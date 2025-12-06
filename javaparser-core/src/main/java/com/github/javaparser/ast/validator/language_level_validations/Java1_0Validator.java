@@ -55,11 +55,14 @@ public class Java1_0Validator extends Validators {
                             "'assert' keyword is not supported.", ParserConfiguration.LanguageLevel.JAVA_1_4)));
 
     final Validator noAssertIdentifer = new TreeVisitorValidator((node, reporter) -> {
-        if (node instanceof NodeWithIdentifier && ((NodeWithIdentifier) node).getIdentifier().equals("assert")) {
+        if (node instanceof NodeWithIdentifier
+                && ((NodeWithIdentifier) node).getIdentifier().equals("assert")) {
             reporter.report(
                     node,
                     new UpgradeJavaMessage(
-                            "'assert' identifier is not supported.", ParserConfiguration.LanguageLevel.JAVA_1_4, false));
+                            "'assert' identifier is not supported.",
+                            ParserConfiguration.LanguageLevel.JAVA_1_4,
+                            false));
         }
     });
 
