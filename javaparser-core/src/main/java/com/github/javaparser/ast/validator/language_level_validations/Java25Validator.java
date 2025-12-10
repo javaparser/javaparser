@@ -31,5 +31,6 @@ public class Java25Validator extends Java24Validator {
     public Java25Validator() {
         super();
         remove(noModuleImports);
+        remove(explicitConstructorInvocationMustBeFirstStatement);
     }
 }

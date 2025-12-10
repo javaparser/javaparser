@@ -284,6 +284,27 @@ public class Java1_0Validator extends Validators {
         }
     });
 
+    final Validator explicitConstructorInvocationMustBeFirstStatement =
+            new TreeVisitorValidator((Node node, ProblemReporter reporter) -> {
+                // Only validate this for ExplicitConstructorInvocationStmts that appear as a child of a block node.
+                // This will
+                // be the case for all such statements that are parsed as part of a compiling source file, but may not
+                // always
+                // be the case for code snippets being parsed.
+                if (node instanceof ExplicitConstructorInvocationStmt
+                        && node.getParentNode().isPresent()) {
+                    Node parent = node.getParentNode().get();
+                    if (parent instanceof BlockStmt
+                            && ((BlockStmt) parent).getStatements().indexOf(node) > 0) {
+                        reporter.report(
+                                node,
+                                new UpgradeJavaMessage(
+                                        "Flexible constructor bodies are not supported",
+                                        ParserConfiguration.LanguageLevel.JAVA_25));
+                    }
+                }
+            });
+
     public Java1_0Validator() {
         super(new CommonValidators());
         add(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
@@ -314,5 +335,6 @@ public class Java1_0Validator extends Validators {
         add(noSwitchPatterns);
         add(noRecordPatterns);
         add(noModuleImports);
+        add(explicitConstructorInvocationMustBeFirstStatement);
     }
 }
