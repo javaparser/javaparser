@@ -1947,7 +1947,6 @@ CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modif
     SimpleName name;
     Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
     NodeList<ReferenceType> throws_ = emptyNodeList();
-    ExplicitConstructorInvocationStmt exConsInv = null;
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
@@ -1964,17 +1963,10 @@ CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modif
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
     "{" { blockBegin=token(); }
-    [
-        LOOKAHEAD(ExplicitConstructorInvocation())
-        exConsInv = ExplicitConstructorInvocation()
-    ]
     stmts = Statements()
     "}"
 
     {
-    if (exConsInv != null) {
-        stmts = prepend(stmts, exConsInv);
-    }
     return new CompactConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, new BlockStmt(range(blockBegin, token()), stmts));
 }
 }
@@ -2513,9 +2505,11 @@ Name ReceiverParameterId():
  *         TypeIdentifier
  * }</pre>
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-ConstructorBody
  * <pre>{@code
  *     ConstructorBody:
- *         { [ExplicitConstructorInvocation] [BlockStatements] }
+ *         { [BlockStatements] ConstructorInvocation [BlockStatements] }
+ *         { [BlockStatements] }
  * }</pre>
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7.1
  * <pre>{@code
@@ -2532,7 +2526,6 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
     SimpleName name;
     Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
     NodeList<ReferenceType> throws_ = emptyNodeList();
-    ExplicitConstructorInvocationStmt exConsInv = null;
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
@@ -2549,17 +2542,10 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
     "{" { blockBegin=token(); }
-    [
-        LOOKAHEAD(ExplicitConstructorInvocation())
-        exConsInv = ExplicitConstructorInvocation()
-    ]
     stmts = Statements()
     "}"
 
     {
-        if (exConsInv != null) {
-            stmts = prepend(stmts, exConsInv);
-        }
         return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);
     }
 }
@@ -4568,6 +4554,15 @@ Statement BlockStatement():
             expr = VariableDeclarationExpression()
             ";"
             { ret = new ExpressionStmt(range(expr, token()), expr); }
+         |
+            // In Java >= 25, explicit constructor invocations are allowed anywhere in the body of a constructor
+            // Adding support for that here isn't 100% correct, since this would allow multiple constructor invocations
+            // in a constructor body or block not in a constructor body, but handling this correctly would require
+            // larger changes through the grammar due to simplifications made elsewhere.
+            // Handling it here should not be a problem since we assume input code compiles. The compiler would have
+            // already caught the incorrect cases above.
+            LOOKAHEAD( ExplicitConstructorInvocation() )
+            ret = ExplicitConstructorInvocation()
          |
             ret = Statement()
         )
