@@ -29,6 +29,7 @@ import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import org.junit.jupiter.api.Test;
 
@@ -45,6 +46,18 @@ class Java25ValidatorTest {
     void moduleImportAllowed() {
         ParseResult<ImportDeclaration> result =
                 javaParser.parse(IMPORT_DECLARATION, provider("import module java.base;"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void explicitConstructorInvocationAfterFirstStatementAllowed() {
+        String code = "class Foo {\n" + "    public Foo() {\n"
+                + "        int x = 2;\n"
+                + "        super();\n"
+                + "    }\n"
+                + "}";
+
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertNoProblems(result);
     }
 }

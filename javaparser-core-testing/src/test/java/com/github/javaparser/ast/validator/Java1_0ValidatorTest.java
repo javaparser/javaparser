@@ -139,4 +139,30 @@ class Java1_0ValidatorTest {
                 result,
                 "(line 1,col 1) Module imports are not supported Pay attention that this feature is supported starting from 'JAVA_25' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
+
+    @Test
+    void explicitConstructorInvocationAsFirstStatementAllowed() {
+        String code = "class Foo {\n" + "    public Foo() {\n"
+                + "        super();\n"
+                + "        int x = 2;\n"
+                + "    }\n"
+                + "}";
+
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void explicitConstructorInvocationAfterFirstStatementNotAllowed() {
+        String code = "class Foo {\n" + "    public Foo() {\n"
+                + "        int x = 2;\n"
+                + "        super();\n"
+                + "    }\n"
+                + "}";
+
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
+        assertProblems(
+                result,
+                "(line 4,col 9) Flexible constructor bodies are not supported Pay attention that this feature is supported starting from 'JAVA_25' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+    }
 }

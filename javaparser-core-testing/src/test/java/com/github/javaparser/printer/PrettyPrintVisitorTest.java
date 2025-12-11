@@ -548,4 +548,16 @@ class PrettyPrintVisitorTest extends TestParser {
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
+
+    @Test
+    void printFlexibleConstructorBody() {
+        String code = "public class A {\n" + "\n"
+                + "    public A() {\n"
+                + "        int x;\n"
+                + "        super();\n"
+                + "    }\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
 }
