@@ -172,6 +172,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         setExtendedTypes(extendedTypes);
         setImplementedTypes(implementedTypes);
         setPermittedTypes(permittedTypes);
+        setCompact(isCompact);
         customInitialization();
     }
 
@@ -422,5 +423,20 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ClassOrInterfaceDeclaration> toClassOrInterfaceDeclaration() {
         return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public boolean isCompact() {
+        return isCompact;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ClassOrInterfaceDeclaration setCompact(final boolean isCompact) {
+        if (isCompact == this.isCompact) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.COMPACT, this.isCompact, isCompact);
+        this.isCompact = isCompact;
+        return this;
     }
 }
