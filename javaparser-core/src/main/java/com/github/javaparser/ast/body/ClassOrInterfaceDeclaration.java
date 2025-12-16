@@ -60,6 +60,8 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
 
     private boolean isInterface;
 
+    private boolean isCompact;
+
     private NodeList<TypeParameter> typeParameters;
 
     // Can contain more than one item if this is an interface
@@ -108,6 +110,31 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
             final NodeList<ClassOrInterfaceType> extendedTypes,
             final NodeList<ClassOrInterfaceType> implementedTypes,
             final NodeList<ClassOrInterfaceType> permittedTypes,
+            final NodeList<BodyDeclaration<?>> members,
+            final boolean isCompact) {
+        this(
+                null,
+                modifiers,
+                annotations,
+                isInterface,
+                name,
+                typeParameters,
+                extendedTypes,
+                implementedTypes,
+                permittedTypes,
+                members,
+                isCompact);
+    }
+
+    public ClassOrInterfaceDeclaration(
+            final NodeList<Modifier> modifiers,
+            final NodeList<AnnotationExpr> annotations,
+            final boolean isInterface,
+            final SimpleName name,
+            final NodeList<TypeParameter> typeParameters,
+            final NodeList<ClassOrInterfaceType> extendedTypes,
+            final NodeList<ClassOrInterfaceType> implementedTypes,
+            final NodeList<ClassOrInterfaceType> permittedTypes,
             final NodeList<BodyDeclaration<?>> members) {
         this(
                 null,
@@ -119,13 +146,35 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
                 extendedTypes,
                 implementedTypes,
                 permittedTypes,
-                members);
+                members,
+                false);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ClassOrInterfaceDeclaration(
+            TokenRange tokenRange,
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            boolean isInterface,
+            SimpleName name,
+            NodeList<TypeParameter> typeParameters,
+            NodeList<ClassOrInterfaceType> extendedTypes,
+            NodeList<ClassOrInterfaceType> implementedTypes,
+            NodeList<ClassOrInterfaceType> permittedTypes,
+            NodeList<BodyDeclaration<?>> members,
+            boolean isCompact) {
+        super(tokenRange, modifiers, annotations, name, members);
+        setInterface(isInterface);
+        setTypeParameters(typeParameters);
+        setExtendedTypes(extendedTypes);
+        setImplementedTypes(implementedTypes);
+        setPermittedTypes(permittedTypes);
+        customInitialization();
+    }
+
     public ClassOrInterfaceDeclaration(
             TokenRange tokenRange,
             NodeList<Modifier> modifiers,
