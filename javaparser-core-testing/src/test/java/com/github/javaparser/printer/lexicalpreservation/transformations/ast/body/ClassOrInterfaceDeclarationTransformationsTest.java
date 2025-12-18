@@ -26,6 +26,8 @@ import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -205,4 +207,68 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
 
     // Javadoc
 
+    // Compact Classes (Java 25)
+
+    @Test
+    void addingFieldToCompactClass() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        considerCode("void main() { }");
+        ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
+        cid.addField("int", "count");
+        assertTransformedToString("void main() { }" + LineSeparator.SYSTEM + "int count;" + LineSeparator.SYSTEM, cid);
+    }
+
+    @Test
+    void addingMethodToCompactClass() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        considerCode("void main() { }");
+        ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
+        cid.addMethod("greet", PUBLIC);
+        assertTransformedToString(
+                "void main() { }" + LineSeparator.SYSTEM + "public void greet() {" + LineSeparator.SYSTEM + "}"
+                        + LineSeparator.SYSTEM,
+                cid);
+    }
+
+    @Test
+    void modifyingFieldInCompactClass() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        considerCode("int count = 0;" + LineSeparator.SYSTEM + LineSeparator.SYSTEM + "void main() { }");
+        ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
+        cid.getFields().get(0).getVariables().get(0).setType(PrimitiveType.longType());
+        assertTransformedToString(
+                "long count = 0;" + LineSeparator.SYSTEM + LineSeparator.SYSTEM + "void main() { }", cid);
+    }
+
+    @Test
+    void modifyingMethodInCompactClass() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        considerCode("int add(int a, int b) { return a + b; }" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "void main() { }");
+        ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
+        cid.getMethods().get(0).setName("subtract");
+        assertTransformedToString(
+                "int subtract(int a, int b) { return a + b; }" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                        + "void main() { }",
+                cid);
+    }
+
+    @Test
+    void removingFieldFromCompactClass() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        considerCode("int count = 0;" + LineSeparator.SYSTEM + LineSeparator.SYSTEM + "void main() { }");
+        ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
+        cid.getMembers().remove(0);
+        assertTransformedToString("void main() { }", cid);
+    }
+
+    @Test
+    void removingMethodFromCompactClass() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        considerCode("int add(int a, int b) { return a + b; }" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "void main() { }");
+        ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
+        cid.getMembers().remove(0);
+        assertTransformedToString("void main() { }", cid);
+    }
 }
