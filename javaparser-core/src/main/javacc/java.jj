@@ -1282,8 +1282,13 @@ ImportDeclaration ImportDeclaration():
 {
     "import" {begin = token();}
     [ "static" { isStatic = true; } ]
-    [ "module" { isModule = true; }]
-    name = Name()
+    (
+        LOOKAHEAD(3)
+        "module" { isModule = true; }
+        name = Name()
+      |
+        name = Name()
+    )
     [ "." "*" { isAsterisk = true; } ] ";"
     { return new ImportDeclaration(range(begin, token()), name, isStatic, isAsterisk, isModule); }
 }
@@ -4388,7 +4393,7 @@ Statement Statement():
     try {
         (
             LOOKAHEAD(2) ret = LabeledStatement()
-            | ret = AssertStatement()
+            | LOOKAHEAD(3) ret = AssertStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
             | ret = Block()
             | ret = EmptyStatement()
