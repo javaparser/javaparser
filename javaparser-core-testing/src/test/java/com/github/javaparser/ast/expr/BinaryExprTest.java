@@ -21,13 +21,22 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class BinaryExprTest {
+
+    @BeforeEach
+    void initParser() {
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+    }
 
     @Test
     void convertOperator() {
@@ -134,5 +143,45 @@ class BinaryExprTest {
                 });
 
         return expression;
+    }
+
+    @Test
+    void binaryExprWithAssertAsLeftOperandTest() {
+        // Note: "assert" as an identifier is only valid in Java < 1.4
+        // In modern Java, "assert" is a keyword. However, "assert" as an identifier is still supported
+        // for backward compatibility.
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_1_0);
+
+        Expression e = parseExpression("assert + 42");
+        assertInstanceOf(BinaryExpr.class, e);
+        BinaryExpr binary = e.asBinaryExpr();
+        assertEquals(BinaryExpr.Operator.PLUS, binary.getOperator());
+
+        // Check left operand is "assert" (as identifier)
+        assertInstanceOf(NameExpr.class, binary.getLeft());
+        assertEquals("assert", binary.getLeft().asNameExpr().getNameAsString());
+
+        assertInstanceOf(IntegerLiteralExpr.class, binary.getRight());
+        assertEquals("42", binary.getRight().asIntegerLiteralExpr().getValue());
+    }
+
+    @Test
+    void binaryExprWithAssertAsRightOperandTest() {
+        // Note: "assert" as an identifier is only valid in Java < 1.4
+        // In modern Java, "assert" is a keyword. However, "assert" as an identifier is still supported
+        // for backward compatibility.
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_1_0);
+
+        Expression e = parseExpression("x + assert");
+        assertInstanceOf(BinaryExpr.class, e);
+        BinaryExpr binary = e.asBinaryExpr();
+        assertEquals(BinaryExpr.Operator.PLUS, binary.getOperator());
+
+        assertInstanceOf(NameExpr.class, binary.getLeft());
+        assertEquals("x", binary.getLeft().asNameExpr().getNameAsString());
+
+        // Check right operand is "assert" (as identifier)
+        assertInstanceOf(NameExpr.class, binary.getRight());
+        assertEquals("assert", binary.getRight().asNameExpr().getNameAsString());
     }
 }
