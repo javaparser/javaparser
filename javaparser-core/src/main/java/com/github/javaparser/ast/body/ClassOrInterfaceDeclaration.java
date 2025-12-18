@@ -31,6 +31,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
+import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -194,6 +195,25 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         setImplementedTypes(implementedTypes);
         setPermittedTypes(permittedTypes);
         customInitialization();
+    }
+
+    /**
+     * This method should only be called by the CompactClassObserver and never in user code. It only exists
+     * because of a conflict between the JavaParser project structure and Java's limited access control
+     * mechanisms which makes proper encapsulation while maintaining a logically ordered structure impossible.
+     *
+     * @param newIsCompact the new value of isCompact. Needed because observers are notified of the change
+     *                     before the value of the field is changed.
+     */
+    public void processIsCompactChange(boolean newIsCompact) {
+        SimpleName name = getName();
+        if (name != null) {
+            getName().setData(PHANTOM_KEY, newIsCompact);
+        }
+        NodeList<Modifier> modifiers = getModifiers();
+        if (modifiers != null) {
+            getModifiers().forEach(modifier -> modifier.setData(PHANTOM_KEY, newIsCompact));
+        }
     }
 
     @Override
