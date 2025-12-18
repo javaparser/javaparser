@@ -4393,7 +4393,7 @@ Statement Statement():
     try {
         (
             LOOKAHEAD(2) ret = LabeledStatement()
-            | ret = AssertStatement()
+            | LOOKAHEAD(3) ret = AssertStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
             | ret = Block()
             | ret = EmptyStatement()
