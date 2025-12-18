@@ -22,8 +22,7 @@
 package com.github.javaparser.ast.imports;
 
 import static com.github.javaparser.StaticJavaParser.parseImport;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
@@ -69,5 +68,20 @@ class ImportDeclarationTest {
         ImportDeclaration i = parseImport("import module java.base;");
         assertEquals("java.base", i.getNameAsString());
         assertTrue(i.isModule());
+    }
+
+    @Test
+    void modulePackageImport() {
+        ImportDeclaration i = parseImport("import module.base.Foo;");
+        assertEquals("module.base.Foo", i.getNameAsString());
+        assertFalse(i.isModule());
+    }
+
+    @Test
+    void staticModulePackageImport() {
+        ImportDeclaration i = parseImport("import static module.base.Foo;");
+        assertEquals("module.base.Foo", i.getNameAsString());
+        assertFalse(i.isModule());
+        assertTrue(i.isStatic());
     }
 }
