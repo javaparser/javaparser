@@ -445,66 +445,175 @@ public class JavaParserFacade {
     }
 
     protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
+        // JLS §15.13.1: "A method reference expression consists of a ReferenceType or Primary,
+        // followed by :: and a method name."
+        // We need to evaluate the scope to determine what we're referencing.
         Expression scope = methodReferenceExpr.getScope();
-        ResolvedType typeOfScope = getType(methodReferenceExpr.getScope());
+        ResolvedType typeOfScope = getType(scope);
+
+        // JLS §15.13.1: The scope must be a reference type
         if (!typeOfScope.isReferenceType()) {
-            throw new UnsupportedOperationException(typeOfScope.getClass().getCanonicalName());
+            throw new UnsupportedOperationException("Cannot resolve method reference on non-reference type: "
+                    + typeOfScope.getClass().getCanonicalName());
         }
 
-        Optional<MethodUsage> result;
-        ResolvedReferenceTypeDeclaration resolvedTypdeDecl = typeOfScope
+        // Extract the type declaration from the reference type
+        ResolvedReferenceTypeDeclaration resolvedTypeDecl = typeOfScope
                 .asReferenceType()
                 .getTypeDeclaration()
-                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
-        Set<MethodUsage> allMethods = resolvedTypdeDecl.getAllMethods();
+                .orElseThrow(() ->
+                        new UnsolvedSymbolException("TypeDeclaration unexpectedly empty for type: " + typeOfScope));
 
-        if (scope.isTypeExpr()) {
-            // static methods should match all params
-            List<MethodUsage> staticMethodUsages = allMethods.stream()
-                    .filter(it -> it.getDeclaration().isStatic())
+        Set<MethodUsage> allMethods = resolvedTypeDecl.getAllMethods();
+        String methodName = methodReferenceExpr.getIdentifier();
+
+        // JLS §15.12.2.1: "Identify Potentially Applicable Methods"
+        // "The class or interface determined by compile-time step 1 (§15.12.1) is searched
+        // for all member methods that are potentially applicable to this method invocation."
+        // Filter methods by name first.
+        List<MethodUsage> candidateMethods =
+                allMethods.stream().filter(m -> m.getName().equals(methodName)).collect(Collectors.toList());
+
+        if (candidateMethods.isEmpty()) {
+            throw new UnsolvedSymbolException("Cannot find method '" + methodName + "' in type " + typeOfScope);
+        }
+
+        // JLS §15.13.1: Method references have different forms based on their scope:
+        //
+        // Form 1: ReferenceType :: [TypeArguments] Identifier
+        //   Example: String::length, Integer::parseInt
+        //   Two possible interpretations:
+        //   a) Static method: All function type parameters map to method parameters
+        //      Example: Integer::parseInt with Function<String,Integer>
+        //               → parseInt(String) is static, paramTypes = [String]
+        //               → ALL paramTypes go to method parameters: [String]
+        //
+        //   b) Unbound instance method: First function type parameter is the receiver type
+        //      Example: String::length with Function<String,Integer>
+        //               → length() is instance, paramTypes = [String] where String is receiver
+        //               → ONLY remaining paramTypes go to method parameters: []
+        //
+        // Form 2: Primary :: [TypeArguments] Identifier
+        //   Example: foo::convert where foo is an expression
+        //   Only instance methods (bound to the Primary expression result)
+        //   ALL function type parameters map to method parameters
+        //   Example: foo::convert with Function<Integer,String>
+        //            → convert(int) is instance, paramTypes = [Integer]
+        //            → ALL paramTypes go to method parameters: [Integer]
+        //            → The receiver is foo (already bound at reference creation time)
+        Optional<MethodUsage> result;
+
+        if (scope.isTypeExpr()
+                && typeOfScope.isReferenceType()
+                && !scope.asTypeExpr().isPrimaryExpr(typeOfScope.asReferenceType())) {
+            // JLS §15.13.1: "If the method reference expression has the form ReferenceType ::
+            // [TypeArguments] Identifier, the potentially applicable methods are:"
+            //
+            // This is FORM 1: The scope is a type name (e.g., String, Integer, Foo)
+            //
+            // Two distinct cases must be tried:
+            // Case 1a: Static method - all paramTypes are method parameters
+            // Case 1b: Unbound instance method - first paramType is receiver, rest are method parameters
+
+            // CASE 1a: Try static methods first
+            // JLS §15.13.1: For static methods, "the arity of m is k, and the type of each
+            // parameter matches the corresponding parameter type of the function type"
+            // This means: ALL paramTypes map to method parameters
+            List<MethodUsage> staticMethods = candidateMethods.stream()
+                    .filter(m -> m.getDeclaration().isStatic())
                     .collect(Collectors.toList());
 
-            result = MethodResolutionLogic.findMostApplicableUsage(
-                    staticMethodUsages, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
+            if (!staticMethods.isEmpty()) {
+                // JLS §15.12.2: Apply the method resolution process (phases 1-3)
+                // Pass ALL paramTypes because they all map to method parameters
+                result = MethodResolutionLogic.findMostApplicableUsage(
+                        staticMethods, methodName, paramTypes, typeSolver);
 
+                if (result.isPresent()) {
+                    return result.get();
+                }
+            }
+
+            // CASE 1b: Try unbound instance methods
+            // JLS §15.13.1: For unbound instance methods with ReferenceType scope:
+            // "The arity of m is n, where m has n formal parameters and the function type has n+1 parameter types"
+            // This means: First paramType is the receiver type, remaining paramTypes are method parameters
             if (!paramTypes.isEmpty()) {
-                // instance methods are called on the first param and should match all other params
-                List<MethodUsage> instanceMethodUsages = allMethods.stream()
-                        .filter(it -> !it.getDeclaration().isStatic())
+                List<MethodUsage> instanceMethods = candidateMethods.stream()
+                        .filter(m -> !m.getDeclaration().isStatic())
                         .collect(Collectors.toList());
 
-                List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
-                instanceMethodParamTypes.remove(0); // remove the first one
+                if (!instanceMethods.isEmpty()) {
+                    // Split paramTypes: first is receiver, rest are method parameters
+                    // Example: Function<String, Integer> has paramTypes = [String, Integer]
+                    //          For String::concat, first param (String) is receiver
+                    //          Remaining params ([Integer]) go to method parameters
+                    List<ResolvedType> methodParams = paramTypes.subList(1, paramTypes.size());
 
-                Optional<MethodUsage> instanceResult = MethodResolutionLogic.findMostApplicableUsage(
-                        instanceMethodUsages,
-                        methodReferenceExpr.getIdentifier(),
-                        instanceMethodParamTypes,
-                        typeSolver);
-                if (result.isPresent() && instanceResult.isPresent()) {
-                    throw new MethodAmbiguityException(
-                            "Ambiguous method call: cannot find a most applicable method for "
-                                    + methodReferenceExpr.getIdentifier());
-                }
+                    // JLS §15.12.2.2-4: Apply phases 1-3 of method resolution
+                    // Pass only the method parameters (excluding receiver type)
+                    result = MethodResolutionLogic.findMostApplicableUsage(
+                            instanceMethods, methodName, methodParams, typeSolver);
 
-                if (instanceResult.isPresent()) {
-                    result = instanceResult;
+                    if (result.isPresent()) {
+                        return result.get();
+                    }
                 }
             }
         } else {
-            result = MethodResolutionLogic.findMostApplicableUsage(
-                    new ArrayList<>(allMethods), methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
+            // JLS §15.13.1: "If the method reference expression has the form
+            // Primary :: [TypeArguments] Identifier"
+            //
+            // This is FORM 2: The scope is an expression (e.g., foo, myString, System.out)
+            //
+            // CRITICAL: In this form, the expression is evaluated and becomes the BOUND RECEIVER
+            // at method reference creation time, not at invocation time.
+            //
+            // "The potentially applicable methods are the member methods of the type
+            // of the Primary that are not static"
+            //
+            // For bound instance methods: ALL functional interface parameters map to method parameters
+            // The receiver is NOT part of paramTypes - it's already bound to the expression result
+            //
+            // Example from failing test:
+            //   Foo foo = new Foo();
+            //   Optional<Integer> priority = Optional.of(4);
+            //   priority.map(foo::convert).orElse("0");
+            //
+            // Analysis:
+            //   - scope = foo (a Primary expression, not a type)
+            //   - foo is evaluated → becomes bound receiver
+            //   - map() expects Function<Integer, String>
+            //   - paramTypes = [Integer] (from Function's parameter type)
+            //   - convert(int) signature: takes 1 parameter
+            //   - ALL paramTypes [Integer] go to method parameters
+            //   - Match: convert(int) with [Integer] ✓
+            List<MethodUsage> instanceMethods = candidateMethods.stream()
+                    .filter(m -> !m.getDeclaration().isStatic())
+                    .collect(Collectors.toList());
 
-            if (result.isPresent() && result.get().getDeclaration().isStatic()) {
-                throw new RuntimeException("Invalid static method reference " + methodReferenceExpr.getIdentifier());
+            if (instanceMethods.isEmpty()) {
+                throw new UnsolvedSymbolException("No non-static methods named '" + methodName + "' found in type "
+                        + typeOfScope + " (method reference with expression scope must reference instance methods)");
+            }
+
+            // JLS §15.12.2.2-4: Apply the three-phase method resolution
+            // IMPORTANT: Pass ALL paramTypes - they ALL go to method parameters
+            // The receiver (foo) is already bound and is NOT part of paramTypes
+            result = MethodResolutionLogic.findMostApplicableUsage(instanceMethods, methodName, paramTypes, typeSolver);
+
+            if (result.isPresent()) {
+                return result.get();
             }
         }
 
-        if (!result.isPresent()) {
-            throw new UnsupportedOperationException();
-        }
-
-        return result.get();
+        // JLS §15.12.2.5: "Choosing the Most Specific Method"
+        // If we cannot find a most specific method, the reference is ambiguous or no applicable method exists
+        throw new UnsupportedOperationException(
+                "Unable to resolve method reference " + methodReferenceExpr + " with param types "
+                        + paramTypes + ". Candidates found: "
+                        + candidateMethods.size() + " method(s) named '"
+                        + methodName + "' in type " + typeOfScope);
     }
 
     protected ResolvedType getBinaryTypeConcrete(
