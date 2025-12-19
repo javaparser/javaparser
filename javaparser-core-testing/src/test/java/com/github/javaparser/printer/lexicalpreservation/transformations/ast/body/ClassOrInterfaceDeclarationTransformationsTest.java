@@ -21,6 +21,11 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -29,13 +34,7 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.utils.LineSeparator;
-
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
 
 /**
  * Transforming ClassOrInterfaceDeclaration and verifying the LexicalPreservation works as expected.
@@ -170,7 +169,8 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     void addingField() {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
         cid.addField("int", "foo");
-        assertTransformedToString("class A {" + LineSeparator.SYSTEM + "    int foo;" + LineSeparator.SYSTEM + "}", cid);
+        assertTransformedToString(
+                "class A {" + LineSeparator.SYSTEM + "    int foo;" + LineSeparator.SYSTEM + "}", cid);
     }
 
     @Test
@@ -183,25 +183,22 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     @Test
     void replacingFieldWithAnotherField() {
         ClassOrInterfaceDeclaration cid = consider("public class A {float f;}");
-        cid.getMembers().set(0, new FieldDeclaration(new NodeList<>(), new VariableDeclarator(PrimitiveType.intType(), "bar")));
+        cid.getMembers()
+                .set(0, new FieldDeclaration(new NodeList<>(), new VariableDeclarator(PrimitiveType.intType(), "bar")));
         assertTransformedToString("public class A {int bar;}", cid);
     }
 
     // Annotations
     @Test
     void removingAnnotations() {
-        ClassOrInterfaceDeclaration cid = consider(
-                "@Value" + LineSeparator.SYSTEM +
-                "public class A {}");
+        ClassOrInterfaceDeclaration cid = consider("@Value" + LineSeparator.SYSTEM + "public class A {}");
         cid.getAnnotationByName("Value").get().remove();
         assertTransformedToString("public class A {}", cid);
     }
 
     @Test
     void removingAnnotationsWithSpaces() {
-        ClassOrInterfaceDeclaration cid = consider(
-                  "   @Value " + LineSeparator.SYSTEM +
-                        "public class A {}");
+        ClassOrInterfaceDeclaration cid = consider("   @Value " + LineSeparator.SYSTEM + "public class A {}");
         cid.getAnnotationByName("Value").get().remove();
         assertTransformedToString("public class A {}", cid);
     }

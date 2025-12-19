@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -35,7 +37,6 @@ import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Optional;
 
 /**
@@ -80,6 +81,21 @@ import java.util.Optional;
  * }</pre>
  * Many kinds of expressions are now allowed.
  *
+ * Note (https://github.com/javaparser/javaparser/pull/4679):
+ * The JavaParser representation for SwitchEntry is (slightly) incorrect.
+ * JP Assumes that the body of a SwitchEntry will be a list of statements which was true before switch expressions were added, but is no longer the case for this rule.
+ *
+ * The workaround for this was to wrap the expression in an ExpressionStmt node which works well, but is not entirely correct according to the JLS since the ExpressionStmt in this specific case can contain any expression,
+ * not just those which are legal expression statements according to the JLS, for example below (a lambda is not a valid expression statement, but the below snippet is still legal Java code):
+ * <pre>{@code
+ *      return switch (o) {
+ *          case String s -> (arg) -> System.out.println(arg + s);
+ *          case null, default -> (arg) -> {};
+ *      };
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.28
+ * https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.8
+ *
  * @author Julio Vilmar Gesser
  * @see SwitchStmt
  * @see com.github.javaparser.ast.expr.SwitchExpr
@@ -87,8 +103,10 @@ import java.util.Optional;
 public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry> {
 
     public enum Type {
-
-        STATEMENT_GROUP, EXPRESSION, BLOCK, THROWS_STATEMENT
+        STATEMENT_GROUP,
+        EXPRESSION,
+        BLOCK,
+        THROWS_STATEMENT
     }
 
     private NodeList<Expression> labels;
@@ -110,7 +128,11 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
      * This constructor exists for backwards compatibility for code that instantiated `SwitchEntries` before
      * the `isDefault` and guard fields were added.
      */
-    public SwitchEntry(final TokenRange tokenRange, final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
+    public SwitchEntry(
+            final TokenRange tokenRange,
+            final NodeList<Expression> labels,
+            final Type type,
+            final NodeList<Statement> statements) {
         this(tokenRange, labels, type, statements, false, null);
     }
 
@@ -123,15 +145,26 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @AllFieldsConstructor
-    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements, final boolean isDefault) {
-        this(null, labels, type, statements, isDefault, null);
+    public SwitchEntry(
+            final NodeList<Expression> labels,
+            final Type type,
+            final NodeList<Statement> statements,
+            final boolean isDefault,
+            final Expression guard) {
+        this(null, labels, type, statements, isDefault, guard);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, boolean isDefault, Expression guard) {
+    public SwitchEntry(
+            TokenRange tokenRange,
+            NodeList<Expression> labels,
+            Type type,
+            NodeList<Statement> statements,
+            boolean isDefault,
+            Expression guard) {
         super(tokenRange);
         setLabels(labels);
         setType(type);
@@ -189,8 +222,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
             return this;
         }
         notifyPropertyChange(ObservableProperty.LABELS, this.labels, labels);
-        if (this.labels != null)
-            this.labels.setParentNode(null);
+        if (this.labels != null) this.labels.setParentNode(null);
         this.labels = labels;
         setAsParentNodeOf(labels);
         return this;
@@ -203,8 +235,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
             return this;
         }
         notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
-        if (this.statements != null)
-            this.statements.setParentNode(null);
+        if (this.statements != null) this.statements.setParentNode(null);
         this.statements = statements;
         setAsParentNodeOf(statements);
         return this;
@@ -318,8 +349,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
             return this;
         }
         notifyPropertyChange(ObservableProperty.GUARD, this.guard, guard);
-        if (this.guard != null)
-            this.guard.setParentNode(null);
+        if (this.guard != null) this.guard.setParentNode(null);
         this.guard = guard;
         setAsParentNodeOf(guard);
         return this;
@@ -334,7 +364,12 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, boolean isDefault) {
+    public SwitchEntry(
+            TokenRange tokenRange,
+            NodeList<Expression> labels,
+            Type type,
+            NodeList<Statement> statements,
+            boolean isDefault) {
         super(tokenRange);
         setLabels(labels);
         setType(type);

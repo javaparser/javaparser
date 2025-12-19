@@ -70,29 +70,31 @@ public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration
      * TODO: Probably this method needs to refer to a method "isTypeSubstituable" implemented in ResolvedType
      */
     default boolean isReturnTypeSubstituable(ResolvedType otherResolvedType) {
-    	ResolvedType returnType = getReturnType();
-    	if (returnType.isVoid()) {
-    		return otherResolvedType.isVoid();
-    	}
-    	if (returnType.isPrimitive()) {
-    		return otherResolvedType.isPrimitive()
-    				&& returnType.asPrimitive().equals(otherResolvedType.asPrimitive());
-    	}
-    	// If R1 is a reference type then one of the following is true:
-
-    	// R1, adapted to the type parameters of d2 (§8.4.4), is a subtype of R2.
-    	// Below we are trying to compare a reference type for example an Object to a type variable let's say T
-    	// we can certainly simplify by saying that this is always true.
-    	if (otherResolvedType.isTypeVariable()) {
-    		return true;
-    	}
-
-    	// R1 can be converted to a subtype of R2 by unchecked conversion (§5.1.9).
-
-    	// d1 does not have the same signature as d2 (§8.4.2), and R1 = |R2|.
-    	if (returnType.describe().equals(otherResolvedType.erasure().describe())) {
-    		return true;
-    	}
-    	throw new UnsupportedOperationException("Return-Type-Substituable must be implemented on reference type.");
+        ResolvedType returnType = getReturnType();
+        if (returnType.isVoid()) {
+            return otherResolvedType.isVoid();
+        }
+        if (returnType.isPrimitive()) {
+            return otherResolvedType.isPrimitive() && returnType.asPrimitive().equals(otherResolvedType.asPrimitive());
+        }
+        // If R1 is a reference type then one of the following is true:
+        // R1, adapted to the type parameters of d2 (§8.4.4), is a subtype of R2.
+        // Below we are trying to compare a reference type for example an Object to a type variable let's say T
+        // we can certainly simplify by saying that this is always true.
+        if (otherResolvedType.isTypeVariable()) {
+            return true;
+        }
+        // R1 can be converted to a subtype of R2 by unchecked conversion (§5.1.9).
+        // d1 does not have the same signature as d2 (§8.4.2), and R1 = |R2|.
+        if (returnType.describe().equals(otherResolvedType.erasure().describe())) {
+            return true;
+        }
+        // At this point, R2 is not a type variable and R1 cannot be converted to a
+        // subtype of R2 by unchecked conversion, so if R1 is a type variable,
+        // then it cannot be assumed that it is return type substitutable.
+        if (returnType.isTypeVariable()) {
+            return false;
+        }
+        throw new UnsupportedOperationException("Return-Type-Substituable must be implemented on reference type.");
     }
 }

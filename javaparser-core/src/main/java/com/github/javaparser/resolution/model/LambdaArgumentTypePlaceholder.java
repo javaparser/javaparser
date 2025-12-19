@@ -18,11 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.model;
 
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import java.util.Optional;
 
 /**
  * Placeholder used to represent a lambda argument type while it is being
@@ -33,10 +33,32 @@ import com.github.javaparser.resolution.types.ResolvedType;
 public class LambdaArgumentTypePlaceholder implements ResolvedType {
 
     private int pos;
+
+    private final Optional<Integer> parameterCount;
+
+    private final Optional<Boolean> bodyBlockHasExplicitNonVoidReturn;
+
     private SymbolReference<? extends ResolvedMethodLikeDeclaration> method;
 
     public LambdaArgumentTypePlaceholder(int pos) {
         this.pos = pos;
+        this.parameterCount = Optional.empty();
+        this.bodyBlockHasExplicitNonVoidReturn = Optional.empty();
+    }
+
+    public LambdaArgumentTypePlaceholder(
+            int pos, int parameterCount, Optional<Boolean> bodyBlockHasExplicitNonVoidReturn) {
+        this.pos = pos;
+        this.parameterCount = Optional.of(parameterCount);
+        this.bodyBlockHasExplicitNonVoidReturn = bodyBlockHasExplicitNonVoidReturn;
+    }
+
+    public Optional<Integer> getParameterCount() {
+        return parameterCount;
+    }
+
+    public Optional<Boolean> bodyBlockHasExplicitNonVoidReturn() {
+        return bodyBlockHasExplicitNonVoidReturn;
     }
 
     @Override
@@ -67,5 +89,4 @@ public class LambdaArgumentTypePlaceholder implements ResolvedType {
     public boolean isAssignableBy(ResolvedType other) {
         throw new UnsupportedOperationException();
     }
-
 }

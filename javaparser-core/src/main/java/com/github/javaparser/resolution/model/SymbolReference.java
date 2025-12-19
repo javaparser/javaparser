@@ -18,14 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.model;
-
-import java.util.Optional;
 
 import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
+import java.util.Optional;
 
 /**
  * A reference to a symbol. It can solved or not solved. If solved the corresponding
@@ -74,18 +72,15 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      * @param <I> The Symbol Reference before adapting.
      * @param <O> The Symbol Reference after adapting.
      */
-    public static <I extends ResolvedDeclaration, O extends ResolvedDeclaration> SymbolReference<O> adapt(SymbolReference<I> ref, Class<O> clazz) {
-
+    public static <I extends ResolvedDeclaration, O extends ResolvedDeclaration> SymbolReference<O> adapt(
+            SymbolReference<I> ref, Class<O> clazz) {
         Optional<I> declaration = ref.getDeclaration();
         if (declaration.isPresent()) {
-
             I symbol = declaration.get();
             if (clazz.isInstance(symbol)) {
                 return solved(clazz.cast(symbol));
             }
-
         }
-
         return unsolved();
     }
 
@@ -108,13 +103,9 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      * The corresponding declaration. If not solve this throws UnsupportedOperationException.
      */
     public S getCorrespondingDeclaration() {
-
-        Optional<S> declaration = getDeclaration();
-        if (declaration.isPresent()) {
-            return declaration.get();
-        }
-
-        throw new UnsolvedSymbolException("Corresponding declaration not available for unsolved symbol.");
+        return getDeclaration()
+                .orElseThrow(() ->
+                        new UnsolvedSymbolException("Corresponding declaration not available for unsolved symbol."));
     }
 
     /**
@@ -128,5 +119,4 @@ public class SymbolReference<S extends ResolvedDeclaration> {
     public String toString() {
         return "SymbolReference{" + correspondingDeclaration + "}";
     }
-
 }

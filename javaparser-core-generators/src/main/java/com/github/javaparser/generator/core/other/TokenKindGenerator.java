@@ -50,19 +50,29 @@ public class TokenKindGenerator extends Generator {
     @Override
     public void generate() {
         Log.info("Running %s", () -> getClass().getSimpleName());
-        
+
         final CompilationUnit javaTokenCu = sourceRoot.parse("com.github.javaparser", "JavaToken.java");
-        final ClassOrInterfaceDeclaration javaToken = javaTokenCu.getClassByName("JavaToken").orElseThrow(() -> new AssertionError("Can't find class in java file."));
-        final EnumDeclaration kindEnum = javaToken.findFirst(EnumDeclaration.class, e -> "Kind".equals(e.getNameAsString())).orElseThrow(() -> new AssertionError("Can't find class in java file."));
+        final ClassOrInterfaceDeclaration javaToken = javaTokenCu
+                .getClassByName("JavaToken")
+                .orElseThrow(() -> new AssertionError("Can't find class in java file."));
+        final EnumDeclaration kindEnum = javaToken
+                .findFirst(EnumDeclaration.class, e -> "Kind".equals(e.getNameAsString()))
+                .orElseThrow(() -> new AssertionError("Can't find class in java file."));
 
         kindEnum.getEntries().clear();
         annotateGenerated(kindEnum);
 
-        final SwitchStmt valueOfSwitch = kindEnum.findFirst(SwitchStmt.class).orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
-        valueOfSwitch.findAll(SwitchEntry.class).stream().filter(e -> e.getLabels().isNonEmpty()).forEach(Node::remove);
+        final SwitchStmt valueOfSwitch = kindEnum.findFirst(SwitchStmt.class)
+                .orElseThrow(() -> new AssertionError("Can't find valueOf switch."));
+        valueOfSwitch.findAll(SwitchEntry.class).stream()
+                .filter(e -> e.getLabels().isNonEmpty())
+                .forEach(Node::remove);
 
-        final CompilationUnit constantsCu = generatedJavaCcSourceRoot.parse("com.github.javaparser", "GeneratedJavaParserConstants.java");
-        final ClassOrInterfaceDeclaration constants = constantsCu.getInterfaceByName("GeneratedJavaParserConstants").orElseThrow(() -> new AssertionError("Can't find class in java file."));
+        final CompilationUnit constantsCu =
+                generatedJavaCcSourceRoot.parse("com.github.javaparser", "GeneratedJavaParserConstants.java");
+        final ClassOrInterfaceDeclaration constants = constantsCu
+                .getInterfaceByName("GeneratedJavaParserConstants")
+                .orElseThrow(() -> new AssertionError("Can't find class in java file."));
         for (BodyDeclaration<?> member : constants.getMembers()) {
             member.toFieldDeclaration()
                     .filter(field -> {
@@ -72,7 +82,8 @@ public class TokenKindGenerator extends Generator {
                     .map(field -> field.getVariable(0))
                     .ifPresent(var -> {
                         final String name = var.getNameAsString();
-                        final IntegerLiteralExpr kind = var.getInitializer().get().asIntegerLiteralExpr();
+                        final IntegerLiteralExpr kind =
+                                var.getInitializer().get().asIntegerLiteralExpr();
                         generateEnumEntry(kindEnum, name, kind);
                         generateValueOfEntry(valueOfSwitch, name, kind);
                     });
@@ -80,7 +91,12 @@ public class TokenKindGenerator extends Generator {
     }
 
     private void generateValueOfEntry(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
-        final SwitchEntry entry = new SwitchEntry(new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)), false);
+        final SwitchEntry entry = new SwitchEntry(
+                new NodeList<>(kind),
+                SwitchEntry.Type.STATEMENT_GROUP,
+                new NodeList<>(new ReturnStmt(name)),
+                false,
+                null);
         valueOfSwitch.getEntries().addFirst(entry);
     }
 

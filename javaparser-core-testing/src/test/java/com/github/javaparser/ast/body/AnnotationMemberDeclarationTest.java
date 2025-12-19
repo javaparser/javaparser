@@ -21,12 +21,15 @@
 
 package com.github.javaparser.ast.body;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AnnotationMemberDeclarationTest {
 
@@ -61,5 +64,21 @@ class AnnotationMemberDeclarationTest {
         decl.removeDefaultValue();
 
         assertFalse(defaultValue.getParentNode().isPresent());
+    }
+
+    @Test
+    void annotationDeclarationShouldSupportRecordChild() {
+        CompilationUnit cu = TestParser.parseCompilationUnit(
+                ParserConfiguration.LanguageLevel.BLEEDING_EDGE,
+                "" + "@interface Foo {\n" + "    record Bar(String s) {}\n" + "}");
+
+        RecordDeclaration bar =
+                cu.getAnnotationDeclarationByName("Foo").get().getMember(0).asRecordDeclaration();
+
+        assertEquals(1, bar.getParameters().size());
+
+        Parameter parameter = bar.getParameter(0);
+        assertEquals("String", parameter.getTypeAsString());
+        assertEquals("s", parameter.getNameAsString());
     }
 }

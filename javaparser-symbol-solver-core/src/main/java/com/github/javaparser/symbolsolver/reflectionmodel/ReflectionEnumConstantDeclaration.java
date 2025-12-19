@@ -26,7 +26,6 @@ import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclara
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.lang.reflect.Field;
 
 public class ReflectionEnumConstantDeclaration implements ResolvedEnumConstantDeclaration {

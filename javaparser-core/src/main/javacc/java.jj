@@ -200,6 +200,9 @@ TOKEN_MGR_DECLS :
     private Stack<Token> tokenWorkStack = new Stack<Token>();
     private boolean storeTokens;
     private boolean yieldSupported = false;
+    private ArrayDeque<Token> markdownCommentTokens = new ArrayDeque<Token>();
+    boolean expectMarkdownComment;
+    boolean expectEndOfMarkdownLine;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -232,12 +235,35 @@ TOKEN_MGR_DECLS :
         yieldSupported = true;
     }
 
+    private void createMarkdownComment() {
+        while (!markdownCommentTokens.isEmpty() && TokenTypes.isWhitespace(markdownCommentTokens.peekFirst().kind)) {
+            markdownCommentTokens.removeFirst();
+        }
+        if (!markdownCommentTokens.isEmpty()) {
+            MarkdownComment comment = createMarkdownCommentFromTokenList(markdownCommentTokens);
+            markdownCommentTokens.clear();
+
+            expectMarkdownComment = true;
+            expectEndOfMarkdownLine = false;
+
+            commentsCollection.addComment(comment);
+        }
+    }
+
     private void CommonTokenAction(Token token) {
         // Use an intermediary stack to avoid recursion, see issue 1003
         do {
             tokenWorkStack.push(token);
             token = token.specialToken;
         } while (token != null);
+
+        // A /// sequence only indicates the start of a markdown comment if it is only preceded by whitespace characters
+        // in the line. This variable is used to keep track of this.
+        expectMarkdownComment = true;
+        // A newline token only indicates the end of the markdown comment if it is not preceded by a line comment (e.g.
+        // the second of two consecutive newlines would end the comment). This variable keeps track of whether the next
+        // newline should end the markdown comment (if currently processing one).
+        expectEndOfMarkdownLine = false;
 
         // The stack is now filled with tokens in left-to-right order. Process them.
         while(!tokenWorkStack.empty()) {
@@ -252,9 +278,57 @@ TOKEN_MGR_DECLS :
                 homeToken = token.javaToken;
             }
 
-            if(TokenTypes.isComment(token.kind)) {
+            // While processing the list of tokens, markdown comments are constructed from consecutive line comments
+            // starting with ///. This is done using effectively a second state machine on top of the javacc. The core
+            // observation is that the start of a markdown comment line must be preceded by only whitespace. When
+            // the processing of the token stream starts, EXPECT_MARKDOWN_COMMENT = true since no non-whitespace tokens
+            // have been processed. Processing then proceeds as follows:
+            //  1. If a non-whitespace, non-line-comment token is read, then a markdown comment cannot start on that
+            //     line. Continue reading tokens until the newline while not expecting markdown comments.
+            //  2. If only whitespace tokens have been processed on a line, followed by a line comment starting with
+            //     ///, start processing a markdown comment.
+            //  3. While processing a markdown comment, add all whitespace tokens and line comments to the
+            //     markdownCommentTokens. These will be used to construct the markdown comment later.
+            //  4. If a newline is read while processing a markdown comment, then either the next line will continue
+            //     the comment (i.e. the newline is followed by only non-newline whitespace characters before the
+            //     next line comment starting with ///), or the markdown comment will be ended by another newline
+            //     or non-line-comment.
+            //  5. If the markdown comment is ended, use the markdownCommentTokens buffer to create the actual markdown
+            //     comment node.
+            if (TokenTypes.isEndOfLineToken(token.kind)) {
+                if (expectEndOfMarkdownLine) {
+                    // A newline is processed, but it's the first newline after a markdown comment line
+                    // (expectEndOfMarkdownComment is still true), so it does not end the comment yet.
+                    markdownCommentTokens.add(token);
+                    expectEndOfMarkdownLine = false;
+                } else {
+                    // A newline is processed, but it's not the first newline after a markdown comment line, so
+                    // create the comment now.
+                    createMarkdownComment();
+                }
+                // A new line is started, so until a non-whitespace non-line-comment token is processed, expect a new
+                // markdown comment.
+                expectMarkdownComment = true;
+            } else if (expectMarkdownComment && isMarkdownCommentLineCandidate(token)) {
+                // The next markdown line comment is processed, so add it to the buffer.
+                expectEndOfMarkdownLine = true;
+                markdownCommentTokens.add(token);
+            } else if (expectMarkdownComment && TokenTypes.isWhitespaceButNotEndOfLine(token.kind)) {
+                // Non-newline whitespace characters are always included in the token range for the markdown comment, so
+                // add them to the buffer
+                markdownCommentTokens.add(token);
+            } else if(TokenTypes.isComment(token.kind)) {
+                // A comment token is found, but not one that is a markdown line candidate (those are handled in an
+                // else above). This could be a line comment not starting with ///, or a block comment. At this point,
+                // end the markdown comment and handle the other comment separately.
+                createMarkdownComment();
                 Comment comment = createCommentFromToken(token);
                 commentsCollection.addComment(comment);
+            } else if (!TokenTypes.isWhitespace(token.kind)) {
+                // Any non-whitespace token ends the markdown comment. If the markdownCommentTokens buffer is empty or
+                // only contains whitespace, it is simply cleared.
+                expectMarkdownComment = false;
+                createMarkdownComment();
             }
         }
     }
@@ -774,10 +848,13 @@ MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
 
 TOKEN :
 {
-  < IDENTIFIER: <LETTER> (<PART_LETTER>)* >
+  < IDENTIFIER:
+      <NON_UNDERSCORE_LETTER> (<PART_LETTER>)*
+    | "\u005f" (<PART_LETTER>)+
+  >
 |
-  < #LETTER: [
-         "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
+  < #NON_UNDERSCORE_LETTER: [
+         "\u0024",  "\u0041"-"\u005a",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
          "\u00ba",  "\u00c0"-"\u00d6",  "\u00d8"-"\u00f6",  "\u00f8"-"\u02c1",  "\u02c6"-"\u02d1",  "\u02e0"-"\u02e4",
          "\u02ec",  "\u02ee",  "\u0370"-"\u0374",  "\u0376"-"\u0377",  "\u037a"-"\u037d",  "\u037f",  "\u0386",
          "\u0388"-"\u038a",  "\u038c",  "\u038e"-"\u03a1",  "\u03a3"-"\u03f5",  "\u03f7"-"\u0481",  "\u048a"-"\u052f",
@@ -1048,6 +1125,8 @@ TOKEN :
 
 TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
 
+TOKEN: { <UNNAMED_PLACEHOLDER: "_" > }
+
 
 /*************************************************************************************************************
  * THE JAVA LANGUAGE GRAMMAR STARTS HERE                                                                     *
@@ -1197,14 +1276,21 @@ ImportDeclaration ImportDeclaration():
     Name name;
     boolean isStatic = false;
     boolean isAsterisk = false;
+    boolean isModule = false;
     JavaToken begin;
 }
 {
     "import" {begin = token();}
     [ "static" { isStatic = true; } ]
-    name = Name()
+    (
+        LOOKAHEAD(3)
+        "module" { isModule = true; }
+        name = Name()
+      |
+        name = Name()
+    )
     [ "." "*" { isAsterisk = true; } ] ";"
-    { return new ImportDeclaration(range(begin, token()), name, isStatic, isAsterisk); }
+    { return new ImportDeclaration(range(begin, token()), name, isStatic, isAsterisk, isModule); }
 }
 
 /*
@@ -1866,7 +1952,6 @@ CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modif
     SimpleName name;
     Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
     NodeList<ReferenceType> throws_ = emptyNodeList();
-    ExplicitConstructorInvocationStmt exConsInv = null;
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
@@ -1883,17 +1968,10 @@ CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modif
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
     "{" { blockBegin=token(); }
-    [
-        LOOKAHEAD(ExplicitConstructorInvocation())
-        exConsInv = ExplicitConstructorInvocation()
-    ]
     stmts = Statements()
     "}"
 
     {
-    if (exConsInv != null) {
-        stmts = prepend(stmts, exConsInv);
-    }
     return new CompactConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, new BlockStmt(range(blockBegin, token()), stmts));
 }
 }
@@ -2432,9 +2510,11 @@ Name ReceiverParameterId():
  *         TypeIdentifier
  * }</pre>
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-ConstructorBody
  * <pre>{@code
  *     ConstructorBody:
- *         { [ExplicitConstructorInvocation] [BlockStatements] }
+ *         { [BlockStatements] ConstructorInvocation [BlockStatements] }
+ *         { [BlockStatements] }
  * }</pre>
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7.1
  * <pre>{@code
@@ -2451,7 +2531,6 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
     SimpleName name;
     Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
     NodeList<ReferenceType> throws_ = emptyNodeList();
-    ExplicitConstructorInvocationStmt exConsInv = null;
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
@@ -2468,17 +2547,10 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
     "{" { blockBegin=token(); }
-    [
-        LOOKAHEAD(ExplicitConstructorInvocation())
-        exConsInv = ExplicitConstructorInvocation()
-    ]
     stmts = Statements()
     "}"
 
     {
-        if (exConsInv != null) {
-            stmts = prepend(stmts, exConsInv);
-        }
         return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);
     }
 }
@@ -2985,7 +3057,7 @@ String Identifier():
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
-        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> |
+        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> | "_" | <ASSERT> |
         // An actual plain old identifier
         <IDENTIFIER>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
@@ -3316,12 +3388,49 @@ Expression EqualityExpression():
     { return ret; }
 }
 
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * <pre>{@code
+ *     Pattern:
+ *       TypePattern
+ *       RecordPattern
+ * }<pre>
+ */
 PatternExpr PatternExpression():
 {
-    PatternExpr ret;
+  PatternExpr ret;
 }
 {
-    ret = TypePatternExpression()
+	(
+		LOOKAHEAD(TypePatternExpression())
+		ret = TypePatternExpression()
+	  |
+	    ret = RecordPatternExpression()
+	)
+    { return ret; }
+}
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * https://openjdk.org/jeps/456
+ * <pre>{@code
+ *     ComponentPattern:
+ *       Pattern
+ *       MatchAllPattern
+ * }<pre>
+ */
+ComponentPatternExpr ComponentPatternExpression():
+{
+    ComponentPatternExpr ret;
+}
+{
+	(
+	    LOOKAHEAD(MatchAllPatternExpression())
+	    ret = MatchAllPatternExpression()
+	  |
+        ret = PatternExpression()
+	)
     { return ret; }
 }
 
@@ -3329,21 +3438,85 @@ PatternExpr PatternExpression():
  * https://openjdk.java.net/jeps/375
  * The instanceof grammar is extended accordingly:
  * <pre>{@code
- *     Pattern:
- *         ReferenceType Identifier
+ *     TypePattern:
+ *         LocalVariableDeclaration
  * }<pre>
  */
 TypePatternExpr TypePatternExpression():
 {
     ModifierHolder modifier;
-    ReferenceType type;
+    Type type;
     SimpleName name;
 }
 {
     modifier = Modifiers()
-    type = ReferenceType(modifier.annotations)
+    type = Type(modifier.annotations)
     name = SimpleName()
     { return new TypePatternExpr(range(type, token()), modifier.modifiers, type, name); }
+}
+
+/**
+ * https://openjdk.org/jeps/440
+ * https://openjdk.org/jeps/456
+ * <pre><code>
+ * RecordPattern:
+ *     ReferenceType ( [ComponentPatternList] )
+ * ComponentPatternList:
+ *     ComponentPattern {, ComponentPattern }
+ * </code></pre>
+ */
+RecordPatternExpr RecordPatternExpression():
+{
+	ModifierHolder modifier;
+	ReferenceType type;
+	NodeList<ComponentPatternExpr> patternList;
+}
+{
+	modifier = Modifiers()
+	type = ReferenceType(modifier.annotations)
+	patternList = PatternList()
+	{ return new RecordPatternExpr(range(type, token()), modifier.modifiers, type, patternList); }
+}
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * https://openjdk.org/jeps/456
+ * <pre>{@code
+ *     MatchAllPattern:
+ *       _
+ * }<pre>
+ */
+MatchAllPatternExpr MatchAllPatternExpression():
+{
+ModifierHolder modifier;
+}
+{
+    modifier = Modifiers()
+    "_"
+    { return new MatchAllPatternExpr(range(token(), token()), modifier.modifiers); }
+}
+
+/**
+ * https://openjdk.org/jeps/440
+ * <pre><code>
+ * PatternList:
+ *     Pattern {, Pattern }
+ * </code></pre>
+ */
+NodeList<ComponentPatternExpr> PatternList():
+{
+    ComponentPatternExpr pattern;
+	NodeList<ComponentPatternExpr> ret = new NodeList<>();
+}
+{
+	"("
+    pattern = ComponentPatternExpression() { ret.add(pattern); }
+    (
+        ","
+        pattern = ComponentPatternExpression() { ret.add(pattern); }
+    )*
+	")"
+    { return ret; }
 }
 
 
@@ -3374,7 +3547,10 @@ Expression InstanceOfExpression():
         (
             LOOKAHEAD(PatternExpression())
             pattern = PatternExpression()
-            { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType(), pattern); }
+            // From the JLS https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-Pattern, the type of
+            // a top-level pattern must be a reference type. This means that converting the pattern type to a
+            // reference type here is always safe if the code being parsed compiles.
+            { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType().asReferenceType(), pattern); }
          |
             type = AnnotatedReferenceType()
             { ret = new InstanceOfExpr(range(ret, token()), ret, type, null); }
@@ -4217,7 +4393,7 @@ Statement Statement():
     try {
         (
             LOOKAHEAD(2) ret = LabeledStatement()
-            | ret = AssertStatement()
+            | LOOKAHEAD(3) ret = AssertStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
             | ret = Block()
             | ret = EmptyStatement()
@@ -4361,7 +4537,7 @@ Statement BlockStatement():
 {
     try {
         (
-            LOOKAHEAD( Modifiers() ("class" | "interface") ) // TODO/FIXME: Is this a bug in the grammar? JLS specifies class or enum, not interface.
+            LOOKAHEAD( Modifiers() ("class" | "interface") ) // JLS specifies local class. Since java 16 local enum or interface are allowed.
             modifier = Modifiers()
             typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl, token()), typeDecl); }
          |
@@ -4375,10 +4551,23 @@ Statement BlockStatement():
             LOOKAHEAD( YieldStatement() )
             ret = YieldStatement()
          |
+         	// try assert statement separate from more general Statement() because assert can be confused with VariableDeclarationExpression sometimes
+            LOOKAHEAD( AssertStatement() )
+            ret = AssertStatement()
+         |
             LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()
             ";"
             { ret = new ExpressionStmt(range(expr, token()), expr); }
+         |
+            // In Java >= 25, explicit constructor invocations are allowed anywhere in the body of a constructor
+            // Adding support for that here isn't 100% correct, since this would allow multiple constructor invocations
+            // in a constructor body or block not in a constructor body, but handling this correctly would require
+            // larger changes through the grammar due to simplifications made elsewhere.
+            // Handling it here should not be a problem since we assume input code compiles. The compiler would have
+            // already caught the incorrect cases above.
+            LOOKAHEAD( ExplicitConstructorInvocation() )
+            ret = ExplicitConstructorInvocation()
          |
             ret = Statement()
         )
@@ -4611,6 +4800,7 @@ SwitchEntry SwitchEntry():
     JavaToken begin;
     SwitchEntry ret;
     Statement stmt = null;
+    Expression expr = null;
     boolean isDefault = false;
     Expression guard = null;
 }
@@ -4638,7 +4828,7 @@ SwitchEntry SwitchEntry():
             * This lookahead is necessary to avoid ambiguity with the ConditionalExpression branch
             * below.
             */
-            LOOKAHEAD(3)
+            LOOKAHEAD(PatternExpression())
             label = PatternExpression() { labels = add(labels, label); }
             [
               "when"
@@ -4661,7 +4851,7 @@ SwitchEntry SwitchEntry():
      |
         "->"
         (
-            stmt = StatementExpression()
+            stmt = SwitchEntryExpression()
             {
                 TokenRange r=range(begin, token());
                 stmts.add(stmt);
@@ -4684,6 +4874,36 @@ SwitchEntry SwitchEntry():
         )
     )
     { return ret; }
+}
+
+/**
+* This method provides special handling for the case
+*
+*<pre>{@code
+*     SwitchRule:
+*         SwitchLabel -> Expression ;
+* }</pre}
+*
+* for switch entries in the JLS. The expression in the entry body is
+* represented as an ExpressionStmt in JavaParser, but the regular
+* StatementExpression() production cannot be used since that only
+* supports a subset of expressions while any expression is supported
+* in the entry body.
+*/
+ExpressionStmt SwitchEntryExpression():
+{
+    Expression expr;
+}
+{
+    expr = Expression()
+    ";"
+    {
+        TokenRange r = expr.getTokenRange().orElse(null);
+        if (r != null) {
+            r = r.withEnd(token());
+        }
+        return new ExpressionStmt(r, expr);
+    }
 }
 
 /**
@@ -5545,6 +5765,10 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
  *         (one of)
  *         Annotation public
  *         abstract
+ *     ClassDeclaration:
+ *         NormalClassDeclaration
+ *         EnumDeclaration
+ *         RecordDeclaration
  * }<pre>
  * For Convenience:
  * <pre>{@code
@@ -5560,6 +5784,10 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
 {
     modifier = Modifiers()
     (
+        // This case must be checked before AnnotationTypeMemberDeclaration since the prefixes are the same
+        LOOKAHEAD(RecordDeclaration())
+        ret = RecordDeclaration(modifier)
+     |
         LOOKAHEAD(Type() Identifier() "(")
         ret = AnnotationTypeMemberDeclaration(modifier)
      |

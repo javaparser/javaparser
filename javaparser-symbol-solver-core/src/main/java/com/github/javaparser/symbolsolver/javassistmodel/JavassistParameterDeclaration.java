@@ -48,11 +48,10 @@ public class JavassistParameterDeclaration implements ResolvedParameterDeclarati
 
     @Override
     public String toString() {
-        return "JavassistParameterDeclaration{" +
-                "type=" + type +
-                ", typeSolver=" + typeSolver +
-                ", variadic=" + variadic +
-                '}';
+        return "JavassistParameterDeclaration{" + "type="
+                + type + ", typeSolver="
+                + typeSolver + ", variadic="
+                + variadic + '}';
     }
 
     @Override

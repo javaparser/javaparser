@@ -21,16 +21,16 @@
 
 package com.github.javaparser.steps;
 
+import static com.github.javaparser.Range.range;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import org.jbehave.core.annotations.BeforeScenario;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-
-import static com.github.javaparser.Range.range;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PositionRangeSteps {
 

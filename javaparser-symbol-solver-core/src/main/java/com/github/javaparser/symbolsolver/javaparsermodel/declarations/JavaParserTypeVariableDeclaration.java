@@ -34,7 +34,6 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-
 import java.util.*;
 
 /**
@@ -76,9 +75,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
 
     @Override
     public String toString() {
-        return "JavaParserTypeVariableDeclaration{" +
-                wrappedNode.getName() +
-                '}';
+        return "JavaParserTypeVariableDeclaration{" + wrappedNode.getName() + '}';
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes) {
@@ -92,7 +89,8 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     @Override
     public boolean isAssignableBy(ResolvedType type) {
         if (type.isTypeVariable()) {
-            throw new UnsupportedOperationException("Is this type variable declaration assignable by " + type.describe());
+            throw new UnsupportedOperationException(
+                    "Is this type variable declaration assignable by " + type.describe());
         }
         throw new UnsupportedOperationException("Is this type variable declaration assignable by " + type);
     }
@@ -127,16 +125,16 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
         }
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         for (ClassOrInterfaceType type : wrappedNode.getTypeBound()) {
-                try {
-                    ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(type);
-                    ancestors.add(resolvedType.asReferenceType());
-                } catch (UnsolvedSymbolException e) {
-                    if (!acceptIncompleteList) {
-                        // Only throw if an incomplete ancestor list is unacceptable.
-                        throw e;
-                    }
+            try {
+                ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(type);
+                ancestors.add(resolvedType.asReferenceType());
+            } catch (UnsolvedSymbolException e) {
+                if (!acceptIncompleteList) {
+                    // Only throw if an incomplete ancestor list is unacceptable.
+                    throw e;
                 }
             }
+        }
         return ancestors;
     }
 
@@ -203,5 +201,4 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
-
 }

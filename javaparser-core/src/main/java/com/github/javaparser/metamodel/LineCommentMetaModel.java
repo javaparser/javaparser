@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.comments.LineComment;
-
 import java.util.Optional;
 
 /**
@@ -39,6 +38,12 @@ public class LineCommentMetaModel extends CommentMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     LineCommentMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, LineComment.class, "LineComment", "com.github.javaparser.ast.comments", false, false);
+        super(
+                superBaseNodeMetaModel,
+                LineComment.class,
+                "LineComment",
+                "com.github.javaparser.ast.comments",
+                false,
+                false);
     }
 }

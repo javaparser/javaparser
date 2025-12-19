@@ -21,13 +21,13 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.TypeSolver;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * This should not be used to represent fields of parameters.
@@ -50,8 +50,8 @@ public final class JavaParserSymbolDeclaration {
         return new JavaParserVariableDeclaration(variableDeclarator, typeSolver);
     }
 
-    public static JavaParserPatternDeclaration patternVar(TypePatternExpr typePatternExpr, TypeSolver typeSolver) {
-        return new JavaParserPatternDeclaration(typePatternExpr, typeSolver);
+    public static JavaParserTypePatternDeclaration patternVar(TypePatternExpr typePatternExpr, TypeSolver typeSolver) {
+        return new JavaParserTypePatternDeclaration(typePatternExpr, typeSolver);
     }
 
     public static int getParamPos(Parameter parameter) {
@@ -70,5 +70,4 @@ public final class JavaParserSymbolDeclaration {
     private JavaParserSymbolDeclaration() {
         // This private constructor is used to hide the public one
     }
-
 }

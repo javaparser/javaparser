@@ -20,12 +20,13 @@
  */
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 import com.github.javaparser.Problem;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.validator.language_level_validations.UpgradeJavaMessage;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * A simple interface where validators can report found problems.

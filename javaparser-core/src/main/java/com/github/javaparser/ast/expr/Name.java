@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -33,10 +35,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -45,7 +44,7 @@ import static com.github.javaparser.utils.Utils.assertNonEmpty;
  * The rightmost identifier is "identifier",
  * The one to the left of it is "qualifier.identifier", etc.
  * <p>
- * You can construct one from a String with the name(...) method.
+ * You can construct one from a String with the {@link com.github.javaparser.StaticJavaParser#parseName(String)} method.
  *
  * @author Julio Vilmar Gesser
  * @see SimpleName
@@ -102,7 +101,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
-        if (identifier == this.identifier) {
+        if (identifier.equals(this.identifier)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
@@ -120,6 +119,10 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         return identifier;
     }
 
+    public boolean hasQualifier() {
+        return qualifier != null;
+    }
+
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Name> getQualifier() {
         return Optional.ofNullable(qualifier);
@@ -131,8 +134,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
             return this;
         }
         notifyPropertyChange(ObservableProperty.QUALIFIER, this.qualifier, qualifier);
-        if (this.qualifier != null)
-            this.qualifier.setParentNode(null);
+        if (this.qualifier != null) this.qualifier.setParentNode(null);
         this.qualifier = qualifier;
         setAsParentNodeOf(qualifier);
         return this;

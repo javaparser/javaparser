@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-
 import java.util.Optional;
 
 /**
@@ -39,7 +38,13 @@ public class BooleanLiteralExprMetaModel extends LiteralExprMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     BooleanLiteralExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, BooleanLiteralExpr.class, "BooleanLiteralExpr", "com.github.javaparser.ast.expr", false, false);
+        super(
+                superBaseNodeMetaModel,
+                BooleanLiteralExpr.class,
+                "BooleanLiteralExpr",
+                "com.github.javaparser.ast.expr",
+                false,
+                false);
     }
 
     public PropertyMetaModel valuePropertyMetaModel;

@@ -28,7 +28,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LineCommentMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -107,14 +106,14 @@ public class LineComment extends Comment {
     public Optional<LineComment> toLineComment() {
         return Optional.of(this);
     }
-    
+
     @Override
-	public String getHeader() {
-		return "//";
-	}
-	
-	@Override
-	public String getFooter() {
-		return "";
-	}
+    public String getHeader() {
+        return "//";
+    }
+
+    @Override
+    public String getFooter() {
+        return "";
+    }
 }

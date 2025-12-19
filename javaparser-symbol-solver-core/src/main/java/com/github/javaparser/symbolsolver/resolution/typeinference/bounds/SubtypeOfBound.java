@@ -21,14 +21,13 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
+
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
 /**
  * S &lt;: T, where at least one of S or T is an inference variable: S is a subtype of T
@@ -60,10 +59,7 @@ public class SubtypeOfBound extends Bound {
 
     @Override
     public String toString() {
-        return "SubtypeOfBound{" +
-                "s=" + s +
-                ", t=" + t +
-                '}';
+        return "SubtypeOfBound{" + "s=" + s + ", t=" + t + '}';
     }
 
     @Override

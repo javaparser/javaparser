@@ -31,22 +31,16 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Arrays;
+import java.util.Collection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-class Issue235Test extends AbstractResolutionTest{
+class Issue235Test extends AbstractResolutionTest {
 
     static Collection<String> data() {
-        return Arrays.asList(
-                "new_Bar_Baz_direct",
-                "new_Bar_Baz",
-                "new_Bar",
-                "new_Foo_Bar"
-        );
+        return Arrays.asList("new_Bar_Baz_direct", "new_Bar_Baz", "new_Bar", "new_Foo_Bar");
     }
 
     @ParameterizedTest

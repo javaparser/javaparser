@@ -315,7 +315,7 @@ abstract class GeneratedJavaParserBase {
         if (ret instanceof EnclosedExpr) {
             Expression inner = ((EnclosedExpr) ret).getInner();
             SimpleName id = ((NameExpr) inner).getName();
-            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().orElse(null), new NodeList<>(), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
+            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(id.getTokenRange().orElse(null), new NodeList<>(), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
             ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();
@@ -328,6 +328,7 @@ abstract class GeneratedJavaParserBase {
             CastExpr castExpr = (CastExpr) ret;
             Expression inner = generateLambda(castExpr.getExpression(), lambdaBody);
             castExpr.setExpression(inner);
+            propagateRangeGrowthOnRight(castExpr, inner);
         } else {
             addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
         }

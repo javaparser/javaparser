@@ -25,7 +25,6 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.SwitchEntry;
-
 import java.util.Optional;
 
 /**

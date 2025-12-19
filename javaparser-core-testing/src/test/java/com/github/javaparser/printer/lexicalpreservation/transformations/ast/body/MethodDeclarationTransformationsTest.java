@@ -21,10 +21,18 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
+import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.comments.MarkdownComment;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -37,16 +45,8 @@ import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.utils.LineSeparator;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.StaticJavaParser.parseStatement;
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
 /**
  * Transforming MethodDeclaration and verifying the LexicalPreservation works as expected.
@@ -69,67 +69,67 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
     // JavaDoc
 
-    @Disabled
     @Test
     void removingDuplicateJavaDocComment() {
         // Arrange
-        considerCode("public class MyClass {" + LineSeparator.SYSTEM +
-                LineSeparator.SYSTEM +
-                "  /**" + LineSeparator.SYSTEM +
-                "   * Comment A" + LineSeparator.SYSTEM +
-                "   */" + LineSeparator.SYSTEM +
-                "  public void oneMethod() {" + LineSeparator.SYSTEM +
-                "  }" + LineSeparator.SYSTEM +
-                LineSeparator.SYSTEM +
-                "  /**" + LineSeparator.SYSTEM +
-                "   * Comment A" + LineSeparator.SYSTEM +
-                "   */" + LineSeparator.SYSTEM +
-                "  public void anotherMethod() {" + LineSeparator.SYSTEM +
-                "  }" + LineSeparator.SYSTEM +
-                "}" +
-                LineSeparator.SYSTEM);
+        considerCode("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /**"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /**"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void anotherMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
-        MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
+        MethodDeclaration methodDeclaration =
+                cu.findAll(MethodDeclaration.class).get(1);
 
         // Act
         methodDeclaration.removeComment();
 
         // Assert
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
-        assertEqualsStringIgnoringEol("public class MyClass {\n" +
-                "\n" +
-                "  /**\n" +
-                "   * Comment A\n" +
-                "   */\n" +
-                "  public void oneMethod() {\n" +
-                "  }\n" +
-                "\n" +
-                "  public void anotherMethod() {\n" +
-                "  }\n" +
-                "}\n", result);
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n" + "\n"
+                        + "  /**\n"
+                        + "   * Comment A\n"
+                        + "   */\n"
+                        + "  public void oneMethod() {\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  public void anotherMethod() {\n"
+                        + "  }\n"
+                        + "}\n",
+                result);
     }
 
     @Disabled
     @Test
     void replacingDuplicateJavaDocComment() {
         // Arrange
-        considerCode("public class MyClass {" + LineSeparator.SYSTEM +
-                LineSeparator.SYSTEM +
-                "  /**" + LineSeparator.SYSTEM +
-                "   * Comment A" + LineSeparator.SYSTEM +
-                "   */" + LineSeparator.SYSTEM +
-                "  public void oneMethod() {" + LineSeparator.SYSTEM +
-                "  }" + LineSeparator.SYSTEM +
-                LineSeparator.SYSTEM +
-                "  /**" + LineSeparator.SYSTEM +
-                "   * Comment A" + LineSeparator.SYSTEM +
-                "   */" + LineSeparator.SYSTEM +
-                "  public void anotherMethod() {" + LineSeparator.SYSTEM +
-                "  }" + LineSeparator.SYSTEM +
-                "}" +
-                LineSeparator.SYSTEM);
+        considerCode("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /**"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /**"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void anotherMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
-        MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
+        MethodDeclaration methodDeclaration =
+                cu.findAll(MethodDeclaration.class).get(1);
 
         // Act
         Javadoc javadoc = new Javadoc(JavadocDescription.parseText("Change Javadoc"));
@@ -137,62 +137,157 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
         // Assert
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
-        assertEqualsStringIgnoringEol("public class MyClass {\n" +
-                "\n" +
-                "  /**\n" +
-                "   * Comment A\n" +
-                "   */\n" +
-                "  public void oneMethod() {\n" +
-                "  }\n" +
-                "\n" +
-                "  /**\n" +
-                "   * Change Javadoc\n" +
-                "   */\n" +
-                "  public void anotherMethod() {\n" +
-                "  }\n" +
-                "}\n", result);
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n" + "\n"
+                        + "  /**\n"
+                        + "   * Comment A\n"
+                        + "   */\n"
+                        + "  public void oneMethod() {\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  /**\n"
+                        + "   * Change Javadoc\n"
+                        + "   */\n"
+                        + "  public void anotherMethod() {\n"
+                        + "  }\n"
+                        + "}\n",
+                result);
+    }
+
+    @Test
+    void replacingDuplicateMarkdownComment() {
+        // Arrange
+        considerCode("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  ///"
+                + LineSeparator.SYSTEM + "  /// Comment A"
+                + LineSeparator.SYSTEM + "  ///"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  ///"
+                + LineSeparator.SYSTEM + "  /// Comment A"
+                + LineSeparator.SYSTEM + "  ///"
+                + LineSeparator.SYSTEM + "  public void anotherMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
+
+        MethodDeclaration methodDeclaration =
+                cu.findAll(MethodDeclaration.class).get(1);
+
+        // Act
+        methodDeclaration.setComment(new MarkdownComment("///\n  /// Change Markdown\n  ///"));
+
+        // Assert
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n" + "\n"
+                        + "  ///\n"
+                        + "  /// Comment A\n"
+                        + "  ///\n"
+                        + "  public void oneMethod() {\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  ///\n"
+                        + "  /// Change Markdown\n"
+                        + "  ///\n"
+                        + "  public void anotherMethod() {\n"
+                        + "  }\n"
+                        + "}\n",
+                result);
+    }
+
+    @Test
+    void removingMarkdownComment() {
+        // Arrange
+        considerCode("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  ///"
+                + LineSeparator.SYSTEM + "  /// Comment A"
+                + LineSeparator.SYSTEM + "  ///"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
+
+        MethodDeclaration methodDeclaration =
+                cu.findAll(MethodDeclaration.class).get(0);
+
+        // Act
+        methodDeclaration.removeComment();
+        // Assert
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n" + "\n" + "  public void oneMethod() {\n" + "  }\n" + "}\n", result);
+    }
+
+    @Test
+    void addingMarkdownComment() {
+        // Arrange
+        considerCode("public class MyClass {"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
+
+        MethodDeclaration methodDeclaration =
+                cu.findAll(MethodDeclaration.class).get(0);
+
+        // Act
+        MarkdownComment markdownComment = new MarkdownComment("///\n  /// Comment A\n  ///");
+        methodDeclaration.setComment(markdownComment);
+        // Assert
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n"
+                        + "  ///\n"
+                        + "  /// Comment A\n"
+                        + "  ///\n"
+                        + "  public void oneMethod() {\n"
+                        + "  }\n"
+                        + "}\n",
+                result);
     }
 
     // Comments
 
-    @Disabled
     @Test
     void removingDuplicateComment() {
         // Arrange
-        considerCode("public class MyClass {" + LineSeparator.SYSTEM +
-                LineSeparator.SYSTEM +
-                "  /*" + LineSeparator.SYSTEM +
-                "   * Comment A" + LineSeparator.SYSTEM +
-                "   */" + LineSeparator.SYSTEM +
-                "  public void oneMethod() {" + LineSeparator.SYSTEM +
-                "  }" + LineSeparator.SYSTEM +
-                LineSeparator.SYSTEM +
-                "  /*" + LineSeparator.SYSTEM +
-                "   * Comment A" + LineSeparator.SYSTEM +
-                "   */" + LineSeparator.SYSTEM +
-                "  public void anotherMethod() {" + LineSeparator.SYSTEM +
-                "  }" + LineSeparator.SYSTEM +
-                "}" +
-                LineSeparator.SYSTEM);
+        considerCode("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /*"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /*"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void anotherMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
-        MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
+        MethodDeclaration methodDeclaration =
+                cu.findAll(MethodDeclaration.class).get(1);
 
         // Act
         methodDeclaration.removeComment();
 
         // Assert
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
-        assertEqualsStringIgnoringEol("public class MyClass {\n" +
-                "\n" +
-                "  /*\n" +
-                "   * Comment A\n" +
-                "   */\n" +
-                "  public void oneMethod() {\n" +
-                "  }\n" +
-                "\n" +
-                "  public void anotherMethod() {\n" +
-                "  }\n" +
-                "}\n", result);
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n" + "\n"
+                        + "  /*\n"
+                        + "   * Comment A\n"
+                        + "   */\n"
+                        + "  public void oneMethod() {\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  public void anotherMethod() {\n"
+                        + "  }\n"
+                        + "}\n",
+                result);
     }
 
     // Modifiers
@@ -227,43 +322,30 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
     @Test
     void removingModifiersWithExistingAnnotations() {
-        considerCode(
-                "class X {" + LineSeparator.SYSTEM +
-                        "  @Test" + LineSeparator.SYSTEM +
-                        "  public void testCase() {" + LineSeparator.SYSTEM +
-                        "  }" + LineSeparator.SYSTEM +
-                        "}" + LineSeparator.SYSTEM
-        );
+        considerCode("class X {" + LineSeparator.SYSTEM + "  @Test"
+                + LineSeparator.SYSTEM + "  public void testCase() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
         cu.getType(0).getMethods().get(0).setModifiers(new NodeList<>());
 
         String result = LexicalPreservingPrinter.print(cu);
-        assertEqualsStringIgnoringEol("class X {\n" +
-                "  @Test\n" +
-                "  void testCase() {\n" +
-                "  }\n" +
-                "}\n", result);
+        assertEqualsStringIgnoringEol("class X {\n" + "  @Test\n" + "  void testCase() {\n" + "  }\n" + "}\n", result);
     }
-    
+
     @Test
     void removingModifiersWithExistingAnnotations_withVariableNumberOfSeparator() {
-        considerCode(
-                "class X {" + LineSeparator.SYSTEM +
-                        "  @Test" + LineSeparator.SYSTEM +
-                        "  public      void testCase() {" + LineSeparator.SYSTEM +
-                        "  }" + LineSeparator.SYSTEM +
-                        "}" + LineSeparator.SYSTEM
-        );
+        considerCode("class X {" + LineSeparator.SYSTEM + "  @Test"
+                + LineSeparator.SYSTEM + "  public      void testCase() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
         cu.getType(0).getMethods().get(0).setModifiers(new NodeList<>());
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
-        assertEqualsStringIgnoringEol(
-        		"class X {\n" +
-                "  @Test\n" +
-                "  void testCase() {\n" +
-                "  }\n" +
-                "}\n", result);
+        assertEqualsStringIgnoringEol("class X {\n" + "  @Test\n" + "  void testCase() {\n" + "  }\n" + "}\n", result);
     }
 
     @Test
@@ -282,22 +364,17 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
     @Test
     void replacingModifiersWithExistingAnnotations() {
-        considerCode(
-                "class X {" + LineSeparator.SYSTEM +
-                        "  @Test" + LineSeparator.SYSTEM +
-                        "  public void testCase() {" + LineSeparator.SYSTEM +
-                        "  }" + LineSeparator.SYSTEM +
-                        "}" + LineSeparator.SYSTEM
-        );
+        considerCode("class X {" + LineSeparator.SYSTEM + "  @Test"
+                + LineSeparator.SYSTEM + "  public void testCase() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
         cu.getType(0).getMethods().get(0).setModifiers(createModifierList(PROTECTED));
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
-        assertEqualsStringIgnoringEol("class X {\n" +
-                "  @Test\n" +
-                "  protected void testCase() {\n" +
-                "  }\n" +
-                "}\n", result);
+        assertEqualsStringIgnoringEol(
+                "class X {\n" + "  @Test\n" + "  protected void testCase() {\n" + "  }\n" + "}\n", result);
     }
 
     // Parameters
@@ -344,76 +421,62 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     // Annotations
     @Test
     void addingToExistingAnnotations() {
-        considerCode(
-                "class X {" + LineSeparator.SYSTEM +
-                        "  @Test" + LineSeparator.SYSTEM +
-                        "  public void testCase() {" + LineSeparator.SYSTEM +
-                        "  }" + LineSeparator.SYSTEM +
-                        "}" + LineSeparator.SYSTEM
-        );
+        considerCode("class X {" + LineSeparator.SYSTEM + "  @Test"
+                + LineSeparator.SYSTEM + "  public void testCase() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
-        cu.getType(0).getMethods().get(0).addSingleMemberAnnotation(
-                "org.junit.Ignore",
-                new StringLiteralExpr("flaky test"));
+        cu.getType(0)
+                .getMethods()
+                .get(0)
+                .addSingleMemberAnnotation("org.junit.Ignore", new StringLiteralExpr("flaky test"));
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
-        assertEqualsStringIgnoringEol("class X {\n" +
-                "  @Test\n" +
-                "  @org.junit.Ignore(\"flaky test\")\n" +
-                "  public void testCase() {\n" +
-                "  }\n" +
-                "}\n", result);
+        assertEqualsStringIgnoringEol(
+                "class X {\n" + "  @Test\n"
+                        + "  @org.junit.Ignore(\"flaky test\")\n"
+                        + "  public void testCase() {\n"
+                        + "  }\n"
+                        + "}\n",
+                result);
     }
 
     @Test
     void addingAnnotationsNoModifiers() {
-        considerCode(
-                "class X {" + LineSeparator.SYSTEM +
-                        "  void testCase() {" + LineSeparator.SYSTEM +
-                        "  }" + LineSeparator.SYSTEM +
-                        "}" + LineSeparator.SYSTEM
-        );
+        considerCode("class X {" + LineSeparator.SYSTEM + "  void testCase() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
         cu.getType(0).getMethods().get(0).addMarkerAnnotation("Test");
         cu.getType(0).getMethods().get(0).addMarkerAnnotation("Override");
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
-        assertEqualsStringIgnoringEol("class X {\n" +
-                "  @Test\n" +
-                "  @Override\n" +
-                "  void testCase() {\n" +
-                "  }\n" +
-                "}\n", result);
+        assertEqualsStringIgnoringEol(
+                "class X {\n" + "  @Test\n" + "  @Override\n" + "  void testCase() {\n" + "  }\n" + "}\n", result);
     }
 
     @Test
     void replacingAnnotations() {
-        considerCode(
-                "class X {" + LineSeparator.SYSTEM +
-                        "  @Override" + LineSeparator.SYSTEM +
-                        "  public void testCase() {" + LineSeparator.SYSTEM +
-                        "  }" + LineSeparator.SYSTEM +
-                        "}" + LineSeparator.SYSTEM
-        );
+        considerCode("class X {" + LineSeparator.SYSTEM + "  @Override"
+                + LineSeparator.SYSTEM + "  public void testCase() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
         cu.getType(0).getMethods().get(0).setAnnotations(new NodeList<>(new MarkerAnnotationExpr("Test")));
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "class X {\n" +
-                        "  @Test\n" +
-                        "  public void testCase() {\n" +
-                        "  }\n" +
-                        "}\n", result);
+                "class X {\n" + "  @Test\n" + "  public void testCase() {\n" + "  }\n" + "}\n", result);
     }
 
     @Test
     void addingAnnotationsShort() {
         MethodDeclaration it = consider("void testMethod(){}");
         it.addMarkerAnnotation("Override");
-        assertTransformedToString(
-                "@Override" + LineSeparator.SYSTEM +
-                        "void testMethod(){}", it);
+        assertTransformedToString("@Override" + LineSeparator.SYSTEM + "void testMethod(){}", it);
     }
 
     // This test case was disabled because we cannot resolve this case for now
@@ -422,43 +485,31 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Disabled
     @Test
     void removingAnnotations() {
-        considerCode(
-                "class X {" + LineSeparator.SYSTEM +
-                        "  @Override" + LineSeparator.SYSTEM +
-                        "  public void testCase() {" + LineSeparator.SYSTEM +
-                        "  }" + LineSeparator.SYSTEM +
-                        "}" + LineSeparator.SYSTEM
-        );
+        considerCode("class X {" + LineSeparator.SYSTEM + "  @Override"
+                + LineSeparator.SYSTEM + "  public void testCase() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
         cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
 
         String result = LexicalPreservingPrinter.print(cu);
-        assertEqualsStringIgnoringEol(
-                "class X {\n" +
-                        "  public void testCase() {\n" +
-                        "  }\n" +
-                        "}\n", result);
+        assertEqualsStringIgnoringEol("class X {\n" + "  public void testCase() {\n" + "  }\n" + "}\n", result);
     }
 
     @Disabled
     @Test
     void removingAnnotationsWithSpaces() {
-        considerCode(
-                "class X {" + LineSeparator.SYSTEM +
-                        "  @Override " + LineSeparator.SYSTEM +
-                        "  public void testCase() {" + LineSeparator.SYSTEM +
-                        "  }" + LineSeparator.SYSTEM +
-                        "}" + LineSeparator.SYSTEM
-        );
+        considerCode("class X {" + LineSeparator.SYSTEM + "  @Override "
+                + LineSeparator.SYSTEM + "  public void testCase() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
         cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
 
         String result = LexicalPreservingPrinter.print(cu);
-        assertEqualsStringIgnoringEol(
-                "class X {\n" +
-                        "  public void testCase() {\n" +
-                        "  }\n" +
-                        "}\n", result);
+        assertEqualsStringIgnoringEol("class X {\n" + "  public void testCase() {\n" + "  }\n" + "}\n", result);
     }
 
     @Test
@@ -470,39 +521,35 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
     @Test
     public void addingModifiersWithExistingAnnotations() {
-        considerCode(
-                "class X {" + LineSeparator.SYSTEM +
-                        "  @Test" + LineSeparator.SYSTEM +
-                        "  void testCase() {" + LineSeparator.SYSTEM +
-                        "  }" + LineSeparator.SYSTEM +
-                        "}" + LineSeparator.SYSTEM
-        );
+        considerCode("class X {" + LineSeparator.SYSTEM + "  @Test"
+                + LineSeparator.SYSTEM + "  void testCase() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
-        cu.getType(0).getMethods().get(0).addModifier(Modifier.finalModifier().getKeyword(), Modifier.publicModifier().getKeyword());
+        cu.getType(0)
+                .getMethods()
+                .get(0)
+                .addModifier(
+                        Modifier.finalModifier().getKeyword(),
+                        Modifier.publicModifier().getKeyword());
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
-        assertEqualsStringIgnoringEol("class X {\n" +
-                "  @Test\n" +
-                "  final public void testCase() {\n" +
-                "  }\n" +
-                "}\n", result);
+        assertEqualsStringIgnoringEol(
+                "class X {\n" + "  @Test\n" + "  final public void testCase() {\n" + "  }\n" + "}\n", result);
     }
 
     @Test
     public void parseAndPrintAnonymousClassExpression() {
-        Expression expression = parseExpression("new Object() {" + LineSeparator.SYSTEM +
-                "}");
-         String expected = "new Object() {" + LineSeparator.SYSTEM +
-                "}";
+        Expression expression = parseExpression("new Object() {" + LineSeparator.SYSTEM + "}");
+        String expected = "new Object() {" + LineSeparator.SYSTEM + "}";
         assertTransformedToString(expected, expression);
     }
 
     @Test
     public void parseAndPrintAnonymousClassStatement() {
-        Statement statement = parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM +
-                "};");
-        String expected = "Object anonymous = new Object() {" + LineSeparator.SYSTEM +
-                "};";
+        Statement statement = parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM + "};");
+        String expected = "Object anonymous = new Object() {" + LineSeparator.SYSTEM + "};";
         assertTransformedToString(expected, statement);
     }
 
@@ -510,18 +557,15 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     public void replaceBodyShouldNotBreakAnonymousClasses() {
         MethodDeclaration it = consider("public void method() { }");
         it.getBody().ifPresent(body -> {
-            Statement statement = parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM +
-                    "};");
+            Statement statement = parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM + "};");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
             body.setStatements(statements);
         });
 
-        String expected = "public void method() {" + LineSeparator.SYSTEM +
-                "    Object anonymous = new Object() {" + LineSeparator.SYSTEM +
-                "    };" + LineSeparator.SYSTEM +
-                "}";
+        String expected = "public void method() {" + LineSeparator.SYSTEM + "    Object anonymous = new Object() {"
+                + LineSeparator.SYSTEM + "    };"
+                + LineSeparator.SYSTEM + "}";
         assertTransformedToString(expected, it);
     }
-
 }

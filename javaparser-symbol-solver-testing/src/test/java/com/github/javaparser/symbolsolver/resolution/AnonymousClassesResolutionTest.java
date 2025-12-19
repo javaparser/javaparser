@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -30,14 +33,10 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.io.IOException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class AnonymousClassesResolutionTest extends AbstractResolutionTest {
 
@@ -50,8 +49,7 @@ class AnonymousClassesResolutionTest extends AbstractResolutionTest {
 
         ResolvedReferenceTypeDeclaration cd = mock(ResolvedReferenceTypeDeclaration.class);
         when(cd.asReferenceType()).thenReturn(cd);
-        memoryTypeSolver.addDeclaration("org.springframework.transaction.support.TransactionCallbackWithoutResult",
-                cd);
+        memoryTypeSolver.addDeclaration("org.springframework.transaction.support.TransactionCallbackWithoutResult", cd);
 
         typeSolver.add(memoryTypeSolver);
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
@@ -68,16 +66,14 @@ class AnonymousClassesResolutionTest extends AbstractResolutionTest {
     void solveAnonymousClassMethodClass() {
         CompilationUnit cu = parseSample("AnonymousClassMethodClass");
 
-        cu.accept(new VoidVisitorAdapter<Object>() {
+        cu.accept(
+                new VoidVisitorAdapter<Object>() {
 
-
-            @Override
-            public void visit(MethodCallExpr m, Object arg) {
-                m.getScope().get().asNameExpr().resolve();
-            }
-        }, null);
-
+                    @Override
+                    public void visit(MethodCallExpr m, Object arg) {
+                        m.getScope().get().asNameExpr().resolve();
+                    }
+                },
+                null);
     }
-
-
 }

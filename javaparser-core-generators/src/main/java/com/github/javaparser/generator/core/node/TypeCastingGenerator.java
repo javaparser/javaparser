@@ -21,6 +21,10 @@
 
 package com.github.javaparser.generator.core.node;
 
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.set;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -29,14 +33,9 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.set;
 
 public class TypeCastingGenerator extends NodeGenerator {
     private final Set<BaseNodeMetaModel> baseNodes = set(
@@ -45,18 +44,19 @@ public class TypeCastingGenerator extends NodeGenerator {
             JavaParserMetaModel.typeMetaModel,
             JavaParserMetaModel.moduleDirectiveMetaModel,
             JavaParserMetaModel.bodyDeclarationMetaModel,
-            JavaParserMetaModel.commentMetaModel
-    );
+            JavaParserMetaModel.commentMetaModel);
 
     public TypeCastingGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);
     }
 
     @Override
-    protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) throws Exception {
+    protected void generateNode(
+            BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid)
+            throws Exception {
         Pair<CompilationUnit, ClassOrInterfaceDeclaration> baseCode = null;
         for (BaseNodeMetaModel baseNode : baseNodes) {
-            if(nodeMetaModel == baseNode) {
+            if (nodeMetaModel == baseNode) {
                 // We adjust the base models from the child nodes,
                 // so we don't do anything when we *are* the base model.
                 return;
@@ -81,11 +81,19 @@ public class TypeCastingGenerator extends NodeGenerator {
         generateIfType(nodeMetaModel, nodeCu, baseCu, nodeCoid, baseCoid, typeName);
     }
 
-    private void generateAsType(BaseNodeMetaModel nodeMetaModel, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+    private void generateAsType(
+            BaseNodeMetaModel nodeMetaModel,
+            CompilationUnit baseCu,
+            ClassOrInterfaceDeclaration nodeCoid,
+            ClassOrInterfaceDeclaration baseCoid,
+            String typeName) {
         baseCu.addImport("com.github.javaparser.utils.CodeGenerationUtils.f", true, false);
 
-        final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s as%s() { throw new IllegalStateException(f(\"%%s is not %s, it is %%s\", this, this.getClass().getSimpleName())); }", typeName, typeName, typeName));
-        final MethodDeclaration asTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public %s as%s() { return this; }", typeName, typeName));
+        final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f(
+                "public %s as%s() { throw new IllegalStateException(f(\"%%s is not %s, it is %%s\", this, this.getClass().getSimpleName())); }",
+                typeName, typeName, typeName));
+        final MethodDeclaration asTypeNodeMethod = (MethodDeclaration)
+                parseBodyDeclaration(f("@Override public %s as%s() { return this; }", typeName, typeName));
 
         annotateWhenOverridden(nodeMetaModel, asTypeNodeMethod);
 
@@ -93,12 +101,20 @@ public class TypeCastingGenerator extends NodeGenerator {
         addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
     }
 
-    private void generateToType(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+    private void generateToType(
+            BaseNodeMetaModel nodeMetaModel,
+            CompilationUnit nodeCu,
+            CompilationUnit baseCu,
+            ClassOrInterfaceDeclaration nodeCoid,
+            ClassOrInterfaceDeclaration baseCoid,
+            String typeName) {
         baseCu.addImport(Optional.class);
         nodeCu.addImport(Optional.class);
 
-        final MethodDeclaration toTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public Optional<%s> to%s() { return Optional.empty(); }", typeName, typeName, typeName));
-        final MethodDeclaration toTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public Optional<%s> to%s() { return Optional.of(this); }", typeName, typeName));
+        final MethodDeclaration toTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(
+                f("public Optional<%s> to%s() { return Optional.empty(); }", typeName, typeName, typeName));
+        final MethodDeclaration toTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(
+                f("@Override public Optional<%s> to%s() { return Optional.of(this); }", typeName, typeName));
 
         annotateWhenOverridden(nodeMetaModel, toTypeNodeMethod);
 
@@ -106,12 +122,20 @@ public class TypeCastingGenerator extends NodeGenerator {
         addOrReplaceWhenSameSignature(nodeCoid, toTypeNodeMethod);
     }
 
-    private void generateIfType(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+    private void generateIfType(
+            BaseNodeMetaModel nodeMetaModel,
+            CompilationUnit nodeCu,
+            CompilationUnit baseCu,
+            ClassOrInterfaceDeclaration nodeCoid,
+            ClassOrInterfaceDeclaration baseCoid,
+            String typeName) {
         baseCu.addImport(Consumer.class);
         nodeCu.addImport(Consumer.class);
 
-        final MethodDeclaration ifTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { }", typeName, typeName));
-        final MethodDeclaration ifTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { action.accept(this); }", typeName, typeName));
+        final MethodDeclaration ifTypeBaseMethod = (MethodDeclaration)
+                parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { }", typeName, typeName));
+        final MethodDeclaration ifTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(
+                f("public void if%s(Consumer<%s> action) { action.accept(this); }", typeName, typeName));
 
         annotateWhenOverridden(nodeMetaModel, ifTypeNodeMethod);
 
@@ -119,9 +143,16 @@ public class TypeCastingGenerator extends NodeGenerator {
         addOrReplaceWhenSameSignature(nodeCoid, ifTypeNodeMethod);
     }
 
-    private void generateIsType(BaseNodeMetaModel nodeMetaModel, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
-        final MethodDeclaration baseIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("public boolean is%s() { return false; }", typeName));
-        final MethodDeclaration overriddenIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public boolean is%s() { return true; }", typeName));
+    private void generateIsType(
+            BaseNodeMetaModel nodeMetaModel,
+            CompilationUnit baseCu,
+            ClassOrInterfaceDeclaration nodeCoid,
+            ClassOrInterfaceDeclaration baseCoid,
+            String typeName) {
+        final MethodDeclaration baseIsTypeMethod =
+                (MethodDeclaration) parseBodyDeclaration(f("public boolean is%s() { return false; }", typeName));
+        final MethodDeclaration overriddenIsTypeMethod = (MethodDeclaration)
+                parseBodyDeclaration(f("@Override public boolean is%s() { return true; }", typeName));
 
         annotateWhenOverridden(nodeMetaModel, overriddenIsTypeMethod);
 

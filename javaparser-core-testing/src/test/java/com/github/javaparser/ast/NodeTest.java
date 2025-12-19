@@ -27,10 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -39,11 +35,19 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.utils.LineSeparator;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 class NodeTest {
     @Test
@@ -61,7 +65,8 @@ class NodeTest {
     @Test
     void removeOrphanCommentNegativeCase() {
         ClassOrInterfaceDeclaration aClass = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
-        FieldDeclaration aField = new FieldDeclaration(new NodeList<>(), new VariableDeclarator(PrimitiveType.intType(), "f"));
+        FieldDeclaration aField =
+                new FieldDeclaration(new NodeList<>(), new VariableDeclarator(PrimitiveType.intType(), "f"));
         aClass.getMembers().add(aField);
         Comment c = new LineComment("A comment");
         aField.addOrphanComment(c);
@@ -81,7 +86,7 @@ class NodeTest {
     @Test
     void hasJavaDocCommentPositiveCaseWithSetComment() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "Foo");
-        decl.setComment(new JavadocComment("A comment"));
+        decl.setComment(new TraditionalJavadocComment("A comment"));
         assertTrue(decl.hasJavaDocComment());
     }
 
@@ -107,31 +112,32 @@ class NodeTest {
 
     @Test
     void findCompilationUnitOfCommentNode() {
-        CompilationUnit cu = parse("class X {\n" +
-                "  void x() {\n" +
-                "    // this is a comment\n" +
-                "    foo();\n" +
-                "  }\n" +
-                "}\n");
+        CompilationUnit cu = parse(
+                "class X {\n" + "  void x() {\n" + "    // this is a comment\n" + "    foo();\n" + "  }\n" + "}\n");
 
-        Comment comment = cu.getType(0).getMember(0)
-                .asMethodDeclaration().getBody().get()
-                .getStatement(0).getComment().get();
+        Comment comment = cu.getType(0)
+                .getMember(0)
+                .asMethodDeclaration()
+                .getBody()
+                .get()
+                .getStatement(0)
+                .getComment()
+                .get();
 
         assertTrue(comment.findCompilationUnit().isPresent());
     }
 
     @Test
     void findCompilationUnitOfOrphanCommentNode() {
-        CompilationUnit cu = parse("class X {\n" +
-                "  void x() {\n" +
-                "    // this is a comment\n" +
-                "  }\n" +
-                "}\n");
+        CompilationUnit cu = parse("class X {\n" + "  void x() {\n" + "    // this is a comment\n" + "  }\n" + "}\n");
 
-        Comment comment = cu.getType(0).getMember(0)
-                .asMethodDeclaration().getBody().get()
-                .getOrphanComments().get(0);
+        Comment comment = cu.getType(0)
+                .getMember(0)
+                .asMethodDeclaration()
+                .getBody()
+                .get()
+                .getOrphanComments()
+                .get(0);
 
         assertTrue(comment.findCompilationUnit().isPresent());
     }
@@ -147,13 +153,14 @@ class NodeTest {
 
     @Test
     void removingTheSecondOfAListOfIdenticalStatementsDoesNotMessUpTheParents() {
-        CompilationUnit unit = parse(String.format("public class Example {%1$s" +
-                "  public static void example() {%1$s" +
-                "    boolean swapped;%1$s" +
-                "    swapped=false;%1$s" +
-                "    swapped=false;%1$s" +
-                "  }%1$s" +
-                "}%1$s", LineSeparator.SYSTEM));
+        CompilationUnit unit = parse(String.format(
+                "public class Example {%1$s" + "  public static void example() {%1$s"
+                        + "    boolean swapped;%1$s"
+                        + "    swapped=false;%1$s"
+                        + "    swapped=false;%1$s"
+                        + "  }%1$s"
+                        + "}%1$s",
+                LineSeparator.SYSTEM));
         // remove the second swapped=false
         ExpressionStmt target = unit.findAll(ExpressionStmt.class).get(2);
         target.remove();
@@ -163,39 +170,117 @@ class NodeTest {
 
     @Test
     void findNodeByRange() {
-        CompilationUnit cu = parse("class X {\n" +
-                "  void x() {\n" +
-                "  }\n" +
-                "}\n");
-        ClassOrInterfaceDeclaration coid = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        CompilationUnit cu = parse("class X {\n" + "  void x() {\n" + "  }\n" + "}\n");
+        ClassOrInterfaceDeclaration coid =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
         MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
 
         // The range corresponds to the compilation unit
-        Optional<Node> node = cu.findByRange(new Range(new Position(1,1), new Position(4,2)));
+        Optional<Node> node = cu.findByRange(new Range(new Position(1, 1), new Position(4, 2)));
         assertTrue(node.isPresent());
         assertEquals(cu, node.get());
 
         // The range corresponds to the class declaration
-        node = cu.findByRange(new Range(new Position(1,1), new Position(4,1)));
+        node = cu.findByRange(new Range(new Position(1, 1), new Position(4, 1)));
         assertTrue(node.isPresent());
         assertEquals(coid, node.get());
 
         // The range corresponds to the method declaration
-        node = cu.findByRange(new Range(new Position(2,3), new Position(3,3)));
+        node = cu.findByRange(new Range(new Position(2, 3), new Position(3, 3)));
         assertTrue(node.isPresent());
         assertEquals(md, node.get());
 
         // The range is included in the class declaration
-        node = cu.findByRange(new Range(new Position(1,1), new Position(1,1)));
+        node = cu.findByRange(new Range(new Position(1, 1), new Position(1, 1)));
         assertTrue(node.isPresent());
         assertEquals(coid, node.get());
 
         // The range is not included in the compilation unit
-        node = cu.findByRange(new Range(new Position(5,1), new Position(5,1)));
+        node = cu.findByRange(new Range(new Position(5, 1), new Position(5, 1)));
         assertFalse(node.isPresent());
 
         // Search based on the method declaration, but the range corresponds to a parent node.
-        node = md.findByRange(new Range(new Position(1,1), new Position(1,1)));
+        node = md.findByRange(new Range(new Position(1, 1), new Position(1, 1)));
         assertFalse(node.isPresent());
+    }
+
+    @Nested
+    class PreOrderIteratorTest {
+        @Test
+        void rootHasNoChild() {
+            Node root = new CompilationUnit();
+            List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.PREORDER);
+            assertEquals(Arrays.asList(CompilationUnit.class), classesOf(nodes));
+        }
+
+        @Test
+        void rootHasChild() {
+            Node root = new CompilationUnit("com");
+            List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.PREORDER);
+            assertEquals(Arrays.asList(CompilationUnit.class, PackageDeclaration.class, Name.class), classesOf(nodes));
+        }
+
+        @Test
+        void astHasMultipleLeafs() {
+            Node root = parse("package com;" + "import com.*;" + "import org.*;" + "abstract class Foo {}");
+            List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.PREORDER);
+            assertEquals(
+                    Arrays.asList(
+                            CompilationUnit.class,
+                            PackageDeclaration.class,
+                            Name.class,
+                            ImportDeclaration.class,
+                            Name.class,
+                            ImportDeclaration.class,
+                            Name.class,
+                            ClassOrInterfaceDeclaration.class,
+                            Modifier.class,
+                            SimpleName.class),
+                    classesOf(nodes));
+        }
+
+        private List<Class<? extends Node>> classesOf(List<Node> nodes) {
+            return nodes.stream().map(Node::getClass).collect(Collectors.toList());
+        }
+    }
+
+    @Nested
+    class PostOrderIteratorTest {
+        @Test
+        void rootHasNoChild() {
+            Node root = new CompilationUnit();
+            List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.POSTORDER);
+            assertEquals(Arrays.asList(CompilationUnit.class), classesOf(nodes));
+        }
+
+        @Test
+        void rootHasChild() {
+            Node root = new CompilationUnit("com");
+            List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.POSTORDER);
+            assertEquals(Arrays.asList(Name.class, PackageDeclaration.class, CompilationUnit.class), classesOf(nodes));
+        }
+
+        @Test
+        void astHasMultipleLeafs() {
+            Node root = parse("package com;" + "import com.*;" + "import org.*;" + "abstract class Foo {}");
+            List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.POSTORDER);
+            assertEquals(
+                    Arrays.asList(
+                            Name.class,
+                            PackageDeclaration.class,
+                            Name.class,
+                            ImportDeclaration.class,
+                            Name.class,
+                            ImportDeclaration.class,
+                            Modifier.class,
+                            SimpleName.class,
+                            ClassOrInterfaceDeclaration.class,
+                            CompilationUnit.class),
+                    classesOf(nodes));
+        }
+
+        private List<Class<? extends Node>> classesOf(List<Node> nodes) {
+            return nodes.stream().map(Node::getClass).collect(Collectors.toList());
+        }
     }
 }

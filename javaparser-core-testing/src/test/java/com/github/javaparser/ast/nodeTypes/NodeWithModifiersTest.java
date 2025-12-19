@@ -21,27 +21,25 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import org.junit.jupiter.api.Test;
-
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.github.javaparser.ast.Modifier.Keyword.*;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class NodeWithModifiersTest {
 
     @Test
     void addModifierWorks() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
-                false, "Foo");
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "Foo");
         decl.addModifier(PUBLIC);
         assertEquals(createModifierList(PUBLIC), decl.getModifiers());
     }
@@ -49,11 +47,11 @@ class NodeWithModifiersTest {
     @Test
     void addModifierTriggerNotification() {
         List<String> changes = new LinkedList<>();
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
-                false, "Foo");
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "Foo");
         decl.register(new AstObserverAdapter() {
             @Override
-            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+            public void propertyChange(
+                    Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 changes.add("property " + property.name() + " is changed to " + newValue);
             }
         });
@@ -85,7 +83,7 @@ class NodeWithModifiersTest {
         assertEquals(createModifierList(SYNCHRONIZED), node.getModifiers());
     }
 
-    private NodeWithModifiers anythingWithModifiers(Modifier.Keyword ... keywords) {
+    private NodeWithModifiers anythingWithModifiers(Modifier.Keyword... keywords) {
         ClassOrInterfaceDeclaration foo = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "Foo");
         foo.addModifier(keywords);
         return foo;

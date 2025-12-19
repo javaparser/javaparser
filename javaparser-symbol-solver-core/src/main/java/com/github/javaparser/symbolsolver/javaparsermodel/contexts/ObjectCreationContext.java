@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -28,20 +30,16 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-
 import java.util.List;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
  */
-public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreationExpr> {
+public class ObjectCreationContext extends ExpressionContext<ObjectCreationExpr> {
 
     public ObjectCreationContext(ObjectCreationExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -53,14 +51,16 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
             Expression scope = wrappedNode.getScope().get();
             ResolvedType scopeType = JavaParserFacade.get(typeSolver).getType(scope);
             // Be careful, the scope can be an object creation expression like <code>new inner().new Other()</code>
-            if (scopeType.isReferenceType() && scopeType.asReferenceType().getTypeDeclaration().isPresent()) {
-                ResolvedReferenceTypeDeclaration scopeTypeDeclaration = scopeType.asReferenceType().getTypeDeclaration().get();
+            if (scopeType.isReferenceType()
+                    && scopeType.asReferenceType().getTypeDeclaration().isPresent()) {
+                ResolvedReferenceTypeDeclaration scopeTypeDeclaration =
+                        scopeType.asReferenceType().getTypeDeclaration().get();
                 for (ResolvedTypeDeclaration it : scopeTypeDeclaration.internalTypes()) {
                     if (it.getName().equals(name)) {
                         return SymbolReference.solved(it);
                     }
                 }
-            } 
+            }
         }
         // find first parent node that is not an object creation expression to avoid stack overflow errors, see #1711
         Node parentNode = demandParentNode(wrappedNode);
@@ -71,13 +71,9 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
     }
 
     @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver).solveSymbol(name);
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver)
+                .solveMethod(name, argumentsTypes, false);
     }
-
-    @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver).solveMethod(name, argumentsTypes, false);
-    }
-
 }

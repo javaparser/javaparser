@@ -21,19 +21,26 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import static com.github.javaparser.symbolsolver.utils.JavassistModuleHelper.MODULE_INFO_CLASS_NAME;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
-import javassist.ClassPool;
-import javassist.NotFoundException;
-
+import com.github.javaparser.symbolsolver.utils.JavassistModuleHelper;
+import com.github.javaparser.utils.Pair;
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.Stream;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.NotFoundException;
 
 /**
  * Will let the symbol solver look inside a jar file while solving types.
@@ -94,40 +101,41 @@ public class JarTypeSolver implements TypeSolver {
 
     private final ClassPool classPool = new ClassPool();
     private final Map<String, String> knownClasses = new HashMap<>();
+    private Optional<Pair<String, List<String>>> moduleToExportedPackages = Optional.empty();
 
     private TypeSolver parent;
 
     /**
      * Create a {@link JarTypeSolver} from a {@link Path}.
      *
-     * @param pathToJar The path where the jar is located.
+     * @param pathToJarOrClassFileHierarchy The path where the jar or class file hierarchy is located.
      *
-     * @throws IOException If an I/O exception occurs while reading the Jar.
+     * @throws IOException If an I/O exception occurs while reading the Jar or class file hierarchy.
      */
-    public JarTypeSolver(Path pathToJar) throws IOException {
-        this(pathToJar.toFile());
+    public JarTypeSolver(Path pathToJarOrClassFileHierarchy) throws IOException {
+        this(pathToJarOrClassFileHierarchy.toFile());
     }
 
     /**
      * Create a {@link JarTypeSolver} from a {@link File}.
      *
-     * @param pathToJar The file pointing to the jar is located.
+     * @param pathToJarOrClassFileHierarchy The file pointing to the jar or class file hierarchy is located.
      *
-     * @throws IOException If an I/O exception occurs while reading the Jar.
+     * @throws IOException If an I/O exception occurs while reading the Jar or class file hierarchy.
      */
-    public JarTypeSolver(File pathToJar) throws IOException {
-        this(pathToJar.getAbsolutePath());
+    public JarTypeSolver(File pathToJarOrClassFileHierarchy) throws IOException {
+        this(pathToJarOrClassFileHierarchy.getAbsolutePath());
     }
 
     /**
      * Create a {@link JarTypeSolver} from a path in a {@link String} format.
      *
-     * @param pathToJar The path pointing to the jar.
+     * @param pathToJarOrClassFileHierarchy The path pointing to the jar or class file hierarchy.
      *
-     * @throws IOException If an I/O exception occurs while reading the Jar.
+     * @throws IOException If an I/O exception occurs while reading the Jar or class file hierarchy.
      */
-    public JarTypeSolver(String pathToJar) throws IOException {
-        addPathToJar(pathToJar);
+    public JarTypeSolver(String pathToJarOrClassFileHierarchy) throws IOException {
+        addPathToJar(pathToJarOrClassFileHierarchy);
     }
 
     /**
@@ -174,14 +182,15 @@ public class JarTypeSolver implements TypeSolver {
     /**
      * Utility method to register a new class path.
      *
-     * @param pathToJar The path pointing to the jar file.
+     * @param pathToJarOrClassFileHierarchy The path pointing to the jar file or class file hierarchy.
      *
-     * @throws IOException If an I/O error occurs while reading the JarFile.
+     * @throws IOException If an I/O error occurs while reading the JarFile or class file hierarchy.
      */
-    private void addPathToJar(String pathToJar) throws IOException {
+    private void addPathToJar(String pathToJarOrClassFileHierarchy) throws IOException {
         try {
-            classPool.appendClassPath(pathToJar);
-            registerKnownClassesFor(pathToJar);
+            classPool.appendClassPath(pathToJarOrClassFileHierarchy);
+            registerKnownClassesFor(pathToJarOrClassFileHierarchy);
+            registerModuleInfo();
         } catch (NotFoundException e) {
             // If JavaAssist throws a NotFoundException we should notify the user
             // with a FileNotFoundException.
@@ -191,39 +200,89 @@ public class JarTypeSolver implements TypeSolver {
         }
     }
 
+    private void registerModuleInfo() {
+        if (knownClasses.containsKey(MODULE_INFO_CLASS_NAME)) {
+            CtClass moduleInfo = getClassFromPool(MODULE_INFO_CLASS_NAME);
+            moduleToExportedPackages = JavassistModuleHelper.getModuleWithExportedPackages(moduleInfo);
+        }
+    }
+
     /**
      * Register the list of known classes.
      *
      * When we create a new {@link JarTypeSolver} we should store the list of
      * solvable types.
      *
-     * @param pathToJar The path to the jar file.
+     * @param pathToJarOrClassFileHierarchy The path to the jar file or .class file hierarchy.
      *
-     * @throws IOException If an I/O error occurs while reading the JarFile.
+     * @throws IOException If an I/O error occurs while reading the JarFile or .class file hierarchy.
      */
-    private void registerKnownClassesFor(String pathToJar) throws IOException {
-        try (JarFile jarFile = new JarFile(pathToJar)) {
+    private void registerKnownClassesFor(String pathToJarOrClassFileHierarchy) throws IOException {
+        Path jarOrClassFileHierarchy = Paths.get(pathToJarOrClassFileHierarchy);
+        if (Files.isDirectory(jarOrClassFileHierarchy)) {
+            try (Stream<Path> classFiles = Files.walk(jarOrClassFileHierarchy)) {
+                classFiles
+                        .filter(path -> Files.isRegularFile(path)
+                                && path.getFileName().toString().endsWith(CLASS_EXTENSION))
+                        .forEach(pathToClassFile -> {
+                            // We can't just use path.toString here, since path seperators are OS-dependent.
+                            String packagePrefix = convertPathToPackagePrefix(jarOrClassFileHierarchy, pathToClassFile);
+                            String classFileName = pathToClassFile.getFileName().toString();
+                            String classNameWithDollars =
+                                    classFileName.substring(0, classFileName.length() - CLASS_EXTENSION.length());
+                            String classPoolName = packagePrefix + classNameWithDollars;
+                            String qualifiedName = packagePrefix + classNameWithDollars.replace('$', '.');
 
-            Enumeration<JarEntry> jarEntries = jarFile.entries();
-            while (jarEntries.hasMoreElements()) {
+                            // If the qualified name is the same as the class pool name we don't need to duplicate store
+                            // two
+                            // different String instances. Let's reuse the same.
+                            if (qualifiedName.equals(classPoolName)) {
+                                knownClasses.put(qualifiedName, qualifiedName);
+                            } else {
+                                knownClasses.put(qualifiedName, classPoolName);
+                            }
+                        });
+            }
+        } else if (Files.isRegularFile(jarOrClassFileHierarchy)) {
+            try (JarFile jarFile = new JarFile(pathToJarOrClassFileHierarchy)) {
 
-                JarEntry entry = jarEntries.nextElement();
-                // Check if the entry is a .class file
-                if (!entry.isDirectory() && entry.getName().endsWith(CLASS_EXTENSION)) {
-                    String qualifiedName = convertEntryPathToClassName(entry.getName());
-                    String classPoolName = convertEntryPathToClassPoolName(entry.getName());
+                Enumeration<JarEntry> jarEntries = jarFile.entries();
+                while (jarEntries.hasMoreElements()) {
 
-                    // If the qualified name is the same as the class pool name we don't need to duplicate store two
-                    // different String instances. Let's reuse the same.
-                    if (qualifiedName.equals(classPoolName)) {
-                        knownClasses.put(qualifiedName, qualifiedName);
-                    } else {
-                        knownClasses.put(qualifiedName, classPoolName);
+                    JarEntry entry = jarEntries.nextElement();
+                    // Check if the entry is a .class file
+                    if (!entry.isDirectory() && entry.getName().endsWith(CLASS_EXTENSION)) {
+                        String qualifiedName = convertEntryPathToClassName(entry.getName());
+                        String classPoolName = convertEntryPathToClassPoolName(entry.getName());
+
+                        // If the qualified name is the same as the class pool name we don't need to duplicate store two
+                        // different String instances. Let's reuse the same.
+                        if (qualifiedName.equals(classPoolName)) {
+                            knownClasses.put(qualifiedName, qualifiedName);
+                        } else {
+                            knownClasses.put(qualifiedName, classPoolName);
+                        }
                     }
                 }
             }
-
         }
+    }
+
+    /**
+     * Given a path to a class file inside a class file hierarchy, extract the package name from the path.
+     * @param pathToClassFileHierarchy the root of the class file hierarchy
+     * @param pathToClassFile the path to the class file, inside the hierarchy
+     * @return the package name of the class file
+     */
+    private static String convertPathToPackagePrefix(Path pathToClassFileHierarchy, Path pathToClassFile) {
+        Path packagePath = pathToClassFileHierarchy.relativize(pathToClassFile).getParent();
+        StringBuilder packagePrefixBuilder = new StringBuilder();
+        if (packagePath != null) {
+            for (Path component : packagePath) {
+                packagePrefixBuilder.append(component.toString()).append('.');
+            }
+        }
+        return packagePrefixBuilder.toString();
     }
 
     /**
@@ -267,8 +326,8 @@ public class JarTypeSolver implements TypeSolver {
             // The names in stored key should always be resolved.
             // But if for some reason this happen, the user is notified.
             throw new IllegalStateException(String.format(
-                    "Unable to get class with name %s from class pool." +
-                    "This was not suppose to happen, please report at https://github.com/javaparser/javaparser/issues",
+                    "Unable to get class with name %s from class pool."
+                            + "This was not suppose to happen, please report at https://github.com/javaparser/javaparser/issues",
                     storedKey));
         }
     }
@@ -282,4 +341,42 @@ public class JarTypeSolver implements TypeSolver {
         throw new UnsolvedSymbolException(name);
     }
 
+    private CtClass getClassFromPool(String className) {
+        try {
+            return classPool.get(className);
+        } catch (NotFoundException e) {
+            // The names in stored key should always be resolved.
+            // But if for some reason this happen, the user is notified.
+            throw new IllegalStateException(String.format(
+                    "Unable to get class with name %s from class pool."
+                            + "This was not suppose to happen, please report at https://github.com/javaparser/javaparser/issues",
+                    "module-info"));
+        }
+    }
+
+    /**
+     * https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-4.html#jvms-4.7.25
+     * @param qualifiedModuleName
+     * @param simpleTypeName
+     * @return
+     */
+    @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName) {
+        if (moduleToExportedPackages.isPresent()) {
+            String moduleName = moduleToExportedPackages.get().a;
+            List<String> exportedPackages = moduleToExportedPackages.get().b;
+
+            if (moduleName.equals(qualifiedModuleName)) {
+                for (String packageName : exportedPackages) {
+                    SymbolReference<ResolvedReferenceTypeDeclaration> maybeSolved =
+                            tryToSolveType(packageName + "." + simpleTypeName);
+                    if (maybeSolved.isSolved()) {
+                        return maybeSolved;
+                    }
+                }
+            }
+        }
+        return SymbolReference.unsolved();
+    }
 }

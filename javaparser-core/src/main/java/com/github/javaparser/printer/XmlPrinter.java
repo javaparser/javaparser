@@ -20,18 +20,17 @@
  */
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
-
-import java.util.List;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 import java.util.function.Predicate;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -43,6 +42,7 @@ import javax.xml.stream.XMLStreamWriter;
 public class XmlPrinter {
 
     private final boolean outputNodeType;
+
     private static final Class<?> TYPE_CLASS = Type.class;
 
     public XmlPrinter(boolean outputNodeType) {
@@ -170,26 +170,20 @@ public class XmlPrinter {
      * @see outputDocument(String, Node, XMLStreamWriter)
      */
     public void outputNode(Node node, String name, XMLStreamWriter xmlWriter) throws XMLStreamException {
-
         assertNotNull(node);
         assertNonEmpty(name);
         assertNotNull(xmlWriter);
-
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();
         Predicate<PropertyMetaModel> nonNullNode = propertyMetaModel -> propertyMetaModel.getValue(node) != null;
-        Predicate<PropertyMetaModel> nonEmptyList = propertyMetaModel ->
-                ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
-        Predicate<PropertyMetaModel> typeList = propertyMetaModel ->
-                TYPE_CLASS == propertyMetaModel.getType();
-
+        Predicate<PropertyMetaModel> nonEmptyList =
+                propertyMetaModel -> ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
+        Predicate<PropertyMetaModel> typeList = propertyMetaModel -> TYPE_CLASS == propertyMetaModel.getType();
         xmlWriter.writeStartElement(name);
-
         // Output node type attribute
         if (outputNodeType) {
-            xmlWriter.writeAttribute("type", metaModel.getTypeName());
+            xmlWriter.writeAttribute("nodeType", metaModel.getTypeName());
         }
-
         try {
             // Output attributes
             allPropertyMetaModels.stream()
@@ -198,13 +192,13 @@ public class XmlPrinter {
                     .forEach(attributeMetaModel -> {
                         try {
                             final String attributeName = attributeMetaModel.getName();
-                            final String attributeValue = attributeMetaModel.getValue(node).toString();
+                            final String attributeValue =
+                                    attributeMetaModel.getValue(node).toString();
                             xmlWriter.writeAttribute(attributeName, attributeValue);
                         } catch (XMLStreamException ex) {
                             throw new RuntimeXMLStreamException(ex);
                         }
                     });
-
             // Output singular subNodes
             allPropertyMetaModels.stream()
                     .filter(PropertyMetaModel::isNode)
@@ -219,7 +213,6 @@ public class XmlPrinter {
                             throw new RuntimeXMLStreamException(ex);
                         }
                     });
-
             // Output list subNodes
             allPropertyMetaModels.stream()
                     .filter(PropertyMetaModel::isNodeList)
@@ -242,7 +235,6 @@ public class XmlPrinter {
         } catch (RuntimeXMLStreamException ex) {
             throw ex.getXMLStreamCause();
         }
-
         xmlWriter.writeEndElement();
     }
 

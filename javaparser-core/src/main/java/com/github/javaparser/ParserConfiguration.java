@@ -22,13 +22,6 @@ package com.github.javaparser;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
 
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Supplier;
-
 import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -36,9 +29,16 @@ import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.ast.validator.language_level_validations.*;
 import com.github.javaparser.ast.validator.postprocessors.*;
+import com.github.javaparser.printer.lexicalpreservation.DefaultLexicalPreservingPrinter;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * The configuration that is used by the parser.
@@ -171,24 +171,39 @@ public class ParserConfiguration {
          * Java 18
          */
         JAVA_18(new Java18Validator(), new Java18PostProcessor()),
-
         /**
          * Java 19
          */
         JAVA_19(new Java19Validator(), new Java19PostProcessor()),
-
         /**
          * Java 20
          */
         JAVA_20(new Java20Validator(), new Java20PostProcessor()),
-
         /**
          * Java 21
          */
-        JAVA_21(new Java21Validator(), new Java21PostProcessor());
+        JAVA_21(new Java21Validator(), new Java21PostProcessor()),
+        /**
+         * Java 22
+         */
+        JAVA_22(new Java22Validator(), new Java22PostProcessor()),
+        /**
+         * Java 23
+         */
+        JAVA_23(new Java23Validator(), new Java23PostProcessor()),
+        /**
+         * Java 24
+         */
+        JAVA_24(new Java24Validator(), new Java24PostProcessor()),
+        /**
+         * Java 25
+         */
+        JAVA_25(new Java25Validator(), new Java25PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
+         * Using the RAW language level can lead to parsing errors for features introduced in a specific version of Java
+         * (see issue https://github.com/javaparser/javaparser/issues/4813).
          */
         public static LanguageLevel RAW = null;
 
@@ -205,13 +220,31 @@ public class ParserConfiguration {
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_21;
+        public static LanguageLevel BLEEDING_EDGE = JAVA_24;
 
         final Validator validator;
 
         final PostProcessors postProcessor;
 
-        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] { JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW, JAVA_18, JAVA_19, JAVA_20, JAVA_21};
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] {
+            JAVA_13,
+            JAVA_13_PREVIEW,
+            JAVA_14,
+            JAVA_14_PREVIEW,
+            JAVA_15,
+            JAVA_15_PREVIEW,
+            JAVA_16,
+            JAVA_16_PREVIEW,
+            JAVA_17,
+            JAVA_17_PREVIEW,
+            JAVA_18,
+            JAVA_19,
+            JAVA_20,
+            JAVA_21,
+            JAVA_22,
+            JAVA_23,
+            JAVA_24
+        };
 
         LanguageLevel(Validator validator, PostProcessors postProcessor) {
             this.validator = validator;
@@ -310,7 +343,9 @@ public class ParserConfiguration {
             @Override
             public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
                 if (configuration.isAttributeComments()) {
-                    result.ifSuccessful(resultNode -> result.getCommentsCollection().ifPresent(comments -> new CommentsInserter(configuration).insertComments(resultNode, comments.copy().getComments())));
+                    result.ifSuccessful(resultNode -> result.getCommentsCollection()
+                            .ifPresent(comments -> new CommentsInserter(configuration)
+                                    .insertComments(resultNode, comments.copy().getComments())));
                 }
             }
         });
@@ -324,7 +359,9 @@ public class ParserConfiguration {
                         languageLevel.postProcessor.postProcess(result, configuration);
                     }
                     if (languageLevel.validator != null) {
-                        languageLevel.validator.accept(result.getResult().get(), new ProblemReporter(newProblem -> result.getProblems().add(newProblem)));
+                        languageLevel.validator.accept(
+                                result.getResult().get(), new ProblemReporter(newProblem -> result.getProblems()
+                                        .add(newProblem)));
                     }
                 }
             }
@@ -333,11 +370,13 @@ public class ParserConfiguration {
 
             @Override
             public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
-                configuration.getSymbolResolver().ifPresent(symbolResolver -> result.ifSuccessful(resultNode -> {
-                    if (resultNode instanceof CompilationUnit) {
-                        resultNode.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
-                    }
-                }));
+                configuration
+                        .getSymbolResolver()
+                        .ifPresent(symbolResolver -> result.ifSuccessful(resultNode -> {
+                            if (resultNode instanceof CompilationUnit) {
+                                resultNode.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
+                            }
+                        }));
             }
         });
         processors.add(() -> new Processor() {
@@ -345,7 +384,10 @@ public class ParserConfiguration {
             @Override
             public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
                 if (configuration.isLexicalPreservationEnabled()) {
-                    result.ifSuccessful(LexicalPreservingPrinter::setup);
+                    result.ifSuccessful(resultNode -> {
+                        LexicalPreservingPrinter.setup(resultNode);
+                        resultNode.setData(Node.PRINTER_KEY, new DefaultLexicalPreservingPrinter());
+                    });
                 }
             }
         });
@@ -368,7 +410,8 @@ public class ParserConfiguration {
         return doNotAssignCommentsPrecedingEmptyLines;
     }
 
-    public ParserConfiguration setDoNotAssignCommentsPrecedingEmptyLines(boolean doNotAssignCommentsPrecedingEmptyLines) {
+    public ParserConfiguration setDoNotAssignCommentsPrecedingEmptyLines(
+            boolean doNotAssignCommentsPrecedingEmptyLines) {
         this.doNotAssignCommentsPrecedingEmptyLines = doNotAssignCommentsPrecedingEmptyLines;
         return this;
     }
@@ -377,7 +420,8 @@ public class ParserConfiguration {
         return ignoreAnnotationsWhenAttributingComments;
     }
 
-    public ParserConfiguration setIgnoreAnnotationsWhenAttributingComments(boolean ignoreAnnotationsWhenAttributingComments) {
+    public ParserConfiguration setIgnoreAnnotationsWhenAttributingComments(
+            boolean ignoreAnnotationsWhenAttributingComments) {
         this.ignoreAnnotationsWhenAttributingComments = ignoreAnnotationsWhenAttributingComments;
         return this;
     }

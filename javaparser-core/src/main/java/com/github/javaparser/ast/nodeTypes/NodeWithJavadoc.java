@@ -23,8 +23,9 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
-
 import java.util.Optional;
 
 /**
@@ -43,7 +44,8 @@ public interface NodeWithJavadoc<N extends Node> {
      * @return The JavadocComment for this node wrapped in an optional as it may be absent.
      */
     default Optional<JavadocComment> getJavadocComment() {
-        return getComment().filter(comment -> comment instanceof JavadocComment).map(comment -> (JavadocComment) comment);
+        return getComment().filter(comment -> comment instanceof JavadocComment).map(comment ->
+                (JavadocComment) comment);
     }
 
     /**
@@ -56,13 +58,20 @@ public interface NodeWithJavadoc<N extends Node> {
     }
 
     /**
-     * Use this to store additional information to this node.
-     *
-     * @param comment to be set
+     * Set a JavadocComment for this node
      */
     @SuppressWarnings("unchecked")
+    default N setJavadocComment(String comment, boolean isMarkdownComment) {
+        JavadocComment javadocComment =
+                isMarkdownComment ? new MarkdownComment(comment) : new TraditionalJavadocComment(comment);
+        return setJavadocComment(javadocComment);
+    }
+
+    /**
+     * Set a JavadocComment for this node
+     */
     default N setJavadocComment(String comment) {
-        return setJavadocComment(new JavadocComment(comment));
+        return setJavadocComment(comment, false);
     }
 
     default N setJavadocComment(JavadocComment comment) {

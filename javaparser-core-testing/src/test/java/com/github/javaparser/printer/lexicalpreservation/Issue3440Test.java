@@ -36,5 +36,4 @@ public class Issue3440Test extends AbstractLexicalPreservingTest {
         entry.setStatements(new NodeList<>());
         TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
-    
 }

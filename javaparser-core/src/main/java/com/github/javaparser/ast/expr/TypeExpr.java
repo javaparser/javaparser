@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -33,11 +35,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeExprMetaModel;
-
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
@@ -93,8 +93,7 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
-            this.type.setParentNode(null);
+        if (this.type != null) this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;
@@ -147,5 +146,21 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TypeExpr> toTypeExpr() {
         return Optional.of(this);
+    }
+
+    /*
+     * https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.13
+     * Workaround to handle cases where a type should have been parsed as a primary expression.
+     * A change to the grammar should lead to the removal of this method.
+     * This is the case, for example, in the following reference expression ‘foo:convert’,
+     * where foo is an instance of the Foo class and convert is a method of the Foo class.
+     * foo should not be considered a type expression as String could be in the expression String::length.
+     * This method compares the type name (e.g. foo) with the name of a resolved type, e.g. Foo.
+     * If they are different, we consider it to be a primary expression.
+     */
+    public boolean isPrimaryExpr(ResolvedReferenceType type) {
+        return type.getTypeDeclaration().isPresent()
+                ? !type.getTypeDeclaration().get().getName().equals(getTypeAsString())
+                : false;
     }
 }

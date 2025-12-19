@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution;
 
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -31,8 +30,11 @@ import com.github.javaparser.resolution.model.SymbolReference;
  * @author Federico Tomassetti
  */
 public interface TypeSolver {
-    
+
     String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
+
+    // Can't use java.lang.Record.class.getCanonicalName() since records were only added in Java 14.
+    String JAVA_LANG_RECORD = "java.lang.Record";
 
     /**
      * Get the root of the hierarchy of type solver.
@@ -71,6 +73,18 @@ public interface TypeSolver {
         throw new UnsolvedSymbolException(name, this.toString());
     }
 
+    SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName);
+
+    default ResolvedReferenceTypeDeclaration solveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+        SymbolReference<ResolvedReferenceTypeDeclaration> ref =
+                tryToSolveTypeInModule(qualifiedModuleName, simpleTypeName);
+        if (ref.isSolved()) {
+            return ref.getCorrespondingDeclaration();
+        }
+        throw new UnsolvedSymbolException(simpleTypeName, "module=" + qualifiedModuleName + " in " + this);
+    }
+
     /**
      * @return A resolved reference to {@code java.lang.Object}
      */
@@ -78,8 +92,14 @@ public interface TypeSolver {
         return solveType(JAVA_LANG_OBJECT);
     }
 
+    /**
+     * @return A resolved reference to {@code java.lang.Record}
+     */
+    default ResolvedReferenceTypeDeclaration getSolvedJavaLangRecord() throws UnsolvedSymbolException {
+        return solveType(JAVA_LANG_RECORD);
+    }
+
     default boolean hasType(String name) {
         return tryToSolveType(name).isSolved();
     }
-    
 }

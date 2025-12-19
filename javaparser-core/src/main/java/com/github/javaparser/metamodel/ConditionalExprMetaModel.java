@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.expr.ConditionalExpr;
-
 import java.util.Optional;
 
 /**
@@ -39,7 +38,13 @@ public class ConditionalExprMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ConditionalExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, ConditionalExpr.class, "ConditionalExpr", "com.github.javaparser.ast.expr", false, false);
+        super(
+                superBaseNodeMetaModel,
+                ConditionalExpr.class,
+                "ConditionalExpr",
+                "com.github.javaparser.ast.expr",
+                false,
+                false);
     }
 
     public PropertyMetaModel conditionPropertyMetaModel;

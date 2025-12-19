@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,14 +74,13 @@ public class InstantiationSet {
 
     @Override
     public String toString() {
-        return "InstantiationSet{" +
-                "instantiations=" + instantiations +
-                '}';
+        return "InstantiationSet{" + "instantiations=" + instantiations + '}';
     }
 
     public ResolvedType apply(ResolvedType type) {
         for (Instantiation instantiation : instantiations) {
-            type = type.replaceTypeVariables(instantiation.getInferenceVariable().getTypeParameterDeclaration(), instantiation.getProperType());
+            type = type.replaceTypeVariables(
+                    instantiation.getInferenceVariable().getTypeParameterDeclaration(), instantiation.getProperType());
         }
         return type;
     }

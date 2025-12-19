@@ -21,14 +21,12 @@
 
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_18;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
-
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_18;
 
 class Java18ValidatorTest {
 
     private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_18));
-
-
 }

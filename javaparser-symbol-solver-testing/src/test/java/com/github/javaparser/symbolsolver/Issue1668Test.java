@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -31,9 +34,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class Issue1668Test {
 
@@ -49,23 +49,26 @@ class Issue1668Test {
 
     @Test
     void testResolveArrayDeclaration() {
-        String code = String.join(System.lineSeparator(),
+        String code = String.join(
+                System.lineSeparator(),
                 "public class X {",
                 "   public static void main(String[] args) {",
                 "       String s = \"a,b,c,d,e\";",
                 "       String[] stringArray = s.split(',');",
                 "   }",
-                "}"
-        );
+                "}");
 
-        ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+        ParseResult<CompilationUnit> parseResult =
+                javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
         assertTrue(parseResult.isSuccessful());
         assertTrue(parseResult.getResult().isPresent());
 
         CompilationUnit compilationUnit = parseResult.getResult().get();
-        VariableDeclarator variableDeclarator = compilationUnit.findFirst(VariableDeclarator.class, v ->
-                v.getNameAsString().equals("stringArray")).get();
-        VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) variableDeclarator.getParentNode().get();
+        VariableDeclarator variableDeclarator = compilationUnit
+                .findFirst(VariableDeclarator.class, v -> v.getNameAsString().equals("stringArray"))
+                .get();
+        VariableDeclarationExpr variableDeclarationExpr =
+                (VariableDeclarationExpr) variableDeclarator.getParentNode().get();
         ResolvedType resolvedType = variableDeclarationExpr.calculateResolvedType();
         assertEquals("java.lang.String[]", resolvedType.describe());
         ResolvedValueDeclaration resolve = variableDeclarator.resolve();

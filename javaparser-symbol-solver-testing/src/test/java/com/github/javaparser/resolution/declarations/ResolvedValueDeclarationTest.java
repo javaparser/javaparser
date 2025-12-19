@@ -21,9 +21,9 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 
 public interface ResolvedValueDeclarationTest extends ResolvedDeclarationTest {
 
@@ -38,6 +38,4 @@ public interface ResolvedValueDeclarationTest extends ResolvedDeclarationTest {
         String expectedTypeQualifiedName = getCanonicalNameOfExpectedType(resolvedDeclaration);
         assertNotNull(expectedTypeQualifiedName, resolvedDeclaration.getType().describe());
     }
-
-
 }

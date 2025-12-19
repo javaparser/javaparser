@@ -21,10 +21,10 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
@@ -33,8 +33,11 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 class LambdaResolutionTest extends AbstractResolutionTest {
 
@@ -44,12 +47,14 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpression().get();
+        MethodCallExpr methodCallExpr =
+                (MethodCallExpr) returnStmt.getExpression().get();
         Expression expression = methodCallExpr.getArguments().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         ResolvedType type = javaParserFacade.getType(expression);
-        assertEquals("java.util.function.Function<? super java.lang.String, ? extends java.lang.String>", type.describe());
+        assertEquals(
+                "java.util.function.Function<? super java.lang.String, ? extends java.lang.String>", type.describe());
     }
 
     @Test
@@ -129,7 +134,8 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpression().get();
+        MethodCallExpr methodCallExpr =
+                (MethodCallExpr) returnStmt.getExpression().get();
         // Collectors.toList()
         Expression expression = methodCallExpr.getArguments().get(0);
 
@@ -182,14 +188,169 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("LambdaVoid");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaEmpty");
-        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
-        Expression expression = returnStmt.getExpression().get();
-        LambdaExpr lambdaExpr = Navigator.demandNodeOfGivenClass(expression, LambdaExpr.class);
+        MethodCallExpr methodCallExpr =
+                Navigator.findMethodCall(method, "forEach").get();
+        LambdaExpr lambdaExpr = (LambdaExpr) methodCallExpr.getArguments().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         ResolvedType type = javaParserFacade.getType(lambdaExpr);
         assertEquals("java.util.function.Consumer<? super java.lang.String>", type.describe());
     }
 
+    @Test
+    void lambdaAsVararg() {
+        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
+                + "    void acceptConsumers(Consumer<String>... consumers) {}\n"
+                + "    void test(Consumer<String> first) {\n"
+                + "        acceptConsumers(first, s -> System.out.println(s));\n"
+                + "    }\n"
+                + "}";
 
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+        assertEquals(
+                "java.util.function.Consumer<java.lang.String>",
+                lambda.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentParameterCounts1() {
+        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
+                + "    void foo(Consumer<String> consumer) {}\n"
+                + "    void foo(Runnable r) {}\n"
+                + "    void test() {\n"
+                + "        foo(input -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals(
+                "Test.foo(java.util.function.Consumer<java.lang.String>)",
+                call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentParameterCounts2() {
+        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
+                + "    void foo(Consumer<java.lang.String> consumer) {}\n"
+                + "    void foo(Runnable r) {}\n"
+                + "    void test() {\n"
+                + "        foo(() -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals("Test.foo(java.lang.Runnable)", call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentReturnTypes1() {
+        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
+                + "class Test {\n"
+                + "    void foo(Consumer<String> consumer) {}\n"
+                + "    void foo(Function<Integer, String> func) {}\n"
+                + "    void test() {\n"
+                + "        foo(input -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals(
+                "Test.foo(java.util.function.Consumer<java.lang.String>)",
+                call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentReturnTypes2() {
+        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
+                + "class Test {\n"
+                + "    void foo(Consumer<String> consumer) {}\n"
+                + "    void foo(Function<Integer, String> func) {}\n"
+                + "    void test() {\n"
+                + "        foo(input -> { return \"\"; });\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals(
+                "Test.foo(java.util.function.Function<java.lang.Integer, java.lang.String>)",
+                call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaUsedAsPolymorphicArgument() {
+        String source = "import java.util.function.Consumer;\n" + "import java.util.HashMap;"
+                + "class Test {\n"
+                + "    void test() {\n"
+                + "        HashMap<String, Consumer> map = new HashMap<>();"
+                + "        map.put(\"\", input -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertDoesNotThrow(() -> call.resolve().getQualifiedSignature());
+        assertDoesNotThrow(() -> call.calculateResolvedType().describe());
+        assertEquals("java.util.HashMap.put(K, V)", call.resolve().getQualifiedSignature());
+    }
+
+    @Test
+    void lambdaUsedAsOverloadedArrayAlternativeArgument() {
+        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
+                + "class Foo<S extends Consumer, T> {\n"
+                + "    void foo(Object[] ts) {}\n"
+                + "    void foo(T t) {}\n"
+                + "}\n"
+                + "class Test {\n"
+                + "    void test() {\n"
+                + "        Foo<Consumer<Integer>, Function<Integer, Integer>> foo = new Foo<>();\n"
+                + "        foo.foo(value -> { return 2; });\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertDoesNotThrow(() -> call.resolve().getQualifiedSignature());
+        assertDoesNotThrow(() -> call.calculateResolvedType().describe());
+        assertEquals("Foo.foo(T)", call.resolve().getQualifiedSignature());
+    }
+
+    @Disabled("Disambiguation for lambdas used as polymorphic is not supported yet.")
+    @Test
+    void lambdaUsedAsOverloadedPolymorphicArgument1() {
+
+        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
+                + "class Foo<S extends Consumer, T> {\n"
+                + "    void foo(T t) {}\n"
+                + "    void foo(S s) {}\n"
+                + "}\n"
+                + "class Test {\n"
+                + "    void test() {\n"
+                + "        Foo<Consumer<Integer>, Function<Integer, Integer>> foo = new Foo<>();\n"
+                + "        foo.foo(value -> { return 2; });\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertDoesNotThrow(() -> call.resolve().getQualifiedSignature());
+        assertDoesNotThrow(() -> call.calculateResolvedType().describe());
+        assertEquals("Foo.foo(java.util.function.Function)", call.resolve().getQualifiedSignature());
+    }
 }

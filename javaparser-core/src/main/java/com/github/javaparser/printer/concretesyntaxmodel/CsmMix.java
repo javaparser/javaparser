@@ -22,7 +22,6 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -55,10 +54,8 @@ public class CsmMix implements CsmElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         CsmMix csmMix = (CsmMix) o;
         return elements != null ? elements.equals(csmMix.elements) : csmMix.elements == null;
     }

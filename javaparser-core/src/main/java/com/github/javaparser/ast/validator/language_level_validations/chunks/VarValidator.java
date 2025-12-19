@@ -23,10 +23,7 @@ package com.github.javaparser.ast.validator.language_level_validations.chunks;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.ArrayInitializerExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
@@ -34,7 +31,6 @@ import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.VarType;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.TypedValidator;
-
 import java.util.Optional;
 
 public class VarValidator implements TypedValidator<VarType> {
@@ -47,12 +43,25 @@ public class VarValidator implements TypedValidator<VarType> {
 
     @Override
     public void accept(VarType node, ProblemReporter reporter) {
-        // All allowed locations are within a VariableDeclaration inside a VariableDeclarationExpr inside something else.
+        // Allowed in type pattern expression. For example
+        // record Name(String fName, String lName, String mName) {};
+        // Name host = new Name("William", "Michael", "Korando");
+        // String printName = switch(person){
+        //   case Name(var fName, var lName, var mName) -> lName + ", " + fName + " " + mName;
+        // };
+        if (node.hasParentNode() && node.getParentNode().get() instanceof TypePatternExpr) {
+            return;
+        }
+        // All allowed locations are within a VariableDeclaration inside a VariableDeclarationExpr inside something
+        // else.
         Optional<VariableDeclarator> variableDeclarator = node.findAncestor(VariableDeclarator.class);
         if (!variableDeclarator.isPresent()) {
             // Java 11's var in lambda's
             if (varAllowedInLambdaParameters) {
-                boolean valid = node.findAncestor(Parameter.class).flatMap(Node::getParentNode).map((Node p) -> p instanceof LambdaExpr).orElse(false);
+                boolean valid = node.findAncestor(Parameter.class)
+                        .flatMap(Node::getParentNode)
+                        .map((Node p) -> p instanceof LambdaExpr)
+                        .orElse(false);
                 if (valid) {
                     return;
                 }
@@ -84,7 +93,10 @@ public class VarValidator implements TypedValidator<VarType> {
                     return;
                 }
                 container.ifPresent(c -> {
-                    boolean positionIsFine = c instanceof ForStmt || c instanceof ForEachStmt || c instanceof ExpressionStmt || c instanceof TryStmt;
+                    boolean positionIsFine = c instanceof ForStmt
+                            || c instanceof ForEachStmt
+                            || c instanceof ExpressionStmt
+                            || c instanceof TryStmt;
                     if (!positionIsFine) {
                         reportIllegalPosition(node, reporter);
                     }

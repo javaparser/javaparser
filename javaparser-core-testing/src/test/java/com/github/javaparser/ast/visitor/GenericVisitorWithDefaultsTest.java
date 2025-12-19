@@ -21,11 +21,16 @@
 
 package com.github.javaparser.ast.visitor;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.openMocks;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -34,11 +39,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.openMocks;
 
 /**
  * This class contains the tests to validate GenericVisitorWithDefaults.
@@ -58,15 +58,13 @@ class GenericVisitorWithDefaultsTest {
         openMocks(this);
 
         argument = new Object();
-        visitor = spy(
-            new GenericVisitorWithDefaults<Node, Object>() {
-                @Override
-                public Node defaultAction(Node n, Object arg) {
-                    super.defaultAction(n, arg);
-                    return n;
-                }
+        visitor = spy(new GenericVisitorWithDefaults<Node, Object>() {
+            @Override
+            public Node defaultAction(Node n, Object arg) {
+                super.defaultAction(n, arg);
+                return n;
             }
-        );
+        });
     }
 
     @Test
@@ -366,7 +364,7 @@ class GenericVisitorWithDefaultsTest {
 
     @Test
     void testThatVisitWithJavadocCommentAsParameterCallDefaultAction() {
-        Node node = visitor.visit(mock(JavadocComment.class), argument);
+        Node node = visitor.visit(mock(TraditionalJavadocComment.class), argument);
         assertNodeVisitDefaultAction(node);
     }
 
@@ -521,8 +519,14 @@ class GenericVisitorWithDefaultsTest {
     }
 
     @Test
-    void testThatVisitWithPatternExprAsParameterCallDefaultAction() {
+    void testThatVisitWithTypePatternExprAsParameterCallDefaultAction() {
         Node node = visitor.visit(mock(TypePatternExpr.class), argument);
+        assertNodeVisitDefaultAction(node);
+    }
+
+    @Test
+    void testThatVisitWithRecordPatternExprAsParameterCallDefaultAction() {
+        Node node = visitor.visit(mock(RecordPatternExpr.class), argument);
         assertNodeVisitDefaultAction(node);
     }
 
@@ -703,5 +707,4 @@ class GenericVisitorWithDefaultsTest {
         // Check if the original argument was passed to the default method
         assertSame(argument, argumentCaptor.getValue());
     }
-
 }

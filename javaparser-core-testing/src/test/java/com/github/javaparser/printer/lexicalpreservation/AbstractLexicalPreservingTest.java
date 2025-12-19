@@ -21,30 +21,28 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsString;
+import static com.github.javaparser.utils.TestUtils.readResource;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
+import java.io.IOException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-
-import java.io.IOException;
-
-import static com.github.javaparser.utils.TestUtils.assertEqualsString;
-import static com.github.javaparser.utils.TestUtils.readResource;
 
 public abstract class AbstractLexicalPreservingTest {
 
     protected CompilationUnit cu;
     protected Expression expression;
     protected Statement statement;
-    
+
     @AfterAll
-    public static void tearDown() {
-    }
-    
+    public static void tearDown() {}
+
     @AfterEach
     public void reset() {
         StaticJavaParser.setConfiguration(new ParserConfiguration());
@@ -57,7 +55,7 @@ public abstract class AbstractLexicalPreservingTest {
     protected void considerExpression(String code) {
         expression = LexicalPreservingPrinter.setup(StaticJavaParser.parseExpression(code));
     }
-    
+
     protected void considerStatement(String code) {
         statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(code));
     }
@@ -98,5 +96,4 @@ public abstract class AbstractLexicalPreservingTest {
         // Note that we explicitly care about line endings when handling lexical preservation.
         assertEqualsString(expectedPartialCode, actualCode);
     }
-
 }

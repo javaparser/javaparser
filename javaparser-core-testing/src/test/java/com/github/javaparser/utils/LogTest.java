@@ -21,13 +21,12 @@
 
 package com.github.javaparser.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.function.Supplier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.function.Supplier;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LogTest {
     private static class TestAdapter implements Log.Adapter {

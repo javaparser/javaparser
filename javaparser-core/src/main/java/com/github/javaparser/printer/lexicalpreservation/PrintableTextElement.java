@@ -17,10 +17,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
 
 public interface PrintableTextElement {
 
-	void accept(LexicalPreservingVisitor visitor);
+    void accept(LexicalPreservingVisitor visitor);
 }

@@ -10,6 +10,7 @@ We noticed we get the best feedback from those.
 Here are [some fun project ideas](https://github.com/javaparser/javaparser/labels/fun%20project%20idea).
 - If you start working on an issue, please say so with a comment in the issue.
 - If you know how to fix a problem, please fix it and open a pull request instead of opening an issue.
+- If you would like to add new nodes, or new fields to existing nodes, check out the [Guide to Adding New Nodes and Fields](https://github.com/javaparser/javaparser/wiki/A-Detailed-Guide-to-Adding-New-Nodes-and-Fields).
 
 Thanks for helping!
 
@@ -28,3 +29,51 @@ Our development workflow is based on Pull Request. If you are not familiar with 
 - Pull requests often stay open for at least a few days to give people a chance to review it.
 - A pull request is merged when all comments on it have been resolved.
 - If you create a pull request for an issue, mention the issue in the format #123 to make github link it automatically.
+- Before creating a commit (or at least before submitting a pull request), please reformat the project with the instructions given below
+  to avoid any formatting-related issues during the review.
+
+### Note on formatting the project:
+
+- If you are developing on a machine with bash installed, execute `./run_core_metamodel_generator.sh && ./run_core_generators.sh`. This
+  will re-run all of the code generators and then re-format the entire project as a final step. This ensures that:
+  - All the code that needs to be generated has been generated correctly.
+  - None of the changes you've added will be overwritten by code generation in the future.
+  - All of your changes are correctly formatted (including changes made during code generation, for example whitespace changes).
+
+  The PR check for style runs these generators and checks that the diff after doing so is empty, so if you've run this on your machine,
+  then that check should not fail.
+
+- If you are developing on a machine without bash, execute `./mvnw spotless:apply`. This will re-format the project, but without
+  running the code generators. This will be sufficient in many cases, but it's still possible that changes are introduced during
+  code generation which would cause the PR style check to fail. If this happens, some manual changes are required.
+
+  To fix this:
+  1. Go to the job output for the failed `Spotless check` job by clicking the red cross next to the job.
+  2. Scroll to the bottom of the `Generate code and format` output tab. 
+  3. There, you will see output from the diff command showing what failed. For example, in https://github.com/javaparser/javaparser/actions/runs/10389076737/job/28766249645,
+     that output is:
+    ```
+    [INFO] ------------------------------------------------------------------------
+    diff --git a/javaparser-core/src/main/java/com/github/javaparser/ast/expr/RecordPatternExpr.java b/javaparser-core/src/main/java/com/github/javaparser/ast/expr/RecordPatternExpr.java
+    index 7bc7f46b9..429889e35 100644
+    --- a/javaparser-core/src/main/java/com/github/javaparser/ast/expr/RecordPatternExpr.java
+    +++ b/javaparser-core/src/main/java/com/github/javaparser/ast/expr/RecordPatternExpr.java
+    @@ -17,7 +17,6 @@
+      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      * GNU Lesser General Public License for more details.
+      */
+    -
+     package com.github.javaparser.ast.expr;
+     
+     import static com.github.javaparser.utils.Utils.assertNotNull;
+    Error: Process completed with exit code 1.
+    ```
+
+  4. Verify that this output does not overwrite any code you wrote which would change the behaviour. If it does, you probably implemented
+     something manually when it should've been generated and this will be overwritten next time the code generators are run. This requires
+     a manual fix to your code to prevent issues in the future.
+  5. If no major issues are found, copy this output, excluding the `[INFO] --...` line and the `Error: Process complete with exit code 1.` 
+     line and paste that into a patch file (for example, `/tmp/style.patch`, but the name and location aren't important).
+  6. From the javaparser project directory, run `git apply /tmp/style.patch` (substituting `/tmp/style.patch` for the path of your
+     patch file). `git status` should now show that all the files mentioned in the patch are modified.
+  7. Add and commit the changes and push to update the PR.

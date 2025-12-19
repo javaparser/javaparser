@@ -25,9 +25,8 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
-
-import java.util.Objects;
-import java.util.Optional;
+import com.github.javaparser.symbolsolver.utils.ModuleLayerHelper;
+import java.util.*;
 
 /**
  * This TypeSolver wraps a ClassLoader. It can solve all types that the given ClassLoader can load.
@@ -40,9 +39,28 @@ public class ClassLoaderTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
     private ClassLoader classLoader;
+    private HashMap<String, Set<String>> modulePackages;
 
     public ClassLoaderTypeSolver(ClassLoader classLoader) {
         this.classLoader = classLoader;
+        this.modulePackages = new HashMap<>();
+    }
+
+    /**
+     * Create a ClassLoaderTypeSolver with a list of module layers to check when solving types in modules. If
+     * moduleLayers is empty, tryToSolveTypeInModule will always return SymbolReference.unsolved
+     *
+     * @param classLoader the ClassLoader that should be used for type solving
+     * @param moduleLayers MUST be {@code Iterable<java.lang.ModuleLayer>}. Object is only used in the signature for
+     *                     Java 8 compatibility.
+     */
+    public ClassLoaderTypeSolver(ClassLoader classLoader, Iterable<Object> moduleLayers) {
+        this(classLoader);
+        setModulePackagesFromLayers(moduleLayers);
+    }
+
+    protected void setModulePackagesFromLayers(Iterable<Object> moduleLayers) {
+        modulePackages = ModuleLayerHelper.getModulePackagesFromLayers(moduleLayers);
     }
 
     @Override
@@ -67,6 +85,30 @@ public class ClassLoaderTypeSolver implements TypeSolver {
     }
 
     @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName) {
+        if (filterName(qualifiedModuleName)) {
+            if (classLoader == null) {
+                throw new RuntimeException(
+                        "The ClassLoaderTypeSolver has been probably loaded through the bootstrap class loader. This usage is not supported by the JavaSymbolSolver");
+            }
+            if (modulePackages.containsKey(qualifiedModuleName)) {
+                Set<String> packages = modulePackages.get(qualifiedModuleName);
+
+                for (String packageName : packages) {
+                    String className = packageName + "." + simpleTypeName;
+                    SymbolReference<ResolvedReferenceTypeDeclaration> maybeSolved = tryToSolveType(className);
+                    if (maybeSolved.isSolved()) {
+                        return maybeSolved;
+                    }
+                }
+            }
+            return SymbolReference.unsolved();
+        }
+        return SymbolReference.unsolved();
+    }
+
+    @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         if (filterName(name)) {
             try {
@@ -80,7 +122,8 @@ public class ClassLoaderTypeSolver implements TypeSolver {
                 Class<?> clazz = classLoader.loadClass(name);
                 return SymbolReference.solved(ReflectionFactory.typeDeclarationFor(clazz, getRoot()));
             } catch (NoClassDefFoundError e) {
-                // We can safely ignore this one because it is triggered when there are package names which are almost the
+                // We can safely ignore this one because it is triggered when there are package names which are almost
+                // the
                 // same as class name, with the exclusion of the case.
                 // For example:
                 // java.lang.NoClassDefFoundError: com/github/javaparser/printer/ConcreteSyntaxModel
@@ -97,17 +140,16 @@ public class ClassLoaderTypeSolver implements TypeSolver {
                 String childName = name.substring(lastDot + 1);
                 SymbolReference<ResolvedReferenceTypeDeclaration> parent = tryToSolveType(parentName);
                 if (parent.isSolved()) {
-                        Optional<ResolvedReferenceTypeDeclaration> innerClass = parent.getCorrespondingDeclaration()
-                                .internalTypes()
-                                .stream().filter(it -> it.getName().equals(childName)).findFirst();
-                        return innerClass.map(SymbolReference::solved)
-                                .orElseGet(() -> SymbolReference.unsolved());
-                    }
+                    Optional<ResolvedReferenceTypeDeclaration> innerClass =
+                            parent.getCorrespondingDeclaration().internalTypes().stream()
+                                    .filter(it -> it.getName().equals(childName))
+                                    .findFirst();
+                    return innerClass.map(SymbolReference::solved).orElseGet(() -> SymbolReference.unsolved());
+                }
                 return SymbolReference.unsolved();
             }
         } else {
             return SymbolReference.unsolved();
         }
     }
-
 }

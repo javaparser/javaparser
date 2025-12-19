@@ -23,8 +23,9 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -39,14 +40,12 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     /**
      * This will be called by every node visit method that is not overridden.
      */
-    public void defaultAction(Node n, A arg) {
-    }
+    public void defaultAction(Node n, A arg) {}
 
     /**
      * This will be called by the NodeList visit method when it is not overridden.
      */
-    public void defaultAction(NodeList n, A arg) {
-    }
+    public void defaultAction(NodeList n, A arg) {}
 
     @Override
     public void visit(final AnnotationDeclaration n, final A arg) {
@@ -239,7 +238,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JavadocComment n, final A arg) {
+    public void visit(final TraditionalJavadocComment n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -543,6 +542,21 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final CompactConstructorDeclaration n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final RecordPatternExpr n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final MatchAllPatternExpr n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final MarkdownComment n, final A arg) {
         defaultAction(n, arg);
     }
 }

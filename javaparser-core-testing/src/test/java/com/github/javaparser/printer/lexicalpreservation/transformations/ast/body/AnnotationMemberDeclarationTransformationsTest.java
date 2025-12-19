@@ -21,25 +21,42 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import com.github.javaparser.utils.LineSeparator;
-
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.body.RecordDeclaration;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
+import com.github.javaparser.utils.LineSeparator;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 /**
  * Transforming AnnotationMemberDeclaration and verifying the LexicalPreservation works as expected.
  */
 class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
+
+    private static final ParserConfiguration.LanguageLevel storedLanguageLevel =
+            StaticJavaParser.getParserConfiguration().getLanguageLevel();
+
+    @BeforeEach
+    public void setLanguageLevel() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+    }
+
+    @AfterEach
+    public void resetLanguageLevel() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(storedLanguageLevel);
+    }
 
     protected AnnotationMemberDeclaration consider(String code) {
         considerCode("@interface AD { " + code + " }");
@@ -124,7 +141,8 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
         it.addAnnotation("myAnno2");
-        assertTransformedToString("@myAnno" + LineSeparator.SYSTEM + "@myAnno2" + LineSeparator.SYSTEM + "int foo();", it);
+        assertTransformedToString(
+                "@myAnno" + LineSeparator.SYSTEM + "@myAnno2" + LineSeparator.SYSTEM + "int foo();", it);
     }
 
     @Test
@@ -154,22 +172,36 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
     void addingJavadoc() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.setJavadocComment("Cool this annotation!");
-        assertTransformedToString("@interface AD { /**Cool this annotation!*/" + LineSeparator.SYSTEM +
-                "int foo(); }", it.getParentNode().get());
+        assertTransformedToString(
+                "@interface AD { /**Cool this annotation!*/" + LineSeparator.SYSTEM + "int foo(); }",
+                it.getParentNode().get());
     }
 
     @Test
     void removingJavadoc() {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
         assertTrue(it.getJavadocComment().get().remove());
-        assertTransformedToString("@interface AD { int foo(); }", it.getParentNode().get());
+        assertTransformedToString(
+                "@interface AD { int foo(); }", it.getParentNode().get());
     }
 
     @Test
     void replacingJavadoc() {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
         it.setJavadocComment("Super extra cool this annotation!!!");
-        assertTransformedToString("@interface AD { /**Super extra cool this annotation!!!*/ int foo(); }", it.getParentNode().get());
+        assertTransformedToString(
+                "@interface AD { /**Super extra cool this annotation!!!*/ int foo(); }",
+                it.getParentNode().get());
     }
 
+    @Test
+    void modifyingRecord() {
+        considerCode("@interface AD { record Bar(String s) {} }");
+        RecordDeclaration recordDecl =
+                cu.getAnnotationDeclarationByName("AD").get().getMember(0).asRecordDeclaration();
+        recordDecl.setName("Baz");
+        assertTransformedToString(
+                "@interface AD { record Baz(String s) {} }",
+                recordDecl.getParentNode().get());
+    }
 }

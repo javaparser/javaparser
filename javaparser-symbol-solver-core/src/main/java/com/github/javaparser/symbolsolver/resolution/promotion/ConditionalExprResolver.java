@@ -39,8 +39,10 @@ public class ConditionalExprResolver {
 
     public static ConditionalExprHandler getConditionExprHandler(ResolvedType thenExpr, ResolvedType elseExpr) {
         // boolean conditional expressions
-        if (!thenExpr.isNull() && !elseExpr.isNull()
-                && thenExpr.isAssignableBy(TYPE_BOOLEAN) && elseExpr.isAssignableBy(TYPE_BOOLEAN)) {
+        if (!thenExpr.isNull()
+                && !elseExpr.isNull()
+                && thenExpr.isAssignableBy(TYPE_BOOLEAN)
+                && elseExpr.isAssignableBy(TYPE_BOOLEAN)) {
             return new BooleanConditionalExprHandler(thenExpr, elseExpr);
             // numeric conditional expressions
         }

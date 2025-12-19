@@ -20,13 +20,13 @@
  */
 package com.github.javaparser;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.utils.LineSeparator;
-
-import java.util.List;
-import java.util.Optional;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.utils.LineSeparator;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A token from a parsed source file.
@@ -77,9 +77,12 @@ public class JavaToken {
         // So in the case of:
         //
         // List<List<Set<String>>>>
-        // ___   -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this class
-        // ___  -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this class
-        // __  -> recognized as ">>", then ">" put back in the stream but Token(type=GT, image=">>") passed to this class
+        // ___   -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this
+        // class
+        // ___  -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this
+        // class
+        // __  -> recognized as ">>", then ">" put back in the stream but Token(type=GT, image=">>") passed to this
+        // class
         // _  -> Token(type=GT, image=">") good!
         //
         // So given the image could be wrong but the type is correct, we look at the type of the token and we fix
@@ -183,8 +186,14 @@ public class JavaToken {
 
     @Override
     public String toString() {
-        String text = getText().replace("\n", "\\n").replace("\r", "\\r").replace("\r\n", "\\r\\n").replace("\t", "\\t");
-        return f("\"%s\"   <%s>   %s", text, getKind(), getRange().map(Range::toString).orElse("(?)-(?)"));
+        String text = getText()
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\r\n", "\\r\\n")
+                .replace("\t", "\\t");
+        return f(
+                "\"%s\"   <%s>   %s",
+                text, getKind(), getRange().map(Range::toString).orElse("(?)-(?)"));
     }
 
     /**
@@ -202,7 +211,6 @@ public class JavaToken {
     }
 
     public enum Category {
-
         WHITESPACE_NO_EOL,
         EOL,
         COMMENT,
@@ -255,7 +263,6 @@ public class JavaToken {
 
     @Generated("com.github.javaparser.generator.core.other.TokenKindGenerator")
     public enum Kind {
-
         EOF(0),
         SPACE(1),
         WINDOWS_EOL(2),
@@ -355,7 +362,7 @@ public class JavaToken {
         TEXT_BLOCK_LITERAL(96),
         TEXT_BLOCK_CONTENT(97),
         IDENTIFIER(98),
-        LETTER(99),
+        NON_UNDERSCORE_LETTER(99),
         PART_LETTER(100),
         LPAREN(101),
         RPAREN(102),
@@ -407,7 +414,8 @@ public class JavaToken {
         RUNSIGNEDSHIFT(148),
         RSIGNEDSHIFT(149),
         GT(150),
-        CTRL_Z(151);
+        CTRL_Z(151),
+        UNNAMED_PLACEHOLDER(152);
 
         private final int kind;
 
@@ -416,7 +424,9 @@ public class JavaToken {
         }
 
         public static Kind valueOf(int kind) {
-            switch(kind) {
+            switch (kind) {
+                case 152:
+                    return UNNAMED_PLACEHOLDER;
                 case 151:
                     return CTRL_Z;
                 case 150:
@@ -522,7 +532,7 @@ public class JavaToken {
                 case 100:
                     return PART_LETTER;
                 case 99:
-                    return LETTER;
+                    return NON_UNDERSCORE_LETTER;
                 case 98:
                     return IDENTIFIER;
                 case 97:
@@ -727,7 +737,13 @@ public class JavaToken {
         }
 
         public boolean isPrimitive() {
-            return this == BYTE || this == CHAR || this == SHORT || this == INT || this == LONG || this == FLOAT || this == DOUBLE;
+            return this == BYTE
+                    || this == CHAR
+                    || this == SHORT
+                    || this == INT
+                    || this == LONG
+                    || this == FLOAT
+                    || this == DOUBLE;
         }
 
         public int getKind() {
@@ -821,15 +837,11 @@ public class JavaToken {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         JavaToken javaToken = (JavaToken) o;
-        if (kind != javaToken.kind)
-            return false;
-        if (!text.equals(javaToken.text))
-            return false;
+        if (kind != javaToken.kind) return false;
+        if (!text.equals(javaToken.text)) return false;
         return true;
     }
 }

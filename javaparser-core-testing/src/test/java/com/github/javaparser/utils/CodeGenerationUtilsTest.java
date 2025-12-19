@@ -21,11 +21,11 @@
 
 package com.github.javaparser.utils;
 
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 class CodeGenerationUtilsTest {
     @Test
@@ -49,9 +49,8 @@ class CodeGenerationUtilsTest {
         assertEquals("blue", getterToPropertyName("isBlue"));
         assertEquals("value", getterToPropertyName("hasValue"));
 
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-                () -> getterToPropertyName("value"));
+        IllegalArgumentException thrown =
+                assertThrows(IllegalArgumentException.class, () -> getterToPropertyName("value"));
         assertEquals("Unexpected getterName 'value'", thrown.getMessage());
     }
-
 }

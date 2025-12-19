@@ -21,11 +21,11 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
+
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
-
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
 /**
  * A type argument S is contained by a type argument T
@@ -108,9 +108,6 @@ public class TypeContainedByType extends ConstraintFormula {
 
     @Override
     public String toString() {
-        return "TypeContainedByType{" +
-                "S=" + S +
-                ", T=" + T +
-                '}';
+        return "TypeContainedByType{" + "S=" + S + ", T=" + T + '}';
     }
 }

@@ -24,13 +24,12 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
-
 import java.util.function.Function;
 
 /**
  * Pretty printer for AST nodes.
  */
-public class DefaultPrettyPrinter implements Printer {
+public class DefaultPrettyPrinter implements ConfigurablePrinter {
 
     private PrinterConfiguration configuration;
 
@@ -67,7 +66,8 @@ public class DefaultPrettyPrinter implements Printer {
      * @param visitorFactory
      * @param configuration Configuration to apply
      */
-    public DefaultPrettyPrinter(Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory, PrinterConfiguration configuration) {
+    public DefaultPrettyPrinter(
+            Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory, PrinterConfiguration configuration) {
         this.configuration = configuration;
         this.visitorFactory = visitorFactory;
     }

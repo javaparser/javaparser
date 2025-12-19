@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -31,8 +33,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Malte Langkabel
@@ -45,7 +45,8 @@ class FieldAccessContextResolutionTest extends AbstractResolutionTest {
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar2");
-        MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "getSelf").get();
+        MethodCallExpr methodCallExpr =
+                Navigator.findMethodCall(method, "getSelf").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);

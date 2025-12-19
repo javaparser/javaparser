@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,26 +18,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+package com.github.javaparser.ast.validator.language_level_validations;
 
-package com.github.javaparser.resolution.declarations;
+/**
+ * Validator for Java 23 language features.
+ * Java 23 does not introduce new syntax changes that affect parsing,
+ * so this validator simply extends Java 22.
+ */
+public class Java23Validator extends Java22Validator {
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-public interface ResolvedPatternDeclarationTest extends ResolvedValueDeclarationTest {
-
-    @Override
-    ResolvedPatternDeclaration createValue();
-
-    @Test
-    default void resolvedPatternShouldBeMarkedAsPattern() {
-        assertTrue(createValue().isPattern());
+    public Java23Validator() {
+        super();
     }
-
-    @Test
-    default void resolvedPatternShouldHaveAName() {
-        assertTrue(createValue().hasName());
-    }
-
 }

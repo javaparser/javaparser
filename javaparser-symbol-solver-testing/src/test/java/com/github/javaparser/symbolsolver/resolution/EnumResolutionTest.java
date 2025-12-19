@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
@@ -46,8 +48,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class EnumResolutionTest extends AbstractResolutionTest {
 
     @Test
@@ -58,9 +58,12 @@ class EnumResolutionTest extends AbstractResolutionTest {
         SwitchStmt switchStmt = Navigator.demandSwitch(method);
         Expression expression = switchStmt.getEntries().get(0).getLabels().get(0);
 
-        SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
+        SymbolReference<? extends ResolvedValueDeclaration> ref =
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
         assertTrue(ref.isSolved());
-        assertEquals("SwitchOnEnum.MyEnum", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        assertEquals(
+                "SwitchOnEnum.MyEnum",
+                ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -78,13 +81,15 @@ class EnumResolutionTest extends AbstractResolutionTest {
     void resolveEnumConstantAccess() {
         try {
             // configure symbol solver before parsing
-            StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+            StaticJavaParser.getParserConfiguration()
+                    .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
             // parse compilation unit and get field access expression
             CompilationUnit cu = parseSample("EnumFieldAccess");
             ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "EnumFieldAccess");
             MethodDeclaration method = Navigator.demandMethod(clazz, "accessField");
-            ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+            ReturnStmt returnStmt =
+                    (ReturnStmt) method.getBody().get().getStatements().get(0);
             FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
 
             // resolve field access expression
@@ -105,20 +110,34 @@ class EnumResolutionTest extends AbstractResolutionTest {
     @Test
     void enumAccessSpecifier() {
         try {
-            StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+            StaticJavaParser.getParserConfiguration()
+                    .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
             CompilationUnit cu = parseSample("EnumAccessSpecifier");
             ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
 
-            EnumDeclaration ed_public = Navigator.findType(clazz, "EnumPublic").get().toEnumDeclaration().get();
+            EnumDeclaration ed_public = Navigator.findType(clazz, "EnumPublic")
+                    .get()
+                    .toEnumDeclaration()
+                    .get();
             assertEquals(AccessSpecifier.PUBLIC, ((JavaParserEnumDeclaration) ed_public.resolve()).accessSpecifier());
 
-            EnumDeclaration ed_protected = Navigator.findType(clazz, "EnumProtected").get().toEnumDeclaration().get();
-            assertEquals(AccessSpecifier.PROTECTED, ((JavaParserEnumDeclaration) ed_protected.resolve()).accessSpecifier());
+            EnumDeclaration ed_protected = Navigator.findType(clazz, "EnumProtected")
+                    .get()
+                    .toEnumDeclaration()
+                    .get();
+            assertEquals(
+                    AccessSpecifier.PROTECTED, ((JavaParserEnumDeclaration) ed_protected.resolve()).accessSpecifier());
 
-            EnumDeclaration ed_private = Navigator.findType(clazz, "EnumPrivate").get().toEnumDeclaration().get();
+            EnumDeclaration ed_private = Navigator.findType(clazz, "EnumPrivate")
+                    .get()
+                    .toEnumDeclaration()
+                    .get();
             assertEquals(AccessSpecifier.PRIVATE, ((JavaParserEnumDeclaration) ed_private.resolve()).accessSpecifier());
 
-            EnumDeclaration ed_default = Navigator.findType(clazz, "EnumDefault").get().toEnumDeclaration().get();
+            EnumDeclaration ed_default = Navigator.findType(clazz, "EnumDefault")
+                    .get()
+                    .toEnumDeclaration()
+                    .get();
             assertEquals(AccessSpecifier.NONE, ((JavaParserEnumDeclaration) ed_default.resolve()).accessSpecifier());
         } finally {
             StaticJavaParser.setConfiguration(new ParserConfiguration());
@@ -127,34 +146,97 @@ class EnumResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void testResolveValueOfMethod() {
-        String s =
-                "public class ClassTest {\n" +
-                        "    public enum SecurityPolicyScopedTemplatesKeys {\n" +
-                        "        SUSPICIOUS(\"suspicious\");\n" +
-                        "        private String displayName;\n" +
-                        "\n" +
-                        "        private SecurityPolicyScopedTemplatesKeys(String displayName) {\n" +
-                        "            this.displayName = displayName;\n" +
-                        "        }\n" +
-                        "\n" +
-                        "        public String getDisplayName() {\n" +
-                        "            return this.displayName;\n" +
-                        "        }\n" +
-                        "    }\n" +
-                        "\n" +
-                        "    public void m() {\n" +
-                        "        SecurityPolicyScopedTemplatesKeys a = SecurityPolicyScopedTemplatesKeys.valueOf(\"SUSPICIOUS\");\n" +
-                        "    }\n" +
-                        "}";
+        String s = "public class ClassTest {\n" + "    public enum SecurityPolicyScopedTemplatesKeys {\n"
+                + "        SUSPICIOUS(\"suspicious\");\n"
+                + "        private String displayName;\n"
+                + "\n"
+                + "        private SecurityPolicyScopedTemplatesKeys(String displayName) {\n"
+                + "            this.displayName = displayName;\n"
+                + "        }\n"
+                + "\n"
+                + "        public String getDisplayName() {\n"
+                + "            return this.displayName;\n"
+                + "        }\n"
+                + "    }\n"
+                + "\n"
+                + "    public void m() {\n"
+                + "        SecurityPolicyScopedTemplatesKeys a = SecurityPolicyScopedTemplatesKeys.valueOf(\"SUSPICIOUS\");\n"
+                + "    }\n"
+                + "}";
         TypeSolver typeSolver = new ReflectionTypeSolver();
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(s);
         MethodCallExpr methodCallExpr = cu.findFirst(MethodCallExpr.class).get();
         ResolvedMethodDeclaration rd = methodCallExpr.resolve();
         assertEquals("valueOf", rd.getName());
-        assertEquals("ClassTest.SecurityPolicyScopedTemplatesKeys", rd.getReturnType().describe());
+        assertEquals(
+                "ClassTest.SecurityPolicyScopedTemplatesKeys",
+                rd.getReturnType().describe());
         assertEquals(1, rd.getNumberOfParams());
         assertEquals("java.lang.String", rd.getParam(0).describeType());
     }
 
+    @Test
+    public void testResolveValuesMethod() {
+        String s = "public class ClassTest {\n" + "    public enum SecurityPolicyScopedTemplatesKeys {\n"
+                + "        SUSPICIOUS(\"suspicious\");\n"
+                + "        private String displayName;\n"
+                + "\n"
+                + "        private SecurityPolicyScopedTemplatesKeys(String displayName) {\n"
+                + "            this.displayName = displayName;\n"
+                + "        }\n"
+                + "\n"
+                + "        public String getDisplayName() {\n"
+                + "            return this.displayName;\n"
+                + "        }\n"
+                + "    }\n"
+                + "\n"
+                + "    public SecurityPolicyScopedTemplatesKeys m(int id) {\n"
+                + "        return SecurityPolicyScopedTemplatesKeys.values()[id];\n"
+                + "    }\n"
+                + "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+        MethodCallExpr methodCallExpr = cu.findFirst(MethodCallExpr.class).get();
+        ResolvedMethodDeclaration rd = methodCallExpr.resolve();
+        assertEquals("values", rd.getName());
+        assertEquals(
+                "ClassTest.SecurityPolicyScopedTemplatesKeys[]",
+                rd.getReturnType().describe());
+        assertTrue(rd.isStatic());
+    }
+
+    @Test
+    public void testResolveValuesMethodAndReturnType() {
+        String s = "public class ClassTest {\n" + "    public enum SecurityPolicyScopedTemplatesKeys {\n"
+                + "        SUSPICIOUS(\"suspicious\");\n"
+                + "        private String displayName;\n"
+                + "\n"
+                + "        private SecurityPolicyScopedTemplatesKeys(String displayName) {\n"
+                + "            this.displayName = displayName;\n"
+                + "        }\n"
+                + "\n"
+                + "        public String getDisplayName() {\n"
+                + "            return this.displayName;\n"
+                + "        }\n"
+                + "\n"
+                + "        public SecurityPolicyScopedTemplatesKeys m(int id) {\n"
+                + "            return values()[id];\n"
+                + "        }\n"
+                + "    }\n"
+                + "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+        MethodCallExpr methodCallExpr = cu.findFirst(MethodCallExpr.class).get();
+        ResolvedMethodDeclaration rd = methodCallExpr.resolve();
+        assertEquals("values", rd.getName());
+        assertEquals(
+                "ClassTest.SecurityPolicyScopedTemplatesKeys[]",
+                rd.getReturnType().describe());
+        final ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
+        assertEquals("ClassTest.SecurityPolicyScopedTemplatesKeys[]", resolvedType.describe());
+        assertTrue(rd.isStatic());
+    }
 }

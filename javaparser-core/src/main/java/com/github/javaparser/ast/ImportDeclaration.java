@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
@@ -29,9 +31,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
-import static com.github.javaparser.StaticJavaParser.parseName;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An import declaration.
@@ -52,21 +51,58 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
 
     private boolean isAsterisk;
 
+    private boolean isModule;
+
     private ImportDeclaration() {
-        this(null, new Name(), false, false);
+        this(null, new Name(), false, false, false);
     }
 
+    public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        // If the value of the isAsterisk parameter is true, we consider that we deliberately wanted to create an import
+        // declaration of the form ‘x.*’ by specifying only ‘x’.
+        // On the other hand, if the isAsterisk parameter is false, we can check that we haven't tried to directly
+        // create an import declaration of the form ‘x.*’.
+        this(null, getNameFromString(name), isStatic, isAsterisk ? isAsterisk : hasAsterisk(name), isModule);
+    }
+
+    /**
+     * This constructor is kept to avoid breaking existing code creating non-module imports.
+     */
     public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk) {
-        this(null, parseName(name), isStatic, isAsterisk);
+        // If the value of the isAsterisk parameter is true, we consider that we deliberately wanted to create an import
+        // declaration of the form ‘x.*’ by specifying only ‘x’.
+        // On the other hand, if the isAsterisk parameter is false, we can check that we haven't tried to directly
+        // create an import declaration of the form ‘x.*’.
+        this(null, getNameFromString(name), isStatic, isAsterisk ? isAsterisk : hasAsterisk(name));
     }
 
     @AllFieldsConstructor
+    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        this(null, name, isStatic, isAsterisk, isModule);
+    }
+
+    /**
+     * This constructor is kept to avoid breaking existing code creating non-module imports.
+     */
     public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk) {
         this(null, name, isStatic, isAsterisk);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        super(tokenRange);
+        setName(name);
+        setStatic(isStatic);
+        setAsterisk(isAsterisk);
+        setModule(isModule);
+        customInitialization();
+    }
+
+    /**
+     * This constructor is kept to avoid breaking existing code creating non-module imports.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk) {
@@ -90,6 +126,37 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     }
 
     /**
+     * Returns true if the specified name is qualified
+     */
+    private static boolean isQualified(String name) {
+        return name != null & name.indexOf(".") >= 0;
+    }
+
+    /**
+     * Returns true if the specified name has an asterisk
+     */
+    private static boolean hasAsterisk(String name) {
+        return name != null & name.endsWith("*");
+    }
+
+    /**
+     * Returns the name of the import.
+     * The name can have a qualifier.
+     * For example, the java.util.Map class would have a qualifier ‘java.util’ and an identifier ‘name’
+     * and the qualifier would have a qualifier ‘java’ and an identifier ‘util’ and so on.
+     */
+    private static Name getNameFromString(String name) {
+        if (!isQualified(name)) {
+            return new Name(name);
+        }
+        if (hasAsterisk(name)) {
+            name = name.substring(0, name.length() - 2);
+        }
+        int lastSeparator = name.lastIndexOf(".");
+        return new Name(getNameFromString(name.substring(0, lastSeparator)), name.substring(lastSeparator + 1));
+    }
+
+    /**
      * Retrieves the name of the import (.* is not included.)
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -103,6 +170,11 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isAsterisk() {
         return isAsterisk;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public boolean isModule() {
+        return isModule;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -127,8 +199,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -167,5 +238,15 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ImportDeclaration setModule(final boolean isModule) {
+        if (isModule == this.isModule) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.MODULE, this.isModule, isModule);
+        this.isModule = isModule;
+        return this;
     }
 }

@@ -21,14 +21,13 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.StaticJavaParser.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.utils.LineSeparator;
-
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ConcreteSyntaxModelTest {
 
@@ -57,17 +56,18 @@ class ConcreteSyntaxModelTest {
     @Test
     void printSimplestClass() {
         Node node = parse("class A {}");
-        assertEquals("class A {" + LineSeparator.SYSTEM +
-                "}" + LineSeparator.SYSTEM, print(node));
+        assertEquals("class A {" + LineSeparator.SYSTEM + "}" + LineSeparator.SYSTEM, print(node));
     }
 
     @Test
     void printAClassWithField() {
         Node node = parse("class A { int a; }");
-        assertEquals("class A {" + LineSeparator.SYSTEM
-                + LineSeparator.SYSTEM +
-                "    int a;" + LineSeparator.SYSTEM +
-                "}" + LineSeparator.SYSTEM, print(node));
+        assertEquals(
+                "class A {" + LineSeparator.SYSTEM
+                        + LineSeparator.SYSTEM + "    int a;"
+                        + LineSeparator.SYSTEM + "}"
+                        + LineSeparator.SYSTEM,
+                print(node));
     }
 
     @Test
@@ -85,14 +85,12 @@ class ConcreteSyntaxModelTest {
     @Test
     void printAnEmptyInterface() {
         Node node = parse("interface A {}");
-        assertEquals("interface A {" + LineSeparator.SYSTEM +
-                "}" + LineSeparator.SYSTEM, print(node));
+        assertEquals("interface A {" + LineSeparator.SYSTEM + "}" + LineSeparator.SYSTEM, print(node));
     }
 
     @Test
     void printAnEmptyInterfaceWithModifier() {
         Node node = parse("public interface A {}");
-        assertEquals("public interface A {" + LineSeparator.SYSTEM +
-                "}" + LineSeparator.SYSTEM, print(node));
+        assertEquals("public interface A {" + LineSeparator.SYSTEM + "}" + LineSeparator.SYSTEM, print(node));
     }
 }

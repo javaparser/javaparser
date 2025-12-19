@@ -30,7 +30,6 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
 import java.util.Optional;
 
 class JavaParserTypeParameterTest extends AbstractTypeDeclarationTest implements ResolvedTypeParameterDeclarationTest {
@@ -38,7 +37,8 @@ class JavaParserTypeParameterTest extends AbstractTypeDeclarationTest implements
     @Override
     public JavaParserTypeParameter createValue() {
         TypeParameter typeParameter = StaticJavaParser.parse("class A<T> {}")
-                .findFirst(TypeParameter.class).get();
+                .findFirst(TypeParameter.class)
+                .get();
         TypeSolver typeSolver = new ReflectionTypeSolver();
         return new JavaParserTypeParameter(typeParameter, typeSolver);
     }
@@ -46,13 +46,11 @@ class JavaParserTypeParameterTest extends AbstractTypeDeclarationTest implements
     @Override
     public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
-                safeCast(associableToAST, JavaParserTypeParameter.class).getWrappedNode()
-        );
+                safeCast(associableToAST, JavaParserTypeParameter.class).getWrappedNode());
     }
 
     @Override
     public boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration) {
         return false;
     }
-
 }

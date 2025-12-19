@@ -20,16 +20,22 @@
 
 package com.github.javaparser.ast.visitor;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
@@ -42,7 +48,8 @@ import static org.mockito.Mockito.times;
 
 class GenericListVisitorAdapterTest {
 
-    private final GenericListVisitorAdapter<Object, Object> visitor = new GenericListVisitorAdapter<Object, Object>() {};
+    private final GenericListVisitorAdapter<Object, Object> visitor =
+            new GenericListVisitorAdapter<Object, Object>() {};
 
     @Test
     void visit_GivenAnnotationDeclaration() {
@@ -1132,7 +1139,7 @@ class GenericListVisitorAdapterTest {
     void visit_GivenJavadocComment() {
         // Given
         Object argument = mock(Object.class);
-        JavadocComment node = mock(JavadocComment.class);
+        TraditionalJavadocComment node = mock(TraditionalJavadocComment.class);
 
         // When
         Mockito.when(node.getComment()).thenReturn(Optional.of(mock(Comment.class)));
@@ -2453,7 +2460,7 @@ class GenericListVisitorAdapterTest {
     }
 
     @Test
-    void visit_GivenPatternExpr() {
+    void visit_GivenTypePatternExpr() {
         // Given
         Object argument = mock(Object.class);
         TypePatternExpr node = mock(TypePatternExpr.class);
@@ -2474,6 +2481,33 @@ class GenericListVisitorAdapterTest {
         InOrder order = Mockito.inOrder(node);
         order.verify(node).getModifiers();
         order.verify(node).getName();
+        order.verify(node).getType();
+        order.verify(node, times(2)).getComment();
+        order.verifyNoMoreInteractions();
+    }
+
+    @Test
+    void visit_GivenRecordPatternExpr() {
+        // Given
+        Object argument = mock(Object.class);
+        RecordPatternExpr node = mock(RecordPatternExpr.class);
+
+        // When
+        Mockito.when(node.getModifiers()).thenReturn(mock(NodeList.class));
+        Mockito.when(node.getType()).thenReturn(mock(ReferenceType.class));
+        Mockito.when(node.getPatternList()).thenReturn(mock(NodeList.class));
+        Mockito.when(node.getComment()).thenReturn(Optional.of(mock(Comment.class)));
+
+        // Then
+        List<Object> result = visitor.visit(node, argument);
+
+        // Assert
+        assertNotNull(result);
+
+        // Verify
+        InOrder order = Mockito.inOrder(node);
+        order.verify(node).getModifiers();
+        order.verify(node).getPatternList();
         order.verify(node).getType();
         order.verify(node, times(2)).getComment();
         order.verifyNoMoreInteractions();
@@ -2517,10 +2551,10 @@ class GenericListVisitorAdapterTest {
     }
 
     @Test
-    void visit_CompactConstructorDeclaration () {
+    void visit_CompactConstructorDeclaration() {
         // Given
         Object argument = mock(Object.class);
-        CompactConstructorDeclaration  node = mock(CompactConstructorDeclaration .class);
+        CompactConstructorDeclaration node = mock(CompactConstructorDeclaration.class);
 
         // When
         Mockito.when(node.getBody()).thenReturn(mock(BlockStmt.class));

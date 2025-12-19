@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.model.typesystem.NullType;
@@ -33,13 +35,10 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class NullTypeTest {
 
@@ -57,7 +56,8 @@ class NullTypeTest {
         arrayOfBooleans = new ResolvedArrayType(ResolvedPrimitiveType.BOOLEAN);
         arrayOfListOfA = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList())))));
+                ImmutableList.of(new ResolvedTypeVariable(
+                        ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList())))));
     }
 
     @Test
@@ -148,5 +148,4 @@ class NullTypeTest {
 
         }
     }
-
 }

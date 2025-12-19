@@ -55,10 +55,7 @@ public class ProperUpperBound {
 
     @Override
     public String toString() {
-        return "ProperUpperBound{" +
-                "inferenceVariable=" + inferenceVariable +
-                ", properType=" + properType +
-                '}';
+        return "ProperUpperBound{" + "inferenceVariable=" + inferenceVariable + ", properType=" + properType + '}';
     }
 
     public InferenceVariable getInferenceVariable() {

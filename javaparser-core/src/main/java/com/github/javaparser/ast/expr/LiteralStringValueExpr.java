@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -27,11 +29,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Any literal value that is stored internally as a String.
@@ -63,7 +62,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LiteralStringValueExpr setValue(final String value) {
         assertNotNull(value);
-        if (value == this.value) {
+        if (value.equals(this.value)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);

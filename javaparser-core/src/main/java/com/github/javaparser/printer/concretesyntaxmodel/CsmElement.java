@@ -23,15 +23,14 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.TokenTypes.spaceTokenKind;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.lexicalpreservation.TextElement;
 import com.github.javaparser.utils.LineSeparator;
+import java.util.Arrays;
+import java.util.List;
 
 public interface CsmElement {
 
@@ -73,15 +72,24 @@ public interface CsmElement {
         return new CsmToken(tokenType);
     }
 
-    static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {
+    static CsmElement conditional(
+            ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {
         return new CsmConditional(property, condition, thenElement);
     }
 
-    static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
+    static CsmElement conditional(
+            ObservableProperty property,
+            CsmConditional.Condition condition,
+            CsmElement thenElement,
+            CsmElement elseElement) {
         return new CsmConditional(property, condition, thenElement, elseElement);
     }
 
-    static CsmElement conditional(List<ObservableProperty> properties, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
+    static CsmElement conditional(
+            List<ObservableProperty> properties,
+            CsmConditional.Condition condition,
+            CsmElement thenElement,
+            CsmElement elseElement) {
         return new CsmConditional(properties, condition, thenElement, elseElement);
     }
 
@@ -121,11 +129,17 @@ public interface CsmElement {
         return new CsmList(property, CsmElement.none(), separator, new CsmNone(), new CsmNone());
     }
 
-    static CsmElement list(ObservableProperty property, CsmElement separator, CsmElement preceeding, CsmElement following) {
+    static CsmElement list(
+            ObservableProperty property, CsmElement separator, CsmElement preceeding, CsmElement following) {
         return new CsmList(property, none(), separator, preceeding, following);
     }
 
-    static CsmElement list(ObservableProperty property, CsmElement separatorPre, CsmElement separatorPost, CsmElement preceeding, CsmElement following) {
+    static CsmElement list(
+            ObservableProperty property,
+            CsmElement separatorPre,
+            CsmElement separatorPost,
+            CsmElement preceeding,
+            CsmElement following) {
         return new CsmList(property, separatorPre, separatorPost, preceeding, following);
     }
 
@@ -147,13 +161,18 @@ public interface CsmElement {
     }
 
     static CsmElement block(CsmElement content) {
-        return sequence(token(GeneratedJavaParserConstants.LBRACE), indent(), content, unindent(), token(GeneratedJavaParserConstants.RBRACE));
+        return sequence(
+                token(GeneratedJavaParserConstants.LBRACE),
+                indent(),
+                content,
+                unindent(),
+                token(GeneratedJavaParserConstants.RBRACE));
     }
 
     /*
      * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
      */
     default boolean isCorrespondingElement(TextElement textElement) {
-    	return false;
+        return false;
     }
 }
