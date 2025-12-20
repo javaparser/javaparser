@@ -40,12 +40,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.times;
-
 class GenericListVisitorAdapterTest {
 
     private final GenericListVisitorAdapter<Object, Object> visitor =
@@ -2583,10 +2577,10 @@ class GenericListVisitorAdapterTest {
         order.verifyNoMoreInteractions();
     }
 
-	@SuppressWarnings("unchecked")
-	// Non type-safe mock method to avoid unchecked warnings
-	// Its use is trivial and systematic enough to not be a problem
-	private <T> T mock(Class<?> classToMock) {
-		return (T) Mockito.mock(classToMock);
-	}
+    @SuppressWarnings("unchecked")
+    // Non type-safe mock method to avoid unchecked warnings
+    // Its use is trivial and systematic enough to not be a problem
+    private <T> T mock(Class<?> classToMock) {
+        return (T) Mockito.mock(classToMock);
+    }
 }
