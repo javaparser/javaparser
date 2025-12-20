@@ -503,9 +503,7 @@ public class JavaParserFacade {
         //            → The receiver is foo (already bound at reference creation time)
         Optional<MethodUsage> result;
 
-        if (scope.isTypeExpr()
-                && typeOfScope.isReferenceType()
-                && !scope.asTypeExpr().isPrimaryExpr(typeOfScope.asReferenceType())) {
+        if (scope.isTypeExpr() && typeOfScope.isReferenceType() && !methodReferenceExpr.isScopePrimaryExpr()) {
             // JLS §15.13.1: "If the method reference expression has the form ReferenceType ::
             // [TypeArguments] Identifier, the potentially applicable methods are:"
             //

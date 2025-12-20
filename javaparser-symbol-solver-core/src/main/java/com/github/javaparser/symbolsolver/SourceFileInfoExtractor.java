@@ -25,6 +25,7 @@ import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static java.util.Comparator.comparing;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -73,6 +74,8 @@ public class SourceFileInfoExtractor {
 
     public SourceFileInfoExtractor(TypeSolver typeSolver) {
         this.typeSolver = typeSolver;
+        // We must initialise the symbol resolver in the parser configuration in order to resolve expressions.
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
     }
 
     public void setVerbose(boolean verbose) {
