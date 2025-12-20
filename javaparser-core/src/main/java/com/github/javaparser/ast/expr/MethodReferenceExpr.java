@@ -263,6 +263,7 @@ public class MethodReferenceExpr extends Expression
     public boolean isScopePrimaryExpr() {
         return !getScope()
                 .calculateResolvedType()
+                .erasure()
                 .describe()
                 .endsWith(getScope().toString());
     }
