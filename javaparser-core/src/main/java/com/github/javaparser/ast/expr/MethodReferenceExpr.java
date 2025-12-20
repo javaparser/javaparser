@@ -249,4 +249,21 @@ public class MethodReferenceExpr extends Expression
     public boolean isPolyExpression() {
         return true;
     }
+
+    /*
+     * https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.13
+     * Workaround to handle cases where scope should have been parsed as a primary expression.
+     * A change to the grammar should lead to the removal of this method.
+     * This is the case, for example, in the following reference expression ‘foo:convert’,
+     * where foo is an instance of the Foo class and convert is a method of the Foo class.
+     * foo should not be considered a type expression as String could be in the expression String::length.
+     * This method compares the scope (e.g. foo) with the resolved type, e.g. Foo.
+     * If they are different, we consider it to be a primary expression.
+     */
+    public boolean isScopePrimaryExpr() {
+        return !getScope()
+                .calculateResolvedType()
+                .describe()
+                .endsWith(getScope().toString());
+    }
 }
