@@ -44,7 +44,6 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.FileVisitResult;
