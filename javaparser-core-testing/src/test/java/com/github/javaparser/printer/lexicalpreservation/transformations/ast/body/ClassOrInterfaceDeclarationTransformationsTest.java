@@ -215,7 +215,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
         considerCode("void main() { }");
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
         cid.addField("int", "count");
-        assertTransformedToString("void main() { }" + LineSeparator.SYSTEM + "int count;" + LineSeparator.SYSTEM, cid);
+        assertTransformedToString("void main() { }" + LineSeparator.SYSTEM + LineSeparator.SYSTEM + "int count;", cid);
     }
 
     @Test
@@ -225,8 +225,8 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
         cid.addMethod("greet", PUBLIC);
         assertTransformedToString(
-                "void main() { }" + LineSeparator.SYSTEM + "public void greet() {" + LineSeparator.SYSTEM + "}"
-                        + LineSeparator.SYSTEM,
+                "void main() { }" + LineSeparator.SYSTEM + LineSeparator.SYSTEM + "public void greet() {"
+                        + LineSeparator.SYSTEM + "}",
                 cid);
     }
 
@@ -270,5 +270,26 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
         cid.getMembers().remove(0);
         assertTransformedToString("void main() { }", cid);
+    }
+
+    @Test
+    void makingNonCompactClassCompact() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        considerCode("class Foo {" + LineSeparator.SYSTEM + "    void main() { }" + LineSeparator.SYSTEM + "}");
+        ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
+        cid.setCompact(true);
+        assertTransformedToString(LineSeparator.SYSTEM + "void main() { }", cid);
+    }
+
+    @Test
+    void makingCompactClassNonCompact() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        considerCode("void main() { }");
+        ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
+        cid.setCompact(false);
+        assertTransformedToString(
+                "final class $COMPACT_CLASS {" + LineSeparator.SYSTEM + "       void main() { }" + LineSeparator.SYSTEM
+                        + "}",
+                cid);
     }
 }
