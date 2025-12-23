@@ -212,8 +212,55 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         }
         NodeList<Modifier> modifiers = getModifiers();
         if (modifiers != null) {
-            getModifiers().forEach(modifier -> modifier.setData(PHANTOM_KEY, newIsCompact));
+            getModifiers().forEach(modifier -> {
+                if (modifier.getKeyword().equals(Modifier.Keyword.FINAL)) {
+                    modifier.setData(PHANTOM_KEY, newIsCompact);
+                }
+            });
         }
+    }
+
+    @Override
+    public void customInitialization() {
+        // The LPP crashes if the name or modifiers of a class don't have a range, but since the compact class name
+        // is synthetic, this will always be the case for the implicit name and final modifier. There is already
+        // a mechanism to handle this case in the LPP in the form of the `PHANTOM_KEY` data property. If this is
+        // set to true for a given, the LPP does not attempt to find the range for this node.
+        // To handle this for classes, an observer is created for all ClassOrInterfaceDeclarations to monitor
+        // name/modifier changes along with the isCompact field and to set these as phantom or not when appropriate.
+        // Another option would be to override the setName, setCompact etc. methods to include this functionality,
+        // but a mechanism to stop the code generators from overwriting these methods would be necessary.
+        register(
+                new AstObserverAdapter() {
+
+                    @Override
+                    public void propertyChange(
+                            Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                        if (!(observedNode instanceof ClassOrInterfaceDeclaration)) {
+                            throw new IllegalStateException(
+                                    "It should not be possible for a compact class observer to be added to anything other than a ClassOrInterfaceDeclaration");
+                        }
+                        if (property.equals(ObservableProperty.NAME)) {
+                            // If the name of the class changes, mark it as a phantom node if the class is compact
+                            SimpleName newName = (SimpleName) newValue;
+                            newName.setData(PHANTOM_KEY, isCompact);
+                        } else if (property.equals(ObservableProperty.MODIFIERS)) {
+                            // If modifiers change, mark them as phantom nodes if the class is compact
+                            @SuppressWarnings("unchecked")
+                            NodeList<Modifier> newModifiers = (NodeList<Modifier>) newValue;
+                            newModifiers.forEach(modifier -> {
+                                if (modifier.getKeyword().equals(Modifier.Keyword.FINAL)) {
+                                    modifier.setData(PHANTOM_KEY, isCompact);
+                                }
+                            });
+                        } else if (property.equals(ObservableProperty.COMPACT)) {
+                            // If a compact class is made non-compact or vice versa, handle it properly
+                            processIsCompactChange((boolean) newValue);
+                        }
+                    }
+                },
+                ObserverRegistrationMode.JUST_THIS_NODE);
+        processIsCompactChange(isCompact());
     }
 
     @Override

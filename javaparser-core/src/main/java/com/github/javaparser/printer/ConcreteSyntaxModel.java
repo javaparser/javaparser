@@ -139,7 +139,7 @@ public class ConcreteSyntaxModel {
                 sequence(conditional(
                         ObservableProperty.COMPACT,
                         FLAG,
-                        list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), newline()),
+                        list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), none()),
                         sequence(
                                 comment(),
                                 memberAnnotations(),
