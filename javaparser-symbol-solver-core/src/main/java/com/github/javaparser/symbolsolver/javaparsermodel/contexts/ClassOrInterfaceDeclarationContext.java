@@ -41,6 +41,8 @@ import java.util.Optional;
  */
 public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContext<ClassOrInterfaceDeclaration> {
 
+    public static final String JAVA_BASE_MODULE_NAME = "java.base";
+
     private JavaParserTypeDeclarationAdapter javaParserTypeDeclarationAdapter;
 
     ///
@@ -65,6 +67,15 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             return SymbolReference.solved(this.getDeclaration().getVisibleField(name));
         }
 
+        // Compact classes implicitly import the java.base module. To avoid having to add this import explicitly,
+        // first check if the class is compact and then try to solve the given type in the java.base module.
+        if (wrappedNode.isCompact()) {
+            SymbolReference<ResolvedValueDeclaration> maybeSolved = solveInJavaBaseModule(name);
+            if (maybeSolved.isSolved()) {
+                return maybeSolved;
+            }
+        }
+
         // then to parent
         return solveSymbolInParentContext(name);
     }
@@ -77,8 +88,31 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
             return Optional.of(Value.from(this.getDeclaration().getField(name)));
         }
 
+        // Compact classes implicitly import the java.base module. To avoid having to add this import explicitly,
+        // first check if the class is compact and then try to solve the given type in the java.base module.
+        if (wrappedNode.isCompact()) {
+            SymbolReference<ResolvedValueDeclaration> maybeSolved = solveInJavaBaseModule(name);
+            if (maybeSolved.isSolved()) {
+                return Optional.of(Value.from(maybeSolved.getCorrespondingDeclaration()));
+            }
+        }
+
         // then to parent
         return solveSymbolAsValueInParentContext(name);
+    }
+
+    /**
+     * Compact classes implicitly import the java.base module, so when resolving a type in a compact class
+     * this needs to be checked.
+     */
+    private SymbolReference<ResolvedValueDeclaration> solveInJavaBaseModule(String name) {
+        SymbolReference<ResolvedReferenceTypeDeclaration> maybeSolved =
+                typeSolver.tryToSolveTypeInModule(JAVA_BASE_MODULE_NAME, name);
+        if (maybeSolved.isSolved() && maybeSolved.getDeclaration().get() instanceof ResolvedValueDeclaration) {
+            return SymbolReference.solved(
+                    (ResolvedValueDeclaration) maybeSolved.getDeclaration().get());
+        }
+        return SymbolReference.unsolved();
     }
 
     @Override

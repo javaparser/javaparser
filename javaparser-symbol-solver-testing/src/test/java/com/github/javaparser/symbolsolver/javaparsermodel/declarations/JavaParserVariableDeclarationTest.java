@@ -24,7 +24,9 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -33,6 +35,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclarationTest;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -42,6 +45,7 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 class JavaParserVariableDeclarationTest extends AbstractResolutionTest implements ResolvedValueDeclarationTest {
 
@@ -141,5 +145,29 @@ class JavaParserVariableDeclarationTest extends AbstractResolutionTest implement
 
         assertEquals(
                 "com.github.javaparser.testpackage.TestClass", rvd.getType().describe());
+    }
+
+    @Test
+    @EnabledForJreRange(min = JRE.JAVA_9)
+    void javaBaseTypeFromImplicitCompactClassImport() {
+        String code = "void main() { List<String> l; }";
+
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
+        ParserConfiguration parserConfiguration = new ParserConfiguration()
+                .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25)
+                .setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParser parser = new JavaParser(parserConfiguration);
+
+        ParseResult<CompilationUnit> parseResult = parser.parse(code);
+
+        assertTrue(parseResult.isSuccessful());
+
+        CompilationUnit cu = parseResult.getResult().get();
+
+        VariableDeclarator declarator = cu.findFirst(VariableDeclarator.class).get();
+
+        assertEquals(
+                "java.util.List<java.lang.String>",
+                declarator.getType().resolve().describe());
     }
 }
