@@ -3,12 +3,14 @@
 	<parent>
         <artifactId>jmlparser-parent</artifactId>
         <groupId>io.github.jmltoolkit</groupId>
-        <version>3.27.0-b7-SNAPSHOT</version>
+		<version>3.27.1-b7-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>jmlparser-core-testing-bdd</artifactId>
-	<description>The BDD test suite for javaparser-core</description>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<url>https://github.com/jmltoolkit</url>
+	<description>The BDD test suite for jmlparser-core</description>
 
 	<licenses>
 		<license>
@@ -29,14 +31,6 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<!-- no need to release this module -->
-					<skip>true</skip>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

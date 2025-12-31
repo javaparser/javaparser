@@ -225,6 +225,8 @@ public class ParserConfiguration {
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
+         * Using the RAW language level can lead to parsing errors for features introduced in a specific version of Java
+         * (see issue https://github.com/javaparser/javaparser/issues/4813).
          */
         public static LanguageLevel RAW = null;
 

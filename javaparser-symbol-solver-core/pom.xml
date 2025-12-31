@@ -4,12 +4,14 @@
 	<parent>
       <artifactId>jmlparser-parent</artifactId>
       <groupId>io.github.jmltoolkit</groupId>
-      <version>3.27.0-b7-SNAPSHOT</version>
+		<version>3.27.1-b7-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>jmlparser-symbol-solver-core</artifactId>
 	<packaging>jar</packaging>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<url>https://github.com/javaparser</url>
 	<description>A Symbol Solver for Java, built on top of JavaParser (core)</description>
 
 	<licenses>

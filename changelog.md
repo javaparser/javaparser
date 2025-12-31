@@ -1,7 +1,6 @@
-
-Next Release (Version 3.27.1-snapshot)
+Next Release (Version 3.27.2-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/213?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/214?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +8,78 @@ Next Release (Version 3.27.1-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+Version 3.27.1
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/213?closed=1)
+
+### Changed
+
+* fix: switch expression improvement (PR [#4823](https://github.com/javaparser/javaparser/pull/4823)
+  by [@seokjun7410](https://github.com/seokjun7410))
+
+### Fixed
+
+* Fix: Adjusts the range limits of lambda expression parameters to ignore brackets. (
+  PR [#4860](https://github.com/javaparser/javaparser/pull/4860) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue 4846 (PR [#4855](https://github.com/javaparser/javaparser/pull/4855)
+  by [@PiTheGuy](https://github.com/PiTheGuy))
+* Revert checkstyle plugin upgrade (PR [#4836](https://github.com/javaparser/javaparser/pull/4836)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4832 Resolving type of fully qualified varargs invocation throws IndexOutOfBoundsException (
+  PR [#4835](https://github.com/javaparser/javaparser/pull/4835) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Issue 4829 Infinite loop in DifferenceElementCalculator when calling setPermittedTypes (
+  PR [#4834](https://github.com/javaparser/javaparser/pull/4834) by [@jlerbsc](https://github.com/jlerbsc))
+* XmlPrinter: fix duplicate attribute name in generated xml (
+  PR [#4806](https://github.com/javaparser/javaparser/pull/4806) by [@sgqy](https://github.com/sgqy))
+* Use lambda parameter counts and block bodies for improved resolution  (
+  PR [#4796](https://github.com/javaparser/javaparser/pull/4796)
+  by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fix issue #4791 (PR [#4792](https://github.com/javaparser/javaparser/pull/4792)
+  by [@bannmann](https://github.com/bannmann))
+
+### Developer Changes
+
+* fix(deps): update dependency org.checkerframework:checker-qual to v3.51.1 (
+  PR [#4862](https://github.com/javaparser/javaparser/pull/4862) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-javadoc-plugin to v3.12.0 (
+  PR [#4843](https://github.com/javaparser/javaparser/pull/4843) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency com.google.guava:guava to v33.5.0-jre (
+  PR [#4839](https://github.com/javaparser/javaparser/pull/4839) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update codecov/codecov-action action to v5.5.1 (
+  PR [#4827](https://github.com/javaparser/javaparser/pull/4827) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency org.checkerframework:checker-qual to v3.50.0 (
+  PR [#4825](https://github.com/javaparser/javaparser/pull/4825) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/setup-java action to v5 (PR [#4822](https://github.com/javaparser/javaparser/pull/4822)
+  by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action to v5 (PR [#4811](https://github.com/javaparser/javaparser/pull/4811)
+  by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency com.puppycrawl.tools:checkstyle to v11 (
+  PR [#4808](https://github.com/javaparser/javaparser/pull/4808) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-surefire-plugin to v3.5.4 (
+  PR [#4701](https://github.com/javaparser/javaparser/pull/4701) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### Uncategorised
+
+* Improves documentation on LexicalPreservingPrinter (PR [#4820](https://github.com/javaparser/javaparser/pull/4820)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* Improves documentation on the raw langage level (PR [#4819](https://github.com/javaparser/javaparser/pull/4819)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* Fix javadoc of Name class (PR [#4789](https://github.com/javaparser/javaparser/pull/4789)
+  by [@bannmann](https://github.com/bannmann))
+* Fix NormalAnnotationExpr Javadoc (PR [#4784](https://github.com/javaparser/javaparser/pull/4784)
+  by [@bannmann](https://github.com/bannmann))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@seokjun7410](https://github.com/seokjun7410)
+* [@bannmann](https://github.com/bannmann)
+* [@sgqy](https://github.com/sgqy)
+* [@johannescoetzee](https://github.com/johannescoetzee)
+* [@PiTheGuy](https://github.com/PiTheGuy)
+* [@jlerbsc](https://github.com/jlerbsc)
 
 Version 3.27.0
 --------------

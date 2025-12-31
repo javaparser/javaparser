@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,7 +23,10 @@ package com.github.javaparser.ast.expr;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
 
+import com.github.javaparser.ast.observer.AstObserver;
 import java.math.BigInteger;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
@@ -184,5 +187,19 @@ class LiteralStringValueExprTest {
         assertThat(new StringLiteralExpr("").setEscapedValue("\r").asString()).isEqualTo("\r");
         assertThat(new StringLiteralExpr("Hello\nWorld\rHello\"World\'").asString())
                 .isEqualTo("Hello\nWorld\rHello\"World\'");
+    }
+
+    @Test
+    void issue4791Test() {
+        String a = new String("Hello World");
+        String b = new String("Hello World");
+        StringLiteralExpr expression = new StringLiteralExpr(a);
+
+        AstObserver observer = mock(AstObserver.class);
+        expression.register(observer);
+
+        expression.setValue(b);
+
+        verifyNoInteractions(observer);
     }
 }
