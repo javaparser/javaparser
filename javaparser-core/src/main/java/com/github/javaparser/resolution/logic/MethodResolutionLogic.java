@@ -269,8 +269,12 @@ public class MethodResolutionLogic {
         return type.isArray() ? type.asArrayType() : new ResolvedArrayType(type);
     }
 
-    /*
-     * Returns the last parameter index
+    /**
+     * Returns the index of the last parameter in a parameter list.
+     * Helper method to safely get the last parameter index even for empty lists.
+     *
+     * @param countOfMethodParametersDeclared the total number of parameters
+     * @return the index of the last parameter (0-based), or 0 if there are no parameters
      */
     private static int getLastParameterIndex(int countOfMethodParametersDeclared) {
         return Math.max(0, countOfMethodParametersDeclared - 1);
@@ -487,13 +491,20 @@ public class MethodResolutionLogic {
     }
 
     /**
-     * Note the specific naming here -- parameters are part of the method declaration,
-     * while arguments are the values passed when calling a method.
-     * Note that "needle" refers to that value being used as a search/query term to match against.
+     * Checks if a method usage is applicable for a given method name and parameter
+     * types. This method performs type compatibility checking including generic
+     * type variable substitution.
      *
-     * @return true, if the given MethodUsage matches the given name/types (normally obtained from a ResolvedMethodDeclaration)
+     * Note the specific naming here -- parameters are part of the method
+     * declaration, while arguments are the values passed when calling a method.
+     * Note that "needle" refers to that value being used as a search/query term to
+     * match against.
      *
-     * @see {@link MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver)}  }
+     * @return true, if the given MethodUsage matches the given name/types (normally
+     *         obtained from a ResolvedMethodDeclaration)
+     *
+     * @see {@link MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver)}
+     *      }
      * @see {@link MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver, boolean)}
      */
     public static boolean isApplicable(
@@ -504,6 +515,27 @@ public class MethodResolutionLogic {
         if (!methodUsage.getName().equals(needleName)) {
             return false;
         }
+
+        // Before checking parameter compatibility, we need to substitute
+        // type variables from the declaring type into the method signature.
+        //
+        // Context: When a method is inherited from a generic ancestor interface/class,
+        // the method signature may contain type variables from that ancestor.
+        // For example:
+        // - Interface Iterable<T> declares: forEach(Consumer<? super T>)
+        // - Interface List<E> extends Collection<E> which extends Iterable<E>
+        // - When we retrieve forEach() from List<E>, the signature still references
+        // Iterable's type variable 'T' instead of List's type variable 'E'
+        //
+        // This substitution ensures that:
+        // - forEach(Consumer<? super T>) becomes forEach(Consumer<? super E>)
+        // - When List<E> is instantiated as List<String>, it becomes forEach(Consumer<?
+        // super String>)
+        //
+        // Without this substitution, type compatibility checks fail because we're
+        // comparing the wrong type variables.
+        methodUsage = substituteDeclaringTypeParameters(methodUsage, typeSolver);
+
         // The index of the final method parameter (on the method declaration).
         int countOfMethodUsageArgumentsPassed = methodUsage.getNoParams();
         int lastMethodUsageArgumentIndex = getLastParameterIndex(countOfMethodUsageArgumentsPassed);
@@ -634,6 +666,213 @@ public class MethodResolutionLogic {
         }
         // If the checks above haven't failed, then we've found a match.
         return true;
+    }
+
+    /**
+     * Substitutes type variables from the declaring type into the method signature.
+     *
+     * This method handles the case where a method is inherited from a generic ancestor,
+     * and the method signature contains type variables from that ancestor that need to
+     * be replaced with the type variables (or concrete types) of the current declaring type.
+     *
+     * Example scenario:
+     * - Iterable<T> declares: forEach(Consumer<? super T> action)
+     * - Collection<E> extends Iterable<E>
+     * - List<E> extends Collection<E>
+     *
+     * When we call List<String>.forEach(...):
+     * 1. The method signature initially references Iterable's type variable 'T'
+     * 2. This needs to be substituted through the inheritance chain:
+     *    - In Collection<E>: T -> E (Iterable<T> becomes Iterable<E>)
+     *    - In List<E>: E remains E
+     *    - In List<String>: E -> String
+     * 3. Final result: forEach(Consumer<? super String> action)
+     *
+     * Without this substitution, we would be comparing incompatible type variables
+     * and the method resolution would fail.
+     *
+     * @param methodUsage the method usage whose signature needs type variable substitution
+     * @param typeSolver the type solver for resolving types during substitution
+     * @return a new MethodUsage with type variables properly substituted
+     */
+    private static MethodUsage substituteDeclaringTypeParameters(
+            MethodUsage methodUsage,
+            TypeSolver typeSolver) {
+
+        // Get the declaring type declaration from the method usage
+        // Note: methodUsage.declaringType() returns a ResolvedReferenceTypeDeclaration
+        // which is the type declaration without specific type arguments
+        ResolvedReferenceTypeDeclaration declaringTypeDeclaration = methodUsage.declaringType();
+
+        // Build a ResolvedReferenceType from the declaration with its type parameters
+        // For a generic type like List<E>, this creates a reference to List with E as type variable
+        ResolvedReferenceType declaringType = ReferenceTypeImpl.undeterminedParameters(declaringTypeDeclaration);
+
+        // Get the type parameter declarations from the declaring type
+        // For List<E>, this gets the declaration of E
+        List<ResolvedTypeParameterDeclaration> typeParams = declaringTypeDeclaration.getTypeParameters();
+
+        // Only proceed if the declaring type has type parameters to substitute
+        // Non-generic types (like String, Integer) don't need any substitution
+        if (!typeParams.isEmpty()) {
+
+            // Get the type variables as ResolvedTypes for substitution
+            // For List<E>, this creates a list containing [E as ResolvedTypeVariable]
+            List<ResolvedType> typeArgs = declaringType.typeParametersValues();
+
+            // Verify that we have matching counts of parameters and arguments
+            if (typeParams.size() == typeArgs.size()) {
+
+                // Substitute type variables in each method parameter
+                for (int i = 0; i < methodUsage.getNoParams(); i++) {
+                    ResolvedType paramType = methodUsage.getParamType(i);
+
+                    // Recursively substitute type variables throughout the parameter type structure
+                    // This handles nested generics like Consumer<? super T>, List<List<T>>, etc.
+                    ResolvedType substitutedType = substituteTypeVariables(
+                        paramType, typeParams, typeArgs
+                    );
+
+                    // Only update the method usage if the type actually changed
+                    if (!substitutedType.equals(paramType)) {
+                        methodUsage = methodUsage.replaceParamType(i, substitutedType);
+                    }
+                }
+
+                // Substitute type variables in the return type
+                ResolvedType returnType = methodUsage.returnType();
+                ResolvedType substitutedReturnType = substituteTypeVariables(
+                    returnType, typeParams, typeArgs
+                );
+
+                if (!substitutedReturnType.equals(returnType)) {
+                    methodUsage = methodUsage.replaceReturnType(substitutedReturnType);
+                }
+            }
+        }
+
+        return methodUsage;
+    }
+
+    /**
+     * Recursively substitutes type variables within a type structure.
+     *
+     * This method performs deep substitution of type variables, handling various
+     * type structures including:
+     * - Simple type variables (T, E, K, V, etc.)
+     * - Wildcards with type variable bounds (? super T, ? extends E)
+     * - Parameterized types with type variables (List<T>, Map<K, V>)
+     * - Nested combinations of the above (Consumer<? super T>, List<List<E>>)
+     *
+     * The substitution is based on a mapping between type parameter declarations
+     * (the formal parameters as declared, e.g., <T> in class Foo<T>) and their
+     * actual type arguments (the concrete types used, e.g., String in Foo<String>).
+     *
+     * Example transformations:
+     * - T -> String (when typeParams contains T and typeArgs contains String)
+     * - ? super T -> ? super String
+     * - Consumer<? super T> -> Consumer<? super String>
+     * - List<T> -> List<String>
+     * - Map<K, V> -> Map<String, Integer> (with appropriate mappings)
+     *
+     * @param type the type in which to substitute type variables
+     * @param typeParams the list of type parameter declarations (formal parameters)
+     * @param typeArgs the list of actual type arguments to substitute in
+     * @return a new type with all matching type variables substituted
+     */
+    private static ResolvedType substituteTypeVariables(
+            ResolvedType type,
+            List<ResolvedTypeParameterDeclaration> typeParams,
+            List<ResolvedType> typeArgs) {
+
+        // Case 1: Type is a type variable (e.g., T, E, K, V)
+        // Replace it with the corresponding type argument from the declaring type
+        if (type.isTypeVariable()) {
+            String varName = type.asTypeVariable().asTypeParameter().getName();
+
+            // Search for this type variable in the declaring type's parameters
+            for (int j = 0; j < typeParams.size(); j++) {
+                if (typeParams.get(j).getName().equals(varName)) {
+                    // Found a match - replace with the corresponding type argument
+                    // For example: if T maps to String, return String
+                    return typeArgs.get(j);
+                }
+            }
+            // If no match found, the type variable is from a different scope
+            // (e.g., method type parameter, not class type parameter)
+            // Return it unchanged
+        }
+
+        // Case 2: Type is a wildcard (e.g., ? super T, ? extends E, ?)
+        // Need to recursively substitute type variables in the wildcard's bound
+        if (type.isWildcard()) {
+            ResolvedWildcard wildcard = type.asWildcard();
+
+            // Only process bounded wildcards (? super X or ? extends X)
+            // Unbounded wildcards (?) don't need substitution
+            if (wildcard.isBounded()) {
+                ResolvedType boundedType = wildcard.getBoundedType();
+
+                // Recursively substitute within the bound
+                // For example: ? super T -> ? super String
+                ResolvedType substitutedBound = substituteTypeVariables(
+                    boundedType, typeParams, typeArgs
+                );
+
+                // If the bound changed, create a new wildcard with the substituted bound
+                if (!substitutedBound.equals(boundedType)) {
+                    if (wildcard.isSuper()) {
+                        // Preserve the super bound: ? super T -> ? super String
+                        return ResolvedWildcard.superBound(substitutedBound);
+                    } else {
+                        // Preserve the extends bound: ? extends T -> ? extends String
+                        return ResolvedWildcard.extendsBound(substitutedBound);
+                    }
+                }
+            }
+        }
+
+        // Case 3: Type is a parameterized reference type (e.g., List<T>, Map<K, V>)
+        // Need to recursively substitute type variables in all type arguments
+        if (type.isReferenceType()) {
+            ResolvedReferenceType refType = type.asReferenceType();
+            List<ResolvedType> originalTypeParams = refType.typeParametersValues();
+            List<ResolvedType> substitutedTypeParams = new ArrayList<>();
+            boolean changed = false;
+
+            // Process each type argument of the parameterized type
+            // For example, in Map<K, V>, process both K and V
+            for (ResolvedType typeParam : originalTypeParams) {
+                // Recursively substitute within each type argument
+                // This handles nested cases like List<List<T>>
+                ResolvedType substituted = substituteTypeVariables(
+                    typeParam, typeParams, typeArgs
+                );
+                substitutedTypeParams.add(substituted);
+
+                // Track if any substitution actually occurred
+                if (!substituted.equals(typeParam)) {
+                    changed = true;
+                }
+            }
+
+            // If any type argument changed, create a new parameterized type
+            // with the substituted type arguments
+            if (changed && refType.getTypeDeclaration().isPresent()) {
+                return new ReferenceTypeImpl(
+                    refType.getTypeDeclaration().get(),
+                    substitutedTypeParams
+                );
+            }
+        }
+
+        // No substitution needed or possible - return the type unchanged
+        // This covers:
+        // - Primitive types (int, double, etc.)
+        // - Non-generic reference types (String when used as a concrete type)
+        // - Type variables from other scopes
+        // - Array types (could be enhanced to handle T[] -> String[] if needed)
+        return type;
     }
 
     /**
