@@ -429,8 +429,14 @@ public class Difference {
                 diffIndex++;
             } else if (diffElement.isAdded()) {
                 Added addedElement = (Added) diffElement;
-                nodeText.addElement(originalIndex, addedElement.toTextElement());
-                originalIndex++;
+                if (addedElement.isIndent()) {
+                    addIndent();
+                } else if (addedElement.isUnindent()) {
+                    removeIndent();
+                } else {
+                    nodeText.addElement(originalIndex, addedElement.toTextElement());
+                    originalIndex++;
+                }
                 diffIndex++;
             } else {
                 // let's forget this element
@@ -940,19 +946,27 @@ public class Difference {
         return false;
     }
 
+    private void addIndent() {
+        for (int i = 0; i < STANDARD_INDENTATION_SIZE; i++) {
+            indentation.add(new TokenTextElement(GeneratedJavaParserConstants.SPACE));
+        }
+    }
+
+    private void removeIndent() {
+        for (int i = 0; i < STANDARD_INDENTATION_SIZE && !indentation.isEmpty(); i++) {
+            indentation.remove(indentation.size() - 1);
+        }
+    }
+
     private void applyAddedDiffElement(Added added) {
         if (added.isIndent()) {
-            for (int i = 0; i < STANDARD_INDENTATION_SIZE; i++) {
-                indentation.add(new TokenTextElement(GeneratedJavaParserConstants.SPACE));
-            }
+            addIndent();
             addedIndentation = true;
             diffIndex++;
             return;
         }
         if (added.isUnindent()) {
-            for (int i = 0; i < STANDARD_INDENTATION_SIZE && !indentation.isEmpty(); i++) {
-                indentation.remove(indentation.size() - 1);
-            }
+            removeIndent();
             addedIndentation = false;
             diffIndex++;
             return;
