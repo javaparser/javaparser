@@ -695,9 +695,7 @@ public class MethodResolutionLogic {
      * @param typeSolver the type solver for resolving types during substitution
      * @return a new MethodUsage with type variables properly substituted
      */
-    private static MethodUsage substituteDeclaringTypeParameters(
-            MethodUsage methodUsage,
-            TypeSolver typeSolver) {
+    private static MethodUsage substituteDeclaringTypeParameters(MethodUsage methodUsage, TypeSolver typeSolver) {
 
         // Get the declaring type declaration from the method usage
         // Note: methodUsage.declaringType() returns a ResolvedReferenceTypeDeclaration
@@ -729,9 +727,7 @@ public class MethodResolutionLogic {
 
                     // Recursively substitute type variables throughout the parameter type structure
                     // This handles nested generics like Consumer<? super T>, List<List<T>>, etc.
-                    ResolvedType substitutedType = substituteTypeVariables(
-                        paramType, typeParams, typeArgs
-                    );
+                    ResolvedType substitutedType = substituteTypeVariables(paramType, typeParams, typeArgs);
 
                     // Only update the method usage if the type actually changed
                     if (!substitutedType.equals(paramType)) {
@@ -741,9 +737,7 @@ public class MethodResolutionLogic {
 
                 // Substitute type variables in the return type
                 ResolvedType returnType = methodUsage.returnType();
-                ResolvedType substitutedReturnType = substituteTypeVariables(
-                    returnType, typeParams, typeArgs
-                );
+                ResolvedType substitutedReturnType = substituteTypeVariables(returnType, typeParams, typeArgs);
 
                 if (!substitutedReturnType.equals(returnType)) {
                     methodUsage = methodUsage.replaceReturnType(substitutedReturnType);
@@ -781,9 +775,7 @@ public class MethodResolutionLogic {
      * @return a new type with all matching type variables substituted
      */
     private static ResolvedType substituteTypeVariables(
-            ResolvedType type,
-            List<ResolvedTypeParameterDeclaration> typeParams,
-            List<ResolvedType> typeArgs) {
+            ResolvedType type, List<ResolvedTypeParameterDeclaration> typeParams, List<ResolvedType> typeArgs) {
 
         // Case 1: Type is a type variable (e.g., T, E, K, V)
         // Replace it with the corresponding type argument from the declaring type
@@ -815,9 +807,7 @@ public class MethodResolutionLogic {
 
                 // Recursively substitute within the bound
                 // For example: ? super T -> ? super String
-                ResolvedType substitutedBound = substituteTypeVariables(
-                    boundedType, typeParams, typeArgs
-                );
+                ResolvedType substitutedBound = substituteTypeVariables(boundedType, typeParams, typeArgs);
 
                 // If the bound changed, create a new wildcard with the substituted bound
                 if (!substitutedBound.equals(boundedType)) {
@@ -845,9 +835,7 @@ public class MethodResolutionLogic {
             for (ResolvedType typeParam : originalTypeParams) {
                 // Recursively substitute within each type argument
                 // This handles nested cases like List<List<T>>
-                ResolvedType substituted = substituteTypeVariables(
-                    typeParam, typeParams, typeArgs
-                );
+                ResolvedType substituted = substituteTypeVariables(typeParam, typeParams, typeArgs);
                 substitutedTypeParams.add(substituted);
 
                 // Track if any substitution actually occurred
@@ -859,10 +847,7 @@ public class MethodResolutionLogic {
             // If any type argument changed, create a new parameterized type
             // with the substituted type arguments
             if (changed && refType.getTypeDeclaration().isPresent()) {
-                return new ReferenceTypeImpl(
-                    refType.getTypeDeclaration().get(),
-                    substitutedTypeParams
-                );
+                return new ReferenceTypeImpl(refType.getTypeDeclaration().get(), substitutedTypeParams);
             }
         }
 

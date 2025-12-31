@@ -99,23 +99,19 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
 
         // Get forEach method inherited from Iterable
         MethodUsage forEachMethod = listDeclaration.getAllMethods().stream()
-                .filter(m -> m.getDeclaration()
-                        .getSignature()
-                        .equals("forEach(java.util.function.Consumer<? super T>)"))
+                .filter(m ->
+                        m.getDeclaration().getSignature().equals("forEach(java.util.function.Consumer<? super T>)"))
                 .findFirst()
                 .get();
 
         // Test with Consumer<? super String>
-        ResolvedType consumerOfSuperString = genericType(
-                Consumer.class.getCanonicalName(),
-                superBound(String.class.getCanonicalName())
-        );
+        ResolvedType consumerOfSuperString =
+                genericType(Consumer.class.getCanonicalName(), superBound(String.class.getCanonicalName()));
 
         assertTrue(
                 MethodResolutionLogic.isApplicable(
                         forEachMethod, "forEach", ImmutableList.of(consumerOfSuperString), typeSolver),
-                "List.forEach should accept Consumer<? super String>"
-        );
+                "List.forEach should accept Consumer<? super String>");
     }
 
     /**
@@ -127,23 +123,19 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
                 (ReflectionInterfaceDeclaration) typeSolver.solveType("java.util.List");
 
         MethodUsage forEachMethod = listDeclaration.getAllMethods().stream()
-                .filter(m -> m.getDeclaration()
-                        .getSignature()
-                        .equals("forEach(java.util.function.Consumer<? super T>)"))
+                .filter(m ->
+                        m.getDeclaration().getSignature().equals("forEach(java.util.function.Consumer<? super T>)"))
                 .findFirst()
                 .get();
 
         // Test with Consumer<Object>
-        ResolvedType consumerOfObject = genericType(
-                Consumer.class.getCanonicalName(),
-                type(Object.class.getCanonicalName())
-        );
+        ResolvedType consumerOfObject =
+                genericType(Consumer.class.getCanonicalName(), type(Object.class.getCanonicalName()));
 
         assertTrue(
                 MethodResolutionLogic.isApplicable(
                         forEachMethod, "forEach", ImmutableList.of(consumerOfObject), typeSolver),
-                "List.forEach should accept Consumer<Object>"
-        );
+                "List.forEach should accept Consumer<Object>");
     }
 
     /**
@@ -155,23 +147,19 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
                 (ReflectionInterfaceDeclaration) typeSolver.solveType("java.util.List");
 
         MethodUsage forEachMethod = listDeclaration.getAllMethods().stream()
-                .filter(m -> m.getDeclaration()
-                        .getSignature()
-                        .equals("forEach(java.util.function.Consumer<? super T>)"))
+                .filter(m ->
+                        m.getDeclaration().getSignature().equals("forEach(java.util.function.Consumer<? super T>)"))
                 .findFirst()
                 .get();
 
         // Test with Consumer<String>
-        ResolvedType consumerOfString = genericType(
-                Consumer.class.getCanonicalName(),
-                type(String.class.getCanonicalName())
-        );
+        ResolvedType consumerOfString =
+                genericType(Consumer.class.getCanonicalName(), type(String.class.getCanonicalName()));
 
         assertTrue(
                 MethodResolutionLogic.isApplicable(
                         forEachMethod, "forEach", ImmutableList.of(consumerOfString), typeSolver),
-                "List.forEach should accept Consumer<String>"
-        );
+                "List.forEach should accept Consumer<String>");
     }
 
     /**
@@ -204,23 +192,19 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
                 (ReflectionInterfaceDeclaration) typeSolver.solveType("java.util.List");
 
         MethodUsage removeIfMethod = listDeclaration.getAllMethods().stream()
-                .filter(m -> m.getDeclaration()
-                        .getSignature()
-                        .equals("removeIf(java.util.function.Predicate<? super E>)"))
+                .filter(m ->
+                        m.getDeclaration().getSignature().equals("removeIf(java.util.function.Predicate<? super E>)"))
                 .findFirst()
                 .get();
 
         // Test with Predicate<? super String>
-        ResolvedType predicateOfSuperString = genericType(
-                Predicate.class.getCanonicalName(),
-                superBound(String.class.getCanonicalName())
-        );
+        ResolvedType predicateOfSuperString =
+                genericType(Predicate.class.getCanonicalName(), superBound(String.class.getCanonicalName()));
 
         assertTrue(
                 MethodResolutionLogic.isApplicable(
                         removeIfMethod, "removeIf", ImmutableList.of(predicateOfSuperString), typeSolver),
-                "List.removeIf should accept Predicate<? super String>"
-        );
+                "List.removeIf should accept Predicate<? super String>");
     }
 
     /**
@@ -232,23 +216,18 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
                 (ReflectionInterfaceDeclaration) typeSolver.solveType("java.util.List");
 
         MethodUsage addAllMethod = listDeclaration.getAllMethods().stream()
-                .filter(m -> m.getDeclaration()
-                        .getSignature()
-                        .equals("addAll(java.util.Collection<? extends E>)"))
+                .filter(m -> m.getDeclaration().getSignature().equals("addAll(java.util.Collection<? extends E>)"))
                 .findFirst()
                 .get();
 
         // Test with Collection<? extends String>
         ResolvedType collectionOfExtendsString = genericType(
-                java.util.Collection.class.getCanonicalName(),
-                extendsBound(String.class.getCanonicalName())
-        );
+                java.util.Collection.class.getCanonicalName(), extendsBound(String.class.getCanonicalName()));
 
         assertTrue(
                 MethodResolutionLogic.isApplicable(
                         addAllMethod, "addAll", ImmutableList.of(collectionOfExtendsString), typeSolver),
-                "List.addAll should accept Collection<? extends String>"
-        );
+                "List.addAll should accept Collection<? extends String>");
     }
 
     /**
@@ -261,9 +240,7 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
                 (ReflectionInterfaceDeclaration) typeSolver.solveType("java.util.stream.Stream");
 
         MethodUsage mapMethod = streamDeclaration.getAllMethods().stream()
-                .filter(m -> m.getDeclaration()
-                        .getSignature()
-                        .startsWith("map(java.util.function.Function"))
+                .filter(m -> m.getDeclaration().getSignature().startsWith("map(java.util.function.Function"))
                 .findFirst()
                 .orElse(null);
 
@@ -284,18 +261,15 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
                 (ReflectionInterfaceDeclaration) typeSolver.solveType("java.util.List");
 
         MethodUsage forEachMethod = listDeclaration.getAllMethods().stream()
-                .filter(m -> m.getDeclaration()
-                        .getSignature()
-                        .equals("forEach(java.util.function.Consumer<? super T>)"))
+                .filter(m ->
+                        m.getDeclaration().getSignature().equals("forEach(java.util.function.Consumer<? super T>)"))
                 .findFirst()
                 .get();
 
         // Test with Consumer<Integer> - this should NOT be compatible
         // because Integer is not a supertype of the element type
-        ResolvedType consumerOfInteger = genericType(
-                Consumer.class.getCanonicalName(),
-                type(Integer.class.getCanonicalName())
-        );
+        ResolvedType consumerOfInteger =
+                genericType(Consumer.class.getCanonicalName(), type(Integer.class.getCanonicalName()));
 
         // This test depends on what element type the List has
         // Since we're using raw List, this might actually pass
@@ -319,8 +293,8 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         // Map.forEach takes BiConsumer<? super K, ? super V>
         MethodUsage forEachMethod = mapDeclaration.getAllMethods().stream()
                 .filter(m -> m.getDeclaration()
-                        .getSignature()
-                        .equals("forEach(java.util.function.BiConsumer<? super K,? super V>)")
+                                .getSignature()
+                                .equals("forEach(java.util.function.BiConsumer<? super K,? super V>)")
                         || m.getDeclaration()
                                 .getSignature()
                                 .equals("forEach(java.util.function.BiConsumer<? super K, ? super V>)"))
