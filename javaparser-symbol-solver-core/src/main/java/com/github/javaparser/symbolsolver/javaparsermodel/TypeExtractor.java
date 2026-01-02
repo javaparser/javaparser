@@ -690,6 +690,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                             .returnType();
                     ResolvedType formalType = functionalMethod.returnType();
 
+                    // if a functional method returns void with a method reference, the return value
+                    // is discarded, so we should not care about type compatibility
+                    // lame example: Arrays.asList(args).forEach(String::getBytes);
+                    if (formalType.isVoid()) {
+                        return result.asReferenceType().transformTypeParameters(tp -> node.getScope().calculateResolvedType());
+                    }
+
                     InferenceContext inferenceContext = new InferenceContext(typeSolver);
                     inferenceContext.addPair(formalType, actualType);
                     result = inferenceContext.resolve(inferenceContext.addSingle(result));
