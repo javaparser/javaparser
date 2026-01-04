@@ -123,6 +123,12 @@ public class MethodResolutionLogic {
         if (!methodDeclaration.getName().equals(needleName)) {
             return false;
         }
+        //Create MethodUsage for type variable substitution
+        MethodUsage methodUsageForSubstitution = new MethodUsage(methodDeclaration);
+        methodUsageForSubstitution = substituteDeclaringTypeParameters(methodUsageForSubstitution, typeSolver);
+        // Map substituted parameters back to the argument list we'll use
+        // This ensures inherited generic method signatures use the correct type variables
+
         // The index of the final method parameter (on the method declaration).
         int countOfMethodParametersDeclared = methodDeclaration.getNumberOfParams();
         // The index of the final argument passed (on the method usage).
@@ -157,13 +163,20 @@ public class MethodResolutionLogic {
                         variadicArgumentIndex < countOfNeedleArgumentsPassed;
                         variadicArgumentIndex++) {
                     ResolvedType currentArgumentType = needleArgumentTypes.get(variadicArgumentIndex);
-                    boolean argumentIsAssignableToVariadicComponentType = expectedVariadicParameterType
+                    ResolvedType variadicComponentType = expectedVariadicParameterType
                             .asArrayType()
-                            .getComponentType()
-                            .isAssignableBy(currentArgumentType);
+                            .getComponentType();
+
+                    boolean argumentIsAssignableToVariadicComponentType =
+                            variadicComponentType.isAssignableBy(currentArgumentType);
+
+                    // Check boxing/unboxing for varargs
                     if (!argumentIsAssignableToVariadicComponentType) {
-                        // If any of the arguments are not assignable to the expected variadic type, this is not a
-                        // match.
+                        argumentIsAssignableToVariadicComponentType =
+                                isBoxingCompatibleWithTypeSolver(variadicComponentType, currentArgumentType, typeSolver);
+                    }
+
+                    if (!argumentIsAssignableToVariadicComponentType) {
                         return false;
                     }
                 }
@@ -223,6 +236,11 @@ public class MethodResolutionLogic {
                     expectedDeclaredType = replaceTypeParam(expectedDeclaredType, tp, typeSolver);
                 }
                 if (!expectedDeclaredType.isAssignableBy(actualArgumentType)) {
+                    // Check boxing/unboxing compatibility using TypeSolver
+                    if (isBoxingCompatibleWithTypeSolver(expectedDeclaredType, actualArgumentType, typeSolver)) {
+                        continue; // This parameter is compatible via boxing/unboxing
+                    }
+
                     if (actualArgumentType.isWildcard()
                             && withWildcardTolerance
                             && !expectedDeclaredType.isPrimitive()) {
@@ -657,15 +675,150 @@ public class MethodResolutionLogic {
             }
             // If the given argument still isn't applicable even after considering type arguments/generics, this is not
             // a match.
-            if (!expectedArgumentType.isAssignableBy(actualArgumentType)
-                    && !expectedTypeWithSubstitutions.isAssignableBy(actualArgumentType)
-                    && !expectedTypeWithInference.isAssignableBy(actualArgumentType)
-                    && !expectedTypeWithoutSubstitutions.isAssignableBy(actualArgumentType)) {
+            // Check if the given argument is applicable, considering:
+            // 1. Direct type assignability
+            // 2. Type substitutions with bounds
+            // 3. Type inference
+            // 4. Boxing/unboxing conversions (especially important for varargs)
+            boolean isApplicable = expectedArgumentType.isAssignableBy(actualArgumentType)
+                    || expectedTypeWithSubstitutions.isAssignableBy(actualArgumentType)
+                    || expectedTypeWithInference.isAssignableBy(actualArgumentType)
+                    || expectedTypeWithoutSubstitutions.isAssignableBy(actualArgumentType);
+            // If none of the above checks passed, check if the types
+            // are compatible through boxing or unboxing conversion.
+            // This is particularly important for varargs methods where primitive arguments
+            // might be passed to boxed type parameters (or vice versa).
+            //
+            // Example cases:
+            // - void method(Integer... args) called with method(1, 2, 3)
+            //   Here: expectedArgumentType = Integer, actualArgumentType = int
+            //   Should succeed via boxing conversion
+            //
+            // - void method(int... args) called with method(Integer.valueOf(1))
+            //   Here: expectedArgumentType = int, actualArgumentType = Integer
+            //   Should succeed via unboxing conversion
+            if (!isApplicable) {
+                // Check boxing/unboxing compatibility with all type variations
+                isApplicable = isBoxingCompatibleWithTypeSolver(expectedArgumentType, actualArgumentType, typeSolver)
+                        || isBoxingCompatibleWithTypeSolver(expectedTypeWithSubstitutions, actualArgumentType, typeSolver)
+                        || isBoxingCompatibleWithTypeSolver(expectedTypeWithInference, actualArgumentType, typeSolver)
+                        || isBoxingCompatibleWithTypeSolver(expectedTypeWithoutSubstitutions, actualArgumentType, typeSolver);
+            }
+            if (!isApplicable) {
                 return false;
             }
         }
         // If the checks above haven't failed, then we've found a match.
         return true;
+    }
+
+    /**
+     * Enhanced version of isBoxingCompatible that uses TypeSolver to check type hierarchy.
+     * Checks if a primitive type can be boxed to a reference type (or vice versa).
+     * Also handles array types for variadic parameters and wildcards.
+     */
+    private static boolean isBoxingCompatibleWithTypeSolver(
+            ResolvedType expectedType,
+            ResolvedType actualType,
+            TypeSolver typeSolver) {
+
+        // Handle null types
+        if (expectedType == null || actualType == null) {
+            return false;
+        }
+
+        // Handle wildcard types (e.g., ? extends Number, ? super Integer)
+        if (expectedType.isWildcard()) {
+            ResolvedWildcard wildcard = expectedType.asWildcard();
+            if (wildcard.isBounded()) {
+                // Check compatibility with the wildcard bound
+                return isBoxingCompatibleWithTypeSolver(wildcard.getBoundedType(), actualType, typeSolver);
+            }
+            // Unbounded wildcard (?) - can accept anything via boxing
+            return actualType.isPrimitive();
+        }
+
+        // Handle array types (for variadic parameters)
+        if (expectedType.isArray() && actualType.isArray()) {
+            ResolvedType expectedComponent = expectedType.asArrayType().getComponentType();
+            ResolvedType actualComponent = actualType.asArrayType().getComponentType();
+
+            // Check if component types are boxing compatible
+            return isBoxingCompatibleWithTypeSolver(expectedComponent, actualComponent, typeSolver);
+        }
+
+        // Boxing (reference type expected, primitive provided)
+        if (expectedType.isReferenceType() && actualType.isPrimitive()) {
+            ResolvedReferenceType expectedRef = expectedType.asReferenceType();
+            ResolvedPrimitiveType primitive = actualType.asPrimitive();
+
+            // Get boxed type for the primitive (e.g., Integer for int)
+            String boxedTypeQName = primitive.getBoxTypeQName();
+
+            try {
+                // Resolve the boxed type using TypeSolver
+                ResolvedReferenceTypeDeclaration boxedTypeDecl = typeSolver.solveType(boxedTypeQName);
+                ResolvedReferenceType boxedType = new ReferenceTypeImpl(boxedTypeDecl);
+
+                // Check if boxed type is assignable to expected type
+                // Example: Integer is assignable to Number
+                return expectedRef.isAssignableBy(boxedType);
+
+            } catch (Exception e) {
+                // If we can't resolve the type, try a fallback check
+                return false;
+            }
+        }
+
+        // Unboxing (primitive expected, reference type provided)
+        if (expectedType.isPrimitive() && actualType.isReferenceType()) {
+            ResolvedPrimitiveType expectedPrimitive = expectedType.asPrimitive();
+            ResolvedReferenceType actualRef = actualType.asReferenceType();
+
+            // Check if actual type is a direct box type for the expected primitive
+            if (ResolvedPrimitiveType.isBoxType(actualRef)) {
+                Optional<ResolvedType> unboxed = ResolvedPrimitiveType.byBoxTypeQName(actualRef.getQualifiedName());
+                return unboxed.isPresent() && unboxed.get().equals(expectedPrimitive);
+            }
+
+            // For other reference types, try to see if they can be assigned to the boxed type
+            String expectedBoxedTypeQName = expectedPrimitive.getBoxTypeQName();
+            try {
+                ResolvedReferenceTypeDeclaration expectedBoxedTypeDecl = typeSolver.solveType(expectedBoxedTypeQName);
+                ResolvedReferenceType expectedBoxedType = new ReferenceTypeImpl(expectedBoxedTypeDecl);
+
+                // Check if actual type is assignable to the expected boxed type
+                if (expectedBoxedType.isAssignableBy(actualRef)) {
+                    // Then we can unbox
+                    return true;
+                }
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        // Unboxing (primitive expected, reference type provided)
+        if (expectedType.isPrimitive() && actualType.isPrimitive()) {
+            ResolvedPrimitiveType expectedPrimitive = expectedType.asPrimitive();
+            ResolvedPrimitiveType actualPrimitive = actualType.asPrimitive();
+            return expectedPrimitive.isAssignableBy(actualPrimitive);
+        }
+
+        // Both are reference types but one might be a constrained/wildcard type
+        // This can happen after type variable substitution
+        if (expectedType.isReferenceType() && actualType.isReferenceType()) {
+            // This is not a boxing case, but we might want to check assignability
+            // Let the main isApplicable logic handle this
+            return false;
+        }
+
+        // Constraint types (e.g., LambdaConstraintType)
+        if (actualType.isConstraint()) {
+            // Check compatibility with the constraint bound
+            return isBoxingCompatibleWithTypeSolver(expectedType, actualType.asConstraintType().getBound(), typeSolver);
+        }
+
+        return false;
     }
 
     /**
