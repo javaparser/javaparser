@@ -714,7 +714,6 @@ public class MethodResolutionLogic {
     }
 
     /**
-     * Enhanced version of isBoxingCompatible that uses TypeSolver to check type hierarchy.
      * Checks if a primitive type can be boxed to a reference type (or vice versa).
      * Also handles array types for variadic parameters and wildcards.
      */
