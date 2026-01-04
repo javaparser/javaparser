@@ -123,7 +123,7 @@ public class MethodResolutionLogic {
         if (!methodDeclaration.getName().equals(needleName)) {
             return false;
         }
-        //Create MethodUsage for type variable substitution
+        // Create MethodUsage for type variable substitution
         MethodUsage methodUsageForSubstitution = new MethodUsage(methodDeclaration);
         methodUsageForSubstitution = substituteDeclaringTypeParameters(methodUsageForSubstitution, typeSolver);
         // Map substituted parameters back to the argument list we'll use
@@ -163,17 +163,16 @@ public class MethodResolutionLogic {
                         variadicArgumentIndex < countOfNeedleArgumentsPassed;
                         variadicArgumentIndex++) {
                     ResolvedType currentArgumentType = needleArgumentTypes.get(variadicArgumentIndex);
-                    ResolvedType variadicComponentType = expectedVariadicParameterType
-                            .asArrayType()
-                            .getComponentType();
+                    ResolvedType variadicComponentType =
+                            expectedVariadicParameterType.asArrayType().getComponentType();
 
                     boolean argumentIsAssignableToVariadicComponentType =
                             variadicComponentType.isAssignableBy(currentArgumentType);
 
                     // Check boxing/unboxing for varargs
                     if (!argumentIsAssignableToVariadicComponentType) {
-                        argumentIsAssignableToVariadicComponentType =
-                                isBoxingCompatibleWithTypeSolver(variadicComponentType, currentArgumentType, typeSolver);
+                        argumentIsAssignableToVariadicComponentType = isBoxingCompatibleWithTypeSolver(
+                                variadicComponentType, currentArgumentType, typeSolver);
                     }
 
                     if (!argumentIsAssignableToVariadicComponentType) {
@@ -700,9 +699,11 @@ public class MethodResolutionLogic {
             if (!isApplicable) {
                 // Check boxing/unboxing compatibility with all type variations
                 isApplicable = isBoxingCompatibleWithTypeSolver(expectedArgumentType, actualArgumentType, typeSolver)
-                        || isBoxingCompatibleWithTypeSolver(expectedTypeWithSubstitutions, actualArgumentType, typeSolver)
+                        || isBoxingCompatibleWithTypeSolver(
+                                expectedTypeWithSubstitutions, actualArgumentType, typeSolver)
                         || isBoxingCompatibleWithTypeSolver(expectedTypeWithInference, actualArgumentType, typeSolver)
-                        || isBoxingCompatibleWithTypeSolver(expectedTypeWithoutSubstitutions, actualArgumentType, typeSolver);
+                        || isBoxingCompatibleWithTypeSolver(
+                                expectedTypeWithoutSubstitutions, actualArgumentType, typeSolver);
             }
             if (!isApplicable) {
                 return false;
@@ -718,9 +719,7 @@ public class MethodResolutionLogic {
      * Also handles array types for variadic parameters and wildcards.
      */
     private static boolean isBoxingCompatibleWithTypeSolver(
-            ResolvedType expectedType,
-            ResolvedType actualType,
-            TypeSolver typeSolver) {
+            ResolvedType expectedType, ResolvedType actualType, TypeSolver typeSolver) {
 
         // Handle null types
         if (expectedType == null || actualType == null) {
@@ -815,7 +814,8 @@ public class MethodResolutionLogic {
         // Constraint types (e.g., LambdaConstraintType)
         if (actualType.isConstraint()) {
             // Check compatibility with the constraint bound
-            return isBoxingCompatibleWithTypeSolver(expectedType, actualType.asConstraintType().getBound(), typeSolver);
+            return isBoxingCompatibleWithTypeSolver(
+                    expectedType, actualType.asConstraintType().getBound(), typeSolver);
         }
 
         return false;

@@ -33,7 +33,6 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
@@ -362,8 +361,7 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicPrimitiveToPrimitive() {
         // Create a test class with primitive varargs method
-        String code =
-                "public class TestClass {\n"
+        String code = "public class TestClass {\n"
                 + "    public void print(int... values) {}\n"
                 + "    public void test() {\n"
                 + "        print(1, 2, 3);\n"
@@ -387,8 +385,7 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicBoxedToPrimitive() {
         // Create a test class with boxed varargs method
-        String code =
-                "public class TestClass {\n"
+        String code = "public class TestClass {\n"
                 + "  public void print(Integer... values) {}\n"
                 + "  public void test() {\n"
                 + "    print(1, 2, 3);  // int should be boxed to Integer\n"
@@ -401,7 +398,9 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         String signature = expr.resolve().getQualifiedSignature();
 
         // This test verifies that primitive arguments are boxed to match varargs
-        assertTrue("TestClass.print(java.lang.Integer...)".equals(signature), "Boxed type varargs should accept primitive arguments via boxing");
+        assertTrue(
+                "TestClass.print(java.lang.Integer...)".equals(signature),
+                "Boxed type varargs should accept primitive arguments via boxing");
     }
 
     /**
@@ -412,14 +411,14 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicNumberToMixedPrimitives() {
         ReflectionClassDeclaration testDeclaration =
-            (ReflectionClassDeclaration) typeSolver.solveType("java.util.Arrays");
+                (ReflectionClassDeclaration) typeSolver.solveType("java.util.Arrays");
 
         // Arrays.asList has varargs: public static <T> List<T> asList(T... a)
         // We can use it to test generic varargs
         MethodUsage asListMethod = testDeclaration.getAllMethods().stream()
-            .filter(m -> m.getDeclaration().getSignature().equals("asList(T...)"))
-            .findFirst()
-            .orElse(null);
+                .filter(m -> m.getDeclaration().getSignature().equals("asList(T...)"))
+                .findFirst()
+                .orElse(null);
 
         if (asListMethod != null) {
             // Test with mixed primitive boxed types
@@ -431,9 +430,8 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
 
             // This should work since all are subclasses of Object (T's upper bound)
             assertTrue(
-                MethodResolutionLogic.isApplicable(asListMethod, "asList", arguments, typeSolver),
-                "Arrays.asList should accept mixed Number types"
-            );
+                    MethodResolutionLogic.isApplicable(asListMethod, "asList", arguments, typeSolver),
+                    "Arrays.asList should accept mixed Number types");
         }
     }
 
@@ -444,24 +442,27 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicPrimitiveToBoxed() {
         // Create a test class
-        String code =
-                "public class TestClass {\n"
-                        + "  public void print(int... values) {}\n"
-                        + "  public void test() {\n"
-                        + "    Integer a = Integer.valueOf(1);\n"
-                        + "    Integer b = Integer.valueOf(2);\n"
-                        + "    print(a, b);  // Integer should be unboxed to int\n"
-                        + "  }\n"
-                        + "}";
+        String code = "public class TestClass {\n"
+                + "  public void print(int... values) {}\n"
+                + "  public void test() {\n"
+                + "    Integer a = Integer.valueOf(1);\n"
+                + "    Integer b = Integer.valueOf(2);\n"
+                + "    print(a, b);  // Integer should be unboxed to int\n"
+                + "  }\n"
+                + "}";
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         String signature = expr.resolve().getQualifiedSignature();
 
         // This test verifies that boxed primitive arguments are unboxed to match varargs
-        assertTrue("TestClass.print(int...)".equals(signature), "Primitive varargs should accept boxed arguments via unboxing");
+        assertTrue(
+                "TestClass.print(int...)".equals(signature),
+                "Primitive varargs should accept boxed arguments via unboxing");
     }
 
     /**
@@ -471,12 +472,12 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicObjectToMixedTypes() {
         ReflectionClassDeclaration arraysDeclaration =
-            (ReflectionClassDeclaration) typeSolver.solveType("java.util.Arrays");
+                (ReflectionClassDeclaration) typeSolver.solveType("java.util.Arrays");
 
         MethodUsage asListMethod = arraysDeclaration.getAllMethods().stream()
-            .filter(m -> m.getDeclaration().getName().equals("asList"))
-            .findFirst()
-            .orElse(null);
+                .filter(m -> m.getDeclaration().getName().equals("asList"))
+                .findFirst()
+                .orElse(null);
 
         if (asListMethod != null) {
             // Mixed types: String, Integer, Double
@@ -499,24 +500,27 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testArrayParameterVsVarargs() {
         // Create a test class
-        String code =
-                "public class TestClass {\n"
-                        + "  public void print(int... values) {}\n"
-                        + "  public void test(int[] arg) {\n"
-                        + "    print(arg);\n"
-                        + "  }\n"
-                        + "}";
+        String code = "public class TestClass {\n"
+                + "  public void print(int... values) {}\n"
+                + "  public void test(int[] arg) {\n"
+                + "    print(arg);\n"
+                + "  }\n"
+                + "}";
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         String signature = expr.resolve().getQualifiedSignature();
 
         // This test would verify that the logic distinguishes between
         // method(int[] values) and method(int... values)
         // when called with single array argument
-        assertTrue("TestClass.print(int...)".equals(signature), "Should distinguish array parameter from varargs parameter");
+        assertTrue(
+                "TestClass.print(int...)".equals(signature),
+                "Should distinguish array parameter from varargs parameter");
     }
 
     /**
@@ -526,20 +530,23 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicZeroArguments() {
         // Create a test class
-        String code =
-                "public class TestClass {\n"
-                        + "  public void print(String... values) {}\n"
-                        + "  public void test() {\n"
-                        + "    print();  // No argument should be valid\n"
-                        + "  }\n"
-                        + "}";
+        String code = "public class TestClass {\n"
+                + "  public void print(String... values) {}\n"
+                + "  public void test() {\n"
+                + "    print();  // No argument should be valid\n"
+                + "  }\n"
+                + "}";
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         String signature = expr.resolve().getQualifiedSignature();
 
-        assertTrue("TestClass.print(java.lang.String...)".equals(signature), "Varargs should accept zero arguments (empty array)");
+        assertTrue(
+                "TestClass.print(java.lang.String...)".equals(signature),
+                "Varargs should accept zero arguments (empty array)");
     }
 
     /**
@@ -549,8 +556,7 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicSingleArrayArgument() {
         // Create a test class
-        String code =
-                "public class TestClass {\n"
+        String code = "public class TestClass {\n"
                 + "  public void print(String... values) {}\n"
                 + "  public void test() {\n"
                 + "    print(new String[]{\"a\", \"b\"});  // Single array should be valid\n"
@@ -559,10 +565,14 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         String signature = expr.resolve().getQualifiedSignature();
 
-        assertTrue("TestClass.print(java.lang.String...)".equals(signature), "Varargs should accept single array argument");
+        assertTrue(
+                "TestClass.print(java.lang.String...)".equals(signature),
+                "Varargs should accept single array argument");
     }
 
     /**
@@ -572,12 +582,12 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testGenericVarargs() {
         ReflectionClassDeclaration arraysDeclaration =
-            (ReflectionClassDeclaration) typeSolver.solveType("java.util.Arrays");
+                (ReflectionClassDeclaration) typeSolver.solveType("java.util.Arrays");
 
         MethodUsage asListMethod = arraysDeclaration.getAllMethods().stream()
-            .filter(m -> m.getDeclaration().getName().equals("asList"))
-            .findFirst()
-            .orElse(null);
+                .filter(m -> m.getDeclaration().getName().equals("asList"))
+                .findFirst()
+                .orElse(null);
 
         if (asListMethod != null) {
             // Test with homogeneous types
@@ -597,13 +607,13 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     void testNonVariadicBoxing() {
         // Test with a method that takes a boxed type
         ReflectionClassDeclaration integerDeclaration =
-            (ReflectionClassDeclaration) typeSolver.solveType("java.lang.Integer");
+                (ReflectionClassDeclaration) typeSolver.solveType("java.lang.Integer");
 
         // Find a method that takes Integer as parameter
         MethodUsage parseIntMethod = integerDeclaration.getAllMethods().stream()
-            .filter(m -> m.getDeclaration().getSignature().equals("parseInt(java.lang.String,int)"))
-            .findFirst()
-            .orElse(null);
+                .filter(m -> m.getDeclaration().getSignature().equals("parseInt(java.lang.String,int)"))
+                .findFirst()
+                .orElse(null);
 
         if (parseIntMethod != null) {
             ResolvedType stringType = type(String.class.getCanonicalName());
@@ -625,9 +635,8 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
      */
     @Test
     void testInheritedVarargs() {
-     // Create a test class
-        String code =
-                "interface A { void print(Number... values); }\n"
+        // Create a test class
+        String code = "interface A { void print(Number... values); }\n"
                 + "class B implements A { void print(Number... values) {} }\n"
                 + "public class TestClass {\n"
                 + "  public void test(B b) {\n"
@@ -637,7 +646,9 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         String signature = expr.resolve().getQualifiedSignature();
 
         // This test verifies varargs work correctly through inheritance
@@ -650,9 +661,8 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
      */
     @Test
     void testVarargsWithWildcardBounds() {
-     // Create a test class
-        String code =
-                "import java.util.List;\n"
+        // Create a test class
+        String code = "import java.util.List;\n"
                 + "class TestClass {\n"
                 + "    void print(List<? extends Number>... lists){}\n"
                 + "    void test(List<Integer> values1, List<Long> values2) {\n"
@@ -662,11 +672,15 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         String signature = expr.resolve().getQualifiedSignature();
 
         // This is a complex case with wildcards in varargs
-        assertTrue("TestClass.print(java.util.List<? extends java.lang.Number>...)".equals(signature), "Varargs with wildcard bounds should be handled");
+        assertTrue(
+                "TestClass.print(java.util.List<? extends java.lang.Number>...)".equals(signature),
+                "Varargs with wildcard bounds should be handled");
     }
 
     /**
@@ -675,9 +689,8 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
      */
     @Test
     void testPrimitiveWideningVarargs() {
-     // Create a test class
-        String code =
-                "class TestClass {\n"
+        // Create a test class
+        String code = "class TestClass {\n"
                 + "    void print(double... values){}\n"
                 + "    void test() {\n"
                 + "        print(1, 2, 3);\n"
@@ -686,7 +699,9 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         String signature = expr.resolve().getQualifiedSignature();
 
         // This test checks if primitive widening works with varargs
@@ -700,9 +715,8 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
      */
     @Test
     void testIncompatibleVarargsTypes() {
-     // Create a test class
-        String code =
-                "class TestClass {\n"
+        // Create a test class
+        String code = "class TestClass {\n"
                 + "  void print(String... values) {}\n"
                 + "    void test() {\n"
                 + "        print(1, 2, 3);\n"
@@ -711,9 +725,10 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         assertThrows(UnsolvedSymbolException.class, () -> expr.resolve().getQualifiedSignature());
-
     }
 
     /**
@@ -723,9 +738,8 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
      */
     @Test
     void testVarargsVsExactMatchPriority() {
-     // Create a test class
-        String code =
-                "class TestClass {\n"
+        // Create a test class
+        String code = "class TestClass {\n"
                 + "    void print(Object value) {}\n"
                 + "    void print(Object... values) {}\n"
                 + "    void test() {\n"
@@ -735,11 +749,15 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         String signature = expr.resolve().getQualifiedSignature();
 
         // This test verifies that exact matches are preferred over varargs
-        assertTrue("TestClass.print(java.lang.Object)".equals(signature), "Exact match should be preferred over varargs match");
+        assertTrue(
+                "TestClass.print(java.lang.Object)".equals(signature),
+                "Exact match should be preferred over varargs match");
     }
 
     /**
@@ -748,9 +766,8 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
      */
     @Test
     void testVarargsWithNullArguments() {
-     // Create a test class
-        String code =
-                "class TestClass {\n"
+        // Create a test class
+        String code = "class TestClass {\n"
                 + "    void print(String... values) {}\n"
                 + "    void test() {\n"
                 + "        print(null, null);\n"
@@ -759,7 +776,9 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         String signature = expr.resolve().getQualifiedSignature();
 
         // Null arguments should be acceptable for reference type varargs
@@ -771,23 +790,26 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
      */
     @Test
     void testNumberVarargsWithIntPrimitives() {
-        String code = "import java.util.Arrays;\n" +
-                "public class TestClass {\n" +
-                "    public void print(Number... numbers){}\n" +
-                "    public void test(int a, int b){\n" +
-                "        print(a, b);\n" +
-                "    }\n" +
-                "}\n";
+        String code = "import java.util.Arrays;\n" + "public class TestClass {\n"
+                + "    public void print(Number... numbers){}\n"
+                + "    public void test(int a, int b){\n"
+                + "        print(a, b);\n"
+                + "    }\n"
+                + "}\n";
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
-                .filter(mce -> mce.getNameAsString().equals("print")).findFirst().get();
+                .filter(mce -> mce.getNameAsString().equals("print"))
+                .findFirst()
+                .get();
         String signature = expr.resolve().getQualifiedSignature();
         System.out.println(signature);
 
         // Null arguments should be acceptable for reference type varargs
-        assertTrue("TestClass.print(java.lang.Number...)".equals(signature), "Number Varargs should accept primitive arguments");
+        assertTrue(
+                "TestClass.print(java.lang.Number...)".equals(signature),
+                "Number Varargs should accept primitive arguments");
     }
 
     private List<ResolvedType> types(String... types) {
