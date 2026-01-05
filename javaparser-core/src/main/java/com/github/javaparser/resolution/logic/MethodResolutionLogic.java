@@ -128,7 +128,6 @@ public class MethodResolutionLogic {
         methodUsageForSubstitution = substituteDeclaringTypeParameters(methodUsageForSubstitution, typeSolver);
         // Map substituted parameters back to the argument list we'll use
         // This ensures inherited generic method signatures use the correct type variables
-
         // The index of the final method parameter (on the method declaration).
         int countOfMethodParametersDeclared = methodDeclaration.getNumberOfParams();
         // The index of the final argument passed (on the method usage).
@@ -165,16 +164,13 @@ public class MethodResolutionLogic {
                     ResolvedType currentArgumentType = needleArgumentTypes.get(variadicArgumentIndex);
                     ResolvedType variadicComponentType =
                             expectedVariadicParameterType.asArrayType().getComponentType();
-
                     boolean argumentIsAssignableToVariadicComponentType =
                             variadicComponentType.isAssignableBy(currentArgumentType);
-
                     // Check boxing/unboxing for varargs
                     if (!argumentIsAssignableToVariadicComponentType) {
                         argumentIsAssignableToVariadicComponentType = isBoxingCompatibleWithTypeSolver(
                                 variadicComponentType, currentArgumentType, typeSolver);
                     }
-
                     if (!argumentIsAssignableToVariadicComponentType) {
                         return false;
                     }
@@ -237,9 +233,9 @@ public class MethodResolutionLogic {
                 if (!expectedDeclaredType.isAssignableBy(actualArgumentType)) {
                     // Check boxing/unboxing compatibility using TypeSolver
                     if (isBoxingCompatibleWithTypeSolver(expectedDeclaredType, actualArgumentType, typeSolver)) {
-                        continue; // This parameter is compatible via boxing/unboxing
+                        // This parameter is compatible via boxing/unboxing
+                        continue;
                     }
-
                     if (actualArgumentType.isWildcard()
                             && withWildcardTolerance
                             && !expectedDeclaredType.isPrimitive()) {
@@ -532,7 +528,6 @@ public class MethodResolutionLogic {
         if (!methodUsage.getName().equals(needleName)) {
             return false;
         }
-
         // Before checking parameter compatibility, we need to substitute
         // type variables from the declaring type into the method signature.
         //
@@ -552,7 +547,6 @@ public class MethodResolutionLogic {
         // Without this substitution, type compatibility checks fail because we're
         // comparing the wrong type variables.
         methodUsage = substituteDeclaringTypeParameters(methodUsage, typeSolver);
-
         // The index of the final method parameter (on the method declaration).
         int countOfMethodUsageArgumentsPassed = methodUsage.getNoParams();
         int lastMethodUsageArgumentIndex = getLastParameterIndex(countOfMethodUsageArgumentsPassed);
@@ -719,12 +713,10 @@ public class MethodResolutionLogic {
      */
     private static boolean isBoxingCompatibleWithTypeSolver(
             ResolvedType expectedType, ResolvedType actualType, TypeSolver typeSolver) {
-
         // Handle null types
         if (expectedType == null || actualType == null) {
             return false;
         }
-
         // Handle wildcard types (e.g., ? extends Number, ? super Integer)
         if (expectedType.isWildcard()) {
             ResolvedWildcard wildcard = expectedType.asWildcard();
@@ -735,56 +727,45 @@ public class MethodResolutionLogic {
             // Unbounded wildcard (?) - can accept anything via boxing
             return actualType.isPrimitive();
         }
-
         // Handle array types (for variadic parameters)
         if (expectedType.isArray() && actualType.isArray()) {
             ResolvedType expectedComponent = expectedType.asArrayType().getComponentType();
             ResolvedType actualComponent = actualType.asArrayType().getComponentType();
-
             // Check if component types are boxing compatible
             return isBoxingCompatibleWithTypeSolver(expectedComponent, actualComponent, typeSolver);
         }
-
         // Boxing (reference type expected, primitive provided)
         if (expectedType.isReferenceType() && actualType.isPrimitive()) {
             ResolvedReferenceType expectedRef = expectedType.asReferenceType();
             ResolvedPrimitiveType primitive = actualType.asPrimitive();
-
             // Get boxed type for the primitive (e.g., Integer for int)
             String boxedTypeQName = primitive.getBoxTypeQName();
-
             try {
                 // Resolve the boxed type using TypeSolver
                 ResolvedReferenceTypeDeclaration boxedTypeDecl = typeSolver.solveType(boxedTypeQName);
                 ResolvedReferenceType boxedType = new ReferenceTypeImpl(boxedTypeDecl);
-
                 // Check if boxed type is assignable to expected type
                 // Example: Integer is assignable to Number
                 return expectedRef.isAssignableBy(boxedType);
-
             } catch (Exception e) {
                 // If we can't resolve the type, try a fallback check
                 return false;
             }
         }
-
         // Unboxing (primitive expected, reference type provided)
         if (expectedType.isPrimitive() && actualType.isReferenceType()) {
             ResolvedPrimitiveType expectedPrimitive = expectedType.asPrimitive();
             ResolvedReferenceType actualRef = actualType.asReferenceType();
-
             // Check if actual type is a direct box type for the expected primitive
             if (ResolvedPrimitiveType.isBoxType(actualRef)) {
                 Optional<ResolvedType> unboxed = ResolvedPrimitiveType.byBoxTypeQName(actualRef.getQualifiedName());
                 return unboxed.isPresent() && unboxed.get().equals(expectedPrimitive);
             }
-
             // For other reference types, try to see if they can be assigned to the boxed type
             String expectedBoxedTypeQName = expectedPrimitive.getBoxTypeQName();
             try {
                 ResolvedReferenceTypeDeclaration expectedBoxedTypeDecl = typeSolver.solveType(expectedBoxedTypeQName);
                 ResolvedReferenceType expectedBoxedType = new ReferenceTypeImpl(expectedBoxedTypeDecl);
-
                 // Check if actual type is assignable to the expected boxed type
                 if (expectedBoxedType.isAssignableBy(actualRef)) {
                     // Then we can unbox
@@ -794,14 +775,12 @@ public class MethodResolutionLogic {
                 return false;
             }
         }
-
         // Unboxing (primitive expected, reference type provided)
         if (expectedType.isPrimitive() && actualType.isPrimitive()) {
             ResolvedPrimitiveType expectedPrimitive = expectedType.asPrimitive();
             ResolvedPrimitiveType actualPrimitive = actualType.asPrimitive();
             return expectedPrimitive.isAssignableBy(actualPrimitive);
         }
-
         // Both are reference types but one might be a constrained/wildcard type
         // This can happen after type variable substitution
         if (expectedType.isReferenceType() && actualType.isReferenceType()) {
@@ -809,14 +788,12 @@ public class MethodResolutionLogic {
             // Let the main isApplicable logic handle this
             return false;
         }
-
         // Constraint types (e.g., LambdaConstraintType)
         if (actualType.isConstraint()) {
             // Check compatibility with the constraint bound
             return isBoxingCompatibleWithTypeSolver(
                     expectedType, actualType.asConstraintType().getBound(), typeSolver);
         }
-
         return false;
     }
 
@@ -848,55 +825,43 @@ public class MethodResolutionLogic {
      * @return a new MethodUsage with type variables properly substituted
      */
     private static MethodUsage substituteDeclaringTypeParameters(MethodUsage methodUsage, TypeSolver typeSolver) {
-
         // Get the declaring type declaration from the method usage
         // Note: methodUsage.declaringType() returns a ResolvedReferenceTypeDeclaration
         // which is the type declaration without specific type arguments
         ResolvedReferenceTypeDeclaration declaringTypeDeclaration = methodUsage.declaringType();
-
         // Build a ResolvedReferenceType from the declaration with its type parameters
         // For a generic type like List<E>, this creates a reference to List with E as type variable
         ResolvedReferenceType declaringType = ReferenceTypeImpl.undeterminedParameters(declaringTypeDeclaration);
-
         // Get the type parameter declarations from the declaring type
         // For List<E>, this gets the declaration of E
         List<ResolvedTypeParameterDeclaration> typeParams = declaringTypeDeclaration.getTypeParameters();
-
         // Only proceed if the declaring type has type parameters to substitute
         // Non-generic types (like String, Integer) don't need any substitution
         if (!typeParams.isEmpty()) {
-
             // Get the type variables as ResolvedTypes for substitution
             // For List<E>, this creates a list containing [E as ResolvedTypeVariable]
             List<ResolvedType> typeArgs = declaringType.typeParametersValues();
-
             // Verify that we have matching counts of parameters and arguments
             if (typeParams.size() == typeArgs.size()) {
-
                 // Substitute type variables in each method parameter
                 for (int i = 0; i < methodUsage.getNoParams(); i++) {
                     ResolvedType paramType = methodUsage.getParamType(i);
-
                     // Recursively substitute type variables throughout the parameter type structure
                     // This handles nested generics like Consumer<? super T>, List<List<T>>, etc.
                     ResolvedType substitutedType = substituteTypeVariables(paramType, typeParams, typeArgs);
-
                     // Only update the method usage if the type actually changed
                     if (!substitutedType.equals(paramType)) {
                         methodUsage = methodUsage.replaceParamType(i, substitutedType);
                     }
                 }
-
                 // Substitute type variables in the return type
                 ResolvedType returnType = methodUsage.returnType();
                 ResolvedType substitutedReturnType = substituteTypeVariables(returnType, typeParams, typeArgs);
-
                 if (!substitutedReturnType.equals(returnType)) {
                     methodUsage = methodUsage.replaceReturnType(substitutedReturnType);
                 }
             }
         }
-
         return methodUsage;
     }
 
@@ -928,12 +893,10 @@ public class MethodResolutionLogic {
      */
     private static ResolvedType substituteTypeVariables(
             ResolvedType type, List<ResolvedTypeParameterDeclaration> typeParams, List<ResolvedType> typeArgs) {
-
         // Case 1: Type is a type variable (e.g., T, E, K, V)
         // Replace it with the corresponding type argument from the declaring type
         if (type.isTypeVariable()) {
             String varName = type.asTypeVariable().asTypeParameter().getName();
-
             // Search for this type variable in the declaring type's parameters
             for (int j = 0; j < typeParams.size(); j++) {
                 if (typeParams.get(j).getName().equals(varName)) {
@@ -946,21 +909,17 @@ public class MethodResolutionLogic {
             // (e.g., method type parameter, not class type parameter)
             // Return it unchanged
         }
-
         // Case 2: Type is a wildcard (e.g., ? super T, ? extends E, ?)
         // Need to recursively substitute type variables in the wildcard's bound
         if (type.isWildcard()) {
             ResolvedWildcard wildcard = type.asWildcard();
-
             // Only process bounded wildcards (? super X or ? extends X)
             // Unbounded wildcards (?) don't need substitution
             if (wildcard.isBounded()) {
                 ResolvedType boundedType = wildcard.getBoundedType();
-
                 // Recursively substitute within the bound
                 // For example: ? super T -> ? super String
                 ResolvedType substitutedBound = substituteTypeVariables(boundedType, typeParams, typeArgs);
-
                 // If the bound changed, create a new wildcard with the substituted bound
                 if (!substitutedBound.equals(boundedType)) {
                     if (wildcard.isSuper()) {
@@ -973,7 +932,6 @@ public class MethodResolutionLogic {
                 }
             }
         }
-
         // Case 3: Type is a parameterized reference type (e.g., List<T>, Map<K, V>)
         // Need to recursively substitute type variables in all type arguments
         if (type.isReferenceType()) {
@@ -981,7 +939,6 @@ public class MethodResolutionLogic {
             List<ResolvedType> originalTypeParams = refType.typeParametersValues();
             List<ResolvedType> substitutedTypeParams = new ArrayList<>();
             boolean changed = false;
-
             // Process each type argument of the parameterized type
             // For example, in Map<K, V>, process both K and V
             for (ResolvedType typeParam : originalTypeParams) {
@@ -989,20 +946,17 @@ public class MethodResolutionLogic {
                 // This handles nested cases like List<List<T>>
                 ResolvedType substituted = substituteTypeVariables(typeParam, typeParams, typeArgs);
                 substitutedTypeParams.add(substituted);
-
                 // Track if any substitution actually occurred
                 if (!substituted.equals(typeParam)) {
                     changed = true;
                 }
             }
-
             // If any type argument changed, create a new parameterized type
             // with the substituted type arguments
             if (changed && refType.getTypeDeclaration().isPresent()) {
                 return new ReferenceTypeImpl(refType.getTypeDeclaration().get(), substitutedTypeParams);
             }
         }
-
         // No substitution needed or possible - return the type unchanged
         // This covers:
         // - Primitive types (int, double, etc.)
