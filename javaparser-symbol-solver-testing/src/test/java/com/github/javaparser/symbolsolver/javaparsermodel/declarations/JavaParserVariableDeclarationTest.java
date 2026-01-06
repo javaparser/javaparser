@@ -30,6 +30,7 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
@@ -169,5 +170,36 @@ class JavaParserVariableDeclarationTest extends AbstractResolutionTest implement
         assertEquals(
                 "java.util.List<java.lang.String>",
                 declarator.getType().resolve().describe());
+    }
+
+    @Test
+    @EnabledForJreRange(min = JRE.JAVA_9)
+    void javaBaseTypeFromImplicitCompactClassImportSolvedAsSymbol() {
+        String code = "List<String> l; void main() { l = new ArrayList<>(); }";
+
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
+        ParserConfiguration parserConfiguration = new ParserConfiguration()
+                .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25)
+                .setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParser parser = new JavaParser(parserConfiguration);
+
+        ParseResult<CompilationUnit> parseResult = parser.parse(code);
+
+        assertTrue(parseResult.isSuccessful());
+
+        CompilationUnit cu = parseResult.getResult().get();
+
+        ClassOrInterfaceDeclaration compactClass =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+
+        JavaParserClassDeclaration resolvedClass = (JavaParserClassDeclaration) compactClass.resolve();
+
+        assertEquals(
+                "java.util.List<java.lang.String>",
+                resolvedClass
+                        .solveSymbol("l", typeSolver)
+                        .getCorrespondingDeclaration()
+                        .getType()
+                        .describe());
     }
 }
