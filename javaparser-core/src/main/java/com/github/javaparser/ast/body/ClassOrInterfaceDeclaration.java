@@ -198,14 +198,13 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     }
 
     /**
-     * This method should only be called by the CompactClassObserver and never in user code. It only exists
-     * because of a conflict between the JavaParser project structure and Java's limited access control
-     * mechanisms which makes proper encapsulation while maintaining a logically ordered structure impossible.
+     * For LPP support, the name and modifiers of a compact class must be marked as phantom nodes. This is a
+     * convenience method that updates the PHANTOM_KEY for all relevant nodes when isCompact is changed.
      *
      * @param newIsCompact the new value of isCompact. Needed because observers are notified of the change
      *                     before the value of the field is changed.
      */
-    public void processIsCompactChange(boolean newIsCompact) {
+    private void processIsCompactChange(boolean newIsCompact) {
         SimpleName name = getName();
         if (name != null) {
             getName().setData(PHANTOM_KEY, newIsCompact);
