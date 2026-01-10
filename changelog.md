@@ -1,7 +1,7 @@
 
-Next Release (Version 3.27.2-snapshot)
+Next Release (Version 3.28.1-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/214?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/215?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +9,64 @@ Next Release (Version 3.27.2-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+Version 3.28.0
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/214?closed=1)
+
+### Added
+
+* [JEP 512] Add support for compact source files (PR [#4940](https://github.com/javaparser/javaparser/pull/4940) by [@johannescoetzee](https://github.com/johannescoetzee))
+* [JEP 513] Add support for flexible constructor bodies (PR [#4919](https://github.com/javaparser/javaparser/pull/4919) by [@johannescoetzee](https://github.com/johannescoetzee))
+* [JEP 511] Module Import Declarations (PR [#4910](https://github.com/javaparser/javaparser/pull/4910) by [@johannescoetzee](https://github.com/johannescoetzee))
+* [JEP 467] Add support for MarkdownComments (PR [#4899](https://github.com/javaparser/javaparser/pull/4899) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Refactor comment hierarchy in preparation for MarkdownComments (PR [#4885](https://github.com/javaparser/javaparser/pull/4885) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Add support for match-all patterns (PR [#4867](https://github.com/javaparser/javaparser/pull/4867) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### Changed
+
+* Improves issue 4188 resolution (PR [#4934](https://github.com/javaparser/javaparser/pull/4934) by [@jlerbsc](https://github.com/jlerbsc))
+* Add support for Java 23 and Java 24 (PR [#4901](https://github.com/javaparser/javaparser/pull/4901) by [@rpx99](https://github.com/rpx99))
+* Improved the code by removing code duplication from the method used to obtain methods declared in a class/interface/enumeration (PR [#4883](https://github.com/javaparser/javaparser/pull/4883) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* Fix: issue 4890 Method call resolution fails for variadic reference-type parameters with primitive arguments (PR [#4943](https://github.com/javaparser/javaparser/pull/4943) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4941 Type variables are not correctly mapped when inheriting between generic interfaces (PR [#4942](https://github.com/javaparser/javaparser/pull/4942) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4188 UnsolvedSymbolException resolving MethocCallExpr using MethodReferenceExpr (PR [#4931](https://github.com/javaparser/javaparser/pull/4931) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix grammar ambiguities causing crashes when using `assert` and `module` as names (PR [#4929](https://github.com/javaparser/javaparser/pull/4929) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fix: issue #3916 Method 'valueOf' cannot be resolved in context MyEnum.One.valueOf("") (PR [#4916](https://github.com/javaparser/javaparser/pull/4916) by [@jlerbsc](https://github.com/jlerbsc))
+* Adds the ability to use the word 'assert' prior to Java version 1.4 (PR [#4915](https://github.com/javaparser/javaparser/pull/4915) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Simplify code and possibly improve the resolution of extended interfaces when using qualified names (PR [#4882](https://github.com/javaparser/javaparser/pull/4882) by [@jlerbsc](https://github.com/jlerbsc))
+* test: improve SourceRoot coverage and apply spotless formatting #4795 (PR [#4881](https://github.com/javaparser/javaparser/pull/4881) by [@Joyce-5](https://github.com/Joyce-5))
+* Fix #4864: Correct toString() output in ReflectionRecordDeclaration (PR [#4879](https://github.com/javaparser/javaparser/pull/4879) by [@ChenduanZhang](https://github.com/ChenduanZhang))
+* Include source file path in failed ParseResult when parsing via SourceRoot #4786 (PR [#4874](https://github.com/javaparser/javaparser/pull/4874) by [@JIN-RUI-LIU](https://github.com/JIN-RUI-LIU))
+* Fixes unchecked warnings when calling Mockito.mock(Class) (PR [#4413](https://github.com/javaparser/javaparser/pull/4413) by [@matthieu-vergne](https://github.com/matthieu-vergne))
+
+### Developer Changes
+
+* fix(deps): update byte-buddy.version to v1.18.2 (PR [#4906](https://github.com/javaparser/javaparser/pull/4906) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action to v6 (PR [#4900](https://github.com/javaparser/javaparser/pull/4900) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action to v5.0.1 (PR [#4892](https://github.com/javaparser/javaparser/pull/4892) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency net.bytebuddy:byte-buddy-agent to v1.18.1 (PR [#4889](https://github.com/javaparser/javaparser/pull/4889) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency org.checkerframework:checker-qual to v3.52.0 (PR [#4886](https://github.com/javaparser/javaparser/pull/4886) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### Uncategorised
+
+* Add UnaryExpr, BinaryExpr, and some record/enum tests to improve overall test coverage (PR [#4930](https://github.com/javaparser/javaparser/pull/4930) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@rpx99](https://github.com/rpx99)
+* [@JIN-RUI-LIU](https://github.com/JIN-RUI-LIU)
+* [@Joyce-5](https://github.com/Joyce-5)
+* [@johannescoetzee](https://github.com/johannescoetzee)
+* [@matthieu-vergne](https://github.com/matthieu-vergne)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@ChenduanZhang](https://github.com/ChenduanZhang)
+
 
 Version 3.27.1
 --------------
