@@ -122,7 +122,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
                 extendedTypes,
                 implementedTypes,
                 permittedTypes,
-                members);
+                members,
+                n.isCompact());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

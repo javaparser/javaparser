@@ -131,6 +131,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final ClassOrInterfaceDeclaration n, final Void arg) {
         return (n.getExtendedTypes().accept(this, arg)) * 31
                 + (n.getImplementedTypes().accept(this, arg)) * 31
+                + (n.isCompact() ? 1 : 0) * 31
                 + (n.isInterface() ? 1 : 0) * 31
                 + (n.getPermittedTypes().accept(this, arg)) * 31
                 + (n.getTypeParameters().accept(this, arg)) * 31

@@ -152,6 +152,9 @@ public final class JavaParserMetaModel {
         classOrInterfaceDeclarationMetaModel
                 .getConstructorParameters()
                 .add(typeDeclarationMetaModel.membersPropertyMetaModel);
+        classOrInterfaceDeclarationMetaModel
+                .getConstructorParameters()
+                .add(classOrInterfaceDeclarationMetaModel.isCompactPropertyMetaModel);
         constructorDeclarationMetaModel
                 .getConstructorParameters()
                 .add(callableDeclarationMetaModel.modifiersPropertyMetaModel);
@@ -1037,6 +1040,18 @@ public final class JavaParserMetaModel {
         classOrInterfaceDeclarationMetaModel
                 .getDeclaredPropertyMetaModels()
                 .add(classOrInterfaceDeclarationMetaModel.implementedTypesPropertyMetaModel);
+        classOrInterfaceDeclarationMetaModel.isCompactPropertyMetaModel = new PropertyMetaModel(
+                classOrInterfaceDeclarationMetaModel,
+                "isCompact",
+                boolean.class,
+                Optional.empty(),
+                false,
+                false,
+                false,
+                false);
+        classOrInterfaceDeclarationMetaModel
+                .getDeclaredPropertyMetaModels()
+                .add(classOrInterfaceDeclarationMetaModel.isCompactPropertyMetaModel);
         classOrInterfaceDeclarationMetaModel.isInterfacePropertyMetaModel = new PropertyMetaModel(
                 classOrInterfaceDeclarationMetaModel,
                 "isInterface",

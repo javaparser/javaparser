@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext.JAVA_BASE_MODULE_NAME;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -79,6 +81,17 @@ public class JavaParserTypeDeclarationAdapter {
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name, List<ResolvedType> typeArguments) {
         if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
+        }
+
+        if (this.wrappedNode.isClassOrInterfaceDeclaration()
+                && this.wrappedNode.asClassOrInterfaceDeclaration().isCompact()) {
+            // Compact classes implicitly import the java.base module. To avoid having to add this import explicitly,
+            // first check if the class is compact and then try to solve the given type in the java.base module.
+            SymbolReference<ResolvedReferenceTypeDeclaration> maybeSolved =
+                    typeSolver.tryToSolveTypeInModule(JAVA_BASE_MODULE_NAME, name);
+            if (maybeSolved.isSolved()) {
+                return SymbolReference.solved((ResolvedTypeDeclaration) maybeSolved.getCorrespondingDeclaration());
+            }
         }
 
         // Internal classes

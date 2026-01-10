@@ -41,6 +41,8 @@ import java.util.Optional;
  */
 public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContext<ClassOrInterfaceDeclaration> {
 
+    public static final String JAVA_BASE_MODULE_NAME = "java.base";
+
     private JavaParserTypeDeclarationAdapter javaParserTypeDeclarationAdapter;
 
     ///
