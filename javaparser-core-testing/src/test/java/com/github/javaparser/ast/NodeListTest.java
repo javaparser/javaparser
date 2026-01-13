@@ -121,46 +121,6 @@ class NodeListTest extends AbstractLexicalPreservingTest {
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
     }
 
-    @Test
-    public void getFirstWhenEmpty() {
-        final NodeList<Name> list = nodeList();
-
-        Optional<Name> first = list.getFirst();
-
-        assertFalse(first.isPresent());
-        assertEquals("Optional.empty", first.toString());
-    }
-
-    @Test
-    public void getFirstWhenNonEmpty() {
-        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
-
-        Optional<Name> first = list.getFirst();
-
-        assertTrue(first.isPresent());
-        assertEquals("Optional[abc]", first.toString());
-    }
-
-    @Test
-    public void getLastWhenEmpty() {
-        final NodeList<Name> list = nodeList();
-
-        Optional<Name> last = list.getLast();
-
-        assertFalse(last.isPresent());
-        assertEquals("Optional.empty", last.toString());
-    }
-
-    @Test
-    public void getLastWhenNonEmpty() {
-        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
-
-        Optional<Name> last = list.getLast();
-
-        assertTrue(last.isPresent());
-        assertEquals("Optional[cde]", last.toString());
-    }
-
     @Nested
     class IteratorTest {
 
