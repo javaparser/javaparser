@@ -408,10 +408,13 @@
                     <!-- This is the last version with Java 8 support -->
                     <version>2.46.1</version>
                     <configuration>
+						<lineEndings>UNIX</lineEndings>
                         <java>
                             <!-- google-java-format, but better: see https://github.com/palantir/palantir-java-format -->
                             <palantirJavaFormat/>
                         </java>
+                        <trimTrailingWhitespace/>
+      					<endWithNewline/>
                     </configuration>
                 </plugin>
             </plugins>
