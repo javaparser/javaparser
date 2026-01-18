@@ -20,13 +20,12 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
+import static com.github.javaparser.printer.lexicalpreservation.IndentationConstants.STANDARD_INDENTATION_SIZE;
 
+import com.github.javaparser.GeneratedJavaParserConstants;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static com.github.javaparser.printer.lexicalpreservation.IndentationConstants.STANDARD_INDENTATION_SIZE;
 
 /**
  * Maintains the current indentation state during lexical preservation operations.

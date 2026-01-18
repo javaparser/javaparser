@@ -20,17 +20,16 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
+import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.GeneratedJavaParserConstants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 class IndentationContextTest {
 
@@ -502,14 +501,14 @@ class IndentationContextTest {
         @Test
         @DisplayName("Should handle complex sequence of operations")
         void complexSequence() {
-            context.increase();         // 4
-            context.increase();         // 8
-            context.decrease();         // 4
-            context.increase();         // 8
+            context.increase(); // 4
+            context.increase(); // 8
+            context.decrease(); // 4
+            context.increase(); // 8
             context.set(Arrays.asList(space(), space())); // 2
-            context.increase();         // 6
-            context.clear();            // 0
-            context.increase();         // 4
+            context.increase(); // 6
+            context.clear(); // 0
+            context.increase(); // 4
 
             assertEquals(4, context.size());
         }

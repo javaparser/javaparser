@@ -20,18 +20,16 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.Constructor;
+import com.github.javaparser.GeneratedJavaParserConstants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 class IndentationCalculatorTest {
 
@@ -60,13 +58,12 @@ class IndentationCalculatorTest {
         @DisplayName("Should compute indentation after newline")
         void computeAfterNewline() {
             List<TextElement> elements = Arrays.asList(
-                token(GeneratedJavaParserConstants.PUBLIC, "public"),
-                newline(),
-                space(),
-                space(),
-                space(),
-                space()
-            );
+                    token(GeneratedJavaParserConstants.PUBLIC, "public"),
+                    newline(),
+                    space(),
+                    space(),
+                    space(),
+                    space());
 
             List<TextElement> indentation = IndentationCalculator.computeFromPrecedingElements(elements);
 
@@ -77,11 +74,8 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should return empty when no newline found")
         void noNewline() {
-            List<TextElement> elements = Arrays.asList(
-                space(),
-                space(),
-                token(GeneratedJavaParserConstants.PUBLIC, "public")
-            );
+            List<TextElement> elements =
+                    Arrays.asList(space(), space(), token(GeneratedJavaParserConstants.PUBLIC, "public"));
 
             List<TextElement> indentation = IndentationCalculator.computeFromPrecedingElements(elements);
 
@@ -91,12 +85,8 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should stop at first non-whitespace after newline")
         void stopAtNonWhitespace() {
-            List<TextElement> elements = Arrays.asList(
-                newline(),
-                space(),
-                space(),
-                token(GeneratedJavaParserConstants.PUBLIC, "public")
-            );
+            List<TextElement> elements =
+                    Arrays.asList(newline(), space(), space(), token(GeneratedJavaParserConstants.PUBLIC, "public"));
 
             List<TextElement> indentation = IndentationCalculator.computeFromPrecedingElements(elements);
 
@@ -106,16 +96,8 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should handle multiple newlines and use last one")
         void multipleNewlines() {
-            List<TextElement> elements = Arrays.asList(
-                newline(),
-                space(),
-                space(),
-                newline(),
-                space(),
-                space(),
-                space(),
-                space()
-            );
+            List<TextElement> elements =
+                    Arrays.asList(newline(), space(), space(), newline(), space(), space(), space(), space());
 
             List<TextElement> indentation = IndentationCalculator.computeFromPrecedingElements(elements);
 
@@ -144,10 +126,7 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should handle newline at end with no trailing spaces")
         void newlineAtEnd() {
-            List<TextElement> elements = Arrays.asList(
-                token(GeneratedJavaParserConstants.PUBLIC, "public"),
-                newline()
-            );
+            List<TextElement> elements = Arrays.asList(token(GeneratedJavaParserConstants.PUBLIC, "public"), newline());
 
             List<TextElement> indentation = IndentationCalculator.computeFromPrecedingElements(elements);
 
@@ -157,12 +136,7 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should handle consecutive newlines")
         void consecutiveNewlines() {
-            List<TextElement> elements = Arrays.asList(
-                newline(),
-                newline(),
-                space(),
-                space()
-            );
+            List<TextElement> elements = Arrays.asList(newline(), newline(), space(), space());
 
             List<TextElement> indentation = IndentationCalculator.computeFromPrecedingElements(elements);
 
@@ -173,13 +147,7 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should handle mixed tabs and spaces")
         void mixedTabsAndSpaces() {
-            List<TextElement> elements = Arrays.asList(
-                newline(),
-                tab(),
-                space(),
-                tab(),
-                space()
-            );
+            List<TextElement> elements = Arrays.asList(newline(), tab(), space(), tab(), space());
 
             List<TextElement> indentation = IndentationCalculator.computeFromPrecedingElements(elements);
 
@@ -190,11 +158,7 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should not modify input list")
         void doesNotModifyInput() {
-            List<TextElement> original = new ArrayList<>(Arrays.asList(
-                newline(),
-                space(),
-                space()
-            ));
+            List<TextElement> original = new ArrayList<>(Arrays.asList(newline(), space(), space()));
             int originalSize = original.size();
 
             IndentationCalculator.computeFromPrecedingElements(original);
@@ -211,12 +175,7 @@ class IndentationCalculatorTest {
         @DisplayName("Should extract leading whitespace")
         void extractLeadingWhitespace() {
             List<TextElement> tokens = Arrays.asList(
-                space(),
-                space(),
-                space(),
-                space(),
-                token(GeneratedJavaParserConstants.PUBLIC, "public")
-            );
+                    space(), space(), space(), space(), token(GeneratedJavaParserConstants.PUBLIC, "public"));
 
             List<TextElement> indentation = IndentationCalculator.extractIndentationFromTokens(tokens);
 
@@ -226,10 +185,7 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should return empty when no leading whitespace")
         void noLeadingWhitespace() {
-            List<TextElement> tokens = Arrays.asList(
-                token(GeneratedJavaParserConstants.PUBLIC, "public"),
-                space()
-            );
+            List<TextElement> tokens = Arrays.asList(token(GeneratedJavaParserConstants.PUBLIC, "public"), space());
 
             List<TextElement> indentation = IndentationCalculator.extractIndentationFromTokens(tokens);
 
@@ -239,11 +195,7 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should extract all spaces if list only contains whitespace")
         void onlyWhitespace() {
-            List<TextElement> tokens = Arrays.asList(
-                space(),
-                space(),
-                space()
-            );
+            List<TextElement> tokens = Arrays.asList(space(), space(), space());
 
             List<TextElement> indentation = IndentationCalculator.extractIndentationFromTokens(tokens);
 
@@ -261,12 +213,8 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should handle mixed tabs and spaces")
         void mixedTabsAndSpaces() {
-            List<TextElement> tokens = Arrays.asList(
-                tab(),
-                space(),
-                tab(),
-                token(GeneratedJavaParserConstants.PUBLIC, "public")
-            );
+            List<TextElement> tokens =
+                    Arrays.asList(tab(), space(), tab(), token(GeneratedJavaParserConstants.PUBLIC, "public"));
 
             List<TextElement> indentation = IndentationCalculator.extractIndentationFromTokens(tokens);
 
@@ -276,12 +224,7 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should stop at newline")
         void stopAtNewline() {
-            List<TextElement> tokens = Arrays.asList(
-                space(),
-                space(),
-                newline(),
-                space()
-            );
+            List<TextElement> tokens = Arrays.asList(space(), space(), newline(), space());
 
             List<TextElement> indentation = IndentationCalculator.extractIndentationFromTokens(tokens);
 
@@ -291,11 +234,8 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should not modify input list")
         void doesNotModifyInput() {
-            List<TextElement> original = new ArrayList<>(Arrays.asList(
-                space(),
-                space(),
-                token(GeneratedJavaParserConstants.PUBLIC, "public")
-            ));
+            List<TextElement> original = new ArrayList<>(
+                    Arrays.asList(space(), space(), token(GeneratedJavaParserConstants.PUBLIC, "public")));
             int originalSize = original.size();
 
             IndentationCalculator.extractIndentationFromTokens(original);
@@ -366,11 +306,11 @@ class IndentationCalculatorTest {
         @DisplayName("Should detect extra spaces in a whitespace-only line")
         void whitespaceOnlyLine() {
             NodeText nodeText = new NodeText();
-            nodeText.addElement(newline());      // index 0
-            nodeText.addElement(space());        // index 1
-            nodeText.addElement(space());        // index 2
-            nodeText.addElement(space());        // index 3
-            nodeText.addElement(space());        // index 4
+            nodeText.addElement(newline()); // index 0
+            nodeText.addElement(space()); // index 1
+            nodeText.addElement(space()); // index 2
+            nodeText.addElement(space()); // index 3
+            nodeText.addElement(space()); // index 4
 
             // Analyzing from index 2 (middle of whitespace sequence)
             IndentationCalculator.EnforcingContext ctx = IndentationCalculator.analyzeEnforcingContext(nodeText, 2);
@@ -385,9 +325,9 @@ class IndentationCalculatorTest {
         @DisplayName("Should return zero when there is non-whitespace before the newline")
         void nonWhitespaceElement() {
             NodeText nodeText = new NodeText();
-            nodeText.addElement(newline());                                  // index 0
+            nodeText.addElement(newline()); // index 0
             nodeText.addToken(GeneratedJavaParserConstants.PUBLIC, "public"); // index 1
-            nodeText.addElement(space());                                    // index 2
+            nodeText.addElement(space()); // index 2
 
             // Analyzing at the non-whitespace token itself
             IndentationCalculator.EnforcingContext ctx = IndentationCalculator.analyzeEnforcingContext(nodeText, 1);
@@ -426,10 +366,10 @@ class IndentationCalculatorTest {
         @DisplayName("Should stop scanning backward at newline")
         void stopAtNewline() {
             NodeText nodeText = new NodeText();
-            nodeText.addElement(newline());      // index 0
-            nodeText.addElement(space());        // index 1
-            nodeText.addElement(space());        // index 2
-            nodeText.addElement(space());        // index 3
+            nodeText.addElement(newline()); // index 0
+            nodeText.addElement(space()); // index 1
+            nodeText.addElement(space()); // index 2
+            nodeText.addElement(space()); // index 3
 
             IndentationCalculator.EnforcingContext ctx = IndentationCalculator.analyzeEnforcingContext(nodeText, 2);
 
@@ -443,12 +383,12 @@ class IndentationCalculatorTest {
         @DisplayName("Should count spaces both before and after index")
         void countBeforeAndAfter() {
             NodeText nodeText = new NodeText();
-            nodeText.addElement(newline());      // index 0
-            nodeText.addElement(space());        // index 1
-            nodeText.addElement(space());        // index 2 ← analyzing here
-            nodeText.addElement(space());        // index 3
-            nodeText.addElement(space());        // index 4
-            nodeText.addElement(space());        // index 5
+            nodeText.addElement(newline()); // index 0
+            nodeText.addElement(space()); // index 1
+            nodeText.addElement(space()); // index 2 ← analyzing here
+            nodeText.addElement(space()); // index 3
+            nodeText.addElement(space()); // index 4
+            nodeText.addElement(space()); // index 5
 
             IndentationCalculator.EnforcingContext ctx = IndentationCalculator.analyzeEnforcingContext(nodeText, 2);
 
@@ -462,9 +402,9 @@ class IndentationCalculatorTest {
         @DisplayName("Should handle analyzing at first space after newline")
         void analyzeAtFirstSpace() {
             NodeText nodeText = new NodeText();
-            nodeText.addElement(newline());      // index 0
-            nodeText.addElement(space());        // index 1 ← analyzing here
-            nodeText.addElement(space());        // index 2
+            nodeText.addElement(newline()); // index 0
+            nodeText.addElement(space()); // index 1 ← analyzing here
+            nodeText.addElement(space()); // index 2
 
             IndentationCalculator.EnforcingContext ctx = IndentationCalculator.analyzeEnforcingContext(nodeText, 1);
 
@@ -478,9 +418,9 @@ class IndentationCalculatorTest {
         @DisplayName("Should handle analyzing at last space before non-whitespace")
         void analyzeAtLastSpace() {
             NodeText nodeText = new NodeText();
-            nodeText.addElement(newline());      // index 0
-            nodeText.addElement(space());        // index 1
-            nodeText.addElement(space());        // index 2 ← analyzing here
+            nodeText.addElement(newline()); // index 0
+            nodeText.addElement(space()); // index 1
+            nodeText.addElement(space()); // index 2 ← analyzing here
             nodeText.addToken(GeneratedJavaParserConstants.PUBLIC, "public"); // index 3
 
             IndentationCalculator.EnforcingContext ctx = IndentationCalculator.analyzeEnforcingContext(nodeText, 2);
@@ -518,11 +458,11 @@ class IndentationCalculatorTest {
         @DisplayName("Should stop forward scan at newline")
         void stopForwardScanAtNewline() {
             NodeText nodeText = new NodeText();
-            nodeText.addElement(newline());      // index 0
-            nodeText.addElement(space());        // index 1 ← analyzing here
-            nodeText.addElement(space());        // index 2
-            nodeText.addElement(newline());      // index 3
-            nodeText.addElement(space());        // index 4 (not counted)
+            nodeText.addElement(newline()); // index 0
+            nodeText.addElement(space()); // index 1 ← analyzing here
+            nodeText.addElement(space()); // index 2
+            nodeText.addElement(newline()); // index 3
+            nodeText.addElement(space()); // index 4 (not counted)
 
             IndentationCalculator.EnforcingContext ctx = IndentationCalculator.analyzeEnforcingContext(nodeText, 1);
 
@@ -536,8 +476,8 @@ class IndentationCalculatorTest {
         @DisplayName("Should handle index at position 0 with whitespace")
         void indexAtZeroWithWhitespace() {
             NodeText nodeText = new NodeText();
-            nodeText.addElement(space());        // index 0 ← analyzing here
-            nodeText.addElement(space());        // index 1
+            nodeText.addElement(space()); // index 0 ← analyzing here
+            nodeText.addElement(space()); // index 1
 
             // No newline before, and index is 0, so backward scan doesn't run
             IndentationCalculator.EnforcingContext ctx = IndentationCalculator.analyzeEnforcingContext(nodeText, 0);
@@ -840,11 +780,7 @@ class IndentationCalculatorTest {
         @Test
         @DisplayName("Should work with tabs")
         void workWithTabs() {
-            List<TextElement> elements = Arrays.asList(
-                newline(),
-                tab(),
-                tab()
-            );
+            List<TextElement> elements = Arrays.asList(newline(), tab(), tab());
 
             List<TextElement> indentation = IndentationCalculator.computeFromPrecedingElements(elements);
 

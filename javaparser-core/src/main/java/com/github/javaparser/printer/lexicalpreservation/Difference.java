@@ -22,7 +22,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.LBRACE;
 import static com.github.javaparser.GeneratedJavaParserConstants.RBRACE;
-import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
@@ -300,40 +299,41 @@ public class Difference {
      * @return EnforcingIndentationContext Data structure that hold the starting position of the first whitespace char and
      * The number of consecutive whitespace (or tab) characters
      */
-//    private EnforcingIndentationContext defineEnforcingIndentationContext(NodeText nodeText, int startIndex) {
-//        EnforcingIndentationContext ctx = new EnforcingIndentationContext(startIndex);
-//        // compute space before startIndex value
-//        if (startIndex < nodeText.numberOfElements() && startIndex > 0) {
-//            // at this stage startIndex points to the first element before the deleted one
-//            for (int i = startIndex - 1; i >= 0 && i < nodeText.numberOfElements(); i--) {
-//                if (nodeText.getTextElement(i).isNewline()) {
-//                    break;
-//                }
-//                if (!isSpaceOrTabElement(nodeText, i)) {
-//                    ctx = new EnforcingIndentationContext(startIndex);
-//                    break;
-//                }
-//                ctx.start = i;
-//                ctx.extraCharacters++;
-//            }
-//        }
-//        // compute space after the deleted element
-//        if (startIndex < nodeText.numberOfElements() && isSpaceOrTabElement(nodeText, startIndex)) {
-//            // int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
-//            for (int i = startIndex; i >= 0 && i < nodeText.numberOfElements(); i++) {
-//                if (nodeText.getTextElement(i).isNewline()) {
-//                    break;
-//                }
-//                if (!isSpaceOrTabElement(nodeText, i)) {
-//                    break;
-//                }
-//                ctx.extraCharacters++;
-//            }
-//        }
-//        return ctx;
-//    }
+    //    private EnforcingIndentationContext defineEnforcingIndentationContext(NodeText nodeText, int startIndex) {
+    //        EnforcingIndentationContext ctx = new EnforcingIndentationContext(startIndex);
+    //        // compute space before startIndex value
+    //        if (startIndex < nodeText.numberOfElements() && startIndex > 0) {
+    //            // at this stage startIndex points to the first element before the deleted one
+    //            for (int i = startIndex - 1; i >= 0 && i < nodeText.numberOfElements(); i--) {
+    //                if (nodeText.getTextElement(i).isNewline()) {
+    //                    break;
+    //                }
+    //                if (!isSpaceOrTabElement(nodeText, i)) {
+    //                    ctx = new EnforcingIndentationContext(startIndex);
+    //                    break;
+    //                }
+    //                ctx.start = i;
+    //                ctx.extraCharacters++;
+    //            }
+    //        }
+    //        // compute space after the deleted element
+    //        if (startIndex < nodeText.numberOfElements() && isSpaceOrTabElement(nodeText, startIndex)) {
+    //            // int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
+    //            for (int i = startIndex; i >= 0 && i < nodeText.numberOfElements(); i++) {
+    //                if (nodeText.getTextElement(i).isNewline()) {
+    //                    break;
+    //                }
+    //                if (!isSpaceOrTabElement(nodeText, i)) {
+    //                    break;
+    //                }
+    //                ctx.extraCharacters++;
+    //            }
+    //        }
+    //        return ctx;
+    //    }
     private EnforcingIndentationContext defineEnforcingIndentationContext(NodeText nodeText, int startIndex) {
-        IndentationCalculator.EnforcingContext ctx = IndentationCalculator.analyzeEnforcingContext(nodeText, startIndex);
+        IndentationCalculator.EnforcingContext ctx =
+                IndentationCalculator.analyzeEnforcingContext(nodeText, startIndex);
         return new EnforcingIndentationContext(ctx.getStartIndex(), ctx.getExtraCharacters());
     }
 
@@ -1174,9 +1174,12 @@ public class Difference {
         if (nodeTextIndex < nodeText.numberOfElements()
                 && nodeText.getTextElement(nodeTextIndex).isToken(RBRACE)) {
             indentationAdj = indentationAdj.subList(
-                    0, indentationAdj.size() - Math.min(IndentationConstants.STANDARD_INDENTATION_SIZE, indentationAdj.size()));
+                    0,
+                    indentationAdj.size()
+                            - Math.min(IndentationConstants.STANDARD_INDENTATION_SIZE, indentationAdj.size()));
         } else if (followedByUnindent) {
-            indentationAdj = indentationAdj.subList(0, Math.max(0, indentationAdj.size() - IndentationConstants.STANDARD_INDENTATION_SIZE));
+            indentationAdj = indentationAdj.subList(
+                    0, Math.max(0, indentationAdj.size() - IndentationConstants.STANDARD_INDENTATION_SIZE));
         }
         for (TextElement e : indentationAdj) {
             if ((nodeTextIndex < nodeText.numberOfElements())

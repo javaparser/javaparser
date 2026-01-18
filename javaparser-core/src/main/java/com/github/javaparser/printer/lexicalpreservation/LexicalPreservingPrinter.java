@@ -179,7 +179,8 @@ public class LexicalPreservingPrinter {
                      */
                     // Extract the existing indentation of the line where we'll insert the comment
                     List<TextElement> precedingElements = nodeText.getElements().subList(0, index);
-                    List<TextElement> existingIndent = IndentationCalculator.computeFromPrecedingElements(precedingElements);
+                    List<TextElement> existingIndent =
+                            IndentationCalculator.computeFromPrecedingElements(precedingElements);
 
                     // Insert the comment (WITHOUT adding indentation before, we'll add it after the EOL)
                     LineSeparator lineSeparator = observedNode.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
@@ -193,8 +194,8 @@ public class LexicalPreservingPrinter {
                     for (TextElement indentElement : existingIndent) {
                         if (indentElement instanceof TokenTextElement) {
                             TokenTextElement tokenElement = (TokenTextElement) indentElement;
-                            nodeText.addElement(index++, new TokenTextElement(
-                                    tokenElement.getTokenKind(), tokenElement.getText()));
+                            nodeText.addElement(
+                                    index++, new TokenTextElement(tokenElement.getTokenKind(), tokenElement.getText()));
                         }
                     }
                 } else if (newValue == null) {
@@ -552,8 +553,8 @@ public class LexicalPreservingPrinter {
             for (TextElement indentElement : existingIndent) {
                 if (indentElement instanceof TokenTextElement) {
                     TokenTextElement tokenElement = (TokenTextElement) indentElement;
-                    nodeText.addElement(index, new TokenTextElement(
-                            tokenElement.getTokenKind(), tokenElement.getText()));
+                    nodeText.addElement(
+                            index, new TokenTextElement(tokenElement.getTokenKind(), tokenElement.getText()));
                 }
             }
         }

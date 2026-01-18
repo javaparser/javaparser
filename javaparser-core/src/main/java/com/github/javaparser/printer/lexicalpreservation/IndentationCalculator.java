@@ -20,13 +20,12 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
+import static com.github.javaparser.printer.lexicalpreservation.IndentationConstants.STANDARD_INDENTATION_SIZE;
 
+import com.github.javaparser.GeneratedJavaParserConstants;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static com.github.javaparser.printer.lexicalpreservation.IndentationConstants.STANDARD_INDENTATION_SIZE;
 
 /**
  * Provides stateless utility methods for indentation calculations and analysis.
@@ -184,8 +183,8 @@ public final class IndentationCalculator {
             return new EnforcingContext(index, 0);
         }
 
-        int start = index;        // Starting position of whitespace sequence to potentially remove
-        int extraCharacters = 0;  // Total count of excess whitespace characters
+        int start = index; // Starting position of whitespace sequence to potentially remove
+        int extraCharacters = 0; // Total count of excess whitespace characters
 
         // ========== PHASE 1: BACKWARD SCAN ==========
         // Scan backward from the position to identify preceding whitespace.
@@ -209,8 +208,8 @@ public final class IndentationCalculator {
                 }
 
                 // Found whitespace - expand the sequence backward
-                start = i;              // Update start to this earlier position
-                extraCharacters++;      // Count this whitespace character
+                start = i; // Update start to this earlier position
+                extraCharacters++; // Count this whitespace character
             }
         }
 
@@ -222,7 +221,8 @@ public final class IndentationCalculator {
         // Example scenario where this matters:
         //   "public[space][space]" - backward scan finds "public" and resets,
         //   but we still need to count the 2 trailing spaces.
-        if (index < nodeText.numberOfElements() && nodeText.getTextElement(index).isSpaceOrTab()) {
+        if (index < nodeText.numberOfElements()
+                && nodeText.getTextElement(index).isSpaceOrTab()) {
             for (int i = index; i < nodeText.numberOfElements(); i++) {
                 // Stop at newline - end of current line
                 if (nodeText.getTextElement(i).isNewline()) {
@@ -284,9 +284,8 @@ public final class IndentationCalculator {
             return index;
         }
 
-        int toRemove = ctx.getExtraCharacters() > charactersToPreserve
-                ? ctx.getExtraCharacters() - charactersToPreserve
-                : 0;
+        int toRemove =
+                ctx.getExtraCharacters() > charactersToPreserve ? ctx.getExtraCharacters() - charactersToPreserve : 0;
 
         int newIndex = removeExcessIndentation(nodeText, ctx.getStartIndex(), toRemove);
 
