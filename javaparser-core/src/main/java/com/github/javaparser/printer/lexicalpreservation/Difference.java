@@ -299,38 +299,6 @@ public class Difference {
      * @return EnforcingIndentationContext Data structure that hold the starting position of the first whitespace char and
      * The number of consecutive whitespace (or tab) characters
      */
-    //    private EnforcingIndentationContext defineEnforcingIndentationContext(NodeText nodeText, int startIndex) {
-    //        EnforcingIndentationContext ctx = new EnforcingIndentationContext(startIndex);
-    //        // compute space before startIndex value
-    //        if (startIndex < nodeText.numberOfElements() && startIndex > 0) {
-    //            // at this stage startIndex points to the first element before the deleted one
-    //            for (int i = startIndex - 1; i >= 0 && i < nodeText.numberOfElements(); i--) {
-    //                if (nodeText.getTextElement(i).isNewline()) {
-    //                    break;
-    //                }
-    //                if (!isSpaceOrTabElement(nodeText, i)) {
-    //                    ctx = new EnforcingIndentationContext(startIndex);
-    //                    break;
-    //                }
-    //                ctx.start = i;
-    //                ctx.extraCharacters++;
-    //            }
-    //        }
-    //        // compute space after the deleted element
-    //        if (startIndex < nodeText.numberOfElements() && isSpaceOrTabElement(nodeText, startIndex)) {
-    //            // int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
-    //            for (int i = startIndex; i >= 0 && i < nodeText.numberOfElements(); i++) {
-    //                if (nodeText.getTextElement(i).isNewline()) {
-    //                    break;
-    //                }
-    //                if (!isSpaceOrTabElement(nodeText, i)) {
-    //                    break;
-    //                }
-    //                ctx.extraCharacters++;
-    //            }
-    //        }
-    //        return ctx;
-    //    }
     private EnforcingIndentationContext defineEnforcingIndentationContext(NodeText nodeText, int startIndex) {
         IndentationCalculator.EnforcingContext ctx =
                 IndentationCalculator.analyzeEnforcingContext(nodeText, startIndex);
