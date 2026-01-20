@@ -27,7 +27,6 @@ import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.utils.Optionals;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -364,4 +363,3 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
         return false;
     }
 }
-

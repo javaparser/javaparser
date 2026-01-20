@@ -1,5 +1,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -9,8 +11,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for TokenOwnerDetector and its strategies.
@@ -29,7 +29,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInLocalVariableDeclaration() {
         CompilationUnit cu = parse("class X { void m() { Set<String> x; } }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -39,7 +41,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInFieldDeclaration() {
         CompilationUnit cu = parse("class X { Set<String> field; }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -49,7 +53,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInEnumConstant() {
         CompilationUnit cu = parse("enum X { A(new ArrayList<String>()); X(List<String> l) {} }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("ArrayList")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("ArrayList"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -63,7 +69,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInMethodParameter() {
         CompilationUnit cu = parse("class X { void m(Set<String> param) {} }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -73,7 +81,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInConstructorParameter() {
         CompilationUnit cu = parse("class X { X(Set<String> param) {} }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -83,7 +93,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInReceiverParameter() {
         CompilationUnit cu = parse("class X { void m(X X.this) {} }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("X")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("X"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -97,7 +109,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInMethodReturnType() {
         CompilationUnit cu = parse("class X { Set<String> m() { return null; } }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -107,7 +121,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInAnnotationMemberDeclaration() {
         CompilationUnit cu = parse("@interface X { Set<String> value(); }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -121,7 +137,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInExtendsClause() {
         CompilationUnit cu = parse("class X extends ArrayList<String> {}");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("ArrayList")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("ArrayList"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -131,7 +149,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInImplementsClause() {
         CompilationUnit cu = parse("class X implements List<String> {}");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("List")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("List"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -142,7 +162,9 @@ class TokenOwnerDetectorTest {
     void typeInRecordImplementsClause() {
         StaticJavaParser.getConfiguration().setLanguageLevel(LanguageLevel.BLEEDING_EDGE);
         CompilationUnit cu = StaticJavaParser.parse("record X() implements List<String> {}");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("List")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("List"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -152,7 +174,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInEnumImplementsClause() {
         CompilationUnit cu = parse("enum X implements List<String> { A }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("List")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("List"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -166,7 +190,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInCastExpression() {
         CompilationUnit cu = parse("class X { void m() { Object o = (String) obj; } }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("String")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("String"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -176,7 +202,9 @@ class TokenOwnerDetectorTest {
     @Test
     void typeInInstanceOfExpression() {
         CompilationUnit cu = parse("class X { void m() { if (obj instanceof String) {} } }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("String")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("String"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -187,7 +215,9 @@ class TokenOwnerDetectorTest {
     void typeInRecordPatternExpression() {
         StaticJavaParser.getConfiguration().setLanguageLevel(LanguageLevel.BLEEDING_EDGE);
         CompilationUnit cu = StaticJavaParser.parse("class X { void m() { switch (a) { case Box(String s) -> {} } } }");
-        ClassOrInterfaceType type = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Box")).get();
+        ClassOrInterfaceType type = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Box"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(type);
 
@@ -201,7 +231,9 @@ class TokenOwnerDetectorTest {
     @Test
     void nestedGenericsInVariableDeclaration() {
         CompilationUnit cu = parse("class X { void m() { Set<Pair<String, String>> x; } }");
-        ClassOrInterfaceType pairType = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Pair")).get();
+        ClassOrInterfaceType pairType = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Pair"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(pairType);
 
@@ -211,7 +243,9 @@ class TokenOwnerDetectorTest {
     @Test
     void deeplyNestedGenerics() {
         CompilationUnit cu = parse("class X { Map<String, List<Set<Integer>>> map; }");
-        ClassOrInterfaceType setType = cu.findFirst(ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set")).get();
+        ClassOrInterfaceType setType = cu.findFirst(
+                        ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Set"))
+                .get();
 
         Node owner = TokenOwnerDetector.findTokenOwner(setType);
 
@@ -267,8 +301,9 @@ class TokenOwnerDetectorTest {
     void needsRegenerationWhenReplacedNodeIsWithinType() {
         CompilationUnit cu = parse("class X { Set<String> field; }");
         ClassOrInterfaceType stringType = cu.findAll(ClassOrInterfaceType.class).stream()
-            .filter(t -> t.getNameAsString().equals("String"))
-            .findFirst().get();
+                .filter(t -> t.getNameAsString().equals("String"))
+                .findFirst()
+                .get();
 
         Node tokenOwner = TokenOwnerDetector.findTokenOwner(stringType);
         Node parent = stringType.getParentNode().get(); // TypeArguments
@@ -342,4 +377,3 @@ class TokenOwnerDetectorTest {
         assertEquals(literal, owner, "Should return the node itself for non-Type nodes");
     }
 }
-

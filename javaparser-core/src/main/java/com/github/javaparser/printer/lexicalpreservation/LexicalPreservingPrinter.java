@@ -162,7 +162,7 @@ public class LexicalPreservingPrinter {
                     if (tokenOwnerText != null) {
                         // Regenerate the token owner's NodeText instead of the observed node
                         LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(
-                            tokenOwnerText, tokenOwner, property, oldValue, newValue);
+                                tokenOwnerText, tokenOwner, property, oldValue, newValue);
                         return; // Early exit - we've handled the change
                     }
                 }

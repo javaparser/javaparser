@@ -1,12 +1,11 @@
 package com.github.javaparser.utils;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for Optionals utility class.
@@ -19,11 +18,8 @@ class OptionalsTest {
 
     @Test
     void orReturnsFirstPresentOptional() {
-        Optional<String> result = Optionals.or(
-            () -> Optional.of("first"),
-            () -> Optional.of("second"),
-            () -> Optional.of("third")
-        );
+        Optional<String> result =
+                Optionals.or(() -> Optional.of("first"), () -> Optional.of("second"), () -> Optional.of("third"));
 
         assertTrue(result.isPresent());
         assertEquals("first", result.get());
@@ -31,11 +27,8 @@ class OptionalsTest {
 
     @Test
     void orReturnsSecondWhenFirstIsEmpty() {
-        Optional<String> result = Optionals.or(
-            () -> Optional.empty(),
-            () -> Optional.of("second"),
-            () -> Optional.of("third")
-        );
+        Optional<String> result =
+                Optionals.or(() -> Optional.empty(), () -> Optional.of("second"), () -> Optional.of("third"));
 
         assertTrue(result.isPresent());
         assertEquals("second", result.get());
@@ -43,20 +36,14 @@ class OptionalsTest {
 
     @Test
     void orReturnsEmptyWhenAllAreEmpty() {
-        Optional<String> result = Optionals.or(
-            () -> Optional.empty(),
-            () -> Optional.empty(),
-            () -> Optional.empty()
-        );
+        Optional<String> result = Optionals.or(() -> Optional.empty(), () -> Optional.empty(), () -> Optional.empty());
 
         assertFalse(result.isPresent());
     }
 
     @Test
     void orWithSingleSupplier() {
-        Optional<String> result = Optionals.or(
-            () -> Optional.of("only")
-        );
+        Optional<String> result = Optionals.or(() -> Optional.of("only"));
 
         assertTrue(result.isPresent());
         assertEquals("only", result.get());
@@ -78,19 +65,18 @@ class OptionalsTest {
         AtomicInteger callCount = new AtomicInteger(0);
 
         Optional<String> result = Optionals.or(
-            () -> {
-                callCount.incrementAndGet();
-                return Optional.of("first");
-            },
-            () -> {
-                callCount.incrementAndGet();
-                return Optional.of("second");
-            },
-            () -> {
-                callCount.incrementAndGet();
-                return Optional.of("third");
-            }
-        );
+                () -> {
+                    callCount.incrementAndGet();
+                    return Optional.of("first");
+                },
+                () -> {
+                    callCount.incrementAndGet();
+                    return Optional.of("second");
+                },
+                () -> {
+                    callCount.incrementAndGet();
+                    return Optional.of("third");
+                });
 
         assertTrue(result.isPresent());
         assertEquals("first", result.get());
@@ -102,23 +88,22 @@ class OptionalsTest {
         AtomicInteger callCount = new AtomicInteger(0);
 
         Optional<String> result = Optionals.or(
-            () -> {
-                callCount.incrementAndGet();
-                return Optional.empty();
-            },
-            () -> {
-                callCount.incrementAndGet();
-                return Optional.empty();
-            },
-            () -> {
-                callCount.incrementAndGet();
-                return Optional.of("third");
-            },
-            () -> {
-                callCount.incrementAndGet();
-                return Optional.of("fourth");
-            }
-        );
+                () -> {
+                    callCount.incrementAndGet();
+                    return Optional.empty();
+                },
+                () -> {
+                    callCount.incrementAndGet();
+                    return Optional.empty();
+                },
+                () -> {
+                    callCount.incrementAndGet();
+                    return Optional.of("third");
+                },
+                () -> {
+                    callCount.incrementAndGet();
+                    return Optional.of("fourth");
+                });
 
         assertTrue(result.isPresent());
         assertEquals("third", result.get());
@@ -131,11 +116,7 @@ class OptionalsTest {
 
     @Test
     void orWorksWithDifferentTypes() {
-        Optional<Integer> result = Optionals.or(
-            () -> Optional.empty(),
-            () -> Optional.of(42),
-            () -> Optional.of(100)
-        );
+        Optional<Integer> result = Optionals.or(() -> Optional.empty(), () -> Optional.of(42), () -> Optional.of(100));
 
         assertTrue(result.isPresent());
         assertEquals(42, result.get());
@@ -144,10 +125,7 @@ class OptionalsTest {
     @Test
     void orWorksWithNullableOptionals() {
         Optional<String> result = Optionals.or(
-            () -> Optional.ofNullable(null),
-            () -> Optional.ofNullable("value"),
-            () -> Optional.of("fallback")
-        );
+                () -> Optional.ofNullable(null), () -> Optional.ofNullable("value"), () -> Optional.of("fallback"));
 
         assertTrue(result.isPresent());
         assertEquals("value", result.get());
@@ -175,17 +153,20 @@ class OptionalsTest {
         // Simulates TokenOwnerDetector pattern
         class TestNode {
             String type;
-            TestNode(String type) { this.type = type; }
+
+            TestNode(String type) {
+                this.type = type;
+            }
         }
 
         TestNode node = new TestNode("field");
 
-        Supplier<Optional<TestNode>> checkVariable = () ->
-            node.type.equals("variable") ? Optional.of(node) : Optional.empty();
-        Supplier<Optional<TestNode>> checkParameter = () ->
-            node.type.equals("parameter") ? Optional.of(node) : Optional.empty();
-        Supplier<Optional<TestNode>> checkField = () ->
-            node.type.equals("field") ? Optional.of(node) : Optional.empty();
+        Supplier<Optional<TestNode>> checkVariable =
+                () -> node.type.equals("variable") ? Optional.of(node) : Optional.empty();
+        Supplier<Optional<TestNode>> checkParameter =
+                () -> node.type.equals("parameter") ? Optional.of(node) : Optional.empty();
+        Supplier<Optional<TestNode>> checkField =
+                () -> node.type.equals("field") ? Optional.of(node) : Optional.empty();
 
         Optional<TestNode> owner = Optionals.or(checkVariable, checkParameter, checkField);
 
@@ -212,10 +193,7 @@ class OptionalsTest {
             return Optional.of("expensive");
         };
 
-        Optional<String> result = Optionals.or(
-            () -> Optional.of("cheap"),
-            expensiveOperation
-        );
+        Optional<String> result = Optionals.or(() -> Optional.of("cheap"), expensiveOperation);
 
         assertEquals("cheap", result.get());
         assertEquals(0, expensiveCallCount.get(), "Expensive operation should not be called");
@@ -226,11 +204,22 @@ class OptionalsTest {
         StringBuilder order = new StringBuilder();
 
         Optional<String> result = Optionals.or(
-            () -> { order.append("1"); return Optional.empty(); },
-            () -> { order.append("2"); return Optional.empty(); },
-            () -> { order.append("3"); return Optional.of("found"); },
-            () -> { order.append("4"); return Optional.of("not-reached"); }
-        );
+                () -> {
+                    order.append("1");
+                    return Optional.empty();
+                },
+                () -> {
+                    order.append("2");
+                    return Optional.empty();
+                },
+                () -> {
+                    order.append("3");
+                    return Optional.of("found");
+                },
+                () -> {
+                    order.append("4");
+                    return Optional.of("not-reached");
+                });
 
         assertEquals("found", result.get());
         assertEquals("123", order.toString(), "Should evaluate in order and stop at first present");
@@ -257,4 +246,3 @@ class OptionalsTest {
         assertEquals("value", result.get());
     }
 }
-

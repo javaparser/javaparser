@@ -23,7 +23,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.type.Type;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -85,13 +84,13 @@ class TokenOwnerDetector {
      * </ol>
      */
     private static final List<DetectionStrategy> STRATEGIES = Arrays.asList(
-        new TypeOwnerStrategy()
-        // Additional strategies will be added here as they are implemented
-        // new AnnotationOwnerStrategy(),
-        // new ModifierOwnerStrategy(),
-        // new TypeParameterOwnerStrategy(),
-        // new NameInExpressionStrategy()
-    );
+            new TypeOwnerStrategy()
+            // Additional strategies will be added here as they are implemented
+            // new AnnotationOwnerStrategy(),
+            // new ModifierOwnerStrategy(),
+            // new TypeParameterOwnerStrategy(),
+            // new NameInExpressionStrategy()
+            );
 
     /**
      * Finds the node that owns the tokens for the given node.
@@ -219,4 +218,3 @@ class TokenOwnerDetector {
         return false;
     }
 }
-
