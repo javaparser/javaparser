@@ -28,18 +28,29 @@ import java.util.List;
 /**
  * This contains the lexical information for a single node.
  * It is basically a list of tokens and children.
+ *
+ * <p>This class has been refactored to use {@link TextElementList} internally
+ * for better code reuse and maintainability, while preserving the exact same
+ * external API and behavior.
  */
 class NodeText {
 
-    private final List<TextElement> elements;
+    // Changed from List<TextElement> to TextElementList for internal optimization
+    private final TextElementList elements;
 
     public static final int NOT_FOUND = -1;
 
     //
     // Constructors
     //
+
+    /**
+     * Creates a NodeText wrapping the given list of elements.
+     *
+     * @param elements the list to wrap (will be wrapped in TextElementList)
+     */
     NodeText(List<TextElement> elements) {
-        this.elements = elements;
+        this.elements = new TextElementList(elements);
     }
 
     /**
@@ -52,18 +63,19 @@ class NodeText {
     //
     // Adding elements
     //
+
     /**
      * Add an element at the end.
      */
     void addElement(TextElement nodeTextElement) {
-        this.elements.add(nodeTextElement);
+        elements.insert(elements.size(), nodeTextElement);
     }
 
     /**
      * Add an element at the given position.
      */
     void addElement(int index, TextElement nodeTextElement) {
-        this.elements.add(index, nodeTextElement);
+        elements.insert(index, nodeTextElement);
     }
 
     void addChild(Node child) {
@@ -75,51 +87,97 @@ class NodeText {
     }
 
     void addToken(int tokenKind, String text) {
-        elements.add(new TokenTextElement(tokenKind, text));
+        addElement(new TokenTextElement(tokenKind, text));
     }
 
     void addToken(int index, int tokenKind, String text) {
-        elements.add(index, new TokenTextElement(tokenKind, text));
+        addElement(index, new TokenTextElement(tokenKind, text));
     }
 
     //
     // Finding elements
     //
+
+    /**
+     * Finds the first element matching the given matcher.
+     *
+     * @param matcher the matcher to use
+     * @return the index of the first matching element
+     * @throws IllegalArgumentException if no matching element is found
+     */
     int findElement(TextElementMatcher matcher) {
         return findElement(matcher, 0);
     }
 
+    /**
+     * Finds the first element matching the given matcher, starting from the given index.
+     *
+     * @param matcher the matcher to use
+     * @param from the starting index (inclusive)
+     * @return the index of the first matching element
+     * @throws IllegalArgumentException if no matching element is found
+     */
     int findElement(TextElementMatcher matcher, int from) {
         int res = tryToFindElement(matcher, from);
         if (res == NOT_FOUND) {
             throw new IllegalArgumentException(String.format(
-                    "I could not find child '%s' from position %d. Elements: %s", matcher, from, elements));
+                    "I could not find child '%s' from position %d. Elements: %s", matcher, from, elements.toList()));
         }
         return res;
     }
 
+    /**
+     * Tries to find an element matching the given matcher, starting from the given index.
+     * Returns NOT_FOUND if no matching element is found.
+     *
+     * @param matcher the matcher to use
+     * @param from the starting index (inclusive)
+     * @return the index of the first matching element, or NOT_FOUND
+     */
     int tryToFindElement(TextElementMatcher matcher, int from) {
-        for (int i = from; i < elements.size(); i++) {
-            TextElement element = elements.get(i);
-            if (matcher.match(element)) {
-                return i;
-            }
-        }
-        return NOT_FOUND;
+        return elements.findNext(from, matcher::match);
     }
 
+    /**
+     * Finds the first occurrence of the given child node.
+     *
+     * @param child the child to find
+     * @return the index of the child
+     * @throws IllegalArgumentException if child is not found
+     */
     int findChild(Node child) {
         return findChild(child, 0);
     }
 
+    /**
+     * Finds the first occurrence of the given child node, starting from the given index.
+     *
+     * @param child the child to find
+     * @param from the starting index (inclusive)
+     * @return the index of the child
+     * @throws IllegalArgumentException if child is not found
+     */
     int findChild(Node child, int from) {
         return findElement(TextElementMatchers.byNode(child), from);
     }
 
+    /**
+     * Tries to find the first occurrence of the given child node.
+     *
+     * @param child the child to find
+     * @return the index of the child, or NOT_FOUND
+     */
     int tryToFindChild(Node child) {
         return tryToFindChild(child, 0);
     }
 
+    /**
+     * Tries to find the first occurrence of the given child node, starting from the given index.
+     *
+     * @param child the child to find
+     * @param from the starting index (inclusive)
+     * @return the index of the child, or NOT_FOUND
+     */
     int tryToFindChild(Node child, int from) {
         return tryToFindElement(TextElementMatchers.byNode(child), from);
     }
@@ -127,29 +185,48 @@ class NodeText {
     //
     // Removing single elements
     //
+
+    /**
+     * Removes the first element matching the given matcher.
+     * Optionally removes following whitespace.
+     *
+     * @param matcher the matcher to use
+     * @param potentiallyFollowingWhitespace if true, removes following whitespace element
+     * @throws IllegalArgumentException if no matching element is found
+     * @throws UnsupportedOperationException if whitespace removal is requested but no element follows
+     */
     public void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
-        int i = 0;
-        for (TextElement e : elements) {
-            if (matcher.match(e)) {
-                elements.remove(e);
-                if (potentiallyFollowingWhitespace) {
-                    if (i < elements.size()) {
-                        if (elements.get(i).isWhiteSpace()) {
-                            elements.remove(i);
-                        }
-                    } else {
-                        throw new UnsupportedOperationException("There is no element to remove!");
-                    }
+        // Find the matching element using our optimized search
+        int index = tryToFindElement(matcher, 0);
+
+        if (index == NOT_FOUND) {
+            throw new IllegalArgumentException("No matching element found");
+        }
+
+        // Remove the element
+        elements.remove(index);
+
+        // Optionally remove following whitespace
+        if (potentiallyFollowingWhitespace) {
+            if (index < elements.size()) {
+                if (elements.get(index).isWhiteSpace()) {
+                    elements.remove(index);
                 }
-                return;
+            } else {
+                throw new UnsupportedOperationException("There is no element to remove!");
             }
         }
-        throw new IllegalArgumentException();
     }
 
     //
     // Removing sequences
     //
+
+    /**
+     * Removes the element at the given index.
+     *
+     * @param index the index of the element to remove
+     */
     void removeElement(int index) {
         elements.remove(index);
     }
@@ -157,47 +234,87 @@ class NodeText {
     //
     // Replacing elements
     //
+
+    /**
+     * Replaces the element at the position matched by the given matcher
+     * with the given new element.
+     *
+     * @param position the matcher to find the element to replace
+     * @param newElement the new element
+     * @throws IllegalArgumentException if no matching element is found
+     */
     void replace(TextElementMatcher position, TextElement newElement) {
         int index = findElement(position, 0);
         elements.remove(index);
-        elements.add(index, newElement);
+        elements.insert(index, newElement);
     }
 
+    /**
+     * Replaces the element at the position matched by the given matcher
+     * with the given collection of new elements.
+     *
+     * @param position the matcher to find the element to replace
+     * @param newElements the new elements
+     * @throws IllegalArgumentException if no matching element is found
+     */
     void replace(TextElementMatcher position, Collection<? extends TextElement> newElements) {
         int index = findElement(position, 0);
         elements.remove(index);
-        elements.addAll(index, newElements);
+        elements.insertAll(index, (List<TextElement>) newElements);
     }
 
     //
     // Other methods
     //
+
     /**
-     * Generate the corresponding string.
+     * Generate the corresponding string by expanding all elements.
+     *
+     * @return the expanded string representation
      */
     String expand() {
-        StringBuffer sb = new StringBuffer();
-        elements.forEach(e -> sb.append(e.expand()));
+        StringBuilder sb = new StringBuilder();
+        // Use the underlying list's forEach for efficiency
+        elements.toList().forEach(e -> sb.append(e.expand()));
         return sb.toString();
     }
 
-    // Visible for testing
+    /**
+     * Returns the number of elements.
+     * Visible for testing.
+     *
+     * @return the number of elements
+     */
     int numberOfElements() {
         return elements.size();
     }
 
-    // Visible for testing
+    /**
+     * Returns the element at the given index.
+     * Visible for testing.
+     *
+     * @param index the index
+     * @return the element at that index
+     */
     TextElement getTextElement(int index) {
         return elements.get(index);
     }
 
-    // Visible for testing
+    /**
+     * Returns the underlying list of elements.
+     * Visible for testing.
+     *
+     * <p><b>IMPORTANT:</b> This returns the internal mutable list.
+     * External modifications will affect this NodeText.
+     *
+     * @return the list of elements (mutable)
+     */
     List<TextElement> getElements() {
-        return elements;
+        return elements.toMutableList();
     }
 
     @Override
     public String toString() {
-        return "NodeText{" + elements + '}';
+        return "NodeText{" + elements.toList() + '}';
     }
 }

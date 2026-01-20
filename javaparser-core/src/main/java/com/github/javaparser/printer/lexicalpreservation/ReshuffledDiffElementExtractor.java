@@ -22,7 +22,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-import com.github.javaparser.printer.lexicalpreservation.Difference.ArrayIterator;
 import java.util.*;
 
 public class ReshuffledDiffElementExtractor {
@@ -56,7 +55,7 @@ public class ReshuffledDiffElementExtractor {
     }
 
     public void extract(List<DifferenceElement> diffElements) {
-        ArrayIterator<DifferenceElement> iterator = new ArrayIterator<>(diffElements);
+        IndexTrackingIterator<DifferenceElement> iterator = new IndexTrackingIterator<>(diffElements);
         while (iterator.hasNext()) {
             DifferenceElement diffElement = iterator.next();
             if (diffElement instanceof Reshuffled) {
@@ -170,21 +169,21 @@ public class ReshuffledDiffElementExtractor {
     private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(
             CsmMix elementsFromPreviousOrder, CsmMix elementsFromNextOrder) {
         Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
-        ArrayIterator<CsmElement> previousOrderElementsIterator =
-                new ArrayIterator<>(elementsFromPreviousOrder.getElements());
+        IndexTrackingIterator<CsmElement> previousOrderElementsIterator =
+                new IndexTrackingIterator<>(elementsFromPreviousOrder.getElements());
         int syncNextIndex = 0;
         while (previousOrderElementsIterator.hasNext()) {
             CsmElement pe = previousOrderElementsIterator.next();
-            ArrayIterator<CsmElement> nextOrderElementsIterator =
-                    new ArrayIterator<>(elementsFromNextOrder.getElements(), syncNextIndex);
+            IndexTrackingIterator<CsmElement> nextOrderElementsIterator =
+                    new IndexTrackingIterator<>(elementsFromNextOrder.getElements(), syncNextIndex);
             while (nextOrderElementsIterator.hasNext()) {
                 CsmElement ne = nextOrderElementsIterator.next();
                 if (!correspondanceBetweenNextOrderAndPreviousOrder
                                 .values()
-                                .contains(previousOrderElementsIterator.index())
+                                .contains(previousOrderElementsIterator.currentIndex())
                         && DifferenceElementCalculator.matching(ne, pe)) {
                     correspondanceBetweenNextOrderAndPreviousOrder.put(
-                            nextOrderElementsIterator.index(), previousOrderElementsIterator.index());
+                            nextOrderElementsIterator.currentIndex(), previousOrderElementsIterator.currentIndex());
                     // set the position to start on the next {@code nextOrderElementsIterator} iteration
                     syncNextIndex = nextOrderElementsIterator.nextIndex();
                     break;
