@@ -148,6 +148,25 @@ public class LexicalPreservingPrinter {
             if (property == ObservableProperty.RANGE || property == ObservableProperty.COMMENTED_NODE) {
                 return;
             }
+            // Handle node replacements with TokenOwnerDetector
+            if (oldValue instanceof Node && newValue instanceof Node) {
+                Node oldNode = (Node) oldValue;
+                Node newNode = (Node) newValue;
+
+                // Find the actual token owner
+                Node tokenOwner = TokenOwnerDetector.findTokenOwner(oldNode);
+
+                // Check if we need to regenerate the token owner instead of just the parent
+                if (TokenOwnerDetector.needsRegeneration(observedNode, tokenOwner, oldNode)) {
+                    NodeText tokenOwnerText = getOrCreateNodeText(tokenOwner);
+                    if (tokenOwnerText != null) {
+                        // Regenerate the token owner's NodeText instead of the observed node
+                        LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(
+                            tokenOwnerText, tokenOwner, property, oldValue, newValue);
+                        return; // Early exit - we've handled the change
+                    }
+                }
+            }
             if (property == ObservableProperty.COMMENT) {
                 Optional<Node> parentNode = observedNode.getParentNode();
                 NodeText nodeText = parentNode
