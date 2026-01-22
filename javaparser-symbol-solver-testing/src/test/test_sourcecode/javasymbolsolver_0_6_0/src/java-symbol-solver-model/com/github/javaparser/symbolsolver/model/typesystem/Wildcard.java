@@ -100,7 +100,7 @@ public class Wildcard implements Type {
         } else if (type == BoundType.EXTENDS) {
             return "? extends " + boundedType.describe();
         } else {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(String.format("%s is not supported", type));
         }
     }
 
