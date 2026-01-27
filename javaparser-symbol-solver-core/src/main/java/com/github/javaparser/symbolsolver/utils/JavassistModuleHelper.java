@@ -29,7 +29,7 @@ import javassist.bytecode.ClassFile;
 import javassist.bytecode.ConstPool;
 
 public class JavassistModuleHelper {
-    public static String MODULE_INFO_CLASS_NAME = "module-info";
+    public static final String MODULE_INFO_CLASS_NAME = "module-info";
 
     /**
      * Javassist does not provide support for modules beyond letting users fetch the module
@@ -52,8 +52,8 @@ public class JavassistModuleHelper {
 
         // The first 2 bytes give the module_name_index, which is needed to get the module name from the constPool
         int attrIdx = 0;
-        int moduleNameIndex = moduleAttribute[attrIdx++] << 16;
-        moduleNameIndex |= moduleAttribute[attrIdx++];
+        int moduleNameIndex = (moduleAttribute[attrIdx++] & 0xFF) << 8;
+        moduleNameIndex |= (moduleAttribute[attrIdx++] & 0xFF);
 
         String moduleName = constPool.getModuleInfo(moduleNameIndex);
         ArrayList<String> exportedPackages = new ArrayList<>();
@@ -63,31 +63,33 @@ public class JavassistModuleHelper {
         attrIdx += 4;
 
         // The next 2 bytes are the requires_count
-        int requiresCount = moduleAttribute[attrIdx++] << 16;
-        requiresCount |= moduleAttribute[attrIdx++];
+        int requiresCount = (moduleAttribute[attrIdx++] & 0xFF) << 8;
+        requiresCount |= (moduleAttribute[attrIdx++] & 0xFF);
 
         // Skip the requires table. Each require structure consists of 6 bytes.
         attrIdx += requiresCount * 6;
 
         // The next 2 bytes are the exports count
-        int exportsCount = moduleAttribute[attrIdx++] << 16;
-        exportsCount |= moduleAttribute[attrIdx++];
+        int exportsCount = (moduleAttribute[attrIdx++] & 0xFF) << 8;
+        exportsCount |= (moduleAttribute[attrIdx++] & 0xFF);
 
         for (int i = 0; i < exportsCount; i++) {
-            int exportsIndex = moduleAttribute[attrIdx++] << 16;
-            exportsIndex = moduleAttribute[attrIdx++];
+            int exportsIndex = (moduleAttribute[attrIdx++] & 0xFF) << 8;
+            exportsIndex |= (moduleAttribute[attrIdx++] & 0xFF);
             String exportedPackageName = constPool.getPackageInfo(exportsIndex).replace('/', '.');
             exportedPackages.add(exportedPackageName);
             // Skip the 2 byte exports_flags
             attrIdx += 2;
             // The next 2 bytes are the exports to count. Need this to skip the exports to table for now, but
             // could use them for better resolution.
-            int exportsToCount = moduleAttribute[attrIdx++] << 16;
-            exportsToCount |= moduleAttribute[attrIdx++];
+            int exportsToCount = (moduleAttribute[attrIdx++] & 0xFF) << 8;
+            exportsToCount |= (moduleAttribute[attrIdx++] & 0xFF);
             // TODO Eventually check exportedTo to see if this is valid
             // For now, skip each 2 byte exports_to
-            attrIdx += 2 + exportsToCount;
+            attrIdx += 2 * exportsToCount;
         }
+
+        // opens, uses and provides tables are not relevant
 
         return Optional.of(new Pair<>(moduleName, exportedPackages));
     }
