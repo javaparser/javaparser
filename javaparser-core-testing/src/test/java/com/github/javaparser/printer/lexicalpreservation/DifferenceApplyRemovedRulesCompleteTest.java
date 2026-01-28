@@ -20,15 +20,14 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test suite for remaining REMOVED rules in Difference.apply()
@@ -43,42 +42,26 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r3_removeFirstElementWithParentIndentation() {
-        considerCode(
-            "class X {\n" +
-            "    @Deprecated\n" +
-            "    void method() {}\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    @Deprecated\n" + "    void method() {}\n" + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
 
         // Remove annotation (first element)
         method.getAnnotations().clear();
 
-        String expected =
-            "class X {\n" +
-            "    void method() {}\n" +
-            "}";
+        String expected = "class X {\n" + "    void method() {}\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
 
     @Test
     void r3_removeAnnotationFromMethod() {
-        considerCode(
-            "class X {\n" +
-            "    @Override\n" +
-            "    public void method() {}\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    @Override\n" + "    public void method() {}\n" + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         method.getAnnotations().clear();
 
-        String expected =
-            "class X {\n" +
-            "    public void method() {}\n" +
-            "}";
+        String expected = "class X {\n" + "    public void method() {}\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -89,14 +72,11 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r4_removeElementEnforcesIndentation() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int x = 1;\n" +
-            "        int y = 2; int z = 3;\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n"
+                + "        int x = 1;\n"
+                + "        int y = 2; int z = 3;\n"
+                + "    }\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -117,22 +97,23 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r5_modifyElementShouldNotCleansDoubleWhitespace() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int x =  1;\n" +
-            "        int y = 2;\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n"
+                + "        int x =  1;\n"
+                + "        int y = 2;\n"
+                + "    }\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
 
         // Modify should not trigger whitespace cleanup
-        body.getStatements().get(0).asExpressionStmt()
-            .getExpression().asVariableDeclarationExpr()
-            .getVariable(0).setName("a");
+        body.getStatements()
+                .get(0)
+                .asExpressionStmt()
+                .getExpression()
+                .asVariableDeclarationExpr()
+                .getVariable(0)
+                .setName("a");
 
         String result = print();
 
@@ -146,14 +127,11 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r7_removeCompleteLineRemovesIndentation() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int x = 1;\n" +
-            "        int y = 2;\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n"
+                + "        int x = 1;\n"
+                + "        int y = 2;\n"
+                + "    }\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -161,12 +139,7 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
         // Remove complete line
         body.getStatements().remove(0);
 
-        String expected =
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int y = 2;\n" +
-            "    }\n" +
-            "}";
+        String expected = "class X {\n" + "    void method() {\n" + "        int y = 2;\n" + "    }\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -177,23 +150,17 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r8_removeFirstNonInlineElementRemovesParentIndentation() {
-        considerCode(
-            "class X {\n" +
-            "    @Deprecated\n" +
-            "    @SuppressWarnings(\"all\")\n" +
-            "    void method() {}\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    @Deprecated\n"
+                + "    @SuppressWarnings(\"all\")\n"
+                + "    void method() {}\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
 
         // Remove all annotations
         method.getAnnotations().clear();
 
-        String expected =
-            "class X {\n" +
-            "    void method() {}\n" +
-            "}";
+        String expected = "class X {\n" + "    void method() {}\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -205,14 +172,11 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
     @Test
     @Disabled("Bug: Removing a commented expression should also delete the associated comment")
     void r10_removeCommentInsteadOfExpectedChild() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        /* comment */\n" +
-            "        int x = 1;\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n"
+                + "        /* comment */\n"
+                + "        int x = 1;\n"
+                + "    }\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -220,11 +184,7 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
         // Remove statement (comment encountered before it)
         body.getStatements().clear();
 
-        String expected =
-            "class X {\n" +
-            "    void method() {\n" +
-            "    }\n" +
-            "}";
+        String expected = "class X {\n" + "    void method() {\n" + "    }\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -235,12 +195,7 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r12_removeNewlineToken() {
-        considerCode(
-            "class X {\n" +
-            "\n" +
-            "    int field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "\n" + "    int field;\n" + "}");
 
         String result = print();
 
@@ -255,13 +210,10 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r13_ChangingNodeShouldNotModifyExtraWhitespaces() {
-        considerCode(
-            "class X {\n" +
-            "    int  field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int  field;\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Modify field should not trigger whitespace handling
         clazz.getFieldByName("field").get().getVariable(0).setName("data");
@@ -277,15 +229,12 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r14_removeIndentUnindentDirective() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        if (true) {\n" +
-            "            int x = 1;\n" +
-            "        }\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n"
+                + "        if (true) {\n"
+                + "            int x = 1;\n"
+                + "        }\n"
+                + "    }\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
 
@@ -295,8 +244,9 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
         String result = print();
 
         // Indentation should be preserved
-        assertTrue(result.contains("    void method()") || result.contains("    String method()"),
-            "Indentation should be maintained");
+        assertTrue(
+                result.contains("    void method()") || result.contains("    String method()"),
+                "Indentation should be maintained");
     }
 
     // =========================================================================
@@ -305,13 +255,10 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r15_skipWhitespaceWhenRemovingWhitespace() {
-        considerCode(
-            "class X {\n" +
-            "    int a, b;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int a, b;\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Modify to trigger whitespace synchronization
         clazz.getMembers().get(0).asFieldDeclaration().getVariable(0).setName("alpha");
@@ -328,21 +275,15 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r16_removeLiteral() {
-        considerCode(
-            "class X {\n" +
-            "    int field = 42;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field = 42;\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Remove initializer (literal)
-        clazz.getFieldByName("field").get().getVariable(0).setInitializer((Expression)null);
+        clazz.getFieldByName("field").get().getVariable(0).setInitializer((Expression) null);
 
-        String expected =
-            "class X {\n" +
-            "    int field;\n" +
-            "}";
+        String expected = "class X {\n" + "    int field;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -353,20 +294,14 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r18_skipRemovedWhitespaceNotFound() {
-        considerCode(
-            "class X {\n" +
-            "    int field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field;\n" + "}");
 
         // This tests that missing whitespace to remove doesn't cause errors
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
         clazz.getFieldByName("field").get().getVariable(0).setName("data");
 
-        String expected =
-            "class X {\n" +
-            "    int data;\n" +
-            "}";
+        String expected = "class X {\n" + "    int data;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -377,13 +312,10 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r19_skipOriginalWhitespaceWhenRemoving() {
-        considerCode(
-            "class X {\n" +
-            "    int field  ;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field  ;\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Modify field name
         clazz.getFieldByName("field").get().getVariable(0).setName("data");
@@ -399,23 +331,14 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r21_changeAnnotationName() {
-        considerCode(
-            "class X {\n" +
-            "    @MyAnnotation\n" +
-            "    void method() {}\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    @MyAnnotation\n" + "    void method() {}\n" + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
 
         // Change annotation name
         method.getAnnotation(0).setName("NewAnnotation");
 
-        String expected =
-            "class X {\n" +
-            "    @NewAnnotation\n" +
-            "    void method() {}\n" +
-            "}";
+        String expected = "class X {\n" + "    @NewAnnotation\n" + "    void method() {}\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -426,15 +349,12 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void postRemoved_cleanLeftoverSpacesAfterCompleteLineRemoval() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int x = 1;\n" +
-            "        int y = 2;\n" +
-            "        int z = 3;\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n"
+                + "        int x = 1;\n"
+                + "        int y = 2;\n"
+                + "        int z = 3;\n"
+                + "    }\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -442,13 +362,11 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
         // Remove middle statement (complete line)
         body.getStatements().remove(1);
 
-        String expected =
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int x = 1;\n" +
-            "        int z = 3;\n" +
-            "    }\n" +
-            "}";
+        String expected = "class X {\n" + "    void method() {\n"
+                + "        int x = 1;\n"
+                + "        int z = 3;\n"
+                + "    }\n"
+                + "}";
 
         assertTransformedToString(expected, cu);
 
@@ -465,4 +383,3 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
         return LexicalPreservingPrinter.print(cu);
     }
 }
-

@@ -59,6 +59,7 @@ class TokenOwnerDetector {
      */
     @FunctionalInterface
     interface DetectionStrategy {
+
         /**
          * Attempts to find the token owner for the given node.
          *
@@ -83,14 +84,7 @@ class TokenOwnerDetector {
      *   <li>NameInExpressionStrategy - Rare edge cases</li>
      * </ol>
      */
-    private static final List<DetectionStrategy> STRATEGIES = Arrays.asList(
-            new TypeOwnerStrategy()
-            // Additional strategies will be added here as they are implemented
-            // new AnnotationOwnerStrategy(),
-            // new ModifierOwnerStrategy(),
-            // new TypeParameterOwnerStrategy(),
-            // new NameInExpressionStrategy()
-            );
+    private static final List<DetectionStrategy> STRATEGIES = Arrays.asList(new TypeOwnerStrategy());
 
     /**
      * Finds the node that owns the tokens for the given node.
@@ -110,7 +104,6 @@ class TokenOwnerDetector {
         if (node == null) {
             throw new IllegalArgumentException("node cannot be null");
         }
-
         // Try each strategy in order
         for (DetectionStrategy strategy : STRATEGIES) {
             Optional<Node> owner = strategy.detect(node);
@@ -118,7 +111,6 @@ class TokenOwnerDetector {
                 return owner.get();
             }
         }
-
         // Default: node owns its own tokens
         return node;
     }
@@ -180,15 +172,14 @@ class TokenOwnerDetector {
         if (tokenOwner.equals(parent)) {
             return false;
         }
-
         // WORKAROUND: Multiple variable declarations share same type
         if (tokenOwner instanceof FieldDeclaration) {
             FieldDeclaration field = (FieldDeclaration) tokenOwner;
             if (field.getVariables().size() > 1) {
-                return false; // Let LPP handle it normally
+                // Let LPP handle it normally
+                return false;
             }
         }
-
         // Case 2: Replaced node is directly a Type
         // This is the most common case requiring special handling (Issue #3365).
         // Types in declarations have their tokens owned by the declaration, not by the Type node itself.
@@ -196,7 +187,6 @@ class TokenOwnerDetector {
         if (replacedNode instanceof Type) {
             return true;
         }
-
         // Case 3: Replaced node is contained within a Type
         // This handles nested cases where a node inside a type (e.g., type arguments) is replaced.
         // We walk up from the replaced node to the parent, checking if we pass through a Type node.
@@ -209,7 +199,6 @@ class TokenOwnerDetector {
             }
             current = current.getParentNode().orElse(null);
         }
-
         // Case 4: None of the above
         // The replaced node is not type-related and tokenOwner != parent.
         // This is rare but possible (e.g., annotations, modifiers in some cases).

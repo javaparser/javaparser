@@ -17,7 +17,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.printer.lexicalpreservation.IndentationConstants.STANDARD_INDENTATION_SIZE;
@@ -64,12 +63,10 @@ public final class IndentationCalculator {
      */
     public static List<TextElement> computeFromPrecedingElements(List<TextElement> precedingElements) {
         int eolIndex = findLastNewlineIndex(precedingElements);
-
         // No newline found, return empty indentation
         if (eolIndex < 0) {
             return Collections.emptyList();
         }
-
         // Extract whitespace elements after the newline
         List<TextElement> result = new ArrayList<>();
         for (int i = eolIndex + 1; i < precedingElements.size(); i++) {
@@ -81,7 +78,6 @@ public final class IndentationCalculator {
                 break;
             }
         }
-
         return result;
     }
 
@@ -100,7 +96,6 @@ public final class IndentationCalculator {
      */
     public static List<TextElement> extractIndentationFromTokens(List<TextElement> precedingTokens) {
         List<TextElement> indentation = new ArrayList<>();
-
         for (TextElement element : precedingTokens) {
             if (element.isSpaceOrTab()) {
                 indentation.add(element);
@@ -109,7 +104,6 @@ public final class IndentationCalculator {
                 break;
             }
         }
-
         return indentation;
     }
 
@@ -182,10 +176,10 @@ public final class IndentationCalculator {
         if (index < 0 || index >= nodeText.numberOfElements()) {
             return new EnforcingContext(index, 0);
         }
-
-        int start = index; // Starting position of whitespace sequence to potentially remove
-        int extraCharacters = 0; // Total count of excess whitespace characters
-
+        // Starting position of whitespace sequence to potentially remove
+        int start = index;
+        // Total count of excess whitespace characters
+        int extraCharacters = 0;
         // ========== PHASE 1: BACKWARD SCAN ==========
         // Scan backward from the position to identify preceding whitespace.
         // This determines if we're at the beginning of a line (after newline) or
@@ -196,7 +190,6 @@ public final class IndentationCalculator {
                 if (nodeText.getTextElement(i).isNewline()) {
                     break;
                 }
-
                 // If we encounter a non-whitespace element:
                 // Reset the context because we're not at the beginning of a line.
                 // However, we still need to scan forward to count any trailing spaces.
@@ -206,13 +199,13 @@ public final class IndentationCalculator {
                     extraCharacters = 0;
                     break;
                 }
-
                 // Found whitespace - expand the sequence backward
-                start = i; // Update start to this earlier position
-                extraCharacters++; // Count this whitespace character
+                // Update start to this earlier position
+                start = i;
+                // Count this whitespace character
+                extraCharacters++;
             }
         }
-
         // ========== PHASE 2: FORWARD SCAN ==========
         // Scan forward from the current position to count additional whitespace.
         // This phase ALWAYS executes if the current position is whitespace,
@@ -228,17 +221,14 @@ public final class IndentationCalculator {
                 if (nodeText.getTextElement(i).isNewline()) {
                     break;
                 }
-
                 // Stop at non-whitespace - end of whitespace sequence
                 if (!nodeText.getTextElement(i).isSpaceOrTab()) {
                     break;
                 }
-
                 // Count this whitespace character
                 extraCharacters++;
             }
         }
-
         return new EnforcingContext(start, extraCharacters);
     }
 
@@ -279,16 +269,12 @@ public final class IndentationCalculator {
      */
     public static int enforceIndentation(NodeText nodeText, int index, int charactersToPreserve) {
         EnforcingContext ctx = analyzeEnforcingContext(nodeText, index);
-
         if (!ctx.hasExtraCharacters()) {
             return index;
         }
-
         int toRemove =
                 ctx.getExtraCharacters() > charactersToPreserve ? ctx.getExtraCharacters() - charactersToPreserve : 0;
-
         int newIndex = removeExcessIndentation(nodeText, ctx.getStartIndex(), toRemove);
-
         // Adjust for preserved characters
         return toRemove > 0 ? newIndex + charactersToPreserve : newIndex;
     }
@@ -315,7 +301,9 @@ public final class IndentationCalculator {
      * This is an immutable value object returned by analyzeEnforcingContext.
      */
     public static class EnforcingContext {
+
         private final int startIndex;
+
         private final int extraCharacters;
 
         public EnforcingContext(int startIndex, int extraCharacters) {

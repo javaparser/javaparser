@@ -56,7 +56,6 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
         if (type == null) {
             return Optional.empty();
         }
-
         // Find the owner
         Node owner = findTypeOwner(type);
         return Optional.ofNullable(owner);
@@ -73,22 +72,18 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
         if (node instanceof Type) {
             return (Type) node;
         }
-
         // Search ancestors, but stop at boundaries
         Node current = node;
         while (current != null) {
             if (current instanceof Type) {
                 return (Type) current;
             }
-
             // Stop at boundaries that indicate we're not in a type context
             if (current instanceof BodyDeclaration || current instanceof ExpressionStmt) {
                 return null;
             }
-
             current = current.getParentNode().orElse(null);
         }
-
         return null;
     }
 
@@ -104,13 +99,11 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
      */
     private Node findTypeOwner(Type type) {
         Node current = type;
-
         while (current != null) {
             Node parent = current.getParentNode().orElse(null);
             if (parent == null) {
                 break;
             }
-
             final Node currentNode = current;
             // Check each context using Optional chaining for clean code
             Optional<Node> owner = Optionals.or(
@@ -120,14 +113,11 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
                     () -> checkClassContext(parent, currentNode),
                     () -> checkExpressionContext(parent, currentNode),
                     () -> checkStatementContext(parent, currentNode));
-
             if (owner.isPresent()) {
                 return owner.get();
             }
-
             current = parent;
         }
-
         // Fallback: type owns its own tokens
         return type;
     }
@@ -136,7 +126,6 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
     // CONTEXT CHECKERS
     // Each method checks if the parent is a specific context that owns tokens
     // ========================================================================
-
     /**
      * Checks variable declaration contexts: local variables, fields, enum constants.
      *
@@ -149,17 +138,14 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
         if (parent instanceof VariableDeclarationExpr) {
             return Optional.of(parent);
         }
-
         // Field declaration
         if (parent instanceof FieldDeclaration) {
             return Optional.of(parent);
         }
-
         // Enum constant declaration
         if (parent instanceof EnumConstantDeclaration) {
             return Optional.of(parent);
         }
-
         return Optional.empty();
     }
 
@@ -175,12 +161,10 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
         if (parent instanceof Parameter) {
             return Optional.of(parent);
         }
-
         // Receiver parameter (e.g., void method(MyClass MyClass.this))
         if (parent instanceof ReceiverParameter) {
             return Optional.of(parent);
         }
-
         return Optional.empty();
     }
 
@@ -200,7 +184,6 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
                 return Optional.of(parent);
             }
         }
-
         // Annotation member declaration
         if (parent instanceof AnnotationMemberDeclaration) {
             AnnotationMemberDeclaration member = (AnnotationMemberDeclaration) parent;
@@ -208,12 +191,10 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
                 return Optional.of(parent);
             }
         }
-
         // Constructor declaration
         if (parent instanceof ConstructorDeclaration) {
             return Optional.of(parent);
         }
-
         return Optional.empty();
     }
 
@@ -228,43 +209,35 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
         // Class or interface declaration
         if (parent instanceof ClassOrInterfaceDeclaration) {
             ClassOrInterfaceDeclaration classDecl = (ClassOrInterfaceDeclaration) parent;
-
             // Check extends clause
             if (isInTypeList(classDecl.getExtendedTypes(), current)) {
                 return Optional.of(parent);
             }
-
             // Check implements clause
             if (isInTypeList(classDecl.getImplementedTypes(), current)) {
                 return Optional.of(parent);
             }
-
             // Check permits clause (sealed classes - Java 17+)
             if (isInTypeList(classDecl.getPermittedTypes(), current)) {
                 return Optional.of(parent);
             }
         }
-
         // Record declaration (Java 14+)
         if (parent instanceof RecordDeclaration) {
             RecordDeclaration recordDecl = (RecordDeclaration) parent;
-
             // Check implements clause
             if (isInTypeList(recordDecl.getImplementedTypes(), current)) {
                 return Optional.of(parent);
             }
         }
-
         // Enum declaration
         if (parent instanceof EnumDeclaration) {
             EnumDeclaration enumDecl = (EnumDeclaration) parent;
-
             // Check implements clause
             if (isInTypeList(enumDecl.getImplementedTypes(), current)) {
                 return Optional.of(parent);
             }
         }
-
         return Optional.empty();
     }
 
@@ -285,7 +258,6 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
                 return Optional.of(parent);
             }
         }
-
         // Instanceof expression: obj instanceof String
         if (parent instanceof InstanceOfExpr) {
             InstanceOfExpr instanceOf = (InstanceOfExpr) parent;
@@ -295,7 +267,6 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
                 return Optional.of(parent);
             }
         }
-
         // Record pattern expression
         if (parent instanceof RecordPatternExpr) {
             RecordPatternExpr pattern = (RecordPatternExpr) parent;
@@ -303,7 +274,6 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
                 return Optional.of(parent);
             }
         }
-
         return Optional.empty();
     }
 
@@ -319,14 +289,12 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
         if (parent instanceof ExplicitConstructorInvocationStmt) {
             return Optional.of(parent);
         }
-
         return Optional.empty();
     }
 
     // ========================================================================
     // UTILITY METHODS
     // ========================================================================
-
     /**
      * Checks if a node is contained in a list of types (extends, implements, permits).
      *
@@ -352,14 +320,12 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
      */
     private boolean isAncestorOf(Node potentialAncestor, Node node) {
         Node current = node.getParentNode().orElse(null);
-
         while (current != null) {
             if (current.equals(potentialAncestor)) {
                 return true;
             }
             current = current.getParentNode().orElse(null);
         }
-
         return false;
     }
 }

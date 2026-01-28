@@ -20,12 +20,12 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test suite for remaining KEPT rules in Difference.apply()
@@ -40,23 +40,14 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k2_skipCommentInDiffList() {
-        considerCode(
-            "class X {\n" +
-            "    /** Javadoc */\n" +
-            "    int field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    /** Javadoc */\n" + "    int field;\n" + "}");
 
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
         // Modify field (Javadoc should be kept automatically)
         field.getVariable(0).setName("data");
 
-        String expected =
-            "class X {\n" +
-            "    /** Javadoc */\n" +
-            "    int data;\n" +
-            "}";
+        String expected = "class X {\n" + "    /** Javadoc */\n" + "    int data;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -67,25 +58,15 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k3_keepBothChildrenWhenIdentical() {
-        considerCode(
-            "class X {\n" +
-            "    int a;\n" +
-            "    int b;\n" +
-            "    int c;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int a;\n" + "    int b;\n" + "    int c;\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Modify middle field (others should remain unchanged)
         clazz.getFieldByName("b").get().getVariable(0).setName("beta");
 
-        String expected =
-            "class X {\n" +
-            "    int a;\n" +
-            "    int beta;\n" +
-            "    int c;\n" +
-            "}";
+        String expected = "class X {\n" + "    int a;\n" + "    int beta;\n" + "    int c;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -96,11 +77,7 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k4_skipWhitespaceBeforeKeptChild() {
-        considerCode(
-            "class X {\n" +
-            "    int field  ;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field  ;\n" + "}");
 
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
@@ -118,26 +95,17 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k8_keepSimpleIdentifier() {
-        considerCode(
-            "class X {\n" +
-            "    String name;\n" +
-            "    int age;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    String name;\n" + "    int age;\n" + "}");
 
         FieldDeclaration ageField = cu.findAll(FieldDeclaration.class).stream()
-            .filter(f -> f.getVariable(0).getNameAsString().equals("age"))
-            .findFirst()
-            .get();
+                .filter(f -> f.getVariable(0).getNameAsString().equals("age"))
+                .findFirst()
+                .get();
 
         // Modify age field
         ageField.getVariable(0).setName("years");
 
-        String expected =
-            "class X {\n" +
-            "    String name;\n" +
-            "    int years;\n" +
-            "}";
+        String expected = "class X {\n" + "    String name;\n" + "    int years;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -148,26 +116,17 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k9_keepPrimitiveType() {
-        considerCode(
-            "class X {\n" +
-            "    int value;\n" +
-            "    double ratio;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int value;\n" + "    double ratio;\n" + "}");
 
         FieldDeclaration valueField = cu.findAll(FieldDeclaration.class).stream()
-            .filter(f -> f.getVariable(0).getNameAsString().equals("value"))
-            .findFirst()
-            .get();
+                .filter(f -> f.getVariable(0).getNameAsString().equals("value"))
+                .findFirst()
+                .get();
 
         // Modify value field name
         valueField.getVariable(0).setName("number");
 
-        String expected =
-            "class X {\n" +
-            "    int number;\n" +
-            "    double ratio;\n" +
-            "}";
+        String expected = "class X {\n" + "    int number;\n" + "    double ratio;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -178,20 +137,13 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k10_keepUnexpectedToken() {
-        considerCode(
-            "class X {\n" +
-            "    int field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field;\n" + "}");
 
         // Modify to test fallback behavior
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
         field.getVariable(0).setName("data");
 
-        String expected =
-            "class X {\n" +
-            "    int data;\n" +
-            "}";
+        String expected = "class X {\n" + "    int data;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -202,25 +154,14 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k12_keepNewlineTokens() {
-        considerCode(
-            "class X {\n" +
-            "    int a;\n" +
-            "\n" +
-            "    int b;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int a;\n" + "\n" + "    int b;\n" + "}");
 
         FieldDeclaration fieldA = cu.findAll(FieldDeclaration.class).get(0);
 
         // Modify first field
         fieldA.getVariable(0).setName("alpha");
 
-        String expected =
-            "class X {\n" +
-            "    int alpha;\n" +
-            "\n" +
-            "    int b;\n" +
-            "}";
+        String expected = "class X {\n" + "    int alpha;\n" + "\n" + "    int b;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -231,11 +172,7 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k13_skipSpaceBeforeNewline() {
-        considerCode(
-            "class X {\n" +
-            "    int field;  \n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field;  \n" + "}");
 
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
@@ -253,11 +190,7 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k14_skipWhitespaceInDiff() {
-        considerCode(
-            "class X {\n" +
-            "    int a, b;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int a, b;\n" + "}");
 
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
@@ -276,11 +209,7 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k15_skipWhitespaceInOriginal() {
-        considerCode(
-            "class X {\n" +
-            "    int  field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int  field;\n" + "}");
 
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
@@ -299,11 +228,7 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k16_keepSeparatorAfterToken() {
-        considerCode(
-            "class X {\n" +
-            "    int a;;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int a;;\n" + "}");
 
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
@@ -321,20 +246,13 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k17_skipDiffWhenTokenExpectedChildFound() {
-        considerCode(
-            "class X {\n" +
-            "    int field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field;\n" + "}");
 
         // This tests asymmetry handling between token and child
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
         field.getVariable(0).setName("data");
 
-        String expected =
-            "class X {\n" +
-            "    int data;\n" +
-            "}";
+        String expected = "class X {\n" + "    int data;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -345,21 +263,14 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k18_skipWhitespaceToKeep() {
-        considerCode(
-            "class X {\n" +
-            "    int field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field;\n" + "}");
 
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
         // Modify to test whitespace preservation
         field.getVariable(0).setName("data");
 
-        String expected =
-            "class X {\n" +
-            "    int data;\n" +
-            "}";
+        String expected = "class X {\n" + "    int data;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -370,15 +281,12 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k19_skipIndentDirective() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        if (true) {\n" +
-            "            int x = 1;\n" +
-            "        }\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n"
+                + "        if (true) {\n"
+                + "            int x = 1;\n"
+                + "        }\n"
+                + "    }\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
 
@@ -388,10 +296,10 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
         String result = print();
 
         // Indentation should be preserved at all levels
-        assertTrue(result.contains("    void method()") || result.contains("    String method()"),
-            "Method indentation should be preserved");
-        assertTrue(result.contains("            int x = 1"),
-            "Inner statement indentation should be preserved");
+        assertTrue(
+                result.contains("    void method()") || result.contains("    String method()"),
+                "Method indentation should be preserved");
+        assertTrue(result.contains("            int x = 1"), "Inner statement indentation should be preserved");
     }
 
     // =========================================================================
@@ -400,16 +308,13 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k20_skipUnindentDirective() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        if (true) {\n" +
-            "            int x = 1;\n" +
-            "        }\n" +
-            "        int y = 2;\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n"
+                + "        if (true) {\n"
+                + "            int x = 1;\n"
+                + "        }\n"
+                + "        int y = 2;\n"
+                + "    }\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
 
@@ -419,8 +324,7 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
         String result = print();
 
         // Unindent after if block should be preserved
-        assertTrue(result.contains("        int y = 2"),
-            "Statement after if should have correct indentation");
+        assertTrue(result.contains("        int y = 2"), "Statement after if should have correct indentation");
     }
 
     // =========================================================================
@@ -429,20 +333,13 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k21_unsupportedKeptCase() {
-        considerCode(
-            "class X {\n" +
-            "    int field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field;\n" + "}");
 
         // This tests that normal operations don't trigger the exception case
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
         field.getVariable(0).setName("data");
 
-        String expected =
-            "class X {\n" +
-            "    int data;\n" +
-            "}";
+        String expected = "class X {\n" + "    int data;\n" + "}";
 
         // Should not throw UnsupportedOperationException
         assertTransformedToString(expected, cu);
@@ -454,19 +351,16 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void keepComplexStructureWithMultipleTypes() {
-        considerCode(
-            "class X {\n" +
-            "    private final Map<String, List<Integer>> data;\n" +
-            "    protected String[] names;\n" +
-            "    public int count;\n" +
-            "    boolean flag;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    private final Map<String, List<Integer>> data;\n"
+                + "    protected String[] names;\n"
+                + "    public int count;\n"
+                + "    boolean flag;\n"
+                + "}");
 
         FieldDeclaration countField = cu.findAll(FieldDeclaration.class).stream()
-            .filter(f -> f.getVariable(0).getNameAsString().equals("count"))
-            .findFirst()
-            .get();
+                .filter(f -> f.getVariable(0).getNameAsString().equals("count"))
+                .findFirst()
+                .get();
 
         // Modify count field only
         countField.getVariable(0).setName("total");
@@ -474,14 +368,10 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
         String result = print();
 
         // All other fields should be preserved exactly
-        assertTrue(result.contains("Map<String, List<Integer>> data"),
-            "Complex generic type should be preserved");
-        assertTrue(result.contains("String[] names"),
-            "Array type should be preserved");
-        assertTrue(result.contains("int total"),
-            "Modified field should be present");
-        assertTrue(result.contains("boolean flag"),
-            "Primitive type should be preserved");
+        assertTrue(result.contains("Map<String, List<Integer>> data"), "Complex generic type should be preserved");
+        assertTrue(result.contains("String[] names"), "Array type should be preserved");
+        assertTrue(result.contains("int total"), "Modified field should be present");
+        assertTrue(result.contains("boolean flag"), "Primitive type should be preserved");
     }
 
     // =========================================================================
