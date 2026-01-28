@@ -91,6 +91,11 @@ class CommentsInserter {
                         .collect(toList());
         boolean attributeToAnnotation = !(configuration.isIgnoreAnnotationsWhenAttributingComments());
         for (Node child : children) {
+            // Some child nodes of a compact class declaration may not have a range, so first check that the child
+            // in question does have a range.
+            if (!child.hasRange()) {
+                continue;
+            }
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
             commentsInsideChild.addAll(commentsToAttribute.stream()
                     .filter(comment -> comment.hasRange())
