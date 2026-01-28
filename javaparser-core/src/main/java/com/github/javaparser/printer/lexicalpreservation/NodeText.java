@@ -43,7 +43,6 @@ class NodeText {
     //
     // Constructors
     //
-
     /**
      * Creates a NodeText wrapping the given list of elements.
      *
@@ -63,7 +62,6 @@ class NodeText {
     //
     // Adding elements
     //
-
     /**
      * Add an element at the end.
      */
@@ -97,7 +95,6 @@ class NodeText {
     //
     // Finding elements
     //
-
     /**
      * Finds the first element matching the given matcher.
      *
@@ -185,7 +182,6 @@ class NodeText {
     //
     // Removing single elements
     //
-
     /**
      * Removes the first element matching the given matcher.
      * Optionally removes following whitespace.
@@ -198,14 +194,11 @@ class NodeText {
     public void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
         // Find the matching element using our optimized search
         int index = tryToFindElement(matcher, 0);
-
         if (index == NOT_FOUND) {
             throw new IllegalArgumentException("No matching element found");
         }
-
         // Remove the element
         elements.remove(index);
-
         // Optionally remove following whitespace
         if (potentiallyFollowingWhitespace) {
             if (index < elements.size()) {
@@ -221,7 +214,6 @@ class NodeText {
     //
     // Removing sequences
     //
-
     /**
      * Removes the element at the given index.
      *
@@ -234,7 +226,6 @@ class NodeText {
     //
     // Replacing elements
     //
-
     /**
      * Replaces the element at the position matched by the given matcher
      * with the given new element.
@@ -266,7 +257,6 @@ class NodeText {
     //
     // Other methods
     //
-
     /**
      * Generate the corresponding string by expanding all elements.
      *

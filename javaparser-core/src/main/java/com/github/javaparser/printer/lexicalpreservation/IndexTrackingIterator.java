@@ -44,6 +44,7 @@ import java.util.ListIterator;
 public class IndexTrackingIterator<T> implements ListIterator<T> {
 
     private final ListIterator<T> delegate;
+
     private int currentIndex;
 
     /**
@@ -66,7 +67,8 @@ public class IndexTrackingIterator<T> implements ListIterator<T> {
      */
     public IndexTrackingIterator(List<T> elements, int fromIndex) {
         this.delegate = elements.listIterator(fromIndex);
-        this.currentIndex = -1; // No element read yet
+        // No element read yet
+        this.currentIndex = -1;
     }
 
     /**
@@ -93,7 +95,6 @@ public class IndexTrackingIterator<T> implements ListIterator<T> {
     }
 
     // === LISTITERATOR METHODS WITH INDEX TRACKING ===
-
     @Override
     public boolean hasNext() {
         return delegate.hasNext();

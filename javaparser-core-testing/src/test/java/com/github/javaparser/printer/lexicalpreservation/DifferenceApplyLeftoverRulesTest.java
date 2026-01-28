@@ -20,14 +20,14 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test suite for LEFTOVER rules in Difference.apply()
@@ -43,21 +43,15 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void l1_skipLeftoverKeptElements() {
-        considerCode(
-            "class X {\n" +
-            "    int field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field;\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Simple modification that processes all elements
         clazz.getFieldByName("field").get().getVariable(0).setName("data");
 
-        String expected =
-            "class X {\n" +
-            "    int data;\n" +
-            "}";
+        String expected = "class X {\n" + "    int data;\n" + "}";
 
         // Should not fail even if there are kept elements at the end
         assertTransformedToString(expected, cu);
@@ -69,13 +63,7 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void l2_processLeftoverIndentDirective() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int x = 1;\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n" + "        int x = 1;\n" + "    }\n" + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -84,13 +72,11 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
-        String expected =
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int x = 1;\n" +
-            "        int y = 2;\n" +
-            "    }\n" +
-            "}";
+        String expected = "class X {\n" + "    void method() {\n"
+                + "        int x = 1;\n"
+                + "        int y = 2;\n"
+                + "    }\n"
+                + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -101,15 +87,12 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void l3_processLeftoverUnindentDirective() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        if (true) {\n" +
-            "            int x = 1;\n" +
-            "        }\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n"
+                + "        if (true) {\n"
+                + "            int x = 1;\n"
+                + "        }\n"
+                + "    }\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -118,15 +101,13 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
-        String expected =
-            "class X {\n" +
-            "    void method() {\n" +
-            "        if (true) {\n" +
-            "            int x = 1;\n" +
-            "        }\n" +
-            "        int y = 2;\n" +
-            "    }\n" +
-            "}";
+        String expected = "class X {\n" + "    void method() {\n"
+                + "        if (true) {\n"
+                + "            int x = 1;\n"
+                + "        }\n"
+                + "        int y = 2;\n"
+                + "    }\n"
+                + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -137,13 +118,7 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void l4_addLeftoverElements() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int x = 1;\n" +
-            "    }\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n" + "        int x = 1;\n" + "    }\n" + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -152,14 +127,12 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         body.getStatements().add(StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt());
         body.getStatements().add(StaticJavaParser.parseStatement("int z = 3;").asExpressionStmt());
 
-        String expected =
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int x = 1;\n" +
-            "        int y = 2;\n" +
-            "        int z = 3;\n" +
-            "    }\n" +
-            "}";
+        String expected = "class X {\n" + "    void method() {\n"
+                + "        int x = 1;\n"
+                + "        int y = 2;\n"
+                + "        int z = 3;\n"
+                + "    }\n"
+                + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -170,24 +143,16 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void l5_skipLeftoverRemovedElements() {
-        considerCode(
-            "class X {\n" +
-            "    int a;\n" +
-            "    int b;\n" +
-            "    int c;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int a;\n" + "    int b;\n" + "    int c;\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Remove multiple fields
         clazz.getMembers().remove(2); // Remove c
         clazz.getMembers().remove(1); // Remove b
 
-        String expected =
-            "class X {\n" +
-            "    int a;\n" +
-            "}";
+        String expected = "class X {\n" + "    int a;\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
@@ -198,37 +163,25 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void l6_preserveLeftoverWhitespaceAndComments() {
-        considerCode(
-            "class X {\n" +
-            "    int field;\n" +
-            "    // trailing comment\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field;\n" + "    // trailing comment\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Modify field (trailing comment should be preserved)
         clazz.getFieldByName("field").get().getVariable(0).setName("data");
 
-        String expected =
-            "class X {\n" +
-            "    int data;\n" +
-            "    // trailing comment\n" +
-            "}";
+        String expected = "class X {\n" + "    int data;\n" + "    // trailing comment\n" + "}";
 
         assertTransformedToString(expected, cu);
     }
 
     @Test
     void l6_preserveTrailingWhitespace() {
-        considerCode(
-            "class X {\n" +
-            "    int field;\n" +
-            "\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field;\n" + "\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Modify field (trailing newline should be preserved)
         clazz.getFieldByName("field").get().getVariable(0).setName("data");
@@ -246,21 +199,15 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void l7_detectUnsynchronizedElements() {
-        considerCode(
-            "class X {\n" +
-            "    int field;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int field;\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Normal modification should not trigger exception
         clazz.getFieldByName("field").get().getVariable(0).setName("data");
 
-        String expected =
-            "class X {\n" +
-            "    int data;\n" +
-            "}";
+        String expected = "class X {\n" + "    int data;\n" + "}";
 
         // Should complete without UnsupportedOperationException
         assertTransformedToString(expected, cu);
@@ -272,16 +219,10 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void multipleLeftoverElementTypes() {
-        considerCode(
-            "class X {\n" +
-            "    int a;\n" +
-            "    int b;\n" +
-            "    // comment\n" +
-            "    int c;\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int a;\n" + "    int b;\n" + "    // comment\n" + "    int c;\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Modify first field
         clazz.getFieldByName("a").get().getVariable(0).setName("alpha");
@@ -297,16 +238,10 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void leftoverElementsAfterRemoval() {
-        considerCode(
-            "class X {\n" +
-            "    int a;\n" +
-            "    int b;\n" +
-            "    int c;\n" +
-            "    // final comment\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int a;\n" + "    int b;\n" + "    int c;\n" + "    // final comment\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Remove middle field
         clazz.getMembers().remove(1);
@@ -321,14 +256,10 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void leftoverElementsAfterAddition() {
-        considerCode(
-            "class X {\n" +
-            "    int a;\n" +
-            "    // comment\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    int a;\n" + "    // comment\n" + "}");
 
-        ClassOrInterfaceDeclaration clazz = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ClassOrInterfaceDeclaration clazz =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         // Add field before comment
         clazz.addField("int", "b");
@@ -342,16 +273,13 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void complexLeftoverScenario() {
-        considerCode(
-            "class X {\n" +
-            "    void method() {\n" +
-            "        int x = 1;\n" +
-            "        // comment\n" +
-            "        int y = 2;\n" +
-            "    }\n" +
-            "    // trailing\n" +
-            "}"
-        );
+        considerCode("class X {\n" + "    void method() {\n"
+                + "        int x = 1;\n"
+                + "        // comment\n"
+                + "        int y = 2;\n"
+                + "    }\n"
+                + "    // trailing\n"
+                + "}");
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -377,4 +305,3 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         return LexicalPreservingPrinter.print(cu);
     }
 }
-

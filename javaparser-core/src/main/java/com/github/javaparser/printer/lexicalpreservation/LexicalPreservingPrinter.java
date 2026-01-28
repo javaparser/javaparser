@@ -152,10 +152,8 @@ public class LexicalPreservingPrinter {
             if (oldValue instanceof Node && newValue instanceof Node) {
                 Node oldNode = (Node) oldValue;
                 Node newNode = (Node) newValue;
-
                 // Find the actual token owner
                 Node tokenOwner = TokenOwnerDetector.findTokenOwner(oldNode);
-
                 // Check if we need to regenerate the token owner instead of just the parent
                 if (TokenOwnerDetector.needsRegeneration(observedNode, tokenOwner, oldNode)) {
                     NodeText tokenOwnerText = getOrCreateNodeText(tokenOwner);
@@ -163,7 +161,8 @@ public class LexicalPreservingPrinter {
                         // Regenerate the token owner's NodeText instead of the observed node
                         LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(
                                 tokenOwnerText, tokenOwner, property, oldValue, newValue);
-                        return; // Early exit - we've handled the change
+                        // Early exit - we've handled the change
+                        return;
                     }
                 }
             }
@@ -200,7 +199,6 @@ public class LexicalPreservingPrinter {
                     List<TextElement> precedingElements = nodeText.getElements().subList(0, index);
                     List<TextElement> existingIndent =
                             IndentationCalculator.computeFromPrecedingElements(precedingElements);
-
                     // Insert the comment (WITHOUT adding indentation before, we'll add it after the EOL)
                     LineSeparator lineSeparator = observedNode.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
                     for (TokenTextElement element : makeCommentTokens((Comment) newValue)) {
@@ -548,11 +546,9 @@ public class LexicalPreservingPrinter {
             // finds the existing indentation
             List<TextElement> existingIndent = IndentationCalculator.computeFromPrecedingElements(
                     nodeText.getElements().subList(0, index + 1));
-
             if (existingIndent.isEmpty()) {
                 return;
             }
-
             // Find the last newline before index
             int lastNewlineIndex = -1;
             for (int i = index; i >= 0; i--) {
@@ -561,12 +557,10 @@ public class LexicalPreservingPrinter {
                     break;
                 }
             }
-
             // If there is no newline or if the newline is just before the index, do nothing.
             if (lastNewlineIndex == -1 || lastNewlineIndex == index - 1) {
                 return;
             }
-
             // Apply the computed indentation
             // The indentation elements are inserted at the given index.
             for (TextElement indentElement : existingIndent) {

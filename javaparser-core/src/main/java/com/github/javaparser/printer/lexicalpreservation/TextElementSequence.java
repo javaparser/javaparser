@@ -46,7 +46,6 @@ import java.util.stream.Stream;
 public interface TextElementSequence {
 
     // === SEARCH BY PREDICATE ===
-
     /**
      * Finds the first index where the predicate matches, searching forward from index 0.
      *
@@ -86,7 +85,6 @@ public interface TextElementSequence {
     int findPrevious(int fromIndex, Predicate<TextElement> predicate);
 
     // === MATCHING (TERMINAL OPERATIONS) ===
-
     /**
      * Tests whether any element in this sequence matches the given predicate.
      *
@@ -163,7 +161,6 @@ public interface TextElementSequence {
     boolean noneMatch(Predicate<TextElement> predicate);
 
     // === SEARCH BY ELEMENT ===
-
     /**
      * Finds the first occurrence of the specified element.
      * Equivalent to {@code findFirst(e -> Objects.equals(e, element))}.
@@ -211,7 +208,6 @@ public interface TextElementSequence {
     }
 
     // === FILTERING ===
-
     /**
      * Returns a new list containing elements from the start until the predicate fails.
      * The returned list is independent of this sequence.
@@ -234,7 +230,6 @@ public interface TextElementSequence {
     List<TextElement> subList(int fromIndex, int toIndex);
 
     // === MUTATION ===
-
     /**
      * Inserts element at the specified index.
      * <b>WARNING:</b> Caller must adjust subsequent indices manually.
@@ -277,7 +272,6 @@ public interface TextElementSequence {
     void removeRange(int fromIndex, int toIndex);
 
     // === ACCESS ===
-
     /**
      * Returns the element at the specified index.
      *
@@ -328,7 +322,6 @@ public interface TextElementSequence {
     List<TextElement> toMutableList();
 
     // === ITERATION ===
-
     /**
      * Returns an iterator starting at the specified index.
      *

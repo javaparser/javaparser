@@ -105,7 +105,6 @@ public class TextElementList implements TextElementSequence {
     }
 
     // === SEARCH BY PREDICATE ===
-
     @Override
     public int findFirst(Predicate<TextElement> predicate) {
         Objects.requireNonNull(predicate, "predicate cannot be null");
@@ -157,7 +156,6 @@ public class TextElementList implements TextElementSequence {
     }
 
     // === FILTERING ===
-
     @Override
     public List<TextElement> takeWhile(Predicate<TextElement> predicate) {
         Objects.requireNonNull(predicate, "predicate cannot be null");
@@ -177,7 +175,6 @@ public class TextElementList implements TextElementSequence {
     }
 
     // === MUTATION ===
-
     @Override
     public void insert(int index, TextElement element) {
         Objects.requireNonNull(element, "element cannot be null");
@@ -206,7 +203,6 @@ public class TextElementList implements TextElementSequence {
     }
 
     // === ACCESS ===
-
     @Override
     public TextElement get(int index) {
         return elements.get(index);
@@ -238,7 +234,6 @@ public class TextElementList implements TextElementSequence {
     }
 
     // === MATCHING (TERMINAL OPERATIONS) ===
-
     @Override
     public boolean anyMatch(Predicate<TextElement> predicate) {
         Objects.requireNonNull(predicate, "predicate cannot be null");
@@ -268,7 +263,6 @@ public class TextElementList implements TextElementSequence {
     }
 
     // === ITERATION ===
-
     @Override
     public TextElementIterator iterator(int fromIndex) {
         return new TextElementIterator(elements, fromIndex);

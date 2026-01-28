@@ -96,7 +96,6 @@ public class Difference {
     private int posOfNextComment(int fromIndex, List<TextElement> elements) {
         TextElementList list = new TextElementList(elements);
         if (!list.isValidIndex(fromIndex)) return -1;
-
         TextElementIterator iterator = list.iterator(fromIndex);
         while (iterator.hasNext()) {
             TextElement element = iterator.next();

@@ -39,6 +39,7 @@ import java.util.ListIterator;
 public class TextElementIterator implements ListIterator<TextElement> {
 
     private final ListIterator<TextElement> delegate;
+
     private int currentIndex;
 
     /**
@@ -52,7 +53,8 @@ public class TextElementIterator implements ListIterator<TextElement> {
      */
     public TextElementIterator(List<TextElement> elements, int fromIndex) {
         this.delegate = elements.listIterator(fromIndex);
-        this.currentIndex = -1; // No element read yet
+        // No element read yet
+        this.currentIndex = -1;
     }
 
     /**
@@ -75,7 +77,6 @@ public class TextElementIterator implements ListIterator<TextElement> {
     }
 
     // === LISTITERATOR METHODS WITH INDEX TRACKING ===
-
     @Override
     public boolean hasNext() {
         return delegate.hasNext();
