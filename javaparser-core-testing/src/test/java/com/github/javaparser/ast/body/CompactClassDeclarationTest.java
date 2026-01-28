@@ -21,8 +21,11 @@
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -631,5 +634,23 @@ class CompactClassDeclarationTest {
         assertTrue(members.get(2).isMethodDeclaration());
         MethodDeclaration mainMethod = members.get(2).asMethodDeclaration();
         assertEquals("main", mainMethod.getNameAsString());
+    }
+
+    @Test
+    public void commentInCompactClassMethodBody() {
+        String code = "void foo() {\n" + "    // Some comment\n" + "    int x;\n" + "}";
+
+        JavaParser parser = new JavaParser();
+        ParseResult<CompilationUnit> result = parser.parse(code);
+        assertNoProblems(result);
+    }
+
+    @Test
+    public void trailingCommentInCompactClass() {
+        String code = "void foo() {\n" + "}\n" + "// Some comment";
+
+        JavaParser parser = new JavaParser();
+        ParseResult<CompilationUnit> result = parser.parse(code);
+        assertNoProblems(result);
     }
 }
