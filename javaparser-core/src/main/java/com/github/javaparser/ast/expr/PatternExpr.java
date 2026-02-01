@@ -140,7 +140,9 @@ public abstract class PatternExpr extends ComponentPatternExpr implements NodeWi
         return JavaParserMetaModel.patternExprMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type type() {
         return Objects.requireNonNull(type);
     }

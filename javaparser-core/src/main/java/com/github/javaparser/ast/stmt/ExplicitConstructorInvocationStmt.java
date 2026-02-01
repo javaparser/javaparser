@@ -115,6 +115,7 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         return Optional.ofNullable(expression);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isThis() {
@@ -304,18 +305,21 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> arguments() {
         return Objects.requireNonNull(arguments);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression expression() {
         return expression;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Type> typeArguments() {

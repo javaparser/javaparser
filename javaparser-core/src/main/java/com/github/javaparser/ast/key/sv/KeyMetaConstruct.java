@@ -196,18 +196,21 @@ public class KeyMetaConstruct extends Statement {
         action.accept(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Node child() {
         return Objects.requireNonNull(child);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String kind() {
         return Objects.requireNonNull(kind);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Node> schemas() {

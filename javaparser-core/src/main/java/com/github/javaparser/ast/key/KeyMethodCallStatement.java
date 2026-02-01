@@ -194,18 +194,21 @@ public class KeyMethodCallStatement extends Statement {
         return setName((Name) null);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt block() {
         return Objects.requireNonNull(block);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyAbstractExecutionContext context() {
         return Objects.requireNonNull(context);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {

@@ -174,12 +174,14 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression expression() {
         return Objects.requireNonNull(expression);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type type() {

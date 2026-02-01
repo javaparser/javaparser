@@ -279,18 +279,21 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     public abstract ResolvedReferenceTypeDeclaration resolve();
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<BodyDeclaration<?>> members() {
         return Objects.requireNonNull(members);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName name() {

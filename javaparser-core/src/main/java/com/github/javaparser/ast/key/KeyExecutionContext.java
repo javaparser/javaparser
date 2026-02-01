@@ -168,18 +168,21 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
         return setInstance((Expression) null);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type context() {
         return Objects.requireNonNull(context);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression instance() {
         return instance;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMethodSignature signature() {

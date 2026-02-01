@@ -384,24 +384,28 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
         return true;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> arguments() {
         return Objects.requireNonNull(arguments);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression scope() {
         return scope;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Type> typeArguments() {

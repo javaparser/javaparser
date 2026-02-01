@@ -202,6 +202,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         return typeParameters;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isInterface() {
@@ -404,6 +405,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isCompact() {
@@ -420,24 +422,28 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         return this;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> extendedTypes() {
         return Objects.requireNonNull(extendedTypes);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> implementedTypes() {
         return Objects.requireNonNull(implementedTypes);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> permittedTypes() {
         return Objects.requireNonNull(permittedTypes);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> typeParameters() {

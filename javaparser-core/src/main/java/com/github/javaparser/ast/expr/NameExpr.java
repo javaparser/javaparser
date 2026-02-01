@@ -172,6 +172,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName name() {

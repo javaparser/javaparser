@@ -227,12 +227,14 @@ public class SwitchStmt extends Statement implements SwitchNode {
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SwitchEntry> entries() {
         return Objects.requireNonNull(entries);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression selector() {

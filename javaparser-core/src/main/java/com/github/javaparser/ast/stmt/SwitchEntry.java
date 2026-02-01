@@ -310,6 +310,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
         return super.replace(node, replacementNode);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isDefault() {
@@ -362,24 +363,28 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
         customInitialization();
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression guard() {
         return guard;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> labels() {
         return Objects.requireNonNull(labels);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> statements() {
         return Objects.requireNonNull(statements);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type type() {

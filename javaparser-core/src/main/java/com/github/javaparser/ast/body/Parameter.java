@@ -126,6 +126,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         return type;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isVarArgs() {
@@ -346,30 +347,35 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         return NodeWithFinalModifier.super.isFinal();
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type type() {
         return Objects.requireNonNull(type);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> varArgsAnnotations() {

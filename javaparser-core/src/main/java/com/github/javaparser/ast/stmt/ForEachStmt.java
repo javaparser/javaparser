@@ -237,18 +237,21 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         return JavaParserMetaModel.forEachStmtMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement body() {
         return Objects.requireNonNull(body);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression iterable() {
         return Objects.requireNonNull(iterable);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr variable() {

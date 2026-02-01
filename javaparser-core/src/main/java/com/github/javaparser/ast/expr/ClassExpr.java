@@ -148,6 +148,7 @@ public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Typ
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type type() {

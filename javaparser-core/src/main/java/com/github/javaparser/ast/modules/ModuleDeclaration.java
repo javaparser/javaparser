@@ -150,6 +150,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return super.remove(node);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isOpen() {
@@ -234,18 +235,21 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return this;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ModuleDirective> directives() {
         return Objects.requireNonNull(directives);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {

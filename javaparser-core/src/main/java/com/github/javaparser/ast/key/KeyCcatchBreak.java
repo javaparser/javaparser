@@ -168,12 +168,14 @@ public class KeyCcatchBreak extends KeyCcatchBranch {
         return JavaParserMetaModel.keyCcatchBreakMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt block() {
         return block;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name label() {

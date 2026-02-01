@@ -1085,10 +1085,12 @@ public abstract class Expression extends Node {
     public void ifKeyProgramVariableSV(Consumer<KeyProgramVariableSV> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ComponentPatternExpr asComponentPatternExpr() {
         throw new IllegalStateException(f("%s is not ComponentPatternExpr, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifRecordPatternExpr(Consumer<RecordPatternExpr> action) {
     }
 }

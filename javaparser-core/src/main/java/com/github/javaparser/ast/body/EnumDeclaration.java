@@ -230,12 +230,14 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<EnumConstantDeclaration> entries() {
         return Objects.requireNonNull(entries);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> implementedTypes() {

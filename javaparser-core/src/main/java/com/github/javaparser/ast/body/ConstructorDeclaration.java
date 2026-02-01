@@ -247,6 +247,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt body() {

@@ -234,16 +234,22 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
         customInitialization();
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifRecordPatternExpr(Consumer<RecordPatternExpr> action) {
         action.accept(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ComponentPatternExpr> patternList() {
         return Objects.requireNonNull(patternList);
     }

@@ -173,12 +173,14 @@ public class KeyEscapeExpression extends Expression {
         return JavaParserMetaModel.keyEscapeExpressionMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> arguments() {
         return arguments;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name callee() {

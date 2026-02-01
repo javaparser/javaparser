@@ -1323,12 +1323,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return this;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Comment> associatedSpecificationComments() {
         return associatedSpecificationComments;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Comment comment() {

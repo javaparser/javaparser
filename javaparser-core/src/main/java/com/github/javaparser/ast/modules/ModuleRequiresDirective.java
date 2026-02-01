@@ -230,12 +230,14 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
         return JavaParserMetaModel.moduleRequiresDirectiveMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {

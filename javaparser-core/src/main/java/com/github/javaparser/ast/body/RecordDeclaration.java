@@ -392,24 +392,28 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
         return unmodifiableList(getMembers().stream().filter(m -> m instanceof CompactConstructorDeclaration).map(m -> (CompactConstructorDeclaration) m).collect(toList()));
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> implementedTypes() {
         return Objects.requireNonNull(implementedTypes);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> parameters() {
         return Objects.requireNonNull(parameters);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ReceiverParameter receiverParameter() {
         return receiverParameter;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> typeParameters() {

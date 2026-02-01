@@ -27,6 +27,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.key.IgnoreLexPrinting;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
@@ -165,6 +166,7 @@ public class PropertyGenerator extends NodeGenerator {
         body.getStatements().clear();
         nodeCoid.findCompilationUnit().get().addImport(Objects.class);
 
+        getter.addAnnotation("com.github.javaparser.ast.key.IgnoreLexPrinting");
         if (property.isOptional()) {
             // Ensure imports have been included.
             nodeCoid.findCompilationUnit().get().addImport(Nullable.class);

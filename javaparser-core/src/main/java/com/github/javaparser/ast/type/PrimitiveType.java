@@ -270,6 +270,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return ResolvedPrimitiveType.byName(getType().name());
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Primitive type() {

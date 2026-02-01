@@ -410,6 +410,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType>, Con
     public void ifVarType(Consumer<VarType> action) {
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> annotations() {

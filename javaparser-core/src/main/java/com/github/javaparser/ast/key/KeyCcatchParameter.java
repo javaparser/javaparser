@@ -161,12 +161,14 @@ public class KeyCcatchParameter extends KeyCcatchBranch {
         return JavaParserMetaModel.keyCcatchParameterMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt block() {
         return block;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter parameter() {

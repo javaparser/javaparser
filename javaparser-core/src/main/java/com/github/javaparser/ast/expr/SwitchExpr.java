@@ -209,12 +209,14 @@ public class SwitchExpr extends Expression implements SwitchNode {
         return JavaParserMetaModel.switchExprMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SwitchEntry> entries() {
         return Objects.requireNonNull(entries);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression selector() {

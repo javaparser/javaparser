@@ -117,6 +117,7 @@ public class KeyMergePointStatement extends Statement {
         action.accept(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression expr() {

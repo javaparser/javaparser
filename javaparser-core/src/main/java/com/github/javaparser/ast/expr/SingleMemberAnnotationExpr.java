@@ -144,6 +144,7 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression memberValue() {

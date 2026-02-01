@@ -204,12 +204,14 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         return getParentNode().filter(parent -> parent instanceof Name).isPresent();
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String identifier() {
         return Objects.requireNonNull(identifier);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name qualifier() {

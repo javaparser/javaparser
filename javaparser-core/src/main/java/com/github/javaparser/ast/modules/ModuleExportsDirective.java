@@ -217,12 +217,14 @@ public class ModuleExportsDirective extends ModuleDirective implements NodeWithN
         return JavaParserMetaModel.moduleExportsDirectiveMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Name> moduleNames() {
         return Objects.requireNonNull(moduleNames);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {

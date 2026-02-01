@@ -161,12 +161,14 @@ public class KeyExecStatement extends Statement {
         action.accept(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<KeyCcatchBranch> branches() {
         return Objects.requireNonNull(branches);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt execBlock() {

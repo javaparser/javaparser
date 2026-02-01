@@ -152,9 +152,9 @@ public class LexicalPreservingPrinter {
                 NodeText nodeText = parentNode.map(parent -> getOrCreateNodeText(parentNode.get())).orElseGet(() -> getOrCreateNodeText(observedNode));
                 if (oldValue == null) {
                     // this case corresponds to the addition of a comment
-                    int index = parentNode.isPresent() ? // Find the position of the comment node and put in front of it the [...]
-                    nodeText.findChild(observedNode) : //
-                    0;
+                    int index = // Find the position of the comment node and put in front of it the [...]
+                    parentNode.isPresent() ? //
+                    nodeText.findChild(observedNode) : 0;
                     /* Add the same indentation to the comment as the previous node
                      * for example if we want to add a comment on the body of the method declaration :
                      * Actual code
@@ -769,6 +769,9 @@ public class LexicalPreservingPrinter {
     private static ObservableProperty findNodeListName(NodeList<?> nodeList) {
         Node parent = nodeList.getParentNodeForChildren();
         for (Method m : parent.getClass().getMethods()) {
+            if (m.getAnnotation(com.github.javaparser.ast.key.IgnoreLexPrinting.class) != null) {
+                continue;
+            }
             if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(JAVAPARSER_AST_NODELIST)) {
                 try {
                     Object raw = m.invoke(parent);

@@ -350,12 +350,14 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> variables() {

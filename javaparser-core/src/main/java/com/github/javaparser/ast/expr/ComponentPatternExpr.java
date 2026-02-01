@@ -118,6 +118,7 @@ public abstract class ComponentPatternExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ComponentPatternExpr asComponentPatternExpr() {
         return this;
     }

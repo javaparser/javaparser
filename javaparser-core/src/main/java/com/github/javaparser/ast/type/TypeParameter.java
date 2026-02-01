@@ -250,12 +250,14 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         throw new UnsupportedOperationException(getClass().getCanonicalName());
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> typeBound() {

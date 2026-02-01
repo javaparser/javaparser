@@ -160,6 +160,7 @@ public class EnclosedExpr extends Expression {
         return getInner().isPolyExpression();
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression inner() {

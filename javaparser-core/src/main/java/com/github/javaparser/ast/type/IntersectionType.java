@@ -193,6 +193,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         throw new UnsupportedOperationException(getClass().getCanonicalName());
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType> elements() {

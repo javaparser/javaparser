@@ -168,7 +168,9 @@ public class MatchAllPatternExpr extends ComponentPatternExpr implements NodeWit
         return JavaParserMetaModel.matchAllPatternExprMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }

@@ -283,12 +283,14 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
         throw new UnsupportedOperationException(toString());
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ReferenceType extendedType() {
         return extendedType;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ReferenceType superType() {

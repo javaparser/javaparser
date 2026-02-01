@@ -693,6 +693,14 @@ class PrettyPrinterTest {
                 + "    }\n"
                 + "}\n";
 
+        GeneratedJavaParserTokenManager toks = new GeneratedJavaParserTokenManager(new SimpleCharStream(provider(code)));
+        Token tok;
+        do {
+            tok = toks.getNextToken();
+            System.out.format("% 3d %15s: %-20s (%d/%d)%n", tok.kind, JavaToken.Kind.valueOf(tok.kind), tok.image, tok.beginLine, tok.beginColumn);
+            System.out.flush();
+        } while (tok.kind != GeneratedJavaParserConstants.EOF);
+
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
     }

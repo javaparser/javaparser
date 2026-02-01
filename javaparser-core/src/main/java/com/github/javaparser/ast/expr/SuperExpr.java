@@ -177,6 +177,7 @@ public class SuperExpr extends Expression {
         return setTypeName((Name) null);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name typeName() {

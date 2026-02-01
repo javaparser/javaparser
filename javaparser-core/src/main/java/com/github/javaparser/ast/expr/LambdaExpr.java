@@ -170,6 +170,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         v.visit(this, arg);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isEnclosingParameters() {
@@ -283,12 +284,14 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return getParameters().stream().allMatch(p -> !(p.getType().isUnknownType()));
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement body() {
         return Objects.requireNonNull(body);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> parameters() {

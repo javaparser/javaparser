@@ -108,6 +108,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String value() {

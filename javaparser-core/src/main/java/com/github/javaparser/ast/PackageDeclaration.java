@@ -187,12 +187,14 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
         return super.replace(node, replacementNode);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {

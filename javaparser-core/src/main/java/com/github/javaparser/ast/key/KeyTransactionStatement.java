@@ -126,6 +126,7 @@ public class KeyTransactionStatement extends Statement {
         action.accept(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TransactionType type() {

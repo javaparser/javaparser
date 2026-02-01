@@ -336,12 +336,14 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         return new ResolvedArrayType(getComponentType().convertToUsage(context));
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type componentType() {
         return Objects.requireNonNull(componentType);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Origin origin() {

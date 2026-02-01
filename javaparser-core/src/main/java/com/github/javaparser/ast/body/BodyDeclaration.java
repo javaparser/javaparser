@@ -379,6 +379,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
         return Optional.empty();
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> annotations() {

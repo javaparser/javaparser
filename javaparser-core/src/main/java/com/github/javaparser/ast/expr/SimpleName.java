@@ -110,6 +110,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         return JavaParserMetaModel.simpleNameMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String identifier() {

@@ -192,12 +192,14 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return super.replace(node, replacementNode);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression dimension() {

@@ -264,17 +264,23 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return !getScope().calculateResolvedType().erasure().describe().endsWith(getScope().toString());
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String identifier() {
         return Objects.requireNonNull(identifier);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression scope() {
         return Objects.requireNonNull(scope);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Type> typeArguments() {
         return typeArguments;
     }

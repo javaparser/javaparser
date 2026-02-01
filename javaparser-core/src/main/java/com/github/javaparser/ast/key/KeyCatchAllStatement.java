@@ -145,12 +145,14 @@ public class KeyCatchAllStatement extends Statement {
         return JavaParserMetaModel.keyCatchAllStatementMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt block() {
         return Objects.requireNonNull(block);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name label() {

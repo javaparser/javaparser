@@ -207,18 +207,21 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
         return appearsInAssignmentContext() || appearsInInvocationContext();
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression condition() {
         return Objects.requireNonNull(condition);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression elseExpr() {
         return Objects.requireNonNull(elseExpr);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression thenExpr() {

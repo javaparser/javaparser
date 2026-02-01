@@ -240,6 +240,7 @@ public abstract class Comment extends Node {
         return getHeader() + getContent() + getFooter();
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String content() {

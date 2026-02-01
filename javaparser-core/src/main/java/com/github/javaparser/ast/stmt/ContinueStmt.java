@@ -180,6 +180,7 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName label() {

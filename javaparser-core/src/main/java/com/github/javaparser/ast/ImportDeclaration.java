@@ -168,18 +168,21 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     /**
      * Return if the import ends with "*".
      */
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isAsterisk() {
         return Objects.requireNonNull(isAsterisk);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isModule() {
         return Objects.requireNonNull(isModule);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
@@ -245,6 +248,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
         return super.replace(node, replacementNode);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {
