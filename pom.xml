@@ -177,7 +177,16 @@
 	</issueManagement>
 
 	<distributionManagement>
-	<!-- According to the documentation https://central.sonatype.org/publish/publish-portal-maven/, it is no longer necessary to configure a repository -->
+		<!-- According to the documentation https://central.sonatype.org/publish/publish-portal-maven/, it is no longer necessary to configure a repository -->
+		<repository>
+			<id>gitlab-maven</id>
+			<url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
+		</repository>
+
+		<snapshotRepository>
+			<id>gitlab-maven</id>
+			<url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 
@@ -193,18 +202,7 @@
 					<useIncrementalCompilation>false</useIncrementalCompilation>
 				</configuration>
 			</plugin>
-			<plugin>
-					<groupId>org.sonatype.central</groupId>
-					<artifactId>central-publishing-maven-plugin</artifactId>
-					<configuration>
-						<excludeArtifacts>
-							<excludeArtifact>com.github.javaparser:javaparser-core-testing</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-core-testing-bdd</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-symbol-solver-testing</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-core-metamodel-generator</excludeArtifact>
-						</excludeArtifacts>
-					</configuration>
-			</plugin>
+
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -239,19 +237,6 @@
                     <version>3.5.0</version>
 				</plugin>
 				<plugin>
-					<groupId>org.sonatype.plugins</groupId>
-					<artifactId>nexus-staging-maven-plugin</artifactId>
-					<version>1.6.7</version>
-					<extensions>true</extensions>
-					<configuration>
-						<serverId>ossrh</serverId>
-						<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-						<autoReleaseAfterClose>true</autoReleaseAfterClose>
-					</configuration>
-				</plugin>
-
-
-				<plugin>
                     <!-- Plugin for preparing and performing a release (to sonatype central publishing portal / maven central). -->
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
@@ -281,16 +266,25 @@
 							<goals>
 								<goal>deploy</goal>
 							</goals>
-							<configuration>
-								<skip>true</skip>
-							</configuration>
 						</execution>
 					</executions>
-					<configuration>
-						<skip>true</skip>
-					</configuration>
 				</plugin>
 				<!-- NEW: Plugin for publishing to Maven Central -->
+				<!--<plugin>
+					<groupId>org.sonatype.central</groupId>
+					<artifactId>central-publishing-maven-plugin</artifactId>
+					<version>0.10.0</version>
+					<extensions>true</extensions>
+					<configuration>
+						<publishingServerId>central-portal</publishingServerId>
+						<excludeArtifacts>
+							<excludeArtifact>com.github.javaparser:javaparser-core-testing</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-core-testing-bdd</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-symbol-solver-testing</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-core-metamodel-generator</excludeArtifact>
+						</excludeArtifacts>
+					</configuration>
+			</plugin>
 				<plugin>
 					<groupId>org.sonatype.central</groupId>
 					<artifactId>central-publishing-maven-plugin</artifactId>
@@ -298,14 +292,14 @@
 					<extensions>true</extensions>
 					<configuration>
 						<publishingServerId>central</publishingServerId>
-						<!-- Automatic publication after validation -->
+						 Automatic publication after validation ->
 						<autoPublish>true</autoPublish>
-						<!-- Wait until the publication is effective -->
+						 Wait until the publication is effective ->
 						<waitUntil>published</waitUntil>
-						<!-- Readable name to identify the deployment -->
+						- Readable name to identify the deployment ->
 						<deploymentName>${project.artifactId}-${project.version}</deploymentName>
 					</configuration>
-				</plugin>
+				</plugin>-->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
@@ -617,6 +611,7 @@
 										<arg>--pinentry-mode</arg>
 										<arg>loopback</arg>
 									</gpgArguments>
+									<keyname>8864964484D22F29</keyname>
 								</configuration>
 							</execution>
 						</executions>

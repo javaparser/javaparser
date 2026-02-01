@@ -32,6 +32,7 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 class JavaParserJsonSerializerTest {
     @Test

@@ -11,7 +11,6 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.TypeSolverBuilder;
 import org.junit.jupiter.api.Test;
 
@@ -62,82 +61,96 @@ public class LogicalTypes {
 
         @Override
         public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
-            return SymbolReference.solved(new ResolvedReferenceTypeDeclaration() {
-                @Override
-                public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-                    return Collections.emptyList();
-                }
+            return SymbolReference.solved(new ResolvedLogicTypeDeclaration(name));
+        }
 
-                @Override
-                public List<ResolvedFieldDeclaration> getAllFields() {
-                    return Collections.emptyList();
-                }
+        @Override
+        public SymbolReference<ResolvedReferenceTypeDeclaration>
+        tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+            return tryToSolveType(simpleTypeName);
+        }
 
-                @Override
-                public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-                    return Collections.emptySet();
-                }
+        private static class ResolvedLogicTypeDeclaration implements ResolvedReferenceTypeDeclaration {
+            private final String name;
 
-                @Override
-                public Set<MethodUsage> getAllMethods() {
-                    return Collections.emptySet();
-                }
+            public ResolvedLogicTypeDeclaration(String name) {
+                this.name = name;
+            }
 
-                @Override
-                public boolean isAssignableBy(ResolvedType type) {
-                    return false;
-                }
+            @Override
+            public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
+                return Collections.emptyList();
+            }
 
-                @Override
-                public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-                    return false;
-                }
+            @Override
+            public List<ResolvedFieldDeclaration> getAllFields() {
+                return Collections.emptyList();
+            }
 
-                @Override
-                public boolean hasDirectlyAnnotation(String qualifiedName) {
-                    return false;
-                }
+            @Override
+            public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+                return Collections.emptySet();
+            }
 
-                @Override
-                public boolean isFunctionalInterface() {
-                    return false;
-                }
+            @Override
+            public Set<MethodUsage> getAllMethods() {
+                return Collections.emptySet();
+            }
 
-                @Override
-                public List<ResolvedConstructorDeclaration> getConstructors() {
-                    return Collections.emptyList();
-                }
+            @Override
+            public boolean isAssignableBy(ResolvedType type) {
+                return false;
+            }
 
-                @Override
-                public Optional<ResolvedReferenceTypeDeclaration> containerType() {
-                    return Optional.empty();
-                }
+            @Override
+            public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
+                return false;
+            }
 
-                @Override
-                public String getPackageName() {
-                    return "";
-                }
+            @Override
+            public boolean hasDirectlyAnnotation(String qualifiedName) {
+                return false;
+            }
 
-                @Override
-                public String getClassName() {
-                    return name;
-                }
+            @Override
+            public boolean isFunctionalInterface() {
+                return false;
+            }
 
-                @Override
-                public String getQualifiedName() {
-                    return name;
-                }
+            @Override
+            public List<ResolvedConstructorDeclaration> getConstructors() {
+                return Collections.emptyList();
+            }
 
-                @Override
-                public String getName() {
-                    return name;
-                }
+            @Override
+            public Optional<ResolvedReferenceTypeDeclaration> containerType() {
+                return Optional.empty();
+            }
 
-                @Override
-                public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
-                    return Collections.emptyList();
-                }
-            });
+            @Override
+            public String getPackageName() {
+                return "";
+            }
+
+            @Override
+            public String getClassName() {
+                return name;
+            }
+
+            @Override
+            public String getQualifiedName() {
+                return name;
+            }
+
+            @Override
+            public String getName() {
+                return name;
+            }
+
+            @Override
+            public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
+                return Collections.emptyList();
+            }
         }
     }
 }

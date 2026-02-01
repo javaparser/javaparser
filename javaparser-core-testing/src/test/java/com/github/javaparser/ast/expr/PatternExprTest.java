@@ -11,6 +11,9 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
+import com.github.javaparser.ast.comments.*;
 
 /**
  * This class exists to test the generated methods for the various Pattern expression
@@ -138,9 +141,9 @@ public class PatternExprTest {
         RecordPatternExpr recordPattern = pattern.asRecordPatternExpr();
 
         NodeList<ComponentPatternExpr> patternList = recordPattern.getPatternList();
-        assertTrue(patternList.getFirst().isPresent());
+        assertTrue(patternList.getOFirst().isPresent());
 
-        ComponentPatternExpr childPattern = patternList.getFirst().get();
+        ComponentPatternExpr childPattern = patternList.getOFirst().get();
         assertTrue(childPattern.isMatchAllPatternExpr());
     }
 
