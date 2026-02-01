@@ -27,6 +27,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.stmt.*;
@@ -45,6 +46,12 @@ public class Java1_0Validator extends Validators {
     final Validator modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods = new ModifierValidator(false, false, false);
 
     final Validator noAssertKeyword = new SimpleValidator<>(AssertStmt.class, n -> true, (n, reporter) -> reporter.report(n, new UpgradeJavaMessage("'assert' keyword is not supported.", ParserConfiguration.LanguageLevel.JAVA_1_4)));
+
+    final Validator noAssertIdentifer = new TreeVisitorValidator((node, reporter) -> {
+        if (node instanceof NodeWithIdentifier && ((NodeWithIdentifier) node).getIdentifier().equals("assert")) {
+            reporter.report(node, new UpgradeJavaMessage("'assert' identifier is not supported.", ParserConfiguration.LanguageLevel.JAVA_1_4, false));
+        }
+    });
 
     final Validator noInnerClasses = new SimpleValidator<>(ClassOrInterfaceDeclaration.class, n -> !n.isTopLevelType(), (n, reporter) -> reporter.report(n, new UpgradeJavaMessage("inner classes or interfaces are not supported.", ParserConfiguration.LanguageLevel.JAVA_1_1)));
 
@@ -119,7 +126,7 @@ public class Java1_0Validator extends Validators {
     });
 
     final Validator noSwitchPatterns = new SingleNodeTypeValidator<>(SwitchEntry.class, (n, reporter) -> {
-        if (n.getGuard().isPresent() || n.getLabels().stream().anyMatch(expr -> expr.isPatternExpr())) {
+        if (n.getGuard().isPresent() || n.getLabels().stream().anyMatch(expr -> expr.isComponentPatternExpr())) {
             reporter.report(n, new UpgradeJavaMessage("Switch patterns not supported.", ParserConfiguration.LanguageLevel.JAVA_21));
         }
     });
@@ -127,6 +134,26 @@ public class Java1_0Validator extends Validators {
     final Validator noRecordPatterns = new TreeVisitorValidator((node, reporter) -> {
         if (node instanceof RecordPatternExpr) {
             reporter.report(node, new UpgradeJavaMessage("Record patterns are not supported.", ParserConfiguration.LanguageLevel.JAVA_21));
+        }
+    });
+
+    final Validator noModuleImports = new TreeVisitorValidator((node, reporter) -> {
+        if (node instanceof ImportDeclaration && ((ImportDeclaration) node).isModule()) {
+            reporter.report(node, new UpgradeJavaMessage("Module imports are not supported", ParserConfiguration.LanguageLevel.JAVA_25));
+        }
+    });
+
+    final Validator explicitConstructorInvocationMustBeFirstStatement = new TreeVisitorValidator((Node node, ProblemReporter reporter) -> {
+        // Only validate this for ExplicitConstructorInvocationStmts that appear as a child of a block node.
+        // This will
+        // be the case for all such statements that are parsed as part of a compiling source file, but may not
+        // always
+        // be the case for code snippets being parsed.
+        if (node instanceof ExplicitConstructorInvocationStmt && node.getParentNode().isPresent()) {
+            Node parent = node.getParentNode().get();
+            if (parent instanceof BlockStmt && ((BlockStmt) parent).getStatements().indexOf(node) > 0) {
+                reporter.report(node, new UpgradeJavaMessage("Flexible constructor bodies are not supported", ParserConfiguration.LanguageLevel.JAVA_25));
+            }
         }
     });
 
@@ -159,5 +186,7 @@ public class Java1_0Validator extends Validators {
         add(noSwitchNullDefault);
         add(noSwitchPatterns);
         add(noRecordPatterns);
+        add(noModuleImports);
+        add(explicitConstructorInvocationMustBeFirstStatement);
     }
 }

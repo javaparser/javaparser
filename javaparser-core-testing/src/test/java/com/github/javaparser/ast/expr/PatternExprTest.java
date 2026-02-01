@@ -51,27 +51,29 @@ public class PatternExprTest {
 
         assertTrue(instanceOfExpr.getPattern().isPresent());
         PatternExpr pattern = instanceOfExpr.getPattern().get();
+        assertTrue(pattern.isComponentPatternExpr());
         assertTrue(pattern.isPatternExpr());
         assertTrue(pattern.isTypePatternExpr());
-        assertInstanceOf(PatternExpr.class, pattern.asPatternExpr());
+        assertInstanceOf(ComponentPatternExpr.class, pattern.asComponentPatternExpr());
+        assertInstanceOf(PatternExpr.class, pattern.asComponentPatternExpr());
         assertInstanceOf(TypePatternExpr.class, pattern.asTypePatternExpr());
 
-        assertFalse(instanceOfExpr.isPatternExpr());
+        assertFalse(instanceOfExpr.isComponentPatternExpr());
         assertFalse(instanceOfExpr.isTypePatternExpr());
 
-        assertThrows(IllegalStateException.class, () -> instanceOfExpr.asPatternExpr());
+        assertThrows(IllegalStateException.class, () -> instanceOfExpr.asComponentPatternExpr());
         assertThrows(IllegalStateException.class, () -> instanceOfExpr.asTypePatternExpr());
 
-        TestConsumer<PatternExpr> validPattern = new TestConsumer<>();
-        pattern.ifPatternExpr(validPattern);
+        TestConsumer<ComponentPatternExpr> validPattern = new TestConsumer<>();
+        pattern.ifComponentPatternExpr(validPattern);
         assertTrue(validPattern.isConsumed);
 
         TestConsumer<TypePatternExpr> validTypePattern = new TestConsumer<>();
         pattern.ifTypePatternExpr(validTypePattern);
         assertTrue(validTypePattern.isConsumed);
 
-        TestConsumer<PatternExpr> invalidPattern = new TestConsumer<>();
-        instanceOfExpr.ifPatternExpr(invalidPattern);
+        TestConsumer<ComponentPatternExpr> invalidPattern = new TestConsumer<>();
+        instanceOfExpr.ifComponentPatternExpr(invalidPattern);
         assertFalse(invalidPattern.isConsumed);
 
         TestConsumer<TypePatternExpr> invalidTypePattern = new TestConsumer<>();
@@ -88,7 +90,7 @@ public class PatternExprTest {
         InstanceOfExpr instanceOfExpr = expr.asInstanceOfExpr();
 
         assertTrue(instanceOfExpr.getPattern().isPresent());
-        PatternExpr pattern = instanceOfExpr.getPattern().get();
+        ComponentPatternExpr pattern = instanceOfExpr.getPattern().get();
 
         assertTrue(pattern.isRecordPatternExpr());
         assertTrue(pattern.toRecordPatternExpr().isPresent());
@@ -110,7 +112,7 @@ public class PatternExprTest {
         pattern.ifRecordPatternExpr(validPattern);
         assertTrue(validPattern.isConsumed);
 
-        NodeList<PatternExpr> patternList = recordPattern.getPatternList();
+        NodeList<ComponentPatternExpr> patternList = recordPattern.getPatternList();
         assertTrue(patternList.isNonEmpty());
 
         recordPattern.replace(patternList.get(0), patternList.get(0));
@@ -118,5 +120,74 @@ public class PatternExprTest {
 
         RecordPatternExpr newRecordPattern = recordPattern.clone();
         assertEquals(recordPattern.getTypeAsString(), newRecordPattern.getTypeAsString());
+    }
+
+    @Test
+    public void aSingleMatchAllPatternInRecordListShouldWork() {
+        Expression expr = parseExpression("x instanceof Foo(_)");
+
+        assertTrue(expr.isInstanceOfExpr());
+
+        InstanceOfExpr instanceOfExpr = expr.asInstanceOfExpr();
+
+        assertTrue(instanceOfExpr.getPattern().isPresent());
+        ComponentPatternExpr pattern = instanceOfExpr.getPattern().get();
+
+        assertTrue(pattern.isRecordPatternExpr());
+        assertTrue(pattern.toRecordPatternExpr().isPresent());
+        RecordPatternExpr recordPattern = pattern.asRecordPatternExpr();
+
+        NodeList<ComponentPatternExpr> patternList = recordPattern.getPatternList();
+        assertTrue(patternList.getFirst().isPresent());
+
+        ComponentPatternExpr childPattern = patternList.getFirst().get();
+        assertTrue(childPattern.isMatchAllPatternExpr());
+    }
+
+    @Test
+    public void multipleMatchAllPatternsInRecordListShouldWork() {
+        Expression expr = parseExpression("x instanceof Foo(_, Bar b, _)");
+
+        assertTrue(expr.isInstanceOfExpr());
+
+        InstanceOfExpr instanceOfExpr = expr.asInstanceOfExpr();
+
+        assertTrue(instanceOfExpr.getPattern().isPresent());
+        ComponentPatternExpr pattern = instanceOfExpr.getPattern().get();
+
+        assertTrue(pattern.isRecordPatternExpr());
+        assertTrue(pattern.toRecordPatternExpr().isPresent());
+        RecordPatternExpr recordPattern = pattern.asRecordPatternExpr();
+
+        NodeList<ComponentPatternExpr> patternList = recordPattern.getPatternList();
+        assertEquals(3, patternList.size());
+
+        ComponentPatternExpr firstChild = patternList.get(0);
+        assertTrue(firstChild.isMatchAllPatternExpr());
+
+        ComponentPatternExpr secondChild = patternList.get(1);
+        assertTrue(secondChild.isTypePatternExpr());
+
+        ComponentPatternExpr thirdChild = patternList.get(2);
+        assertTrue(thirdChild.isMatchAllPatternExpr());
+    }
+
+    @Test
+    public void anUnnamedTypePatternShouldWork() {
+        Expression expr = parseExpression("x instanceof Foo _");
+
+        assertTrue(expr.isInstanceOfExpr());
+
+        InstanceOfExpr instanceOfExpr = expr.asInstanceOfExpr();
+
+        assertTrue(instanceOfExpr.getPattern().isPresent());
+        ComponentPatternExpr pattern = instanceOfExpr.getPattern().get();
+
+        assertTrue(pattern.isTypePatternExpr());
+        assertTrue(pattern.toTypePatternExpr().isPresent());
+        TypePatternExpr typePattern = pattern.toTypePatternExpr().get();
+
+        assertEquals("Foo", typePattern.getTypeAsString());
+        assertEquals("_", typePattern.getNameAsString());
     }
 }

@@ -181,10 +181,28 @@ public class ParserConfiguration {
         /**
          * Java 21
          */
-        JAVA_21(new Java21Validator(), new Java21PostProcessor());
+        JAVA_21(new Java21Validator(), new Java21PostProcessor()),
+        /**
+         * Java 22
+         */
+        JAVA_22(new Java22Validator(), new Java22PostProcessor()),
+        /**
+         * Java 23
+         */
+        JAVA_23(new Java23Validator(), new Java23PostProcessor()),
+        /**
+         * Java 24
+         */
+        JAVA_24(new Java24Validator(), new Java24PostProcessor()),
+        /**
+         * Java 25
+         */
+        JAVA_25(new Java25Validator(), new Java25PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
+         * Using the RAW language level can lead to parsing errors for features introduced in a specific version of Java
+         * (see issue https://github.com/javaparser/javaparser/issues/4813).
          */
         public static LanguageLevel RAW = null;
 
@@ -201,13 +219,13 @@ public class ParserConfiguration {
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_21;
+        public static LanguageLevel BLEEDING_EDGE = JAVA_24;
 
         final Validator validator;
 
         final PostProcessors postProcessor;
 
-        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] { JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW, JAVA_18, JAVA_19, JAVA_20, JAVA_21 };
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] { JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW, JAVA_18, JAVA_19, JAVA_20, JAVA_21, JAVA_22, JAVA_23, JAVA_24 };
 
         LanguageLevel(Validator validator, PostProcessors postProcessor) {
             this.validator = validator;

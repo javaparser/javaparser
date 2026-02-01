@@ -248,6 +248,7 @@ public class TokenTypes {
             case TRUE:
             case FALSE:
             case NULL:
+            case UNNAMED_PLACEHOLDER:
                 return JavaToken.Category.LITERAL;
             case JMLIDENTIFIER:
             case SVIDENTIFIER:
@@ -310,7 +311,7 @@ public class TokenTypes {
             case ENTER_MULTILINE_COMMENT:
             case COMMENT_CONTENT:
             case HEX_DIGITS:
-            case LETTER:
+            case NON_UNDERSCORE_LETTER:
             case UNICODE_ESCAPE:
             case PART_LETTER:
             case TEXT_BLOCK_CONTENT:

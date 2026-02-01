@@ -30,8 +30,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
+import java.util.Objects;
 
 /**
  * An import declaration.
@@ -52,10 +52,23 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
 
     private boolean isAsterisk;
 
+    private boolean isModule;
+
     private ImportDeclaration() {
-        this(null, new Name(), false, false);
+        this(null, new Name(), false, false, false);
     }
 
+    public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        // If the value of the isAsterisk parameter is true, we consider that we deliberately wanted to create an import
+        // declaration of the form ‘x.*’ by specifying only ‘x’.
+        // On the other hand, if the isAsterisk parameter is false, we can check that we haven't tried to directly
+        // create an import declaration of the form ‘x.*’.
+        this(null, getNameFromString(name), isStatic, isAsterisk ? isAsterisk : hasAsterisk(name), isModule);
+    }
+
+    /**
+     * This constructor is kept to avoid breaking existing code creating non-module imports.
+     */
     public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk) {
         // If the value of the isAsterisk parameter is true, we consider that we deliberately wanted to create an import
         // declaration of the form ‘x.*’ by specifying only ‘x’.
@@ -65,12 +78,32 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     }
 
     @AllFieldsConstructor
+    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        this(null, name, isStatic, isAsterisk, isModule);
+    }
+
+    /**
+     * This constructor is kept to avoid breaking existing code creating non-module imports.
+     */
     public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk) {
         this(null, name, isStatic, isAsterisk);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        super(tokenRange);
+        setName(name);
+        setStatic(isStatic);
+        setAsterisk(isAsterisk);
+        setModule(isModule);
+        customInitialization();
+    }
+
+    /**
+     * This constructor is kept to avoid breaking existing code creating non-module imports.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk) {
@@ -143,6 +176,12 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
 
     @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public boolean isModule() {
+        return Objects.requireNonNull(isModule);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
         return Objects.requireNonNull(isStatic);
     }
@@ -210,5 +249,15 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name name() {
         return Objects.requireNonNull(name);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ImportDeclaration setModule(final boolean isModule) {
+        if (isModule == this.isModule) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.MODULE, this.isModule, isModule);
+        this.isModule = isModule;
+        return this;
     }
 }

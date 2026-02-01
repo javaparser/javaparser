@@ -99,7 +99,7 @@ public class KeyMetaConstructType extends Type {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMetaConstructType setKind(final String kind) {
         assertNotNull(kind);
-        if (kind == this.kind) {
+        if (kind.equals(this.kind)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.KIND, this.kind, kind);

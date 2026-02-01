@@ -56,7 +56,7 @@ public class KeyStatementSV extends Statement {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyStatementSV setText(final String text) {
         assertNotNull(text);
-        if (text == this.text) {
+        if (text.equals(this.text)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TEXT, this.text, text);

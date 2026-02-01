@@ -151,7 +151,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodReferenceExpr setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
-        if (identifier == this.identifier) {
+        if (identifier.equals(this.identifier)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
@@ -250,20 +250,31 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return true;
     }
 
+    /*
+     * https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.13
+     * Workaround to handle cases where scope should have been parsed as a primary expression.
+     * A change to the grammar should lead to the removal of this method.
+     * This is the case, for example, in the following reference expression ‘foo:convert’,
+     * where foo is an instance of the Foo class and convert is a method of the Foo class.
+     * foo should not be considered a type expression as String could be in the expression String::length.
+     * This method compares the scope (e.g. foo) with the resolved type, e.g. Foo.
+     * If they are different, we consider it to be a primary expression.
+     */
+    public boolean isScopePrimaryExpr() {
+        return !getScope().calculateResolvedType().erasure().describe().endsWith(getScope().toString());
+    }
+
     @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String identifier() {
         return Objects.requireNonNull(identifier);
     }
 
     @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression scope() {
         return Objects.requireNonNull(scope);
     }
 
     @Nullable()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Type> typeArguments() {
         return typeArguments;
     }

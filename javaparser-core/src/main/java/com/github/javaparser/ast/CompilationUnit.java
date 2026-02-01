@@ -31,7 +31,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
@@ -185,7 +185,7 @@ public class CompilationUnit extends Node {
      * If there is no comment, an empty list is returned.
      *
      * @return list with all comments of this compilation unit.
-     * @see JavadocComment
+     * @see TraditionalJavadocComment
      * @see com.github.javaparser.ast.comments.LineComment
      * @see com.github.javaparser.ast.comments.BlockComment
      */
@@ -377,13 +377,13 @@ public class CompilationUnit extends Node {
 
     /**
      * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
-     * shorthand for {@link #addImport(String, boolean, boolean)} with name,false,false
+     * shorthand for {@link #addImport(String, boolean, boolean, boolean)} with name,false,false,false
      *
      * @param name the import name
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name) {
-        return addImport(name, false, false);
+        return addImport(name, false, false, false);
     }
 
     /**
@@ -406,7 +406,7 @@ public class CompilationUnit extends Node {
     }
 
     /**
-     * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
+     * Add a non-module import to the list of {@link ImportDeclaration} of this compilation unit<br>
      * <b>This method check if no import with the same name is already in the list</b>
      *
      * @param name the import name
@@ -418,7 +418,24 @@ public class CompilationUnit extends Node {
         if (name == null) {
             return this;
         }
-        return addImport(new ImportDeclaration(name, isStatic, isAsterisk));
+        return addImport(new ImportDeclaration(name, isStatic, isAsterisk, false));
+    }
+
+    /**
+     * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
+     * <b>This method check if no import with the same name is already in the list</b>
+     *
+     * @param name the import name
+     * @param isStatic is it an "import static"
+     * @param isAsterisk does the import end with ".*"
+     * @param isModule is it an "import module"
+     * @return this, the {@link CompilationUnit}
+     */
+    public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        if (name == null) {
+            return this;
+        }
+        return addImport(new ImportDeclaration(name, isStatic, isAsterisk, isModule));
     }
 
     /**

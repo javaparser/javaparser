@@ -14,7 +14,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2667378.svg)](https://doi.org/10.5281/zenodo.2667378)
 
 
-This project contains a set of libraries implementing a Java 1.0 - Java 15 Parser with advanced analysis functionalities. This includes preview features to Java 13, with Java 14 preview features work-in-progress.
+This project contains a set of libraries implementing a Java 1.0 - Java 21 Parser with advanced analysis functionalities.
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
@@ -37,7 +37,7 @@ Just add the following to your maven configuration or tailor to your own depende
 <dependency>
     <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-symbol-solver-core</artifactId>
-    <version>3.26.3-K10-SNAPSHOT</version>
+    <version>3.28.0-K10-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -59,7 +59,7 @@ Using the dependency above will add both JavaParser and JavaSymbolSolver to your
 <dependency>
     <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.26.3-K10-SNAPSHOT</version>
+    <version>3.28.0-K10-SNAPSHOT</version>
 </dependency>
 ```
 

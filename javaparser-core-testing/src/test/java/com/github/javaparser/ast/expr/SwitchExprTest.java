@@ -480,4 +480,43 @@ class SwitchExprTest {
 
         assertTrue(innerType.getType().isPrimitiveType());
     }
+
+    @Test
+    void switchWithMatchAllPattern() {
+        SwitchStmt stmt = parseStatement("switch (value) {\n" + "    case Box(_) -> System.out.println(0);\n" + "}")
+                .asSwitchStmt();
+
+        assertEquals(1, stmt.getEntries().size());
+
+        SwitchEntry entry = stmt.getEntry(0);
+        assertFalse(entry.getGuard().isPresent());
+
+        assertEquals(1, entry.getLabels().size());
+
+        assertTrue(entry.getLabels().get(0).isRecordPatternExpr());
+
+        RecordPatternExpr recordPattern = entry.getLabels().get(0).asRecordPatternExpr();
+        assertEquals(1, recordPattern.getPatternList().size());
+
+        assertTrue(recordPattern.getPatternList().get(0).isMatchAllPatternExpr());
+    }
+
+    @Test
+    void switchWithUnnamedTypePattern() {
+        SwitchStmt stmt = parseStatement("switch (value) {\n" + "    case Box _ -> System.out.println(0);\n" + "}")
+                .asSwitchStmt();
+
+        assertEquals(1, stmt.getEntries().size());
+
+        SwitchEntry entry = stmt.getEntry(0);
+        assertFalse(entry.getGuard().isPresent());
+
+        assertEquals(1, entry.getLabels().size());
+
+        assertTrue(entry.getLabels().get(0).isTypePatternExpr());
+
+        TypePatternExpr typePattern = entry.getLabels().get(0).asTypePatternExpr();
+        assertEquals("Box", typePattern.getTypeAsString());
+        assertEquals("_", typePattern.getNameAsString());
+    }
 }

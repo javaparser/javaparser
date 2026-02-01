@@ -14,8 +14,11 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.KeyCcatchBreakMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import org.jspecify.annotations.Nullable;
-
 import java.util.Optional;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
+import com.github.javaparser.ast.comments.*;
+import java.util.Objects;
 
 public class KeyCcatchBreak extends KeyCcatchBranch {
 

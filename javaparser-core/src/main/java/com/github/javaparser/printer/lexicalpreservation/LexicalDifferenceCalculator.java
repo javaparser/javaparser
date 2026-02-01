@@ -68,6 +68,18 @@ class LexicalDifferenceCalculator {
         void removeIndentationElements() {
             elements.removeIf(el -> el instanceof CsmIndent || el instanceof CsmUnindent);
         }
+
+        public int hashCode() {
+            return elements.hashCode();
+        }
+
+        public boolean equals(Object other) {
+            if (other == null)
+                return false;
+            if (!(other instanceof CalculatedSyntaxModel))
+                return false;
+            return elements.equals(other);
+        }
     }
 
     public static class CsmChild implements CsmElement {
@@ -121,7 +133,7 @@ class LexicalDifferenceCalculator {
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterListRemoval(element, observableProperty, nodeList, index);
-        return DifferenceElementCalculator.calculate(original, after);
+        return new DifferenceElementCalculator().calculate(original, after);
     }
 
     List<DifferenceElement> calculateListAdditionDifference(ObservableProperty observableProperty, NodeList<?> nodeList, int index, Node nodeAdded) {
@@ -129,7 +141,7 @@ class LexicalDifferenceCalculator {
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterListAddition(element, observableProperty, nodeList, index, nodeAdded);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, after);
+        List<DifferenceElement> differenceElements = new DifferenceElementCalculator().calculate(original, after);
         // Set the line separator character tokens
         LineSeparator lineSeparator = container.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
         replaceEolTokens(differenceElements, lineSeparator);
@@ -159,7 +171,7 @@ class LexicalDifferenceCalculator {
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterListReplacement(element, observableProperty, nodeList, index, newValue);
-        return DifferenceElementCalculator.calculate(original, after);
+        return new DifferenceElementCalculator().calculate(original, after);
     }
 
     void calculatePropertyChange(NodeText nodeText, Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
@@ -169,7 +181,7 @@ class LexicalDifferenceCalculator {
         CsmElement element = ConcreteSyntaxModel.forClass(observedNode.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, observedNode);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterPropertyChange(element, observedNode, property, oldValue, newValue);
-        List<DifferenceElement> differenceElements = DifferenceElementCalculator.calculate(original, after);
+        List<DifferenceElement> differenceElements = new DifferenceElementCalculator().calculate(original, after);
         Difference difference = new Difference(differenceElements, nodeText, observedNode);
         difference.apply();
     }

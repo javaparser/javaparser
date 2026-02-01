@@ -110,9 +110,11 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.body.VariableDeclarator.class);
 
             add(com.github.javaparser.ast.comments.Comment.class); // First, as it is the base of other comment types
-            add(com.github.javaparser.ast.comments.BlockComment.class);
             add(com.github.javaparser.ast.comments.JavadocComment.class);
+            add(com.github.javaparser.ast.comments.BlockComment.class);
+            add(com.github.javaparser.ast.comments.TraditionalJavadocComment.class);
             add(com.github.javaparser.ast.comments.LineComment.class);
+            add(com.github.javaparser.ast.comments.MarkdownComment.class);
 
             add(com.github.javaparser.ast.expr.ArrayAccessExpr.class);
             add(com.github.javaparser.ast.expr.ArrayCreationExpr.class);
@@ -140,6 +142,7 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.expr.NormalAnnotationExpr.class);
             add(com.github.javaparser.ast.expr.NullLiteralExpr.class);
             add(com.github.javaparser.ast.expr.ObjectCreationExpr.class);
+            add(com.github.javaparser.ast.expr.ComponentPatternExpr.class);
             add(com.github.javaparser.ast.expr.PatternExpr.class);
             add(com.github.javaparser.ast.expr.RecordPatternExpr.class);
             add(com.github.javaparser.ast.expr.SingleMemberAnnotationExpr.class);
@@ -151,6 +154,7 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.expr.TypeExpr.class);
             add(com.github.javaparser.ast.expr.TypePatternExpr.class);
             add(com.github.javaparser.ast.expr.UnaryExpr.class);
+            add(com.github.javaparser.ast.expr.MatchAllPatternExpr.class);
             add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
 
             add(com.github.javaparser.ast.stmt.AssertStmt.class);

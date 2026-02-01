@@ -22,15 +22,13 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.key.*;
-import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 
 /**
  * A visitor that does not return anything.
@@ -125,7 +123,7 @@ public interface VoidVisitor<A> {
 
     void visit(IntersectionType n, A arg);
 
-    void visit(JavadocComment n, A arg);
+    void visit(TraditionalJavadocComment n, A arg);
 
     void visit(LabeledStmt n, A arg);
 
@@ -240,6 +238,10 @@ public interface VoidVisitor<A> {
     void visit(TypePatternExpr n, A arg);
 
     void visit(RecordPatternExpr n, A arg);
+
+    void visit(MatchAllPatternExpr n, A arg);
+
+    void visit(MarkdownComment n, A arg);
 
     void visit(KeyCcatchBreak n, A arg);
 

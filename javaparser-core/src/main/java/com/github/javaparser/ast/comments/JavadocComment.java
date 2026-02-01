@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2025 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -25,8 +25,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JavadocCommentMetaModel;
@@ -34,12 +32,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Node;
 
-/**
- * A Javadoc comment. {@code /∗∗ a comment ∗/}
- *
- * @author Julio Vilmar Gesser
- */
-public class JavadocComment extends Comment {
+public abstract class JavadocComment extends Comment {
 
     public JavadocComment() {
         this(null, "empty");
@@ -60,19 +53,27 @@ public class JavadocComment extends Comment {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-        return v.visit(this, arg);
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJavadocComment() {
+        return true;
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
-        v.visit(this, arg);
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JavadocComment asJavadocComment() {
+        return this;
     }
 
-    public Javadoc parse() {
-        return parseJavadoc(getContent());
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JavadocComment> toJavadocComment() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJavadocComment(Consumer<JavadocComment> action) {
+        action.accept(this);
     }
 
     @Override
@@ -87,37 +88,7 @@ public class JavadocComment extends Comment {
         return JavaParserMetaModel.javadocCommentMetaModel;
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJavadocComment() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JavadocComment asJavadocComment() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJavadocComment(Consumer<JavadocComment> action) {
-        action.accept(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JavadocComment> toJavadocComment() {
-        return Optional.of(this);
-    }
-
-    @Override
-    public String getHeader() {
-        return "/**";
-    }
-
-    @Override
-    public String getFooter() {
-        return "*/";
+    public Javadoc parse() {
+        return parseJavadoc(getContent(), this.isMarkdownComment());
     }
 }

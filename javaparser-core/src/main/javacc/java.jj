@@ -204,6 +204,9 @@ TOKEN_MGR_DECLS :
     private Stack<Token> tokenWorkStack = new Stack<Token>();
     private boolean storeTokens;
     private boolean yieldSupported = false;
+    private ArrayDeque<Token> markdownCommentTokens = new ArrayDeque<Token>();
+    boolean expectMarkdownComment;
+    boolean expectEndOfMarkdownLine;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -236,12 +239,35 @@ TOKEN_MGR_DECLS :
         yieldSupported = true;
     }
 
+    private void createMarkdownComment() {
+        while (!markdownCommentTokens.isEmpty() && TokenTypes.isWhitespace(markdownCommentTokens.peekFirst().kind)) {
+            markdownCommentTokens.removeFirst();
+        }
+        if (!markdownCommentTokens.isEmpty()) {
+            MarkdownComment comment = createMarkdownCommentFromTokenList(markdownCommentTokens);
+            markdownCommentTokens.clear();
+
+            expectMarkdownComment = true;
+            expectEndOfMarkdownLine = false;
+
+            commentsCollection.addComment(comment);
+        }
+    }
+
     private void CommonTokenAction(Token token) {
         // Use an intermediary stack to avoid recursion, see issue 1003
         do {
             tokenWorkStack.push(token);
             token = token.specialToken;
         } while (token != null);
+
+        // A /// sequence only indicates the start of a markdown comment if it is only preceded by whitespace characters
+        // in the line. This variable is used to keep track of this.
+        expectMarkdownComment = true;
+        // A newline token only indicates the end of the markdown comment if it is not preceded by a line comment (e.g.
+        // the second of two consecutive newlines would end the comment). This variable keeps track of whether the next
+        // newline should end the markdown comment (if currently processing one).
+        expectEndOfMarkdownLine = false;
 
         // The stack is now filled with tokens in left-to-right order. Process them.
         while(!tokenWorkStack.empty()) {
@@ -256,9 +282,57 @@ TOKEN_MGR_DECLS :
                 homeToken = token.javaToken;
             }
 
-            if(TokenTypes.isComment(token.kind)) {
+            // While processing the list of tokens, markdown comments are constructed from consecutive line comments
+            // starting with ///. This is done using effectively a second state machine on top of the javacc. The core
+            // observation is that the start of a markdown comment line must be preceded by only whitespace. When
+            // the processing of the token stream starts, EXPECT_MARKDOWN_COMMENT = true since no non-whitespace tokens
+            // have been processed. Processing then proceeds as follows:
+            //  1. If a non-whitespace, non-line-comment token is read, then a markdown comment cannot start on that
+            //     line. Continue reading tokens until the newline while not expecting markdown comments.
+            //  2. If only whitespace tokens have been processed on a line, followed by a line comment starting with
+            //     ///, start processing a markdown comment.
+            //  3. While processing a markdown comment, add all whitespace tokens and line comments to the
+            //     markdownCommentTokens. These will be used to construct the markdown comment later.
+            //  4. If a newline is read while processing a markdown comment, then either the next line will continue
+            //     the comment (i.e. the newline is followed by only non-newline whitespace characters before the
+            //     next line comment starting with ///), or the markdown comment will be ended by another newline
+            //     or non-line-comment.
+            //  5. If the markdown comment is ended, use the markdownCommentTokens buffer to create the actual markdown
+            //     comment node.
+            if (TokenTypes.isEndOfLineToken(token.kind)) {
+                if (expectEndOfMarkdownLine) {
+                    // A newline is processed, but it's the first newline after a markdown comment line
+                    // (expectEndOfMarkdownComment is still true), so it does not end the comment yet.
+                    markdownCommentTokens.add(token);
+                    expectEndOfMarkdownLine = false;
+                } else {
+                    // A newline is processed, but it's not the first newline after a markdown comment line, so
+                    // create the comment now.
+                    createMarkdownComment();
+                }
+                // A new line is started, so until a non-whitespace non-line-comment token is processed, expect a new
+                // markdown comment.
+                expectMarkdownComment = true;
+            } else if (expectMarkdownComment && isMarkdownCommentLineCandidate(token)) {
+                // The next markdown line comment is processed, so add it to the buffer.
+                expectEndOfMarkdownLine = true;
+                markdownCommentTokens.add(token);
+            } else if (expectMarkdownComment && TokenTypes.isWhitespaceButNotEndOfLine(token.kind)) {
+                // Non-newline whitespace characters are always included in the token range for the markdown comment, so
+                // add them to the buffer
+                markdownCommentTokens.add(token);
+            } else if(TokenTypes.isComment(token.kind)) {
+                // A comment token is found, but not one that is a markdown line candidate (those are handled in an
+                // else above). This could be a line comment not starting with ///, or a block comment. At this point,
+                // end the markdown comment and handle the other comment separately.
+                createMarkdownComment();
                 Comment comment = createCommentFromToken(token);
                 commentsCollection.addComment(comment);
+            } else if (!TokenTypes.isWhitespace(token.kind)) {
+                // Any non-whitespace token ends the markdown comment. If the markdownCommentTokens buffer is empty or
+                // only contains whitespace, it is simply cleared.
+                expectMarkdownComment = false;
+                createMarkdownComment();
             }
         }
     }
@@ -841,15 +915,18 @@ MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
 
 TOKEN :
 {
-  < IDENTIFIER: <LETTER> (<PART_LETTER>)* >
+  < IDENTIFIER:
+      <NON_UNDERSCORE_LETTER> (<PART_LETTER>)*
+    | "\u005f" (<PART_LETTER>)+
+  >
 |
-  < JMLIDENTIFIER: "\\" <LETTER> (<PART_LETTER>)* >
+  < JMLIDENTIFIER: "\\"<IDENTIFIER> >
 |
-  < SVIDENTIFIER:  "#" <LETTER> (<PART_LETTER>)* >
+  < SVIDENTIFIER:  "#" <IDENTIFIER> >
 |
-  < KEYIDENTIFIER:  "$" <LETTER> (<PART_LETTER>)* >
+  < KEYIDENTIFIER:  "$" <IDENTIFIER> >
 |
-  < #LETTER: [
+  < #NON_UNDERSCORE_LETTER: [
          "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
          "\u00ba",  "\u00c0"-"\u00d6",  "\u00d8"-"\u00f6",  "\u00f8"-"\u02c1",  "\u02c6"-"\u02d1",  "\u02e0"-"\u02e4",
          "\u02ec",  "\u02ee",  "\u0370"-"\u0374",  "\u0376"-"\u0377",  "\u037a"-"\u037d",  "\u037f",  "\u0386",
@@ -1124,6 +1201,8 @@ TOKEN :
 
 TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
 
+TOKEN: { <UNNAMED_PLACEHOLDER: "_" > }
+
 
 /*************************************************************************************************************
  * THE JAVA LANGUAGE GRAMMAR STARTS HERE                                                                     *
@@ -1184,9 +1263,9 @@ public CompilationUnit CompilationUnit():
     PackageDeclaration packageDeclaration = null;
     NodeList<ImportDeclaration> imports = emptyNodeList();
     ImportDeclaration in = null;
-    NodeList<TypeDeclaration<?>> types = emptyNodeList();
+    NodeList<BodyDeclaration<?>> bodyDeclarations = emptyNodeList();
     ModifierHolder modifier;
-    TypeDeclaration<?> typeDeclaration = null;
+    BodyDeclaration<?> bodyDeclaration = null;
     ModuleDeclaration module = null;
 }
 {
@@ -1199,28 +1278,55 @@ public CompilationUnit CompilationUnit():
             (
                 modifier = Modifiers()
                 (
-                    typeDeclaration = ClassOrInterfaceDeclaration(modifier) { types = add(types, typeDeclaration); }
+                    bodyDeclaration = ClassOrInterfaceDeclaration(modifier) { bodyDeclarations = add(bodyDeclarations, bodyDeclaration); }
                  |
-                    typeDeclaration = RecordDeclaration(modifier)  { types = add(types, typeDeclaration); }
+                    bodyDeclaration = RecordDeclaration(modifier)  { bodyDeclarations = add(bodyDeclarations, bodyDeclaration); }
                  |
-                    typeDeclaration = EnumDeclaration(modifier) { types = add(types, typeDeclaration); }
+                    bodyDeclaration = EnumDeclaration(modifier) { bodyDeclarations = add(bodyDeclarations, bodyDeclaration); }
                  |
-                    typeDeclaration = AnnotationTypeDeclaration(modifier) { types = add(types, typeDeclaration); }
+                    bodyDeclaration = AnnotationTypeDeclaration(modifier) { bodyDeclarations = add(bodyDeclarations, bodyDeclaration); }
                  |
                     module = ModuleDeclaration(modifier)
+                 |
+                    bodyDeclaration = CompactClassMember(modifier) { bodyDeclarations = add(bodyDeclarations, bodyDeclaration); }
                  |
                     ";"
                 )
             )
         )*
         (<EOF> | <CTRL_Z>)
-        { return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module); }
+        {
+            NodeList<TypeDeclaration<?>> types = typeDeclarationsForCu(bodyDeclarations);
+
+            return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module);
+        }
     } catch (ParseException e) {
         recover(EOF, e);
         final CompilationUnit compilationUnit = new CompilationUnit(range(token_source.getHomeToken(), token()), null, new NodeList<ImportDeclaration>(), new NodeList<TypeDeclaration<?>>(), null);
         compilationUnit.setParsed(UNPARSABLE);
         return compilationUnit;
     }
+}
+
+/**
+ * Parses a compact class member (JEP 512) - either a method or field at the top level.
+ * This is used when parsing compact source files with implicit classes.
+ */
+BodyDeclaration<?> CompactClassMember(ModifierHolder modifier):
+{
+    BodyDeclaration<?> member;
+}
+{
+    // Use numerical LOOKAHEAD to distinguish between field and method
+    // Fields: Type Identifier = ... or Type Identifier ; or Type Identifier ,
+    // Methods: Type Identifier ( ...
+    (
+        LOOKAHEAD( FieldDeclaration() )
+        member = FieldDeclaration(modifier)
+     |
+        member = MethodDeclaration(modifier)
+    )
+    { return member; }
 }
 
 /**
@@ -1273,14 +1379,21 @@ ImportDeclaration ImportDeclaration():
     Name name;
     boolean isStatic = false;
     boolean isAsterisk = false;
+    boolean isModule = false;
     JavaToken begin;
 }
 {
     "import" {begin = token();}
     [ "static" { isStatic = true; } ]
-    name = Name()
+    (
+        LOOKAHEAD(3)
+        "module" { isModule = true; }
+        name = Name()
+      |
+        name = Name()
+    )
     [ "." "*" { isAsterisk = true; } ] ";"
-    { return new ImportDeclaration(range(begin, token()), name, isStatic, isAsterisk); }
+    { return new ImportDeclaration(range(begin, token()), name, isStatic, isAsterisk, isModule); }
 }
 
 /*
@@ -1950,7 +2063,6 @@ CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modif
     SimpleName name;
     Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
     NodeList<ReferenceType> throws_ = emptyNodeList();
-    ExplicitConstructorInvocationStmt exConsInv = null;
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
@@ -1967,17 +2079,10 @@ CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modif
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
     "{" { blockBegin=token(); }
-    [
-        LOOKAHEAD(ExplicitConstructorInvocation())
-        exConsInv = ExplicitConstructorInvocation()
-    ]
     stmts = Statements()
     "}"
 
     {
-    if (exConsInv != null) {
-        stmts = prepend(stmts, exConsInv);
-    }
     return new CompactConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, new BlockStmt(range(blockBegin, token()), stmts));
 }
 }
@@ -2502,7 +2607,7 @@ Name ReceiverParameterId():
 }
 {
     [ LOOKAHEAD(Name()) ret = Name() "."] "this"
-    { return new Name(tokenRange(), ret, token().getText()); }
+    { return new Name(tokenRange(), ret, token.image); }
 }
 
 /**
@@ -2516,9 +2621,11 @@ Name ReceiverParameterId():
  *         TypeIdentifier
  * }</pre>
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-ConstructorBody
  * <pre>{@code
  *     ConstructorBody:
- *         { [ExplicitConstructorInvocation] [BlockStatements] }
+ *         { [BlockStatements] ConstructorInvocation [BlockStatements] }
+ *         { [BlockStatements] }
  * }</pre>
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7.1
  * <pre>{@code
@@ -2535,12 +2642,10 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
     SimpleName name;
     Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
     NodeList<ReferenceType> throws_ = emptyNodeList();
-    ExplicitConstructorInvocationStmt exConsInv = null;
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
     ReferenceType throwType;
-    BlockStmt block = null;
 }
 {
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
@@ -2552,26 +2657,12 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
         throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
-    (
-	    "{" { blockBegin=token(); }
-	    [
-	        LOOKAHEAD(ExplicitConstructorInvocation())
-	        exConsInv = ExplicitConstructorInvocation()
-	    ]
-	    stmts = Statements()
-	    "}"
-	|
-		";"
-		{block = new BlockStmt(range(token(),token()),new NodeList<>());}
-	)
+    "{" { blockBegin=token(); }
+    stmts = Statements()
+    "}"
+
     {
-        if (exConsInv != null) {
-            stmts = prepend(stmts, exConsInv);
-        }
-        if(block == null){
-            block = new BlockStmt(range(blockBegin, token()), stmts);
-        }
-        return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, block, parameters.b);
+        return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);
     }
 }
 
@@ -3014,12 +3105,12 @@ Name Name():
     Name ret;
 }
 {
-    Identifier() { ret = new Name(tokenRange(), null, token().getText()); }
+    Identifier() { ret = new Name(tokenRange(), null, token.image); }
     (
         LOOKAHEAD(2)
         "."
         Identifier()
-        { ret = new Name(range(ret, token()), ret, token().getText()); }
+        { ret = new Name(range(ret, token()), ret, token.image); }
     )*
     { return ret; }
 }
@@ -3034,11 +3125,7 @@ SimpleName SimpleName():
     SimpleName ret;
 }
 {
-    //(
-    //  <SVIDENTIFIER> { ret = new KeyProgramVariableSV(range(token(),token()), token().getText()); }
-    //|
-      Identifier() { ret = new SimpleName(tokenRange(), token().getText()); }
-    //)
+    Identifier() { ret = new SimpleName(tokenRange(), token.image); }
     { return ret; }
 }
 
@@ -3085,7 +3172,7 @@ String Identifier():
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
-        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> |
+        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> | "_" | <ASSERT> |
         // overwritten by Key/SV but still valid in Java
         "model" | "ghost" | "two_state" | "no_state" | "source" | "merge_point" | "exec" | "ccatch" | "ccat" |
         <IDENTIFIER> | <SVIDENTIFIER> | <KEYIDENTIFIER> | <JMLIDENTIFIER>
@@ -3131,7 +3218,7 @@ Expression Expression():
          |
             "::"
             [typeArgs = TypeArguments()]
-            (Identifier() | "new") { ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token().getText()); }
+            (Identifier() | "new") { ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image); }
         )
     ]
 
@@ -3417,9 +3504,18 @@ Expression EqualityExpression():
     { return ret; }
 }
 
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * <pre>{@code
+ *     Pattern:
+ *       TypePattern
+ *       RecordPattern
+ * }<pre>
+ */
 PatternExpr PatternExpression():
 {
-    PatternExpr ret;
+  PatternExpr ret;
 }
 {
 	(
@@ -3432,11 +3528,34 @@ PatternExpr PatternExpression():
 }
 
 /**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * https://openjdk.org/jeps/456
+ * <pre>{@code
+ *     ComponentPattern:
+ *       Pattern
+ *       MatchAllPattern
+ * }<pre>
+ */
+ComponentPatternExpr ComponentPatternExpression():
+{
+    ComponentPatternExpr ret;
+}
+{
+	(
+	    LOOKAHEAD(MatchAllPatternExpression())
+	    ret = MatchAllPatternExpression()
+	  |
+        ret = PatternExpression()
+	)
+    { return ret; }
+}
+
+/**
  * https://openjdk.java.net/jeps/375
  * The instanceof grammar is extended accordingly:
  * <pre>{@code
- *     Pattern:
- *         ReferenceType Identifier
+ *     TypePattern:
+ *         LocalVariableDeclaration
  * }<pre>
  */
 TypePatternExpr TypePatternExpression():
@@ -3454,18 +3573,19 @@ TypePatternExpr TypePatternExpression():
 
 /**
  * https://openjdk.org/jeps/440
+ * https://openjdk.org/jeps/456
  * <pre><code>
  * RecordPattern:
- *     ReferenceType ( [PatternList] )
- * PatternList:
- *     Pattern {, Pattern }
+ *     ReferenceType ( [ComponentPatternList] )
+ * ComponentPatternList:
+ *     ComponentPattern {, ComponentPattern }
  * </code></pre>
  */
 RecordPatternExpr RecordPatternExpression():
 {
 	ModifierHolder modifier;
 	ReferenceType type;
-	NodeList<PatternExpr> patternList;
+	NodeList<ComponentPatternExpr> patternList;
 }
 {
 	modifier = Modifiers()
@@ -3475,23 +3595,41 @@ RecordPatternExpr RecordPatternExpression():
 }
 
 /**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * https://openjdk.org/jeps/456
+ * <pre>{@code
+ *     MatchAllPattern:
+ *       _
+ * }<pre>
+ */
+MatchAllPatternExpr MatchAllPatternExpression():
+{
+ModifierHolder modifier;
+}
+{
+    modifier = Modifiers()
+    "_"
+    { return new MatchAllPatternExpr(range(token(), token()), modifier.modifiers); }
+}
+
+/**
  * https://openjdk.org/jeps/440
  * <pre><code>
  * PatternList:
  *     Pattern {, Pattern }
  * </code></pre>
  */
-NodeList<PatternExpr> PatternList():
+NodeList<ComponentPatternExpr> PatternList():
 {
-    PatternExpr pattern;
-	NodeList<PatternExpr> ret = new NodeList<>();
+    ComponentPatternExpr pattern;
+	NodeList<ComponentPatternExpr> ret = new NodeList<>();
 }
 {
 	"("
-    pattern = PatternExpression() { ret.add(pattern); }
+    pattern = ComponentPatternExpression() { ret.add(pattern); }
     (
         ","
-        pattern = PatternExpression() { ret.add(pattern); }
+        pattern = ComponentPatternExpression() { ret.add(pattern); }
     )*
 	")"
     { return ret; }
@@ -3983,7 +4121,7 @@ Expression PrimaryPrefix():
             [ typeArgs = TypeArguments() ]
             (Identifier() | "new")
             {
-                ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token().getText());
+                ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image);
             }
         )
     |
@@ -4124,17 +4262,17 @@ Expression Literal():
 }
 {
     (
-        <INTEGER_LITERAL> { ret = new IntegerLiteralExpr(tokenRange(), token().getText()); }
+        <INTEGER_LITERAL> { ret = new IntegerLiteralExpr(tokenRange(), token.image); }
      |
-        <LONG_LITERAL> { ret = new LongLiteralExpr(tokenRange(), token().getText()); }
+        <LONG_LITERAL> { ret = new LongLiteralExpr(tokenRange(), token.image); }
      |
-        <FLOATING_POINT_LITERAL> { ret = new DoubleLiteralExpr(tokenRange(), token().getText()); }
+        <FLOATING_POINT_LITERAL> { ret = new DoubleLiteralExpr(tokenRange(), token.image); }
      |
-        <CHARACTER_LITERAL> { ret = new CharLiteralExpr(tokenRange(), unquote(token().getText())); }
+        <CHARACTER_LITERAL> { ret = new CharLiteralExpr(tokenRange(), unquote(token.image)); }
      |
-        <STRING_LITERAL> { ret = new StringLiteralExpr(tokenRange(), unquote(token().getText())); }
+        <STRING_LITERAL> { ret = new StringLiteralExpr(tokenRange(), unquote(token.image)); }
      |
-        <TEXT_BLOCK_LITERAL> { ret = new TextBlockLiteralExpr(tokenRange(), unTripleQuote(token().getText())); }
+        <TEXT_BLOCK_LITERAL> { ret = new TextBlockLiteralExpr(tokenRange(), unTripleQuote(token.image)); }
      |
         ret = BooleanLiteral()
      |
@@ -4407,7 +4545,7 @@ Statement Statement():
     try {
         (
             LOOKAHEAD(2) ret = LabeledStatement()
-            | ret = AssertStatement()
+            | LOOKAHEAD(3) ret = AssertStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
             | LOOKAHEAD(2) ret = KeyMethodCallStatement()
             | LOOKAHEAD(KeyMethodBodyStatement()) ret = KeyMethodBodyStatement()
@@ -4577,10 +4715,23 @@ Statement BlockStatement():
             LOOKAHEAD( YieldStatement() )
             ret = YieldStatement()
          |
+         	// try assert statement separate from more general Statement() because assert can be confused with VariableDeclarationExpression sometimes
+            LOOKAHEAD( AssertStatement() )
+            ret = AssertStatement()
+         |
             LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()
             ";"
             { ret = new ExpressionStmt(range(expr, token()), expr); }
+         |
+            // In Java >= 25, explicit constructor invocations are allowed anywhere in the body of a constructor
+            // Adding support for that here isn't 100% correct, since this would allow multiple constructor invocations
+            // in a constructor body or block not in a constructor body, but handling this correctly would require
+            // larger changes through the grammar due to simplifications made elsewhere.
+            // Handling it here should not be a problem since we assume input code compiles. The compiler would have
+            // already caught the incorrect cases above.
+            LOOKAHEAD( ExplicitConstructorInvocation() )
+            ret = ExplicitConstructorInvocation()
          |
             ret = Statement()
         )
@@ -6811,7 +6962,7 @@ KeyContextStatementBlock StartBlock() :
         ( LOOKAHEAD(2)
            ( <DOT>
              ( LOOKAHEAD(2)
-		         pm=MethodSignatureSV() "@" tr = TypeSV(emptyNodeList())  "(" (sv = ExpressionSV())? ")"
+		         pm=KeyMethodSignatureSV() "@" tr = TypeSV(emptyNodeList())  "(" (sv = ExpressionSV())? ")"
 		       |
 	             ec = ExecutionContextSV() )
 	       )?

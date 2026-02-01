@@ -17,7 +17,7 @@
 	<groupId>org.key-project.proofjava</groupId>
 	<artifactId>javaparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.27.0-K10-SNAPSHOT</version>
+	<version>3.28.0-K10-SNAPSHOT</version>
 
 	<name>javaparser-parent</name>
 	<url>https://github.com/javaparser</url>
@@ -156,11 +156,11 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>21</java.version>
-		<byte-buddy.version>1.17.5</byte-buddy.version>
+		<byte-buddy.version>1.18.3</byte-buddy.version>
 		<!--
 		<argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'</argLine>
 		-->
-		<build.timestamp>2025-06-14T00:00:00Z</build.timestamp>
+		<build.timestamp>2026-01-10T00:00:00Z</build.timestamp>
 		<jacoco.javaagent/>
 	</properties>
 
@@ -177,14 +177,7 @@
 	</issueManagement>
 
 	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
+	<!-- According to the documentation https://central.sonatype.org/publish/publish-portal-maven/, it is no longer necessary to configure a repository -->
 	</distributionManagement>
 
 
@@ -199,6 +192,18 @@
 					<release>${java.version}</release>
 					<useIncrementalCompilation>false</useIncrementalCompilation>
 				</configuration>
+			</plugin>
+			<plugin>
+					<groupId>org.sonatype.central</groupId>
+					<artifactId>central-publishing-maven-plugin</artifactId>
+					<configuration>
+						<excludeArtifacts>
+							<excludeArtifact>com.github.javaparser:javaparser-core-testing</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-core-testing-bdd</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-symbol-solver-testing</excludeArtifact>
+							<excludeArtifact>com.github.javaparser:javaparser-core-metamodel-generator</excludeArtifact>
+						</excludeArtifacts>
+					</configuration>
 			</plugin>
 		</plugins>
 		<pluginManagement>
@@ -216,12 +221,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.14.0</version>
+                    <version>3.14.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-gpg-plugin</artifactId>
-					<version>3.2.7</version>
+                    <version>3.2.8</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -231,7 +236,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.4.2</version>
+                    <version>3.5.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.sonatype.plugins</groupId>
@@ -247,12 +252,10 @@
 
 
 				<plugin>
-					<!-- See also: https://central.sonatype.org/pages/apache-maven.html#performing-a-release-deployment-with-the-maven-release-plugin -->
-					<!-- Plugin for preparing and performing a release (to ossrh / maven central). -->
-					<!-- TODO: Consider switching to using `mvn versions:set` and org.sonatype.plugins:nexus-staging-maven-plugin -->
+                    <!-- Plugin for preparing and performing a release (to sonatype central publishing portal / maven central). -->
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>3.1.1</version>
+                    <version>3.3.1</version>
 					<configuration>
 						<!-- When updating versions during release, synchronise versions of sub-modules with the parent-pom. -->
 						<autoVersionSubmodules>true</autoVersionSubmodules>
@@ -262,27 +265,66 @@
 						<releaseProfiles>run-release</releaseProfiles>
 						<!-- Disable pushing of changes (i.e. false, for local testing) -->
 						<pushChanges>false</pushChanges>
+						<!-- NEW: Disable deployment during release:perform -->
+						<goals>deploy</goals>
+                    </configuration>
+                </plugin>
+				<!-- NEW: Disable the old maven-deploy-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>3.1.4</version>
+					<executions>
+						<execution>
+							<id>default-deploy</id>
+							<phase>deploy</phase>
+							<goals>
+								<goal>deploy</goal>
+							</goals>
+							<configuration>
+								<skip>true</skip>
+							</configuration>
+						</execution>
+					</executions>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+				<!-- NEW: Plugin for publishing to Maven Central -->
+				<plugin>
+					<groupId>org.sonatype.central</groupId>
+					<artifactId>central-publishing-maven-plugin</artifactId>
+					<version>0.10.0</version>
+					<extensions>true</extensions>
+					<configuration>
+						<publishingServerId>central</publishingServerId>
+						<!-- Automatic publication after validation -->
+						<autoPublish>true</autoPublish>
+						<!-- Wait until the publication is effective -->
+						<waitUntil>published</waitUntil>
+						<!-- Readable name to identify the deployment -->
+						<deploymentName>${project.artifactId}-${project.version}</deploymentName>
 					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.3.1</version>
+                    <version>3.4.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-scm-plugin</artifactId>
-					<version>2.1.0</version>
+                    <version>2.2.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>3.3.1</version>
+                    <version>3.4.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.13</version>
+                    <version>0.8.14</version>
                     <configuration>
                         <includes>
                             <include>
@@ -315,7 +357,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.11.2</version>
+                    <version>3.12.0</version>
 					<configuration>
 						<source>${java.version}</source>
 						<additionalOptions>
@@ -339,17 +381,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.5.2</version>
+                    <version>3.5.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
-                    <version>3.5.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.1.4</version>
+                    <version>3.6.3</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -364,12 +401,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>3.8.1</version>
+                    <version>3.9.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>versions-maven-plugin</artifactId>
-					<version>2.18.0</version>
+                    <version>2.20.1</version>
 					<configuration>
 						<generateBackupPoms>false</generateBackupPoms>
 					</configuration>
@@ -377,6 +414,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-checkstyle-plugin</artifactId>
+                    <!-- This is the last version with Java 8 support -->
 					<version>3.6.0</version>
 					<configuration>
 						<configLocation>dev-files/JavaParser-CheckStyle.xml</configLocation>
@@ -387,7 +425,7 @@
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
-                            <version>10.25.0</version>
+                            <version>10.26.1</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -395,7 +433,7 @@
 					<groupId>com.diffplug.spotless</groupId>
 					<artifactId>spotless-maven-plugin</artifactId>
 					<!-- This is the last version with Java 8 support -->
-                    <version>2.44.5</version>
+                    <version>2.46.1</version>
 					<configuration>
 						<java>
 							<!-- google-java-format, but better: see https://github.com/palantir/palantir-java-format -->
@@ -438,12 +476,12 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-                <version>33.4.8-jre</version>
+                <version>33.5.0-jre</version>
             </dependency>
 			<dependency>
 				<groupId>org.checkerframework</groupId>
 				<artifactId>checker-qual</artifactId>
-				<version>3.49.4</version>
+				<version>3.53.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hamcrest</groupId>
@@ -454,7 +492,7 @@
 			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
-				<version>5.13.1</version>
+				<version>5.14.2</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -565,7 +603,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>3.2.7</version>
+                        <version>3.2.8</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>

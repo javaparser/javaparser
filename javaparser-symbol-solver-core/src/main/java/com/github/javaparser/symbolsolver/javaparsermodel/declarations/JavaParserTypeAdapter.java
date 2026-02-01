@@ -31,10 +31,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -137,6 +134,10 @@ public class JavaParserTypeAdapter<
                         return SymbolReference.solved(new JavaParserAnnotationDeclaration(
                                 (com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
                     }
+                    if (internalType instanceof RecordDeclaration) {
+                        return SymbolReference.solved(new JavaParserRecordDeclaration(
+                                (com.github.javaparser.ast.body.RecordDeclaration) internalType, typeSolver));
+                    }
                     throw new UnsupportedOperationException();
                 }
                 if (name.startsWith(prefix) && name.length() > prefix.length()) {
@@ -200,6 +201,19 @@ public class JavaParserTypeAdapter<
         return wrappedNode.getAnnotations().stream()
                 .map(annotation -> annotation.resolve())
                 .collect(Collectors.toSet());
+    }
+
+    /*
+     * Returns a set of the declared methods on this type
+     */
+    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+        Set<ResolvedMethodDeclaration> methods = new HashSet<>();
+        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
+            if (member instanceof MethodDeclaration) {
+                methods.add(new JavaParserMethodDeclaration((MethodDeclaration) member, typeSolver));
+            }
+        }
+        return methods;
     }
 
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {

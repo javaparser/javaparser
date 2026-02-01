@@ -26,8 +26,9 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
@@ -682,7 +683,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JavadocComment n, final A arg) {
+    public Visitable visit(final TraditionalJavadocComment n, final A arg) {
         NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setAssociatedSpecificationComments(associatedSpecificationComments);
@@ -1916,7 +1917,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final RecordPatternExpr n, final A arg) {
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
-        NodeList<PatternExpr> patternList = modifyList(n.getPatternList(), arg);
+        NodeList<ComponentPatternExpr> patternList = modifyList(n.getPatternList(), arg);
         Type type = (Type) n.getType().accept(this, arg);
         NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -1925,6 +1926,26 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setModifiers(modifiers);
         n.setPatternList(patternList);
         n.setType(type);
+        n.setAssociatedSpecificationComments(associatedSpecificationComments);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final MatchAllPatternExpr n, final A arg) {
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
+        NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setModifiers(modifiers);
+        n.setAssociatedSpecificationComments(associatedSpecificationComments);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final MarkdownComment n, final A arg) {
+        NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setAssociatedSpecificationComments(associatedSpecificationComments);
         n.setComment(comment);
         return n;

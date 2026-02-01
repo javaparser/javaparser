@@ -57,10 +57,9 @@ class ParseResultTest {
         assertThat(result.getProblems().size()).isEqualTo(1);
 
         Problem problem = result.getProblem(0);
-
-        // weigl relaxed due to new tokens
         assertThat(problem.getMessage())
-                .startsWith("Parse error. Found \"{\", expected one of");
+                .isEqualTo(
+                        "Parse error. Found \"{\", expected one of  \"_\" \"assert\" \"enum\" \"exports\" \"module\" \"open\" \"opens\" \"permits\" \"provides\" \"record\" \"requires\" \"sealed\" \"strictfp\" \"to\" \"transitive\" \"uses\" \"when\" \"with\" \"yield\" <IDENTIFIER>");
 
         assertThat(result.toString())
                 .startsWith("Parsing failed:" + LineSeparator.SYSTEM + "(line 1,col 1) Parse error.");

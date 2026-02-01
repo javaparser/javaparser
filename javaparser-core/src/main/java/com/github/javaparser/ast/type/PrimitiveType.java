@@ -34,15 +34,16 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
+import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import org.jspecify.annotations.NonNull;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Node;
-import java.util.Objects;
-import org.jspecify.annotations.NonNull;
 
 /**
  * A primitive type.
@@ -86,7 +87,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return new PrimitiveType(Primitive.DOUBLE);
     }
 
-    public enum Primitive {
+    public enum Primitive implements Stringable {
 
         BOOLEAN("Boolean", "Z"),
         CHAR("Character", "C"),

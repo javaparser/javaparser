@@ -43,6 +43,8 @@ public class ImportDeclarationMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel isAsteriskPropertyMetaModel;
 
+    public PropertyMetaModel isModulePropertyMetaModel;
+
     public PropertyMetaModel isStaticPropertyMetaModel;
 
     public PropertyMetaModel namePropertyMetaModel;

@@ -56,7 +56,7 @@ public class KeyProgramVariableSV extends Expression {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyProgramVariableSV setText(final String text) {
         assertNotNull(text);
-        if (text == this.text) {
+        if (text.equals(this.text)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TEXT, this.text, text);

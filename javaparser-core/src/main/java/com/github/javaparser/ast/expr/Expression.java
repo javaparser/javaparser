@@ -26,7 +26,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.key.KeyEscapeExpression;
-import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.KeyPassiveExpression;
 import com.github.javaparser.ast.key.KeyRangeExpression;
 import com.github.javaparser.ast.key.KeyTransactionStatement;
 import com.github.javaparser.ast.key.sv.KeyExpressionSV;
@@ -886,22 +886,17 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isPatternExpr() {
+    public boolean isComponentPatternExpr() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public PatternExpr asPatternExpr() {
-        throw new IllegalStateException(f("%s is not PatternExpr, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<PatternExpr> toPatternExpr() {
+    public Optional<ComponentPatternExpr> toComponentPatternExpr() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifPatternExpr(Consumer<PatternExpr> action) {
+    public void ifComponentPatternExpr(Consumer<ComponentPatternExpr> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -920,7 +915,41 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifRecordPatternExpr(Consumer<RecordPatternExpr> action) {
+    public boolean isMatchAllPatternExpr() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public MatchAllPatternExpr asMatchAllPatternExpr() {
+        throw new IllegalStateException(f("%s is not MatchAllPatternExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<MatchAllPatternExpr> toMatchAllPatternExpr() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifMatchAllPatternExpr(Consumer<MatchAllPatternExpr> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isPatternExpr() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public PatternExpr asPatternExpr() {
+        throw new IllegalStateException(f("%s is not PatternExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<PatternExpr> toPatternExpr() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifPatternExpr(Consumer<PatternExpr> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -1054,5 +1083,12 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyProgramVariableSV(Consumer<KeyProgramVariableSV> action) {
+    }
+
+    public ComponentPatternExpr asComponentPatternExpr() {
+        throw new IllegalStateException(f("%s is not ComponentPatternExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public void ifRecordPatternExpr(Consumer<RecordPatternExpr> action) {
     }
 }

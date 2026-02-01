@@ -75,7 +75,7 @@ public class KeyTypeSV extends Type {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyTypeSV setText(final String text) {
         assertNotNull(text);
-        if (text == this.text) {
+        if (text.equals(this.text)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TEXT, this.text, text);

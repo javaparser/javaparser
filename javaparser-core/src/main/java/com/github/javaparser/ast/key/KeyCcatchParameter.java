@@ -15,6 +15,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.KeyCcatchParameterMetaModel;
 import org.jspecify.annotations.Nullable;
+import java.util.Objects;
 
 public class KeyCcatchParameter extends KeyCcatchBranch {
 

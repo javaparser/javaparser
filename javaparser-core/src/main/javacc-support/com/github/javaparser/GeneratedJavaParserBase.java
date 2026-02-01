@@ -21,16 +21,15 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.type.ArrayType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.Pair;
 
 import java.util.*;
@@ -315,7 +314,7 @@ abstract class GeneratedJavaParserBase {
         if (ret instanceof EnclosedExpr) {
             Expression inner = ((EnclosedExpr) ret).getInner();
             SimpleName id = ((NameExpr) inner).getName();
-            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().orElse(null), new NodeList<>(), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
+            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(id.getTokenRange().orElse(null), new NodeList<>(), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
             ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();
@@ -446,5 +445,47 @@ abstract class GeneratedJavaParserBase {
 
     void setYieldSupported() {
         getTokenSource().setYieldSupported();
+    }
+
+    NodeList<TypeDeclaration<?>> typeDeclarationsForCu(NodeList<BodyDeclaration<?>> bodyDeclarations) {
+        NodeList<TypeDeclaration<?>> types = emptyNodeList();
+        // If all the body declarations are type declarations, then this is not a compact class declaration, so nothing
+        // special needs to be done. Just return the declarations cast to type declarations.
+        if (bodyDeclarations.stream().allMatch(BodyDeclaration::isTypeDeclaration)) {
+            for (BodyDeclaration<?> bodyDeclaration : bodyDeclarations) {
+                types.add(bodyDeclaration.asTypeDeclaration());
+            }
+            return types;
+        }
+
+        // If the above return wasn't hit, then this is a compact class declaration, so the type declaration for the
+        // implicit class must be created manually and all the found body declarations added as children of that.
+        // We also know at this point that at least one body declaration exists, otherwise allMatch would have matched
+        // the empty list.
+
+        ClassOrInterfaceDeclaration compactClass = new ClassOrInterfaceDeclaration(
+                new NodeList<Modifier>(),
+                false,
+                "$COMPACT_CLASS"
+        );
+
+        Optional<TokenRange> maybeStartingRange = bodyDeclarations.get(0).getTokenRange();
+        Optional<TokenRange> maybeEndRange = bodyDeclarations.get(bodyDeclarations.size() - 1).getTokenRange();
+        if (maybeStartingRange.isPresent() && maybeEndRange.isPresent()) {
+            JavaToken begin = maybeStartingRange.get().getBegin();
+            JavaToken end = maybeEndRange.get().getEnd();
+            TokenRange tokenRange = new TokenRange(begin, end);
+
+            compactClass.setTokenRange(tokenRange);
+        }
+        compactClass.setCompact(true);
+        compactClass.addModifier(Modifier.Keyword.FINAL);
+
+        for (BodyDeclaration<?> bodyDeclaration : bodyDeclarations) {
+            compactClass.addMember(bodyDeclaration);
+        }
+
+        types.add(compactClass);
+        return types;
     }
 }

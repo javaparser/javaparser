@@ -42,8 +42,8 @@ import com.github.javaparser.ast.body.ReceiverParameter;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.ArrayAccessExpr;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.ArrayInitializerExpr;
@@ -1102,7 +1102,7 @@ public class NodeFinderVisitor extends VoidVisitorAdapter<Range> {
     }
 
     @Override
-    public void visit(final JavadocComment n, final Range arg) {
+    public void visit(final TraditionalJavadocComment n, final Range arg) {
         if (n.getComment().isPresent()) {
             n.getComment().get().accept(this, arg);
             if (selectedNode != null)

@@ -23,8 +23,9 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -1104,7 +1105,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JavadocComment n, final A arg) {
+    public R visit(final TraditionalJavadocComment n, final A arg) {
         R result;
         if (n.getAssociatedSpecificationComments().isPresent()) {
             result = n.getAssociatedSpecificationComments().get().accept(this, arg);
@@ -3403,6 +3404,43 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getAssociatedSpecificationComments().isPresent()) {
+            result = n.getAssociatedSpecificationComments().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final MatchAllPatternExpr n, final A arg) {
+        R result;
+        {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getAssociatedSpecificationComments().isPresent()) {
+            result = n.getAssociatedSpecificationComments().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final MarkdownComment n, final A arg) {
+        R result;
         if (n.getAssociatedSpecificationComments().isPresent()) {
             result = n.getAssociatedSpecificationComments().get().accept(this, arg);
             if (result != null)

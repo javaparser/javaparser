@@ -87,7 +87,7 @@ public class KeyMetaConstruct extends Statement {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMetaConstruct setKind(final String kind) {
         assertNotNull(kind);
-        if (kind == this.kind) {
+        if (kind.equals(this.kind)) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.KIND, this.kind, kind);

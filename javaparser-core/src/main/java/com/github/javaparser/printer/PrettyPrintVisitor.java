@@ -32,10 +32,7 @@ import java.util.stream.Collectors;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
@@ -292,53 +289,82 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final ClassOrInterfaceDeclaration n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-        printMemberAnnotations(n.getAnnotations(), arg);
-        printModifiers(n.getModifiers());
-        if (n.isInterface()) {
-            printer.print("interface ");
-        } else {
-            printer.print("class ");
-        }
-        n.getName().accept(this, arg);
-        printTypeParameters(n.getTypeParameters(), arg);
-        if (!n.getExtendedTypes().isEmpty()) {
-            printer.print(" extends ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getExtendedTypes().iterator(); i.hasNext(); ) {
-                final ClassOrInterfaceType c = i.next();
-                c.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(", ");
+        if (!n.isCompact()) {
+            printMemberAnnotations(n.getAnnotations(), arg);
+            printModifiers(n.getModifiers());
+            if (n.isInterface()) {
+                printer.print("interface ");
+            } else {
+                printer.print("class ");
+            }
+            n.getName().accept(this, arg);
+            printTypeParameters(n.getTypeParameters(), arg);
+            if (!n.getExtendedTypes().isEmpty()) {
+                printer.print(" extends ");
+                for (final Iterator<ClassOrInterfaceType> i = n.getExtendedTypes().iterator(); i.hasNext(); ) {
+                    final ClassOrInterfaceType c = i.next();
+                    c.accept(this, arg);
+                    if (i.hasNext()) {
+                        printer.print(", ");
+                    }
                 }
             }
-        }
-        if (!n.getImplementedTypes().isEmpty()) {
-            printer.print(" implements ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
-                final ClassOrInterfaceType c = i.next();
-                c.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(", ");
+            if (!n.getImplementedTypes().isEmpty()) {
+                printer.print(" implements ");
+                for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
+                    final ClassOrInterfaceType c = i.next();
+                    c.accept(this, arg);
+                    if (i.hasNext()) {
+                        printer.print(", ");
+                    }
                 }
             }
-        }
-        if (!n.getPermittedTypes().isEmpty()) {
-            printer.print(" permits ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getPermittedTypes().iterator(); i.hasNext(); ) {
-                final ClassOrInterfaceType c = i.next();
-                c.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(", ");
+            if (!n.getPermittedTypes().isEmpty()) {
+                printer.print(" permits ");
+                for (final Iterator<ClassOrInterfaceType> i = n.getPermittedTypes().iterator(); i.hasNext(); ) {
+                    final ClassOrInterfaceType c = i.next();
+                    c.accept(this, arg);
+                    if (i.hasNext()) {
+                        printer.print(", ");
+                    }
                 }
             }
+            printer.println(" {");
+            printer.indent();
         }
-        printer.println(" {");
-        printer.indent();
         if (!isNullOrEmpty(n.getMembers())) {
-            printMembers(n.getMembers(), arg);
+            if (n.isCompact()) {
+                printCompactClassMembers(n.getMembers(), arg);
+            } else {
+                printMembers(n.getMembers(), arg);
+            }
         }
         printOrphanCommentsEnding(n);
-        printer.unindent();
-        printer.print("}");
+        if (!n.isCompact()) {
+            printer.unindent();
+            printer.print("}");
+        }
+    }
+
+    /**
+     * Print a list of compact class members. This is similar to {@see printMembers} with the exception that the
+     * empty lines preceding the first member and following the last member are not printed.
+     */
+    protected void printCompactClassMembers(final NodeList<BodyDeclaration<?>> members, final Void arg) {
+        BodyDeclaration<?> member;
+        int size = members.size();
+        for (int i = 0; i < size; i++) {
+            member = members.get(i);
+            if (i > 0) {
+                // Only print the preceding line if this is not the first member in the list
+                printer.println();
+            }
+            member.accept(this, arg);
+            if (i < size - 1) {
+                // Only print the following line if this is not the last member in the list
+                printer.println();
+            }
+        }
     }
 
     @Override
@@ -382,7 +408,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(final JavadocComment n, final Void arg) {
+    public void visit(final TraditionalJavadocComment n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         if (configuration.isPrintComments() && configuration.isPrintJavadoc()) {
             printer.println(n.getHeader());
@@ -1083,6 +1109,13 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         n.getType().accept(this, arg);
         printArguments(n.getPatternList(), arg);
+    }
+
+    @Override
+    public void visit(final MatchAllPatternExpr n, final Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(MatchAllPatternExpr.UNNAMED_PLACEHOLDER);
     }
 
     @Override
@@ -1999,6 +2032,25 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(final MarkdownComment n, final Void arg) {
+        if (configuration.isIgnoreComments()) {
+            return;
+        }
+        final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
+        String[] lines = commentContent.split("\\R");
+        for (int i = 0; i < (lines.length - 1); i++) {
+            printer.print(n.getHeader());
+            printer.print(lines[i]);
+            // Avoids introducing indentation in markdown comments. ie: do not use println() as it would trigger
+            // indentation
+            // at the next print call.
+            printer.print(configuration.getEndOfLineCharacter());
+        }
+        printer.print(n.getHeader());
+        printer.println(lines[lines.length - 1]);
+    }
+
+    @Override
     public void visit(LambdaExpr n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
@@ -2075,6 +2127,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("import ");
         if (n.isStatic()) {
             printer.print("static ");
+        }
+        if (n.isModule()) {
+            printer.print("module ");
         }
         n.getName().accept(this, arg);
         if (n.isAsterisk()) {

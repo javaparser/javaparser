@@ -2,11 +2,13 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>org.key-project.proofjava</groupId>
-        <version>3.27.0-K10-SNAPSHOT</version>
+        <version>3.28.0-K10-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javaparser-core-testing</artifactId>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<url>https://github.com/javaparser</url>
     <description>The test suite for javaparser-core</description>
 
     <licenses>
@@ -27,14 +29,6 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <!-- no need to release this module -->
-                    <skip>true</skip>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -71,7 +65,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.27.3</version>
+            <version>3.27.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>

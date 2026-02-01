@@ -21,6 +21,15 @@
 
 package com.github.javaparser;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.CURRENT;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Range.range;
+import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -35,20 +44,10 @@ import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.YamlPrinter;
 import com.github.javaparser.utils.LineSeparator;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.CURRENT;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.Range.range;
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.*;
 
 class JavaParserTest {
 

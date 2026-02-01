@@ -30,6 +30,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
+import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -41,10 +42,10 @@ import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import org.jspecify.annotations.NonNull;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.Objects;
-import org.jspecify.annotations.NonNull;
 
 /**
  * A definition of a class or interface.<br>{@code class X { ... }}<br>{@code interface X { ... }}
@@ -54,6 +55,8 @@ import org.jspecify.annotations.NonNull;
 public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements NodeWithImplements<ClassOrInterfaceDeclaration>, NodeWithExtends<ClassOrInterfaceDeclaration>, NodeWithTypeParameters<ClassOrInterfaceDeclaration>, NodeWithAbstractModifier<ClassOrInterfaceDeclaration>, NodeWithFinalModifier<ClassOrInterfaceDeclaration>, Resolvable<ResolvedReferenceTypeDeclaration> {
 
     private boolean isInterface;
+
+    private boolean isCompact;
 
     private NodeList<TypeParameter> typeParameters;
 
@@ -81,6 +84,21 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ClassOrInterfaceDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, boolean isInterface, SimpleName name, NodeList<TypeParameter> typeParameters, NodeList<ClassOrInterfaceType> extendedTypes, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<ClassOrInterfaceType> permittedTypes, NodeList<BodyDeclaration<?>> members, boolean isCompact) {
+        super(tokenRange, modifiers, annotations, name, members);
+        setInterface(isInterface);
+        setTypeParameters(typeParameters);
+        setExtendedTypes(extendedTypes);
+        setImplementedTypes(implementedTypes);
+        setPermittedTypes(permittedTypes);
+        setCompact(isCompact);
+        customInitialization();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassOrInterfaceDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, boolean isInterface, SimpleName name, NodeList<TypeParameter> typeParameters, NodeList<ClassOrInterfaceType> extendedTypes, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<ClassOrInterfaceType> permittedTypes, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
         setInterface(isInterface);
@@ -89,6 +107,67 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         setImplementedTypes(implementedTypes);
         setPermittedTypes(permittedTypes);
         customInitialization();
+    }
+
+    /**
+     * For LPP support, the name and modifiers of a compact class must be marked as phantom nodes. This is a
+     * convenience method that updates the PHANTOM_KEY for all relevant nodes when isCompact is changed.
+     *
+     * @param newIsCompact the new value of isCompact. Needed because observers are notified of the change
+     *                     before the value of the field is changed.
+     */
+    private void processIsCompactChange(boolean newIsCompact) {
+        SimpleName name = getName();
+        if (name != null) {
+            getName().setData(PHANTOM_KEY, newIsCompact);
+        }
+        NodeList<Modifier> modifiers = getModifiers();
+        if (modifiers != null) {
+            getModifiers().forEach(modifier -> {
+                if (modifier.getKeyword().equals(Modifier.Keyword.FINAL)) {
+                    modifier.setData(PHANTOM_KEY, newIsCompact);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void customInitialization() {
+        // The LPP crashes if the name or modifiers of a class don't have a range, but since the compact class name
+        // is synthetic, this will always be the case for the implicit name and final modifier. There is already
+        // a mechanism to handle this case in the LPP in the form of the `PHANTOM_KEY` data property. If this is
+        // set to true for a given, the LPP does not attempt to find the range for this node.
+        // To handle this for classes, an observer is created for all ClassOrInterfaceDeclarations to monitor
+        // name/modifier changes along with the isCompact field and to set these as phantom or not when appropriate.
+        // Another option would be to override the setName, setCompact etc. methods to include this functionality,
+        // but a mechanism to stop the code generators from overwriting these methods would be necessary.
+        register(new AstObserverAdapter() {
+
+            @Override
+            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                if (!(observedNode instanceof ClassOrInterfaceDeclaration)) {
+                    throw new IllegalStateException("It should not be possible for a compact class observer to be added to anything other than a ClassOrInterfaceDeclaration");
+                }
+                if (property.equals(ObservableProperty.NAME)) {
+                    // If the name of the class changes, mark it as a phantom node if the class is compact
+                    SimpleName newName = (SimpleName) newValue;
+                    newName.setData(PHANTOM_KEY, isCompact);
+                } else if (property.equals(ObservableProperty.MODIFIERS)) {
+                    // If modifiers change, mark them as phantom nodes if the class is compact
+                    @SuppressWarnings("unchecked")
+                    NodeList<Modifier> newModifiers = (NodeList<Modifier>) newValue;
+                    newModifiers.forEach(modifier -> {
+                        if (modifier.getKeyword().equals(Modifier.Keyword.FINAL)) {
+                            modifier.setData(PHANTOM_KEY, isCompact);
+                        }
+                    });
+                } else if (property.equals(ObservableProperty.COMPACT)) {
+                    // If a compact class is made non-compact or vice versa, handle it properly
+                    processIsCompactChange((boolean) newValue);
+                }
+            }
+        }, ObserverRegistrationMode.JUST_THIS_NODE);
+        processIsCompactChange(isCompact());
     }
 
     @Override
@@ -323,6 +402,22 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ClassOrInterfaceDeclaration> toClassOrInterfaceDeclaration() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public boolean isCompact() {
+        return Objects.requireNonNull(isCompact);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ClassOrInterfaceDeclaration setCompact(final boolean isCompact) {
+        if (isCompact == this.isCompact) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.COMPACT, this.isCompact, isCompact);
+        this.isCompact = isCompact;
+        return this;
     }
 
     @NonNull()

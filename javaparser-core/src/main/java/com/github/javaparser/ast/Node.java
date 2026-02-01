@@ -347,8 +347,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
                 ConfigurablePrinter configurablePrinter = (ConfigurablePrinter) printer;
                 PrinterConfiguration config = configurablePrinter.getConfiguration();
                 if (config != null) {
-                    config.addOption(new DefaultConfigurationOption(
-                            ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
+                    config.addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
                     configurablePrinter.setConfiguration(config);
                 }
             }
@@ -877,7 +876,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     };
 
     // We need to expose it because we will need to use it to inject the printer
-    public static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {};
+    public static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {
+    };
 
     protected static final DataKey<Boolean> PHANTOM_KEY = new DataKey<Boolean>() {
     };

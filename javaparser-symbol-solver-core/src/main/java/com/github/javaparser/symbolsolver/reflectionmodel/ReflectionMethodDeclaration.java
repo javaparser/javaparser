@@ -74,7 +74,7 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
 
     @Override
     public String toString() {
-        return "ReflectionMethodDeclaration{" + "method=" + method + '}';
+        return getClass().getSimpleName() + "{" + "method=" + method + '}';
     }
 
     @Override

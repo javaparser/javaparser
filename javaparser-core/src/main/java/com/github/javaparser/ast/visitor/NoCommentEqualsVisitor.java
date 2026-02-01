@@ -23,8 +23,9 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -148,6 +149,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodesEquals(n.getExtendedTypes(), n2.getExtendedTypes()))
             return false;
         if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes()))
+            return false;
+        if (!objEquals(n.isCompact(), n2.isCompact()))
             return false;
         if (!objEquals(n.isInterface(), n2.isInterface()))
             return false;
@@ -351,7 +354,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final JavadocComment n, final Visitable arg) {
+    public Boolean visit(final TraditionalJavadocComment n, final Visitable arg) {
         return true;
     }
 
@@ -1140,6 +1143,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final ImportDeclaration n2 = (ImportDeclaration) arg;
         if (!objEquals(n.isAsterisk(), n2.isAsterisk()))
             return false;
+        if (!objEquals(n.isModule(), n2.isModule()))
+            return false;
         if (!objEquals(n.isStatic(), n2.isStatic()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -1710,6 +1715,26 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     public Boolean visit(final KeyExecutionContextSV n, final Visitable arg) {
         final KeyExecutionContextSV n2 = (KeyExecutionContextSV) arg;
         if (!objEquals(n.getText(), n2.getText()))
+            return false;
+        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final MatchAllPatternExpr n, final Visitable arg) {
+        final MatchAllPatternExpr n2 = (MatchAllPatternExpr) arg;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final MarkdownComment n, final Visitable arg) {
+        final MarkdownComment n2 = (MarkdownComment) arg;
+        if (!objEquals(n.getContent(), n2.getContent()))
             return false;
         if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments()))
             return false;
