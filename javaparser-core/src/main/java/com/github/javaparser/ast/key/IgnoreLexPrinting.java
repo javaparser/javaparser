@@ -4,7 +4,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- *
  * @author Alexander Weigl
  * @version 1 (2/1/26)
  */

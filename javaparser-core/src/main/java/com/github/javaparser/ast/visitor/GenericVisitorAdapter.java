@@ -584,8 +584,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final ConstructorDeclaration n, final A arg) {
         R result;
-        {
-            result = n.getBody().accept(this, arg);
+        if (n.getBody().isPresent()) {
+            result = n.getBody().get().accept(this, arg);
             if (result != null)
                 return result;
         }

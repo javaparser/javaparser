@@ -638,9 +638,12 @@ public class NodeFinderVisitor extends VoidVisitorAdapter<Range> {
     @Override
     public void visit(final ConstructorDeclaration n, final Range arg) {
         {
-            n.getBody().accept(this, arg);
-            if (selectedNode != null)
-                return;
+            var b = n.getBody();
+            if(b.isPresent()) {
+                b.get().accept(this, arg);
+                if (selectedNode != null)
+                    return;
+            }
         }
         {
             n.getModifiers().accept(this, arg);

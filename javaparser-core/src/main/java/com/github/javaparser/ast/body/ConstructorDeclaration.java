@@ -36,12 +36,14 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ConstructorDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.Objects;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A constructor declaration: {@code class X { X() { } }} where X(){} is the constructor declaration.
@@ -51,8 +53,11 @@ import org.jspecify.annotations.NonNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration> implements NodeWithBlockStmt<ConstructorDeclaration>, NodeWithAccessModifiers<ConstructorDeclaration>, NodeWithJavadoc<ConstructorDeclaration>, NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration>, Resolvable<ResolvedConstructorDeclaration> {
+public class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration>
+        implements NodeWithOptionalBlockStmt<ConstructorDeclaration>,
+        NodeWithAccessModifiers<ConstructorDeclaration>, NodeWithJavadoc<ConstructorDeclaration>, NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration>, Resolvable<ResolvedConstructorDeclaration> {
 
+    @OptionalProperty
     private BlockStmt body;
 
     public ConstructorDeclaration() {
@@ -99,8 +104,8 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt getBody() {
-        return body;
+    public Optional<BlockStmt> getBody() {
+        return Optional.ofNullable(body);
     }
 
     /**
@@ -111,7 +116,6 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConstructorDeclaration setBody(final BlockStmt body) {
-        assertNotNull(body);
         if (body == this.body) {
             return this;
         }
@@ -211,9 +215,11 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         if (node == null) {
             return false;
         }
-        if (node == body) {
-            setBody((BlockStmt) replacementNode);
-            return true;
+        if (body != null) {
+            if (node == body) {
+                setBody((BlockStmt) replacementNode);
+                return true;
+            }
         }
         return super.replace(node, replacementNode);
     }
@@ -248,9 +254,27 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
+    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt body() {
-        return Objects.requireNonNull(body);
+    public @Nullable() BlockStmt body() {
+        return body;
+    }
+
+    public ConstructorDeclaration removeBody() {
+        return setBody((BlockStmt) null);
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null) {
+            return false;
+        }
+        if (body != null) {
+            if (node == body) {
+                removeBody();
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }

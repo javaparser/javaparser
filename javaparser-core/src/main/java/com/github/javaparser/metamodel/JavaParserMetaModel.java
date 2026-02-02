@@ -599,7 +599,7 @@ public final class JavaParserMetaModel {
         classOrInterfaceDeclarationMetaModel.getDeclaredPropertyMetaModels().add(classOrInterfaceDeclarationMetaModel.permittedTypesPropertyMetaModel);
         classOrInterfaceDeclarationMetaModel.typeParametersPropertyMetaModel = new PropertyMetaModel(classOrInterfaceDeclarationMetaModel, "typeParameters", com.github.javaparser.ast.type.TypeParameter.class, Optional.of(typeParameterMetaModel), false, false, true, false);
         classOrInterfaceDeclarationMetaModel.getDeclaredPropertyMetaModels().add(classOrInterfaceDeclarationMetaModel.typeParametersPropertyMetaModel);
-        constructorDeclarationMetaModel.bodyPropertyMetaModel = new PropertyMetaModel(constructorDeclarationMetaModel, "body", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), false, false, false, false);
+        constructorDeclarationMetaModel.bodyPropertyMetaModel = new PropertyMetaModel(constructorDeclarationMetaModel, "body", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false);
         constructorDeclarationMetaModel.getDeclaredPropertyMetaModels().add(constructorDeclarationMetaModel.bodyPropertyMetaModel);
         enumConstantDeclarationMetaModel.argumentsPropertyMetaModel = new PropertyMetaModel(enumConstantDeclarationMetaModel, "arguments", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
         enumConstantDeclarationMetaModel.getDeclaredPropertyMetaModels().add(enumConstantDeclarationMetaModel.argumentsPropertyMetaModel);

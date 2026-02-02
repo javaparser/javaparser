@@ -381,7 +381,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final ConstructorDeclaration n, final A arg) {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
-        BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);
+        BlockStmt body = n.getBody().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
         ReceiverParameter receiverParameter = n.getReceiverParameter().map(s -> (ReceiverParameter) s.accept(this, arg)).orElse(null);
@@ -389,7 +389,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (body == null || name == null)
+        if (name == null)
             return null;
         n.setAnnotations(annotations);
         n.setModifiers(modifiers);

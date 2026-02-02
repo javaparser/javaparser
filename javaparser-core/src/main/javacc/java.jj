@@ -2067,6 +2067,7 @@ CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modif
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
     ReferenceType throwType;
+    BlockStmt stmt = null;
 }
 {
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
@@ -2078,12 +2079,14 @@ CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modif
         throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
-    "{" { blockBegin=token(); }
-    stmts = Statements()
-    "}"
-
+    (
+	    "{" { blockBegin=token(); }
+	    stmts = Statements()
+	    "}" { stmt = new BlockStmt(range(blockBegin, token()), stmts); }
+    | ";" // KeY Extension
+		)
     {
-    return new CompactConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, new BlockStmt(range(blockBegin, token()), stmts));
+    return new CompactConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, stmt);
 }
 }
 
@@ -2646,6 +2649,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
     ReferenceType throwType;
+    BlockStmt stmt = null;
 }
 {
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
@@ -2657,12 +2661,17 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
         throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
-    "{" { blockBegin=token(); }
-    stmts = Statements()
-    "}"
+    (
+	    "{" { blockBegin=token(); }
+      stmts = Statements()
+      "}"
+      { stmt = new BlockStmt(range(blockBegin, token()), stmts); }
+    | ";" // KEY extension
+    )
 
     {
-        return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);
+        return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_,
+        stmt, parameters.b);
     }
 }
 

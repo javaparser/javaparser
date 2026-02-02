@@ -1408,8 +1408,13 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 }
             }
         }
-        printer.print(" ");
-        n.getBody().accept(this, arg);
+        final var b = n.getBody();
+        if(b.isPresent()) {
+            printer.print(" ");
+            b.get().accept(this, arg);
+        }else{
+            printer.print(";");
+        }
     }
 
     @Override

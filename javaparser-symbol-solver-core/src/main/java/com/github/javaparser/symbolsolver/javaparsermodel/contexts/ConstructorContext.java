@@ -45,7 +45,8 @@ public class ConstructorContext extends AbstractMethodLikeDeclarationContext<Con
     public List<Parameter> parametersExposedToChild(Node child) {
         // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the
         // direct child?
-        if (child == wrappedNode.getBody()) {
+        var b = wrappedNode.getBody();
+        if (b.isPresent() && child == b.get()) {
             return wrappedNode.getParameters();
         }
         return Collections.emptyList();

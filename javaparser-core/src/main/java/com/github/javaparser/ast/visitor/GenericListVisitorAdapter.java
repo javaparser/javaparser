@@ -679,8 +679,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final ConstructorDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        {
-            tmp = n.getBody().accept(this, arg);
+        if (n.getBody().isPresent()) {
+            tmp = n.getBody().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

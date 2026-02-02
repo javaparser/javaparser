@@ -210,7 +210,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final ConstructorDeclaration n, final A arg) {
-        n.getBody().accept(this, arg);
+        n.getBody().ifPresent(l -> l.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getParameters().forEach(p -> p.accept(this, arg));
