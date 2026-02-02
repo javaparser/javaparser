@@ -125,7 +125,7 @@ class ConstructorDeclarationTransformationsTest extends AbstractLexicalPreservin
     @Test
     void addingConstructorInvocationAsSecondStatement() {
         ConstructorDeclaration cd = consider("public A() { int x; }");
-        cd.getBody().getStatements().add(new ExplicitConstructorInvocationStmt().setThis(false));
+        cd.getBody().get().getStatements().add(new ExplicitConstructorInvocationStmt().setThis(false));
         assertTransformedToString("public A() { int x; super();" + System.lineSeparator() + "}", cd);
     }
 
@@ -134,6 +134,7 @@ class ConstructorDeclarationTransformationsTest extends AbstractLexicalPreservin
         StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         ConstructorDeclaration cd = consider("public A() { int x; super(); }");
         cd.getBody()
+                .get()
                 .getStatements()
                 .get(1)
                 .asExplicitConstructorInvocationStmt()
@@ -145,7 +146,7 @@ class ConstructorDeclarationTransformationsTest extends AbstractLexicalPreservin
     void removingConstructorInvocationAsSecondStatement() {
         StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         ConstructorDeclaration cd = consider("public A() { int x; super(); }");
-        cd.getBody().getStatements().remove(1);
+        cd.getBody().get().getStatements().remove(1);
         assertTransformedToString("public A() { int x; }", cd);
     }
 

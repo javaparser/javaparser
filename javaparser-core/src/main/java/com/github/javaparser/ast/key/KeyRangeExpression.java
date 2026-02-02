@@ -18,6 +18,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 
+/// @deprecated currently unused
+@Deprecated()
 public class KeyRangeExpression extends Expression {
 
     private Expression lower;

@@ -20,6 +20,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 
+///
+/// @author weigl
 public class KeyMetaConstruct extends Statement {
 
     private String kind;

@@ -3,7 +3,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>org.key-project.proofjava</groupId>
-        <version>3.28.0-K10-SNAPSHOT</version>
+        <version>3.28.0-K10.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

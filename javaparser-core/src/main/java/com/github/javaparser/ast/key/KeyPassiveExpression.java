@@ -18,6 +18,13 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 
+/// A passive expression `@(expr)` is an expression with a static-suppression semantics.
+///
+/// Sometimes you need to evaluate or access an expression, but needs to avoid the evaluation
+/// of static code inside the theorem prover. The semantic of `@(e)` is similar to `e`, but none
+/// static initialization is triggered.
+///
+/// @author weigl
 public class KeyPassiveExpression extends Expression {
 
     private Expression expr;

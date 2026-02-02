@@ -6446,47 +6446,6 @@ Expression KeyIndexRange() :
 }
 
 
-/*
-EmptySetLiteral EmptySetLiteral() :
-{
-    EmptySetLiteral result;
-}
-{
-  "\\empty"
-  {
-      result = EmptySetLiteral.INSTANCE;
-      setPrefixInfo(result);
-      return result;
-  }
-}
-
-EmptySeqLiteral EmptySeqLiteral() :
-{
-    EmptySeqLiteral result;
-}
-{
-  "\\seq_empty"
-  {
-      result = EmptySeqLiteral.INSTANCE;
-      setPrefixInfo(result);
-      return result;
-  }
-}
-
-EmptyMapLiteral EmptyMapLiteral() :
-{
-    EmptyMapLiteral result;
-}
-{
-  "\\map_empty"
-  {
-      result = EmptyMapLiteral.INSTANCE;
-      setPrefixInfo(result);
-      return result;
-  }
-}
-*/
-
 Statement KeyCatchAllStatement() :
 {
   JavaToken begin;

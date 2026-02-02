@@ -1,10 +1,9 @@
-
 <!--
     Note that edits to this readme should be done via `docs/readme.md`.
     Modifying this file directly within the root directory risks it being overwritten. 
 -->
 
-# JavaParser
+# KeY-JavaParser
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.javaparser/javaparser-core.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.javaparser%22%20AND%20a%3A%22javaparser-core%22)
 [![Build Status](https://travis-ci.org/javaparser/javaparser.svg?branch=master)](https://travis-ci.org/javaparser/javaparser)
@@ -28,8 +27,6 @@ If you are not familiar with them we suggest taking a look at the maven quicksta
 [javasymbolsolver-maven-sample](https://github.com/javaparser/javasymbolsolver-maven-sample)).
 
 Just add the following to your maven configuration or tailor to your own dependency management system.
-
-[Please refer to the Migration Guide when upgrading from 2.5.1 to 3.0.0+](https://github.com/javaparser/javaparser/wiki/Migration-Guide)
 
 **Maven**:
 
@@ -69,25 +66,6 @@ Using the dependency above will add both JavaParser and JavaSymbolSolver to your
 implementation 'com.github.javaparser:javaparser-core:${project.version}'
 ```
 
-Since version 3.6.17 the AST can be serialized to JSON.
-There is a separate module for this:
-
-**Maven**:
-
-```xml
-<dependency>
-    <groupId>org.key-project.proofjava</groupId>
-    <artifactId>javaparser-core-serialization</artifactId>
-    <version>${project.version}</version>
-</dependency>
-```
-
-**Gradle**:
-
-```
-implementation 'com.github.javaparser:javaparser-core-serialization:${project.version}'
-```
-
 ## How To Compile Sources
 
 If you checked out the project's source code from GitHub, you can build the project with maven using:
@@ -104,12 +82,7 @@ mvnw package
 - `javaparser/javaparser-core/target/javaparser-core-\<version\>.jar`
 - `javaparser-symbol-solver-core/target/javaparser-symbol-solver-core-\<version\>.jar`
 
-If you checkout the sources and want to view the project in an IDE, it is best to first generate some of the source files;
-otherwise you will get many compilation complaints in the IDE. (`mvnw clean install` already does this for you.)
-
-```
-mvnw javacc:javacc
-```
+## Development
 
 If you modify the code of the AST nodes, specifically if you add or remove fields or node classes,
 the code generators will update a lot of code for you.
@@ -117,7 +90,45 @@ The `run_metamodel_generator.sh` script will rebuild the metamodel,
 which is used by the code generators which are run by `run_core_generators.sh`
 Make sure that `javaparser-core` at least compiles before you run these.
 
-**Note**: for Eclipse IDE follow the steps described in the wiki: https://github.com/javaparser/javaparser/wiki/Eclipse-Project-Setup-Guide
+**Note**: for Eclipse IDE follow the steps described in the [wiki](https://github.com/javaparser/javaparser/wiki/Eclipse-Project-Setup-Guide).
+
+
+## Structural Changes
+## Syntax Changes for the KeY Changes
+
+* Allow no-body on constructors
+  ```java
+  class String { public String(); }
+  ```
+  For method this is already covered by the grammar.
+
+* New Statements
+    * [`KeyMetaConstruct`](javaparser-core/src/main/java/com/github/javaparser/ast/key/sv/KeyMetaConstruct.java)
+    * [`KeyMethodCallStatement`](javaparser-core/src/main/java/com/github/javaparser/ast/key/KeyMethodCallStatement.java)
+    * [`KeyMethodBodyStatement`]()
+    * [`KeyTransactionStatement`]()
+    * [`KeyMergePointStatement`]()
+    * [`KeyLoopScopeBlock`]()
+    * [`KeyCatchAllStatement`]()
+    * [`KeyExecStatement`]()
+    * [`KeyMethodCallStatement`]()
+* Primitive types
+    * `\bigint`
+    * `\real`
+    * `\\locset`
+    * `\seq`
+    * `\free`
+    * `\map`
+* Types
+    * Schema type
+    * Meta-type
+* Modifiers
+    * ghost
+    * model
+    * no_state
+    * two_state
+* A lot of new tokens
+
 
 ## More information
 

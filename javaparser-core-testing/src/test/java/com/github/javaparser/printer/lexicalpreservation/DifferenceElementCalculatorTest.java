@@ -402,7 +402,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
         assertEquals(kept(new CsmToken(GeneratedJavaParserConstants.LPAREN)), differenceElements.get(i++));
         assertEquals(kept(new CsmToken(GeneratedJavaParserConstants.RPAREN)), differenceElements.get(i++));
         assertEquals(kept(new CsmToken(spaceTokenKind())), differenceElements.get(i++));
-        assertEquals(kept(new CsmChild(cd.getBody())), differenceElements.get(i++));
+        assertEquals(kept(new CsmChild(cd.getBody().get())), differenceElements.get(i++));
         assertEquals(i, differenceElements.size());
     }
 

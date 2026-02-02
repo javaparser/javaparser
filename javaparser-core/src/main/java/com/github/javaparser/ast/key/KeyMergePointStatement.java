@@ -19,6 +19,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 
+/// A statement marking a merge point for the theorem prover, carries an `expr`;
+/// @author weigl
 public class KeyMergePointStatement extends Statement {
 
     private Expression expr;

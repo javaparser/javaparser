@@ -65,7 +65,7 @@ class ConstructorDeclarationTest {
 
         ConstructorDeclaration constructorDeclaration =
                 Navigator.demandNodeOfGivenClass(cu, ConstructorDeclaration.class);
-        NodeList<Statement> statements = constructorDeclaration.getBody().getStatements();
+        NodeList<Statement> statements = constructorDeclaration.getBody().get().getStatements();
 
         assertTrue(statements.get(0).isExpressionStmt());
         assertTrue(statements.get(0).asExpressionStmt().getExpression().isVariableDeclarationExpr());

@@ -122,14 +122,14 @@ public class NodeMetaModelGenerator extends AbstractGenerator {
                         f("super%s", MetaModelGenerator.BASE_NODE_META_MODEL));
         classMMConstructor
                 .getBody()
-                .addStatement(parseExplicitConstructorInvocationStmt(f(
+                .ifPresent(blockStmt -> blockStmt.addStatement(parseExplicitConstructorInvocationStmt(f(
                         "super(super%s, %s.class, \"%s\", \"%s\", %s, %s);",
                         MetaModelGenerator.BASE_NODE_META_MODEL,
                         nodeClass.getSimpleName(),
                         nodeClass.getSimpleName(),
                         nodeClass.getPackage().getName(),
                         typeAnalysis.isAbstract,
-                        typeAnalysis.isSelfType)));
+                        typeAnalysis.isSelfType))));
         annotateGenerated(classMMConstructor);
 
         // ?Abstract protected constructor?

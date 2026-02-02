@@ -20,6 +20,14 @@ import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+/// An execution context re-defines the context in which a given java block is executed.
+///
+/// ```java
+///
+///
+/// ```
+///
+/// @author weigl
 public class KeyExecutionContext extends KeyAbstractExecutionContext {
 
     private Type context;

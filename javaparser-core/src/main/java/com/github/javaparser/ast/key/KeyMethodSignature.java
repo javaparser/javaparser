@@ -18,6 +18,8 @@ import com.github.javaparser.metamodel.KeyMethodSignatureMetaModel;
 import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
+///
+/// @author weigl
 public class KeyMethodSignature extends Node {
 
     private Name name;

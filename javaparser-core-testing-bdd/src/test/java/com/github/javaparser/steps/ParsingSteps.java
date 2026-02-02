@@ -366,7 +366,8 @@ public class ParsingSteps {
         ClassOrInterfaceDeclaration classDeclaration =
                 compilationUnit.getType(0).asClassOrInterfaceDeclaration();
         ConstructorDeclaration ctor = classDeclaration.getMember(1).asConstructorDeclaration();
-        ExpressionStmt assignStmt = ctor.getBody().getStatement(0).asExpressionStmt();
+        ExpressionStmt assignStmt =
+                ctor.getBody().map(it -> it.getStatement(0).asExpressionStmt()).orElse(null);
         AssignExpr assignExpr = assignStmt.getExpression().asAssignExpr();
         assertNotNull(assignExpr.getTarget());
         assertEquals(NameExpr.class, assignExpr.getTarget().getClass());

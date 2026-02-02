@@ -23,6 +23,8 @@ import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+///
+/// @author weigl
 public class KeyMethodBodyStatement extends Statement {
 
     @OptionalProperty

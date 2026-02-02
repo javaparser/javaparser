@@ -22,6 +22,12 @@ import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+/// ```java
+/// methodFrame( instance, source= , this=instance ) : {
+///
+/// }
+/// ```
+/// @author weigl
 public class KeyMethodCallStatement extends Statement {
 
     @OptionalProperty

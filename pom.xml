@@ -17,7 +17,7 @@
 	<groupId>org.key-project.proofjava</groupId>
 	<artifactId>javaparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.28.0-K10-SNAPSHOT</version>
+	<version>3.28.0-K10.1-SNAPSHOT</version>
 
 	<name>javaparser-parent</name>
 	<url>https://github.com/javaparser</url>

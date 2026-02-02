@@ -18,6 +18,18 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 
+/// A transaction statement is a Java statement to modeling JavaCard transaction.
+///
+/// There are four valid statements:
+/// ```java
+/// {
+///   #beginJavaCardTransaction;
+///   #commitJavaCardTransaction;
+///   #finishJavaCardTransaction;
+///   #abortJavaCardTransaction;
+/// }
+/// ```
+/// @author weigl
 public class KeyTransactionStatement extends Statement {
 
     private TransactionType type;

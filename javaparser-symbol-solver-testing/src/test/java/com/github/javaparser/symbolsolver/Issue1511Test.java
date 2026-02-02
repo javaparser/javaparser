@@ -66,6 +66,7 @@ public class Issue1511Test {
                 .getMember(0)
                 .asConstructorDeclaration()
                 .getBody()
+                .get()
                 .getStatement(0)
                 .asExplicitConstructorInvocationStmt();
 
