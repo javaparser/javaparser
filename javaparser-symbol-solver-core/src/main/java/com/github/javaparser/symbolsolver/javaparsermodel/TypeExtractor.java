@@ -23,10 +23,12 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import static com.github.javaparser.ast.expr.Expression.EXCLUDE_ENCLOSED_EXPR;
 import static com.github.javaparser.ast.expr.Expression.IS_NOT_ENCLOSED_EXPR;
+import static com.github.javaparser.ast.stmt.SwitchEntry.Type.THROWS_STATEMENT;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -34,6 +36,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.SwitchEntry;
+import com.github.javaparser.ast.stmt.YieldStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.*;
 import com.github.javaparser.resolution.declarations.*;
@@ -53,10 +57,12 @@ import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprResolver;
 import com.github.javaparser.symbolsolver.resolution.typeinference.LeastUpperBoundLogic;
+import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -373,6 +379,109 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
         throw new UnsolvedSymbolException(
                 "Solving " + node, classOrInterfaceType.getName().getId());
+    }
+
+    @Override
+    public ResolvedType visit(SwitchExpr node, Boolean solveLambdas) {
+        NodeList<SwitchEntry> entries = node.getEntries();
+
+        Set<ResolvedType> resolvedEntryTypes = entries.stream()
+                .map(entry -> {
+                    switch (entry.getType()) {
+                        case EXPRESSION:
+                            // "case L -> e;" - the result is the expression value.
+                            // The expression is wrapped in a single ExpressionStmt
+                            return entry.getStatements()
+                                    .getFirst()
+                                    .map(statement -> statement.accept(this, solveLambdas))
+                                    .orElseThrow(() -> new IllegalStateException("Empty switch entry"));
+                        case BLOCK:
+                            // "case L -> { ... yield e; }" - the result is the yielded value
+                            // The block is wrapped in a single BlockStmt, search within it for yield
+                            // Blocks may not have a yield if they throw, so return null in that case
+                            return entry.getStatements()
+                                    .getFirst()
+                                    .flatMap(block -> findYieldForSwitch(block, node))
+                                    .map(YieldStmt::getExpression)
+                                    .map(expr -> expr.accept(this, solveLambdas))
+                                    .orElse(null);
+                        case STATEMENT_GROUP:
+                            // "case L: ... yield e;" - colon-style with yield
+                            // Search all of them for yield
+                            // Some groups may not have yield (e.g., fall-through or throw), so return null
+                            return entry.getStatements().stream()
+                                    .map(stmt -> findYieldForSwitch(stmt, node))
+                                    .filter(Optional::isPresent)
+                                    .map(Optional::get)
+                                    .findFirst()
+                                    .map(YieldStmt::getExpression)
+                                    .map(expr -> expr.accept(this, solveLambdas))
+                                    .orElse(null);
+                        case THROWS_STATEMENT:
+                            // Throwing statements do not contribute to the computation of the type of the switch
+                            // expression
+                            return null;
+                        default:
+                            throw new IllegalStateException("Unsupported switch entry type: " + entry.getType());
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        if (resolvedEntryTypes.isEmpty()) {
+            // Should not happen because of prior validation
+            throw new IllegalStateException("Invalid switch expression with no result expressions");
+        }
+
+        // JLS 15.28.1 - Determine the type of the switch expression
+
+        if (resolvedEntryTypes.size() == 1) {
+            // If the result expressions all have the same type then that is the type of the switch expression
+            return resolvedEntryTypes.iterator().next();
+        }
+
+        if (resolvedEntryTypes.stream()
+                .allMatch(type -> type.isPrimitive() && type.asPrimitive().isBoolean()
+                        || type.isReferenceType()
+                                && type.asReferenceType().isUnboxableTo(ResolvedPrimitiveType.BOOLEAN))) {
+            // If the type of each result expression is boolean or Boolean the switch expression has type boolean.
+            return ResolvedPrimitiveType.BOOLEAN;
+        }
+
+        if (resolvedEntryTypes.stream().allMatch(ResolvedType::isNumericType)) {
+            // If the type of each result expression is convertible to a numeric type,
+            // then the switch type is determined by applying numeric promotion
+            return resolvedEntryTypes.stream()
+                    .map(type -> type.isReferenceType()
+                                    && type.asReferenceType().isUnboxable()
+                            ? type.asReferenceType().toUnboxedType().get().asPrimitive()
+                            : type.asPrimitive())
+                    .reduce(ResolvedPrimitiveType::bnp)
+                    .orElseThrow(() -> new IllegalStateException("Unexpected error in numeric promotion"));
+        }
+
+        // Otherwise, boxing conversion is applied to each result expression that has a primitive type,
+        // after which the type is the least upper bound of the types of the result expressions.
+        Set<ResolvedType> boxedTypes = resolvedEntryTypes.stream()
+                .map(type -> type.isPrimitive() ? TypeHelper.toBoxedType(type.asPrimitive(), typeSolver) : type)
+                .collect(Collectors.toSet());
+
+        return LeastUpperBoundLogic.of().lub(boxedTypes);
+    }
+
+    /**
+     * Finds the first YieldStmt that belongs to the given SwitchExpr (not to a nested switch).
+     */
+    private Optional<YieldStmt> findYieldForSwitch(Node searchRoot, SwitchExpr targetSwitch) {
+        return searchRoot.findFirst(YieldStmt.class, yieldStmt -> yieldStmt
+                .findAncestor(SwitchExpr.class)
+                .map(ancestor -> ancestor == targetSwitch)
+                .orElse(false));
+    }
+
+    @Override
+    public ResolvedType visit(ExpressionStmt node, Boolean solveLambdas) {
+        return node.getExpression().accept(this, solveLambdas);
     }
 
     @Override
