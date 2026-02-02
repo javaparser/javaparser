@@ -78,12 +78,15 @@ class SwitchExprTest {
 
     @Test
     void aThrowStatement() {
-        SwitchExpr switchExpr = parseExpression(
-                        "switch (k) {\n" + "        case 1 -> throw new Exception(\"one\");\n" + "    }")
+        SwitchExpr switchExpr = parseExpression("switch (k) {\n"
+                        + "        case 1 -> throw new Exception(\"one\");\n"
+                        + "        case 2 -> 42;\n"
+                        + "    }")
                 .findFirst(SwitchExpr.class)
                 .get();
 
         assertEquals(THROWS_STATEMENT, switchExpr.getEntry(0).getType());
+        assertEquals(EXPRESSION, switchExpr.getEntry(1).getType());
     }
 
     @Test
