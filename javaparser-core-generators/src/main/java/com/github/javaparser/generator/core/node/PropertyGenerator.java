@@ -21,13 +21,19 @@
 
 package com.github.javaparser.generator.core.node;
 
+import static com.github.javaparser.StaticJavaParser.parseType;
+import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.key.IgnoreLexPrinting;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
@@ -36,17 +42,9 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
+import java.util.*;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
-import java.util.*;
-
-import static com.github.javaparser.StaticJavaParser.parseType;
-import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
 
 public class PropertyGenerator extends NodeGenerator {
 
@@ -100,16 +98,15 @@ public class PropertyGenerator extends NodeGenerator {
         if (property.isOptional()) {
             // Ensure imports have been included.
             compilationUnit.addImport(Nullable.class);
-            if(rtype.isClassOrInterfaceType()) {
+            if (rtype.isClassOrInterfaceType()) {
                 rtype.asClassOrInterfaceType().addAnnotation(Nullable.class);
             }
         } else {
             compilationUnit.addImport(NonNull.class);
-            if(rtype.isClassOrInterfaceType()) {
+            if (rtype.isClassOrInterfaceType()) {
                 rtype.asClassOrInterfaceType().addAnnotation(NonNull.class);
             }
         }
-
 
         final BlockStmt body = setter.getBody().get();
         body.getStatements().clear();
@@ -190,13 +187,13 @@ public class PropertyGenerator extends NodeGenerator {
         if (property.isOptional()) {
             // Ensure imports have been included.
             compilationUnit.addImport(Nullable.class);
-            if(rtype.isClassOrInterfaceType()) {
+            if (rtype.isClassOrInterfaceType()) {
                 rtype.asClassOrInterfaceType().addAnnotation(Nullable.class);
             }
             body.addStatement(f("return %s;", property.getName()));
         } else {
             compilationUnit.addImport(NonNull.class);
-            if(rtype.isClassOrInterfaceType()) {
+            if (rtype.isClassOrInterfaceType()) {
                 rtype.asClassOrInterfaceType().addAnnotation(NonNull.class);
             }
             body.addStatement(f("return Objects.requireNonNull(%s);", property.getName()));

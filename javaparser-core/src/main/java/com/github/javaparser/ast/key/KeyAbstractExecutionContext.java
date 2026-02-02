@@ -4,11 +4,11 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeyAbstractExecutionContextMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.KeyAbstractExecutionContextMetaModel;
 
 /**
  * @author Alexander Weigl
@@ -36,8 +36,7 @@ public abstract class KeyAbstractExecutionContext extends Node {
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-    }
+    public <A> void accept(VoidVisitor<A> v, A arg) {}
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")

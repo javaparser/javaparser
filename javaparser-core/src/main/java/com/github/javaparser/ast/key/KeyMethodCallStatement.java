@@ -1,23 +1,24 @@
 package com.github.javaparser.ast.key;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Optional;
-import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeyMethodCallStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.KeyMethodCallStatementMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -39,7 +40,8 @@ public class KeyMethodCallStatement extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyMethodCallStatement(TokenRange tokenRange, Name name, KeyAbstractExecutionContext context, BlockStmt block) {
+    public KeyMethodCallStatement(
+            TokenRange tokenRange, Name name, KeyAbstractExecutionContext context, BlockStmt block) {
         super(tokenRange);
         setName(name);
         setContext(context);
@@ -95,8 +97,7 @@ public class KeyMethodCallStatement extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BLOCK, this.block, block);
-        if (this.block != null)
-            this.block.setParentNode(null);
+        if (this.block != null) this.block.setParentNode(null);
         this.block = block;
         setAsParentNodeOf(block);
         return this;
@@ -114,8 +115,7 @@ public class KeyMethodCallStatement extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONTEXT, this.context, context);
-        if (this.context != null)
-            this.context.setParentNode(null);
+        if (this.context != null) this.context.setParentNode(null);
         this.context = context;
         setAsParentNodeOf(context);
         return this;
@@ -132,8 +132,7 @@ public class KeyMethodCallStatement extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

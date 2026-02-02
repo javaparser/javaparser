@@ -21,6 +21,8 @@
 
 package com.github.javaparser.generator.metamodel;
 
+import static com.github.javaparser.utils.Utils.decapitalize;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -40,15 +42,12 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator extends AbstractGenerator {
 
@@ -199,42 +198,43 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.modules.ModuleRequiresDirective.class);
             add(com.github.javaparser.ast.modules.ModuleUsesDirective.class);
 
-        //KEY
-        add(KeyAbstractExecutionContext.class);
-        add(KeyCatchAllStatement.class);
-        add(KeyCcatchBranch.class);
-        add(KeyCcatchBreak.class);
-        add(KeyCcatchContinue.class);
-        add(KeyCcatchParameter.class);
-        add(KeyCcatchReturn.class);
-        add(KeyEscapeExpression.class);
-        add(KeyExecStatement.class);
-        add(KeyExecutionContext.class);
-        add(KeyLoopScopeBlock.class);
-        add(KeyMergePointStatement.class);
-        add(KeyMethodBodyStatement.class);
-        add(KeyMethodCallStatement.class);
-        add(KeyMethodSignature.class);
-        add(KeyRangeExpression.class);
-        add(KeyTransactionStatement.class);
-        //add(KeyActiveCommentStatement.class);
+            // KEY
+            add(KeyAbstractExecutionContext.class);
+            add(KeyCatchAllStatement.class);
+            add(KeyCcatchBranch.class);
+            add(KeyCcatchBreak.class);
+            add(KeyCcatchContinue.class);
+            add(KeyCcatchParameter.class);
+            add(KeyCcatchReturn.class);
+            add(KeyEscapeExpression.class);
+            add(KeyExecStatement.class);
+            add(KeyExecutionContext.class);
+            add(KeyLoopScopeBlock.class);
+            add(KeyMergePointStatement.class);
+            add(KeyMethodBodyStatement.class);
+            add(KeyMethodCallStatement.class);
+            add(KeyMethodSignature.class);
+            add(KeyRangeExpression.class);
+            add(KeyTransactionStatement.class);
+            // add(KeyActiveCommentStatement.class);
 
-        //KeY-Schema
-        add(KeyContextStatementBlock.class);
-        add(KeyExecCtxtSV.class);
-        add(KeyExpressionSV.class);
-        add(KeyJumpLabelSV.class);
-        add(KeyMetaConstruct.class);
-        add(KeyMetaConstructExpression.class);
-        add(KeyMetaConstructType.class);
-        add(KeyMethodSignatureSV.class);
-        add(KeyPassiveExpression.class);
-        add(KeyProgramVariableSV.class);
-        add(KeyStatementSV.class);
-        add(KeyTypeSV.class);
-        add(KeyCcatchSV.class);
-        add(KeyExecutionContextSV.class);
-    }};
+            // KeY-Schema
+            add(KeyContextStatementBlock.class);
+            add(KeyExecCtxtSV.class);
+            add(KeyExpressionSV.class);
+            add(KeyJumpLabelSV.class);
+            add(KeyMetaConstruct.class);
+            add(KeyMetaConstructExpression.class);
+            add(KeyMetaConstructType.class);
+            add(KeyMethodSignatureSV.class);
+            add(KeyPassiveExpression.class);
+            add(KeyProgramVariableSV.class);
+            add(KeyStatementSV.class);
+            add(KeyTypeSV.class);
+            add(KeyCcatchSV.class);
+            add(KeyExecutionContextSV.class);
+        }
+    };
 
     public MetaModelGenerator(SourceRoot sourceRoot) {
         super(sourceRoot);

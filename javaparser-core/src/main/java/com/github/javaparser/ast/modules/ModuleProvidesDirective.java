@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.modules;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -34,9 +35,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleProvidesDirectiveMetaModel;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -136,8 +137,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -150,8 +150,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
             return this;
         }
         notifyPropertyChange(ObservableProperty.WITH, this.with, with);
-        if (this.with != null)
-            this.with.setParentNode(null);
+        if (this.with != null) this.with.setParentNode(null);
         this.with = with;
         setAsParentNodeOf(with);
         return this;

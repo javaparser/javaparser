@@ -120,21 +120,19 @@ public class UnicodeEscapeProcessingProvider implements Provider {
      */
     private int nextOutputChar() throws IOException {
         int next = nextInputChar();
-        switch(next) {
+        switch (next) {
             case EOF:
                 return EOF;
-            case BACKSLASH:
-                {
-                    if (_backslashSeen) {
-                        return clearBackSlashSeen(next);
-                    }
-                    return backSlashSeen();
-                }
-            default:
-                {
-                    // An arbitrary character.
+            case BACKSLASH: {
+                if (_backslashSeen) {
                     return clearBackSlashSeen(next);
                 }
+                return backSlashSeen();
+            }
+            default: {
+                // An arbitrary character.
+                return clearBackSlashSeen(next);
+            }
         }
     }
 
@@ -146,19 +144,17 @@ public class UnicodeEscapeProcessingProvider implements Provider {
     private int backSlashSeen() throws IOException {
         _backslashSeen = true;
         int next = nextInputChar();
-        switch(next) {
+        switch (next) {
             case EOF:
                 // End of file after backslash produces the backslash itself.
                 return BACKSLASH;
-            case 'u':
-                {
-                    return unicodeStartSeen();
-                }
-            default:
-                {
-                    pushBack(next);
-                    return BACKSLASH;
-                }
+            case 'u': {
+                return unicodeStartSeen();
+            }
+            default: {
+                pushBack(next);
+                return BACKSLASH;
+            }
         }
     }
 
@@ -166,21 +162,18 @@ public class UnicodeEscapeProcessingProvider implements Provider {
         int uCnt = 1;
         while (true) {
             int next = nextInputChar();
-            switch(next) {
-                case EOF:
-                    {
-                        pushBackUs(uCnt);
-                        return BACKSLASH;
-                    }
-                case 'u':
-                    {
-                        uCnt++;
-                        continue;
-                    }
-                default:
-                    {
-                        return readDigits(uCnt, next);
-                    }
+            switch (next) {
+                case EOF: {
+                    pushBackUs(uCnt);
+                    return BACKSLASH;
+                }
+                case 'u': {
+                    uCnt++;
+                    continue;
+                }
+                default: {
+                    return readDigits(uCnt, next);
+                }
             }
         }
     }
@@ -554,32 +547,28 @@ public class UnicodeEscapeProcessingProvider implements Provider {
          * Analyzes the given character for line feed.
          */
         public int process(int ch) {
-            switch(ch) {
-                case EOF:
-                    {
-                        break;
-                    }
-                case CR:
-                    {
-                        incLine();
-                        _crSeen = true;
-                        break;
-                    }
-                case LF:
-                    {
-                        // CR LF does only count as a single line terminator.
-                        if (_crSeen) {
-                            _crSeen = false;
-                        } else {
-                            incLine();
-                        }
-                        break;
-                    }
-                default:
-                    {
+            switch (ch) {
+                case EOF: {
+                    break;
+                }
+                case CR: {
+                    incLine();
+                    _crSeen = true;
+                    break;
+                }
+                case LF: {
+                    // CR LF does only count as a single line terminator.
+                    if (_crSeen) {
                         _crSeen = false;
-                        _column++;
+                    } else {
+                        incLine();
                     }
+                    break;
+                }
+                default: {
+                    _crSeen = false;
+                    _column++;
+                }
             }
             return ch;
         }

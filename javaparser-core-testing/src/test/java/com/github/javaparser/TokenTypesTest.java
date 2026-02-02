@@ -21,21 +21,20 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.stmt.SwitchEntry;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.stmt.SwitchEntry;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 
 public class TokenTypesTest {
 
@@ -56,14 +55,13 @@ public class TokenTypesTest {
     @TestFactory
     Stream<DynamicTest> everyTokenHasACategory0() {
         final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
-        return IntStream.range(0, tokenCount - 1).mapToObj(it ->
-                DynamicTest.dynamicTest("TokenType: " + it,
-                        () -> {
-                            try {
-                                TokenTypes.getCategory(it);
-                            } catch (IllegalArgumentException ignored) {
-                            }
-                        }));
+        return IntStream.range(0, tokenCount - 1)
+                .mapToObj(it -> DynamicTest.dynamicTest("TokenType: " + it, () -> {
+                    try {
+                        TokenTypes.getCategory(it);
+                    } catch (IllegalArgumentException ignored) {
+                    }
+                }));
     }
 
     @Test

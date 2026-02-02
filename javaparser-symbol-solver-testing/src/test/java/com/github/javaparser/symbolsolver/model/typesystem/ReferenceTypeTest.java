@@ -648,8 +648,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         rawArrayList.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        //weigl: disable test, in new JDKs the number is 10 (SequencedCollection was added)
-        //assertEquals(9, ancestors.size());
+        // weigl: disable test, in new JDKs the number is 10 (SequencedCollection was added)
+        // assertEquals(9, ancestors.size());
 
         ResolvedTypeVariable tv =
                 new ResolvedTypeVariable(arraylist.getTypeParameters().get(0));
@@ -696,7 +696,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         listOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        //weigl: disable new JDKs are different
+        // weigl: disable new JDKs are different
         // assertEquals(2, ancestors.size());
 
         assertEquals(
@@ -744,8 +744,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         abstractListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        //weigl: disable new JDKs are different
-        //assertEquals(5, ancestors.size());
+        // weigl: disable new JDKs are different
+        // assertEquals(5, ancestors.size());
 
         assertEquals(
                 new ReferenceTypeImpl(
@@ -778,8 +778,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         arrayListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        //weigl: disable new JDKs are different
-        //assertEquals(9, ancestors.size());
+        // weigl: disable new JDKs are different
+        // assertEquals(9, ancestors.size());
 
         assertEquals(
                 new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(RandomAccess.class, typeResolver)),

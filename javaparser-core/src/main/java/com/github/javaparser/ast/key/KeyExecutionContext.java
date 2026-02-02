@@ -1,21 +1,22 @@
 package com.github.javaparser.ast.key;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeyExecutionContextMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.KeyExecutionContextMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import java.util.Optional;
 import java.util.Objects;
+import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -69,8 +70,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONTEXT, this.context, context);
-        if (this.context != null)
-            this.context.setParentNode(null);
+        if (this.context != null) this.context.setParentNode(null);
         this.context = context;
         setAsParentNodeOf(context);
         return this;
@@ -87,8 +87,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
             return this;
         }
         notifyPropertyChange(ObservableProperty.INSTANCE, this.instance, instance);
-        if (this.instance != null)
-            this.instance.setParentNode(null);
+        if (this.instance != null) this.instance.setParentNode(null);
         this.instance = instance;
         setAsParentNodeOf(instance);
         return this;
@@ -106,8 +105,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
             return this;
         }
         notifyPropertyChange(ObservableProperty.SIGNATURE, this.signature, signature);
-        if (this.signature != null)
-            this.signature.setParentNode(null);
+        if (this.signature != null) this.signature.setParentNode(null);
         this.signature = signature;
         setAsParentNodeOf(signature);
         return this;

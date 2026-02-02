@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.expr.MatchAllPatternExpr;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.expr.MatchAllPatternExpr;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class MatchAllPatternExprMetaModel extends ComponentPatternExprMetaModel 
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     MatchAllPatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, MatchAllPatternExpr.class, "MatchAllPatternExpr", "com.github.javaparser.ast.expr", false, false);
+        super(
+                superBaseNodeMetaModel,
+                MatchAllPatternExpr.class,
+                "MatchAllPatternExpr",
+                "com.github.javaparser.ast.expr",
+                false,
+                false);
     }
 
     public PropertyMetaModel modifiersPropertyMetaModel;

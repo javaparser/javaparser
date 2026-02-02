@@ -40,7 +40,8 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      * Get the list of types defined inside the current type.
      */
     default Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        throw new UnsupportedOperationException("InternalTypes not available for " + this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(
+                "InternalTypes not available for " + this.getClass().getCanonicalName());
     }
 
     /**
@@ -48,7 +49,9 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      * (Does not include internal types inside internal types).
      */
     default ResolvedReferenceTypeDeclaration getInternalType(String name) {
-        Optional<ResolvedReferenceTypeDeclaration> type = this.internalTypes().stream().filter(f -> f.getName().equals(name)).findFirst();
+        Optional<ResolvedReferenceTypeDeclaration> type = this.internalTypes().stream()
+                .filter(f -> f.getName().equals(name))
+                .findFirst();
         return type.orElseThrow(() -> new UnsolvedSymbolException("Internal type not found: " + name));
     }
 

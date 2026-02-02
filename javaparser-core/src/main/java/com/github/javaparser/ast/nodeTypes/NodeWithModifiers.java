@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -62,7 +63,9 @@ public interface NodeWithModifiers<N extends Node> {
     @SuppressWarnings("unchecked")
     default N removeModifier(Modifier.Keyword... modifiersToRemove) {
         List<Modifier.Keyword> modifiersToRemoveAsList = Arrays.asList(modifiersToRemove);
-        NodeList<Modifier> remaining = getModifiers().stream().filter(existingModifier -> !modifiersToRemoveAsList.contains(existingModifier.getKeyword())).collect(toNodeList());
+        NodeList<Modifier> remaining = getModifiers().stream()
+                .filter(existingModifier -> !modifiersToRemoveAsList.contains(existingModifier.getKeyword()))
+                .collect(toNodeList());
         setModifiers(remaining);
         return (N) this;
     }
@@ -100,7 +103,7 @@ public interface NodeWithModifiers<N extends Node> {
      */
     default AccessSpecifier getAccessSpecifier() {
         for (Modifier modifier : getModifiers()) {
-            switch(modifier.getKeyword()) {
+            switch (modifier.getKeyword()) {
                 case PUBLIC:
                     return AccessSpecifier.PUBLIC;
                 case PROTECTED:

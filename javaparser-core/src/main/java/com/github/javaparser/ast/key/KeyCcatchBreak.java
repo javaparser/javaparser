@@ -4,7 +4,9 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -13,12 +15,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.KeyCcatchBreakMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import org.jspecify.annotations.Nullable;
 import java.util.Optional;
-import com.github.javaparser.ast.key.*;
-import com.github.javaparser.ast.key.sv.*;
-import com.github.javaparser.ast.comments.*;
-import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
 public class KeyCcatchBreak extends KeyCcatchBranch {
 
@@ -79,8 +77,7 @@ public class KeyCcatchBreak extends KeyCcatchBranch {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BLOCK, this.block, block);
-        if (this.block != null)
-            this.block.setParentNode(null);
+        if (this.block != null) this.block.setParentNode(null);
         this.block = block;
         setAsParentNodeOf(block);
         return this;
@@ -97,8 +94,7 @@ public class KeyCcatchBreak extends KeyCcatchBranch {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null)
-            this.label.setParentNode(null);
+        if (this.label != null) this.label.setParentNode(null);
         this.label = label;
         setAsParentNodeOf(label);
         return this;

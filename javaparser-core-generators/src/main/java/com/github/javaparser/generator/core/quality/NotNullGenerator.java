@@ -21,6 +21,8 @@
 
 package com.github.javaparser.generator.core.quality;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
@@ -38,12 +40,9 @@ import com.github.javaparser.generator.CompilationUnitGenerator;
 import com.github.javaparser.quality.NotNull;
 import com.github.javaparser.quality.Preconditions;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Generator to process annotations {@link com.github.javaparser.quality.NotNull}.
@@ -91,7 +90,9 @@ public class NotNullGenerator extends CompilationUnitGenerator {
      */
     protected void generateQualityForConstructor(ConstructorDeclaration constructorDeclaration) {
         generateQualityForParameter(
-                constructorDeclaration, constructorDeclaration.getParameters(), constructorDeclaration.getBody().get());
+                constructorDeclaration,
+                constructorDeclaration.getParameters(),
+                constructorDeclaration.getBody().get());
     }
 
     /**
@@ -159,7 +160,7 @@ public class NotNullGenerator extends CompilationUnitGenerator {
 
         // When the callable is a constructor we must check if is a ExplicitConstructorInvocationStmt.
         if (callableDeclaration.isConstructorDeclaration()) {
-			Optional<Statement> optionalFirstStatement = statements.getOFirst();
+            Optional<Statement> optionalFirstStatement = statements.getOFirst();
             if (optionalFirstStatement.isPresent()) {
 
                 // Check if the first item is a "super" expr. If it's then we add the assertions after it.

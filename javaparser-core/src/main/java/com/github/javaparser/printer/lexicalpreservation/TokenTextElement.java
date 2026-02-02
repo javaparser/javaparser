@@ -62,10 +62,8 @@ public class TokenTextElement extends TextElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         TokenTextElement that = (TokenTextElement) o;
         return token.equals(that.token);
     }

@@ -1,26 +1,27 @@
 package com.github.javaparser.ast.key;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Optional;
-import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeyEscapeExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.KeyEscapeExpressionMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Objects;
-import org.jspecify.annotations.Nullable;
+import java.util.Optional;
+import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class KeyEscapeExpression extends Expression {
 
@@ -97,8 +98,7 @@ public class KeyEscapeExpression extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        if (this.arguments != null)
-            this.arguments.setParentNode(null);
+        if (this.arguments != null) this.arguments.setParentNode(null);
         this.arguments = arguments;
         setAsParentNodeOf(arguments);
         return this;
@@ -116,8 +116,7 @@ public class KeyEscapeExpression extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CALLEE, this.callee, callee);
-        if (this.callee != null)
-            this.callee.setParentNode(null);
+        if (this.callee != null) this.callee.setParentNode(null);
         this.callee = callee;
         setAsParentNodeOf(callee);
         return this;

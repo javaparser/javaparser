@@ -726,7 +726,7 @@ public class JavaParserFacade {
         boolean detachFlag = false;
         while (true) {
             parent = demandParentNode(parent);
-            if (parent instanceof KeyMethodCallStatement) { //weigl: fun with KeY name resolution.
+            if (parent instanceof KeyMethodCallStatement) { // weigl: fun with KeY name resolution.
                 Type type = ((KeyExecutionContext) ((KeyMethodCallStatement) parent).getContext()).getContext();
                 ResolvedReferenceTypeDeclaration rt = typeSolver.solveType(type.asString());
                 return rt.toAst().get();

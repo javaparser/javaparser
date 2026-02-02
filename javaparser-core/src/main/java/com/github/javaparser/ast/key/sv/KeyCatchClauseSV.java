@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.key.sv;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.CatchClause;

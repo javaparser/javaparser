@@ -55,14 +55,28 @@ public class MethodUsage implements ResolvedTypeParametrized {
     }
 
     public MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType) {
-        this(declaration, paramTypes, returnType, declaration.getSpecifiedExceptions(), ResolvedTypeParametersMap.empty());
+        this(
+                declaration,
+                paramTypes,
+                returnType,
+                declaration.getSpecifiedExceptions(),
+                ResolvedTypeParametersMap.empty());
     }
 
-    public MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType, List<ResolvedType> exceptionTypes) {
+    public MethodUsage(
+            ResolvedMethodDeclaration declaration,
+            List<ResolvedType> paramTypes,
+            ResolvedType returnType,
+            List<ResolvedType> exceptionTypes) {
         this(declaration, paramTypes, returnType, exceptionTypes, ResolvedTypeParametersMap.empty());
     }
 
-    private MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType, List<ResolvedType> exceptionTypes, ResolvedTypeParametersMap typeParametersMap) {
+    private MethodUsage(
+            ResolvedMethodDeclaration declaration,
+            List<ResolvedType> paramTypes,
+            ResolvedType returnType,
+            List<ResolvedType> exceptionTypes,
+            ResolvedTypeParametersMap typeParametersMap) {
         this.declaration = declaration;
         this.paramTypes = paramTypes;
         this.returnType = returnType;
@@ -145,7 +159,12 @@ public class MethodUsage implements ResolvedTypeParametrized {
             throw new IllegalArgumentException();
         }
         // TODO if the method declaration has a type param with that name ignore this call
-        MethodUsage res = new MethodUsage(declaration, paramTypes, returnType, exceptionTypes, typeParametersMap.toBuilder().setValue(typeParameter, type).build());
+        MethodUsage res = new MethodUsage(
+                declaration,
+                paramTypes,
+                returnType,
+                exceptionTypes,
+                typeParametersMap.toBuilder().setValue(typeParameter, type).build());
         Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
         for (int i = 0; i < paramTypes.size(); i++) {
             ResolvedType originalParamType = paramTypes.get(i);
@@ -255,6 +274,7 @@ public class MethodUsage implements ResolvedTypeParametrized {
      * d1 does not have the same signature as d2 (§8.4.2), and R1 = |R2|.
      */
     public boolean isReturnTypeSubstituable(MethodUsage otherMethodUsage) {
-        return getDeclaration().isReturnTypeSubstituable(otherMethodUsage.getDeclaration().getReturnType());
+        return getDeclaration()
+                .isReturnTypeSubstituable(otherMethodUsage.getDeclaration().getReturnType());
     }
 }

@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.stmt;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -37,9 +38,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ForEachStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -116,8 +117,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
+        if (this.body != null) this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
@@ -130,8 +130,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
             return this;
         }
         notifyPropertyChange(ObservableProperty.ITERABLE, this.iterable, iterable);
-        if (this.iterable != null)
-            this.iterable.setParentNode(null);
+        if (this.iterable != null) this.iterable.setParentNode(null);
         this.iterable = iterable;
         setAsParentNodeOf(iterable);
         return this;
@@ -144,8 +143,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
             return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLE, this.variable, variable);
-        if (this.variable != null)
-            this.variable.setParentNode(null);
+        if (this.variable != null) this.variable.setParentNode(null);
         this.variable = variable;
         setAsParentNodeOf(variable);
         return this;
@@ -177,7 +175,8 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
      * @return {@code true} if this foreach statement's variable is {@code final}, and {@code false} otherwise.
      */
     public boolean hasFinalVariable() {
-        return getVariable().getModifiers().isNonEmpty() && getVariable().getModifiers().get(0).getKeyword() == Modifier.Keyword.FINAL;
+        return getVariable().getModifiers().isNonEmpty()
+                && getVariable().getModifiers().get(0).getKeyword() == Modifier.Keyword.FINAL;
     }
 
     @Override

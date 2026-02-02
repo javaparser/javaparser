@@ -79,8 +79,8 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         list.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        //weigl: disable due to new JDK versions
-        //assertEquals(2, ancestors.size());
+        // weigl: disable due to new JDK versions
+        // assertEquals(2, ancestors.size());
 
         // Since List is an interface, Object cannot be an ancestor of List
         ResolvedTypeVariable typeVariable =

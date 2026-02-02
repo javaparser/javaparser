@@ -22,6 +22,7 @@ package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.StaticJavaParser.parseName;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.*;
@@ -139,7 +140,8 @@ public interface NodeWithAnnotations<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N addSingleMemberAnnotation(String name, Expression expression) {
-        SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(parseName(name), expression);
+        SingleMemberAnnotationExpr singleMemberAnnotationExpr =
+                new SingleMemberAnnotationExpr(parseName(name), expression);
         return addAnnotation(singleMemberAnnotationExpr);
     }
 
@@ -185,7 +187,8 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return true if found, false if not
      */
     default boolean isAnnotationPresent(String annotationName) {
-        return getAnnotations().stream().anyMatch(a -> a.getName().getIdentifier().equals(annotationName));
+        return getAnnotations().stream()
+                .anyMatch(a -> a.getName().getIdentifier().equals(annotationName));
     }
 
     /**
@@ -204,7 +207,9 @@ public interface NodeWithAnnotations<N extends Node> {
      * @param annotationName the name of the annotation
      */
     default Optional<AnnotationExpr> getAnnotationByName(String annotationName) {
-        return getAnnotations().stream().filter(a -> a.getName().getIdentifier().equals(annotationName)).findFirst();
+        return getAnnotations().stream()
+                .filter(a -> a.getName().getIdentifier().equals(annotationName))
+                .findFirst();
     }
 
     /**

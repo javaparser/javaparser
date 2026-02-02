@@ -431,8 +431,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         arraylist.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        //weigl: disable for later JDKs
-        //assertEquals(9, ancestors.size());
+        // weigl: disable for later JDKs
+        // assertEquals(9, ancestors.size());
 
         ResolvedTypeVariable typeVariable =
                 new ResolvedTypeVariable(arraylist.getTypeParameters().get(0));

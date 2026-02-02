@@ -118,9 +118,9 @@ public abstract class AbstractSymbolResolutionTest {
                 return JDK18;
             }
 
-            //weigl just return JDK18
+            // weigl just return JDK18
             return JDK18;
-            //throw new IllegalStateException("Unable to determine the current version of java running");
+            // throw new IllegalStateException("Unable to determine the current version of java running");
         }
 
         /**

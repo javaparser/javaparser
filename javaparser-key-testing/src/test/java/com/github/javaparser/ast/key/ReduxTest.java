@@ -3,16 +3,15 @@ package com.github.javaparser.ast.key;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
 /**
  * @author Alexander Weigl
@@ -20,7 +19,8 @@ import java.util.stream.Stream;
  */
 @Disabled
 public class ReduxTest {
-    public static final String PATHTOREDUX = "/home/weigl/work/key/key.core/src/main/resources/de/uka/ilkd/key/java/JavaRedux/java";
+    public static final String PATHTOREDUX =
+            "/home/weigl/work/key/key.core/src/main/resources/de/uka/ilkd/key/java/JavaRedux/java";
 
     @TestFactory
     Stream<DynamicTest> testRedux() throws IOException {

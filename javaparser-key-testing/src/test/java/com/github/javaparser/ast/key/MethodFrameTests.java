@@ -1,6 +1,5 @@
 package com.github.javaparser.ast.key;
 
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -19,17 +18,14 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderType
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.google.common.truth.Truth;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class MethodFrameTests {
     @Test
@@ -39,10 +35,9 @@ public class MethodFrameTests {
 
     private void loadAndResolveAll(File file) throws IOException {
         final ParserConfiguration configuration = new ParserConfiguration();
-        configuration.setSymbolResolver(new JavaSymbolSolver(
-                new CombinedTypeSolver(
-                        new JavaParserTypeSolver(file.getParentFile()),
-                        new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader()))));
+        configuration.setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
+                new JavaParserTypeSolver(file.getParentFile()),
+                new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader()))));
         JavaParser parser = new JavaParser(configuration);
 
         ParseResult<CompilationUnit> cu = parser.parse(file);
@@ -53,7 +48,6 @@ public class MethodFrameTests {
             Assertions.fail("Errors during parsing");
         }
 
-
         final ResolveAllVisitor v = new ResolveAllVisitor();
         cu.getResult().get().accept(v, null);
 
@@ -62,11 +56,9 @@ public class MethodFrameTests {
                 .map(it -> it.trim().substring(4).trim())
                 .collect(Collectors.toSet());
 
-        errorLines.stream().sorted().forEach(errorLine ->
-                System.out.format("//? %s%n", errorLine));
+        errorLines.stream().sorted().forEach(errorLine -> System.out.format("//? %s%n", errorLine));
         System.out.println("---");
-        v.messages.stream().sorted().forEach(errorLine ->
-                System.out.format("//? %s%n", errorLine));
+        v.messages.stream().sorted().forEach(errorLine -> System.out.format("//? %s%n", errorLine));
 
         Truth.assertThat(v.messages).isEqualTo(errorLines);
     }
@@ -92,9 +84,7 @@ public class MethodFrameTests {
                 Node t = rtype.toAst().get();
                 String target = t.getRange().map(it -> it.begin.toString()).orElse("_");
 
-                messages.add(
-                        String.format("name: %s@%s to %s@%s", n, pos,
-                                rtype.getName(), target));
+                messages.add(String.format("name: %s@%s to %s@%s", n, pos, rtype.getName(), target));
                 try {
                     n.getSymbolResolver().calculateType(n);
                     messages.add(String.format("type: %s@%s", n, pos));
@@ -103,7 +93,7 @@ public class MethodFrameTests {
                 }
             } catch (UnsolvedSymbolException e) {
                 messages.add(String.format("e name: %s@%s", n, pos));
-                //e.printStackTrace();
+                // e.printStackTrace();
             }
         }
     }

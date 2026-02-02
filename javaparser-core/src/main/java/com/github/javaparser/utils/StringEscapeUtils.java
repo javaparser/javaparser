@@ -33,8 +33,7 @@ import java.util.HashSet;
  */
 public final class StringEscapeUtils {
 
-    private StringEscapeUtils() {
-    }
+    private StringEscapeUtils() {}
 
     /**
      * <p>Escapes the characters in a {@code String} using Java String rules.</p>
@@ -80,15 +79,28 @@ public final class StringEscapeUtils {
     }
 
     // TODO do we need to integrate /s escape sequence because there is a compilation error?
-    private static final LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new LookupTranslator(new String[][] { { "\\b", "\b" }, { "\\n", "\n" }, { "\\t", "\t" }, { "\\f", "\f" }, { "\\r", "\r" } });
+    private static final LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new LookupTranslator(
+            new String[][] {{"\\b", "\b"}, {"\\n", "\n"}, {"\\t", "\t"}, {"\\f", "\f"}, {"\\r", "\r"}});
 
-    private static final LookupTranslator JAVA_CTRL_CHARS_ESCAPE = new LookupTranslator(new String[][] { { "\b", "\\b" }, { "\n", "\\n" }, { "\t", "\\t" }, { "\f", "\\f" }, { "\r", "\\r" } });
+    private static final LookupTranslator JAVA_CTRL_CHARS_ESCAPE = new LookupTranslator(
+            new String[][] {{"\b", "\\b"}, {"\n", "\\n"}, {"\t", "\\t"}, {"\f", "\\f"}, {"\r", "\\r"}});
 
-    private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(new LookupTranslator(new String[][] { { "\"", "\\\"" }, { "\\", "\\\\" } }), JAVA_CTRL_CHARS_ESCAPE);
+    private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(
+            new LookupTranslator(new String[][] {{"\"", "\\\""}, {"\\", "\\\\"}}), JAVA_CTRL_CHARS_ESCAPE);
 
-    private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(new OctalUnescaper(), new UnicodeUnescaper(), JAVA_CTRL_CHARS_UNESCAPE, new LookupTranslator(new String[][] { { "\\\\", "\\" }, { "\\\"", "\"" }, { "\\'", "'" }, { "\\", "" } }));
+    private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(
+            new OctalUnescaper(),
+            new UnicodeUnescaper(),
+            JAVA_CTRL_CHARS_UNESCAPE,
+            new LookupTranslator(new String[][] {{"\\\\", "\\"}, {"\\\"", "\""}, {"\\'", "'"}, {"\\", ""}}));
 
-    private static final CharSequenceTranslator UNESCAPE_JAVA_TEXT_BLOCK = new AggregateTranslator(new OctalUnescaper(), new UnicodeUnescaper(), JAVA_CTRL_CHARS_UNESCAPE, new LookupTranslator(new String[][] { { "\\\\", "\\" }, { "\\\"", "\"" }, { "\\'", "'" }, { "\\", "" }, { "\\s", " " }, { "\\\n", "" } }));
+    private static final CharSequenceTranslator UNESCAPE_JAVA_TEXT_BLOCK = new AggregateTranslator(
+            new OctalUnescaper(),
+            new UnicodeUnescaper(),
+            JAVA_CTRL_CHARS_UNESCAPE,
+            new LookupTranslator(
+                    new String[][] {{"\\\\", "\\"}, {"\\\"", "\""}, {"\\'", "'"}, {"\\", ""}, {"\\s", " "}, {"\\\n", ""}
+                    }));
 
     /**
      * Adapted from apache commons-lang3 project.
@@ -387,7 +399,8 @@ public final class StringEscapeUtils {
                     }
                     return i + 4;
                 }
-                throw new IllegalArgumentException("Less than 4 hex digits in unicode value: '" + input.subSequence(index, input.length()) + "' due to end of CharSequence");
+                throw new IllegalArgumentException("Less than 4 hex digits in unicode value: '"
+                        + input.subSequence(index, input.length()) + "' due to end of CharSequence");
             }
             return 0;
         }

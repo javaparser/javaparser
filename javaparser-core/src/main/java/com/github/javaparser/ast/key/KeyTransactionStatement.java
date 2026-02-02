@@ -1,5 +1,7 @@
 package com.github.javaparser.ast.key;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -11,11 +13,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.KeyTransactionStatementMetaModel;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 public class KeyTransactionStatement extends Statement {
@@ -45,8 +45,10 @@ public class KeyTransactionStatement extends Statement {
     }
 
     public enum TransactionType {
-
-        BEGIN("#beginJavaCardTransaction"), COMMIT("#commitJavaCardTransaction"), FINISH("#finishJavaCardTransaction"), ABORT("#abortJavaCardTransaction");
+        BEGIN("#beginJavaCardTransaction"),
+        COMMIT("#commitJavaCardTransaction"),
+        FINISH("#finishJavaCardTransaction"),
+        ABORT("#abortJavaCardTransaction");
 
         public final String symbol;
 

@@ -1,27 +1,26 @@
 package com.github.javaparser.ast.key.sv;
 
-import com.github.javaparser.JavaToken;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.KeyMetaConstructTypeMetaModel;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedType;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeyMetaConstructTypeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 public class KeyMetaConstructType extends Type {
@@ -43,7 +42,8 @@ public class KeyMetaConstructType extends Type {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyMetaConstructType(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, String kind, Expression expr) {
+    public KeyMetaConstructType(
+            TokenRange tokenRange, NodeList<AnnotationExpr> annotations, String kind, Expression expr) {
         super(tokenRange, annotations);
         setKind(kind);
         setExpr(expr);
@@ -84,8 +84,7 @@ public class KeyMetaConstructType extends Type {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-        if (this.expr != null)
-            this.expr.setParentNode(null);
+        if (this.expr != null) this.expr.setParentNode(null);
         this.expr = expr;
         setAsParentNodeOf(expr);
         return this;
@@ -134,7 +133,7 @@ public class KeyMetaConstructType extends Type {
 
     @Override
     public ResolvedType convertToUsage(Context context) {
-        //TODO weigl
+        // TODO weigl
         return null;
     }
 

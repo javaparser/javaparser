@@ -32,7 +32,8 @@ import java.util.Optional;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier {
+public interface ResolvedClassDeclaration
+        extends ResolvedReferenceTypeDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier {
 
     /**
      * This method should always return true.

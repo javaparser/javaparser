@@ -1,22 +1,23 @@
 package com.github.javaparser.ast.key;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.KeyExecStatementMetaModel;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeyExecStatementMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 public class KeyExecStatement extends Statement {
@@ -65,8 +66,7 @@ public class KeyExecStatement extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BRANCHES, this.branches, branches);
-        if (this.branches != null)
-            this.branches.setParentNode(null);
+        if (this.branches != null) this.branches.setParentNode(null);
         this.branches = branches;
         setAsParentNodeOf(branches);
         return this;
@@ -84,8 +84,7 @@ public class KeyExecStatement extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXEC_BLOCK, this.execBlock, execBlock);
-        if (this.execBlock != null)
-            this.execBlock.setParentNode(null);
+        if (this.execBlock != null) this.execBlock.setParentNode(null);
         this.execBlock = execBlock;
         setAsParentNodeOf(execBlock);
         return this;

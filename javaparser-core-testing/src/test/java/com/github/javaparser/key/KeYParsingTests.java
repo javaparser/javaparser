@@ -9,11 +9,13 @@ import org.junit.jupiter.api.Test;
  * @version 1 (29.06.23)
  */
 public class KeYParsingTests {
-    @Test void testGhostModifier() {
+    @Test
+    void testGhostModifier() {
         Statement x = StaticJavaParser.parseStatement("ghost int x;");
     }
 
-    @Test void testDLEscape() {
+    @Test
+    void testDLEscape() {
         Statement x = StaticJavaParser.parseStatement("x = \\dl_union(y,z);");
     }
 }

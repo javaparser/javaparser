@@ -12,12 +12,11 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.TypeSolverBuilder;
-import org.junit.jupiter.api.Test;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Alexander Weigl
@@ -26,8 +25,8 @@ import java.util.Set;
 public class LogicalTypes {
     @Test
     void resolveFree() {
-        CompilationUnit cu = StaticJavaParser.parse("public class A { public ghost \\free test; " +
-                "public \\map abc() { return test;} }");
+        CompilationUnit cu = StaticJavaParser.parse(
+                "public class A { public ghost \\free test; " + "public \\map abc() { return test;} }");
 
         TypeSolver typeSolver = new TypeSolverBuilder()
                 .withCurrentJRE()
@@ -42,7 +41,13 @@ public class LogicalTypes {
         ResolvedType rt = retType.resolve();
         System.out.println(rt);
 
-        ResolvedType testType = md.getBody().get().getStatement(0).asReturnStmt().getExpression().get().calculateResolvedType();
+        ResolvedType testType = md.getBody()
+                .get()
+                .getStatement(0)
+                .asReturnStmt()
+                .getExpression()
+                .get()
+                .calculateResolvedType();
         System.out.println(testType);
     }
 
@@ -65,8 +70,8 @@ public class LogicalTypes {
         }
 
         @Override
-        public SymbolReference<ResolvedReferenceTypeDeclaration>
-        tryToSolveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+        public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+                String qualifiedModuleName, String simpleTypeName) {
             return tryToSolveType(simpleTypeName);
         }
 

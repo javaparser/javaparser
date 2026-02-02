@@ -49,7 +49,8 @@ public class ListRemovalChange implements Change {
                 currentRawValue = optional.orElse(null);
             }
             if (!(currentRawValue instanceof NodeList)) {
-                throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
+                throw new IllegalStateException(
+                        "Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
             }
             NodeList<Node> currentNodeList = (NodeList<Node>) currentRawValue;
             // Note: When adding to a node list children get assigned the list's parent, thus we must set the list's
@@ -64,7 +65,9 @@ public class ListRemovalChange implements Change {
             // which deletes the relationship between a node and its parent node.
             // This relationship is necessary to reinforce indentation, for example when
             // deleting a node, as indentation can be carried by the parent node.
-            currentNodeList.stream().filter(n -> !isSameNode(currentNodeList.get(index), n)).forEach(selectedNode -> newNodeList.add(selectedNode));
+            currentNodeList.stream()
+                    .filter(n -> !isSameNode(currentNodeList.get(index), n))
+                    .forEach(selectedNode -> newNodeList.add(selectedNode));
             return newNodeList;
         }
         return new NoChange().getValue(property, node);
@@ -75,7 +78,10 @@ public class ListRemovalChange implements Change {
     }
 
     private boolean isSameRange(Node n1, Node n2) {
-        return (!n1.hasRange() && !n2.hasRange()) || (n1.hasRange() && n2.hasRange() && isSameRange(n1.getRange().get(), n2.getRange().get()));
+        return (!n1.hasRange() && !n2.hasRange())
+                || (n1.hasRange()
+                        && n2.hasRange()
+                        && isSameRange(n1.getRange().get(), n2.getRange().get()));
     }
 
     private boolean isSameRange(Range r1, Range r2) {

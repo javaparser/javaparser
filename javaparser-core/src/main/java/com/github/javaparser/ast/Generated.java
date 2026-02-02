@@ -22,6 +22,7 @@ package com.github.javaparser.ast;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -32,7 +33,7 @@ import java.lang.annotation.Target;
  * and will be overwritten the next time the generators are run.
  */
 @Retention(SOURCE)
-@Target({ PACKAGE, TYPE, ANNOTATION_TYPE, METHOD, CONSTRUCTOR, FIELD, LOCAL_VARIABLE, PARAMETER })
+@Target({PACKAGE, TYPE, ANNOTATION_TYPE, METHOD, CONSTRUCTOR, FIELD, LOCAL_VARIABLE, PARAMETER})
 public @interface Generated {
 
     /**
