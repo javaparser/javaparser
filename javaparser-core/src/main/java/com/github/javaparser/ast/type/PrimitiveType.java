@@ -204,7 +204,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PrimitiveType setType(final Primitive type) {
+    public PrimitiveType setType(final @NonNull() Primitive type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -271,9 +271,8 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Primitive type() {
+    public @NonNull() Primitive type() {
         return Objects.requireNonNull(type);
     }
 }

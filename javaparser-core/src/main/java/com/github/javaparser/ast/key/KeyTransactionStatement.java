@@ -70,7 +70,7 @@ public class KeyTransactionStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyTransactionStatement setType(final TransactionType type) {
+    public KeyTransactionStatement setType(final @NonNull() TransactionType type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -127,9 +127,8 @@ public class KeyTransactionStatement extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TransactionType type() {
+    public @NonNull() TransactionType type() {
         return Objects.requireNonNull(type);
     }
 }

@@ -159,7 +159,7 @@ public class AssignExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssignExpr setOperator(final Operator operator) {
+    public AssignExpr setOperator(final @NonNull() Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
             return this;
@@ -170,7 +170,7 @@ public class AssignExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssignExpr setTarget(final Expression target) {
+    public AssignExpr setTarget(final @NonNull() Expression target) {
         assertNotNull(target);
         if (target == this.target) {
             return this;
@@ -184,7 +184,7 @@ public class AssignExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssignExpr setValue(final Expression value) {
+    public AssignExpr setValue(final @NonNull() Expression value) {
         assertNotNull(value);
         if (value == this.value) {
             return this;
@@ -261,23 +261,20 @@ public class AssignExpr extends Expression {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Operator operator() {
+    public @NonNull() Operator operator() {
         return Objects.requireNonNull(operator);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression target() {
+    public @NonNull() Expression target() {
         return Objects.requireNonNull(target);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression value() {
+    public @NonNull() Expression value() {
         return Objects.requireNonNull(value);
     }
 }

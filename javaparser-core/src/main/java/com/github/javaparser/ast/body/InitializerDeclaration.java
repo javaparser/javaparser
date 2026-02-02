@@ -88,14 +88,13 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
         return Objects.requireNonNull(isStatic);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public InitializerDeclaration setBody(final BlockStmt body) {
+    public InitializerDeclaration setBody(final @NonNull() BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -168,9 +167,8 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt body() {
+    public @NonNull() BlockStmt body() {
         return Objects.requireNonNull(body);
     }
 }

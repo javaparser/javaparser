@@ -250,7 +250,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public InstanceOfExpr setExpression(final Expression expression) {
+    public InstanceOfExpr setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -264,7 +264,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public InstanceOfExpr setPattern(final PatternExpr pattern) {
+    public InstanceOfExpr setPattern(final @Nullable() PatternExpr pattern) {
         if (pattern == this.pattern) {
             return this;
         }
@@ -277,7 +277,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public InstanceOfExpr setType(final ReferenceType type) {
+    public InstanceOfExpr setType(final @NonNull() ReferenceType type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -297,23 +297,20 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PatternExpr pattern() {
+    public @Nullable() PatternExpr pattern() {
         return pattern;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReferenceType type() {
+    public @NonNull() ReferenceType type() {
         return Objects.requireNonNull(type);
     }
 }

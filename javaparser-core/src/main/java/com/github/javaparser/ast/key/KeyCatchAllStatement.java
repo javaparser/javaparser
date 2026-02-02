@@ -84,7 +84,7 @@ public class KeyCatchAllStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyCatchAllStatement setBlock(final BlockStmt block) {
+    public KeyCatchAllStatement setBlock(final @NonNull() BlockStmt block) {
         assertNotNull(block);
         if (block == this.block) {
             return this;
@@ -103,7 +103,7 @@ public class KeyCatchAllStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyCatchAllStatement setLabel(final Name label) {
+    public KeyCatchAllStatement setLabel(final @NonNull() Name label) {
         assertNotNull(label);
         if (label == this.label) {
             return this;
@@ -146,16 +146,14 @@ public class KeyCatchAllStatement extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt block() {
+    public @NonNull() BlockStmt block() {
         return Objects.requireNonNull(block);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name label() {
+    public @NonNull() Name label() {
         return Objects.requireNonNull(label);
     }
 }

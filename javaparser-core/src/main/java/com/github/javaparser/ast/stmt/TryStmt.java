@@ -165,7 +165,7 @@ public class TryStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TryStmt setCatchClauses(final NodeList<CatchClause> catchClauses) {
+    public TryStmt setCatchClauses(final @NonNull() NodeList<CatchClause> catchClauses) {
         assertNotNull(catchClauses);
         if (catchClauses == this.catchClauses) {
             return this;
@@ -179,7 +179,7 @@ public class TryStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TryStmt setFinallyBlock(final BlockStmt finallyBlock) {
+    public TryStmt setFinallyBlock(final @Nullable() BlockStmt finallyBlock) {
         if (finallyBlock == this.finallyBlock) {
             return this;
         }
@@ -192,7 +192,7 @@ public class TryStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TryStmt setTryBlock(final BlockStmt tryBlock) {
+    public TryStmt setTryBlock(final @NonNull() BlockStmt tryBlock) {
         assertNotNull(tryBlock);
         if (tryBlock == this.tryBlock) {
             return this;
@@ -206,7 +206,7 @@ public class TryStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TryStmt setResources(final NodeList<Expression> resources) {
+    public TryStmt setResources(final @NonNull() NodeList<Expression> resources) {
         assertNotNull(resources);
         if (resources == this.resources) {
             return this;
@@ -319,30 +319,26 @@ public class TryStmt extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<CatchClause> catchClauses() {
+    public @NonNull() NodeList<CatchClause> catchClauses() {
         return Objects.requireNonNull(catchClauses);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt finallyBlock() {
+    public @Nullable() BlockStmt finallyBlock() {
         return finallyBlock;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> resources() {
+    public @NonNull() NodeList<Expression> resources() {
         return Objects.requireNonNull(resources);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt tryBlock() {
+    public @NonNull() BlockStmt tryBlock() {
         return Objects.requireNonNull(tryBlock);
     }
 }

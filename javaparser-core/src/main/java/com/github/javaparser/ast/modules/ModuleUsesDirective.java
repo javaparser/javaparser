@@ -125,7 +125,7 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleUsesDirective setName(final Name name) {
+    public ModuleUsesDirective setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -182,9 +182,8 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @NonNull() Name name() {
         return Objects.requireNonNull(name);
     }
 }

@@ -164,7 +164,7 @@ public class BinaryExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BinaryExpr setLeft(final Expression left) {
+    public BinaryExpr setLeft(final @NonNull() Expression left) {
         assertNotNull(left);
         if (left == this.left) {
             return this;
@@ -178,7 +178,7 @@ public class BinaryExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BinaryExpr setOperator(final Operator operator) {
+    public BinaryExpr setOperator(final @NonNull() Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
             return this;
@@ -189,7 +189,7 @@ public class BinaryExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BinaryExpr setRight(final Expression right) {
+    public BinaryExpr setRight(final @NonNull() Expression right) {
         assertNotNull(right);
         if (right == this.right) {
             return this;
@@ -256,23 +256,20 @@ public class BinaryExpr extends Expression {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression left() {
+    public @NonNull() Expression left() {
         return Objects.requireNonNull(left);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Operator operator() {
+    public @NonNull() Operator operator() {
         return Objects.requireNonNull(operator);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression right() {
+    public @NonNull() Expression right() {
         return Objects.requireNonNull(right);
     }
 }

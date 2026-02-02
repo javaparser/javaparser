@@ -94,7 +94,7 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CastExpr setExpression(final Expression expression) {
+    public CastExpr setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -108,7 +108,7 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CastExpr setType(final Type type) {
+    public CastExpr setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -175,16 +175,14 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 }

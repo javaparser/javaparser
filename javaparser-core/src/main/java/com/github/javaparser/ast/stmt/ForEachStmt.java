@@ -110,7 +110,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ForEachStmt setBody(final Statement body) {
+    public ForEachStmt setBody(final @NonNull() Statement body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -124,7 +124,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ForEachStmt setIterable(final Expression iterable) {
+    public ForEachStmt setIterable(final @NonNull() Expression iterable) {
         assertNotNull(iterable);
         if (iterable == this.iterable) {
             return this;
@@ -138,7 +138,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ForEachStmt setVariable(final VariableDeclarationExpr variable) {
+    public ForEachStmt setVariable(final @NonNull() VariableDeclarationExpr variable) {
         assertNotNull(variable);
         if (variable == this.variable) {
             return this;
@@ -238,23 +238,20 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement body() {
+    public @NonNull() Statement body() {
         return Objects.requireNonNull(body);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression iterable() {
+    public @NonNull() Expression iterable() {
         return Objects.requireNonNull(iterable);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarationExpr variable() {
+    public @NonNull() VariableDeclarationExpr variable() {
         return Objects.requireNonNull(variable);
     }
 }

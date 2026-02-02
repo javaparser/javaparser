@@ -63,7 +63,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecutionContext setContext(final Type context) {
+    public KeyExecutionContext setContext(final @NonNull() Type context) {
         assertNotNull(context);
         if (context == this.context) {
             return this;
@@ -82,7 +82,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecutionContext setInstance(final Expression instance) {
+    public KeyExecutionContext setInstance(final @Nullable() Expression instance) {
         if (instance == this.instance) {
             return this;
         }
@@ -100,7 +100,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecutionContext setSignature(final KeyMethodSignature signature) {
+    public KeyExecutionContext setSignature(final @NonNull() KeyMethodSignature signature) {
         assertNotNull(signature);
         if (signature == this.signature) {
             return this;
@@ -169,23 +169,20 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type context() {
+    public @NonNull() Type context() {
         return Objects.requireNonNull(context);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression instance() {
+    public @Nullable() Expression instance() {
         return instance;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodSignature signature() {
+    public @NonNull() KeyMethodSignature signature() {
         return Objects.requireNonNull(signature);
     }
 }

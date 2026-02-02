@@ -142,7 +142,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public VariableDeclarationExpr setAnnotations(final @NonNull() NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
             return this;
@@ -156,7 +156,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarationExpr setModifiers(final NodeList<Modifier> modifiers) {
+    public VariableDeclarationExpr setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -170,7 +170,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
+    public VariableDeclarationExpr setVariables(final @NonNull() NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
@@ -274,23 +274,20 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> annotations() {
+    public @NonNull() NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<VariableDeclarator> variables() {
+    public @NonNull() NodeList<VariableDeclarator> variables() {
         return Objects.requireNonNull(variables);
     }
 }

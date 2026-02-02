@@ -95,7 +95,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public WhileStmt setBody(final Statement body) {
+    public WhileStmt setBody(final @NonNull() Statement body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -109,7 +109,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public WhileStmt setCondition(final Expression condition) {
+    public WhileStmt setCondition(final @NonNull() Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
             return this;
@@ -176,16 +176,14 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement body() {
+    public @NonNull() Statement body() {
         return Objects.requireNonNull(body);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression condition() {
+    public @NonNull() Expression condition() {
         return Objects.requireNonNull(condition);
     }
 }

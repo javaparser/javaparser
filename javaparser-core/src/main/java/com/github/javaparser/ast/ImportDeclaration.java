@@ -169,21 +169,18 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
      * Return if the import ends with "*".
      */
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isAsterisk() {
         return Objects.requireNonNull(isAsterisk);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isModule() {
         return Objects.requireNonNull(isModule);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
         return Objects.requireNonNull(isStatic);
@@ -200,7 +197,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ImportDeclaration setName(final Name name) {
+    public ImportDeclaration setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -249,9 +246,8 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @NonNull() Name name() {
         return Objects.requireNonNull(name);
     }
 

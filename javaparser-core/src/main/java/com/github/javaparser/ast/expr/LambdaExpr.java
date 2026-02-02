@@ -123,7 +123,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LambdaExpr setParameters(final NodeList<Parameter> parameters) {
+    public LambdaExpr setParameters(final @NonNull() NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
             return this;
@@ -145,7 +145,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LambdaExpr setBody(final Statement body) {
+    public LambdaExpr setBody(final @NonNull() Statement body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -171,7 +171,6 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isEnclosingParameters() {
         return Objects.requireNonNull(isEnclosingParameters);
@@ -285,16 +284,14 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement body() {
+    public @NonNull() Statement body() {
         return Objects.requireNonNull(body);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Parameter> parameters() {
+    public @NonNull() NodeList<Parameter> parameters() {
         return Objects.requireNonNull(parameters);
     }
 }

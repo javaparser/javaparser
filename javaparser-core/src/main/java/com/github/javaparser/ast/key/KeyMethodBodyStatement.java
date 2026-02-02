@@ -66,7 +66,7 @@ public class KeyMethodBodyStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodBodyStatement setExpr(final Expression expr) {
+    public KeyMethodBodyStatement setExpr(final @NonNull() Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -85,7 +85,7 @@ public class KeyMethodBodyStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodBodyStatement setName(final Name name) {
+    public KeyMethodBodyStatement setName(final @Nullable() Name name) {
         if (name == this.name) {
             return this;
         }
@@ -103,7 +103,7 @@ public class KeyMethodBodyStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodBodyStatement setSource(final Type source) {
+    public KeyMethodBodyStatement setSource(final @NonNull() Type source) {
         assertNotNull(source);
         if (source == this.source) {
             return this;
@@ -196,23 +196,20 @@ public class KeyMethodBodyStatement extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expr() {
+    public @NonNull() Expression expr() {
         return Objects.requireNonNull(expr);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @Nullable() Name name() {
         return name;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type source() {
+    public @NonNull() Type source() {
         return Objects.requireNonNull(source);
     }
 }

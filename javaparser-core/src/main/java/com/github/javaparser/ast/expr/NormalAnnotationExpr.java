@@ -82,7 +82,7 @@ public class NormalAnnotationExpr extends AnnotationExpr {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NormalAnnotationExpr setPairs(final NodeList<MemberValuePair> pairs) {
+    public NormalAnnotationExpr setPairs(final @NonNull() NodeList<MemberValuePair> pairs) {
         assertNotNull(pairs);
         if (pairs == this.pairs) {
             return this;
@@ -182,9 +182,8 @@ public class NormalAnnotationExpr extends AnnotationExpr {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<MemberValuePair> pairs() {
+    public @NonNull() NodeList<MemberValuePair> pairs() {
         return Objects.requireNonNull(pairs);
     }
 }

@@ -89,7 +89,7 @@ public class SuperExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SuperExpr setTypeName(final Name typeName) {
+    public SuperExpr setTypeName(final @Nullable() Name typeName) {
         if (typeName == this.typeName) {
             return this;
         }
@@ -178,9 +178,8 @@ public class SuperExpr extends Expression {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name typeName() {
+    public @Nullable() Name typeName() {
         return typeName;
     }
 }

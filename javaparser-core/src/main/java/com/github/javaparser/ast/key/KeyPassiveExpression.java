@@ -54,7 +54,7 @@ public class KeyPassiveExpression extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyPassiveExpression setExpr(final Expression expr) {
+    public KeyPassiveExpression setExpr(final @NonNull() Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -117,9 +117,8 @@ public class KeyPassiveExpression extends Expression {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expr() {
+    public @NonNull() Expression expr() {
         return Objects.requireNonNull(expr);
     }
 }

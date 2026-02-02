@@ -83,7 +83,7 @@ public class YieldStmt extends Statement implements NodeWithExpression {
      * @return this, the YieldStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public YieldStmt setExpression(final Expression expression) {
+    public YieldStmt setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -158,9 +158,8 @@ public class YieldStmt extends Statement implements NodeWithExpression {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
     }
 }

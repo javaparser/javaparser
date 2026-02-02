@@ -137,7 +137,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public FieldDeclaration setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -151,7 +151,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
+    public FieldDeclaration setVariables(final @NonNull() NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
@@ -351,16 +351,14 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<VariableDeclarator> variables() {
+    public @NonNull() NodeList<VariableDeclarator> variables() {
         return Objects.requireNonNull(variables);
     }
 }

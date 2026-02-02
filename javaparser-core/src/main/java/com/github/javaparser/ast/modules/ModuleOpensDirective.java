@@ -101,7 +101,7 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleOpensDirective setName(final Name name) {
+    public ModuleOpensDirective setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -120,7 +120,7 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleOpensDirective setModuleNames(final NodeList<Name> moduleNames) {
+    public ModuleOpensDirective setModuleNames(final @NonNull() NodeList<Name> moduleNames) {
         assertNotNull(moduleNames);
         if (moduleNames == this.moduleNames) {
             return this;
@@ -212,16 +212,14 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Name> moduleNames() {
+    public @NonNull() NodeList<Name> moduleNames() {
         return Objects.requireNonNull(moduleNames);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @NonNull() Name name() {
         return Objects.requireNonNull(name);
     }
 }

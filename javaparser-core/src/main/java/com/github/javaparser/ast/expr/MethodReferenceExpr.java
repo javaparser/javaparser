@@ -106,7 +106,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MethodReferenceExpr setScope(final Expression scope) {
+    public MethodReferenceExpr setScope(final @NonNull() Expression scope) {
         assertNotNull(scope);
         if (scope == this.scope) {
             return this;
@@ -131,7 +131,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
      * @return this, the MethodReferenceExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MethodReferenceExpr setTypeArguments(final NodeList<Type> typeArguments) {
+    public MethodReferenceExpr setTypeArguments(final @Nullable() NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return this;
         }
@@ -149,7 +149,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MethodReferenceExpr setIdentifier(final String identifier) {
+    public MethodReferenceExpr setIdentifier(final @NonNull() String identifier) {
         assertNonEmpty(identifier);
         if (identifier.equals(this.identifier)) {
             return this;
@@ -265,23 +265,20 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String identifier() {
+    public @NonNull() String identifier() {
         return Objects.requireNonNull(identifier);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression scope() {
+    public @NonNull() Expression scope() {
         return Objects.requireNonNull(scope);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Type> typeArguments() {
+    public @Nullable() NodeList<Type> typeArguments() {
         return typeArguments;
     }
 }

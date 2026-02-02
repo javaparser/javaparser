@@ -111,7 +111,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
      * @return this, the WildcardType
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public WildcardType setExtendedType(final ReferenceType extendedType) {
+    public WildcardType setExtendedType(final @Nullable() ReferenceType extendedType) {
         if (extendedType == this.extendedType) {
             return this;
         }
@@ -130,7 +130,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
      * @return this, the WildcardType
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public WildcardType setSuperType(final ReferenceType superType) {
+    public WildcardType setSuperType(final @Nullable() ReferenceType superType) {
         if (superType == this.superType) {
             return this;
         }
@@ -284,16 +284,14 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReferenceType extendedType() {
+    public @Nullable() ReferenceType extendedType() {
         return extendedType;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReferenceType superType() {
+    public @Nullable() ReferenceType superType() {
         return superType;
     }
 }

@@ -105,7 +105,7 @@ public class KeyContextStatementBlock extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyContextStatementBlock setContext(final KeyExecCtxtSV context) {
+    public KeyContextStatementBlock setContext(final @Nullable() KeyExecCtxtSV context) {
         if (context == this.context) {
             return this;
         }
@@ -123,7 +123,7 @@ public class KeyContextStatementBlock extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyContextStatementBlock setExpression(final KeyExpressionSV expression) {
+    public KeyContextStatementBlock setExpression(final @Nullable() KeyExpressionSV expression) {
         if (expression == this.expression) {
             return this;
         }
@@ -141,7 +141,7 @@ public class KeyContextStatementBlock extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyContextStatementBlock setSignature(final KeyMethodSignatureSV signature) {
+    public KeyContextStatementBlock setSignature(final @Nullable() KeyMethodSignatureSV signature) {
         if (signature == this.signature) {
             return this;
         }
@@ -159,7 +159,7 @@ public class KeyContextStatementBlock extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyContextStatementBlock setStatements(final NodeList<Statement> statements) {
+    public KeyContextStatementBlock setStatements(final @NonNull() NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
             return this;
@@ -178,7 +178,7 @@ public class KeyContextStatementBlock extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyContextStatementBlock setTr(final KeyTypeSV tr) {
+    public KeyContextStatementBlock setTr(final @Nullable() KeyTypeSV tr) {
         if (tr == this.tr) {
             return this;
         }
@@ -301,37 +301,32 @@ public class KeyContextStatementBlock extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecCtxtSV context() {
+    public @Nullable() KeyExecCtxtSV context() {
         return context;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExpressionSV expression() {
+    public @Nullable() KeyExpressionSV expression() {
         return expression;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodSignatureSV signature() {
+    public @Nullable() KeyMethodSignatureSV signature() {
         return signature;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Statement> statements() {
+    public @NonNull() NodeList<Statement> statements() {
         return Objects.requireNonNull(statements);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyTypeSV tr() {
+    public @Nullable() KeyTypeSV tr() {
         return tr;
     }
 }

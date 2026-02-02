@@ -91,7 +91,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ThisExpr setTypeName(final Name typeName) {
+    public ThisExpr setTypeName(final @Nullable() Name typeName) {
         if (typeName == this.typeName) {
             return this;
         }
@@ -185,9 +185,8 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name typeName() {
+    public @Nullable() Name typeName() {
         return typeName;
     }
 }

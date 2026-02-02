@@ -57,7 +57,7 @@ public class KeyMethodSignature extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodSignature setName(final Name name) {
+    public KeyMethodSignature setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -76,7 +76,7 @@ public class KeyMethodSignature extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodSignature setParamTypes(final NodeList<Type> paramTypes) {
+    public KeyMethodSignature setParamTypes(final @NonNull() NodeList<Type> paramTypes) {
         assertNotNull(paramTypes);
         if (paramTypes == this.paramTypes) {
             return this;
@@ -136,16 +136,14 @@ public class KeyMethodSignature extends Node {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @NonNull() Name name() {
         return Objects.requireNonNull(name);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Type> paramTypes() {
+    public @NonNull() NodeList<Type> paramTypes() {
         return Objects.requireNonNull(paramTypes);
     }
 }

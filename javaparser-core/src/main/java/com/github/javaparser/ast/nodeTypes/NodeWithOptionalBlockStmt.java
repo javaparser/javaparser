@@ -24,7 +24,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-
 import java.util.Optional;
 
 /**
@@ -35,7 +34,8 @@ public interface NodeWithOptionalBlockStmt<N extends Node> {
 
     Optional<BlockStmt> getBody();
 
-    @Nullable BlockStmt body();
+    @Nullable
+    BlockStmt body();
 
     N setBody(@Nullable BlockStmt block);
 

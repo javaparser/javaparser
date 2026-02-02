@@ -253,7 +253,7 @@ public class CompilationUnit extends Node {
      * @param imports the list of imports
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
+    public CompilationUnit setImports(final @NonNull() NodeList<ImportDeclaration> imports) {
         assertNotNull(imports);
         if (imports == this.imports) {
             return this;
@@ -319,7 +319,7 @@ public class CompilationUnit extends Node {
      * @param packageDeclaration the packageDeclaration declaration to set or {@code null} to default package
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
+    public CompilationUnit setPackageDeclaration(final @Nullable() PackageDeclaration packageDeclaration) {
         if (packageDeclaration == this.packageDeclaration) {
             return this;
         }
@@ -335,7 +335,7 @@ public class CompilationUnit extends Node {
      * Sets the list of types declared in this compilation unit.
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
+    public CompilationUnit setTypes(final @NonNull() NodeList<TypeDeclaration<?>> types) {
         assertNotNull(types);
         if (types == this.types) {
             return this;
@@ -648,7 +648,7 @@ public class CompilationUnit extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CompilationUnit setModule(final ModuleDeclaration module) {
+    public CompilationUnit setModule(final @Nullable() ModuleDeclaration module) {
         if (module == this.module) {
             return this;
         }
@@ -864,30 +864,26 @@ public class CompilationUnit extends Node {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ImportDeclaration> imports() {
+    public @NonNull() NodeList<ImportDeclaration> imports() {
         return Objects.requireNonNull(imports);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleDeclaration module() {
+    public @Nullable() ModuleDeclaration module() {
         return module;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PackageDeclaration packageDeclaration() {
+    public @Nullable() PackageDeclaration packageDeclaration() {
         return packageDeclaration;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<TypeDeclaration<?>> types() {
+    public @NonNull() NodeList<TypeDeclaration<?>> types() {
         return Objects.requireNonNull(types);
     }
 }

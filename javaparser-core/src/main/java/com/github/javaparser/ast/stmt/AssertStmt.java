@@ -99,7 +99,7 @@ public class AssertStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssertStmt setCheck(final Expression check) {
+    public AssertStmt setCheck(final @NonNull() Expression check) {
         assertNotNull(check);
         if (check == this.check) {
             return this;
@@ -119,7 +119,7 @@ public class AssertStmt extends Statement {
      * @return this, the AssertStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssertStmt setMessage(final Expression message) {
+    public AssertStmt setMessage(final @Nullable() Expression message) {
         if (message == this.message) {
             return this;
         }
@@ -207,16 +207,14 @@ public class AssertStmt extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression check() {
+    public @NonNull() Expression check() {
         return Objects.requireNonNull(check);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression message() {
+    public @Nullable() Expression message() {
         return message;
     }
 }

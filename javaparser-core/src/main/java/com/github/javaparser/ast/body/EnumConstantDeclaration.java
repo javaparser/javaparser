@@ -111,7 +111,7 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumConstantDeclaration setArguments(final NodeList<Expression> arguments) {
+    public EnumConstantDeclaration setArguments(final @NonNull() NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
             return this;
@@ -125,7 +125,7 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumConstantDeclaration setClassBody(final NodeList<BodyDeclaration<?>> classBody) {
+    public EnumConstantDeclaration setClassBody(final @NonNull() NodeList<BodyDeclaration<?>> classBody) {
         assertNotNull(classBody);
         if (classBody == this.classBody) {
             return this;
@@ -139,7 +139,7 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumConstantDeclaration setName(final SimpleName name) {
+    public EnumConstantDeclaration setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -240,23 +240,20 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> arguments() {
+    public @NonNull() NodeList<Expression> arguments() {
         return Objects.requireNonNull(arguments);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<BodyDeclaration<?>> classBody() {
+    public @NonNull() NodeList<BodyDeclaration<?>> classBody() {
         return Objects.requireNonNull(classBody);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 }

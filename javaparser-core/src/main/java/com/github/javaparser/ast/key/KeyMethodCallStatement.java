@@ -89,7 +89,7 @@ public class KeyMethodCallStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodCallStatement setBlock(final BlockStmt block) {
+    public KeyMethodCallStatement setBlock(final @NonNull() BlockStmt block) {
         assertNotNull(block);
         if (block == this.block) {
             return this;
@@ -108,7 +108,7 @@ public class KeyMethodCallStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodCallStatement setContext(final KeyAbstractExecutionContext context) {
+    public KeyMethodCallStatement setContext(final @NonNull() KeyAbstractExecutionContext context) {
         assertNotNull(context);
         if (context == this.context) {
             return this;
@@ -127,7 +127,7 @@ public class KeyMethodCallStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodCallStatement setName(final Name name) {
+    public KeyMethodCallStatement setName(final @Nullable() Name name) {
         if (name == this.name) {
             return this;
         }
@@ -195,23 +195,20 @@ public class KeyMethodCallStatement extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt block() {
+    public @NonNull() BlockStmt block() {
         return Objects.requireNonNull(block);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyAbstractExecutionContext context() {
+    public @NonNull() KeyAbstractExecutionContext context() {
         return Objects.requireNonNull(context);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @Nullable() Name name() {
         return name;
     }
 }

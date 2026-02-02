@@ -53,9 +53,7 @@ import org.jspecify.annotations.Nullable;
  *
  * @author Julio Vilmar Gesser
  */
-public class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration>
-        implements NodeWithOptionalBlockStmt<ConstructorDeclaration>,
-        NodeWithAccessModifiers<ConstructorDeclaration>, NodeWithJavadoc<ConstructorDeclaration>, NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration>, Resolvable<ResolvedConstructorDeclaration> {
+public class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration> implements NodeWithOptionalBlockStmt<ConstructorDeclaration>, NodeWithAccessModifiers<ConstructorDeclaration>, NodeWithJavadoc<ConstructorDeclaration>, NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration>, Resolvable<ResolvedConstructorDeclaration> {
 
     @OptionalProperty
     private BlockStmt body;
@@ -115,7 +113,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
      * @return this, the ConstructorDeclaration
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ConstructorDeclaration setBody(final BlockStmt body) {
+    public ConstructorDeclaration setBody(final @Nullable() BlockStmt body) {
         if (body == this.body) {
             return this;
         }
@@ -254,17 +252,18 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @Nullable() BlockStmt body() {
         return body;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ConstructorDeclaration removeBody() {
         return setBody((BlockStmt) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null) {
             return false;

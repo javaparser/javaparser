@@ -80,7 +80,7 @@ public class KeyMergePointStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMergePointStatement setExpr(final Expression expr) {
+    public KeyMergePointStatement setExpr(final @NonNull() Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -118,9 +118,8 @@ public class KeyMergePointStatement extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expr() {
+    public @NonNull() Expression expr() {
         return Objects.requireNonNull(expr);
     }
 }

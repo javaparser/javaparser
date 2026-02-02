@@ -203,14 +203,13 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isInterface() {
         return Objects.requireNonNull(isInterface);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendedTypes) {
+    public ClassOrInterfaceDeclaration setExtendedTypes(final @NonNull() NodeList<ClassOrInterfaceType> extendedTypes) {
         assertNotNull(extendedTypes);
         if (extendedTypes == this.extendedTypes) {
             return this;
@@ -224,7 +223,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
+    public ClassOrInterfaceDeclaration setImplementedTypes(final @NonNull() NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
             return this;
@@ -238,7 +237,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassOrInterfaceDeclaration setPermittedTypes(final NodeList<ClassOrInterfaceType> permittedTypes) {
+    public ClassOrInterfaceDeclaration setPermittedTypes(final @NonNull() NodeList<ClassOrInterfaceType> permittedTypes) {
         assertNotNull(permittedTypes);
         if (permittedTypes == this.permittedTypes) {
             return this;
@@ -262,7 +261,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+    public ClassOrInterfaceDeclaration setTypeParameters(final @NonNull() NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
             return this;
@@ -406,7 +405,6 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isCompact() {
         return Objects.requireNonNull(isCompact);
@@ -423,30 +421,26 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ClassOrInterfaceType> extendedTypes() {
+    public @NonNull() NodeList<ClassOrInterfaceType> extendedTypes() {
         return Objects.requireNonNull(extendedTypes);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ClassOrInterfaceType> implementedTypes() {
+    public @NonNull() NodeList<ClassOrInterfaceType> implementedTypes() {
         return Objects.requireNonNull(implementedTypes);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ClassOrInterfaceType> permittedTypes() {
+    public @NonNull() NodeList<ClassOrInterfaceType> permittedTypes() {
         return Objects.requireNonNull(permittedTypes);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<TypeParameter> typeParameters() {
+    public @NonNull() NodeList<TypeParameter> typeParameters() {
         return Objects.requireNonNull(typeParameters);
     }
 }

@@ -90,7 +90,7 @@ public class LabeledStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LabeledStmt setStatement(final Statement statement) {
+    public LabeledStmt setStatement(final @NonNull() Statement statement) {
         assertNotNull(statement);
         if (statement == this.statement) {
             return this;
@@ -109,7 +109,7 @@ public class LabeledStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LabeledStmt setLabel(final SimpleName label) {
+    public LabeledStmt setLabel(final @NonNull() SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {
             return this;
@@ -176,16 +176,14 @@ public class LabeledStmt extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName label() {
+    public @NonNull() SimpleName label() {
         return Objects.requireNonNull(label);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement statement() {
+    public @NonNull() Statement statement() {
         return Objects.requireNonNull(statement);
     }
 }

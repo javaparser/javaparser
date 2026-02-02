@@ -60,7 +60,7 @@ public class KeyLoopScopeBlock extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyLoopScopeBlock setBlock(final BlockStmt block) {
+    public KeyLoopScopeBlock setBlock(final @NonNull() BlockStmt block) {
         assertNotNull(block);
         if (block == this.block) {
             return this;
@@ -79,7 +79,7 @@ public class KeyLoopScopeBlock extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyLoopScopeBlock setIndexPV(final Expression indexPV) {
+    public KeyLoopScopeBlock setIndexPV(final @NonNull() Expression indexPV) {
         assertNotNull(indexPV);
         if (indexPV == this.indexPV) {
             return this;
@@ -146,16 +146,14 @@ public class KeyLoopScopeBlock extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt block() {
+    public @NonNull() BlockStmt block() {
         return Objects.requireNonNull(block);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression indexPV() {
+    public @NonNull() Expression indexPV() {
         return Objects.requireNonNull(indexPV);
     }
 }

@@ -83,7 +83,7 @@ public abstract class Comment extends Node {
      * @param content the text of the comment to set
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Comment setContent(final String content) {
+    public Comment setContent(final @NonNull() String content) {
         assertNotNull(content);
         if (content.equals(this.content)) {
             return this;
@@ -241,9 +241,8 @@ public abstract class Comment extends Node {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String content() {
+    public @NonNull() String content() {
         return Objects.requireNonNull(content);
     }
 

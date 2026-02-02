@@ -1409,10 +1409,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             }
         }
         final var b = n.getBody();
-        if(b.isPresent()) {
+        if (b.isPresent()) {
             printer.print(" ");
             b.get().accept(this, arg);
-        }else{
+        } else {
             printer.print(";");
         }
     }

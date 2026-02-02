@@ -130,7 +130,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchStmt setEntries(final NodeList<SwitchEntry> entries) {
+    public SwitchStmt setEntries(final @NonNull() NodeList<SwitchEntry> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
             return this;
@@ -144,7 +144,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchStmt setSelector(final Expression selector) {
+    public SwitchStmt setSelector(final @NonNull() Expression selector) {
         assertNotNull(selector);
         if (selector == this.selector) {
             return this;
@@ -228,16 +228,14 @@ public class SwitchStmt extends Statement implements SwitchNode {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SwitchEntry> entries() {
+    public @NonNull() NodeList<SwitchEntry> entries() {
         return Objects.requireNonNull(entries);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression selector() {
+    public @NonNull() Expression selector() {
         return Objects.requireNonNull(selector);
     }
 }

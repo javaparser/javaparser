@@ -95,7 +95,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public DoStmt setBody(final Statement body) {
+    public DoStmt setBody(final @NonNull() Statement body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -109,7 +109,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public DoStmt setCondition(final Expression condition) {
+    public DoStmt setCondition(final @NonNull() Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
             return this;
@@ -176,16 +176,14 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement body() {
+    public @NonNull() Statement body() {
         return Objects.requireNonNull(body);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression condition() {
+    public @NonNull() Expression condition() {
         return Objects.requireNonNull(condition);
     }
 }

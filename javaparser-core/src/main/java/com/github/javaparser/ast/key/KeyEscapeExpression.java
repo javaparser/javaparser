@@ -92,7 +92,7 @@ public class KeyEscapeExpression extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyEscapeExpression setArguments(final NodeList<Expression> arguments) {
+    public KeyEscapeExpression setArguments(final @Nullable() NodeList<Expression> arguments) {
         if (arguments == this.arguments) {
             return this;
         }
@@ -110,7 +110,7 @@ public class KeyEscapeExpression extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyEscapeExpression setCallee(final Name callee) {
+    public KeyEscapeExpression setCallee(final @NonNull() Name callee) {
         assertNotNull(callee);
         if (callee == this.callee) {
             return this;
@@ -174,16 +174,14 @@ public class KeyEscapeExpression extends Expression {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> arguments() {
+    public @Nullable() NodeList<Expression> arguments() {
         return arguments;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name callee() {
+    public @NonNull() Name callee() {
         return Objects.requireNonNull(callee);
     }
 }

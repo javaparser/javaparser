@@ -91,8 +91,25 @@ public class PropertyGenerator extends NodeGenerator {
         if (property.getContainingNodeMetaModel().hasWildcard()) {
             setter.setType(parseType("T"));
         }
-        setter.addAndGetParameter(property.getTypeNameForSetter(), property.getName())
+
+        var parameter = setter.addAndGetParameter(property.getTypeNameForSetter(), property.getName())
                 .addModifier(FINAL);
+
+        var compilationUnit = nodeCoid.findCompilationUnit().get();
+        var rtype = parameter.getType();
+        if (property.isOptional()) {
+            // Ensure imports have been included.
+            compilationUnit.addImport(Nullable.class);
+            if(rtype.isClassOrInterfaceType()) {
+                rtype.asClassOrInterfaceType().addAnnotation(Nullable.class);
+            }
+        } else {
+            compilationUnit.addImport(NonNull.class);
+            if(rtype.isClassOrInterfaceType()) {
+                rtype.asClassOrInterfaceType().addAnnotation(NonNull.class);
+            }
+        }
+
 
         final BlockStmt body = setter.getBody().get();
         body.getStatements().clear();
@@ -164,17 +181,24 @@ public class PropertyGenerator extends NodeGenerator {
         annotateWhenOverridden(nodeMetaModel, getter);
         final BlockStmt body = getter.getBody().get();
         body.getStatements().clear();
-        nodeCoid.findCompilationUnit().get().addImport(Objects.class);
+        final var compilationUnit = nodeCoid.findCompilationUnit().get();
+        compilationUnit.addImport(Objects.class);
 
         getter.addAnnotation("com.github.javaparser.ast.key.IgnoreLexPrinting");
+
+        var rtype = getter.getType();
         if (property.isOptional()) {
             // Ensure imports have been included.
-            nodeCoid.findCompilationUnit().get().addImport(Nullable.class);
-            getter.addAnnotation(Nullable.class);
+            compilationUnit.addImport(Nullable.class);
+            if(rtype.isClassOrInterfaceType()) {
+                rtype.asClassOrInterfaceType().addAnnotation(Nullable.class);
+            }
             body.addStatement(f("return %s;", property.getName()));
         } else {
-            nodeCoid.findCompilationUnit().get().addImport(NonNull.class);
-            getter.addAnnotation(NonNull.class);
+            compilationUnit.addImport(NonNull.class);
+            if(rtype.isClassOrInterfaceType()) {
+                rtype.asClassOrInterfaceType().addAnnotation(NonNull.class);
+            }
             body.addStatement(f("return Objects.requireNonNull(%s);", property.getName()));
         }
 

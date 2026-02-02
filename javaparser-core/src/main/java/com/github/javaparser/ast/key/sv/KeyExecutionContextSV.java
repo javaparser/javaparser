@@ -44,7 +44,7 @@ public class KeyExecutionContextSV extends KeyAbstractExecutionContext {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecutionContextSV setText(final String text) {
+    public KeyExecutionContextSV setText(final @NonNull() String text) {
         assertNotNull(text);
         if (text.equals(this.text)) {
             return this;
@@ -79,9 +79,8 @@ public class KeyExecutionContextSV extends KeyAbstractExecutionContext {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String text() {
+    public @NonNull() String text() {
         return Objects.requireNonNull(text);
     }
 }

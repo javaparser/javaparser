@@ -97,7 +97,7 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
      * @return this, the ContinueStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ContinueStmt setLabel(final SimpleName label) {
+    public ContinueStmt setLabel(final @Nullable() SimpleName label) {
         if (label == this.label) {
             return this;
         }
@@ -181,9 +181,8 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName label() {
+    public @Nullable() SimpleName label() {
         return label;
     }
 }

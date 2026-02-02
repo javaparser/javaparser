@@ -56,7 +56,7 @@ public class KeyCcatchSV extends KeyCcatchBranch {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyCcatchSV setText(final String text) {
+    public KeyCcatchSV setText(final @NonNull() String text) {
         assertNotNull(text);
         if (text.equals(this.text)) {
             return this;
@@ -79,9 +79,8 @@ public class KeyCcatchSV extends KeyCcatchBranch {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String text() {
+    public @NonNull() String text() {
         return Objects.requireNonNull(text);
     }
 }

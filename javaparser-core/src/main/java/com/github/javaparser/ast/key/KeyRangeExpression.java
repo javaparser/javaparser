@@ -81,7 +81,7 @@ public class KeyRangeExpression extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyRangeExpression setUpper(final Expression upper) {
+    public KeyRangeExpression setUpper(final @NonNull() Expression upper) {
         assertNotNull(upper);
         if (upper == this.upper) {
             return this;
@@ -100,7 +100,7 @@ public class KeyRangeExpression extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyRangeExpression setLower(final Expression lower) {
+    public KeyRangeExpression setLower(final @NonNull() Expression lower) {
         assertNotNull(lower);
         if (lower == this.lower) {
             return this;
@@ -143,16 +143,14 @@ public class KeyRangeExpression extends Expression {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression lower() {
+    public @NonNull() Expression lower() {
         return Objects.requireNonNull(lower);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression upper() {
+    public @NonNull() Expression upper() {
         return Objects.requireNonNull(upper);
     }
 }

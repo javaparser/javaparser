@@ -71,7 +71,7 @@ public class KeyCcatchContinue extends KeyCcatchBranch {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyCcatchContinue setBlock(final BlockStmt block) {
+    public KeyCcatchContinue setBlock(final @Nullable() BlockStmt block) {
         if (block == this.block) {
             return this;
         }
@@ -89,7 +89,7 @@ public class KeyCcatchContinue extends KeyCcatchBranch {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyCcatchContinue setLabel(final Name label) {
+    public KeyCcatchContinue setLabel(final @Nullable() Name label) {
         if (label == this.label) {
             return this;
         }
@@ -166,16 +166,14 @@ public class KeyCcatchContinue extends KeyCcatchBranch {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt block() {
+    public @Nullable() BlockStmt block() {
         return block;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name label() {
+    public @Nullable() Name label() {
         return label;
     }
 }

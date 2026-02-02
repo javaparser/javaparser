@@ -78,7 +78,7 @@ public class KeyMetaConstructType extends Type {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMetaConstructType setExpr(final Expression expr) {
+    public KeyMetaConstructType setExpr(final @NonNull() Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -97,7 +97,7 @@ public class KeyMetaConstructType extends Type {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMetaConstructType setKind(final String kind) {
+    public KeyMetaConstructType setKind(final @NonNull() String kind) {
         assertNotNull(kind);
         if (kind.equals(this.kind)) {
             return this;
@@ -163,16 +163,14 @@ public class KeyMetaConstructType extends Type {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expr() {
+    public @NonNull() Expression expr() {
         return Objects.requireNonNull(expr);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String kind() {
+    public @NonNull() String kind() {
         return Objects.requireNonNull(kind);
     }
 }

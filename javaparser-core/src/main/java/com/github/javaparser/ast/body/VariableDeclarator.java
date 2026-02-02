@@ -163,7 +163,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarator setName(final SimpleName name) {
+    public VariableDeclarator setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -183,7 +183,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
      * @return this, the VariableDeclarator
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarator setInitializer(final Expression initializer) {
+    public VariableDeclarator setInitializer(final @Nullable() Expression initializer) {
         if (initializer == this.initializer) {
             return this;
         }
@@ -211,7 +211,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarator setType(final Type type) {
+    public VariableDeclarator setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -285,23 +285,20 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression initializer() {
+    public @Nullable() Expression initializer() {
         return initializer;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 }

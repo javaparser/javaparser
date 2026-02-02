@@ -119,7 +119,7 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordPatternExpr setModifiers(final NodeList<Modifier> modifiers) {
+    public RecordPatternExpr setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -156,7 +156,7 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordPatternExpr setPatternList(final NodeList<ComponentPatternExpr> patternList) {
+    public RecordPatternExpr setPatternList(final @NonNull() NodeList<ComponentPatternExpr> patternList) {
         assertNotNull(patternList);
         if (patternList == this.patternList) {
             return this;
@@ -241,16 +241,14 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ComponentPatternExpr> patternList() {
+    public @NonNull() NodeList<ComponentPatternExpr> patternList() {
         return Objects.requireNonNull(patternList);
     }
 }

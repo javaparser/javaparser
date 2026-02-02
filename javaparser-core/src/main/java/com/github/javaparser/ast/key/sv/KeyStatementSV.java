@@ -54,7 +54,7 @@ public class KeyStatementSV extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyStatementSV setText(final String text) {
+    public KeyStatementSV setText(final @NonNull() String text) {
         assertNotNull(text);
         if (text.equals(this.text)) {
             return this;
@@ -101,9 +101,8 @@ public class KeyStatementSV extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String text() {
+    public @NonNull() String text() {
         return Objects.requireNonNull(text);
     }
 }

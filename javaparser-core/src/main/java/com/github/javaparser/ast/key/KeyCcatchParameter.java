@@ -67,7 +67,7 @@ public class KeyCcatchParameter extends KeyCcatchBranch {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyCcatchParameter setBlock(final BlockStmt block) {
+    public KeyCcatchParameter setBlock(final @Nullable() BlockStmt block) {
         if (block == this.block) {
             return this;
         }
@@ -85,7 +85,7 @@ public class KeyCcatchParameter extends KeyCcatchBranch {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyCcatchParameter setParameter(final Parameter parameter) {
+    public KeyCcatchParameter setParameter(final @Nullable() Parameter parameter) {
         if (parameter == this.parameter) {
             return this;
         }
@@ -162,16 +162,14 @@ public class KeyCcatchParameter extends KeyCcatchBranch {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt block() {
+    public @Nullable() BlockStmt block() {
         return block;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter parameter() {
+    public @Nullable() Parameter parameter() {
         return parameter;
     }
 }

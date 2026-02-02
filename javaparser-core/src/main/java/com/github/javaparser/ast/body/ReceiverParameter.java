@@ -111,7 +111,7 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReceiverParameter setType(final Type type) {
+    public ReceiverParameter setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -137,7 +137,7 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
      * so please avoid passing null
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReceiverParameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public ReceiverParameter setAnnotations(final @NonNull() NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
             return this;
@@ -168,7 +168,7 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReceiverParameter setName(final Name name) {
+    public ReceiverParameter setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -220,23 +220,20 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> annotations() {
+    public @NonNull() NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @NonNull() Name name() {
         return Objects.requireNonNull(name);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 }

@@ -96,7 +96,7 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CatchClause setParameter(final Parameter parameter) {
+    public CatchClause setParameter(final @NonNull() Parameter parameter) {
         assertNotNull(parameter);
         if (parameter == this.parameter) {
             return this;
@@ -115,7 +115,7 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CatchClause setBody(final BlockStmt body) {
+    public CatchClause setBody(final @NonNull() BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -158,16 +158,14 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt body() {
+    public @NonNull() BlockStmt body() {
         return Objects.requireNonNull(body);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter parameter() {
+    public @NonNull() Parameter parameter() {
         return Objects.requireNonNull(parameter);
     }
 }

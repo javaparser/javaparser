@@ -66,7 +66,7 @@ public class KeyMetaConstruct extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMetaConstruct setChild(final Node child) {
+    public KeyMetaConstruct setChild(final @NonNull() Node child) {
         assertNotNull(child);
         if (child == this.child) {
             return this;
@@ -85,7 +85,7 @@ public class KeyMetaConstruct extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMetaConstruct setKind(final String kind) {
+    public KeyMetaConstruct setKind(final @NonNull() String kind) {
         assertNotNull(kind);
         if (kind.equals(this.kind)) {
             return this;
@@ -101,7 +101,7 @@ public class KeyMetaConstruct extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMetaConstruct setSchemas(final NodeList<Node> schemas) {
+    public KeyMetaConstruct setSchemas(final @NonNull() NodeList<Node> schemas) {
         assertNotNull(schemas);
         if (schemas == this.schemas) {
             return this;
@@ -197,23 +197,20 @@ public class KeyMetaConstruct extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Node child() {
+    public @NonNull() Node child() {
         return Objects.requireNonNull(child);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String kind() {
+    public @NonNull() String kind() {
         return Objects.requireNonNull(kind);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Node> schemas() {
+    public @NonNull() NodeList<Node> schemas() {
         return Objects.requireNonNull(schemas);
     }
 }

@@ -69,7 +69,7 @@ public abstract class PatternExpr extends ComponentPatternExpr implements NodeWi
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PatternExpr setType(final Type type) {
+    public PatternExpr setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -141,9 +141,8 @@ public abstract class PatternExpr extends ComponentPatternExpr implements NodeWi
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 }

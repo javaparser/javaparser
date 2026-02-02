@@ -84,7 +84,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt setStatements(final NodeList<Statement> statements) {
+    public BlockStmt setStatements(final @NonNull() NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
             return this;
@@ -164,9 +164,8 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Statement> statements() {
+    public @NonNull() NodeList<Statement> statements() {
         return Objects.requireNonNull(statements);
     }
 }

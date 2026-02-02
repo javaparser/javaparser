@@ -51,7 +51,7 @@ public class KeyMethodSignatureSV extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodSignatureSV setText(final String text) {
+    public KeyMethodSignatureSV setText(final @NonNull() String text) {
         assertNotNull(text);
         if (text.equals(this.text)) {
             return this;
@@ -74,9 +74,8 @@ public class KeyMethodSignatureSV extends Node {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String text() {
+    public @NonNull() String text() {
         return Objects.requireNonNull(text);
     }
 }

@@ -93,7 +93,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NameExpr setName(final SimpleName name) {
+    public NameExpr setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -173,9 +173,8 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 }

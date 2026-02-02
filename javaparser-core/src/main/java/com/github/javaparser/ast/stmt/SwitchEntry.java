@@ -201,7 +201,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
      * @return this, the SwitchEntry
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchEntry setLabels(final NodeList<Expression> labels) {
+    public SwitchEntry setLabels(final @NonNull() NodeList<Expression> labels) {
         assertNotNull(labels);
         if (labels == this.labels) {
             return this;
@@ -215,7 +215,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchEntry setStatements(final NodeList<Statement> statements) {
+    public SwitchEntry setStatements(final @NonNull() NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
             return this;
@@ -273,7 +273,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchEntry setType(final Type type) {
+    public SwitchEntry setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -311,7 +311,6 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isDefault() {
         return Objects.requireNonNull(isDefault);
@@ -333,7 +332,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchEntry setGuard(final Expression guard) {
+    public SwitchEntry setGuard(final @Nullable() Expression guard) {
         if (guard == this.guard) {
             return this;
         }
@@ -364,30 +363,26 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression guard() {
+    public @Nullable() Expression guard() {
         return guard;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> labels() {
+    public @NonNull() NodeList<Expression> labels() {
         return Objects.requireNonNull(labels);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Statement> statements() {
+    public @NonNull() NodeList<Statement> statements() {
         return Objects.requireNonNull(statements);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 }

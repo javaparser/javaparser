@@ -114,7 +114,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayType setComponentType(final Type componentType) {
+    public ArrayType setComponentType(final @NonNull() Type componentType) {
         assertNotNull(componentType);
         if (componentType == this.componentType) {
             return this;
@@ -241,7 +241,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayType setOrigin(final Origin origin) {
+    public ArrayType setOrigin(final @NonNull() Origin origin) {
         assertNotNull(origin);
         if (origin == this.origin) {
             return this;
@@ -337,16 +337,14 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type componentType() {
+    public @NonNull() Type componentType() {
         return Objects.requireNonNull(componentType);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Origin origin() {
+    public @NonNull() Origin origin() {
         return Objects.requireNonNull(origin);
     }
 }

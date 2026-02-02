@@ -83,7 +83,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType>, Con
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public Type setAnnotations(final @NonNull() NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
             return this;
@@ -411,9 +411,8 @@ public abstract class Type extends Node implements Resolvable<ResolvedType>, Con
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> annotations() {
+    public @NonNull() NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 }

@@ -82,7 +82,7 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
+    public SingleMemberAnnotationExpr setMemberValue(final @NonNull() Expression memberValue) {
         assertNotNull(memberValue);
         if (memberValue == this.memberValue) {
             return this;
@@ -145,9 +145,8 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression memberValue() {
+    public @NonNull() Expression memberValue() {
         return Objects.requireNonNull(memberValue);
     }
 }

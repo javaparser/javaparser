@@ -63,7 +63,7 @@ public class KeyMetaConstructExpression extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMetaConstructExpression setChild(final Expression child) {
+    public KeyMetaConstructExpression setChild(final @NonNull() Expression child) {
         assertNotNull(child);
         if (child == this.child) {
             return this;
@@ -82,7 +82,7 @@ public class KeyMetaConstructExpression extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMetaConstructExpression setText(final String text) {
+    public KeyMetaConstructExpression setText(final @NonNull() String text) {
         assertNotNull(text);
         if (text.equals(this.text)) {
             return this;
@@ -142,16 +142,14 @@ public class KeyMetaConstructExpression extends Expression {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression child() {
+    public @NonNull() Expression child() {
         return Objects.requireNonNull(child);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String text() {
+    public @NonNull() String text() {
         return Objects.requireNonNull(text);
     }
 }

@@ -173,7 +173,7 @@ public class Modifier extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Modifier setKeyword(final Keyword keyword) {
+    public Modifier setKeyword(final @NonNull() Keyword keyword) {
         assertNotNull(keyword);
         if (keyword == this.keyword) {
             return this;
@@ -204,9 +204,8 @@ public class Modifier extends Node {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Keyword keyword() {
+    public @NonNull() Keyword keyword() {
         return Objects.requireNonNull(keyword);
     }
 }

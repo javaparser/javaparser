@@ -639,7 +639,7 @@ public class NodeFinderVisitor extends VoidVisitorAdapter<Range> {
     public void visit(final ConstructorDeclaration n, final Range arg) {
         {
             var b = n.getBody();
-            if(b.isPresent()) {
+            if (b.isPresent()) {
                 b.get().accept(this, arg);
                 if (selectedNode != null)
                     return;

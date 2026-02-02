@@ -1311,7 +1311,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Node setAssociatedSpecificationComments(final NodeList<Comment> associatedSpecificationComments) {
+    public Node setAssociatedSpecificationComments(final @Nullable() NodeList<Comment> associatedSpecificationComments) {
         if (associatedSpecificationComments == this.associatedSpecificationComments) {
             return this;
         }
@@ -1324,16 +1324,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Comment> associatedSpecificationComments() {
+    public @Nullable() NodeList<Comment> associatedSpecificationComments() {
         return associatedSpecificationComments;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Comment comment() {
+    public @Nullable() Comment comment() {
         return comment;
     }
 }

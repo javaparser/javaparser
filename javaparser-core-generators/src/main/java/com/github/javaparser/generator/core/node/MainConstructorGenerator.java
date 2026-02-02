@@ -53,7 +53,7 @@ public class MainConstructorGenerator extends NodeGenerator {
                 .addParameter(TokenRange.class, "tokenRange")
                 .setJavadocComment("\n     * This constructor is used by the parser and is considered private.\n     ");
 
-        BlockStmt body = constructor.getBody();
+        BlockStmt body = constructor.getBody().get(); // only non-existing in KeY world.
 
         SeparatedItemStringBuilder superCall = new SeparatedItemStringBuilder("super(", ", ", ");");
         superCall.append("tokenRange");

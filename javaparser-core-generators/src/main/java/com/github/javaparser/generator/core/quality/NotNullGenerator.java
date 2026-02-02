@@ -91,7 +91,7 @@ public class NotNullGenerator extends CompilationUnitGenerator {
      */
     protected void generateQualityForConstructor(ConstructorDeclaration constructorDeclaration) {
         generateQualityForParameter(
-                constructorDeclaration, constructorDeclaration.getParameters(), constructorDeclaration.getBody());
+                constructorDeclaration, constructorDeclaration.getParameters(), constructorDeclaration.getBody().get());
     }
 
     /**

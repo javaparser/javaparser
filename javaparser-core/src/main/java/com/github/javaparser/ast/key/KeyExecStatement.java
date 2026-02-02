@@ -59,7 +59,7 @@ public class KeyExecStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecStatement setBranches(final NodeList<KeyCcatchBranch> branches) {
+    public KeyExecStatement setBranches(final @NonNull() NodeList<KeyCcatchBranch> branches) {
         assertNotNull(branches);
         if (branches == this.branches) {
             return this;
@@ -78,7 +78,7 @@ public class KeyExecStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecStatement setExecBlock(final BlockStmt execBlock) {
+    public KeyExecStatement setExecBlock(final @NonNull() BlockStmt execBlock) {
         assertNotNull(execBlock);
         if (execBlock == this.execBlock) {
             return this;
@@ -162,16 +162,14 @@ public class KeyExecStatement extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<KeyCcatchBranch> branches() {
+    public @NonNull() NodeList<KeyCcatchBranch> branches() {
         return Objects.requireNonNull(branches);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt execBlock() {
+    public @NonNull() BlockStmt execBlock() {
         return Objects.requireNonNull(execBlock);
     }
 }

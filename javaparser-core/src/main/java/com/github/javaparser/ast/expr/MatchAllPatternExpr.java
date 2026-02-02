@@ -77,7 +77,7 @@ public class MatchAllPatternExpr extends ComponentPatternExpr implements NodeWit
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MatchAllPatternExpr setModifiers(final NodeList<Modifier> modifiers) {
+    public MatchAllPatternExpr setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -169,9 +169,8 @@ public class MatchAllPatternExpr extends ComponentPatternExpr implements NodeWit
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 }

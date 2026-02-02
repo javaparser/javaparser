@@ -109,7 +109,7 @@ public class BreakStmt extends Statement {
      * @return this, the BreakStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BreakStmt setLabel(final SimpleName label) {
+    public BreakStmt setLabel(final @Nullable() SimpleName label) {
         if (label == this.label) {
             return this;
         }
@@ -193,9 +193,8 @@ public class BreakStmt extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName label() {
+    public @Nullable() SimpleName label() {
         return label;
     }
 }

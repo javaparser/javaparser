@@ -86,7 +86,7 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ThrowStmt setExpression(final Expression expression) {
+    public ThrowStmt setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -149,9 +149,8 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
     }
 }

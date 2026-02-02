@@ -85,7 +85,7 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ExpressionStmt setExpression(final Expression expression) {
+    public ExpressionStmt setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -148,9 +148,8 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
     }
 }

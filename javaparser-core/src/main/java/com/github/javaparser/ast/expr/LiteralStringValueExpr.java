@@ -62,7 +62,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LiteralStringValueExpr setValue(final String value) {
+    public LiteralStringValueExpr setValue(final @NonNull() String value) {
         assertNotNull(value);
         if (value.equals(this.value)) {
             return this;
@@ -109,9 +109,8 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String value() {
+    public @NonNull() String value() {
         return Objects.requireNonNull(value);
     }
 }

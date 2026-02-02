@@ -98,7 +98,7 @@ public class ReturnStmt extends Statement {
      * @return this, the ReturnStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReturnStmt setExpression(final Expression expression) {
+    public ReturnStmt setExpression(final @Nullable() Expression expression) {
         if (expression == this.expression) {
             return this;
         }
@@ -182,9 +182,8 @@ public class ReturnStmt extends Statement {
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @Nullable() Expression expression() {
         return expression;
     }
 }

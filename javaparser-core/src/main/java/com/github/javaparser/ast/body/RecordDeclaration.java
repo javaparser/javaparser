@@ -151,7 +151,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
+    public RecordDeclaration setImplementedTypes(final @NonNull() NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
             return this;
@@ -165,7 +165,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+    public RecordDeclaration setTypeParameters(final @NonNull() NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
             return this;
@@ -316,7 +316,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclaration setParameters(final NodeList<Parameter> parameters) {
+    public RecordDeclaration setParameters(final @NonNull() NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
             return this;
@@ -335,7 +335,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclaration setReceiverParameter(final ReceiverParameter receiverParameter) {
+    public RecordDeclaration setReceiverParameter(final @Nullable() ReceiverParameter receiverParameter) {
         if (receiverParameter == this.receiverParameter) {
             return this;
         }
@@ -393,30 +393,26 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ClassOrInterfaceType> implementedTypes() {
+    public @NonNull() NodeList<ClassOrInterfaceType> implementedTypes() {
         return Objects.requireNonNull(implementedTypes);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Parameter> parameters() {
+    public @NonNull() NodeList<Parameter> parameters() {
         return Objects.requireNonNull(parameters);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @Nullable()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReceiverParameter receiverParameter() {
+    public @Nullable() ReceiverParameter receiverParameter() {
         return receiverParameter;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
-    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<TypeParameter> typeParameters() {
+    public @NonNull() NodeList<TypeParameter> typeParameters() {
         return Objects.requireNonNull(typeParameters);
     }
 }
