@@ -26,15 +26,14 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.body.*;
+import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.expr.*;
+import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.jml.clauses.*;
-import com.github.javaparser.ast.jml.body.*;
-import com.github.javaparser.ast.jml.doc.*;
-import com.github.javaparser.ast.jml.stmt.*;
-import com.github.javaparser.ast.jml.expr.*;
-import com.github.javaparser.ast.modules.*;
 
 /**
  * A visitor that returns nothing, and has default methods that are used when a specific visit method is not
@@ -45,14 +44,12 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     /**
      * This will be called by every node visit method that is not overridden.
      */
-    public void defaultAction(Node n, A arg) {
-    }
+    public void defaultAction(Node n, A arg) {}
 
     /**
      * This will be called by the NodeList visit method when it is not overridden.
      */
-    public void defaultAction(NodeList n, A arg) {
-    }
+    public void defaultAction(NodeList n, A arg) {}
 
     @Override
     public void visit(final LocalRecordDeclarationStmt n, final A arg) {

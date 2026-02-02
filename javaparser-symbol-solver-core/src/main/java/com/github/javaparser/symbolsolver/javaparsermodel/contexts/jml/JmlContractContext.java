@@ -43,7 +43,6 @@ public class JmlContractContext extends AbstractJavaParserContext<JmlContract> {
             }
         }
 
-
         // Fallback to default implementation to find non-here defined names.
         return super.solveSymbol(name);
     }

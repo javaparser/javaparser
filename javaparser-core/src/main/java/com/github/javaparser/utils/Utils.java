@@ -21,6 +21,7 @@
 package com.github.javaparser.utils;
 
 import static java.util.Arrays.asList;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import java.io.IOException;
@@ -73,7 +74,7 @@ public class Utils {
     public static String escapeEndOfLines(String string) {
         StringBuilder escapedString = new StringBuilder();
         for (char c : string.toCharArray()) {
-            switch(c) {
+            switch (c) {
                 case '\n':
                     escapedString.append("\\n");
                     break;
@@ -172,7 +173,8 @@ public class Utils {
         return stringTransformer(s, "decapitalize", String::toLowerCase);
     }
 
-    private static String stringTransformer(String s, String operationDescription, Function<String, String> transformation) {
+    private static String stringTransformer(
+            String s, String operationDescription, Function<String, String> transformation) {
         if (s.isEmpty()) {
             throw new IllegalArgumentException(String.format("You cannot %s an empty string", operationDescription));
         }
@@ -280,8 +282,7 @@ public class Utils {
      */
     public static String removeFileExtension(String filename) {
         int extensionIndex = filename.lastIndexOf(".");
-        if (extensionIndex == -1)
-            return filename;
+        if (extensionIndex == -1) return filename;
         return filename.substring(0, extensionIndex);
     }
 
@@ -299,6 +300,10 @@ public class Utils {
      * Checks, if the parent is a unary expression with a minus operator. Used to check for negative literals.
      */
     public static boolean hasUnaryMinusAsParent(Node n) {
-        return n.getParentNode().filter(parent -> parent instanceof UnaryExpr).map(parent -> (UnaryExpr) parent).map(unaryExpr -> unaryExpr.getOperator() == UnaryExpr.Operator.MINUS).orElse(false);
+        return n.getParentNode()
+                .filter(parent -> parent instanceof UnaryExpr)
+                .map(parent -> (UnaryExpr) parent)
+                .map(unaryExpr -> unaryExpr.getOperator() == UnaryExpr.Operator.MINUS)
+                .orElse(false);
     }
 }

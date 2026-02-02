@@ -4,15 +4,14 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.Providers;
 import com.github.javaparser.ast.jml.ArbitraryNodeContainer;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
 /**
  * @author Alexander Weigl
@@ -21,8 +20,7 @@ import java.util.stream.Stream;
 class FragmentTest {
     @TestFactory
     Stream<DynamicTest> testStatementLevel() {
-        return files()
-                .filter(it -> it.getName().startsWith("stmt"))
+        return files().filter(it -> it.getName().startsWith("stmt"))
                 .map(it -> DynamicTest.dynamicTest(it.getName(), () -> testStatementLevel(it)));
     }
 
@@ -31,17 +29,14 @@ class FragmentTest {
         ParseResult<ArbitraryNodeContainer> r = jp.parseJmlMethodLevel(Providers.provider(f));
         Assumptions.assumeFalse(r.getProblems().stream().anyMatch(it -> ignorableMessages(it.getMessage())));
 
-        r.getProblems().forEach(
-                it -> System.out.println(it.getMessage())
-        );
+        r.getProblems().forEach(it -> System.out.println(it.getMessage()));
         Assertions.assertTrue(r.isSuccessful());
     }
 
     @TestFactory
     Stream<DynamicTest> testClassLevel() {
-        return files()
-                .filter(it -> it.getName().startsWith("decl"))
-                //.filter(it -> it.getName().endsWith("510942598.txt"))
+        return files().filter(it -> it.getName().startsWith("decl"))
+                // .filter(it -> it.getName().endsWith("510942598.txt"))
                 .map(it -> DynamicTest.dynamicTest(it.getName(), () -> testClassLevel(it)));
     }
 
@@ -51,9 +46,7 @@ class FragmentTest {
 
         Assumptions.assumeFalse(r.getProblems().stream().anyMatch(it -> ignorableMessages(it.getMessage())));
 
-        r.getProblems().forEach(
-                it -> System.out.println(it.getMessage())
-        );
+        r.getProblems().forEach(it -> System.out.println(it.getMessage()));
         if (!r.isSuccessful()) {
             System.out.println(f.getAbsolutePath());
         }
@@ -78,7 +71,6 @@ class FragmentTest {
                 || message.contains("loop_decreases")
                 || message.contains("check");
     }
-
 
     private Stream<File> files() {
         File[] files = new File("src/test/resources/fragments").listFiles();

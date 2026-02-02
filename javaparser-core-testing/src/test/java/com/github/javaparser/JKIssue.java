@@ -21,11 +21,10 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Paths;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class JKIssue {
     @Test
@@ -34,7 +33,8 @@ public class JKIssue {
         cfg.setProcessJml(true);
         JavaParser parser = new JavaParser(cfg);
         CompilationUnit cu = parser.parse(Paths.get("src/test/test_sourcecode/JKIssueDoubleContract.java"))
-                .getResult().get();
+                .getResult()
+                .get();
 
         var methods = cu.getPrimaryType().get().getMethods();
         for (var method : methods) {
@@ -48,9 +48,17 @@ public class JKIssue {
         cfg.setProcessJml(true);
         JavaParser parser = new JavaParser(cfg);
         CompilationUnit cu = parser.parse(Paths.get("src/test/test_sourcecode/MissingParentSimpleExprClause.java"))
-                .getResult().get();
+                .getResult()
+                .get();
 
-        var clause = cu.getType(0).getMethods().get(0).getContracts().get(0).getClauses().get(0).asJmlSimpleExprClause();
+        var clause = cu.getType(0)
+                .getMethods()
+                .get(0)
+                .getContracts()
+                .get(0)
+                .getClauses()
+                .get(0)
+                .asJmlSimpleExprClause();
         Assertions.assertEquals(1, clause.getChildNodes().size());
     }
 

@@ -140,8 +140,7 @@ public class Range {
      */
     public boolean contains(Range other) {
         boolean beginResult = (begin.isBeforeOrEqual(other.begin));
-        if (!beginResult)
-            return false;
+        if (!beginResult) return false;
         return end.isAfterOrEqual(other.end);
     }
 
@@ -228,10 +227,8 @@ public class Range {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Range range = (Range) o;
         return begin.equals(range.begin) && end.equals(range.end);
     }

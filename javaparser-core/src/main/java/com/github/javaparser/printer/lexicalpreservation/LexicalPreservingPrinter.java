@@ -26,6 +26,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.decapitalize;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DataKey;
@@ -88,8 +89,7 @@ public class LexicalPreservingPrinter {
     /**
      * The nodetext for a node is stored in the node's data field. This is the key to set and retrieve it.
      */
-    public static final DataKey<NodeText> NODE_TEXT_DATA = new DataKey<NodeText>() {
-    };
+    public static final DataKey<NodeText> NODE_TEXT_DATA = new DataKey<NodeText>() {};
 
     private static final LexicalDifferenceCalculator LEXICAL_DIFFERENCE_CALCULATOR = new LexicalDifferenceCalculator();
 
@@ -142,7 +142,8 @@ public class LexicalPreservingPrinter {
     private static class Observer extends PropagatingAstObserver {
 
         @Override
-        public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+        public void concretePropertyChange(
+                Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
             if (oldValue == newValue) {
                 // Not really a change, ignore
                 return;
@@ -152,13 +153,15 @@ public class LexicalPreservingPrinter {
             }
             if (property == ObservableProperty.COMMENT) {
                 Optional<Node> parentNode = observedNode.getParentNode();
-                NodeText nodeText = parentNode.map(parent -> getOrCreateNodeText(parentNode.get())).orElseGet(() -> getOrCreateNodeText(observedNode));
+                NodeText nodeText = parentNode
+                        .map(parent -> getOrCreateNodeText(parentNode.get()))
+                        .orElseGet(() -> getOrCreateNodeText(observedNode));
                 if (oldValue == null) {
                     // this case corresponds to the addition of a comment
                     // Find the position of the comment node and put in front of it the [...]
                     int // Find the position of the comment node and put in front of it the [...]
-                    //
-                    index = parentNode.isPresent() ? nodeText.findChild(observedNode) : 0;
+                            //
+                            index = parentNode.isPresent() ? nodeText.findChild(observedNode) : 0;
                     /* Add the same indentation to the comment as the previous node
                      * for example if we want to add a comment on the body of the method declaration :
                      * Actual code
@@ -195,14 +198,16 @@ public class LexicalPreservingPrinter {
                         if (isCompleteLine(nodeText.getElements(), index)) {
                             removeAllExtraCharacters(nodeText.getElements(), index);
                         } else {
-                            removeAllExtraCharactersStartingFrom(nodeText.getElements().listIterator(index));
+                            removeAllExtraCharactersStartingFrom(
+                                    nodeText.getElements().listIterator(index));
                         }
                     } else {
                         throw new UnsupportedOperationException("Trying to remove something that is not a comment!");
                     }
                 } else {
                     // this is a replacement of a comment
-                    List<TokenTextElement> matchingTokens = findTokenTextElementForComment((Comment) oldValue, nodeText);
+                    List<TokenTextElement> matchingTokens =
+                            findTokenTextElementForComment((Comment) oldValue, nodeText);
                     if (matchingTokens.size() != 1) {
                         throw new IllegalStateException("The matching comment to be replaced could not be found");
                     }
@@ -219,17 +224,14 @@ public class LexicalPreservingPrinter {
         }
 
         private boolean isCompleteLine(List<TextElement> elements, int index) {
-            if (index <= 0 || index >= elements.size())
-                return false;
+            if (index <= 0 || index >= elements.size()) return false;
             boolean isCompleteLine = true;
             ListIterator<TextElement> iterator = elements.listIterator(index);
             // verify if elements after the index are only spaces or tabs
             while (iterator.hasNext()) {
                 TextElement textElement = iterator.next();
-                if (textElement.isNewline())
-                    break;
-                if (textElement.isSpaceOrTab())
-                    continue;
+                if (textElement.isNewline()) break;
+                if (textElement.isSpaceOrTab()) continue;
                 isCompleteLine = false;
                 break;
             }
@@ -237,18 +239,15 @@ public class LexicalPreservingPrinter {
             iterator = elements.listIterator(index);
             while (iterator.hasPrevious() && isCompleteLine) {
                 TextElement textElement = iterator.previous();
-                if (textElement.isNewline())
-                    break;
-                if (textElement.isSpaceOrTab())
-                    continue;
+                if (textElement.isNewline()) break;
+                if (textElement.isSpaceOrTab()) continue;
                 isCompleteLine = false;
             }
             return isCompleteLine;
         }
 
         private void removeAllExtraCharacters(List<TextElement> elements, int index) {
-            if (index < 0 || index >= elements.size())
-                return;
+            if (index < 0 || index >= elements.size()) return;
             removeAllExtraCharactersStartingFrom(elements.listIterator(index));
             removeAllExtraCharactersBeforePosition(elements.listIterator(index));
         }
@@ -286,15 +285,18 @@ public class LexicalPreservingPrinter {
 
         private TokenTextElement makeCommentToken(Comment newComment) {
             if (newComment.isJavadocComment()) {
-                return new TokenTextElement(JAVADOC_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
+                return new TokenTextElement(
+                        JAVADOC_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
             }
             if (newComment.isLineComment()) {
                 return new TokenTextElement(SINGLE_LINE_COMMENT, newComment.getHeader() + newComment.getContent());
             }
             if (newComment.isBlockComment()) {
-                return new TokenTextElement(MULTI_LINE_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
+                return new TokenTextElement(
+                        MULTI_LINE_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
             }
-            throw new UnsupportedOperationException("Unknown type of comment: " + newComment.getClass().getSimpleName());
+            throw new UnsupportedOperationException(
+                    "Unknown type of comment: " + newComment.getClass().getSimpleName());
         }
 
         private int getIndexOfComment(Comment oldValue, NodeText nodeText) {
@@ -317,17 +319,35 @@ public class LexicalPreservingPrinter {
             matchingChildElements = selectMatchingChildElements(oldValue, nodeText);
             if (matchingChildElements.size() > 1) {
                 // Duplicate child nodes found, refine the result
-                matchingChildElements = matchingChildElements.stream().filter(t -> t.getChild().hasRange() && oldValue.hasRange()).filter(t -> t.getChild().getRange().get().equals(oldValue.getRange().get()) || (t.getChild().getComment().isPresent() && t.getChild().getComment().get().hasRange() && t.getChild().getComment().get().getRange().get().equals(oldValue.getRange().get()))).collect(toList());
+                matchingChildElements = matchingChildElements.stream()
+                        .filter(t -> t.getChild().hasRange() && oldValue.hasRange())
+                        .filter(t -> t.getChild()
+                                        .getRange()
+                                        .get()
+                                        .equals(oldValue.getRange().get())
+                                || (t.getChild().getComment().isPresent()
+                                        && t.getChild().getComment().get().hasRange()
+                                        && t.getChild()
+                                                .getComment()
+                                                .get()
+                                                .getRange()
+                                                .get()
+                                                .equals(oldValue.getRange().get())))
+                        .collect(toList());
             }
             if (matchingChildElements.size() != 1) {
-                throw new IllegalStateException("The matching child text element for the comment to be removed could not be found.");
+                throw new IllegalStateException(
+                        "The matching child text element for the comment to be removed could not be found.");
             }
             return matchingChildElements;
         }
 
         private List<ChildTextElement> selectMatchingChildElements(Comment oldValue, NodeText nodeText) {
             List<ChildTextElement> result = new ArrayList<>();
-            List<ChildTextElement> childTextElements = nodeText.getElements().stream().filter(e -> e.isChild()).map(c -> (ChildTextElement) c).collect(toList());
+            List<ChildTextElement> childTextElements = nodeText.getElements().stream()
+                    .filter(e -> e.isChild())
+                    .map(c -> (ChildTextElement) c)
+                    .collect(toList());
             ListIterator<ChildTextElement> iterator = childTextElements.listIterator();
             while (iterator.hasNext()) {
                 ChildTextElement textElement = iterator.next();
@@ -336,7 +356,8 @@ public class LexicalPreservingPrinter {
                     continue;
                 }
                 Node node = textElement.getChild();
-                if (node.getComment().isPresent() && isSameComment(node.getComment().get(), oldValue)) {
+                if (node.getComment().isPresent()
+                        && isSameComment(node.getComment().get(), oldValue)) {
                     result.add(textElement);
                     continue;
                 }
@@ -351,15 +372,35 @@ public class LexicalPreservingPrinter {
         private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<TokenTextElement> matchingTokens;
             if (oldValue instanceof JavadocComment) {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals(oldValue.asString())).collect(toList());
+                matchingTokens = nodeText.getElements().stream()
+                        .filter(e -> e.isToken(JAVADOC_COMMENT))
+                        .map(e -> (TokenTextElement) e)
+                        .filter(t -> t.getText().equals(oldValue.asString()))
+                        .collect(toList());
             } else if (oldValue instanceof BlockComment) {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(MULTI_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals(oldValue.asString())).collect(toList());
+                matchingTokens = nodeText.getElements().stream()
+                        .filter(e -> e.isToken(MULTI_LINE_COMMENT))
+                        .map(e -> (TokenTextElement) e)
+                        .filter(t -> t.getText().equals(oldValue.asString()))
+                        .collect(toList());
             } else {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(SINGLE_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().trim().equals((oldValue.asString()).trim())).collect(toList());
+                matchingTokens = nodeText.getElements().stream()
+                        .filter(e -> e.isToken(SINGLE_LINE_COMMENT))
+                        .map(e -> (TokenTextElement) e)
+                        .filter(t -> t.getText().trim().equals((oldValue.asString()).trim()))
+                        .collect(toList());
             }
             // To check that a comment matches in the list of tokens, if exists the range must be always checked,
             // as comments with the same content may exist on different lines.
-            return matchingTokens.stream().filter(t -> (!t.getToken().hasRange() && !oldValue.hasRange()) || (t.getToken().hasRange() && oldValue.hasRange() && t.getToken().getRange().get().equals(oldValue.getRange().get()))).collect(toList());
+            return matchingTokens.stream()
+                    .filter(t -> (!t.getToken().hasRange() && !oldValue.hasRange())
+                            || (t.getToken().hasRange()
+                                    && oldValue.hasRange()
+                                    && t.getToken()
+                                            .getRange()
+                                            .get()
+                                            .equals(oldValue.getRange().get())))
+                    .collect(toList());
         }
 
         /**
@@ -387,7 +428,10 @@ public class LexicalPreservingPrinter {
                         for (int j = 0; j < numberOfIndentationCharacters; j++) {
                             if (currentSpaceCandidate != null) {
                                 // use the current (or last) indentation character
-                                nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind(), currentSpaceCandidate.expand()));
+                                nodeText.addElement(
+                                        index,
+                                        new TokenTextElement(
+                                                JavaToken.Kind.SPACE.getKind(), currentSpaceCandidate.expand()));
                             } else {
                                 // use the default indentation character
                                 nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
@@ -400,25 +444,32 @@ public class LexicalPreservingPrinter {
         }
 
         @Override
-        public void concreteListChange(NodeList<?> changedList, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+        public void concreteListChange(
+                NodeList<?> changedList, ListChangeType type, int index, Node nodeAddedOrRemoved) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
             final List<DifferenceElement> differenceElements;
             if (type == AstObserver.ListChangeType.REMOVAL) {
-                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(findNodeListName(changedList), changedList, index);
+                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(
+                        findNodeListName(changedList), changedList, index);
             } else if (type == AstObserver.ListChangeType.ADDITION) {
-                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved);
+                differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(
+                        findNodeListName(changedList), changedList, index, nodeAddedOrRemoved);
             } else {
                 throw new UnsupportedOperationException("Unknown change type: " + type);
             }
-            Difference difference = new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
+            Difference difference =
+                    new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
             difference.apply();
         }
 
         @Override
         public void concreteListReplacement(NodeList<?> changedList, int index, Node oldValue, Node newValue) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
-            List<DifferenceElement> differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListReplacementDifference(findNodeListName(changedList), changedList, index, newValue);
-            Difference difference = new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
+            List<DifferenceElement> differenceElements =
+                    LEXICAL_DIFFERENCE_CALCULATOR.calculateListReplacementDifference(
+                            findNodeListName(changedList), changedList, index, newValue);
+            Difference difference =
+                    new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
             difference.apply();
         }
     }
@@ -443,8 +494,10 @@ public class LexicalPreservingPrinter {
         // range of interest and ignore all other branches
         root.getTokenRange().ifPresent(rootTokenRange -> {
             for (JavaToken token : rootTokenRange) {
-                Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
-                Node owner = root.findByRange(tokenRange).orElseThrow(() -> new RuntimeException("Token without node owning it: " + token));
+                Range tokenRange =
+                        token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
+                Node owner = root.findByRange(tokenRange)
+                        .orElseThrow(() -> new RuntimeException("Token without node owning it: " + token));
                 if (!tokensByNode.containsKey(owner)) {
                     tokensByNode.put(owner, new LinkedList<>());
                 }
@@ -489,7 +542,8 @@ public class LexicalPreservingPrinter {
             elements.add(new Pair<>(token.getRange().get(), new TokenTextElement(token)));
         }
         elements.sort(comparing(e -> e.a.begin));
-        node.setData(NODE_TEXT_DATA, new NodeText(elements.stream().map(p -> p.b).collect(toList())));
+        node.setData(
+                NODE_TEXT_DATA, new NodeText(elements.stream().map(p -> p.b).collect(toList())));
     }
 
     //
@@ -509,7 +563,9 @@ public class LexicalPreservingPrinter {
             }
             return new TextElementIteratorsFactory.EmptyIterator<TokenTextElement>();
         }
-        return new TextElementIteratorsFactory.CascadingIterator<>(TextElementIteratorsFactory.partialReverseIterator(parentNodeText, index - 1), () -> tokensPreceeding(node.getParentNode().get()));
+        return new TextElementIteratorsFactory.CascadingIterator<>(
+                TextElementIteratorsFactory.partialReverseIterator(parentNodeText, index - 1),
+                () -> tokensPreceeding(node.getParentNode().get()));
     }
 
     //
@@ -543,12 +599,14 @@ public class LexicalPreservingPrinter {
         }
         if (node instanceof JavadocComment) {
             Comment comment = (JavadocComment) node;
-            nodeText.addToken(JAVADOC_COMMENT, comment.getHeader() + ((JavadocComment) node).getContent() + comment.getFooter());
+            nodeText.addToken(
+                    JAVADOC_COMMENT, comment.getHeader() + ((JavadocComment) node).getContent() + comment.getFooter());
             return;
         }
         if (node instanceof BlockComment) {
             Comment comment = (BlockComment) node;
-            nodeText.addToken(MULTI_LINE_COMMENT, comment.getHeader() + ((BlockComment) node).getContent() + comment.getFooter());
+            nodeText.addToken(
+                    MULTI_LINE_COMMENT, comment.getHeader() + ((BlockComment) node).getContent() + comment.getFooter());
             return;
         }
         if (node instanceof LineComment) {
@@ -558,7 +616,9 @@ public class LexicalPreservingPrinter {
         }
         if (node instanceof Modifier) {
             Modifier modifier = (Modifier) node;
-            nodeText.addToken(LexicalDifferenceCalculator.toToken(modifier), modifier.getKeyword().asString());
+            nodeText.addToken(
+                    LexicalDifferenceCalculator.toToken(modifier),
+                    modifier.getKeyword().asString());
             return;
         }
         interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
@@ -568,7 +628,8 @@ public class LexicalPreservingPrinter {
      * TODO: Process CsmIndent and CsmUnindent before reaching this point
      */
     private static NodeText interpret(Node node, CsmElement csm, NodeText nodeText) {
-        LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
+        LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel =
+                new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
         List<TextElement> indentation = findIndentation(node);
         boolean pendingIndentation = false;
         // Add a comment and line separator if necessary
@@ -576,14 +637,16 @@ public class LexicalPreservingPrinter {
             // new comment has no range so in this case we want to force the comment before the node
             if (!comment.hasRange()) {
                 LineSeparator lineSeparator = node.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-                calculatedSyntaxModel.elements.add(0, new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()));
+                calculatedSyntaxModel.elements.add(
+                        0, new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()));
                 calculatedSyntaxModel.elements.add(0, new CsmChild(comment));
             }
         });
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof CsmIndent) {
                 int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);
-                if (calculatedSyntaxModel.elements.size() > indexCurrentElement && !(calculatedSyntaxModel.elements.get(indexCurrentElement + 1) instanceof CsmUnindent)) {
+                if (calculatedSyntaxModel.elements.size() > indexCurrentElement
+                        && !(calculatedSyntaxModel.elements.get(indexCurrentElement + 1) instanceof CsmUnindent)) {
                     for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
                         indentation.add(new TokenTextElement(SPACE, " "));
                     }
@@ -612,7 +675,8 @@ public class LexicalPreservingPrinter {
                 // Indentation should probably be dealt with before because an indentation has effects also on the
                 // following lines
                 if (!(element instanceof CsmIndent) && !(element instanceof CsmUnindent)) {
-                    throw new UnsupportedOperationException("Unknown element type: " + element.getClass().getSimpleName());
+                    throw new UnsupportedOperationException(
+                            "Unknown element type: " + element.getClass().getSimpleName());
                 }
             }
         }
@@ -620,13 +684,15 @@ public class LexicalPreservingPrinter {
         // so they have to be handled in a special way
         if (node instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) node;
-            variableDeclarator.getParentNode().ifPresent(parent -> ((NodeWithVariables<?>) parent).getMaximumCommonType().ifPresent(mct -> {
-                int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - mct.getArrayLevel();
-                for (int i = 0; i < extraArrayLevels; i++) {
-                    nodeText.addElement(new TokenTextElement(LBRACKET));
-                    nodeText.addElement(new TokenTextElement(RBRACKET));
-                }
-            }));
+            variableDeclarator.getParentNode().ifPresent(parent -> ((NodeWithVariables<?>) parent)
+                    .getMaximumCommonType()
+                    .ifPresent(mct -> {
+                        int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - mct.getArrayLevel();
+                        for (int i = 0; i < extraArrayLevels; i++) {
+                            nodeText.addElement(new TokenTextElement(LBRACKET));
+                            nodeText.addElement(new TokenTextElement(RBRACKET));
+                        }
+                    }));
         }
         return nodeText;
     }
@@ -679,11 +745,13 @@ public class LexicalPreservingPrinter {
     private static ObservableProperty findNodeListName(NodeList<?> nodeList) {
         Node parent = nodeList.getParentNodeForChildren();
         for (Method m : parent.getClass().getMethods()) {
-            if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(JAVAPARSER_AST_NODELIST)) {
+            if (m.getParameterCount() == 0
+                    && m.getReturnType().getCanonicalName().equals(JAVAPARSER_AST_NODELIST)) {
                 try {
                     Object raw = m.invoke(parent);
                     if (!(raw instanceof NodeList)) {
-                        throw new IllegalStateException("Expected NodeList, found " + raw.getClass().getCanonicalName());
+                        throw new IllegalStateException(
+                                "Expected NodeList, found " + raw.getClass().getCanonicalName());
                     }
                     NodeList<?> result = (NodeList<?>) raw;
                     if (result == nodeList) {

@@ -21,6 +21,12 @@
 
 package com.github.javaparser.generator.metamodel;
 
+import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.optionalOf;
+import static com.github.javaparser.utils.Utils.decapitalize;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -30,16 +36,9 @@ import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
-
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.CodeGenerationUtils.optionalOf;
-import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class NodeMetaModelGenerator extends AbstractGenerator {
 

@@ -20,6 +20,7 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -36,9 +37,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.RecordPatternExprMetaModel;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -88,7 +89,8 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
     }
 
     @AllFieldsConstructor
-    public RecordPatternExpr(final NodeList<Modifier> modifiers, final Type type, final NodeList<PatternExpr> patternList) {
+    public RecordPatternExpr(
+            final NodeList<Modifier> modifiers, final Type type, final NodeList<PatternExpr> patternList) {
         this(null, modifiers, type, patternList);
     }
 
@@ -125,8 +127,7 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
-            this.modifiers.setParentNode(null);
+        if (this.modifiers != null) this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return this;
@@ -168,8 +169,7 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
             return this;
         }
         notifyPropertyChange(ObservableProperty.PATTERN_LIST, this.patternList, patternList);
-        if (this.patternList != null)
-            this.patternList.setParentNode(null);
+        if (this.patternList != null) this.patternList.setParentNode(null);
         this.patternList = patternList;
         setAsParentNodeOf(patternList);
         return this;
@@ -233,7 +233,8 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public RecordPatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, Type type, NodeList<PatternExpr> patternList) {
+    public RecordPatternExpr(
+            TokenRange tokenRange, NodeList<Modifier> modifiers, Type type, NodeList<PatternExpr> patternList) {
         super(tokenRange, type);
         setModifiers(modifiers);
         setPatternList(patternList);

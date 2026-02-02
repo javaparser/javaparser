@@ -20,16 +20,17 @@
  */
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
-import java.util.List;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 import java.util.function.Predicate;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -176,7 +177,8 @@ public class XmlPrinter {
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();
         Predicate<PropertyMetaModel> nonNullNode = propertyMetaModel -> propertyMetaModel.getValue(node) != null;
-        Predicate<PropertyMetaModel> nonEmptyList = propertyMetaModel -> ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
+        Predicate<PropertyMetaModel> nonEmptyList =
+                propertyMetaModel -> ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
         Predicate<PropertyMetaModel> typeList = propertyMetaModel -> TYPE_CLASS == propertyMetaModel.getType();
         xmlWriter.writeStartElement(name);
         // Output node type attribute
@@ -185,40 +187,52 @@ public class XmlPrinter {
         }
         try {
             // Output attributes
-            allPropertyMetaModels.stream().filter(PropertyMetaModel::isAttribute).filter(PropertyMetaModel::isSingular).forEach(attributeMetaModel -> {
-                try {
-                    final String attributeName = attributeMetaModel.getName();
-                    final String attributeValue = attributeMetaModel.getValue(node).toString();
-                    xmlWriter.writeAttribute(attributeName, attributeValue);
-                } catch (XMLStreamException ex) {
-                    throw new RuntimeXMLStreamException(ex);
-                }
-            });
+            allPropertyMetaModels.stream()
+                    .filter(PropertyMetaModel::isAttribute)
+                    .filter(PropertyMetaModel::isSingular)
+                    .forEach(attributeMetaModel -> {
+                        try {
+                            final String attributeName = attributeMetaModel.getName();
+                            final String attributeValue =
+                                    attributeMetaModel.getValue(node).toString();
+                            xmlWriter.writeAttribute(attributeName, attributeValue);
+                        } catch (XMLStreamException ex) {
+                            throw new RuntimeXMLStreamException(ex);
+                        }
+                    });
             // Output singular subNodes
-            allPropertyMetaModels.stream().filter(PropertyMetaModel::isNode).filter(PropertyMetaModel::isSingular).filter(nonNullNode).forEach(subNodeMetaModel -> {
-                try {
-                    final Node subNode = (Node) subNodeMetaModel.getValue(node);
-                    final String subNodeName = subNodeMetaModel.getName();
-                    outputNode(subNode, subNodeName, xmlWriter);
-                } catch (XMLStreamException ex) {
-                    throw new RuntimeXMLStreamException(ex);
-                }
-            });
+            allPropertyMetaModels.stream()
+                    .filter(PropertyMetaModel::isNode)
+                    .filter(PropertyMetaModel::isSingular)
+                    .filter(nonNullNode)
+                    .forEach(subNodeMetaModel -> {
+                        try {
+                            final Node subNode = (Node) subNodeMetaModel.getValue(node);
+                            final String subNodeName = subNodeMetaModel.getName();
+                            outputNode(subNode, subNodeName, xmlWriter);
+                        } catch (XMLStreamException ex) {
+                            throw new RuntimeXMLStreamException(ex);
+                        }
+                    });
             // Output list subNodes
-            allPropertyMetaModels.stream().filter(PropertyMetaModel::isNodeList).filter(nonNullNode).filter(nonEmptyList.or(typeList)).forEach(listMetaModel -> {
-                try {
-                    String listName = listMetaModel.getName();
-                    String singular = listName.substring(0, listName.length() - 1);
-                    NodeList<? extends Node> nodeList = (NodeList) listMetaModel.getValue(node);
-                    xmlWriter.writeStartElement(listName);
-                    for (Node subNode : nodeList) {
-                        outputNode(subNode, singular, xmlWriter);
-                    }
-                    xmlWriter.writeEndElement();
-                } catch (XMLStreamException ex) {
-                    throw new RuntimeXMLStreamException(ex);
-                }
-            });
+            allPropertyMetaModels.stream()
+                    .filter(PropertyMetaModel::isNodeList)
+                    .filter(nonNullNode)
+                    .filter(nonEmptyList.or(typeList))
+                    .forEach(listMetaModel -> {
+                        try {
+                            String listName = listMetaModel.getName();
+                            String singular = listName.substring(0, listName.length() - 1);
+                            NodeList<? extends Node> nodeList = (NodeList) listMetaModel.getValue(node);
+                            xmlWriter.writeStartElement(listName);
+                            for (Node subNode : nodeList) {
+                                outputNode(subNode, singular, xmlWriter);
+                            }
+                            xmlWriter.writeEndElement();
+                        } catch (XMLStreamException ex) {
+                            throw new RuntimeXMLStreamException(ex);
+                        }
+                    });
         } catch (RuntimeXMLStreamException ex) {
             throw ex.getXMLStreamCause();
         }

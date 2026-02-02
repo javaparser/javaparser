@@ -1,5 +1,7 @@
 package com.github.javaparser.ast.jml.clauses;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -12,10 +14,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlForallClauseMetaModel;
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -65,8 +66,7 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BOUNDED_VARIABLES, this.boundedVariables, boundedVariables);
-        if (this.boundedVariables != null)
-            this.boundedVariables.setParentNode(null);
+        if (this.boundedVariables != null) this.boundedVariables.setParentNode(null);
         this.boundedVariables = boundedVariables;
         setAsParentNodeOf(boundedVariables);
         return this;

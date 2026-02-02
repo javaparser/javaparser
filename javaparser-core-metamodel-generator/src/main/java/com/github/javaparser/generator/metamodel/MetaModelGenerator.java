@@ -21,19 +21,21 @@
 
 package com.github.javaparser.generator.metamodel;
 
+import static com.github.javaparser.utils.Utils.decapitalize;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.jml.expr.*;
-import com.github.javaparser.ast.jml.clauses.*;
-import com.github.javaparser.ast.jml.stmt.*;
-import com.github.javaparser.ast.jml.body.*;
-import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.CompactConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.jml.body.*;
+import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.expr.*;
+import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
@@ -43,15 +45,12 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator extends AbstractGenerator {
 
@@ -219,7 +218,7 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(JmlMethodSignature.class);
             add(com.github.javaparser.ast.jml.clauses.JmlContract.class);
 
-            //add(com.github.javaparser.ast.JmlBoundVariable.class);
+            // add(com.github.javaparser.ast.JmlBoundVariable.class);
 
             add(JmlClassExprDeclaration.class);
             add(JmlRepresentsDeclaration.class);

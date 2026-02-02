@@ -53,6 +53,8 @@ public final class UpgradeJavaMessage {
 
     @Override
     public String toString() {
-        return String.format("%s Pay attention that this feature is supported starting from '%s' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.", this.reason, this.level.toString());
+        return String.format(
+                "%s Pay attention that this feature is supported starting from '%s' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.",
+                this.reason, this.level.toString());
     }
 }

@@ -12,17 +12,15 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.JavaRefersToJmlException;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.TypeSolverBuilder;
 import com.google.common.truth.Truth;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Alexander Weigl
@@ -103,7 +101,6 @@ class NameResolutionTest {
          */
     }
 
-
     @Test
     void jmlBinderExpression() throws IOException {
         loadAndResolveAll("JmlQuantifiedExprResolutionTest.java");
@@ -119,13 +116,12 @@ class NameResolutionTest {
         loadAndResolveAll("Locals.java");
     }
 
-
     private void loadAndResolveAll(String name) throws IOException {
         final ParserConfiguration configuration = new ParserConfiguration().setProcessJml(true);
-        configuration.setSymbolResolver(new JavaSymbolSolver(new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader())));
+        configuration.setSymbolResolver(
+                new JavaSymbolSolver(new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader())));
         JavaParser parser = new JavaParser(configuration);
-        final File file = new File("src/test/resources/com/github/jml/resolution/" + name)
-                .getAbsoluteFile();
+        final File file = new File("src/test/resources/com/github/jml/resolution/" + name).getAbsoluteFile();
         ParseResult<CompilationUnit> cu = parser.parse(file);
         if (!cu.isSuccessful()) {
             for (Problem problem : cu.getProblems()) {
@@ -142,11 +138,9 @@ class NameResolutionTest {
                 .map(it -> it.trim().substring(4).trim())
                 .collect(Collectors.toSet());
 
-        errorLines.stream().sorted().forEach(errorLine ->
-                System.out.format("//? %s%n", errorLine));
+        errorLines.stream().sorted().forEach(errorLine -> System.out.format("//? %s%n", errorLine));
 
-        v.messages.stream().sorted().forEach(errorLine ->
-                System.out.format("//? %s%n", errorLine));
+        v.messages.stream().sorted().forEach(errorLine -> System.out.format("//? %s%n", errorLine));
 
         Truth.assertThat(v.messages).isEqualTo(errorLines);
     }
@@ -163,23 +157,17 @@ class NameResolutionTest {
                 var t = rtype.toAst().get();
                 var target = t.getRange().map(it -> it.begin.toString()).orElse("_");
 
-                messages.add("name: %s@%s to %s@%s"
-                        .formatted(n.getNameAsString(), pos,
-                                rtype.getName(), target));
+                messages.add("name: %s@%s to %s@%s".formatted(n.getNameAsString(), pos, rtype.getName(), target));
                 try {
                     n.calculateResolvedType();
-                    messages.add("type: %s@%s"
-                            .formatted(n.getNameAsString(), pos));
+                    messages.add("type: %s@%s".formatted(n.getNameAsString(), pos));
                 } catch (UnsolvedSymbolException e) {
-                    messages.add("e type: %s@%s"
-                            .formatted(n.getNameAsString(), pos));
+                    messages.add("e type: %s@%s".formatted(n.getNameAsString(), pos));
                 }
             } catch (JavaRefersToJmlException e) {
-                messages.add("e java2jml: %s@%s"
-                        .formatted(n.getNameAsString(), pos));
+                messages.add("e java2jml: %s@%s".formatted(n.getNameAsString(), pos));
             } catch (UnsolvedSymbolException e) {
-                messages.add("e name: %s@%s"
-                        .formatted(n.getNameAsString(), pos));
+                messages.add("e name: %s@%s".formatted(n.getNameAsString(), pos));
             }
         }
 

@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -40,10 +42,9 @@ import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -51,7 +52,13 @@ import org.jspecify.annotations.NonNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements NodeWithImplements<ClassOrInterfaceDeclaration>, NodeWithExtends<ClassOrInterfaceDeclaration>, NodeWithTypeParameters<ClassOrInterfaceDeclaration>, NodeWithAbstractModifier<ClassOrInterfaceDeclaration>, NodeWithFinalModifier<ClassOrInterfaceDeclaration>, Resolvable<ResolvedReferenceTypeDeclaration> {
+public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration>
+        implements NodeWithImplements<ClassOrInterfaceDeclaration>,
+                NodeWithExtends<ClassOrInterfaceDeclaration>,
+                NodeWithTypeParameters<ClassOrInterfaceDeclaration>,
+                NodeWithAbstractModifier<ClassOrInterfaceDeclaration>,
+                NodeWithFinalModifier<ClassOrInterfaceDeclaration>,
+                Resolvable<ResolvedReferenceTypeDeclaration> {
 
     private boolean isInterface;
 
@@ -65,23 +72,73 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     private NodeList<ClassOrInterfaceType> permittedTypes;
 
     public ClassOrInterfaceDeclaration() {
-        this(null, new NodeList<>(), new NodeList<>(), false, new SimpleName(), new NodeList<>(), new NodeList<>(), new NodeList<>(), new NodeList<>(), new NodeList<>());
+        this(
+                null,
+                new NodeList<>(),
+                new NodeList<>(),
+                false,
+                new SimpleName(),
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>());
     }
 
-    public ClassOrInterfaceDeclaration(final NodeList<Modifier> modifiers, final boolean isInterface, final String name) {
-        this(null, modifiers, new NodeList<>(), isInterface, new SimpleName(name), new NodeList<>(), new NodeList<>(), new NodeList<>(), new NodeList<>(), new NodeList<>());
+    public ClassOrInterfaceDeclaration(
+            final NodeList<Modifier> modifiers, final boolean isInterface, final String name) {
+        this(
+                null,
+                modifiers,
+                new NodeList<>(),
+                isInterface,
+                new SimpleName(name),
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public ClassOrInterfaceDeclaration(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final boolean isInterface, final SimpleName name, final NodeList<TypeParameter> typeParameters, final NodeList<ClassOrInterfaceType> extendedTypes, final NodeList<ClassOrInterfaceType> implementedTypes, final NodeList<ClassOrInterfaceType> permittedTypes, final NodeList<BodyDeclaration<?>> members) {
-        this(null, modifiers, annotations, isInterface, name, typeParameters, extendedTypes, implementedTypes, permittedTypes, members);
+    public ClassOrInterfaceDeclaration(
+            final NodeList<Modifier> modifiers,
+            final NodeList<AnnotationExpr> annotations,
+            final boolean isInterface,
+            final SimpleName name,
+            final NodeList<TypeParameter> typeParameters,
+            final NodeList<ClassOrInterfaceType> extendedTypes,
+            final NodeList<ClassOrInterfaceType> implementedTypes,
+            final NodeList<ClassOrInterfaceType> permittedTypes,
+            final NodeList<BodyDeclaration<?>> members) {
+        this(
+                null,
+                modifiers,
+                annotations,
+                isInterface,
+                name,
+                typeParameters,
+                extendedTypes,
+                implementedTypes,
+                permittedTypes,
+                members);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ClassOrInterfaceDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, boolean isInterface, SimpleName name, NodeList<TypeParameter> typeParameters, NodeList<ClassOrInterfaceType> extendedTypes, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<ClassOrInterfaceType> permittedTypes, NodeList<BodyDeclaration<?>> members) {
+    public ClassOrInterfaceDeclaration(
+            TokenRange tokenRange,
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            boolean isInterface,
+            SimpleName name,
+            NodeList<TypeParameter> typeParameters,
+            NodeList<ClassOrInterfaceType> extendedTypes,
+            NodeList<ClassOrInterfaceType> implementedTypes,
+            NodeList<ClassOrInterfaceType> permittedTypes,
+            NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
         setInterface(isInterface);
         setTypeParameters(typeParameters);
@@ -136,8 +193,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
-        if (this.extendedTypes != null)
-            this.extendedTypes.setParentNode(null);
+        if (this.extendedTypes != null) this.extendedTypes.setParentNode(null);
         this.extendedTypes = extendedTypes;
         setAsParentNodeOf(extendedTypes);
         return this;
@@ -150,8 +206,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
             return this;
         }
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
-        if (this.implementedTypes != null)
-            this.implementedTypes.setParentNode(null);
+        if (this.implementedTypes != null) this.implementedTypes.setParentNode(null);
         this.implementedTypes = implementedTypes;
         setAsParentNodeOf(implementedTypes);
         return this;
@@ -164,8 +219,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
             return this;
         }
         notifyPropertyChange(ObservableProperty.PERMITTED_TYPES, this.permittedTypes, permittedTypes);
-        if (this.permittedTypes != null)
-            this.permittedTypes.setParentNode(null);
+        if (this.permittedTypes != null) this.permittedTypes.setParentNode(null);
         this.permittedTypes = permittedTypes;
         setAsParentNodeOf(permittedTypes);
         return this;
@@ -188,8 +242,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        if (this.typeParameters != null)
-            this.typeParameters.setParentNode(null);
+        if (this.typeParameters != null) this.typeParameters.setParentNode(null);
         this.typeParameters = typeParameters;
         setAsParentNodeOf(typeParameters);
         return this;

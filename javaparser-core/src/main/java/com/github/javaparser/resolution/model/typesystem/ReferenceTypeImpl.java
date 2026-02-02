@@ -42,14 +42,21 @@ import java.util.stream.Stream;
  */
 public class ReferenceTypeImpl extends ResolvedReferenceType {
 
-    private static final String[] ASSIGNABLE_REFERENCE_TYPE = { "java.lang.Object", "java.lang.Cloneable", "java.io.Serializable" };
+    private static final String[] ASSIGNABLE_REFERENCE_TYPE = {
+        "java.lang.Object", "java.lang.Cloneable", "java.io.Serializable"
+    };
 
     public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration) {
-        return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(ResolvedTypeVariable::new).collect(Collectors.toList()));
+        return new ReferenceTypeImpl(
+                typeDeclaration,
+                typeDeclaration.getTypeParameters().stream()
+                        .map(ResolvedTypeVariable::new)
+                        .collect(Collectors.toList()));
     }
 
     @Override
-    protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParametersCorrected) {
+    protected ResolvedReferenceType create(
+            ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParametersCorrected) {
         return new ReferenceTypeImpl(typeDeclaration, typeParametersCorrected);
     }
 
@@ -89,10 +96,11 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 return true;
             }
             // Check if 'other' can be boxed to match this type
-            if (isCorrespondingBoxingType(other.describe()))
-                return true;
+            if (isCorrespondingBoxingType(other.describe())) return true;
             // All numeric types extend Number
-            return other.isNumericType() && this.isReferenceType() && this.asReferenceType().getQualifiedName().equals(Number.class.getCanonicalName());
+            return other.isNumericType()
+                    && this.isReferenceType()
+                    && this.asReferenceType().getQualifiedName().equals(Number.class.getCanonicalName());
         }
         if (other instanceof LambdaArgumentTypePlaceholder) {
             return FunctionalInterfaceLogic.isFunctionalInterfaceType(this);
@@ -110,7 +118,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             return false;
         }
         if (other.isTypeVariable()) {
-            for (ResolvedTypeParameterDeclaration.Bound bound : other.asTypeVariable().asTypeParameter().getBounds()) {
+            for (ResolvedTypeParameterDeclaration.Bound bound :
+                    other.asTypeVariable().asTypeParameter().getBounds()) {
                 if (bound.isExtends()) {
                     if (this.isAssignableBy(bound.getType())) {
                         return true;
@@ -184,7 +193,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             ResolvedType transformedTp = transformer.transform(tp);
             // Identity comparison on purpose
             if (transformedTp != tp) {
-                List<ResolvedType> typeParametersCorrected = result.asReferenceType().typeParametersValues();
+                List<ResolvedType> typeParametersCorrected =
+                        result.asReferenceType().typeParametersValues();
                 typeParametersCorrected.set(i, transformedTp);
                 result = create(typeDeclaration, typeParametersCorrected);
             }
@@ -202,10 +212,13 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     }
 
     @Override
-    public List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
+    public List<ResolvedReferenceType> getAllAncestors(
+            Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
         // We need to go through the inheritance line and propagate the type parameters
         List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors(traverser);
-        ancestors = ancestors.stream().map(a -> typeParametersMap().replaceAll(a).asReferenceType()).collect(Collectors.toList());
+        ancestors = ancestors.stream()
+                .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
+                .collect(Collectors.toList());
         return ancestors;
     }
 
@@ -213,14 +226,19 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     public List<ResolvedReferenceType> getDirectAncestors() {
         // We need to go through the inheritance line and propagate the type parameters
         List<ResolvedReferenceType> ancestors = typeDeclaration.getAncestors();
-        ancestors = ancestors.stream().map(a -> typeParametersMap().replaceAll(a).asReferenceType()).collect(Collectors.toList());
+        ancestors = ancestors.stream()
+                .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
+                .collect(Collectors.toList());
         // Conditionally re-insert java.lang.Object as an ancestor.
         if (this.getTypeDeclaration().isPresent()) {
-            ResolvedReferenceTypeDeclaration thisTypeDeclaration = this.getTypeDeclaration().get();
+            ResolvedReferenceTypeDeclaration thisTypeDeclaration =
+                    this.getTypeDeclaration().get();
             // The superclass of interfaces is always null
             if (thisTypeDeclaration.isClass()) {
-                Optional<ResolvedReferenceType> optionalSuperClass = thisTypeDeclaration.asClass().getSuperClass();
-                boolean superClassIsJavaLangObject = optionalSuperClass.isPresent() && optionalSuperClass.get().isJavaLangObject();
+                Optional<ResolvedReferenceType> optionalSuperClass =
+                        thisTypeDeclaration.asClass().getSuperClass();
+                boolean superClassIsJavaLangObject = optionalSuperClass.isPresent()
+                        && optionalSuperClass.get().isJavaLangObject();
                 boolean thisIsJavaLangObject = thisTypeDeclaration.asClass().isJavaLangObject();
                 if (superClassIsJavaLangObject && !thisIsJavaLangObject) {
                     ancestors.add(optionalSuperClass.get());

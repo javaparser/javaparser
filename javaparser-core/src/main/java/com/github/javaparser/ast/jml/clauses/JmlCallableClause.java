@@ -1,21 +1,22 @@
 package com.github.javaparser.ast.jml.clauses;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlCallableClauseMetaModel;
-import com.github.javaparser.ast.Node;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -105,8 +106,7 @@ public class JmlCallableClause extends JmlClause {
             return this;
         }
         notifyPropertyChange(ObservableProperty.METHOD_SIGNATURES, this.methodSignatures, methodSignatures);
-        if (this.methodSignatures != null)
-            this.methodSignatures.setParentNode(null);
+        if (this.methodSignatures != null) this.methodSignatures.setParentNode(null);
         this.methodSignatures = methodSignatures;
         setAsParentNodeOf(methodSignatures);
         return this;

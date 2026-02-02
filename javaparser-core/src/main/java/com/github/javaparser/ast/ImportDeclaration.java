@@ -21,6 +21,7 @@
 package com.github.javaparser.ast;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
@@ -30,8 +31,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import static com.github.javaparser.StaticJavaParser.parseName;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
@@ -82,7 +81,8 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk, boolean isJmlModel) {
+    public ImportDeclaration(
+            TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk, boolean isJmlModel) {
         super(tokenRange);
         setName(name);
         setStatic(isStatic);
@@ -178,8 +178,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

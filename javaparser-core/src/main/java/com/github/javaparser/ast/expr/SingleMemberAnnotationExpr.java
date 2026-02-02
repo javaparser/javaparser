@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -30,10 +32,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SingleMemberAnnotationExprMetaModel;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -88,8 +89,7 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
             return this;
         }
         notifyPropertyChange(ObservableProperty.MEMBER_VALUE, this.memberValue, memberValue);
-        if (this.memberValue != null)
-            this.memberValue.setParentNode(null);
+        if (this.memberValue != null) this.memberValue.setParentNode(null);
         this.memberValue = memberValue;
         setAsParentNodeOf(memberValue);
         return this;

@@ -38,7 +38,13 @@ public class ClassInvariantClauseMetaModel extends JmlClassLevelMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ClassInvariantClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlClassExprDeclaration.class, "ClassInvariantClause", "com.github.javaparser.ast.jml.body", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlClassExprDeclaration.class,
+                "ClassInvariantClause",
+                "com.github.javaparser.ast.jml.body",
+                false,
+                false);
     }
 
     public PropertyMetaModel invariantPropertyMetaModel;

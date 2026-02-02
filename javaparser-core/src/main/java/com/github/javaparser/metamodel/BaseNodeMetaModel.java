@@ -21,6 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import static com.github.javaparser.utils.Utils.decapitalize;
+
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -54,7 +55,13 @@ public abstract class BaseNodeMetaModel {
 
     private final boolean hasWildcard;
 
-    public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
+    public BaseNodeMetaModel(
+            Optional<BaseNodeMetaModel> superNodeMetaModel,
+            Class<? extends Node> type,
+            String name,
+            String packageName,
+            boolean isAbstract,
+            boolean hasWildcard) {
         this.superNodeMetaModel = superNodeMetaModel;
         this.type = type;
         this.name = name;
@@ -166,13 +173,10 @@ public abstract class BaseNodeMetaModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         BaseNodeMetaModel classMetaModel = (BaseNodeMetaModel) o;
-        if (!type.equals(classMetaModel.type))
-            return false;
+        if (!type.equals(classMetaModel.type)) return false;
         return true;
     }
 

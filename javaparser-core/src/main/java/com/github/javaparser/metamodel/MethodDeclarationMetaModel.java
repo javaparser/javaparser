@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class MethodDeclarationMetaModel extends CallableDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     MethodDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, MethodDeclaration.class, "MethodDeclaration", "com.github.javaparser.ast.body", false, false);
+        super(
+                superBaseNodeMetaModel,
+                MethodDeclaration.class,
+                "MethodDeclaration",
+                "com.github.javaparser.ast.body",
+                false,
+                false);
     }
 
     public PropertyMetaModel bodyPropertyMetaModel;

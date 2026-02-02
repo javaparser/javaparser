@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.Parameter;
@@ -33,7 +35,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CatchClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
@@ -53,8 +54,16 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
         this(null, new Parameter(), new BlockStmt());
     }
 
-    public CatchClause(final NodeList<Modifier> exceptModifier, final NodeList<AnnotationExpr> exceptAnnotations, final ClassOrInterfaceType exceptType, final SimpleName exceptName, final BlockStmt body) {
-        this(null, new Parameter(null, exceptModifier, exceptAnnotations, exceptType, false, new NodeList<>(), exceptName), body);
+    public CatchClause(
+            final NodeList<Modifier> exceptModifier,
+            final NodeList<AnnotationExpr> exceptAnnotations,
+            final ClassOrInterfaceType exceptType,
+            final SimpleName exceptName,
+            final BlockStmt body) {
+        this(
+                null,
+                new Parameter(null, exceptModifier, exceptAnnotations, exceptType, false, new NodeList<>(), exceptName),
+                body);
     }
 
     @AllFieldsConstructor
@@ -102,8 +111,7 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
             return this;
         }
         notifyPropertyChange(ObservableProperty.PARAMETER, this.parameter, parameter);
-        if (this.parameter != null)
-            this.parameter.setParentNode(null);
+        if (this.parameter != null) this.parameter.setParentNode(null);
         this.parameter = parameter;
         setAsParentNodeOf(parameter);
         return this;
@@ -121,8 +129,7 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
+        if (this.body != null) this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;

@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.jml.expr.JmlBinaryInfixExpr;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.jml.expr.JmlBinaryInfixExpr;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class JmlBinaryInfixExprMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlBinaryInfixExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlBinaryInfixExpr.class, "JmlBinaryInfixExpr", "com.github.javaparser.ast.jml.expr", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlBinaryInfixExpr.class,
+                "JmlBinaryInfixExpr",
+                "com.github.javaparser.ast.jml.expr",
+                false,
+                false);
     }
 
     public PropertyMetaModel leftPropertyMetaModel;

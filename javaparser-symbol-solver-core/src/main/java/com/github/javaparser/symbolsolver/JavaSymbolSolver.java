@@ -23,8 +23,6 @@ package com.github.javaparser.symbolsolver;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
-import java.util.Optional;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
@@ -46,6 +44,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
+import java.util.Optional;
 
 /**
  * This implementation of the SymbolResolver wraps the functionality of the library to make them easily usable
@@ -117,8 +116,7 @@ public class JavaSymbolSolver implements SymbolResolver {
 
     private boolean inJml(Node node) {
         if (node instanceof NodeWithJmlTags) return true;
-        if (node.hasParentNode())
-            return inJml(node.getParentNode().get());
+        if (node.hasParentNode()) return inJml(node.getParentNode().get());
         return false;
     }
 
@@ -387,24 +385,24 @@ public class JavaSymbolSolver implements SymbolResolver {
     /*
      * Resolves constructor or method parameter
      */
-	private Optional<ResolvedParameterDeclaration> resolveParameterDeclaration(
-			ResolvedMethodLikeDeclaration resolvedMethodLikeDeclaration, Parameter parameter) {
-		for (int i = 0; i < resolvedMethodLikeDeclaration.getNumberOfParams(); i++) {
-			if (resolvedMethodLikeDeclaration.getParam(i).getName().equals(parameter.getNameAsString())) {
-				return Optional.of(resolvedMethodLikeDeclaration.getParam(i));
-			}
-		}
-		return Optional.empty();
-	}
+    private Optional<ResolvedParameterDeclaration> resolveParameterDeclaration(
+            ResolvedMethodLikeDeclaration resolvedMethodLikeDeclaration, Parameter parameter) {
+        for (int i = 0; i < resolvedMethodLikeDeclaration.getNumberOfParams(); i++) {
+            if (resolvedMethodLikeDeclaration.getParam(i).getName().equals(parameter.getNameAsString())) {
+                return Optional.of(resolvedMethodLikeDeclaration.getParam(i));
+            }
+        }
+        return Optional.empty();
+    }
 
-	/*
-	 * Resolves record parameter
-	 */
-	private Optional<ResolvedParameterDeclaration> resolveParameterDeclaration(
-			ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration, Parameter parameter) {
-		ResolvedFieldDeclaration rfd = resolvedReferenceTypeDeclaration.getField(parameter.getNameAsString());
-		if (rfd == null) return Optional.empty();
-		ResolvedParameterDeclaration  resolvedParameterDeclaration = new ResolvedParameterDeclaration() {
+    /*
+     * Resolves record parameter
+     */
+    private Optional<ResolvedParameterDeclaration> resolveParameterDeclaration(
+            ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration, Parameter parameter) {
+        ResolvedFieldDeclaration rfd = resolvedReferenceTypeDeclaration.getField(parameter.getNameAsString());
+        if (rfd == null) return Optional.empty();
+        ResolvedParameterDeclaration resolvedParameterDeclaration = new ResolvedParameterDeclaration() {
 
             @Override
             public ResolvedType getType() {
@@ -420,15 +418,15 @@ public class JavaSymbolSolver implements SymbolResolver {
             public boolean isVariadic() {
                 return parameter.isVarArgs();
             }
-		};
-		return Optional.of(resolvedParameterDeclaration);
-	}
+        };
+        return Optional.of(resolvedParameterDeclaration);
+    }
 
-	/*
-	 * Resolves lambda expression parameters and catch clause parameters
-	 */
-	private Optional<ResolvedParameterDeclaration> resolveParameterDeclaration(Parameter parameter) {
-		ResolvedParameterDeclaration resolvedParameterDeclaration = new ResolvedParameterDeclaration() {
+    /*
+     * Resolves lambda expression parameters and catch clause parameters
+     */
+    private Optional<ResolvedParameterDeclaration> resolveParameterDeclaration(Parameter parameter) {
+        ResolvedParameterDeclaration resolvedParameterDeclaration = new ResolvedParameterDeclaration() {
 
             @Override
             public ResolvedType getType() {
@@ -453,9 +451,9 @@ public class JavaSymbolSolver implements SymbolResolver {
             public boolean isVariadic() {
                 return parameter.isVarArgs();
             }
-		};
-		return Optional.of(resolvedParameterDeclaration);
-	}
+        };
+        return Optional.of(resolvedParameterDeclaration);
+    }
 
     @Override
     public <T> T toResolvedType(Type javaparserType, Class<T> resultClass) {

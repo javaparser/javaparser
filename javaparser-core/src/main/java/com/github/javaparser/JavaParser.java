@@ -20,6 +20,13 @@
  */
 package com.github.javaparser;
 
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Providers.resourceProvider;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.toList;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -43,12 +50,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Supplier;
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.Providers.resourceProvider;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Parse Java source code and creates Abstract Syntax Trees.
@@ -115,7 +116,8 @@ public final class JavaParser {
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
         assertNotNull(start);
         assertNotNull(provider);
-        List<Processor> processors = configuration.getProcessors().stream().map(Supplier::get).collect(toList());
+        List<Processor> processors =
+                configuration.getProcessors().stream().map(Supplier::get).collect(toList());
         for (Processor processor : processors) {
             provider = processor.preProcess(provider);
         }
@@ -190,7 +192,8 @@ public final class JavaParser {
      * @throws FileNotFoundException the file was not found
      */
     public ParseResult<CompilationUnit> parse(final File file) throws FileNotFoundException {
-        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(file, configuration.getCharacterEncoding()));
+        ParseResult<CompilationUnit> result =
+                parse(COMPILATION_UNIT, provider(file, configuration.getCharacterEncoding()));
         result.getResult().ifPresent(cu -> cu.setStorage(file.toPath(), configuration.getCharacterEncoding()));
         return result;
     }
@@ -221,7 +224,8 @@ public final class JavaParser {
      * @throws IOException the path could not be accessed
      */
     public ParseResult<CompilationUnit> parse(final Path path) throws IOException {
-        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
+        ParseResult<CompilationUnit> result =
+                parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
         result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
         return result;
     }
@@ -267,7 +271,8 @@ public final class JavaParser {
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
-    public ParseResult<CompilationUnit> parseResource(final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
+    public ParseResult<CompilationUnit> parseResource(
+            final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
         return parse(COMPILATION_UNIT, resourceProvider(classLoader, path, encoding));
     }
 

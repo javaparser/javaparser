@@ -1,5 +1,7 @@
 package com.github.javaparser.ast.jml.clauses;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -15,10 +17,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlMultiExprClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.function.Consumer;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -36,11 +37,17 @@ public class JmlMultiExprClause extends JmlClause {
     private NodeList<Expression> expressions;
 
     @AllFieldsConstructor
-    public JmlMultiExprClause(JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expressions) {
+    public JmlMultiExprClause(
+            JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expressions) {
         this(null, kind, name, heaps, expressions);
     }
 
-    public JmlMultiExprClause(TokenRange range, JavaToken begin, SimpleName label, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
+    public JmlMultiExprClause(
+            TokenRange range,
+            JavaToken begin,
+            SimpleName label,
+            NodeList<SimpleName> heaps,
+            NodeList<Expression> exprs) {
         this(range, JmlClauseKind.getKindByToken(begin), label, heaps, exprs);
     }
 
@@ -74,8 +81,7 @@ public class JmlMultiExprClause extends JmlClause {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSIONS, this.expressions, expressions);
-        if (this.expressions != null)
-            this.expressions.setParentNode(null);
+        if (this.expressions != null) this.expressions.setParentNode(null);
         this.expressions = expressions;
         setAsParentNodeOf(expressions);
         return this;
@@ -92,8 +98,7 @@ public class JmlMultiExprClause extends JmlClause {
             return this;
         }
         notifyPropertyChange(ObservableProperty.HEAPS, this.heaps, heaps);
-        if (this.heaps != null)
-            this.heaps.setParentNode(null);
+        if (this.heaps != null) this.heaps.setParentNode(null);
         this.heaps = heaps;
         setAsParentNodeOf(heaps);
         return this;
@@ -172,7 +177,12 @@ public class JmlMultiExprClause extends JmlClause {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlMultiExprClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expressions) {
+    public JmlMultiExprClause(
+            TokenRange tokenRange,
+            JmlClauseKind kind,
+            SimpleName name,
+            NodeList<SimpleName> heaps,
+            NodeList<Expression> expressions) {
         super(tokenRange, name);
         setKind(kind);
         setHeaps(heaps);
@@ -190,8 +200,7 @@ public class JmlMultiExprClause extends JmlClause {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expressions, expressions);
-        if (this.expressions != null)
-            this.expressions.setParentNode(null);
+        if (this.expressions != null) this.expressions.setParentNode(null);
         this.expressions = expressions;
         setAsParentNodeOf(expressions);
         return this;

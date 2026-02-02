@@ -34,7 +34,6 @@ import java.util.Optional;
  */
 @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
 public enum ObservableProperty {
-
     ANNOTATIONS(Type.MULTIPLE_REFERENCE),
     ANONYMOUS_CLASS_BODY(Type.MULTIPLE_REFERENCE),
     ARGUMENTS(Type.MULTIPLE_REFERENCE),
@@ -166,8 +165,10 @@ public enum ObservableProperty {
     COMMENTED_NODE;
 
     enum Type {
-
-        SINGLE_ATTRIBUTE(false, false), SINGLE_REFERENCE(false, true), MULTIPLE_ATTRIBUTE(true, false), MULTIPLE_REFERENCE(true, true);
+        SINGLE_ATTRIBUTE(false, false),
+        SINGLE_REFERENCE(false, true),
+        MULTIPLE_ATTRIBUTE(true, false),
+        MULTIPLE_REFERENCE(true, true);
 
         private boolean multiple;
 
@@ -184,7 +185,9 @@ public enum ObservableProperty {
     private boolean derived;
 
     public static ObservableProperty fromCamelCaseName(String camelCaseName) {
-        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();
+        Optional<ObservableProperty> observableProperty = Arrays.stream(values())
+                .filter(v -> v.camelCaseName().equals(camelCaseName))
+                .findFirst();
         if (observableProperty.isPresent()) {
             return observableProperty.get();
         }
@@ -242,7 +245,9 @@ public enum ObservableProperty {
                 }
                 return null;
             }
-            throw new RuntimeException(String.format("Property %s returned %s (%s)", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
+            throw new RuntimeException(String.format(
+                    "Property %s returned %s (%s)",
+                    this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
         } catch (ClassCastException e) {
             throw new RuntimeException(e);
         }
@@ -272,7 +277,10 @@ public enum ObservableProperty {
             }
             return null;
         } catch (ClassCastException e) {
-            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
+            throw new RuntimeException(
+                    "Unable to get list value for " + this.name() + " from " + node + " (class: "
+                            + node.getClass().getSimpleName() + ")",
+                    e);
         }
     }
 
@@ -281,7 +289,10 @@ public enum ObservableProperty {
         try {
             return (Collection) rawValue;
         } catch (ClassCastException e) {
-            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
+            throw new RuntimeException(
+                    "Unable to get list value for " + this.name() + " from " + node + " (class: "
+                            + node.getClass().getSimpleName() + ")",
+                    e);
         }
     }
 
@@ -304,7 +315,10 @@ public enum ObservableProperty {
         try {
             return node.getClass().getMethod(getterName).invoke(node);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Unable to get value for " + this.name() + " from " + node + " (" + node.getClass().getSimpleName() + ")", e);
+            throw new RuntimeException(
+                    "Unable to get value for " + this.name() + " from " + node + " ("
+                            + node.getClass().getSimpleName() + ")",
+                    e);
         }
     }
 

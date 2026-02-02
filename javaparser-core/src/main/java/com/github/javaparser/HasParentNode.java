@@ -87,8 +87,7 @@ public interface HasParentNode<T> extends Observable {
      * @param <N>
      */
     default <N> Optional<N> findAncestor(Predicate<N> predicate, Class<N>... types) {
-        if (!hasParentNode())
-            return Optional.empty();
+        if (!hasParentNode()) return Optional.empty();
         Node parent = getParentNode().get();
         for (Class<N> type : types) {
             if (type.isAssignableFrom(parent.getClass()) && predicate.test(type.cast(parent))) {

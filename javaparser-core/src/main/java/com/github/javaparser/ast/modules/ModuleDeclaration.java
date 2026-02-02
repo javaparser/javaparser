@@ -22,6 +22,7 @@ package com.github.javaparser.ast.modules;
 
 import static com.github.javaparser.StaticJavaParser.parseModuleDirective;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -43,7 +44,8 @@ import org.jspecify.annotations.NonNull;
 /**
  * A Java 9 Jigsaw module declaration. {@code @Foo module com.github.abc { requires a.B; }}
  */
-public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclaration>, NodeWithAnnotations<ModuleDeclaration> {
+public class ModuleDeclaration extends Node
+        implements NodeWithName<ModuleDeclaration>, NodeWithAnnotations<ModuleDeclaration> {
 
     private Name name;
 
@@ -62,7 +64,8 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     }
 
     @AllFieldsConstructor
-    public ModuleDeclaration(NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleDirective> directives) {
+    public ModuleDeclaration(
+            NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleDirective> directives) {
         this(null, annotations, name, isOpen, directives);
     }
 
@@ -70,7 +73,12 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleDirective> directives) {
+    public ModuleDeclaration(
+            TokenRange tokenRange,
+            NodeList<AnnotationExpr> annotations,
+            Name name,
+            boolean isOpen,
+            NodeList<ModuleDirective> directives) {
         super(tokenRange);
         setAnnotations(annotations);
         setName(name);
@@ -103,8 +111,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -122,8 +129,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
             return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null)
-            this.annotations.setParentNode(null);
+        if (this.annotations != null) this.annotations.setParentNode(null);
         this.annotations = annotations;
         setAsParentNodeOf(annotations);
         return this;
@@ -178,8 +184,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
             return this;
         }
         notifyPropertyChange(ObservableProperty.DIRECTIVES, this.directives, directives);
-        if (this.directives != null)
-            this.directives.setParentNode(null);
+        if (this.directives != null) this.directives.setParentNode(null);
         this.directives = directives;
         setAsParentNodeOf(directives);
         return this;

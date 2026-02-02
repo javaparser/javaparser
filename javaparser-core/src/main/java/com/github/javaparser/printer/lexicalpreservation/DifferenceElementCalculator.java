@@ -46,8 +46,7 @@ class DifferenceElementCalculator {
 
         @Override
         public boolean equals(Object other) {
-            if (other == null || !(other instanceof ChildPositionInfo))
-                return false;
+            if (other == null || !(other instanceof ChildPositionInfo)) return false;
             ChildPositionInfo cpi = (ChildPositionInfo) other;
             // verify that the node content and the position are equal
             // because we can have nodes with the same content but in different lines

@@ -1,21 +1,22 @@
 package com.github.javaparser.ast.jml.clauses;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.JmlClauseIfMetaModel;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.JmlClauseIfMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -97,8 +98,7 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        if (this.condition != null)
-            this.condition.setParentNode(null);
+        if (this.condition != null) this.condition.setParentNode(null);
         this.condition = condition;
         setAsParentNodeOf(condition);
         return this;
@@ -127,8 +127,7 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
             return this;
         }
         notifyPropertyChange(ObservableProperty.THEN, this.then, then);
-        if (this.then != null)
-            this.then.setParentNode(null);
+        if (this.then != null) this.then.setParentNode(null);
         this.then = then;
         setAsParentNodeOf(then);
         return this;
@@ -168,7 +167,8 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseIf(TokenRange tokenRange, SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
+    public JmlClauseIf(
+            TokenRange tokenRange, SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
         super(tokenRange, name);
         setCondition(condition);
         setKind(kind);

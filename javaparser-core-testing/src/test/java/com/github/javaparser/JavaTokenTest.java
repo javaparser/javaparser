@@ -83,10 +83,9 @@ class JavaTokenTest {
         for (int i = 0; i < tokenCount; i++) {
             System.out.println(i);
             JavaToken.Kind kind = JavaToken.Kind.valueOf(i);
-            //assertEquals(JavaToken.Kind.ASSERT, kind);
-            //assertEquals(GeneratedJavaParserConstants.ASSERT, kind.getKind());
+            // assertEquals(JavaToken.Kind.ASSERT, kind);
+            // assertEquals(GeneratedJavaParserConstants.ASSERT, kind.getKind());
         }
-
     }
 
     /**

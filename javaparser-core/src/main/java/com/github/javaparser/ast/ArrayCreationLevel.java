@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -32,9 +34,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayCreationLevelMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Objects;
+import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -102,8 +103,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
             return this;
         }
         notifyPropertyChange(ObservableProperty.DIMENSION, this.dimension, dimension);
-        if (this.dimension != null)
-            this.dimension.setParentNode(null);
+        if (this.dimension != null) this.dimension.setParentNode(null);
         this.dimension = dimension;
         setAsParentNodeOf(dimension);
         return this;
@@ -126,8 +126,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
             return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null)
-            this.annotations.setParentNode(null);
+        if (this.annotations != null) this.annotations.setParentNode(null);
         this.annotations = annotations;
         setAsParentNodeOf(annotations);
         return this;

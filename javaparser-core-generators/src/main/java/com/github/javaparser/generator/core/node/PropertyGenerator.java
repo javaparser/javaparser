@@ -43,10 +43,9 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
+import java.util.*;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
-import java.util.*;
 
 public class PropertyGenerator extends NodeGenerator {
 
@@ -160,7 +159,9 @@ public class PropertyGenerator extends NodeGenerator {
     private void generateGetterWithAnnot(
             BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
         final MethodDeclaration getter = new MethodDeclaration(
-                createModifierList(Modifier.DefaultKeyword.PUBLIC), parseType(property.getTypeNameForSetter()), property.getName());
+                createModifierList(Modifier.DefaultKeyword.PUBLIC),
+                parseType(property.getTypeNameForSetter()),
+                property.getName());
         annotateWhenOverridden(nodeMetaModel, getter);
         final BlockStmt body = getter.getBody().get();
         body.getStatements().clear();

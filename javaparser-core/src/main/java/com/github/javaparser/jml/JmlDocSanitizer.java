@@ -22,8 +22,7 @@ public record JmlDocSanitizer(Set<String> enabledKeys) {
     }
 
     public String asStringJT(Collection<JavaToken> jmlDocs, boolean emulateGlobalPosition) {
-        if (jmlDocs.isEmpty())
-            return "";
+        if (jmlDocs.isEmpty()) return "";
         StringConstructor s = new StringConstructor();
         for (JavaToken tok : jmlDocs) {
             if (emulateGlobalPosition) {
@@ -41,8 +40,7 @@ public record JmlDocSanitizer(Set<String> enabledKeys) {
     }
 
     public String asString(Collection<Token> jmlDocs, boolean emulateGlobalPosition) {
-        if (jmlDocs.isEmpty())
-            return "";
+        if (jmlDocs.isEmpty()) return "";
         StringConstructor s = new StringConstructor();
         for (Token tok : jmlDocs) {
             if (emulateGlobalPosition) {
@@ -71,8 +69,7 @@ public record JmlDocSanitizer(Set<String> enabledKeys) {
             if (cur == '\n') {
                 ++pos;
                 for (; pos < s.length(); pos++) {
-                    if (!Character.isWhitespace(s.charAt(pos)))
-                        break;
+                    if (!Character.isWhitespace(s.charAt(pos))) break;
                 }
                 for (; pos < s.length(); pos++) {
                     if ('@' == s.charAt(pos)) {
@@ -135,17 +132,15 @@ public record JmlDocSanitizer(Set<String> enabledKeys) {
 
     private boolean isJmlComment(StringBuilder s, int pos) {
         int posAt = s.indexOf("@", pos + 2);
-        if (posAt < 0)
-            return false;
+        if (posAt < 0) return false;
         for (int i = pos + 2; i < posAt; i++) {
             int point = s.charAt(i);
             if (!(Character.isJavaIdentifierPart(point) || point == '-' || point == '+')) {
                 return false;
             }
         }
-        //unconditional JML comment
-        if (pos + 2 == posAt)
-            return true;
+        // unconditional JML comment
+        if (pos + 2 == posAt) return true;
         String[] keys = splitTags(s.substring(pos + 2, posAt));
         return isActiveJmlSpec(keys);
     }
@@ -162,18 +157,17 @@ public record JmlDocSanitizer(Set<String> enabledKeys) {
 
     public static boolean isActiveJmlSpec(Collection<String> activeKeys, String[] keys) {
         if (keys.length == 0) {
-            //a JML annotation with no keys is always included,
+            // a JML annotation with no keys is always included,
             return true;
         }
-        //a JML annotation with at least one positive-key is only included
+        // a JML annotation with at least one positive-key is only included
         boolean plusKeyFound = false;
-        //if at least one of these positive keys is enabled
+        // if at least one of these positive keys is enabled
         boolean enabledPlusKeyFound = false;
-        //a JML annotation with an enabled negative-key is ignored (even if there are enabled positive-keys).
+        // a JML annotation with an enabled negative-key is ignored (even if there are enabled positive-keys).
         boolean enabledNegativeKeyFound = false;
         for (String marker : keys) {
-            if (marker.isEmpty())
-                continue;
+            if (marker.isEmpty()) continue;
             plusKeyFound = plusKeyFound || isPositive(marker);
             enabledPlusKeyFound = enabledPlusKeyFound || isPositive(marker) && isEnabled(activeKeys, marker);
             enabledNegativeKeyFound = enabledNegativeKeyFound || isNegative(marker) && isEnabled(activeKeys, marker);

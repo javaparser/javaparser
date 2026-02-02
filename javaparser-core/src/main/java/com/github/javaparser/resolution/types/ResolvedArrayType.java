@@ -41,13 +41,10 @@ public class ResolvedArrayType implements ResolvedType {
     // /
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         ResolvedArrayType that = (ResolvedArrayType) o;
-        if (!baseType.equals(that.baseType))
-            return false;
+        if (!baseType.equals(that.baseType)) return false;
         return true;
     }
 
@@ -95,7 +92,10 @@ public class ResolvedArrayType implements ResolvedType {
             }
             // An array of primitive type is not assignable by an array of boxed type nor the reverse
             // An array of primitive type cannot be assigned to an array of Object
-            if ((baseType.isPrimitive() && other.asArrayType().getComponentType().isReferenceType()) || (baseType.isReferenceType() && other.asArrayType().getComponentType().isPrimitive())) {
+            if ((baseType.isPrimitive()
+                            && other.asArrayType().getComponentType().isReferenceType())
+                    || (baseType.isReferenceType()
+                            && other.asArrayType().getComponentType().isPrimitive())) {
                 return false;
             }
             // An array can be assigned only to a variable of a compatible array type, or to
@@ -106,7 +106,10 @@ public class ResolvedArrayType implements ResolvedType {
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(
+            ResolvedTypeParameterDeclaration tpToReplace,
+            ResolvedType replaced,
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         ResolvedType baseTypeReplaced = baseType.replaceTypeVariables(tpToReplace, replaced, inferredTypes);
         if (baseTypeReplaced == baseType) {
             return this;

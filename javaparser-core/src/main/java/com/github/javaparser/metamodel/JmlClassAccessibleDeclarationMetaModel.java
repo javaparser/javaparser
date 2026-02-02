@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class JmlClassAccessibleDeclarationMetaModel extends JmlClassLevelDeclara
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlClassAccessibleDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlClassAccessibleDeclaration.class, "JmlClassAccessibleDeclaration", "com.github.javaparser.ast.jml.body", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlClassAccessibleDeclaration.class,
+                "JmlClassAccessibleDeclaration",
+                "com.github.javaparser.ast.jml.body",
+                false,
+                false);
     }
 
     public PropertyMetaModel expressionsPropertyMetaModel;

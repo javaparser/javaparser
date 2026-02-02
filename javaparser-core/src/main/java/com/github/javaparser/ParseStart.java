@@ -71,9 +71,11 @@ public interface ParseStart<R> {
 
     ParseStart<TypeParameter> TYPE_PARAMETER = GeneratedJavaParser::TypeParameterParseStart;
 
-    ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR = GeneratedJavaParser::VariableDeclarationExpressionParseStart;
+    ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR =
+            GeneratedJavaParser::VariableDeclarationExpressionParseStart;
 
-    ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT = GeneratedJavaParser::ExplicitConstructorInvocationParseStart;
+    ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT =
+            GeneratedJavaParser::ExplicitConstructorInvocationParseStart;
 
     ParseStart<Name> NAME = GeneratedJavaParser::NameParseStart;
 

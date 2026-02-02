@@ -22,7 +22,6 @@ package com.github.javaparser.printer.configuration;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.utils.LineSeparator;
-import com.github.javaparser.utils.Utils;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -140,10 +139,21 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
 
     // contains all available options
     // an option contained in the set is considered as activated
-    private Set<ConfigurationOption> defaultOptions = new HashSet<>(Arrays.asList(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS, ConfigOption.PRINT_COMMENTS.defaultValue), new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC, ConfigOption.PRINT_JAVADOC.defaultValue), new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS, ConfigOption.SPACE_AROUND_OPERATORS.defaultValue), new DefaultConfigurationOption(ConfigOption.INDENT_CASE_IN_SWITCH, ConfigOption.INDENT_CASE_IN_SWITCH.defaultValue), new DefaultConfigurationOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY, ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.defaultValue), new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, ConfigOption.END_OF_LINE_CHARACTER.defaultValue), new DefaultConfigurationOption(ConfigOption.INDENTATION, ConfigOption.INDENTATION.defaultValue)));
+    private Set<ConfigurationOption> defaultOptions = new HashSet<>(Arrays.asList(
+            new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS, ConfigOption.PRINT_COMMENTS.defaultValue),
+            new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC, ConfigOption.PRINT_JAVADOC.defaultValue),
+            new DefaultConfigurationOption(
+                    ConfigOption.SPACE_AROUND_OPERATORS, ConfigOption.SPACE_AROUND_OPERATORS.defaultValue),
+            new DefaultConfigurationOption(
+                    ConfigOption.INDENT_CASE_IN_SWITCH, ConfigOption.INDENT_CASE_IN_SWITCH.defaultValue),
+            new DefaultConfigurationOption(
+                    ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY,
+                    ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.defaultValue),
+            new DefaultConfigurationOption(
+                    ConfigOption.END_OF_LINE_CHARACTER, ConfigOption.END_OF_LINE_CHARACTER.defaultValue),
+            new DefaultConfigurationOption(ConfigOption.INDENTATION, ConfigOption.INDENTATION.defaultValue)));
 
-    public DefaultPrinterConfiguration() {
-    }
+    public DefaultPrinterConfiguration() {}
 
     /*
      * add the specified option if it does not exist or replace the existing option

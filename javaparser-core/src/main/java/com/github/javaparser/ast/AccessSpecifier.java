@@ -28,8 +28,10 @@ package com.github.javaparser.ast;
  * @since July 2014
  */
 public enum AccessSpecifier {
-
-    PUBLIC("public"), PRIVATE("private"), PROTECTED("protected"), NONE("");
+    PUBLIC("public"),
+    PRIVATE("private"),
+    PROTECTED("protected"),
+    NONE("");
 
     private final String codeRepresenation;
 

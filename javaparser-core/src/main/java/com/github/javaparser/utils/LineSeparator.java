@@ -46,7 +46,10 @@ public enum LineSeparator {
     /**
      * This line ending is set to whatever the host system's line separator is
      */
-    SYSTEM(System.getProperty("line.separator"), "SYSTEM : (" + System.getProperty("line.separator").replace("\r", "\\r").replace("\n", "\\n") + ")"),
+    SYSTEM(
+            System.getProperty("line.separator"),
+            "SYSTEM : ("
+                    + System.getProperty("line.separator").replace("\r", "\\r").replace("\n", "\\n") + ")"),
     /**
      * The ARBITRARY line ending can be used where we do not care about the line separator,
      * only that we use the same one consistently

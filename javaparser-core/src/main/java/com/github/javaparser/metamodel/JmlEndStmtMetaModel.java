@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.jml.stmt.JmlEndStmt;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.jml.stmt.JmlEndStmt;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class JmlEndStmtMetaModel extends JmlStatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlEndStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlEndStmt.class, "JmlEndStmt", "com.github.javaparser.ast.jml.stmt", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlEndStmt.class,
+                "JmlEndStmt",
+                "com.github.javaparser.ast.jml.stmt",
+                false,
+                false);
     }
 
     public PropertyMetaModel jmlTagsPropertyMetaModel;

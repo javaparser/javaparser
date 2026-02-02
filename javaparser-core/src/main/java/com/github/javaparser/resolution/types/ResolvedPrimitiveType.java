@@ -30,7 +30,6 @@ import java.util.Optional;
  * @author Federico Tomassetti
  */
 public enum ResolvedPrimitiveType implements ResolvedType {
-
     BYTE("byte", Byte.class, Collections.emptyList()),
     SHORT("short", Short.class, Collections.singletonList(BYTE)),
     CHAR("char", Character.class, Collections.emptyList()),
@@ -97,7 +96,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
      * Returns an array containing all numeric types
      */
     public static ResolvedPrimitiveType[] getNumericPrimitiveTypes() {
-        return new ResolvedPrimitiveType[] { BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, CHAR };
+        return new ResolvedPrimitiveType[] {BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, CHAR};
     }
 
     @Override
@@ -150,7 +149,8 @@ public enum ResolvedPrimitiveType implements ResolvedType {
             }
             return false;
         }
-        return other.isConstraint() && this.isAssignableBy(other.asConstraintType().getBound());
+        return other.isConstraint()
+                && this.isAssignableBy(other.asConstraintType().getBound());
     }
 
     public String getBoxTypeQName() {
@@ -204,17 +204,29 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         // conversion (§5.1.8).
         // The result is then promoted to a value of type int by a widening primitive conversion (§5.1.2) or an identity
         // conversion (§5.1.1).
-        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.INT })) {
+        if (isUnboxable
+                && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] {
+                    ResolvedPrimitiveType.BYTE,
+                    ResolvedPrimitiveType.SHORT,
+                    ResolvedPrimitiveType.CHAR,
+                    ResolvedPrimitiveType.INT
+                })) {
             return ResolvedPrimitiveType.INT;
         }
         // Otherwise, if the operand is of compile-time type Long, Float, or Double, it is subjected to unboxing
         // conversion (§5.1.8).
-        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.LONG, ResolvedPrimitiveType.FLOAT, ResolvedPrimitiveType.DOUBLE })) {
+        if (isUnboxable
+                && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] {
+                    ResolvedPrimitiveType.LONG, ResolvedPrimitiveType.FLOAT, ResolvedPrimitiveType.DOUBLE
+                })) {
             return type.asReferenceType().toUnboxedType().get();
         }
         // Otherwise, if the operand is of compile-time type byte, short, or char, it is promoted to a value of type int
         // by a widening primitive conversion (§5.1.2).
-        if (type.isPrimitive() && type.asPrimitive().in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.SHORT })) {
+        if (type.isPrimitive()
+                && type.asPrimitive().in(new ResolvedPrimitiveType[] {
+                    ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.SHORT
+                })) {
             return ResolvedPrimitiveType.INT;
         }
         // Otherwise, a unary numeric operand remains as is and is not converted.

@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -33,10 +35,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SwitchExprMetaModel;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -118,8 +119,7 @@ public class SwitchExpr extends Expression implements SwitchNode {
             return this;
         }
         notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
-        if (this.entries != null)
-            this.entries.setParentNode(null);
+        if (this.entries != null) this.entries.setParentNode(null);
         this.entries = entries;
         setAsParentNodeOf(entries);
         return this;
@@ -132,8 +132,7 @@ public class SwitchExpr extends Expression implements SwitchNode {
             return this;
         }
         notifyPropertyChange(ObservableProperty.SELECTOR, this.selector, selector);
-        if (this.selector != null)
-            this.selector.setParentNode(null);
+        if (this.selector != null) this.selector.setParentNode(null);
         this.selector = selector;
         setAsParentNodeOf(selector);
         return this;

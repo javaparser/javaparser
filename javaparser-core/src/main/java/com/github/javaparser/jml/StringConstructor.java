@@ -4,7 +4,7 @@ public class StringConstructor {
 
     private final StringBuilder sb = new StringBuilder(1024);
 
-    //JavaCC starts with 1/1
+    // JavaCC starts with 1/1
     private int curLine = 1;
 
     private int curColumn = 1;

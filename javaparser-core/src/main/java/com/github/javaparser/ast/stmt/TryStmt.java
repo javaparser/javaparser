@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -33,10 +35,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.TryStmtMetaModel;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -115,7 +116,11 @@ public class TryStmt extends Statement {
     }
 
     @AllFieldsConstructor
-    public TryStmt(NodeList<Expression> resources, final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
+    public TryStmt(
+            NodeList<Expression> resources,
+            final BlockStmt tryBlock,
+            final NodeList<CatchClause> catchClauses,
+            final BlockStmt finallyBlock) {
         this(null, resources, tryBlock, catchClauses, finallyBlock);
     }
 
@@ -123,7 +128,12 @@ public class TryStmt extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TryStmt(TokenRange tokenRange, NodeList<Expression> resources, BlockStmt tryBlock, NodeList<CatchClause> catchClauses, BlockStmt finallyBlock) {
+    public TryStmt(
+            TokenRange tokenRange,
+            NodeList<Expression> resources,
+            BlockStmt tryBlock,
+            NodeList<CatchClause> catchClauses,
+            BlockStmt finallyBlock) {
         super(tokenRange);
         setResources(resources);
         setTryBlock(tryBlock);
@@ -171,8 +181,7 @@ public class TryStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CATCH_CLAUSES, this.catchClauses, catchClauses);
-        if (this.catchClauses != null)
-            this.catchClauses.setParentNode(null);
+        if (this.catchClauses != null) this.catchClauses.setParentNode(null);
         this.catchClauses = catchClauses;
         setAsParentNodeOf(catchClauses);
         return this;
@@ -184,8 +193,7 @@ public class TryStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.FINALLY_BLOCK, this.finallyBlock, finallyBlock);
-        if (this.finallyBlock != null)
-            this.finallyBlock.setParentNode(null);
+        if (this.finallyBlock != null) this.finallyBlock.setParentNode(null);
         this.finallyBlock = finallyBlock;
         setAsParentNodeOf(finallyBlock);
         return this;
@@ -198,8 +206,7 @@ public class TryStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TRY_BLOCK, this.tryBlock, tryBlock);
-        if (this.tryBlock != null)
-            this.tryBlock.setParentNode(null);
+        if (this.tryBlock != null) this.tryBlock.setParentNode(null);
         this.tryBlock = tryBlock;
         setAsParentNodeOf(tryBlock);
         return this;
@@ -212,8 +219,7 @@ public class TryStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.RESOURCES, this.resources, resources);
-        if (this.resources != null)
-            this.resources.setParentNode(null);
+        if (this.resources != null) this.resources.setParentNode(null);
         this.resources = resources;
         setAsParentNodeOf(resources);
         return this;

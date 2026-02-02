@@ -38,6 +38,12 @@ public class WorkingSpaceClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     WorkingSpaceClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlClauseIf.class, "WorkingSpaceClause", "com.github.javaparser.ast.jml.clauses", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlClauseIf.class,
+                "WorkingSpaceClause",
+                "com.github.javaparser.ast.jml.clauses",
+                false,
+                false);
     }
 }

@@ -1,13 +1,13 @@
 package com.github.jml.printer;
 
+import static com.github.javaparser.StaticJavaParser.parseJmlExpression;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-
-import static com.github.javaparser.StaticJavaParser.parseJmlExpression;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ConcreteSyntaxModelTest {
 

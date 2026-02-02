@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -31,10 +33,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ConditionalExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -106,8 +107,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        if (this.condition != null)
-            this.condition.setParentNode(null);
+        if (this.condition != null) this.condition.setParentNode(null);
         this.condition = condition;
         setAsParentNodeOf(condition);
         return this;
@@ -120,8 +120,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
             return this;
         }
         notifyPropertyChange(ObservableProperty.ELSE_EXPR, this.elseExpr, elseExpr);
-        if (this.elseExpr != null)
-            this.elseExpr.setParentNode(null);
+        if (this.elseExpr != null) this.elseExpr.setParentNode(null);
         this.elseExpr = elseExpr;
         setAsParentNodeOf(elseExpr);
         return this;
@@ -134,8 +133,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
             return this;
         }
         notifyPropertyChange(ObservableProperty.THEN_EXPR, this.thenExpr, thenExpr);
-        if (this.thenExpr != null)
-            this.thenExpr.setParentNode(null);
+        if (this.thenExpr != null) this.thenExpr.setParentNode(null);
         this.thenExpr = thenExpr;
         setAsParentNodeOf(thenExpr);
         return this;

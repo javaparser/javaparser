@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.NodeList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -38,6 +38,12 @@ public class CallableClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     CallableClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlCallableClause.class, "CallableClause", "com.github.javaparser.ast.jml.clauses", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlCallableClause.class,
+                "CallableClause",
+                "com.github.javaparser.ast.jml.clauses",
+                false,
+                false);
     }
 }

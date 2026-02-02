@@ -15,9 +15,6 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
 import com.github.javaparser.jml.JmlDocSanitizer;
 import com.google.common.truth.Truth;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.provider.CsvSource;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,6 +27,7 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.*;
 
 /**
  * @author Alexander Weigl
@@ -42,7 +40,7 @@ class FullExamplesTest {
     private long time;
 
     {
-        //private final StoreJMLComments storeProcessor = new StoreJMLComments()
+        // private final StoreJMLComments storeProcessor = new StoreJMLComments()
         ParserConfiguration config = new ParserConfiguration();
         config.setKeepJmlDocs(false);
         config.setProcessJml(true);
@@ -124,8 +122,7 @@ class FullExamplesTest {
         blocked.add("/key/standard_key/java_dl/classpath/IllegalStateException.java");
         blocked.add("/key/standard_key/java_dl/classpath/InputStream.java");
 
-        blockedPaths = blocked.stream().map(it -> Paths.get(dir.toString(), it))
-                .collect(Collectors.toSet());
+        blockedPaths = blocked.stream().map(it -> Paths.get(dir.toString(), it)).collect(Collectors.toSet());
     }
 
     static int prefixLength = dir.toString().length();
@@ -141,18 +138,16 @@ class FullExamplesTest {
     }
 
     Stream<DynamicTest> createTests(Predicate<Path> pred) throws IOException {
-        //System.out.format("Folder: %s\n", dir);
+        // System.out.format("Folder: %s\n", dir);
         Assumptions.assumeTrue(dir.exists());
         Stream<Path> files = Files.walk(dir.toPath());
-        return files
-                .filter(it -> it.toString().endsWith(".java"))
+        return files.filter(it -> it.toString().endsWith(".java"))
                 .filter(it -> !it.toString().contains("InformationFlow"))
                 .filter(pred)
                 .map(it -> {
-                            String name = it.toString().substring(prefixLength);
-                            return DynamicTest.dynamicTest(name, () -> testParse(it));
-                        }
-                );
+                    String name = it.toString().substring(prefixLength);
+                    return DynamicTest.dynamicTest(name, () -> testParse(it));
+                });
     }
 
     private void testParse(Path p) throws IOException {
@@ -167,11 +162,13 @@ class FullExamplesTest {
         lines += content.chars().filter(it -> it == '\n').count();
 
         result.getProblems().forEach(it -> {
-            int line = it.getLocation().map(l -> l.getBegin().getRange().map(r -> r.begin.line).orElse(-1)).orElse(-1);
+            int line = it.getLocation()
+                    .map(l -> l.getBegin().getRange().map(r -> r.begin.line).orElse(-1))
+                    .orElse(-1);
             System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p.toUri(), line);
             it.getCause().ifPresent(Throwable::printStackTrace);
         });
-        //storeProcessor.process(result, config);
+        // storeProcessor.process(result, config);
         Assertions.assertTrue(result.isSuccessful(), "parsing failed");
 
         testParentAndChild(result.getResult().get());
@@ -180,17 +177,19 @@ class FullExamplesTest {
     }
 
     private void testParentAndChild(Node node) {
-        node.accept(new VoidVisitorWithDefaults<>() {
-            @Override
-            public void defaultAction(Node n, Object arg) {
-                final var parent = node.getParentNode();
-                if (parent.isPresent()) {
-                    final var childNodes = parent.get().getChildNodes();
-                    Assertions.assertFalse(childNodes.isEmpty());
-                    Truth.assertThat(childNodes).contains(node);
-                }
-            }
-        }, null);
+        node.accept(
+                new VoidVisitorWithDefaults<>() {
+                    @Override
+                    public void defaultAction(Node n, Object arg) {
+                        final var parent = node.getParentNode();
+                        if (parent.isPresent()) {
+                            final var childNodes = parent.get().getChildNodes();
+                            Assertions.assertFalse(childNodes.isEmpty());
+                            Truth.assertThat(childNodes).contains(node);
+                        }
+                    }
+                },
+                null);
     }
 
     private boolean isBlocked(Path it) {
@@ -202,7 +201,6 @@ class FullExamplesTest {
         System.out.format("Performance: %d LoCs in %d ns%n", lines, time);
         System.out.format("Performance: %.0f LoCs/ms", lines * 1000000.0 / time);
     }
-
 }
 
 class StoreJMLComments extends Processor {
@@ -214,8 +212,10 @@ class StoreJMLComments extends Processor {
         if (result.getResult().isPresent()) {
             final Node node = result.getResult().get();
             if (node instanceof CompilationUnit) {
-                origin = ((CompilationUnit) node).getStorage()
-                        .map(it -> it.getPath().toFile().toString()).orElse("no path given");
+                origin = ((CompilationUnit) node)
+                        .getStorage()
+                        .map(it -> it.getPath().toFile().toString())
+                        .orElse("no path given");
             } else {
                 origin = "n/a";
             }
@@ -226,8 +226,7 @@ class StoreJMLComments extends Processor {
     private void write(String cat, NodeList<JmlDoc> comment) {
         if (comment.isEmpty()) return;
 
-        Path f = Paths.get("src", "test", "resources", "fragments",
-                cat + "_" + Math.abs(comment.hashCode()) + ".txt");
+        Path f = Paths.get("src", "test", "resources", "fragments", cat + "_" + Math.abs(comment.hashCode()) + ".txt");
         String s = sanitizer.asString(comment);
         String pos = comment.get(0).getRange().map(it -> it.begin.toString()).orElse("");
         try (FileWriter fw = new FileWriter(f.toFile())) {

@@ -20,25 +20,21 @@
  */
 package com.github.javaparser.serialization;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-
 import com.google.common.truth.Truth;
 import jakarta.json.Json;
 import jakarta.json.stream.JsonGenerator;
 import jakarta.json.stream.JsonGeneratorFactory;
-
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
 
 class JavaParserJsonSerializerTest {
     @Test

@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -41,12 +43,11 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.Objects;
-import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The "int id();" in {@code @interface X { int id(); }}
@@ -56,7 +57,13 @@ import org.jspecify.annotations.NonNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavadoc<AnnotationMemberDeclaration>, NodeWithSimpleName<AnnotationMemberDeclaration>, NodeWithType<AnnotationMemberDeclaration, Type>, NodeWithPublicModifier<AnnotationMemberDeclaration>, NodeWithAbstractModifier<AnnotationMemberDeclaration>, Resolvable<ResolvedAnnotationMemberDeclaration> {
+public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration>
+        implements NodeWithJavadoc<AnnotationMemberDeclaration>,
+                NodeWithSimpleName<AnnotationMemberDeclaration>,
+                NodeWithType<AnnotationMemberDeclaration, Type>,
+                NodeWithPublicModifier<AnnotationMemberDeclaration>,
+                NodeWithAbstractModifier<AnnotationMemberDeclaration>,
+                Resolvable<ResolvedAnnotationMemberDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -76,7 +83,12 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     }
 
     @AllFieldsConstructor
-    public AnnotationMemberDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            Type type,
+            SimpleName name,
+            Expression defaultValue) {
         this(null, modifiers, annotations, type, name, defaultValue);
     }
 
@@ -84,7 +96,13 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AnnotationMemberDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(
+            TokenRange tokenRange,
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            Type type,
+            SimpleName name,
+            Expression defaultValue) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setType(type);
@@ -148,8 +166,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
             return this;
         }
         notifyPropertyChange(ObservableProperty.DEFAULT_VALUE, this.defaultValue, defaultValue);
-        if (this.defaultValue != null)
-            this.defaultValue.setParentNode(null);
+        if (this.defaultValue != null) this.defaultValue.setParentNode(null);
         this.defaultValue = defaultValue;
         setAsParentNodeOf(defaultValue);
         return this;
@@ -162,8 +179,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
-            this.modifiers.setParentNode(null);
+        if (this.modifiers != null) this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return this;
@@ -176,8 +192,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -190,8 +205,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
-            this.type.setParentNode(null);
+        if (this.type != null) this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;

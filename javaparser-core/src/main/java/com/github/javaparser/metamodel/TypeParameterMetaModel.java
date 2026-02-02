@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.type.TypeParameter;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class TypeParameterMetaModel extends ReferenceTypeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     TypeParameterMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, TypeParameter.class, "TypeParameter", "com.github.javaparser.ast.type", false, false);
+        super(
+                superBaseNodeMetaModel,
+                TypeParameter.class,
+                "TypeParameter",
+                "com.github.javaparser.ast.type",
+                false,
+                false);
     }
 
     public PropertyMetaModel namePropertyMetaModel;

@@ -23,5 +23,4 @@ class JmlExpressionTest {
         }
         Assertions.assertTrue(r.isSuccessful());
     }
-
 }

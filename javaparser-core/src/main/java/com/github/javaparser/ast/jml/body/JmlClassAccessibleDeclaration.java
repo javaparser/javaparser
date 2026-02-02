@@ -1,5 +1,7 @@
 package com.github.javaparser.ast.jml.body;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
@@ -12,10 +14,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClassAccessibleDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -23,7 +24,8 @@ import org.jspecify.annotations.Nullable;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlClassAccessibleDeclaration> implements NodeWithModifiers<JmlClassAccessibleDeclaration> {
+public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlClassAccessibleDeclaration>
+        implements NodeWithModifiers<JmlClassAccessibleDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -41,7 +43,12 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlC
     }
 
     @AllFieldsConstructor
-    public JmlClassAccessibleDeclaration(NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, Expression variable, NodeList<Expression> expressions, Expression measuredBy) {
+    public JmlClassAccessibleDeclaration(
+            NodeList<SimpleName> jmlTags,
+            NodeList<Modifier> modifiers,
+            Expression variable,
+            NodeList<Expression> expressions,
+            Expression measuredBy) {
         this(null, jmlTags, modifiers, variable, expressions, measuredBy);
     }
 
@@ -49,7 +56,13 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlC
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClassAccessibleDeclaration(TokenRange tokenRange, NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, Expression variable, NodeList<Expression> expressions, Expression measuredBy) {
+    public JmlClassAccessibleDeclaration(
+            TokenRange tokenRange,
+            NodeList<SimpleName> jmlTags,
+            NodeList<Modifier> modifiers,
+            Expression variable,
+            NodeList<Expression> expressions,
+            Expression measuredBy) {
         super(tokenRange);
         setJmlTags(jmlTags);
         setModifiers(modifiers);
@@ -71,8 +84,7 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlC
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
-            this.modifiers.setParentNode(null);
+        if (this.modifiers != null) this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return this;
@@ -187,8 +199,7 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlC
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSIONS, this.expressions, expressions);
-        if (this.expressions != null)
-            this.expressions.setParentNode(null);
+        if (this.expressions != null) this.expressions.setParentNode(null);
         this.expressions = expressions;
         setAsParentNodeOf(expressions);
         return this;
@@ -206,8 +217,7 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlC
             return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLE, this.variable, variable);
-        if (this.variable != null)
-            this.variable.setParentNode(null);
+        if (this.variable != null) this.variable.setParentNode(null);
         this.variable = variable;
         setAsParentNodeOf(variable);
         return this;
@@ -224,8 +234,7 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlC
             return this;
         }
         notifyPropertyChange(ObservableProperty.MEASURED_BY, this.measuredBy, measuredBy);
-        if (this.measuredBy != null)
-            this.measuredBy.setParentNode(null);
+        if (this.measuredBy != null) this.measuredBy.setParentNode(null);
         this.measuredBy = measuredBy;
         setAsParentNodeOf(measuredBy);
         return this;
@@ -279,8 +288,7 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlC
             return this;
         }
         notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
-        if (this.jmlTags != null)
-            this.jmlTags.setParentNode(null);
+        if (this.jmlTags != null) this.jmlTags.setParentNode(null);
         this.jmlTags = jmlTags;
         setAsParentNodeOf(jmlTags);
         return this;

@@ -30,8 +30,11 @@ public class ReshuffledDiffElementExtractor {
     private final NodeText nodeText;
 
     private enum MatchClassification {
-
-        ALL(1), PREVIOUS_AND_SAME(2), NEXT_AND_SAME(3), SAME_ONLY(4), ALMOST(5);
+        ALL(1),
+        PREVIOUS_AND_SAME(2),
+        NEXT_AND_SAME(3),
+        SAME_ONLY(4),
+        ALMOST(5);
 
         private final int priority;
 
@@ -62,18 +65,25 @@ public class ReshuffledDiffElementExtractor {
                 CsmMix elementsFromPreviousOrder = reshuffled.getPreviousOrder();
                 CsmMix elementsFromNextOrder = reshuffled.getNextOrder();
                 // This contains indexes from elementsFromNextOrder to indexes from elementsFromPreviousOrder
-                Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = getCorrespondanceBetweenNextOrderAndPreviousOrder(elementsFromPreviousOrder, elementsFromNextOrder);
+                Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder =
+                        getCorrespondanceBetweenNextOrderAndPreviousOrder(
+                                elementsFromPreviousOrder, elementsFromNextOrder);
                 // We now find out which Node Text elements corresponds to the elements in the original CSM
-                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText);
-                PeekingIterator<Integer> nodeTextIndexOfPreviousElementsIterator = new PeekingIterator<>(nodeTextIndexOfPreviousElements);
+                List<Integer> nodeTextIndexOfPreviousElements =
+                        findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText);
+                PeekingIterator<Integer> nodeTextIndexOfPreviousElementsIterator =
+                        new PeekingIterator<>(nodeTextIndexOfPreviousElements);
                 Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
                 while (nodeTextIndexOfPreviousElementsIterator.hasNext()) {
                     int value = nodeTextIndexOfPreviousElementsIterator.next();
                     if (value != -1) {
-                        nodeTextIndexToPreviousCSMIndex.put(value, nodeTextIndexOfPreviousElementsIterator.currentIndex());
+                        nodeTextIndexToPreviousCSMIndex.put(
+                                value, nodeTextIndexOfPreviousElementsIterator.currentIndex());
                     }
                 }
-                int lastNodeTextIndex = nodeTextIndexOfPreviousElements.stream().max(Integer::compareTo).orElse(-1);
+                int lastNodeTextIndex = nodeTextIndexOfPreviousElements.stream()
+                        .max(Integer::compareTo)
+                        .orElse(-1);
                 // Elements to be added at the end
                 List<CsmElement> elementsToBeAddedAtTheEnd = new LinkedList<>();
                 List<CsmElement> nextOrderElements = elementsFromNextOrder.getElements();
@@ -88,9 +98,12 @@ public class ReshuffledDiffElementExtractor {
                             if (correspondanceBetweenNextOrderAndPreviousOrder.containsKey(nj)) {
                                 originalCsmIndex = correspondanceBetweenNextOrderAndPreviousOrder.get(nj);
                                 if (!elementsToAddBeforeGivenOriginalCSMElement.containsKey(originalCsmIndex)) {
-                                    elementsToAddBeforeGivenOriginalCSMElement.put(originalCsmIndex, new LinkedList<>());
+                                    elementsToAddBeforeGivenOriginalCSMElement.put(
+                                            originalCsmIndex, new LinkedList<>());
                                 }
-                                elementsToAddBeforeGivenOriginalCSMElement.get(originalCsmIndex).add(nextOrderElements.get(ni));
+                                elementsToAddBeforeGivenOriginalCSMElement
+                                        .get(originalCsmIndex)
+                                        .add(nextOrderElements.get(ni));
                             }
                         }
                         // it does not preceed anything, so it goes at the end
@@ -113,12 +126,15 @@ public class ReshuffledDiffElementExtractor {
                         if (nodeTextIndexToPreviousCSMIndex.containsKey(ntIndex)) {
                             int indexOfOriginalCSMElement = nodeTextIndexToPreviousCSMIndex.get(ntIndex);
                             if (elementsToAddBeforeGivenOriginalCSMElement.containsKey(indexOfOriginalCSMElement)) {
-                                for (CsmElement elementToAdd : elementsToAddBeforeGivenOriginalCSMElement.get(indexOfOriginalCSMElement)) {
+                                for (CsmElement elementToAdd :
+                                        elementsToAddBeforeGivenOriginalCSMElement.get(indexOfOriginalCSMElement)) {
                                     iterator.add(new Added(elementToAdd));
                                 }
                             }
-                            CsmElement originalCSMElement = elementsFromPreviousOrder.getElements().get(indexOfOriginalCSMElement);
-                            boolean toBeKept = correspondanceBetweenNextOrderAndPreviousOrder.containsValue(indexOfOriginalCSMElement);
+                            CsmElement originalCSMElement =
+                                    elementsFromPreviousOrder.getElements().get(indexOfOriginalCSMElement);
+                            boolean toBeKept = correspondanceBetweenNextOrderAndPreviousOrder.containsValue(
+                                    indexOfOriginalCSMElement);
                             if (toBeKept) {
                                 iterator.add(new Kept(originalCSMElement));
                             } else {
@@ -151,17 +167,24 @@ public class ReshuffledDiffElementExtractor {
      * case the search for the next element of the list L1 must start from the
      * position of the last element kept {@code syncNextIndex}.
      */
-    private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder, CsmMix elementsFromNextOrder) {
+    private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(
+            CsmMix elementsFromPreviousOrder, CsmMix elementsFromNextOrder) {
         Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
-        ArrayIterator<CsmElement> previousOrderElementsIterator = new ArrayIterator<>(elementsFromPreviousOrder.getElements());
+        ArrayIterator<CsmElement> previousOrderElementsIterator =
+                new ArrayIterator<>(elementsFromPreviousOrder.getElements());
         int syncNextIndex = 0;
         while (previousOrderElementsIterator.hasNext()) {
             CsmElement pe = previousOrderElementsIterator.next();
-            ArrayIterator<CsmElement> nextOrderElementsIterator = new ArrayIterator<>(elementsFromNextOrder.getElements(), syncNextIndex);
+            ArrayIterator<CsmElement> nextOrderElementsIterator =
+                    new ArrayIterator<>(elementsFromNextOrder.getElements(), syncNextIndex);
             while (nextOrderElementsIterator.hasNext()) {
                 CsmElement ne = nextOrderElementsIterator.next();
-                if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(previousOrderElementsIterator.index()) && DifferenceElementCalculator.matching(ne, pe)) {
-                    correspondanceBetweenNextOrderAndPreviousOrder.put(nextOrderElementsIterator.index(), previousOrderElementsIterator.index());
+                if (!correspondanceBetweenNextOrderAndPreviousOrder
+                                .values()
+                                .contains(previousOrderElementsIterator.index())
+                        && DifferenceElementCalculator.matching(ne, pe)) {
+                    correspondanceBetweenNextOrderAndPreviousOrder.put(
+                            nextOrderElementsIterator.index(), previousOrderElementsIterator.index());
                     // set the position to start on the next {@code nextOrderElementsIterator} iteration
                     syncNextIndex = nextOrderElementsIterator.nextIndex();
                     break;
@@ -190,17 +213,20 @@ public class ReshuffledDiffElementExtractor {
                         boolean hasSamePreviousElement = false;
                         if (!isFirstIterationOnNodeTextElements && !isFirstIterationOnCsmElements) {
                             TextElement previousTextElement = nodeText.getTextElement(currentTextElementIndex - 1);
-                            hasSamePreviousElement = elements.get(previousCsmElementIndex).isCorrespondingElement(previousTextElement);
+                            hasSamePreviousElement =
+                                    elements.get(previousCsmElementIndex).isCorrespondingElement(previousTextElement);
                         }
                         boolean hasSameNextElement = false;
                         if (csmElementListIterator.hasNext()) {
                             TextElement nextTextElement = nodeTextListIterator.peek();
-                            hasSameNextElement = elements.get(csmElementListIterator.nextIndex()).isCorrespondingElement(nextTextElement);
+                            hasSameNextElement = elements.get(csmElementListIterator.nextIndex())
+                                    .isCorrespondingElement(nextTextElement);
                         }
                         if (hasSamePreviousElement && hasSameNextElement) {
                             potentialMatches.putIfAbsent(MatchClassification.ALL, currentTextElementIndex);
                         } else if (hasSamePreviousElement) {
-                            potentialMatches.putIfAbsent(MatchClassification.PREVIOUS_AND_SAME, currentTextElementIndex);
+                            potentialMatches.putIfAbsent(
+                                    MatchClassification.PREVIOUS_AND_SAME, currentTextElementIndex);
                         } else if (hasSameNextElement) {
                             potentialMatches.putIfAbsent(MatchClassification.NEXT_AND_SAME, currentTextElementIndex);
                         } else {
@@ -212,7 +238,8 @@ public class ReshuffledDiffElementExtractor {
                 }
             }
             // Prioritize the matches from best to worst
-            Optional<MatchClassification> bestMatchKey = potentialMatches.keySet().stream().min(Comparator.comparing(MatchClassification::getPriority));
+            Optional<MatchClassification> bestMatchKey =
+                    potentialMatches.keySet().stream().min(Comparator.comparing(MatchClassification::getPriority));
             if (bestMatchKey.isPresent()) {
                 correspondingIndices.add(potentialMatches.get(bestMatchKey.get()));
             } else {
