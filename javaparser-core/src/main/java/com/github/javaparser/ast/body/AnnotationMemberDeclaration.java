@@ -161,7 +161,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
      * @return this, the AnnotationMemberDeclaration
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AnnotationMemberDeclaration setDefaultValue(final Expression defaultValue) {
+    public AnnotationMemberDeclaration setDefaultValue(final @Nullable() Expression defaultValue) {
         if (defaultValue == this.defaultValue) {
             return this;
         }
@@ -173,7 +173,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AnnotationMemberDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public AnnotationMemberDeclaration setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -186,7 +186,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AnnotationMemberDeclaration setName(final SimpleName name) {
+    public AnnotationMemberDeclaration setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -199,7 +199,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AnnotationMemberDeclaration setType(final Type type) {
+    public AnnotationMemberDeclaration setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -302,27 +302,27 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
         return Optional.of(this);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression defaultValue() {
+    public @Nullable() Expression defaultValue() {
         return defaultValue;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 }

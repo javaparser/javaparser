@@ -73,7 +73,7 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlSignalsClause setExpression(final Expression expression) {
+    public JmlSignalsClause setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -102,7 +102,7 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlSignalsClause setParameter(final Parameter parameter) {
+    public JmlSignalsClause setParameter(final @NonNull() Parameter parameter) {
         assertNotNull(parameter);
         if (parameter == this.parameter) {
             return this;
@@ -161,15 +161,15 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
         action.accept(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter parameter() {
+    public @NonNull() Parameter parameter() {
         return Objects.requireNonNull(parameter);
     }
 }

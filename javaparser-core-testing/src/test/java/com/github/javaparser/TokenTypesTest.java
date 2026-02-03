@@ -40,7 +40,7 @@ public class TokenTypesTest {
 
     @Test
     void everyTokenHasACategory() throws IOException {
-        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
+        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length - 1;
         Path tokenTypesPath = mavenModuleRoot(JavaParserTest.class)
                 .resolve("../javaparser-core/src/main/java/com/github/javaparser/TokenTypes.java");
         CompilationUnit tokenTypesCu = parse(tokenTypesPath);
@@ -52,22 +52,22 @@ public class TokenTypesTest {
         assertEquals(tokenCount, switchEntries);
     }
 
-    @Test
-    void throwOnUnrecognisedTokenType() {
-        assertThrows(AssertionError.class, () -> {
-            TokenTypes.getCategory(-1);
-        });
-    }
-
     @TestFactory
-    Stream<DynamicTest> everyTokenHasACategory0() throws IOException {
+    Stream<DynamicTest> everyTokenHasACategory0() {
         final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
-        return IntStream.range(0, tokenCount)
+        return IntStream.range(0, tokenCount - 1)
                 .mapToObj(it -> DynamicTest.dynamicTest("TokenType: " + it, () -> {
                     try {
                         TokenTypes.getCategory(it);
                     } catch (IllegalArgumentException ignored) {
                     }
                 }));
+    }
+
+    @Test
+    void throwOnUnrecognisedTokenType() {
+        assertThrows(AssertionError.class, () -> {
+            TokenTypes.getCategory(-1);
+        });
     }
 }

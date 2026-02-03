@@ -100,7 +100,7 @@ public class JmlCallableClause extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlCallableClause setMethodSignatures(final NodeList<JmlMethodSignature> methodSignatures) {
+    public JmlCallableClause setMethodSignatures(final @NonNull() NodeList<JmlMethodSignature> methodSignatures) {
         assertNotNull(methodSignatures);
         if (methodSignatures == this.methodSignatures) {
             return this;
@@ -152,9 +152,9 @@ public class JmlCallableClause extends JmlClause {
         customInitialization();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlMethodSignature> methodSignatures() {
+    public @NonNull() NodeList<JmlMethodSignature> methodSignatures() {
         return Objects.requireNonNull(methodSignatures);
     }
 }

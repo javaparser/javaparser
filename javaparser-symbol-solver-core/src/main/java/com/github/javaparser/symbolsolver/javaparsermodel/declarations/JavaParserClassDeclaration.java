@@ -23,9 +23,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -200,7 +198,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             return Optional.of(object());
         }
         return Optional.of(
-                toReferenceType(wrappedNode.getExtendedTypes().getFirst().get()));
+                toReferenceType(wrappedNode.getExtendedTypes().getOFirst().get()));
     }
 
     @Override
@@ -408,13 +406,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        Set<ResolvedMethodDeclaration> methods = new HashSet<>();
-        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
-            if (member instanceof MethodDeclaration) {
-                methods.add(new JavaParserMethodDeclaration((MethodDeclaration) member, typeSolver));
-            }
-        }
-        return methods;
+        return javaParserTypeAdapter.getDeclaredMethods();
     }
 
     @Override

@@ -46,30 +46,6 @@ public class JmlBeginStmt extends JmlStatement implements NodeWithJmlTags<JmlBeg
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlBeginStmt() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlBeginStmt asJmlBeginStmt() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlBeginStmt> toJmlBeginStmt() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlBeginStmt(Consumer<JmlBeginStmt> action) {
-        action.accept(this);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlBeginStmt clone() {
         return (JmlBeginStmt) accept(new CloneVisitor(), null);
@@ -97,7 +73,7 @@ public class JmlBeginStmt extends JmlStatement implements NodeWithJmlTags<JmlBeg
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlBeginStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlBeginStmt setJmlTags(final @NonNull() NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -139,9 +115,32 @@ public class JmlBeginStmt extends JmlStatement implements NodeWithJmlTags<JmlBeg
         return super.replace(node, replacementNode);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> jmlTags() {
+    public @NonNull() NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlBeginStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlBeginStmt asJmlBeginStmt() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlBeginStmt> toJmlBeginStmt() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlBeginStmt(Consumer<JmlBeginStmt> action) {
+        action.accept(this);
     }
 }

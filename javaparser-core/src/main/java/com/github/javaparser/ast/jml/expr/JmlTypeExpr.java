@@ -60,7 +60,7 @@ public class JmlTypeExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlTypeExpr setType(final Type type) {
+    public JmlTypeExpr setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -121,9 +121,9 @@ public class JmlTypeExpr extends Expression {
         return JavaParserMetaModel.jmlTypeExprMetaModel;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 }

@@ -27,16 +27,16 @@ import static com.github.javaparser.Providers.resourceProvider;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.ArbitraryNodeContainer;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -226,6 +226,7 @@ public final class JavaParser {
     public ParseResult<CompilationUnit> parse(final Path path) throws IOException {
         ParseResult<CompilationUnit> result =
                 parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
+        result.setSourcePath(path);
         result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
         return result;
     }
@@ -568,5 +569,32 @@ public final class JavaParser {
     @SuppressWarnings("unchecked")
     public <T extends Expression> ParseResult<T> parseJmlExpression(Provider content) {
         return (ParseResult<T>) parse(enableJml(GeneratedJavaParser::ExpressionParseStart), content);
+    }
+
+    /**
+     * TODO weigl
+     *
+     * @param block
+     * @return
+     */
+    public ParseResult<KeyContextStatementBlock> parseSchemaBlock(String block) {
+        return parse(GeneratedJavaParser::StartBlock, provider(block));
+    }
+
+    /**
+     * TODO weigl
+     *
+     * @param statements
+     * @return
+     */
+    public ParseResult<NodeList<Statement>> parseStatements(String statements) {
+        ParseStart<BlockStmt> start = GeneratedJavaParser::StatementsParseStart;
+        ParseResult<BlockStmt> result = parse(start, provider(statements));
+        NodeList<Statement> s = null;
+        if (result.getResult().isPresent()) {
+            s = result.getResult().get().getStatements();
+        }
+        return new ParseResult<>(
+                s, result.getProblems(), result.getCommentsCollection().orElse(null));
     }
 }

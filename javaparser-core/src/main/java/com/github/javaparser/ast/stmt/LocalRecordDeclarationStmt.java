@@ -85,7 +85,7 @@ public class LocalRecordDeclarationStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocalRecordDeclarationStmt setRecordDeclaration(final RecordDeclaration recordDeclaration) {
+    public LocalRecordDeclarationStmt setRecordDeclaration(final @NonNull() RecordDeclaration recordDeclaration) {
         assertNotNull(recordDeclaration);
         if (recordDeclaration == this.recordDeclaration) {
             return this;
@@ -146,9 +146,9 @@ public class LocalRecordDeclarationStmt extends Statement {
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclaration recordDeclaration() {
+    public @NonNull() RecordDeclaration recordDeclaration() {
         return Objects.requireNonNull(recordDeclaration);
     }
 }

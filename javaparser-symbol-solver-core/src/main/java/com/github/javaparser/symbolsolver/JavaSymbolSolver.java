@@ -67,9 +67,9 @@ public class JavaSymbolSolver implements SymbolResolver {
     /*
      * add possibility to resolve array.length #1695
      */
-    private static class ArrayLengthValueDeclaration implements ResolvedValueDeclaration {
+    public static class ArrayLengthValueDeclaration implements ResolvedValueDeclaration {
 
-        private static final ArrayLengthValueDeclaration INSTANCE = new ArrayLengthValueDeclaration();
+        public static final ArrayLengthValueDeclaration INSTANCE = new ArrayLengthValueDeclaration();
 
         private ArrayLengthValueDeclaration() {}
 

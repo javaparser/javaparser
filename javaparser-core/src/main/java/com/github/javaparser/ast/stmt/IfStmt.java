@@ -108,7 +108,7 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public IfStmt setCondition(final Expression condition) {
+    public IfStmt setCondition(final @NonNull() Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
             return this;
@@ -127,7 +127,7 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
      * @return this, the IfStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public IfStmt setElseStmt(final Statement elseStmt) {
+    public IfStmt setElseStmt(final @Nullable() Statement elseStmt) {
         if (elseStmt == this.elseStmt) {
             return this;
         }
@@ -139,7 +139,7 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public IfStmt setThenStmt(final Statement thenStmt) {
+    public IfStmt setThenStmt(final @NonNull() Statement thenStmt) {
         assertNotNull(thenStmt);
         if (thenStmt == this.thenStmt) {
             return this;
@@ -262,21 +262,21 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression condition() {
+    public @NonNull() Expression condition() {
         return Objects.requireNonNull(condition);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement elseStmt() {
+    public @Nullable() Statement elseStmt() {
         return elseStmt;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement thenStmt() {
+    public @NonNull() Statement thenStmt() {
         return Objects.requireNonNull(thenStmt);
     }
 }

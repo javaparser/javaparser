@@ -40,7 +40,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * The return statement, with an optional expression to return.
  * <br>{@code return 5 * 5;}
- *
  * @author Julio Vilmar Gesser
  */
 public class ReturnStmt extends Statement {
@@ -98,7 +97,7 @@ public class ReturnStmt extends Statement {
      * @return this, the ReturnStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReturnStmt setExpression(final Expression expression) {
+    public ReturnStmt setExpression(final @Nullable() Expression expression) {
         if (expression == this.expression) {
             return this;
         }
@@ -180,9 +179,9 @@ public class ReturnStmt extends Statement {
         return Optional.of(this);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @Nullable() Expression expression() {
         return expression;
     }
 }

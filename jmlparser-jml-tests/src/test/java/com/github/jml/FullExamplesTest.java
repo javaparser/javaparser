@@ -1,5 +1,7 @@
 package com.github.jml;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -14,7 +16,6 @@ import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
 import com.github.javaparser.jml.JmlDocSanitizer;
-import com.google.common.truth.Truth;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -185,7 +186,7 @@ class FullExamplesTest {
                         if (parent.isPresent()) {
                             final var childNodes = parent.get().getChildNodes();
                             Assertions.assertFalse(childNodes.isEmpty());
-                            Truth.assertThat(childNodes).contains(node);
+                            assertThat(childNodes).contains(node);
                         }
                     }
                 },

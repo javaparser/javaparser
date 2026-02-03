@@ -70,7 +70,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlRepresentsDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public JmlRepresentsDeclaration setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -100,7 +100,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlRepresentsDeclaration setExpr(final Expression expr) {
+    public JmlRepresentsDeclaration setExpr(final @NonNull() Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -118,7 +118,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlRepresentsDeclaration setName(final Name name) {
+    public JmlRepresentsDeclaration setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -187,6 +187,55 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlRepresentsDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlRepresentsDeclarationMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SimpleName> getJmlTags() {
+        return jmlTags;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlRepresentsDeclaration setJmlTags(final @NonNull() NodeList<SimpleName> jmlTags) {
+        assertNotNull(jmlTags);
+        if (jmlTags == this.jmlTags) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        if (this.jmlTags != null) this.jmlTags.setParentNode(null);
+        this.jmlTags = jmlTags;
+        setAsParentNodeOf(jmlTags);
+        return this;
+    }
+
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() Expression expr() {
+        return Objects.requireNonNull(expr);
+    }
+
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
+    }
+
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() Name name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlRepresentsDeclaration() {
         return true;
@@ -204,58 +253,8 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlRepresentsDeclaration(Consumer<JmlRepresentsDeclaration> action) {
         action.accept(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlRepresentsDeclarationMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlRepresentsDeclarationMetaModel;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> getJmlTags() {
-        return jmlTags;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlRepresentsDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
-        assertNotNull(jmlTags);
-        if (jmlTags == this.jmlTags) {
-            return this;
-        }
-        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
-        if (this.jmlTags != null) this.jmlTags.setParentNode(null);
-        this.jmlTags = jmlTags;
-        setAsParentNodeOf(jmlTags);
-        return this;
-    }
-
-    @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expr() {
-        return Objects.requireNonNull(expr);
-    }
-
-    @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> jmlTags() {
-        return Objects.requireNonNull(jmlTags);
-    }
-
-    @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
-        return Objects.requireNonNull(modifiers);
-    }
-
-    @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
-        return Objects.requireNonNull(name);
     }
 }

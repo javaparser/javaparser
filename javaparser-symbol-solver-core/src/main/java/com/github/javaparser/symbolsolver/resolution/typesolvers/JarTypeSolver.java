@@ -21,11 +21,15 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import static com.github.javaparser.symbolsolver.utils.JavassistModuleHelper.MODULE_INFO_CLASS_NAME;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
+import com.github.javaparser.symbolsolver.utils.JavassistModuleHelper;
+import com.github.javaparser.utils.Pair;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,6 +39,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import javassist.ClassPool;
+import javassist.CtClass;
 import javassist.NotFoundException;
 
 /**
@@ -96,6 +101,7 @@ public class JarTypeSolver implements TypeSolver {
 
     private final ClassPool classPool = new ClassPool();
     private final Map<String, String> knownClasses = new HashMap<>();
+    private Optional<Pair<String, List<String>>> moduleToExportedPackages = Optional.empty();
 
     private TypeSolver parent;
 
@@ -184,12 +190,20 @@ public class JarTypeSolver implements TypeSolver {
         try {
             classPool.appendClassPath(pathToJarOrClassFileHierarchy);
             registerKnownClassesFor(pathToJarOrClassFileHierarchy);
+            registerModuleInfo();
         } catch (NotFoundException e) {
             // If JavaAssist throws a NotFoundException we should notify the user
             // with a FileNotFoundException.
             FileNotFoundException jarNotFound = new FileNotFoundException(e.getMessage());
             jarNotFound.initCause(e);
             throw jarNotFound;
+        }
+    }
+
+    private void registerModuleInfo() {
+        if (knownClasses.containsKey(MODULE_INFO_CLASS_NAME)) {
+            CtClass moduleInfo = getClassFromPool(MODULE_INFO_CLASS_NAME);
+            moduleToExportedPackages = JavassistModuleHelper.getModuleWithExportedPackages(moduleInfo);
         }
     }
 
@@ -325,5 +339,44 @@ public class JarTypeSolver implements TypeSolver {
             return ref.getCorrespondingDeclaration();
         }
         throw new UnsolvedSymbolException(name);
+    }
+
+    private CtClass getClassFromPool(String className) {
+        try {
+            return classPool.get(className);
+        } catch (NotFoundException e) {
+            // The names in stored key should always be resolved.
+            // But if for some reason this happen, the user is notified.
+            throw new IllegalStateException(String.format(
+                    "Unable to get class with name %s from class pool."
+                            + "This was not suppose to happen, please report at https://github.com/javaparser/javaparser/issues",
+                    "module-info"));
+        }
+    }
+
+    /**
+     * https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-4.html#jvms-4.7.25
+     * @param qualifiedModuleName
+     * @param simpleTypeName
+     * @return
+     */
+    @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName) {
+        if (moduleToExportedPackages.isPresent()) {
+            String moduleName = moduleToExportedPackages.get().a;
+            List<String> exportedPackages = moduleToExportedPackages.get().b;
+
+            if (moduleName.equals(qualifiedModuleName)) {
+                for (String packageName : exportedPackages) {
+                    SymbolReference<ResolvedReferenceTypeDeclaration> maybeSolved =
+                            tryToSolveType(packageName + "." + simpleTypeName);
+                    if (maybeSolved.isSolved()) {
+                        return maybeSolved;
+                    }
+                }
+            }
+        }
+        return SymbolReference.unsolved();
     }
 }

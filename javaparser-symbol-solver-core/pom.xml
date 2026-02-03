@@ -4,7 +4,7 @@
 	<parent>
       <artifactId>jmlparser-parent</artifactId>
       <groupId>io.github.jmltoolkit</groupId>
-		<version>3.27.1-b7-SNAPSHOT</version>
+		<version>3.28.0-J7.0-K10.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -27,10 +27,6 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
-
-	<properties>
-		<build.timestamp>${maven.build.timestamp}</build.timestamp>
-	</properties>
 
 	<dependencies>
 		<dependency>

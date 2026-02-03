@@ -112,7 +112,7 @@ public class JmlSignalsOnlyClause extends JmlClause implements MethodContractabl
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlSignalsOnlyClause setTypes(final NodeList<Type> types) {
+    public JmlSignalsOnlyClause setTypes(final @NonNull() NodeList<Type> types) {
         assertNotNull(types);
         if (types == this.types) {
             return this;
@@ -159,9 +159,9 @@ public class JmlSignalsOnlyClause extends JmlClause implements MethodContractabl
         action.accept(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Type> types() {
+    public @NonNull() NodeList<Type> types() {
         return Objects.requireNonNull(types);
     }
 }

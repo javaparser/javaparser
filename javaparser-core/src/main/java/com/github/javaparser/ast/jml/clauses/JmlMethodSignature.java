@@ -57,7 +57,7 @@ public class JmlMethodSignature extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMethodSignature setArgumentTypes(final NodeList<Type> argumentTypes) {
+    public JmlMethodSignature setArgumentTypes(final @NonNull() NodeList<Type> argumentTypes) {
         assertNotNull(argumentTypes);
         if (argumentTypes == this.argumentTypes) {
             return this;
@@ -75,7 +75,7 @@ public class JmlMethodSignature extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMethodSignature setName(final SimpleName name) {
+    public JmlMethodSignature setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -93,7 +93,7 @@ public class JmlMethodSignature extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMethodSignature setReceiver(final Type receiver) {
+    public JmlMethodSignature setReceiver(final @Nullable() Type receiver) {
         if (receiver == this.receiver) {
             return this;
         }
@@ -179,21 +179,21 @@ public class JmlMethodSignature extends Node {
         customInitialization();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Type> argumentTypes() {
+    public @NonNull() NodeList<Type> argumentTypes() {
         return Objects.requireNonNull(argumentTypes);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type receiver() {
+    public @Nullable() Type receiver() {
         return receiver;
     }
 }

@@ -46,8 +46,8 @@ import org.jspecify.annotations.NonNull;
  * A statement consisting of a class declaration.
  * <br><code>class X { void m() { <b>class Y { }</b> } }</code>
  *
- * @author Julio Vilmar Gesser
  * @see ClassOrInterfaceDeclaration
+ * @author Julio Vilmar Gesser
  */
 public class LocalClassDeclarationStmt extends Statement {
 
@@ -90,7 +90,8 @@ public class LocalClassDeclarationStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocalClassDeclarationStmt setClassDeclaration(final ClassOrInterfaceDeclaration classDeclaration) {
+    public LocalClassDeclarationStmt setClassDeclaration(
+            final @NonNull() ClassOrInterfaceDeclaration classDeclaration) {
         assertNotNull(classDeclaration);
         if (classDeclaration == this.classDeclaration) {
             return this;
@@ -151,9 +152,9 @@ public class LocalClassDeclarationStmt extends Statement {
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassOrInterfaceDeclaration classDeclaration() {
+    public @NonNull() ClassOrInterfaceDeclaration classDeclaration() {
         return Objects.requireNonNull(classDeclaration);
     }
 }

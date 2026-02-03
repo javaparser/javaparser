@@ -94,7 +94,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public UnionType setElements(final NodeList<ReferenceType> elements) {
+    public UnionType setElements(final @NonNull() NodeList<ReferenceType> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
             return this;
@@ -206,9 +206,9 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         return new ResolvedUnionType(resolvedElements);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ReferenceType> elements() {
+    public @NonNull() NodeList<ReferenceType> elements() {
         return Objects.requireNonNull(elements);
     }
 }

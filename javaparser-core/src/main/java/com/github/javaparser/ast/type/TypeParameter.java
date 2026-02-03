@@ -132,7 +132,7 @@ public class TypeParameter extends ReferenceType
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TypeParameter setName(final SimpleName name) {
+    public TypeParameter setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -145,7 +145,7 @@ public class TypeParameter extends ReferenceType
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
+    public TypeParameter setTypeBound(final @NonNull() NodeList<ClassOrInterfaceType> typeBound) {
         assertNotNull(typeBound);
         if (typeBound == this.typeBound) {
             return this;
@@ -257,15 +257,15 @@ public class TypeParameter extends ReferenceType
         throw new UnsupportedOperationException(getClass().getCanonicalName());
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ClassOrInterfaceType> typeBound() {
+    public @NonNull() NodeList<ClassOrInterfaceType> typeBound() {
         return Objects.requireNonNull(typeBound);
     }
 }

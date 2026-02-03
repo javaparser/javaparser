@@ -102,7 +102,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setBehavior(final Behavior behavior) {
+    public JmlContract setBehavior(final @NonNull() Behavior behavior) {
         assertNotNull(behavior);
         if (behavior == this.behavior) {
             return this;
@@ -118,7 +118,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setClauses(final NodeList<JmlClause> clauses) {
+    public JmlContract setClauses(final @NonNull() NodeList<JmlClause> clauses) {
         assertNotNull(clauses);
         if (clauses == this.clauses) {
             return this;
@@ -136,7 +136,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setModifiers(final NodeList<Modifier> modifiers) {
+    public JmlContract setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -154,7 +154,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setSubContracts(final NodeList<JmlContract> subContracts) {
+    public JmlContract setSubContracts(final @NonNull() NodeList<JmlContract> subContracts) {
         assertNotNull(subContracts);
         if (subContracts == this.subContracts) {
             return this;
@@ -292,7 +292,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlContract setJmlTags(final @NonNull() NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -310,7 +310,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setName(final SimpleName name) {
+    public JmlContract setName(final @Nullable() SimpleName name) {
         if (name == this.name) {
             return this;
         }
@@ -327,7 +327,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setType(final ContractType type) {
+    public JmlContract setType(final @NonNull() ContractType type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -390,45 +390,45 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
         customInitialization();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Behavior behavior() {
+    public @NonNull() Behavior behavior() {
         return Objects.requireNonNull(behavior);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlClause> clauses() {
+    public @NonNull() NodeList<JmlClause> clauses() {
         return Objects.requireNonNull(clauses);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> jmlTags() {
+    public @NonNull() NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @Nullable() SimpleName name() {
         return name;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> subContracts() {
+    public @NonNull() NodeList<JmlContract> subContracts() {
         return Objects.requireNonNull(subContracts);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ContractType type() {
+    public @NonNull() ContractType type() {
         return Objects.requireNonNull(type);
     }
 }

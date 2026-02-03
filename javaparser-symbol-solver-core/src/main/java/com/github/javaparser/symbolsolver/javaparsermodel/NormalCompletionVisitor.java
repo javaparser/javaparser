@@ -124,7 +124,7 @@ public class NormalCompletionVisitor extends GenericVisitorWithDefaults<Boolean,
     @Override
     public Boolean visit(BlockStmt block, Void unused) {
         return block.getStatements().isEmpty()
-                || block.getStatements().getLast().get().accept(this, unused);
+                || block.getStatements().getOLast().get().accept(this, unused);
     }
 
     /**
@@ -298,12 +298,12 @@ public class NormalCompletionVisitor extends GenericVisitorWithDefaults<Boolean,
             // In this case, the switch stmt is a classic switch, so check:
             // - The last statement in the switch block can complete normally.
             // - There is at least one switch label after the last switch block statement group.
-            SwitchEntry lastEntry = entries.getLast().get();
+            SwitchEntry lastEntry = entries.getOLast().get();
             if (lastEntry.getStatements().isEmpty()) {
                 return true;
             }
 
-            Statement lastStmt = lastEntry.getStatements().getLast().get();
+            Statement lastStmt = lastEntry.getStatements().getOLast().get();
             if (lastStmt.accept(this, unused)) {
                 return true;
             }
@@ -334,8 +334,8 @@ public class NormalCompletionVisitor extends GenericVisitorWithDefaults<Boolean,
             return true;
         }
 
-        if (switchEntry.getStatements().getLast().isPresent()
-                && switchEntry.getStatements().getLast().get().accept(this, unused)) {
+        if (switchEntry.getStatements().getOLast().isPresent()
+                && switchEntry.getStatements().getOLast().get().accept(this, unused)) {
             return true;
         }
 

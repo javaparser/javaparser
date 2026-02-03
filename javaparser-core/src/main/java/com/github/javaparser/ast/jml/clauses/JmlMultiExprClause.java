@@ -75,7 +75,7 @@ public class JmlMultiExprClause extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMultiExprClause setExpressions(final NodeList<Expression> expressions) {
+    public JmlMultiExprClause setExpressions(final @NonNull() NodeList<Expression> expressions) {
         assertNotNull(expressions);
         if (expressions == this.expressions) {
             return this;
@@ -93,7 +93,7 @@ public class JmlMultiExprClause extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMultiExprClause setHeaps(final NodeList<SimpleName> heaps) {
+    public JmlMultiExprClause setHeaps(final @Nullable() NodeList<SimpleName> heaps) {
         if (heaps == this.heaps) {
             return this;
         }
@@ -105,7 +105,7 @@ public class JmlMultiExprClause extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMultiExprClause setKind(final JmlClauseKind kind) {
+    public JmlMultiExprClause setKind(final @NonNull() JmlClauseKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -230,21 +230,21 @@ public class JmlMultiExprClause extends JmlClause {
         action.accept(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> expressions() {
+    public @NonNull() NodeList<Expression> expressions() {
         return Objects.requireNonNull(expressions);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> heaps() {
+    public @Nullable() NodeList<SimpleName> heaps() {
         return heaps;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseKind kind() {
+    public @NonNull() JmlClauseKind kind() {
         return Objects.requireNonNull(kind);
     }
 }

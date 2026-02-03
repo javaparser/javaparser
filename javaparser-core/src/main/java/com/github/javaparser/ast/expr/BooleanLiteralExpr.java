@@ -32,7 +32,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import org.jspecify.annotations.NonNull;
 
 /**
  * The boolean literals.
@@ -135,7 +134,7 @@ public class BooleanLiteralExpr extends LiteralExpr {
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean value() {
         return Objects.requireNonNull(value);

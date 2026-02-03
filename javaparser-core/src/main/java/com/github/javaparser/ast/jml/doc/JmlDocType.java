@@ -69,37 +69,13 @@ public class JmlDocType extends TypeDeclaration<JmlDocType> implements JmlDocCon
         return null;
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlDocType() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlDocType asJmlDocType() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlDocType> toJmlDocType() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlDocType(Consumer<JmlDocType> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<JmlDoc> getJmlComments() {
         return jmlComments;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlDocType setJmlComments(final NodeList<JmlDoc> jmlComments) {
+    public JmlDocType setJmlComments(final @NonNull() NodeList<JmlDoc> jmlComments) {
         assertNotNull(jmlComments);
         if (jmlComments == this.jmlComments) {
             return this;
@@ -169,9 +145,32 @@ public class JmlDocType extends TypeDeclaration<JmlDocType> implements JmlDocCon
         customInitialization();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlDoc> jmlComments() {
+    public @NonNull() NodeList<JmlDoc> jmlComments() {
         return Objects.requireNonNull(jmlComments);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlDocType() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlDocType asJmlDocType() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlDocType> toJmlDocType() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlDocType(Consumer<JmlDocType> action) {
+        action.accept(this);
     }
 }

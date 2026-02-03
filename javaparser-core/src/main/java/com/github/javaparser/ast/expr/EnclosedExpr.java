@@ -90,7 +90,7 @@ public class EnclosedExpr extends Expression {
      * @return this, the EnclosedExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnclosedExpr setInner(final Expression inner) {
+    public EnclosedExpr setInner(final @NonNull() Expression inner) {
         assertNotNull(inner);
         if (inner == this.inner) {
             return this;
@@ -160,9 +160,9 @@ public class EnclosedExpr extends Expression {
         return getInner().isPolyExpression();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression inner() {
+    public @NonNull() Expression inner() {
         return Objects.requireNonNull(inner);
     }
 }

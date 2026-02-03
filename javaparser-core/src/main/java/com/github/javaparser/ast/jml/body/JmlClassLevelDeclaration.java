@@ -38,30 +38,6 @@ public abstract class JmlClassLevelDeclaration<T extends BodyDeclaration<?>> ext
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlClassLevel() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassLevelDeclaration asJmlClassLevel() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassLevelDeclaration> toJmlClassLevel() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassLevel(Consumer<JmlClassLevelDeclaration> action) {
-        action.accept(this);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlClassLevelDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlClassLevelDeclarationMetaModel;
@@ -85,7 +61,6 @@ public abstract class JmlClassLevelDeclaration<T extends BodyDeclaration<?>> ext
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClassLevelDeclaration(Consumer<JmlClassLevelDeclaration> action) {
         action.accept(this);

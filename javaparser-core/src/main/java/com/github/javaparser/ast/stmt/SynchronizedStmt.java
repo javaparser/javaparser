@@ -92,7 +92,7 @@ public class SynchronizedStmt extends Statement
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SynchronizedStmt setExpression(final Expression expression) {
+    public SynchronizedStmt setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -110,7 +110,7 @@ public class SynchronizedStmt extends Statement
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SynchronizedStmt setBody(final BlockStmt body) {
+    public SynchronizedStmt setBody(final @NonNull() BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -175,15 +175,15 @@ public class SynchronizedStmt extends Statement
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt body() {
+    public @NonNull() BlockStmt body() {
         return Objects.requireNonNull(body);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
     }
 }

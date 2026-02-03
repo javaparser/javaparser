@@ -102,32 +102,8 @@ public class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGho
         return (JmlGhostStmt) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlGhostStatement() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlGhostStmt asJmlGhostStatement() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlGhostStmt> toJmlGhostStatement() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlGhostStatement(Consumer<JmlGhostStmt> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlGhostStmt setStatement(final Statement statement) {
+    public JmlGhostStmt setStatement(final @NonNull() Statement statement) {
         assertNotNull(statement);
         if (statement == this.statement) {
             return this;
@@ -145,37 +121,13 @@ public class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGho
         return JavaParserMetaModel.jmlGhostStmtMetaModel;
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlGhostStmt() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlGhostStmt asJmlGhostStmt() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlGhostStmt> toJmlGhostStmt() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlGhostStmt(Consumer<JmlGhostStmt> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlGhostStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlGhostStmt setJmlTags(final @NonNull() NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -202,15 +154,38 @@ public class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGho
         return super.remove(node);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> jmlTags() {
+    public @NonNull() NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement statement() {
+    public @NonNull() Statement statement() {
         return Objects.requireNonNull(statement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlGhostStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlGhostStmt asJmlGhostStmt() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlGhostStmt> toJmlGhostStmt() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlGhostStmt(Consumer<JmlGhostStmt> action) {
+        action.accept(this);
     }
 }

@@ -118,7 +118,7 @@ public class ArrayCreationExpr extends Expression {
      * @return this, the ArrayCreationExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayCreationExpr setInitializer(final ArrayInitializerExpr initializer) {
+    public ArrayCreationExpr setInitializer(final @Nullable() ArrayInitializerExpr initializer) {
         if (initializer == this.initializer) {
             return this;
         }
@@ -130,7 +130,7 @@ public class ArrayCreationExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayCreationExpr setElementType(final Type elementType) {
+    public ArrayCreationExpr setElementType(final @NonNull() Type elementType) {
         assertNotNull(elementType);
         if (elementType == this.elementType) {
             return this;
@@ -148,7 +148,7 @@ public class ArrayCreationExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayCreationExpr setLevels(final NodeList<ArrayCreationLevel> levels) {
+    public ArrayCreationExpr setLevels(final @NonNull() NodeList<ArrayCreationLevel> levels) {
         assertNotNull(levels);
         if (levels == this.levels) {
             return this;
@@ -273,21 +273,21 @@ public class ArrayCreationExpr extends Expression {
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type elementType() {
+    public @NonNull() Type elementType() {
         return Objects.requireNonNull(elementType);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayInitializerExpr initializer() {
+    public @Nullable() ArrayInitializerExpr initializer() {
         return initializer;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ArrayCreationLevel> levels() {
+    public @NonNull() NodeList<ArrayCreationLevel> levels() {
         return Objects.requireNonNull(levels);
     }
 }

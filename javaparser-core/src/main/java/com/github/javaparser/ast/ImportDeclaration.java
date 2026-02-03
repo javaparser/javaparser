@@ -56,10 +56,25 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
 
     private boolean isJmlModel = false;
 
-    private ImportDeclaration() {
-        this(new Name(), false, false);
+    private boolean isModule;
+
+    public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk, boolean isModule, boolean isJmlModel) {
+        // If the value of the isAsterisk parameter is true, we consider that we deliberately wanted to create an import
+        // declaration of the form ‘x.*’ by specifying only ‘x’.
+        // On the other hand, if the isAsterisk parameter is false, we can check that we haven't tried to directly
+        // create an import declaration of the form ‘x.*’.
+        this(
+                null,
+                getNameFromString(name),
+                isStatic,
+                isAsterisk ? isAsterisk : hasAsterisk(name),
+                isModule,
+                isJmlModel);
     }
 
+    /**
+     * This constructor is kept to avoid breaking existing code creating non-module imports.
+     */
     public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk) {
         // If the value of the isAsterisk parameter is true, we consider that we deliberately wanted to create an import
         // declaration of the form ‘x.*’ by specifying only ‘x’.
@@ -68,13 +83,28 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
         this(null, getNameFromString(name), isStatic, isAsterisk ? isAsterisk : hasAsterisk(name));
     }
 
-    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk) {
-        this(name, isStatic, isAsterisk, false);
+    @AllFieldsConstructor
+    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk, boolean isModule, boolean isJmlModel) {
+        this(null, name, isStatic, isAsterisk, isModule, isJmlModel);
     }
 
-    @AllFieldsConstructor
-    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk, boolean isJmlModel) {
-        this(null, name, isStatic, isAsterisk, isJmlModel);
+    /**
+     * This constructor is kept to avoid breaking existing code creating non-module imports.
+     */
+    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk) {
+        this(null, name, isStatic, isAsterisk, false);
+    }
+
+    public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        this(name, isStatic, isAsterisk, isModule, false);
+    }
+
+    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        this(tokenRange, name, isStatic, isAsterisk, isModule, false);
+    }
+
+    public ImportDeclaration(TokenRange range, Name name, boolean isStatic, boolean isAsterisk) {
+        this(range, name, isStatic, isAsterisk, false);
     }
 
     /**
@@ -82,17 +112,19 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ImportDeclaration(
-            TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk, boolean isJmlModel) {
+            TokenRange tokenRange,
+            Name name,
+            boolean isStatic,
+            boolean isAsterisk,
+            boolean isModule,
+            boolean isJmlModel) {
         super(tokenRange);
         setName(name);
         setStatic(isStatic);
         setAsterisk(isAsterisk);
+        setModule(isModule);
         setJmlModel(isJmlModel);
         customInitialization();
-    }
-
-    public ImportDeclaration(TokenRange range, Name name, boolean isStatic, boolean isAsterisk) {
-        this(range, name, isStatic, isAsterisk, false);
     }
 
     @Override
@@ -149,13 +181,19 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     /**
      * Return if the import ends with "*".
      */
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isAsterisk() {
         return Objects.requireNonNull(isAsterisk);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public boolean isModule() {
+        return Objects.requireNonNull(isModule);
+    }
+
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
         return Objects.requireNonNull(isStatic);
@@ -172,7 +210,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ImportDeclaration setName(final Name name) {
+    public ImportDeclaration setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -219,7 +257,23 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
         return super.replace(node, replacementNode);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() Name name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ImportDeclaration setModule(final boolean isModule) {
+        if (isModule == this.isModule) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.MODULE, this.isModule, isModule);
+        this.isModule = isModule;
+        return this;
+    }
+
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isJmlModel() {
         return Objects.requireNonNull(isJmlModel);
@@ -237,11 +291,5 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
         notifyPropertyChange(ObservableProperty.JML_MODEL, this.isJmlModel, isJmlModel);
         this.isJmlModel = isJmlModel;
         return this;
-    }
-
-    @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
-        return Objects.requireNonNull(name);
     }
 }

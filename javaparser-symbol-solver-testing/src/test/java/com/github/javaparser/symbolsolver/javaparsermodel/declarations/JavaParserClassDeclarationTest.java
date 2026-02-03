@@ -1109,7 +1109,10 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
         if (TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
         }
-        assertEquals(expected.size(), signatures.size());
+        // weigl: relax new JDKs
+        assertTrue(expected.size() == signatures.size() || expected.size() + 1 == signatures.size());
+
+        signatures.remove("java.lang.Object.wait0(long)");
         assertThat(signatures, containsInAnyOrder(expected.toArray()));
     }
 

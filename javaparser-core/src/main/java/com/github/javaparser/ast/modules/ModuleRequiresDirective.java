@@ -20,8 +20,7 @@
  */
 package com.github.javaparser.ast.modules;
 
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.STATIC;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.TRANSITIVE;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 import com.github.javaparser.TokenRange;
@@ -88,7 +87,7 @@ public class ModuleRequiresDirective extends ModuleDirective
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleRequiresDirective setModifiers(final NodeList<Modifier> modifiers) {
+    public ModuleRequiresDirective setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -106,7 +105,7 @@ public class ModuleRequiresDirective extends ModuleDirective
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleRequiresDirective setName(final Name name) {
+    public ModuleRequiresDirective setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -230,15 +229,15 @@ public class ModuleRequiresDirective extends ModuleDirective
         return JavaParserMetaModel.moduleRequiresDirectiveMetaModel;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @NonNull() Name name() {
         return Objects.requireNonNull(name);
     }
 }

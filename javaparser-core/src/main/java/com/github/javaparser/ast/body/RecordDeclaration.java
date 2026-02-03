@@ -201,7 +201,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
+    public RecordDeclaration setImplementedTypes(final @NonNull() NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
             return this;
@@ -214,7 +214,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+    public RecordDeclaration setTypeParameters(final @NonNull() NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
             return this;
@@ -364,7 +364,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclaration setParameters(final NodeList<Parameter> parameters) {
+    public RecordDeclaration setParameters(final @NonNull() NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
             return this;
@@ -382,7 +382,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclaration setReceiverParameter(final ReceiverParameter receiverParameter) {
+    public RecordDeclaration setReceiverParameter(final @Nullable() ReceiverParameter receiverParameter) {
         if (receiverParameter == this.receiverParameter) {
             return this;
         }
@@ -401,9 +401,9 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration>
     /**
      * Records are implicitly final, even without the explicit modifier.
      * https://openjdk.java.net/jeps/359#Restrictions-on-records
-     * <p>
+     *
      * If wanting to find out if the keyword {@code final} is explicitly added to this parameter,
-     * you should use {@code node.hasModifier(Modifier.DefaultKeyword.FINAL)}
+     * you should use {@code node.hasModifier(Modifier.Keyword.FINAL)}
      *
      * @return always true -- Records are always implicitly final, therefore can never not be final.
      */
@@ -441,27 +441,27 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration>
                 .collect(toList()));
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ClassOrInterfaceType> implementedTypes() {
+    public @NonNull() NodeList<ClassOrInterfaceType> implementedTypes() {
         return Objects.requireNonNull(implementedTypes);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Parameter> parameters() {
+    public @NonNull() NodeList<Parameter> parameters() {
         return Objects.requireNonNull(parameters);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReceiverParameter receiverParameter() {
+    public @Nullable() ReceiverParameter receiverParameter() {
         return receiverParameter;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<TypeParameter> typeParameters() {
+    public @NonNull() NodeList<TypeParameter> typeParameters() {
         return Objects.requireNonNull(typeParameters);
     }
 }

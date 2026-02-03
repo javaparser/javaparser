@@ -20,8 +20,6 @@
  */
 package com.github.javaparser.utils;
 
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.nio.file.FileVisitResult.*;
@@ -130,9 +128,7 @@ public class SourceRoot {
         }
         final Path path = root.resolve(relativePath);
         Log.trace("Parsing %s", () -> path);
-        final ParseResult<CompilationUnit> result = new JavaParser(configuration)
-                .parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
-        result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
+        final ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(path);
         cache.put(relativePath, result);
         return result;
     }
@@ -276,9 +272,7 @@ public class SourceRoot {
             throws IOException {
         Path localPath = root.relativize(absolutePath);
         Log.trace("Parsing %s", () -> localPath);
-        ParseResult<CompilationUnit> result = new JavaParser(configuration)
-                .parse(COMPILATION_UNIT, provider(absolutePath, configuration.getCharacterEncoding()));
-        result.getResult().ifPresent(cu -> cu.setStorage(absolutePath, configuration.getCharacterEncoding()));
+        ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(absolutePath);
         switch (callback.process(localPath, absolutePath, result)) {
             case SAVE:
                 result.getResult().ifPresent(cu -> save(cu, absolutePath));
@@ -477,21 +471,49 @@ public class SourceRoot {
     }
 
     /**
-     * Save all previously parsed files back to a new path.
-     * @param root the root of the java packages
-     * @param encoding the encoding to use while saving the file
+     * Saves all cached compilation units to the specified root directory.
+     *
+     * Path resolution follows java.nio.file.Path.resolve semantics:
+     * - Relative paths are resolved against the provided root.
+     * - Absolute paths remain unchanged (only normalized).
+     *
+     * @param root the destination root directory
+     * @param encoding the character encoding used when writing files
+     * @return this SourceRoot instance
+     * @throws NullPointerException if root is null
      */
     public SourceRoot saveAll(Path root, Charset encoding) {
         assertNotNull(root);
         Log.info("Saving all files (%s) to %s", cache::size, () -> root);
-        for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : cache.entrySet()) {
-            final Path path = root.resolve(cu.getKey());
-            if (cu.getValue().getResult().isPresent()) {
-                Log.trace("Saving %s", () -> path);
-                save(cu.getValue().getResult().get(), path, encoding);
-            }
+        for (Map.Entry<Path, ParseResult<CompilationUnit>> e : cache.entrySet()) {
+            final Path target = resolvePath(root, e.getKey());
+            e.getValue().getResult().ifPresent(cu -> {
+                Log.trace("Saving %s", () -> target);
+                save(cu, target, encoding);
+            });
         }
         return this;
+    }
+
+    /**
+     * Resolves and normalizes a cached path using java.nio.file.Path.resolve semantics.
+     *
+     * Rules:
+     * - If cachedPath is relative, it is resolved under newRoot.
+     * - If cachedPath is absolute, it is returned unchanged (only normalized).
+     *
+     * @param newRoot the root directory used for resolution
+     * @param cachedPath the original cached path (relative or absolute)
+     * @return the resolved and normalized target path
+     * @throws NullPointerException if either argument is null
+     */
+    Path resolvePath(Path newRoot, Path cachedPath) {
+        if (newRoot == null || cachedPath == null) {
+            throw new NullPointerException("newRoot/cachedPath must not be null");
+        }
+        return cachedPath.isAbsolute()
+                ? cachedPath.normalize()
+                : newRoot.resolve(cachedPath).normalize();
     }
 
     /**

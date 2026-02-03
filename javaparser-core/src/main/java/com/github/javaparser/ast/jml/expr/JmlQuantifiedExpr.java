@@ -172,7 +172,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlQuantifiedExpr setExpressions(final NodeList<Expression> expressions) {
+    public JmlQuantifiedExpr setExpressions(final @NonNull() NodeList<Expression> expressions) {
         assertNotNull(expressions);
         if (expressions == this.expressions) {
             return this;
@@ -190,7 +190,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlQuantifiedExpr setVariables(final NodeList<Parameter> variables) {
+    public JmlQuantifiedExpr setVariables(final @NonNull() NodeList<Parameter> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
@@ -256,7 +256,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlQuantifiedExpr setBinder(final JmlBinder binder) {
+    public JmlQuantifiedExpr setBinder(final @NonNull() JmlBinder binder) {
         assertNotNull(binder);
         if (binder == this.binder) {
             return this;
@@ -296,21 +296,21 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
         return JavaParserMetaModel.jmlQuantifiedExprMetaModel;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlBinder binder() {
+    public @NonNull() JmlBinder binder() {
         return Objects.requireNonNull(binder);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> expressions() {
+    public @NonNull() NodeList<Expression> expressions() {
         return Objects.requireNonNull(expressions);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Parameter> variables() {
+    public @NonNull() NodeList<Parameter> variables() {
         return Objects.requireNonNull(variables);
     }
 }

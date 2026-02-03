@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
@@ -70,14 +69,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        Set<ResolvedMethodDeclaration> methods = new HashSet<>();
-        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-                methods.add(new JavaParserMethodDeclaration(
-                        (com.github.javaparser.ast.body.MethodDeclaration) member, typeSolver));
-            }
-        }
-        return methods;
+        return javaParserTypeAdapter.getDeclaredMethods();
     }
 
     public Context getContext() {
@@ -135,8 +127,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     public List<ResolvedReferenceType> getInterfacesExtended() {
         List<ResolvedReferenceType> interfaces = new ArrayList<>();
         for (ClassOrInterfaceType t : wrappedNode.getExtendedTypes()) {
-            interfaces.add(new ReferenceTypeImpl(
-                    solveType(t.getName().getId()).getCorrespondingDeclaration().asInterface()));
+            interfaces.add(toReferenceType(t));
         }
         return interfaces;
     }

@@ -33,6 +33,8 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.*;
@@ -136,45 +138,49 @@ public class ConcreteSyntaxModel {
                         semicolon()));
         concreteSyntaxModelByClass.put(
                 ClassOrInterfaceDeclaration.class,
-                sequence(
-                        comment(),
-                        memberAnnotations(),
-                        modifiers(),
-                        conditional(
-                                ObservableProperty.INTERFACE,
-                                FLAG,
-                                token(GeneratedJavaParserConstants.INTERFACE),
-                                token(GeneratedJavaParserConstants.CLASS)),
-                        space(),
-                        child(ObservableProperty.NAME),
-                        list(
-                                TYPE_PARAMETERS,
-                                sequence(comma(), space()),
-                                string(GeneratedJavaParserConstants.LT),
-                                string(GeneratedJavaParserConstants.GT)),
-                        list(
-                                ObservableProperty.EXTENDED_TYPES,
-                                sequence(string(GeneratedJavaParserConstants.COMMA), space()),
-                                sequence(space(), token(GeneratedJavaParserConstants.EXTENDS), space()),
-                                none()),
-                        list(
-                                ObservableProperty.IMPLEMENTED_TYPES,
-                                sequence(string(GeneratedJavaParserConstants.COMMA), space()),
-                                sequence(space(), token(GeneratedJavaParserConstants.IMPLEMENTS), space()),
-                                none()),
-                        space(),
-                        list(
-                                ObservableProperty.PERMITTED_TYPES,
-                                sequence(string(GeneratedJavaParserConstants.COMMA), space()),
-                                sequence(space(), token(GeneratedJavaParserConstants.PERMITS), space()),
-                                none()),
-                        block(sequence(
-                                newline(),
+                sequence(conditional(
+                        ObservableProperty.COMPACT,
+                        FLAG,
+                        list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), none()),
+                        sequence(
+                                comment(),
+                                memberAnnotations(),
+                                modifiers(),
+                                conditional(
+                                        ObservableProperty.INTERFACE,
+                                        FLAG,
+                                        token(GeneratedJavaParserConstants.INTERFACE),
+                                        token(GeneratedJavaParserConstants.CLASS)),
+                                space(),
+                                child(ObservableProperty.NAME),
                                 list(
-                                        ObservableProperty.MEMBERS,
-                                        sequence(newline(), newline()),
+                                        TYPE_PARAMETERS,
+                                        sequence(comma(), space()),
+                                        string(GeneratedJavaParserConstants.LT),
+                                        string(GeneratedJavaParserConstants.GT)),
+                                list(
+                                        ObservableProperty.EXTENDED_TYPES,
+                                        sequence(string(GeneratedJavaParserConstants.COMMA), space()),
+                                        sequence(space(), token(GeneratedJavaParserConstants.EXTENDS), space()),
+                                        none()),
+                                list(
+                                        ObservableProperty.IMPLEMENTED_TYPES,
+                                        sequence(string(GeneratedJavaParserConstants.COMMA), space()),
+                                        sequence(space(), token(GeneratedJavaParserConstants.IMPLEMENTS), space()),
+                                        none()),
+                                space(),
+                                list(
+                                        ObservableProperty.PERMITTED_TYPES,
+                                        sequence(string(GeneratedJavaParserConstants.COMMA), space()),
+                                        sequence(space(), token(GeneratedJavaParserConstants.PERMITS), space()),
+                                        none()),
+                                block(sequence(
                                         newline(),
-                                        newline())))));
+                                        list(
+                                                ObservableProperty.MEMBERS,
+                                                sequence(newline(), newline()),
+                                                newline(),
+                                                newline())))))));
         concreteSyntaxModelByClass.put(
                 ConstructorDeclaration.class,
                 sequence(
@@ -510,6 +516,9 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(
                 MarkerAnnotationExpr.class,
                 sequence(comment(), token(GeneratedJavaParserConstants.AT), attribute(ObservableProperty.NAME)));
+        concreteSyntaxModelByClass.put(
+                MatchAllPatternExpr.class,
+                sequence(comment(), token(GeneratedJavaParserConstants.UNNAMED_PLACEHOLDER)));
         concreteSyntaxModelByClass.put(
                 MemberValuePair.class,
                 sequence(
@@ -1111,6 +1120,10 @@ public class ConcreteSyntaxModel {
                                 ObservableProperty.STATIC,
                                 FLAG,
                                 sequence(token(GeneratedJavaParserConstants.STATIC), space())),
+                        conditional(
+                                ObservableProperty.MODULE,
+                                FLAG,
+                                sequence(token(GeneratedJavaParserConstants.MODULE), space())),
                         child(ObservableProperty.NAME),
                         conditional(
                                 ASTERISK,
@@ -1210,6 +1223,37 @@ public class ConcreteSyntaxModel {
                         child(ObservableProperty.NAME),
                         semicolon(),
                         newline()));
+        // TODO weigl maybe one day someone will complete this, but currently we do not need
+        // the support of concrete syntax model.
+        concreteSyntaxModelByClass.put(KeyCcatchBreak.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCcatchContinue.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCcatchParameter.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCcatchReturn.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCatchAllStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCcatchSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyContextStatementBlock.class, sequence());
+        concreteSyntaxModelByClass.put(KeyEscapeExpression.class, sequence());
+        concreteSyntaxModelByClass.put(KeyExecCtxtSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyExecStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyExecutionContext.class, sequence());
+        concreteSyntaxModelByClass.put(KeyExecutionContextSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyExpressionSV.class, sequence());
+        concreteSyntaxModelByClass.put(KeyJumpLabelSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyLoopScopeBlock.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMergePointStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMetaConstructExpression.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMetaConstruct.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMetaConstructType.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMethodBodyStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMethodCallStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMethodSignature.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMethodSignatureSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyPassiveExpression.class, sequence());
+        concreteSyntaxModelByClass.put(KeyProgramVariableSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyRangeExpression.class, sequence());
+        concreteSyntaxModelByClass.put(KeyStatementSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyTransactionStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyTypeSV.class, attribute(TEXT));
         List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter(c -> !c.isAbstract()
                         && !Comment.class.isAssignableFrom(c.getType())

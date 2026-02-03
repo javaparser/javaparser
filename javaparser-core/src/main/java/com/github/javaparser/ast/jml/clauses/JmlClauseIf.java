@@ -92,7 +92,7 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setCondition(final Expression condition) {
+    public JmlClauseIf setCondition(final @NonNull() Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
             return this;
@@ -105,7 +105,7 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setKind(final JmlClauseKind kind) {
+    public JmlClauseIf setKind(final @NonNull() JmlClauseKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -121,7 +121,7 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setThen(final Expression then) {
+    public JmlClauseIf setThen(final @NonNull() Expression then) {
         assertNotNull(then);
         if (then == this.then) {
             return this;
@@ -176,21 +176,21 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
         customInitialization();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression condition() {
+    public @NonNull() Expression condition() {
         return Objects.requireNonNull(condition);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseKind kind() {
+    public @NonNull() JmlClauseKind kind() {
         return Objects.requireNonNull(kind);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression then() {
+    public @NonNull() Expression then() {
         return Objects.requireNonNull(then);
     }
 }

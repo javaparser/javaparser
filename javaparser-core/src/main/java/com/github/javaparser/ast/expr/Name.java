@@ -102,7 +102,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name setIdentifier(final String identifier) {
+    public Name setIdentifier(final @NonNull() String identifier) {
         assertNonEmpty(identifier);
         if (identifier.equals(this.identifier)) {
             return this;
@@ -132,7 +132,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name setQualifier(final Name qualifier) {
+    public Name setQualifier(final @Nullable() Name qualifier) {
         if (qualifier == this.qualifier) {
             return this;
         }
@@ -204,15 +204,15 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         return getParentNode().filter(parent -> parent instanceof Name).isPresent();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String identifier() {
+    public @NonNull() String identifier() {
         return Objects.requireNonNull(identifier);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name qualifier() {
+    public @Nullable() Name qualifier() {
         return qualifier;
     }
 }

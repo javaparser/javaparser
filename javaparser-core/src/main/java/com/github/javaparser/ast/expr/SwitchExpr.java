@@ -113,7 +113,7 @@ public class SwitchExpr extends Expression implements SwitchNode {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchExpr setEntries(final NodeList<SwitchEntry> entries) {
+    public SwitchExpr setEntries(final @NonNull() NodeList<SwitchEntry> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
             return this;
@@ -126,7 +126,7 @@ public class SwitchExpr extends Expression implements SwitchNode {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SwitchExpr setSelector(final Expression selector) {
+    public SwitchExpr setSelector(final @NonNull() Expression selector) {
         assertNotNull(selector);
         if (selector == this.selector) {
             return this;
@@ -208,15 +208,15 @@ public class SwitchExpr extends Expression implements SwitchNode {
         return JavaParserMetaModel.switchExprMetaModel;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SwitchEntry> entries() {
+    public @NonNull() NodeList<SwitchEntry> entries() {
         return Objects.requireNonNull(entries);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression selector() {
+    public @NonNull() Expression selector() {
         return Objects.requireNonNull(selector);
     }
 }

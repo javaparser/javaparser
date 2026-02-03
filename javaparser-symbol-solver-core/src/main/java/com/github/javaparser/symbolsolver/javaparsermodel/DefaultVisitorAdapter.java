@@ -23,8 +23,8 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
@@ -35,6 +35,8 @@ import com.github.javaparser.ast.jml.doc.JmlDocStmt;
 import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -64,6 +66,11 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
 
     @Override
     public ResolvedType visit(BlockComment node, Boolean aBoolean) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(MarkdownComment node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
@@ -123,7 +130,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(JavadocComment node, Boolean aBoolean) {
+    public ResolvedType visit(TraditionalJavadocComment node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
@@ -404,6 +411,156 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
 
     @Override
     public ResolvedType visit(JmlMethodSignature n, Boolean arg) {
+        return null;
+    }
+
+    @Override
+    public ResolvedType visit(MatchAllPatternExpr node, Boolean aBoolean) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyCcatchBreak n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyCcatchContinue n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyCcatchParameter n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyCcatchReturn n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyCatchAllStatement n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyEscapeExpression n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyExecStatement n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyExecutionContext n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyLoopScopeBlock n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyMergePointStatement n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyMethodBodyStatement n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyMethodCallStatement n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyMethodSignature n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyRangeExpression n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyTransactionStatement n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyContextStatementBlock n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyExecCtxtSV n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyExpressionSV n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyJumpLabelSV n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyMetaConstructExpression n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyMetaConstruct n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyMetaConstructType n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyMethodSignatureSV n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyPassiveExpression n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyProgramVariableSV n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyStatementSV n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyTypeSV n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(KeyCcatchSV n, Boolean arg) {
+        return null;
+    }
+
+    @Override
+    public ResolvedType visit(KeyExecutionContextSV n, Boolean arg) {
         return null;
     }
 

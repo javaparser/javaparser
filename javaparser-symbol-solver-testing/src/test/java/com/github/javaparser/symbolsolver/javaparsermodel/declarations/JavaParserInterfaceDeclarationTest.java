@@ -1041,6 +1041,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
         if (TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
         }
+        signatures.remove("java.lang.Object.wait0(long)");
 
         assertThat(signatures, containsInAnyOrder(expected.toArray()));
     }

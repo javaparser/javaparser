@@ -186,7 +186,7 @@ public class NodeList<N extends Node>
     /**
      * Inserts the node before all other nodes.
      */
-    public NodeList<N> addFirst(N node) {
+    public NodeList<N> addFirstO(N node) {
         add(0, node);
         return this;
     }
@@ -194,7 +194,7 @@ public class NodeList<N extends Node>
     /**
      * Inserts the node after all other nodes. (This is simply an alias for add.)
      */
-    public NodeList<N> addLast(N node) {
+    public NodeList<N> addLastO(N node) {
         add(node);
         return this;
     }
@@ -230,7 +230,7 @@ public class NodeList<N extends Node>
     /**
      * @return the first node, or empty if the list is empty.
      */
-    public Optional<N> getFirst() {
+    public Optional<N> getOFirst() {
         if (isEmpty()) {
             return Optional.empty();
         }
@@ -240,7 +240,7 @@ public class NodeList<N extends Node>
     /**
      * @return the last node, or empty if the list is empty.
      */
-    public Optional<N> getLast() {
+    public Optional<N> getOLast() {
         if (isEmpty()) {
             return Optional.empty();
         }

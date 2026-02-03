@@ -81,7 +81,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public T setAnnotations(final @NonNull() NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
             return (T) this;
@@ -409,28 +409,59 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
         return Optional.empty();
     }
 
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassAccessibleDeclaration(Consumer<JmlClassAccessibleDeclaration> action) {}
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlRepresentsDeclaration() {
-        return false;
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlRepresentsDeclaration asJmlRepresentsDeclaration() {
-        throw new IllegalStateException(f(
-                "%s is not JmlRepresentsDeclaration, it is %s",
-                this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlRepresentsDeclaration> toJmlRepresentsDeclaration() {
+    public Optional<JmlClassAccessibleDeclaration> toJmlClassAccessibleDeclaration() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlRepresentsDeclaration(Consumer<JmlRepresentsDeclaration> action) {}
+    public void ifJmlClassAccessibleDeclaration(Consumer<JmlClassAccessibleDeclaration> action) {}
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlClassExprDeclaration() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlClassExprDeclaration asJmlClassExprDeclaration() {
+        throw new IllegalStateException(f(
+                "%s is not JmlClassExprDeclaration, it is %s",
+                this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlClassExprDeclaration> toJmlClassExprDeclaration() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlClassExprDeclaration(Consumer<JmlClassExprDeclaration> action) {}
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlClassLevelDeclaration() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlClassLevelDeclaration asJmlClassLevelDeclaration() {
+        throw new IllegalStateException(f(
+                "%s is not JmlClassLevelDeclaration, it is %s",
+                this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlClassLevelDeclaration> toJmlClassLevelDeclaration() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlClassLevelDeclaration(Consumer<JmlClassLevelDeclaration> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlDocDeclaration() {
@@ -450,51 +481,6 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlDocDeclaration(Consumer<JmlDocDeclaration> action) {}
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassAccessibleDeclaration> toJmlClassAccessibleDeclaration() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlClassInvariantDeclaration() {
-        return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassExprDeclaration asJmlClassInvariantDeclaration() {
-        throw new IllegalStateException(f(
-                "%s is not JmlClassInvariantDeclaration, it is %s",
-                this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassExprDeclaration> toJmlClassInvariantDeclaration() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassInvariantDeclaration(Consumer<JmlClassExprDeclaration> action) {}
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlClassLevel() {
-        return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassLevelDeclaration asJmlClassLevel() {
-        throw new IllegalStateException(f(
-                "%s is not JmlClassLevelDeclaration, it is %s",
-                this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassLevelDeclaration> toJmlClassLevel() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassLevel(Consumer<JmlClassLevelDeclaration> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlDocType() {
@@ -555,53 +541,22 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     public void ifJmlMethodDeclaration(Consumer<JmlMethodDeclaration> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlClassAxiomDeclaration() {
+    public boolean isJmlRepresentsDeclaration() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlClassExprDeclaration() {
-        return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassExprDeclaration asJmlClassExprDeclaration() {
+    public JmlRepresentsDeclaration asJmlRepresentsDeclaration() {
         throw new IllegalStateException(f(
-                "%s is not JmlClassExprDeclaration, it is %s",
+                "%s is not JmlRepresentsDeclaration, it is %s",
                 this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassExprDeclaration> toJmlClassExprDeclaration() {
+    public Optional<JmlRepresentsDeclaration> toJmlRepresentsDeclaration() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassExprDeclaration(Consumer<JmlClassExprDeclaration> action) {}
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlClassLevelDeclaration() {
-        return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassLevelDeclaration asJmlClassLevelDeclaration() {
-        throw new IllegalStateException(f(
-                "%s is not JmlClassLevelDeclaration, it is %s",
-                this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassLevelDeclaration> toJmlClassLevelDeclaration() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassLevelDeclaration(Consumer<JmlClassLevelDeclaration> action) {}
-
-    @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> annotations() {
-        return Objects.requireNonNull(annotations);
-    }
+    public void ifJmlRepresentsDeclaration(Consumer<JmlRepresentsDeclaration> action) {}
 }

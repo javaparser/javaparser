@@ -81,7 +81,7 @@ public class Issue2620Test extends AbstractLexicalPreservingTest {
         Optional<ClassOrInterfaceDeclaration> cd = cu.findFirst(ClassOrInterfaceDeclaration.class);
 
         // add the new variable
-        cd.get().getMembers().addFirst(fd);
+        cd.get().getMembers().addFirstO(fd);
 
         // should be printed like this
         //        System.out.println("\n\nOriginal:\n" + original);

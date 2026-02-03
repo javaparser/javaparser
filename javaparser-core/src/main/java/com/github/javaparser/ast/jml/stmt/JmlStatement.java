@@ -30,6 +30,18 @@ public abstract class JmlStatement extends Statement implements Jmlish {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
+    public JmlStatement clone() {
+        return (JmlStatement) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlStatementMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlStatementMetaModel;
+    }
+
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlStatement() {
         return true;
@@ -47,21 +59,8 @@ public abstract class JmlStatement extends Statement implements Jmlish {
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlStatement(Consumer<JmlStatement> action) {
         action.accept(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlStatement clone() {
-        return (JmlStatement) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlStatementMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlStatementMetaModel;
     }
 }

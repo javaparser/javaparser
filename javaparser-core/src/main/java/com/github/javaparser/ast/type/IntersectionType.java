@@ -95,7 +95,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public IntersectionType setElements(final NodeList<ReferenceType> elements) {
+    public IntersectionType setElements(final @NonNull() NodeList<ReferenceType> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
             return this;
@@ -193,9 +193,9 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         throw new UnsupportedOperationException(getClass().getCanonicalName());
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ReferenceType> elements() {
+    public @NonNull() NodeList<ReferenceType> elements() {
         return Objects.requireNonNull(elements);
     }
 }

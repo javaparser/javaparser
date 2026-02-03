@@ -17,6 +17,8 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.ast.jml.expr, \
     com.github.javaparser.ast.jml.stmt, \
     com.github.javaparser.ast.jml.type, \
+    com.github.javaparser.ast.key, \
+    com.github.javaparser.ast.key.sv, \
     com.github.javaparser.ast.modules, \
     com.github.javaparser.ast.nodeTypes, \
     com.github.javaparser.ast.nodeTypes.modifiers, \

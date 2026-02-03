@@ -126,7 +126,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt>,
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ForEachStmt setBody(final Statement body) {
+    public ForEachStmt setBody(final @NonNull() Statement body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -139,7 +139,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt>,
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ForEachStmt setIterable(final Expression iterable) {
+    public ForEachStmt setIterable(final @NonNull() Expression iterable) {
         assertNotNull(iterable);
         if (iterable == this.iterable) {
             return this;
@@ -152,7 +152,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt>,
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ForEachStmt setVariable(final VariableDeclarationExpr variable) {
+    public ForEachStmt setVariable(final @NonNull() VariableDeclarationExpr variable) {
         assertNotNull(variable);
         if (variable == this.variable) {
             return this;
@@ -290,7 +290,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt>,
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ForEachStmt setContracts(final NodeList<JmlContract> contracts) {
+    public ForEachStmt setContracts(final @NonNull() NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;
@@ -302,27 +302,27 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt>,
         return this;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement body() {
+    public @NonNull() Statement body() {
         return Objects.requireNonNull(body);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> contracts() {
+    public @NonNull() NodeList<JmlContract> contracts() {
         return Objects.requireNonNull(contracts);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression iterable() {
+    public @NonNull() Expression iterable() {
         return Objects.requireNonNull(iterable);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarationExpr variable() {
+    public @NonNull() VariableDeclarationExpr variable() {
         return Objects.requireNonNull(variable);
     }
 }

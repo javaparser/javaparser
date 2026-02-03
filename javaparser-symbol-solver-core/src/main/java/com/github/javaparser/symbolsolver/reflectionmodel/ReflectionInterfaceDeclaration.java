@@ -114,7 +114,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public String toString() {
-        return "ReflectionInterfaceDeclaration{" + "clazz=" + clazz.getCanonicalName() + '}';
+        return getClass().getSimpleName() + "{" + "clazz=" + clazz.getCanonicalName() + '}';
     }
 
     public ResolvedType getUsage(Node node) {

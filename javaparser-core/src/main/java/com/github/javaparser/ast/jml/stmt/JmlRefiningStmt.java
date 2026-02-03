@@ -46,30 +46,6 @@ public class JmlRefiningStmt extends JmlStatement implements NodeWithJmlTags<Jml
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlRefiningStmt() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlRefiningStmt asJmlRefiningStmt() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlRefiningStmt> toJmlRefiningStmt() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlRefiningStmt(Consumer<JmlRefiningStmt> action) {
-        action.accept(this);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlRefiningStmt clone() {
         return (JmlRefiningStmt) accept(new CloneVisitor(), null);
@@ -97,7 +73,7 @@ public class JmlRefiningStmt extends JmlStatement implements NodeWithJmlTags<Jml
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlRefiningStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlRefiningStmt setJmlTags(final @NonNull() NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -139,9 +115,32 @@ public class JmlRefiningStmt extends JmlStatement implements NodeWithJmlTags<Jml
         return super.replace(node, replacementNode);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> jmlTags() {
+    public @NonNull() NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlRefiningStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlRefiningStmt asJmlRefiningStmt() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlRefiningStmt> toJmlRefiningStmt() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlRefiningStmt(Consumer<JmlRefiningStmt> action) {
+        action.accept(this);
     }
 }

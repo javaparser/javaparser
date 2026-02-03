@@ -239,7 +239,7 @@ public class Modifier extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Modifier setKeyword(final Keyword keyword) {
+    public Modifier setKeyword(final @NonNull() Keyword keyword) {
         assertNotNull(keyword);
         if (keyword == this.keyword) {
             return this;
@@ -269,6 +269,12 @@ public class Modifier extends Node {
         return JavaParserMetaModel.modifierMetaModel;
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() Keyword keyword() {
+        return Objects.requireNonNull(keyword);
+    }
+
     /**
      * This constructor is used by the parser and is considered private.
      */
@@ -276,11 +282,5 @@ public class Modifier extends Node {
     public Modifier(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
-    }
-
-    @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Keyword keyword() {
-        return Objects.requireNonNull(keyword);
     }
 }

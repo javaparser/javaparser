@@ -122,18 +122,6 @@ public class VarType extends Type {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<VarType> toVarType() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifVarType(Consumer<VarType> action) {
-        action.accept(this);
-    }
-
-    @Override
     public ResolvedType convertToUsage(Context context) {
         Node parent = getParentNode().get();
         if (!(parent instanceof VariableDeclarator)) {
@@ -184,5 +172,17 @@ public class VarType extends Type {
             return Optional.empty();
         }
         return Optional.of((ForEachStmt) node.get());
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<VarType> toVarType() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifVarType(Consumer<VarType> action) {
+        action.accept(this);
     }
 }

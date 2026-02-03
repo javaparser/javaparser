@@ -22,8 +22,8 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
@@ -31,6 +31,8 @@ import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -215,7 +217,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
         return n.hashCode();
     }
 
-    public Integer visit(final JavadocComment n, final Void arg) {
+    public Integer visit(final TraditionalJavadocComment n, final Void arg) {
         return n.hashCode();
     }
 
@@ -563,6 +565,161 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final RecordPatternExpr n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final MatchAllPatternExpr n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final MarkdownComment n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyCcatchBreak n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyCcatchContinue n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyCcatchParameter n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyCcatchReturn n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyCatchAllStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyEscapeExpression n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyExecStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyExecutionContext n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyLoopScopeBlock n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMergePointStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMethodBodyStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMethodCallStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMethodSignature n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyRangeExpression n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyTransactionStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyContextStatementBlock n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyExecCtxtSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyExpressionSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyJumpLabelSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMetaConstructExpression n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMetaConstruct n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMetaConstructType n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMethodSignatureSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyPassiveExpression n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyProgramVariableSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyStatementSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyTypeSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyCcatchSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyExecutionContextSV n, final Void arg) {
         return n.hashCode();
     }
 

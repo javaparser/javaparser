@@ -21,7 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -38,6 +38,6 @@ public class AnnotationSpaceTest extends AbstractLexicalPreservingTest {
         type.get().addAnnotation(new MarkerAnnotationExpr("Nullable"));
         String result = LexicalPreservingPrinter.print(cu);
         // Verify that there's a space between the annotation and the String type.
-        assertTrue(result.contains("@Nullable String"));
+        assertThat(result).contains("@Nullable String");
     }
 }

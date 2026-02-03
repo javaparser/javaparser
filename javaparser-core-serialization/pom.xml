@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>jmlparser-parent</artifactId>
 		<groupId>io.github.jmltoolkit</groupId>
-		<version>3.27.1-b7-SNAPSHOT</version>
+		<version>3.28.0-J7.0-K10.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -14,12 +14,12 @@
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License</name>
-			<url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
+			<url>https://www.gnu.org/licenses/lgpl-3.0.html</url>
 			<distribution>repo</distribution>
 		</license>
 		<license>
 			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
 			<comments>A business-friendly OSS license</comments>
 		</license>
@@ -56,11 +56,6 @@
 			<groupId>jakarta.json</groupId>
 			<artifactId>jakarta.json-api</artifactId>
 			<version>2.1.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.truth</groupId>
-			<artifactId>truth</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<!-- The jakarta.json variant of Glassfish is now available under a new name, Eclipse Parsson -->
 		<dependency>

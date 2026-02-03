@@ -121,7 +121,7 @@ public class BlockStmtContext extends StatementContext<BlockStmt> {
             // because a variable cannot be (re)defined after having been used
             wrappedNode
                     .getStatements()
-                    .getLast()
+                    .getOLast()
                     .ifPresent(stmt -> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
             if (!variableDeclarators.isEmpty()) {
                 // FIXME: Work backwards from the current statement, to only consider declarations prior to this

@@ -830,7 +830,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
     void parametersExposedToChildForConstructor() {
         ConstructorDeclaration constructor =
                 parse("Foo(int myParam) { aCall(); }", ParseStart.CLASS_BODY).asConstructorDeclaration();
-        assertOneParamExposedToChildInContextNamed(constructor, constructor.getBody(), "myParam");
+        assertOneParamExposedToChildInContextNamed(
+                constructor, constructor.getBody().get(), "myParam");
         assertNoParamsExposedToChildInContextNamed(constructor, constructor.getParameter(0), "myParam");
     }
 

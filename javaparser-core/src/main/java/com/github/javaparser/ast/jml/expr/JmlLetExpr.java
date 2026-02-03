@@ -83,7 +83,7 @@ public class JmlLetExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLetExpr setBody(final Expression body) {
+    public JmlLetExpr setBody(final @NonNull() Expression body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -101,7 +101,7 @@ public class JmlLetExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLetExpr setVariables(final VariableDeclarationExpr variables) {
+    public JmlLetExpr setVariables(final @NonNull() VariableDeclarationExpr variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
@@ -153,15 +153,15 @@ public class JmlLetExpr extends Expression implements Jmlish {
         customInitialization();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression body() {
+    public @NonNull() Expression body() {
         return Objects.requireNonNull(body);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarationExpr variables() {
+    public @NonNull() VariableDeclarationExpr variables() {
         return Objects.requireNonNull(variables);
     }
 }

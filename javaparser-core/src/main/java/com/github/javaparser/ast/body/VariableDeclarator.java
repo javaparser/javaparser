@@ -92,9 +92,9 @@ public class VariableDeclarator extends Node
     /**
      * Defines the declaration of a variable.
      *
-     * @param name        The identifier for this variable. IE. The variables name.
+     * @param name The identifier for this variable. IE. The variables name.
      * @param initializer What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr}
-     *                    is unnecessary as the {@code =} operator is already added.
+     * is unnecessary as the {@code =} operator is already added.
      */
     @AllFieldsConstructor
     public VariableDeclarator(Type type, SimpleName name, Expression initializer) {
@@ -173,7 +173,7 @@ public class VariableDeclarator extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarator setName(final SimpleName name) {
+    public VariableDeclarator setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -192,7 +192,7 @@ public class VariableDeclarator extends Node
      * @return this, the VariableDeclarator
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarator setInitializer(final Expression initializer) {
+    public VariableDeclarator setInitializer(final @Nullable() Expression initializer) {
         if (initializer == this.initializer) {
             return this;
         }
@@ -219,7 +219,7 @@ public class VariableDeclarator extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarator setType(final Type type) {
+    public VariableDeclarator setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -291,21 +291,21 @@ public class VariableDeclarator extends Node
         return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression initializer() {
+    public @Nullable() Expression initializer() {
         return initializer;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 }

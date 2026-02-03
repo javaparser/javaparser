@@ -41,7 +41,7 @@ import org.jspecify.annotations.NonNull;
 /**
  * An assignment expression. It supports the operators that are found the AssignExpr.Operator enum.
  * <br>{@code a=5}
- * <br>{@code time+=500}AssignExpr
+ * <br>{@code time+=500}
  * <br>{@code watch.time+=500}
  * <br>{@code (((time)))=100*60}
  * <br>{@code peanut[a]=true}
@@ -159,7 +159,7 @@ public class AssignExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssignExpr setOperator(final Operator operator) {
+    public AssignExpr setOperator(final @NonNull() Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
             return this;
@@ -170,7 +170,7 @@ public class AssignExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssignExpr setTarget(final Expression target) {
+    public AssignExpr setTarget(final @NonNull() Expression target) {
         assertNotNull(target);
         if (target == this.target) {
             return this;
@@ -183,7 +183,7 @@ public class AssignExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssignExpr setValue(final Expression value) {
+    public AssignExpr setValue(final @NonNull() Expression value) {
         assertNotNull(value);
         if (value == this.value) {
             return this;
@@ -258,21 +258,21 @@ public class AssignExpr extends Expression {
         return true;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Operator operator() {
+    public @NonNull() Operator operator() {
         return Objects.requireNonNull(operator);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression target() {
+    public @NonNull() Expression target() {
         return Objects.requireNonNull(target);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression value() {
+    public @NonNull() Expression value() {
         return Objects.requireNonNull(value);
     }
 }

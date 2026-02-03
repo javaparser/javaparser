@@ -5,13 +5,13 @@ import com.github.javaparser.ast.jml.NodeWithContracts;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.jml.clauses.JmlSignalsClause;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.quality.NotNull;
 import com.github.javaparser.quality.Preconditions;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Alexander Weigl
@@ -25,7 +25,7 @@ public class JmlUtility {
         var m = ((Node) n);
         var r = m.getRange();
         if (r.isPresent()
-                && (first = n.getContracts().getFirst()).isPresent()
+                && (first = n.getContracts().getOFirst()).isPresent()
                 && first.get().getRange().isPresent()) {
             m.setRange(r.get().withBegin(first.get().getRange().get().begin));
         }

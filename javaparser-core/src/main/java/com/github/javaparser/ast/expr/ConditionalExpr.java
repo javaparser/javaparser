@@ -101,7 +101,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ConditionalExpr setCondition(final Expression condition) {
+    public ConditionalExpr setCondition(final @NonNull() Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
             return this;
@@ -114,7 +114,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ConditionalExpr setElseExpr(final Expression elseExpr) {
+    public ConditionalExpr setElseExpr(final @NonNull() Expression elseExpr) {
         assertNotNull(elseExpr);
         if (elseExpr == this.elseExpr) {
             return this;
@@ -127,7 +127,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ConditionalExpr setThenExpr(final Expression thenExpr) {
+    public ConditionalExpr setThenExpr(final @NonNull() Expression thenExpr) {
         assertNotNull(thenExpr);
         if (thenExpr == this.thenExpr) {
             return this;
@@ -205,21 +205,21 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
         return appearsInAssignmentContext() || appearsInInvocationContext();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression condition() {
+    public @NonNull() Expression condition() {
         return Objects.requireNonNull(condition);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression elseExpr() {
+    public @NonNull() Expression elseExpr() {
         return Objects.requireNonNull(elseExpr);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression thenExpr() {
+    public @NonNull() Expression thenExpr() {
         return Objects.requireNonNull(thenExpr);
     }
 }

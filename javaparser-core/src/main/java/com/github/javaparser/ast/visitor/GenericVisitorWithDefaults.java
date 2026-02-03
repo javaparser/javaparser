@@ -22,15 +22,15 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -241,7 +241,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JavadocComment n, final A arg) {
+    public R visit(final TraditionalJavadocComment n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -657,6 +657,161 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final RecordPatternExpr n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final MatchAllPatternExpr n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final MarkdownComment n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyCcatchBreak n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyCcatchContinue n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyCcatchParameter n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyCcatchReturn n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyCatchAllStatement n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyEscapeExpression n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyExecStatement n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyExecutionContext n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyLoopScopeBlock n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMergePointStatement n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMethodBodyStatement n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMethodCallStatement n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMethodSignature n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyRangeExpression n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyTransactionStatement n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyContextStatementBlock n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyExecCtxtSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyExpressionSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyJumpLabelSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMetaConstructExpression n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMetaConstruct n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMetaConstructType n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMethodSignatureSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyPassiveExpression n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyProgramVariableSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyStatementSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyTypeSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyCcatchSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyExecutionContextSV n, final A arg) {
         return defaultAction(n, arg);
     }
 

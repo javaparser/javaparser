@@ -98,7 +98,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt setStatements(final NodeList<Statement> statements) {
+    public BlockStmt setStatements(final @NonNull() NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
             return this;
@@ -188,13 +188,19 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         return Optional.of(this);
     }
 
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() NodeList<Statement> statements() {
+        return Objects.requireNonNull(statements);
+    }
+
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<JmlContract> getContracts() {
         return contracts;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt setContracts(final NodeList<JmlContract> contracts) {
+    public BlockStmt setContracts(final @NonNull() NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;
@@ -206,15 +212,9 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         return this;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> contracts() {
+    public @NonNull() NodeList<JmlContract> contracts() {
         return Objects.requireNonNull(contracts);
-    }
-
-    @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Statement> statements() {
-        return Objects.requireNonNull(statements);
     }
 }

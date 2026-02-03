@@ -1,0 +1,15 @@
+<settings>
+    <servers>
+        <server>
+            <id>gitlab-maven</id>
+            <configuration>
+                <httpHeaders>
+                    <property>
+                        <name>Job-Token</name>
+                        <value>${env.CI_JOB_TOKEN}</value>
+                    </property>
+                </httpHeaders>
+            </configuration>
+        </server>
+    </servers>
+</settings>

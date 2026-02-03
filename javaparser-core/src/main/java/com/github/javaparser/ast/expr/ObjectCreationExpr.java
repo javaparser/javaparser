@@ -88,8 +88,8 @@ public class ObjectCreationExpr extends Expression
     /**
      * Defines a call to a constructor.
      *
-     * @param scope     may be null
-     * @param type      this is the class that the constructor is being called for.
+     * @param scope may be null
+     * @param type this is the class that the constructor is being called for.
      * @param arguments Any arguments to pass to the constructor
      */
     public ObjectCreationExpr(
@@ -173,7 +173,7 @@ public class ObjectCreationExpr extends Expression
      * @return this, the ObjectCreationExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
+    public ObjectCreationExpr setAnonymousClassBody(final @Nullable() NodeList<BodyDeclaration<?>> anonymousClassBody) {
         if (anonymousClassBody == this.anonymousClassBody) {
             return this;
         }
@@ -185,7 +185,7 @@ public class ObjectCreationExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ObjectCreationExpr setArguments(final NodeList<Expression> arguments) {
+    public ObjectCreationExpr setArguments(final @NonNull() NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
             return this;
@@ -204,7 +204,7 @@ public class ObjectCreationExpr extends Expression
      * @return this, the ObjectCreationExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ObjectCreationExpr setScope(final Expression scope) {
+    public ObjectCreationExpr setScope(final @Nullable() Expression scope) {
         if (scope == this.scope) {
             return this;
         }
@@ -216,7 +216,7 @@ public class ObjectCreationExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
+    public ObjectCreationExpr setType(final @NonNull() ClassOrInterfaceType type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -240,7 +240,7 @@ public class ObjectCreationExpr extends Expression
      * @return this, the ObjectCreationExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ObjectCreationExpr setTypeArguments(final NodeList<Type> typeArguments) {
+    public ObjectCreationExpr setTypeArguments(final @Nullable() NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return this;
         }
@@ -398,33 +398,33 @@ public class ObjectCreationExpr extends Expression
         return isUsingDiamondOperator() && (appearsInInvocationContext() || appearsInAssignmentContext());
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<BodyDeclaration<?>> anonymousClassBody() {
+    public @Nullable() NodeList<BodyDeclaration<?>> anonymousClassBody() {
         return anonymousClassBody;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> arguments() {
+    public @NonNull() NodeList<Expression> arguments() {
         return Objects.requireNonNull(arguments);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression scope() {
+    public @Nullable() Expression scope() {
         return scope;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassOrInterfaceType type() {
+    public @NonNull() ClassOrInterfaceType type() {
         return Objects.requireNonNull(type);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Type> typeArguments() {
+    public @Nullable() NodeList<Type> typeArguments() {
         return typeArguments;
     }
 }

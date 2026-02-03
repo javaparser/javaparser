@@ -62,37 +62,13 @@ public class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDeclar
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlFieldDeclaration() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlFieldDeclaration asJmlFieldDeclaration() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlFieldDeclaration> toJmlFieldDeclaration() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlFieldDeclaration(Consumer<JmlFieldDeclaration> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldDeclaration getDecl() {
         return decl;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlFieldDeclaration setDecl(final FieldDeclaration decl) {
+    public JmlFieldDeclaration setDecl(final @NonNull() FieldDeclaration decl) {
         assertNotNull(decl);
         if (decl == this.decl) {
             return this;
@@ -142,7 +118,7 @@ public class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDeclar
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlFieldDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlFieldDeclaration setJmlTags(final @NonNull() NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -169,15 +145,38 @@ public class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDeclar
         return super.remove(node);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldDeclaration decl() {
+    public @NonNull() FieldDeclaration decl() {
         return Objects.requireNonNull(decl);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> jmlTags() {
+    public @NonNull() NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlFieldDeclaration() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlFieldDeclaration asJmlFieldDeclaration() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlFieldDeclaration> toJmlFieldDeclaration() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlFieldDeclaration(Consumer<JmlFieldDeclaration> action) {
+        action.accept(this);
     }
 }

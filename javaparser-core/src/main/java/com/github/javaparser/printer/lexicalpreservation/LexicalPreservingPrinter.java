@@ -34,10 +34,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -184,7 +181,9 @@ public class LexicalPreservingPrinter {
                      */
                     fixIndentOfAddedNode(nodeText, index - 1);
                     LineSeparator lineSeparator = observedNode.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-                    nodeText.addElement(index++, makeCommentToken((Comment) newValue));
+                    for (TokenTextElement element : makeCommentTokens((Comment) newValue)) {
+                        nodeText.addElement(index++, element);
+                    }
                     nodeText.addToken(index, eolTokenKind(lineSeparator), lineSeparator.asRawString());
                     // code indentation after inserting an eol token may be wrong
                 } else if (newValue == null) {
@@ -193,8 +192,12 @@ public class LexicalPreservingPrinter {
                         if (((Comment) oldValue).isOrphan()) {
                             nodeText = getOrCreateNodeText(observedNode);
                         }
-                        int index = getIndexOfComment((Comment) oldValue, nodeText);
-                        nodeText.removeElement(index);
+                        Pair<Integer, Integer> indexAndCount =
+                                getIndexAndCountOfCommentTokens((Comment) oldValue, nodeText);
+                        int index = indexAndCount.a;
+                        for (int i = 0; i < indexAndCount.b; i++) {
+                            nodeText.removeElement(index);
+                        }
                         if (isCompleteLine(nodeText.getElements(), index)) {
                             removeAllExtraCharacters(nodeText.getElements(), index);
                         } else {
@@ -212,8 +215,15 @@ public class LexicalPreservingPrinter {
                         throw new IllegalStateException("The matching comment to be replaced could not be found");
                     }
                     Comment newComment = (Comment) newValue;
-                    TokenTextElement matchingElement = matchingTokens.get(0);
-                    nodeText.replace(matchingElement.and(matchingElement.matchByRange()), makeCommentToken(newComment));
+                    TokenTextElement firstMatchingElement = matchingTokens.get(0);
+                    int index = nodeText.findElement(firstMatchingElement.and(firstMatchingElement.matchByRange()));
+                    // When replacing a MarkdownComment, all matching tokens must be removed before adding new ones
+                    for (int i = 0; i < matchingTokens.size(); i++) {
+                        nodeText.removeElement(index);
+                    }
+                    for (TokenTextElement newElement : makeCommentTokens(newComment)) {
+                        nodeText.addElement(index++, newElement);
+                    }
                 }
             }
             NodeText nodeText = getOrCreateNodeText(observedNode);
@@ -283,32 +293,78 @@ public class LexicalPreservingPrinter {
             }
         }
 
-        private TokenTextElement makeCommentToken(Comment newComment) {
-            if (newComment.isJavadocComment()) {
-                return new TokenTextElement(
-                        JAVADOC_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
+        /**
+         * Comments must be converted to TokenTextElements that the LPP can work with. For the other comments this is
+         * simple since there is a TokenType corresponding to them. A TokenTextElement can just be created from the
+         * header, footer, and content of the comment. This is not the case for MarkdownComments, however, since a
+         * MarkdownComment is made up of a sequence of whitespace and line comment tokens. This sequence is therefore
+         * manually reconstructed from the comment content.
+         */
+        private List<TokenTextElement> convertMarkdownCommentContentToTokens(MarkdownComment comment) {
+            ArrayList<TokenTextElement> tokens = new ArrayList<>();
+            String content = comment.getContent();
+            for (int i = 0; i < content.length(); i++) {
+                if (content.charAt(i) == '/') {
+                    int commentStart = i;
+                    while (i < content.length() - 1) {
+                        if (content.charAt(i + 1) == '\n' || content.charAt(i + 1) == '\r') {
+                            break;
+                        }
+                        i++;
+                    }
+                    tokens.add(new TokenTextElement(SINGLE_LINE_COMMENT, content.substring(commentStart, i + 1)));
+                } else if (content.charAt(i) == '\r') {
+                    if (i < content.length() - 1 && content.charAt(i + 1) == '\n') {
+                        tokens.add(new TokenTextElement(SPACE, "\r\n"));
+                        i++;
+                    } else {
+                        tokens.add(new TokenTextElement(SPACE, "\r"));
+                    }
+                } else if (Character.isWhitespace(content.charAt(i))) {
+                    tokens.add(new TokenTextElement(SPACE, Character.toString(content.charAt(i))));
+                } else {
+                    throw new IllegalArgumentException("Expected Markdown comment content format, but got " + comment);
+                }
             }
-            if (newComment.isLineComment()) {
-                return new TokenTextElement(SINGLE_LINE_COMMENT, newComment.getHeader() + newComment.getContent());
-            }
-            if (newComment.isBlockComment()) {
-                return new TokenTextElement(
-                        MULTI_LINE_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
-            }
-            throw new UnsupportedOperationException(
-                    "Unknown type of comment: " + newComment.getClass().getSimpleName());
+            return tokens;
         }
 
-        private int getIndexOfComment(Comment oldValue, NodeText nodeText) {
+        private List<TokenTextElement> makeCommentTokens(Comment newComment) {
+            List<TokenTextElement> tokens = new ArrayList<>();
+            if (newComment.isJavadocComment()) {
+                TokenTextElement t = new TokenTextElement(
+                        JAVADOC_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
+                tokens.add(t);
+            } else if (newComment.isLineComment()) {
+                TokenTextElement t =
+                        new TokenTextElement(SINGLE_LINE_COMMENT, newComment.getHeader() + newComment.getContent());
+                tokens.add(t);
+            } else if (newComment.isBlockComment()) {
+                TokenTextElement t = new TokenTextElement(
+                        MULTI_LINE_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
+                tokens.add(t);
+            } else if (newComment.isMarkdownComment()) {
+                tokens.addAll(convertMarkdownCommentContentToTokens(newComment.asMarkdownComment()));
+            } else {
+                throw new UnsupportedOperationException(
+                        "Unknown type of comment: " + newComment.getClass().getSimpleName());
+            }
+            return tokens;
+        }
+
+        private Pair<Integer, Integer> getIndexAndCountOfCommentTokens(Comment oldValue, NodeText nodeText) {
             List<TokenTextElement> matchingTokens = findTokenTextElementForComment(oldValue, nodeText);
             if (!matchingTokens.isEmpty()) {
                 TextElement matchingElement = matchingTokens.get(0);
-                return nodeText.findElement(matchingElement.and(matchingElement.matchByRange()));
+                return new Pair<>(
+                        nodeText.findElement(matchingElement.and(matchingElement.matchByRange())),
+                        matchingTokens.size());
             }
             // If no matching TokenTextElements were found, we try searching through ChildTextElements as well
             List<ChildTextElement> matchingChilds = findChildTextElementForComment(oldValue, nodeText);
             ChildTextElement matchingChild = matchingChilds.get(0);
-            return nodeText.findElement(matchingChild.and(matchingChild.matchByRange()));
+            return new Pair<>(
+                    nodeText.findElement(matchingChild.and(matchingChild.matchByRange())), matchingChilds.size());
         }
 
         /*
@@ -371,7 +427,7 @@ public class LexicalPreservingPrinter {
 
         private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<TokenTextElement> matchingTokens;
-            if (oldValue instanceof JavadocComment) {
+            if (oldValue instanceof TraditionalJavadocComment) {
                 matchingTokens = nodeText.getElements().stream()
                         .filter(e -> e.isToken(JAVADOC_COMMENT))
                         .map(e -> (TokenTextElement) e)
@@ -383,6 +439,49 @@ public class LexicalPreservingPrinter {
                         .map(e -> (TokenTextElement) e)
                         .filter(t -> t.getText().equals(oldValue.asString()))
                         .collect(toList());
+            } else if (oldValue instanceof MarkdownComment) {
+                // Because a MarkdownComment consists of a sequence of tokens (as opposed to the other comment types
+                // which consist of a single token), all the tokens making up the MarkdownComment need to be found to
+                // be able to correctly replace or delete it.
+                matchingTokens = new ArrayList<>();
+                ArrayList<TextElement> maybeMatchingTokens = new ArrayList<>();
+                boolean inMatch = false;
+                String oldContent = oldValue.asMarkdownComment().getContent();
+                List<TextElement> textElements = nodeText.getElements();
+                for (TextElement textElement : textElements) {
+                    if (inMatch) {
+                        // If a matching start has been found, then add all following tokens to maybeMatchingTokens
+                        // until either a matching end is found, at which point the token range is added to
+                        // matchingTokens, or a non-whitespace, non-comment token is found at which point we know the
+                        // maybeMatchingTokens do not actually match the markdown comment (just some prefix of it), so
+                        // maybeMatchingTokens is cleared.
+                        maybeMatchingTokens.add(textElement);
+                        if (textElement.isToken(SINGLE_LINE_COMMENT) && oldContent.endsWith(textElement.expand())) {
+                            // We have a matching start and end, so check that the full text matches.
+                            StringBuilder sb = new StringBuilder();
+                            for (TextElement elem : maybeMatchingTokens) {
+                                sb.append(((TokenTextElement) elem).getText());
+                            }
+                            if (sb.toString().equals(oldContent)) {
+                                matchingTokens.addAll(maybeMatchingTokens.stream()
+                                        .map(e -> (TokenTextElement) e)
+                                        .collect(toList()));
+                                // Clear and continue, since multiple markdown comments may have the same content
+                                maybeMatchingTokens.clear();
+                                inMatch = false;
+                            } else {
+                                maybeMatchingTokens.clear();
+                                inMatch = false;
+                            }
+                        }
+                    } else if (textElement.isToken(SINGLE_LINE_COMMENT)
+                            && oldContent.startsWith(((TokenTextElement) textElement).getText())) {
+                        // Found a line comment that matches the first line of the markdown comment, so start looking
+                        // for the rest of the comment.
+                        maybeMatchingTokens.add(textElement);
+                        inMatch = true;
+                    }
+                }
             } else {
                 matchingTokens = nodeText.getElements().stream()
                         .filter(e -> e.isToken(SINGLE_LINE_COMMENT))
@@ -396,10 +495,9 @@ public class LexicalPreservingPrinter {
                     .filter(t -> (!t.getToken().hasRange() && !oldValue.hasRange())
                             || (t.getToken().hasRange()
                                     && oldValue.hasRange()
-                                    && t.getToken()
-                                            .getRange()
+                                    && oldValue.getRange()
                                             .get()
-                                            .equals(oldValue.getRange().get())))
+                                            .contains(t.getToken().getRange().get())))
                     .collect(toList());
         }
 
@@ -597,10 +695,11 @@ public class LexicalPreservingPrinter {
             interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
             return;
         }
-        if (node instanceof JavadocComment) {
-            Comment comment = (JavadocComment) node;
+        if (node instanceof TraditionalJavadocComment) {
+            Comment comment = (TraditionalJavadocComment) node;
             nodeText.addToken(
-                    JAVADOC_COMMENT, comment.getHeader() + ((JavadocComment) node).getContent() + comment.getFooter());
+                    JAVADOC_COMMENT,
+                    comment.getHeader() + ((TraditionalJavadocComment) node).getContent() + comment.getFooter());
             return;
         }
         if (node instanceof BlockComment) {
@@ -745,6 +844,9 @@ public class LexicalPreservingPrinter {
     private static ObservableProperty findNodeListName(NodeList<?> nodeList) {
         Node parent = nodeList.getParentNodeForChildren();
         for (Method m : parent.getClass().getMethods()) {
+            if (m.getAnnotation(com.github.javaparser.ast.key.IgnoreLexPrinting.class) != null) {
+                continue;
+            }
             if (m.getParameterCount() == 0
                     && m.getReturnType().getCanonicalName().equals(JAVAPARSER_AST_NODELIST)) {
                 try {

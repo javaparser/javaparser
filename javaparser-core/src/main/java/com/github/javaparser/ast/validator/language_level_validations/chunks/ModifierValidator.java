@@ -126,7 +126,8 @@ public class ModifierValidator extends VisitorValidator {
 
     @Override
     public void visit(FieldDeclaration n, ProblemReporter reporter) {
-        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL, TRANSIENT, VOLATILE);
+        validateModifiers(
+                n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL, TRANSIENT, VOLATILE, JML_GHOST, JML_MODEL);
         super.visit(n, reporter);
     }
 
@@ -193,7 +194,7 @@ public class ModifierValidator extends VisitorValidator {
 
     @Override
     public void visit(VariableDeclarationExpr n, ProblemReporter reporter) {
-        validateModifiers(n, reporter, FINAL);
+        validateModifiers(n, reporter, FINAL, JML_GHOST, JML_MODEL);
         super.visit(n, reporter);
     }
 

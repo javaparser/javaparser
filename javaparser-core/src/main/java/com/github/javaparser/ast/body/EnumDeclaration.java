@@ -142,7 +142,7 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumDeclaration setEntries(final NodeList<EnumConstantDeclaration> entries) {
+    public EnumDeclaration setEntries(final @NonNull() NodeList<EnumConstantDeclaration> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
             return this;
@@ -155,7 +155,7 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
+    public EnumDeclaration setImplementedTypes(final @NonNull() NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
             return this;
@@ -257,15 +257,15 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<EnumConstantDeclaration> entries() {
+    public @NonNull() NodeList<EnumConstantDeclaration> entries() {
         return Objects.requireNonNull(entries);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ClassOrInterfaceType> implementedTypes() {
+    public @NonNull() NodeList<ClassOrInterfaceType> implementedTypes() {
         return Objects.requireNonNull(implementedTypes);
     }
 }

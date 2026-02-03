@@ -250,7 +250,6 @@ public class TokenTypes {
             case REP:
             case READ_ONLY:
             case GHOST:
-            case BEGIN:
             case END:
             case HELPER:
             case HENCE_BY:
@@ -363,6 +362,57 @@ public class TokenTypes {
             case ENTER_JML_BLOCK_COMMENT:
             case JML_BLOCK_COMMENT:
             case JML_MULTI_LINE_COMMENT:
+            case TRANSACTIONBEGIN:
+            case TRANSACTIONCOMMIT:
+            case TRANSACTIONFINISH:
+            case TRANSACTIONABORT:
+            case RETURNTYPE:
+            case LOOPSCOPE:
+            case MERGE_POINT:
+            case METHODFRAME:
+            case SHARP:
+            case EXEC:
+            case CONTINUETYPE:
+            case CCATCH:
+            case CCAT:
+            case BREAKTYPE:
+            case TYPEOF:
+            case SWITCHTOIF:
+            case UNPACK:
+            case REATTACHLOOPINVARIANT:
+            case FORINITUNFOLDTRANSFORMER:
+            case LOOPSCOPEINVARIANTTRANSFORMER:
+            case SETSV:
+            case ISSTATIC:
+            case EVALARGS:
+            case REPLACEARGS:
+            case UNWINDLOOP:
+            case CATCHALL:
+            case BEGIN:
+            case COMMIT:
+            case FINISH:
+            case ABORT:
+            case UNWIND_LOOP_BOUNDED:
+            case FORTOWHILE:
+            case DOBREAK:
+            case METHODCALL:
+            case EXPANDMETHODBODY:
+            case CONSTRUCTORCALL:
+            case SPECIALCONSTRUCTORECALL:
+            case POSTWORK:
+            case STATICINITIALIZATION:
+            case RESOLVE_MULTIPLE_VAR_DECL:
+            case ARRAY_POST_DECL:
+            case ARRAY_INIT_CREATION:
+            case ARRAY_INIT_CREATION_TRANSIENT:
+            case ARRAY_INIT_CREATION_ASSIGNMENTS:
+            case ENHANCEDFOR_ELIM:
+            case STATIC_EVALUATE:
+            case CREATE_OBJECT:
+            case LENGTHREF:
+            case KEYIDENTIFIER:
+            case SOURCE:
+            case RESULTARROW:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:
@@ -381,10 +431,12 @@ public class TokenTypes {
             case TRUE:
             case FALSE:
             case NULL:
+            case UNNAMED_PLACEHOLDER:
                 return JavaToken.Category.LITERAL;
+            case JMLIDENTIFIER:
+            case SVIDENTIFIER:
             case IDENTIFIER:
             case JML_IDENTIFIER:
-            case SYNTH_IDENTIFIER:
                 return JavaToken.Category.IDENTIFIER;
             case LPAREN:
             case RPAREN:
@@ -443,12 +495,12 @@ public class TokenTypes {
             case ENTER_MULTILINE_COMMENT:
             case COMMENT_CONTENT:
             case HEX_DIGITS:
-            case LETTER:
+            case NON_UNDERSCORE_LETTER:
             case UNICODE_ESCAPE:
             case PART_LETTER:
             case TEXT_BLOCK_CONTENT:
             case ENTER_TEXT_BLOCK:
-                throw new IllegalArgumentException("internal token type");
+                return JavaToken.Category.EOL;
             default:
                 throw new AssertionError(
                         "Unable to categorise token kind " + kind

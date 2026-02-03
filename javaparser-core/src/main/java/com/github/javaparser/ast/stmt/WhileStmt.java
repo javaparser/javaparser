@@ -111,7 +111,7 @@ public class WhileStmt extends Statement
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public WhileStmt setBody(final Statement body) {
+    public WhileStmt setBody(final @NonNull() Statement body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -124,7 +124,7 @@ public class WhileStmt extends Statement
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public WhileStmt setCondition(final Expression condition) {
+    public WhileStmt setCondition(final @NonNull() Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
             return this;
@@ -216,7 +216,7 @@ public class WhileStmt extends Statement
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public WhileStmt setContracts(final NodeList<JmlContract> contracts) {
+    public WhileStmt setContracts(final @NonNull() NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;
@@ -228,21 +228,21 @@ public class WhileStmt extends Statement
         return this;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement body() {
+    public @NonNull() Statement body() {
         return Objects.requireNonNull(body);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression condition() {
+    public @NonNull() Expression condition() {
         return Objects.requireNonNull(condition);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> contracts() {
+    public @NonNull() NodeList<JmlContract> contracts() {
         return Objects.requireNonNull(contracts);
     }
 }

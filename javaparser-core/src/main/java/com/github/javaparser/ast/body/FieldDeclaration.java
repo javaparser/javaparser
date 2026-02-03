@@ -26,6 +26,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.Modifier.DefaultKeyword;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
@@ -114,8 +115,8 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * Creates a {@link FieldDeclaration}.
      *
      * @param modifiers modifiers
-     * @param type      type
-     * @param name      field name
+     * @param type type
+     * @param name field name
      */
     public FieldDeclaration(NodeList<Modifier> modifiers, Type type, String name) {
         this(assertNotNull(modifiers), new VariableDeclarator(type, assertNotNull(name)));
@@ -150,7 +151,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public FieldDeclaration setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -163,7 +164,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
+    public FieldDeclaration setVariables(final @NonNull() NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
@@ -181,7 +182,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      *
      * @return the {@link MethodDeclaration} created
      * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
-     *                               class or enum
+     * class or enum
      */
     public MethodDeclaration createGetter() {
         if (getVariables().size() != 1)
@@ -193,11 +194,11 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
             throw new IllegalStateException("You can use this only when the field is attached to a class or an enum");
         VariableDeclarator variable = getVariable(0);
         String fieldName = variable.getNameAsString();
-        String fieldNameUpper = fieldName.toUpperCase().charAt(0) + fieldName.substring(1);
+        String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
         getter = parentClass
-                .map(clazz -> clazz.addMethod("get" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC))
-                .orElseGet(() -> parentEnum.get().addMethod("get" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC));
+                .map(clazz -> clazz.addMethod("get" + fieldNameUpper, DefaultKeyword.PUBLIC))
+                .orElseGet(() -> parentEnum.get().addMethod("get" + fieldNameUpper, DefaultKeyword.PUBLIC));
         getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
@@ -211,7 +212,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      *
      * @return the {@link MethodDeclaration} created
      * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
-     *                               class or enum
+     * class or enum
      */
     public MethodDeclaration createSetter() {
         if (getVariables().size() != 1)
@@ -223,11 +224,11 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
             throw new IllegalStateException("You can use this only when the field is attached to a class or an enum");
         VariableDeclarator variable = getVariable(0);
         String fieldName = variable.getNameAsString();
-        String fieldNameUpper = fieldName.toUpperCase().charAt(0) + fieldName.substring(1);
+        String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration setter;
         setter = parentClass
-                .map(clazz -> clazz.addMethod("set" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC))
-                .orElseGet(() -> parentEnum.get().addMethod("set" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC));
+                .map(clazz -> clazz.addMethod("set" + fieldNameUpper, DefaultKeyword.PUBLIC))
+                .orElseGet(() -> parentEnum.get().addMethod("set" + fieldNameUpper, DefaultKeyword.PUBLIC));
         setter.setType(new VoidType());
         setter.getParameters().add(new Parameter(variable.getType(), fieldName));
         BlockStmt blockStmt2 = new BlockStmt();
@@ -238,19 +239,19 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
     }
 
     public boolean isTransient() {
-        return hasModifier(Modifier.DefaultKeyword.TRANSIENT);
+        return hasModifier(DefaultKeyword.TRANSIENT);
     }
 
     public boolean isVolatile() {
-        return hasModifier(Modifier.DefaultKeyword.VOLATILE);
+        return hasModifier(DefaultKeyword.VOLATILE);
     }
 
     public FieldDeclaration setTransient(boolean set) {
-        return setModifier(Modifier.DefaultKeyword.TRANSIENT, set);
+        return setModifier(DefaultKeyword.TRANSIENT, set);
     }
 
     public FieldDeclaration setVolatile(boolean set) {
-        return setModifier(Modifier.DefaultKeyword.VOLATILE, set);
+        return setModifier(DefaultKeyword.VOLATILE, set);
     }
 
     /*
@@ -372,15 +373,15 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<VariableDeclarator> variables() {
+    public @NonNull() NodeList<VariableDeclarator> variables() {
         return Objects.requireNonNull(variables);
     }
 }

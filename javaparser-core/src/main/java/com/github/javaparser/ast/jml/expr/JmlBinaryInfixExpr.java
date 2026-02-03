@@ -103,7 +103,7 @@ public class JmlBinaryInfixExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlBinaryInfixExpr setLeft(final Expression left) {
+    public JmlBinaryInfixExpr setLeft(final @NonNull() Expression left) {
         assertNotNull(left);
         if (left == this.left) {
             return this;
@@ -121,7 +121,7 @@ public class JmlBinaryInfixExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlBinaryInfixExpr setOperator(final SimpleName operator) {
+    public JmlBinaryInfixExpr setOperator(final @NonNull() SimpleName operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
             return this;
@@ -139,7 +139,7 @@ public class JmlBinaryInfixExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlBinaryInfixExpr setRight(final Expression right) {
+    public JmlBinaryInfixExpr setRight(final @NonNull() Expression right) {
         assertNotNull(right);
         if (right == this.right) {
             return this;
@@ -184,21 +184,21 @@ public class JmlBinaryInfixExpr extends Expression {
         return JavaParserMetaModel.jmlBinaryInfixExprMetaModel;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression left() {
+    public @NonNull() Expression left() {
         return Objects.requireNonNull(left);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName operator() {
+    public @NonNull() SimpleName operator() {
         return Objects.requireNonNull(operator);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression right() {
+    public @NonNull() Expression right() {
         return Objects.requireNonNull(right);
     }
 }

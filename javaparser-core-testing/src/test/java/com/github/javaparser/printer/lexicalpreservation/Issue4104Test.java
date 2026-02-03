@@ -72,7 +72,7 @@ public class Issue4104Test extends AbstractLexicalPreservingTest {
         SwitchEntry newEntry = new SwitchEntry();
         newEntry.setLabels(NodeList.nodeList(new IntegerLiteralExpr(0)));
         newEntry.setStatements(NodeList.nodeList(new BreakStmt()));
-        switchStmt.getEntries().addLast(newEntry);
+        switchStmt.getEntries().addLastO(newEntry);
 
         assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }

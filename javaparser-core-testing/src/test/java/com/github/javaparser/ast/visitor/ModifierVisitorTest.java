@@ -52,7 +52,7 @@ class ModifierVisitorTest extends AbstractLexicalPreservingTest {
                     public Visitable visit(final StringLiteralExpr n, final Void arg) {
                         String v = n.getValue();
 
-                        list.addFirst(new StringLiteralExpr("extra " + v));
+                        list.addFirstO(new StringLiteralExpr("extra " + v));
                         list.remove(new StringLiteralExpr("t"));
 
                         if (v.equals("a")) {

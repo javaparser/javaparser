@@ -60,7 +60,7 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlForallClause setBoundedVariables(final NodeList<Parameter> boundedVariables) {
+    public JmlForallClause setBoundedVariables(final @NonNull() NodeList<Parameter> boundedVariables) {
         assertNotNull(boundedVariables);
         if (boundedVariables == this.boundedVariables) {
             return this;
@@ -143,9 +143,9 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
         action.accept(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Parameter> boundedVariables() {
+    public @NonNull() NodeList<Parameter> boundedVariables() {
         return Objects.requireNonNull(boundedVariables);
     }
 }

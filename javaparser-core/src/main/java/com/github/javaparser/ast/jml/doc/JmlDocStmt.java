@@ -45,30 +45,6 @@ public class JmlDocStmt extends Statement implements JmlDocContainer {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlDocStmt() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlDocStmt asJmlDocStmt() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlDocStmt> toJmlDocStmt() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlDocStmt(Consumer<JmlDocStmt> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<JmlDoc> getJmlComments() {
         return jmlComments;
@@ -131,7 +107,7 @@ public class JmlDocStmt extends Statement implements JmlDocContainer {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlDocStmt setJmlComments(final NodeList<JmlDoc> jmlComments) {
+    public JmlDocStmt setJmlComments(final @NonNull() NodeList<JmlDoc> jmlComments) {
         assertNotNull(jmlComments);
         if (jmlComments == this.jmlComments) {
             return this;
@@ -153,9 +129,32 @@ public class JmlDocStmt extends Statement implements JmlDocContainer {
         customInitialization();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlDoc> jmlComments() {
+    public @NonNull() NodeList<JmlDoc> jmlComments() {
         return Objects.requireNonNull(jmlComments);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlDocStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlDocStmt asJmlDocStmt() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlDocStmt> toJmlDocStmt() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlDocStmt(Consumer<JmlDocStmt> action) {
+        action.accept(this);
     }
 }

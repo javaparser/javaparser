@@ -28,16 +28,15 @@ import static java.util.stream.Collectors.joining;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.*;
@@ -288,55 +287,88 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final ClassOrInterfaceDeclaration n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-        printMemberAnnotations(n.getAnnotations(), arg);
-        printModifiers(n.getModifiers());
-        if (n.isInterface()) {
-            printer.print("interface ");
-        } else {
-            printer.print("class ");
-        }
-        n.getName().accept(this, arg);
-        printTypeParameters(n.getTypeParameters(), arg);
-        if (!n.getExtendedTypes().isEmpty()) {
-            printer.print(" extends ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getExtendedTypes().iterator(); i.hasNext(); ) {
-                final ClassOrInterfaceType c = i.next();
-                c.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(", ");
+        if (!n.isCompact()) {
+            printMemberAnnotations(n.getAnnotations(), arg);
+            printModifiers(n.getModifiers());
+            if (n.isInterface()) {
+                printer.print("interface ");
+            } else {
+                printer.print("class ");
+            }
+            n.getName().accept(this, arg);
+            printTypeParameters(n.getTypeParameters(), arg);
+            if (!n.getExtendedTypes().isEmpty()) {
+                printer.print(" extends ");
+                for (final Iterator<ClassOrInterfaceType> i =
+                                n.getExtendedTypes().iterator();
+                        i.hasNext(); ) {
+                    final ClassOrInterfaceType c = i.next();
+                    c.accept(this, arg);
+                    if (i.hasNext()) {
+                        printer.print(", ");
+                    }
                 }
             }
-        }
-        if (!n.getImplementedTypes().isEmpty()) {
-            printer.print(" implements ");
-            for (final Iterator<ClassOrInterfaceType> i =
-                            n.getImplementedTypes().iterator();
-                    i.hasNext(); ) {
-                final ClassOrInterfaceType c = i.next();
-                c.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(", ");
+            if (!n.getImplementedTypes().isEmpty()) {
+                printer.print(" implements ");
+                for (final Iterator<ClassOrInterfaceType> i =
+                                n.getImplementedTypes().iterator();
+                        i.hasNext(); ) {
+                    final ClassOrInterfaceType c = i.next();
+                    c.accept(this, arg);
+                    if (i.hasNext()) {
+                        printer.print(", ");
+                    }
                 }
             }
-        }
-        if (!n.getPermittedTypes().isEmpty()) {
-            printer.print(" permits ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getPermittedTypes().iterator(); i.hasNext(); ) {
-                final ClassOrInterfaceType c = i.next();
-                c.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(", ");
+            if (!n.getPermittedTypes().isEmpty()) {
+                printer.print(" permits ");
+                for (final Iterator<ClassOrInterfaceType> i =
+                                n.getPermittedTypes().iterator();
+                        i.hasNext(); ) {
+                    final ClassOrInterfaceType c = i.next();
+                    c.accept(this, arg);
+                    if (i.hasNext()) {
+                        printer.print(", ");
+                    }
                 }
             }
+            printer.println(" {");
+            printer.indent();
         }
-        printer.println(" {");
-        printer.indent();
         if (!isNullOrEmpty(n.getMembers())) {
-            printMembers(n.getMembers(), arg);
+            if (n.isCompact()) {
+                printCompactClassMembers(n.getMembers(), arg);
+            } else {
+                printMembers(n.getMembers(), arg);
+            }
         }
         printOrphanCommentsEnding(n);
-        printer.unindent();
-        printer.print("}");
+        if (!n.isCompact()) {
+            printer.unindent();
+            printer.print("}");
+        }
+    }
+
+    /**
+     * Print a list of compact class members. This is similar to {@see printMembers} with the exception that the
+     * empty lines preceding the first member and following the last member are not printed.
+     */
+    protected void printCompactClassMembers(final NodeList<BodyDeclaration<?>> members, final Void arg) {
+        BodyDeclaration<?> member;
+        int size = members.size();
+        for (int i = 0; i < size; i++) {
+            member = members.get(i);
+            if (i > 0) {
+                // Only print the preceding line if this is not the first member in the list
+                printer.println();
+            }
+            member.accept(this, arg);
+            if (i < size - 1) {
+                // Only print the following line if this is not the last member in the list
+                printer.println();
+            }
+        }
     }
 
     @Override
@@ -382,7 +414,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(final JavadocComment n, final Void arg) {
+    public void visit(final TraditionalJavadocComment n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         if (configuration.isPrintComments() && configuration.isPrintJavadoc()) {
             printer.println(n.getHeader());
@@ -764,6 +796,323 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(KeyCcatchBreak n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("ccatch (\\Break");
+        if (n.getLabel().isPresent()) {
+            n.getLabel().get().accept(this, arg);
+        }
+        printer.print(")");
+        if (n.getBlock().isPresent()) {
+            n.getBlock().get().accept(this, arg);
+        }
+    }
+
+    @Override
+    public void visit(KeyCcatchContinue n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("ccatch (\\Continue");
+        if (n.getLabel().isPresent()) {
+            n.getLabel().get().accept(this, arg);
+        }
+        printer.print(")");
+        if (n.getBlock().isPresent()) {
+            n.getBlock().get().accept(this, arg);
+        }
+    }
+
+    @Override
+    public void visit(KeyCcatchParameter n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("ccatch (");
+        if (n.getParameter().isPresent()) {
+            n.getParameter().get().accept(this, arg);
+        }
+        printer.print(")");
+        if (n.getBlock().isPresent()) {
+            n.getBlock().get().accept(this, arg);
+        }
+    }
+
+    @Override
+    public void visit(KeyCcatchReturn n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("ccatch (\\Return");
+        if (n.getParameter().isPresent()) {
+            n.getParameter().get().accept(this, arg);
+        }
+        printer.print(")");
+        if (n.getBlock().isPresent()) {
+            n.getBlock().get().accept(this, arg);
+        }
+    }
+
+    @Override
+    public void visit(KeyCatchAllStatement n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("#catchAll");
+        printer.print("(");
+        n.getLabel().accept(this, arg);
+        printer.print(")");
+        n.getBlock().accept(this, arg);
+    }
+
+    @Override
+    public void visit(KeyEscapeExpression n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        n.getCallee().accept(this, arg);
+        if (n.getArguments().isPresent()) {
+            printer.print("(");
+            n.getArguments().get().accept(this, arg);
+            printer.print(")");
+        }
+    }
+
+    @Override
+    public void visit(KeyExecStatement n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("exec");
+        n.getExecBlock().accept(this, arg);
+        for (KeyCcatchBranch branch : n.getBranches()) {
+            branch.accept(this, arg);
+        }
+    }
+
+    @Override
+    public void visit(KeyExecutionContext n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("source");
+        printer.print("=");
+        n.getSignature().accept(this, arg);
+        printer.print("@");
+        n.getContext().accept(this, arg);
+        if (n.getInstance().isPresent()) {
+            printer.print(",");
+            printer.print("this");
+            printer.print("=");
+            n.getInstance().get().accept(this, arg);
+        }
+    }
+
+    @Override
+    public void visit(KeyLoopScopeBlock n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("loop-scope");
+        printer.print("(");
+        n.getIndexPV().accept(this, arg);
+        printer.print(")");
+        n.getBlock().accept(this, arg);
+    }
+
+    @Override
+    public void visit(KeyMergePointStatement n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("merge_point");
+        printer.print("(");
+        n.getExpr().accept(this, arg);
+        printer.print(");");
+    }
+
+    @Override
+    public void visit(KeyMethodBodyStatement n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        if (n.getName().isPresent()) {
+            n.getName().get().accept(this, arg);
+            printer.print("=");
+        }
+        n.getExpr().accept(this, arg);
+        printer.print("@");
+        n.getSource().accept(this, arg);
+        printer.print(";");
+    }
+
+    @Override
+    public void visit(KeyMethodCallStatement n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("method-frame");
+        printer.print("(");
+        if (n.getName().isPresent()) {
+            printer.print("result->");
+            n.getName().get().accept(this, arg);
+            printer.print(", ");
+        }
+        n.getContext().accept(this, arg);
+        printer.print(") :");
+        n.getBlock().accept(this, arg);
+    }
+
+    @Override
+    public void visit(KeyMethodSignature n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        n.getName().accept(this, arg);
+        printer.print("(");
+        for (Type paramType : n.getParamTypes()) {
+            paramType.accept(this, arg);
+            // TODO
+            printer.print(",");
+        }
+        printer.print(")");
+    }
+
+    @Override
+    public void visit(KeyRangeExpression n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        n.getLower().accept(this, arg);
+        printer.print("..");
+        n.getUpper().accept(this, arg);
+    }
+
+    @Override
+    public void visit(KeyTransactionStatement n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getType().symbol);
+        printer.print(";");
+    }
+
+    @Override
+    public void visit(KeyContextStatementBlock n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("{");
+        if (n.getSignature().isPresent()) {
+            printer.print(".");
+            n.getSignature().get().accept(this, arg);
+            printer.print("@");
+            n.getTr().get().accept(this, arg);
+            printer.print("(");
+            n.getExpression().get().accept(this, arg);
+            printer.print(")");
+        }
+        if (n.getComment().isPresent()) {
+            n.getContext().get().accept(this, arg);
+        }
+        printer.print("..");
+        for (Statement statement : n.getStatements()) {
+            statement.accept(this, arg);
+        }
+        printer.print("...");
+        printer.print("}");
+    }
+
+    @Override
+    public void visit(KeyExecCtxtSV n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getText());
+    }
+
+    @Override
+    public void visit(KeyExpressionSV n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getText());
+    }
+
+    @Override
+    public void visit(KeyJumpLabelSV n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getText());
+    }
+
+    @Override
+    public void visit(KeyMetaConstructExpression n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getText());
+        printer.print("(");
+        n.getChild().accept(this, arg);
+        printer.print(")");
+    }
+
+    @Override
+    public void visit(KeyMetaConstruct n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getKind());
+        printer.print("(");
+        for (Node schema : n.getSchemas()) {
+            schema.accept(this, arg);
+            printer.print(", ");
+        }
+        n.getChild().accept(this, arg);
+        printer.print(")");
+    }
+
+    @Override
+    public void visit(KeyMetaConstructType n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getKind());
+    }
+
+    @Override
+    public void visit(KeyMethodSignatureSV n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getText());
+    }
+
+    @Override
+    public void visit(KeyPassiveExpression n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print("@(");
+        n.accept(this, arg);
+        printer.print(")");
+    }
+
+    @Override
+    public void visit(KeyProgramVariableSV n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getText());
+    }
+
+    @Override
+    public void visit(KeyStatementSV n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getText());
+    }
+
+    @Override
+    public void visit(KeyTypeSV n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getText());
+    }
+
+    @Override
+    public void visit(KeyCcatchSV n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getText());
+    }
+
+    @Override
+    public void visit(KeyExecutionContextSV n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(n.getText());
+    }
+
+    @Override
     public void visit(final RecordPatternExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
@@ -772,116 +1121,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlQuantifiedExpr jmlQuantifiedExpr, Void arg) {}
-
-    @Override
-    public void visit(JmlClauseLabel n, Void arg) {}
-
-    @Override
-    public void visit(JmlExpressionStmt n, Void arg) {}
-
-    @Override
-    public void visit(JmlLabelExpr n, Void arg) {}
-
-    @Override
-    public void visit(JmlLetExpr n, Void arg) {}
-
-    @Override
-    public void visit(JmlMultiCompareExpr n, Void arg) {}
-
-    @Override
-    public void visit(JmlSimpleExprClause n, Void arg) {}
-
-    @Override
-    public void visit(JmlSignalsClause n, Void arg) {}
-
-    @Override
-    public void visit(JmlSignalsOnlyClause n, Void arg) {}
-
-    @Override
-    public void visit(JmlUnreachableStmt n, Void arg) {}
-
-    @Override
-    public void visit(JmlCallableClause n, Void arg) {}
-
-    @Override
-    public void visit(JmlForallClause n, Void arg) {}
-
-    @Override
-    public void visit(JmlRefiningStmt n, Void arg) {}
-
-    @Override
-    public void visit(JmlClauseIf n, Void arg) {}
-
-    @Override
-    public void visit(JmlClassExprDeclaration n, Void arg) {}
-
-    @Override
-    public void visit(JmlClassAccessibleDeclaration n, Void arg) {}
-
-    @Override
-    public void visit(JmlRepresentsDeclaration n, Void arg) {}
-
-    @Override
-    public void visit(JmlContract n, Void arg) {}
-
-    @Override
-    public void visit(JmlSetComprehensionExpr n, Void arg) {}
-
-    @Override
-    public void visit(JmlGhostStmt n, Void arg) {}
-
-    @Override
-    public void visit(JmlMethodDeclaration n, Void arg) {
-        n.getMethodDeclaration().accept(this, arg);
+    public void visit(final MatchAllPatternExpr n, final Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printer.print(MatchAllPatternExpr.UNNAMED_PLACEHOLDER);
     }
-
-    @Override
-    public void visit(JmlBinaryInfixExpr n, Void arg) {}
-
-    @Override
-    public void visit(JmlDocDeclaration n, Void arg) {
-        n.getJmlComments().forEach(it -> it.accept(this, arg));
-    }
-
-    @Override
-    public void visit(JmlDocStmt n, Void arg) {
-        n.getJmlComments().forEach(it -> it.accept(this, arg));
-    }
-
-    @Override
-    public void visit(JmlDoc n, Void arg) {
-        printer.print(n.getContent().asString());
-    }
-
-    @Override
-    public void visit(JmlDocType n, Void arg) {}
-
-    @Override
-    public void visit(JmlFieldDeclaration n, Void arg) {}
-
-    @Override
-    public void visit(JmlOldClause n, Void arg) {}
-
-    @Override
-    public void visit(JmlTypeExpr n, Void arg) {
-        n.getType().accept(this, arg);
-    }
-
-    @Override
-    public void visit(JmlMultiExprClause n, Void arg) {}
-
-    @Override
-    public void visit(JmlBeginStmt n, Void arg) {}
-
-    @Override
-    public void visit(JmlEndStmt n, Void arg) {}
-
-    @Override
-    public void visit(JmlLabelStmt n, Void arg) {}
-
-    @Override
-    public void visit(JmlMethodSignature n, Void arg) {}
 
     @Override
     public void visit(final CharLiteralExpr n, final Void arg) {
@@ -1140,8 +1384,13 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                 }
             }
         }
-        printer.print(" ");
-        n.getBody().accept(this, arg);
+        final var b = n.getBody();
+        if (b.isPresent()) {
+            printer.print(" ");
+            b.get().accept(this, arg);
+        } else {
+            printer.print(";");
+        }
     }
 
     @Override
@@ -1809,6 +2058,25 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(final MarkdownComment n, final Void arg) {
+        if (configuration.isIgnoreComments()) {
+            return;
+        }
+        final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
+        String[] lines = commentContent.split("\\R");
+        for (int i = 0; i < (lines.length - 1); i++) {
+            printer.print(n.getHeader());
+            printer.print(lines[i]);
+            // Avoids introducing indentation in markdown comments. ie: do not use println() as it would trigger
+            // indentation
+            // at the next print call.
+            printer.print(configuration.getEndOfLineCharacter());
+        }
+        printer.print(n.getHeader());
+        printer.println(lines[lines.length - 1]);
+    }
+
+    @Override
     public void visit(LambdaExpr n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
@@ -1887,6 +2155,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.isStatic()) {
             printer.print("static ");
         }
+        if (n.isModule()) {
+            printer.print("module ");
+        }
         n.getName().accept(this, arg);
         if (n.isAsterisk()) {
             printer.print(".*");
@@ -1951,6 +2222,118 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(UnparsableStmt n, Void arg) {
         printer.print("???;");
     }
+
+    @Override
+    public void visit(JmlQuantifiedExpr jmlQuantifiedExpr, Void arg) {}
+
+    @Override
+    public void visit(JmlClauseLabel n, Void arg) {}
+
+    @Override
+    public void visit(JmlExpressionStmt n, Void arg) {}
+
+    @Override
+    public void visit(JmlLabelExpr n, Void arg) {}
+
+    @Override
+    public void visit(JmlLetExpr n, Void arg) {}
+
+    @Override
+    public void visit(JmlMultiCompareExpr n, Void arg) {}
+
+    @Override
+    public void visit(JmlSimpleExprClause n, Void arg) {}
+
+    @Override
+    public void visit(JmlSignalsClause n, Void arg) {}
+
+    @Override
+    public void visit(JmlSignalsOnlyClause n, Void arg) {}
+
+    @Override
+    public void visit(JmlUnreachableStmt n, Void arg) {}
+
+    @Override
+    public void visit(JmlCallableClause n, Void arg) {}
+
+    @Override
+    public void visit(JmlForallClause n, Void arg) {}
+
+    @Override
+    public void visit(JmlRefiningStmt n, Void arg) {}
+
+    @Override
+    public void visit(JmlClauseIf n, Void arg) {}
+
+    @Override
+    public void visit(JmlClassExprDeclaration n, Void arg) {}
+
+    @Override
+    public void visit(JmlClassAccessibleDeclaration n, Void arg) {}
+
+    @Override
+    public void visit(JmlRepresentsDeclaration n, Void arg) {}
+
+    @Override
+    public void visit(JmlContract n, Void arg) {}
+
+    @Override
+    public void visit(JmlSetComprehensionExpr n, Void arg) {}
+
+    @Override
+    public void visit(JmlGhostStmt n, Void arg) {}
+
+    @Override
+    public void visit(JmlMethodDeclaration n, Void arg) {
+        n.getMethodDeclaration().accept(this, arg);
+    }
+
+    @Override
+    public void visit(JmlBinaryInfixExpr n, Void arg) {}
+
+    @Override
+    public void visit(JmlDocDeclaration n, Void arg) {
+        n.getJmlComments().forEach(it -> it.accept(this, arg));
+    }
+
+    @Override
+    public void visit(JmlDocStmt n, Void arg) {
+        n.getJmlComments().forEach(it -> it.accept(this, arg));
+    }
+
+    @Override
+    public void visit(JmlDoc n, Void arg) {
+        printer.print(n.getContent().asString());
+    }
+
+    @Override
+    public void visit(JmlDocType n, Void arg) {}
+
+    @Override
+    public void visit(JmlFieldDeclaration n, Void arg) {}
+
+    @Override
+    public void visit(JmlOldClause n, Void arg) {}
+
+    @Override
+    public void visit(JmlTypeExpr n, Void arg) {
+        n.getType().accept(this, arg);
+    }
+
+    @Override
+    public void visit(JmlMultiExprClause n, Void arg) {}
+
+    @Override
+    public void visit(JmlBeginStmt n, Void arg) {}
+
+    @Override
+    public void visit(JmlEndStmt n, Void arg) {}
+
+    @Override
+    public void visit(JmlLabelStmt n, Void arg) {}
+
+    @Override
+    public void visit(JmlMethodSignature n, Void arg) {}
 
     private void printOrphanCommentsBeforeThisChildNode(final Node node) {
         if (configuration.isIgnoreComments()) return;

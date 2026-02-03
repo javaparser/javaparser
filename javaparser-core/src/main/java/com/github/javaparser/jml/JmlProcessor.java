@@ -23,7 +23,7 @@ import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import java.util.*;
 import java.util.stream.IntStream;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Here happens the JML magic. This post-processor consumes {@link JmlDoc}
@@ -219,6 +219,7 @@ public class JmlProcessor extends Processor {
             for (int pos = 0; pos < n.getStatements().size(); pos++) {
                 Statement s = n.getStatement(pos);
                 if (s.isJmlDocStmt()) {
+                    // TODO merge
                     pos = handleJmlStatementLevel(n, (JmlDocStmt) s, pos);
                     // assert !s.getParentNode().isPresent();
                 } else {

@@ -171,7 +171,7 @@ public class ClassOrInterfaceType extends ReferenceType
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassOrInterfaceType setName(final SimpleName name) {
+    public ClassOrInterfaceType setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -190,7 +190,7 @@ public class ClassOrInterfaceType extends ReferenceType
      * @return this, the ClassOrInterfaceType
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
+    public ClassOrInterfaceType setScope(final @Nullable() ClassOrInterfaceType scope) {
         if (scope == this.scope) {
             return this;
         }
@@ -213,7 +213,7 @@ public class ClassOrInterfaceType extends ReferenceType
      * @return this, the ClassOrInterfaceType
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassOrInterfaceType setTypeArguments(final NodeList<Type> typeArguments) {
+    public ClassOrInterfaceType setTypeArguments(final @Nullable() NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return this;
         }
@@ -372,21 +372,21 @@ public class ClassOrInterfaceType extends ReferenceType
         return new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) typeDeclaration, typeParameters);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassOrInterfaceType scope() {
+    public @Nullable() ClassOrInterfaceType scope() {
         return scope;
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Type> typeArguments() {
+    public @Nullable() NodeList<Type> typeArguments() {
         return typeArguments;
     }
 }

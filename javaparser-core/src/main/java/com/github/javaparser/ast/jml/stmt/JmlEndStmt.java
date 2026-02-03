@@ -46,30 +46,6 @@ public class JmlEndStmt extends JmlStatement implements NodeWithJmlTags<JmlEndSt
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlEndStmt() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlEndStmt asJmlEndStmt() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlEndStmt> toJmlEndStmt() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlEndStmt(Consumer<JmlEndStmt> action) {
-        action.accept(this);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlEndStmt clone() {
         return (JmlEndStmt) accept(new CloneVisitor(), null);
@@ -97,7 +73,7 @@ public class JmlEndStmt extends JmlStatement implements NodeWithJmlTags<JmlEndSt
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlEndStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlEndStmt setJmlTags(final @NonNull() NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -139,9 +115,32 @@ public class JmlEndStmt extends JmlStatement implements NodeWithJmlTags<JmlEndSt
         return super.replace(node, replacementNode);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> jmlTags() {
+    public @NonNull() NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlEndStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlEndStmt asJmlEndStmt() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlEndStmt> toJmlEndStmt() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlEndStmt(Consumer<JmlEndStmt> action) {
+        action.accept(this);
     }
 }

@@ -44,9 +44,10 @@ options {
     ERROR_REPORTING = true;
     JAVA_TEMPLATE_TYPE = "modern"; // FIXME: Warning: Bad option name "JAVA_TEMPLATE_TYPE".  Option setting will be ignored.
     JDK_VERSION = "1.8";
-    //STATIC = false;
+    STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
-    //DEBUG_PARSER = true; DEBUG_LOOKAHEAD = true;
+    //DEBUG_LOOKAHEAD = true;
+    //DEBUG_PARSER = true;
 }
 
 
@@ -92,14 +93,19 @@ import com.github.javaparser.ast.jml.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.utils.*;
 import static com.github.javaparser.JavaToken.INVALID;
-import static com.github.javaparser.GeneratedJavaParser.*;
-import static com.github.javaparser.ast.type.ArrayType.*;
-import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.createCommentFromToken;
-
+import static com.github.javaparser.utils.Utils.*;
+import static com.github.javaparser.ast.NodeList.*;
+import static com.github.javaparser.GeneratedJavaParser.*;
+import static com.github.javaparser.Range.*;
+import static com.github.javaparser.Position.*;
+import static com.github.javaparser.ast.type.ArrayType.*;
+import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
+import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 
 @Generated("JavaCC")
 final class GeneratedJavaParser extends GeneratedJavaParserBase {
@@ -448,11 +454,15 @@ TOKEN : {
 TOKEN_MGR_DECLS :
 {
     private List<JavaToken> tokens = new ArrayList<JavaToken>();
+    private List<JavaToken> tokeJmlExpressionStmtns = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
     private JavaToken homeToken;
     private Stack<Token> tokenWorkStack = new Stack<Token>();
     private boolean storeTokens;
     private boolean yieldSupported = false;
+    private ArrayDeque<Token> markdownCommentTokens = new ArrayDeque<Token>();
+    boolean expectMarkdownComment;
+    boolean expectEndOfMarkdownLine;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -485,12 +495,35 @@ TOKEN_MGR_DECLS :
         yieldSupported = true;
     }
 
+    private void createMarkdownComment() {
+        while (!markdownCommentTokens.isEmpty() && TokenTypes.isWhitespace(markdownCommentTokens.peekFirst().kind)) {
+            markdownCommentTokens.removeFirst();
+        }
+        if (!markdownCommentTokens.isEmpty()) {
+            MarkdownComment comment = createMarkdownCommentFromTokenList(markdownCommentTokens);
+            markdownCommentTokens.clear();
+
+            expectMarkdownComment = true;
+            expectEndOfMarkdownLine = false;
+
+            commentsCollection.addComment(comment);
+        }
+    }
+
     private void CommonTokenAction(Token token) {
         // Use an intermediary stack to avoid recursion, see issue 1003
         do {
             tokenWorkStack.push(token);
             token = token.specialToken;
         } while (token != null);
+
+        // A /// sequence only indicates the start of a markdown comment if it is only preceded by whitespace characters
+        // in the line. This variable is used to keep track of this.
+        expectMarkdownComment = true;
+        // A newline token only indicates the end of the markdown comment if it is not preceded by a line comment (e.g.
+        // the second of two consecutive newlines would end the comment). This variable keeps track of whether the next
+        // newline should end the markdown comment (if currently processing one).
+        expectEndOfMarkdownLine = false;
 
         // The stack is now filled with tokens in left-to-right order. Process them.
         while(!tokenWorkStack.empty()) {
@@ -505,9 +538,57 @@ TOKEN_MGR_DECLS :
                 homeToken = token.javaToken;
             }
 
-            if(TokenTypes.isComment(token.kind)) {
+            // While processing the list of tokens, markdown comments are constructed from consecutive line comments
+            // starting with ///. This is done using effectively a second state machine on top of the javacc. The core
+            // observation is that the start of a markdown comment line must be preceded by only whitespace. When
+            // the processing of the token stream starts, EXPECT_MARKDOWN_COMMENT = true since no non-whitespace tokens
+            // have been processed. Processing then proceeds as follows:
+            //  1. If a non-whitespace, non-line-comment token is read, then a markdown comment cannot start on that
+            //     line. Continue reading tokens until the newline while not expecting markdown comments.
+            //  2. If only whitespace tokens have been processed on a line, followed by a line comment starting with
+            //     ///, start processing a markdown comment.
+            //  3. While processing a markdown comment, add all whitespace tokens and line comments to the
+            //     markdownCommentTokens. These will be used to construct the markdown comment later.
+            //  4. If a newline is read while processing a markdown comment, then either the next line will continue
+            //     the comment (i.e. the newline is followed by only non-newline whitespace characters before the
+            //     next line comment starting with ///), or the markdown comment will be ended by another newline
+            //     or non-line-comment.
+            //  5. If the markdown comment is ended, use the markdownCommentTokens buffer to create the actual markdown
+            //     comment node.
+            if (TokenTypes.isEndOfLineToken(token.kind)) {
+                if (expectEndOfMarkdownLine) {
+                    // A newline is processed, but it's the first newline after a markdown comment line
+                    // (expectEndOfMarkdownComment is still true), so it does not end the comment yet.
+                    markdownCommentTokens.add(token);
+                    expectEndOfMarkdownLine = false;
+                } else {
+                    // A newline is processed, but it's not the first newline after a markdown comment line, so
+                    // create the comment now.
+                    createMarkdownComment();
+                }
+                // A new line is started, so until a non-whitespace non-line-comment token is processed, expect a new
+                // markdown comment.
+                expectMarkdownComment = true;
+            } else if (expectMarkdownComment && isMarkdownCommentLineCandidate(token)) {
+                // The next markdown line comment is processed, so add it to the buffer.
+                expectEndOfMarkdownLine = true;
+                markdownCommentTokens.add(token);
+            } else if (expectMarkdownComment && TokenTypes.isWhitespaceButNotEndOfLine(token.kind)) {
+                // Non-newline whitespace characters are always included in the token range for the markdown comment, so
+                // add them to the buffer
+                markdownCommentTokens.add(token);
+            } else if(TokenTypes.isComment(token.kind)) {
+                // A comment token is found, but not one that is a markdown line candidate (those are handled in an
+                // else above). This could be a line comment not starting with ///, or a block comment. At this point,
+                // end the markdown comment and handle the other comment separately.
+                createMarkdownComment();
                 Comment comment = createCommentFromToken(token);
                 commentsCollection.addComment(comment);
+            } else if (!TokenTypes.isWhitespace(token.kind)) {
+                // Any non-whitespace token ends the markdown comment. If the markdownCommentTokens buffer is empty or
+                // only contains whitespace, it is simply cleared.
+                expectMarkdownComment = false;
+                createMarkdownComment();
             }
         }
     }
@@ -519,6 +600,10 @@ TOKEN :
 {
   <JML_LINE_COMMENT: "//" (("+"|"-") <IDENTIFIER>)* "@" (~["\n","\r"])*>
 }
+
+/*TOKEN : {
+    <SPECIAL_KEY_COMMENT: "//🔑" (~["\n","\r"])*>
+}*/
 
 <DEFAULT, JML_MULTI_CONTRACT, JML_SINGLE_CONTRACT>
 SPECIAL_TOKEN :
@@ -647,6 +732,55 @@ TOKEN :
 | < PROVIDES: "provides" >
 | < TRANSITIVE: "transitive" >
 | < WHEN: "when" >
+| < SOURCE: "source">
+| < TRANSACTIONBEGIN: "#beginJavaCardTransaction" >
+| < TRANSACTIONCOMMIT: "#commitJavaCardTransaction" >
+| < TRANSACTIONFINISH: "#finishJavaCardTransaction" >
+| < TRANSACTIONABORT: "#abortJavaCardTransaction" >
+| < RETURNTYPE: "\\Return" >
+| < LOOPSCOPE: "loop-scope" | "$loopScope" >
+| < MERGE_POINT: "merge_point" | "$mergePoint" >
+| < METHODFRAME: "method-frame" | "$methodFrame" >
+| < EXEC: "exec" >
+| < CONTINUETYPE: "\\Continue" >
+| < CCATCH: "ccatch" >
+| < CCAT: "ccat" >
+| < BREAKTYPE: "\\Break" >
+| < TYPEOF: "#typeof" >
+| < SWITCHTOIF: "#switch-to-if" >
+| < UNPACK: "#unpack" >
+| < REATTACHLOOPINVARIANT: "#reattachLoopInvariant" >
+| < FORINITUNFOLDTRANSFORMER: "#forInitUnfoldTransformer" >
+| < LOOPSCOPEINVARIANTTRANSFORMER: "#loopScopeInvariantTransformer" >
+| < SETSV: "#set" >
+| < ISSTATIC: "#isstatic" >
+| < EVALARGS: "#evaluate-arguments" >
+| < REPLACEARGS: "#replace" >
+| <UNWINDLOOP: "#unwind-loop" >
+| <CATCHALL: "#catchAll" >
+//| <BEGIN: "#begin" >
+| <COMMIT: "#commit" >
+| <FINISH: "#finish" >
+| <ABORT: "#abort" >
+| <UNWIND_LOOP_BOUNDED: "#unwind-loop-bounded" >
+| <FORTOWHILE: "#for-to-while" >
+| <DOBREAK: "#do-break" >
+| <METHODCALL: "#method-call" >
+| <EXPANDMETHODBODY: "#expand-method-body" >
+| <CONSTRUCTORCALL: "#constructor-call" >
+| <SPECIALCONSTRUCTORECALL: "#special-constructor-call" >
+| <POSTWORK: "#post-work" >
+| <STATICINITIALIZATION: "#static-initialisation" >
+| <RESOLVE_MULTIPLE_VAR_DECL: "#resolve-multiple-var-decl" >
+| <ARRAY_POST_DECL: "#array-post-declaration" >
+| <ARRAY_INIT_CREATION: "#init-array-creation" >
+| <ARRAY_INIT_CREATION_TRANSIENT: "#init-array-creation-transient" >
+| <ARRAY_INIT_CREATION_ASSIGNMENTS: "#init-array-assignments" >
+| <ENHANCEDFOR_ELIM: "#enhancedfor-elim" >
+| <STATIC_EVALUATE: "#static-evaluate" >
+| <CREATE_OBJECT: "#create-object" >
+| <LENGTHREF: "#length-reference" >
+| <RESULTARROW: "result->"> // $result =
 }
 
 /* LITERALS */
@@ -822,7 +956,12 @@ TOKEN :
   >
 |
   < #DECIMAL_FLOATING_POINT_LITERAL:
-        <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>)? (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      //weigl: add negative lookahead here because `5..6` are read as to floating numbers
+      // here we just force a following part of the double literal, hence "5." is not valid anymore
+         <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>) (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      |  <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>)? (<DECIMAL_EXPONENT>) (["f","F","d","D"])?
+      |  <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>)? (<DECIMAL_EXPONENT>)? (["f","F","d","D"])
+      //end patch
       | "." <DECIMAL_LITERAL> (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
       | <DECIMAL_LITERAL> <DECIMAL_EXPONENT> (["f","F","d","D"])?
       | <DECIMAL_LITERAL> (<DECIMAL_EXPONENT>)? ["f","F","d","D"]
@@ -1058,12 +1197,19 @@ TOKEN: {
 <DEFAULT,JML_SINGLE_CONTRACT,JML_MULTI_CONTRACT>
 TOKEN :
 {
-  < IDENTIFIER: <LETTER> (<PART_LETTER>)* >
+  < IDENTIFIER:
+      <NON_UNDERSCORE_LETTER> (<PART_LETTER>)*
+    | "\u005f" (<PART_LETTER>)+
+  >
 |
-  <SYNTH_IDENTIFIER: "$" <IDENTIFIER> >
+  < JMLIDENTIFIER: "\\"<IDENTIFIER> >
 |
-  < #LETTER: [
-         "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
+  < SVIDENTIFIER:  "#" <IDENTIFIER> >
+|
+  < KEYIDENTIFIER:  "$" <IDENTIFIER> >
+|
+  < #NON_UNDERSCORE_LETTER: [
+         "\u0024",  "\u0041"-"\u005a",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
          "\u00ba",  "\u00c0"-"\u00d6",  "\u00d8"-"\u00f6",  "\u00f8"-"\u02c1",  "\u02c6"-"\u02d1",  "\u02e0"-"\u02e4",
          "\u02ec",  "\u02ee",  "\u0370"-"\u0374",  "\u0376"-"\u0377",  "\u037a"-"\u037d",  "\u037f",  "\u0386",
          "\u0388"-"\u038a",  "\u038c",  "\u038e"-"\u03a1",  "\u03a3"-"\u03f5",  "\u03f7"-"\u0481",  "\u048a"-"\u052f",
@@ -1295,6 +1441,7 @@ TOKEN :
 | < XOR: "^" >
 | < REM: "%" >
 | < LSHIFT: "<<" >
+| < SHARP: "#">
 // RSIGNEDSHIFT - see below
 // RUNSIGNEDSHIFT - see below
 | < PLUSASSIGN: "+=" >
@@ -1335,6 +1482,8 @@ TOKEN :
 }
 
 TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
+
+TOKEN: { <UNNAMED_PLACEHOLDER: "_" > }
 
 
 /*************************************************************************************************************
@@ -1395,11 +1544,10 @@ public CompilationUnit CompilationUnit():
 {
     PackageDeclaration packageDeclaration = null;
     NodeList<ImportDeclaration> imports = emptyNodeList();
-    NodeList<ImportDeclaration> im;
     ImportDeclaration in = null;
-    NodeList<TypeDeclaration<?>> types = emptyNodeList();
+    NodeList<BodyDeclaration<?>> bodyDeclarations = emptyNodeList();
     ModifierHolder modifier;
-    TypeDeclaration<?> typeDeclaration = null;
+    BodyDeclaration<?> bodyDeclaration = null;
     ModuleDeclaration module = null;
     JmlDocType doc;
 }
@@ -1410,33 +1558,60 @@ public CompilationUnit CompilationUnit():
         (
             in = ImportDeclaration() { imports = add(imports, in); }
          |
-            doc = JmlDocType() { types = add(types, doc); }
+            doc = JmlDocType() { bodyDeclarations = add(bodyDeclarations, doc); }
          |
             (
                 modifier = Modifiers()
                 (
-                    typeDeclaration = ClassOrInterfaceDeclaration(modifier) { types = add(types, typeDeclaration); }
+                    bodyDeclaration = ClassOrInterfaceDeclaration(modifier) { bodyDeclarations = add(bodyDeclarations, bodyDeclaration); }
                  |
-                    typeDeclaration = RecordDeclaration(modifier)  { types = add(types, typeDeclaration); }
+                    bodyDeclaration = RecordDeclaration(modifier)  { bodyDeclarations = add(bodyDeclarations, bodyDeclaration); }
                  |
-                    typeDeclaration = EnumDeclaration(modifier) { types = add(types, typeDeclaration); }
+                    bodyDeclaration = EnumDeclaration(modifier) { bodyDeclarations = add(bodyDeclarations, bodyDeclaration); }
                  |
-                    typeDeclaration = AnnotationTypeDeclaration(modifier) { types = add(types, typeDeclaration); }
+                    bodyDeclaration = AnnotationTypeDeclaration(modifier) { bodyDeclarations = add(bodyDeclarations, bodyDeclaration); }
                  |
                     module = ModuleDeclaration(modifier)
+                 |
+                    bodyDeclaration = CompactClassMember(modifier) { bodyDeclarations = add(bodyDeclarations, bodyDeclaration); }
                  |
                     ";"
                 )
             )
         )*
         (<EOF> | <CTRL_Z>)
-        { return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module); }
+        {
+            NodeList<TypeDeclaration<?>> types = typeDeclarationsForCu(bodyDeclarations);
+
+            return new CompilationUnit(range(token_source.getHomeToken(), token()), packageDeclaration, imports, types, module);
+        }
     } catch (ParseException e) {
         recover(EOF, e);
         final CompilationUnit compilationUnit = new CompilationUnit(range(token_source.getHomeToken(), token()), null, new NodeList<ImportDeclaration>(), new NodeList<TypeDeclaration<?>>(), null);
         compilationUnit.setParsed(UNPARSABLE);
         return compilationUnit;
     }
+}
+
+/**
+ * Parses a compact class member (JEP 512) - either a method or field at the top level.
+ * This is used when parsing compact source files with implicit classes.
+ */
+BodyDeclaration<?> CompactClassMember(ModifierHolder modifier):
+{
+    BodyDeclaration<?> member;
+}
+{
+    // Use numerical LOOKAHEAD to distinguish between field and method
+    // Fields: Type Identifier = ... or Type Identifier ; or Type Identifier ,
+    // Methods: Type Identifier ( ...
+    (
+        LOOKAHEAD( FieldDeclaration() )
+        member = FieldDeclaration(modifier)
+     |
+        member = MethodDeclaration(modifier)
+    )
+    { return member; }
 }
 
 /**
@@ -1489,14 +1664,21 @@ ImportDeclaration ImportDeclaration():
     Name name;
     boolean isStatic = false;
     boolean isAsterisk = false;
+    boolean isModule = false;
     JavaToken begin;
 }
 {
     "import" {begin = token();}
     [ "static" { isStatic = true; } ]
-    name = Name()
+    (
+        LOOKAHEAD(3)
+        "module" { isModule = true; }
+        name = Name()
+      |
+        name = Name()
+    )
     [ "." "*" { isAsterisk = true; } ] ";"
-    { return new ImportDeclaration(range(begin, token()), name, isStatic, isAsterisk); }
+    { return new ImportDeclaration(range(begin, token()), name, isStatic, isAsterisk, isModule); }
 }
 
 /*
@@ -1575,6 +1757,14 @@ ModifierHolder Modifiers():
             "sealed" { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.SEALED));  begin = orIfInvalid(begin, token()); }
          |
             "non-sealed" { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.NON_SEALED));  begin = orIfInvalid(begin, token()); }
+      /*   |
+            "ghost"   { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.GHOST));  begin = orIfInvalid(begin, token()); }
+         |
+            "model"   { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.MODEL));  begin = orIfInvalid(begin, token()); }
+         |
+            "no_state"   { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.NO_STATE));  begin = orIfInvalid(begin, token()); }
+         |
+            "two_state"   { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.TWO_STATE));  begin = orIfInvalid(begin, token()); }*/
          |
             ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
         )
@@ -2218,11 +2408,11 @@ CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modif
     SimpleName name;
     Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
     NodeList<ReferenceType> throws_ = emptyNodeList();
-    ExplicitConstructorInvocationStmt exConsInv = null;
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
     ReferenceType throwType;
+    BlockStmt stmt = null;
 }
 {
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
@@ -2234,19 +2424,14 @@ CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modif
         throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
-    "{" { blockBegin=token(); }
-    [
-        LOOKAHEAD(ExplicitConstructorInvocation())
-        exConsInv = ExplicitConstructorInvocation()
-    ]
-    stmts = Statements()
-    "}"
-
+    (
+	    "{" { blockBegin=token(); }
+	    stmts = Statements()
+	    "}" { stmt = new BlockStmt(range(blockBegin, token()), stmts); }
+    | ";" // KeY Extension
+		)
     {
-    if (exConsInv != null) {
-        stmts = prepend(stmts, exConsInv);
-    }
-    return new CompactConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, new BlockStmt(range(blockBegin, token()), stmts));
+    return new CompactConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, stmt);
 }
 }
 
@@ -2785,9 +2970,11 @@ Name ReceiverParameterId():
  *         TypeIdentifier
  * }</pre>
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-ConstructorBody
  * <pre>{@code
  *     ConstructorBody:
- *         { [ExplicitConstructorInvocation] [BlockStatements] }
+ *         { [BlockStatements] ConstructorInvocation [BlockStatements] }
+ *         { [BlockStatements] }
  * }</pre>
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.8.7.1
  * <pre>{@code
@@ -2804,11 +2991,11 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
     SimpleName name;
     Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
     NodeList<ReferenceType> throws_ = emptyNodeList();
-    ExplicitConstructorInvocationStmt exConsInv = null;
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
     ReferenceType throwType;
+    BlockStmt stmt = null;
 }
 {
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
@@ -2820,19 +3007,17 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
         throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
     ]
-    "{" { blockBegin=token(); }
-    [
-        LOOKAHEAD(ExplicitConstructorInvocation())
-        exConsInv = ExplicitConstructorInvocation()
-    ]
-    stmts = Statements()
-    "}"
+    (
+	    "{" { blockBegin=token(); }
+      stmts = Statements()
+      "}"
+      { stmt = new BlockStmt(range(blockBegin, token()), stmts); }
+    | ";" // KEY extension
+    )
 
     {
-        if (exConsInv != null) {
-            stmts = prepend(stmts, exConsInv);
-        }
-        return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);
+        return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_,
+        stmt, parameters.b);
     }
 }
 
@@ -2974,6 +3159,10 @@ Type Type(NodeList<AnnotationExpr> annotations):
         ret = ReferenceType(annotations)
      |
         ret = PrimitiveType(annotations)
+     |
+        ret =TypeSV(annotations)
+     |
+        ret =TypeMC(annotations)
     )
     { return ret; }
 }
@@ -3217,21 +3406,21 @@ PrimitiveType PrimitiveType(NodeList<AnnotationExpr> annotations):
 }
 {
     (
-        "boolean" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.BOOLEAN, annotations); }
+        "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN, annotations); }
      |
-        "char" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.CHAR, annotations); }
+        "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR, annotations); }
      |
-        "byte" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.BYTE, annotations); }
+        "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE, annotations); }
      |
-        "short" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.SHORT, annotations); }
+        "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT, annotations); }
      |
-        "int" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.INT, annotations); }
+        "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT, annotations); }
      |
-        "long" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.LONG, annotations); }
+        "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG, annotations); }
      |
-        "float" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.FLOAT, annotations); }
+        "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT, annotations); }
      |
-        "double" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.DOUBLE, annotations); }
+        "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE, annotations); }
     )
     { return ret; }
 }
@@ -3333,19 +3522,15 @@ String Identifier():
 }
 {
     (
-        // An actual plain old identifier
-        <IDENTIFIER> |
-        //or an identifier of JML
-        <JML_IDENTIFIER> |
-        // SYNTHETIC NAMES
-        <SYNTH_IDENTIFIER> |
-
+        <IDENTIFIER> | <SVIDENTIFIER> | <KEYIDENTIFIER> | <JMLIDENTIFIER> |
         // TODO: Explain why these keywords are explicitly flagged up as "included", and why they're not already covered by {@code <IDENTIFIER>}.
         // TODO: Explain how / where boolean and null literals are excluded.
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
-        <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE>
+        <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
-        | <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN>
+        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> | "_" | <ASSERT> |
+        // overwritten by Key/SV but still valid in Java
+        "model" | "ghost" | "two_state" | "no_state" | "source" | "merge_point" | "exec" | "ccatch" | "ccat"
         // or a bunch of JML clause words
         | <INVARIANT> | <ABRUPT_BEHAVIOR> | <ABRUPT_BEHAVIOUR> | <ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY>
         | <MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>
@@ -3380,7 +3565,7 @@ String Identifier():
         | <WORKING_SPACE_REDUNDANTLY> | <WRITABLE> //| <INVARIANT_FOR>
         | <RESULT> //| <SUBSET> | <INTERSECT> | <UNION> | <LOCSET> | <SINGLETON>
         | <PEER> | <REP> | <READ_ONLY>
-    ) { ret = token.image; setTokenKind(IDENTIFIER);}
+    ) { ret = token().getText(); setTokenKind(IDENTIFIER);}
     { return ret; }
 }
 
@@ -3754,9 +3939,18 @@ Expression EqualityExpression():
     { return ret; }
 }
 
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * <pre>{@code
+ *     Pattern:
+ *       TypePattern
+ *       RecordPattern
+ * }<pre>
+ */
 PatternExpr PatternExpression():
 {
-    PatternExpr ret;
+  PatternExpr ret;
 }
 {
 	(
@@ -3769,11 +3963,34 @@ PatternExpr PatternExpression():
 }
 
 /**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * https://openjdk.org/jeps/456
+ * <pre>{@code
+ *     ComponentPattern:
+ *       Pattern
+ *       MatchAllPattern
+ * }<pre>
+ */
+ComponentPatternExpr ComponentPatternExpression():
+{
+    ComponentPatternExpr ret;
+}
+{
+	(
+	    LOOKAHEAD(MatchAllPatternExpression())
+	    ret = MatchAllPatternExpression()
+	  |
+        ret = PatternExpression()
+	)
+    { return ret; }
+}
+
+/**
  * https://openjdk.java.net/jeps/375
  * The instanceof grammar is extended accordingly:
  * <pre>{@code
- *     Pattern:
- *         ReferenceType Identifier
+ *     TypePattern:
+ *         LocalVariableDeclaration
  * }<pre>
  */
 TypePatternExpr TypePatternExpression():
@@ -3791,18 +4008,19 @@ TypePatternExpr TypePatternExpression():
 
 /**
  * https://openjdk.org/jeps/440
+ * https://openjdk.org/jeps/456
  * <pre><code>
  * RecordPattern:
- *     ReferenceType ( [PatternList] )
- * PatternList:
- *     Pattern {, Pattern }
+ *     ReferenceType ( [ComponentPatternList] )
+ * ComponentPatternList:
+ *     ComponentPattern {, ComponentPattern }
  * </code></pre>
  */
 RecordPatternExpr RecordPatternExpression():
 {
 	ModifierHolder modifier;
 	ReferenceType type;
-	NodeList<PatternExpr> patternList;
+	NodeList<ComponentPatternExpr> patternList;
 }
 {
 	modifier = Modifiers()
@@ -3812,23 +4030,41 @@ RecordPatternExpr RecordPatternExpression():
 }
 
 /**
+ * https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.30
+ * https://openjdk.org/jeps/456
+ * <pre>{@code
+ *     MatchAllPattern:
+ *       _
+ * }<pre>
+ */
+MatchAllPatternExpr MatchAllPatternExpression():
+{
+ModifierHolder modifier;
+}
+{
+    modifier = Modifiers()
+    "_"
+    { return new MatchAllPatternExpr(range(token(), token()), modifier.modifiers); }
+}
+
+/**
  * https://openjdk.org/jeps/440
  * <pre><code>
  * PatternList:
  *     Pattern {, Pattern }
  * </code></pre>
  */
-NodeList<PatternExpr> PatternList():
+NodeList<ComponentPatternExpr> PatternList():
 {
-    PatternExpr pattern;
-	NodeList<PatternExpr> ret = new NodeList<>();
+    ComponentPatternExpr pattern;
+	NodeList<ComponentPatternExpr> ret = new NodeList<>();
 }
 {
 	"("
-    pattern = PatternExpression() { ret.add(pattern); }
+    pattern = ComponentPatternExpression() { ret.add(pattern); }
     (
         ","
-        pattern = PatternExpression() { ret.add(pattern); }
+        pattern = ComponentPatternExpression() { ret.add(pattern); }
     )*
 	")"
     { return ret; }
@@ -3854,7 +4090,8 @@ Expression InstanceOfExpression():
     ReferenceType type;
     NodeList<AnnotationExpr> annotations;
     PatternExpr pattern;
-    Expression expr; JavaToken op;
+    Expression expr;
+    JavaToken op;
 }
 {
     ret = RelationalExpression()
@@ -3869,9 +4106,9 @@ Expression InstanceOfExpression():
                 LOOKAHEAD(PatternExpression())
                 pattern = PatternExpression()
             // From the JLS https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-Pattern, the type of
-            // a top-level pattern must be a reference type. This means that converting the pattern type to a
-            // reference type here is always safe if the code being parsed compiles.
-            { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType().asReferenceType(), pattern); }
+	            // a top-level pattern must be a reference type. This means that converting the pattern type to a
+	            // reference type here is always safe if the code being parsed compiles.
+	            { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType().asReferenceType(), pattern); }
              |
                 type = AnnotatedReferenceType()
                 { ret = new InstanceOfExpr(range(ret, token()), ret, type, null); }
@@ -3928,7 +4165,6 @@ Expression RelationalExpression():
         e = RangeExpr()
         { exprs.add(e); ops.add(op); }
     )*
-
     {
         if(ops.isEmpty()) return exprs.get(0);
         if(ops.size() == 1) return new BinaryExpr(range(exprs.get(0), token()), exprs.get(0), exprs.get(1), ops.get(0));
@@ -4104,6 +4340,10 @@ Expression UnaryExpression():
         { ret = new UnaryExpr(range(begin, token()), ret, op); }
      |
         ret = UnaryExpressionNotPlusMinus()
+     |
+       ret = KeyCreateObjectSV()
+     |
+       ret = KeyLengthReferenceSV()
     )
     { return ret; }
 }
@@ -4228,6 +4468,7 @@ Expression CastExpression():
     Expression ret;
     ReferenceType referenceType;
     PrimitiveType primitiveType;
+    Type type;
     JavaToken begin = INVALID;
     NodeList<AnnotationExpr> annotations;
     NodeList<ReferenceType> typesOfMultiCast = emptyNodeList();
@@ -4242,6 +4483,14 @@ Expression CastExpression():
         ")"
         ret = UnaryExpression()
         { ret = new CastExpr(range(begin, token()), primitiveType, ret); }
+     |
+        //Schema
+        LOOKAHEAD(1) // "(#a) expr;"
+        (type=TypeSV(annotations) | type=TypeMC(annotations))
+        ")"
+        ret=UnaryExpression()
+        { ret = new CastExpr(range(begin, token()), type, ret); }
+
      |
         // ( ReferenceType {AdditionalBound} ) UnaryExpressionNotPlusMinus
         // ( ReferenceType {AdditionalBound} ) LambdaExpression
@@ -4322,6 +4571,7 @@ Expression PrimaryPrefix():
     NodeList<Parameter> params = emptyNodeList();
     boolean hasArgs = false;
     boolean isLambda = false;
+    Expression expr;
     Type type;
     JavaToken begin;
     Parameter p = null;
@@ -4393,8 +4643,13 @@ Expression PrimaryPrefix():
         (Identifier() | "new")
         {
             ret = new TypeExpr(range(type, type), type);
-            ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image);
+            ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token().getText());
         }
+     |
+        "@" "(" {begin=token();} expr = Expression() ")"
+        {
+            ret=  new KeyPassiveExpression(range(begin, token()), expr);
+      	}
      |
         name = SimpleName() { begin=token(); }
         [ args = Arguments() { hasArgs=true; } ]
@@ -4416,9 +4671,10 @@ Expression JmlPrimaryPrefix():
     NodeList<Expression> lsexprs;
     JavaToken begin, quant;
     NodeList<Parameter> vars;
-    Type ret;
+    Type retType;
     VariableDeclarationExpr decls;
     SimpleName name;
+    Expression ret; 
 }
 {
   (  LOOKAHEAD(2)
@@ -4427,7 +4683,7 @@ Expression JmlPrimaryPrefix():
       name=SimpleName()
       expr=Expression()
       ")"
-      { return new JmlLabelExpr(range(begin, token()), quant, name, expr);}
+      { ret = new JmlLabelExpr(range(begin, token()), quant, name, expr);}
   |
       LOOKAHEAD(2)
       "(" {begin=token();}
@@ -4436,7 +4692,7 @@ Expression JmlPrimaryPrefix():
        ";"
        expr=Expression()
        ")"
-       { return new JmlLetExpr(range(begin, token()), decls, expr);}
+       { ret = new JmlLetExpr(range(begin, token()), decls, expr);}
   |
       "(" {begin=token();}
        (<FORALLQ> | <EXISTS> | <NUM_OF> |  <SUM> | <MIN> | <PRODUCT> | <MAX> | <JML_IDENTIFIER>)
@@ -4445,14 +4701,15 @@ Expression JmlPrimaryPrefix():
        ";"
        expr=Expression() {exprs.add(expr);} (";" expr=Expression() {exprs.add(expr);})*
       ")"
-      { return new JmlQuantifiedExpr(range(begin, token()), quant, vars, exprs);}
+      { ret =  new JmlQuantifiedExpr(range(begin, token()), quant, vars, exprs);}
   |
-      <TYPE> {begin=token();} "(" ret=ResultType(new NodeList<>()) ")"
+      <TYPE> {begin=token();} "(" retType=ResultType(new NodeList<>()) ")"
       {
-        return new MethodCallExpr(range(begin,token()), null, new NodeList<>(),
-                        new SimpleName("\\type"), new NodeList<>(new JmlTypeExpr(ret)));
+        ret =  new MethodCallExpr(range(begin,token()), null, new NodeList<>(),
+                        new SimpleName("\\type"), new NodeList<>(new JmlTypeExpr(retType)));
       }
   )
+  { return ret; }
 }
 
 /**
@@ -4561,6 +4818,10 @@ Expression Literal():
         ret = BooleanLiteral()
      |
         ret = NullLiteral()
+     |
+         ret = KeyStaticEvaluate()
+     |
+         ret = IsStaticMC()
     )
     { return ret; }
 }
@@ -4835,13 +5096,16 @@ Statement StatementOrig():
     try {
         (
              LOOKAHEAD(3) ret = AssertStatement() //precedence over JML assert
-					 	| LOOKAHEAD(3) ret = JmlStatement()
-						| LOOKAHEAD(2) ret = LabeledStatement()
-
+		    | LOOKAHEAD(3) ret = JmlStatement()
+			| LOOKAHEAD(2) ret = LabeledStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
+            | LOOKAHEAD(2) ret = KeyMethodCallStatement()
+            | LOOKAHEAD(KeyMethodBodyStatement()) ret = KeyMethodBodyStatement()
             | ret = Block()
             | ret = EmptyStatement()
-            | ret = StatementExpression()
+            | LOOKAHEAD(24) ret = StatementExpression()
+            | ret = KeyMetaConstructStatement()
+            | LOOKAHEAD(2) ret = StatementSV()
             | ret = SwitchStatement()
             | ret = IfStatement()
             | ret = WhileStatement()
@@ -4853,6 +5117,14 @@ Statement StatementOrig():
             | ret = ThrowStatement()
             | ret = SynchronizedStatement()
             | ret = TryStatement()
+            // KEY
+            //| ret = KeyActiveCommentStatement()
+            | ret = KeyTransactionStatement()
+            | ret = KeyMergePointStatement()
+            | ret = KeyLoopScope()
+            | ret = KeyCatchAllStatement()
+            | ret = KeyExecStatement()
+            | ret = KeyMethodCallStatement()
         )
         { return ret; }
     } catch (ParseException e) {
@@ -4987,7 +5259,6 @@ BlockStmt Block():
  * }</pre>
  *
  */
-
 Statement BlockStatement():
 {
     Statement ret = null;
@@ -5036,10 +5307,23 @@ Statement BlockStatementOrig():
             LOOKAHEAD( YieldStatement() )
             ret = YieldStatement()
          |
+         	// try assert statement separate from more general Statement() because assert can be confused with VariableDeclarationExpression sometimes
+            LOOKAHEAD( AssertStatement() )
+            ret = AssertStatement()
+         |
             LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()
             ";"
             { ret = new ExpressionStmt(range(expr, token()), expr); }
+         |
+            // In Java >= 25, explicit constructor invocations are allowed anywhere in the body of a constructor
+            // Adding support for that here isn't 100% correct, since this would allow multiple constructor invocations
+            // in a constructor body or block not in a constructor body, but handling this correctly would require
+            // larger changes through the grammar due to simplifications made elsewhere.
+            // Handling it here should not be a problem since we assume input code compiles. The compiler would have
+            // already caught the incorrect cases above.
+            LOOKAHEAD( ExplicitConstructorInvocation() )
+            ret = ExplicitConstructorInvocation()
          |
             ret = Statement()
         )
@@ -5771,40 +6055,39 @@ TryStmt TryStatement():
     "try" { begin=token(); }
     [ resources = ResourceSpecification() ]
     tryBlock = Block()
-    (
-        LOOKAHEAD(2)
-        (
-            "catch" {catchBegin=token();}
-            "("
-            exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
-            exceptionType = ReferenceType(emptyNodeList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
-            (
-                "|"
-                exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); }
-            )*
-            exceptId = VariableDeclaratorId() { paramEnd = token(); }
-            ")"
+    ( LOOKAHEAD(3)
+      "catch" {catchBegin=token();}
+      <SVIDENTIFIER>
+      { catchs = add(catchs, new KeyCatchClauseSV(range(catchBegin, token()), token().getText())); }
+    |
+      LOOKAHEAD(2)
+      "catch" {catchBegin=token();}
+      "("
+      exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
+      exceptionType = ReferenceType(emptyNodeList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
+      (
+          "|"
+          exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); }
+      )*
+      exceptId = VariableDeclaratorId() { paramEnd = token(); }
+      ")"
 
-            catchBlock = Block()
-            {
-    if (exceptionTypes.size() > 1) {
-        type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
-    } else {
-        type = exceptionTypes.get(0);
-    }
-    Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyNodeList(), exceptId.a);
-    catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
-    exceptionTypes = emptyNodeList();
-}
-        )*
-        [
-            "finally"
-            finallyBlock = Block()
-        ]
-     |
+      catchBlock = Block()
+      {
+          if (exceptionTypes.size() > 1) {
+              type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
+          } else {
+                    type = (Type)exceptionTypes.get(0);
+          }
+          Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyNodeList(), exceptId.a);
+          catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
+          exceptionTypes = emptyNodeList();
+      }
+    )*
+    [
         "finally"
         finallyBlock = Block()
-    )
+    ]
     { return new TryStmt(range(begin, token()), resources, tryBlock, catchs, finallyBlock); }
 }
 
@@ -6473,6 +6756,12 @@ ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
  * after they matched their desired input, which will lead to unexpected behaviour
  */
 
+
+BlockStmt StatementsParseStart():
+{ NodeList<Statement> ret; }
+{ ret = Statements() <EOF> { return new BlockStmt(ret); } }
+
+
 BlockStmt BlockParseStart():
 { BlockStmt ret; }
 { ret = Block() <EOF> { return ret; } }
@@ -6716,29 +7005,42 @@ JmlStatement JmlStatement():
 	Expression expr , target;
 	Statement stmt;
 	SimpleName label;
+    JmlStatement ret;
 }
 {
-		(<ASSERT> | <ASSUME> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY> | <SET>)
-		{ begin = token(); }
-		expr=Expression()
-		";"
-		{ return new JmlExpressionStmt(range(begin, token()), new NodeList<>(), expr); }
+  (
+    (<ASSERT> | <ASSUME> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY> | <SET>)
+    { begin = token(); }
+    expr=Expression()
+    ";"
+    { ret =  new JmlExpressionStmt(range(begin, token()), new NodeList<>(), expr); }
   | <GHOST> { begin = token(); }
     stmt=BlockStatement()
-    { return new JmlGhostStmt(range(begin, token()), new NodeList<>(), stmt); }
+    { ret =  new JmlGhostStmt(range(begin, token()), new NodeList<>(), stmt); }
   | <UNREACHABLE> {begin=token();} ";"
-    { return new JmlUnreachableStmt(range(begin, token()), new NodeList<>()); }
+    { ret =  new JmlUnreachableStmt(range(begin, token()), new NodeList<>()); }
+
+  )
+  { return ret; }
 }
 
 JmlStatement JmlSpecialStatement():
-{ JavaToken begin; Expression expr,target; Statement stmt; SimpleName label;}
+{ 
+    JavaToken begin; Expression expr,target; 
+    Statement stmt; SimpleName label;
+    JmlStatement ret;
+}
 {
-    LOOKAHEAD(3) label=SimpleName() {begin=token();} ":"
-		{ return new JmlLabelStmt(range(begin, token()), new NodeList<>(), label); }
-	| <BEGIN>
-    { return new JmlBeginStmt(range(token(), token()), new NodeList<>()); }
+  (
+    LOOKAHEAD(3)
+    label=SimpleName() {begin=token();} ":"
+	{ ret =  new JmlLabelStmt(range(begin, token()), new NodeList<>(), label); }
+  | <BEGIN>
+    { ret =  new JmlBeginStmt(range(token(), token()), new NodeList<>()); }
   | <END>
-    { return new JmlBeginStmt(range(token(), token()), new NodeList<>()); }
+    { ret =  new JmlBeginStmt(range(token(), token()), new NodeList<>()); }
+  )
+  { return ret; }
 }
 
 JmlClause JmlLoopInvClause():
@@ -6950,17 +7252,20 @@ JmlClause JmlDecreasesClause():
 }
 
 Behavior JmlBehavior():
-{}
+{ Behavior ret;}
 {
-    (<BEHAVIOUR>|<BEHAVIOR>) {return Behavior.BEHAVIOR;}
-  | (<FEASIBLE_BEHAVIOR>|<FEASIBLE_BEHAVIOUR>) {return Behavior.BEHAVIOR;}
-  | (<NORMAL_BEHAVIOR>|<NORMAL_BEHAVIOUR>) {return Behavior.NORMAL;}
-  | (<EXCEPTIONAL_BEHAVIOR>|<EXCEPTIONAL_BEHAVIOUR>) {return Behavior.EXCEPTIONAL;}
-  | (<ABRUPT_BEHAVIOR>|<ABRUPT_BEHAVIOUR>) {return Behavior.BREAK;}
-  | (<BREAK_BEHAVIOR>|<BREAK_BEHAVIOUR>) {return Behavior.BREAK;}
-  | (<CONTINUE_BEHAVIOR>|<CONTINUE_BEHAVIOUR>){return Behavior.CONTINUE;}
-  | (<RETURN_BEHAVIOR>|<RETURN_BEHAVIOUR>) {return Behavior.RETURN;}
-  | (<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>) {return Behavior.MODEL; }
+  (
+    (<BEHAVIOUR>|<BEHAVIOR>) {ret =  Behavior.BEHAVIOR;}
+  | (<FEASIBLE_BEHAVIOR>|<FEASIBLE_BEHAVIOUR>) {ret =  Behavior.BEHAVIOR;}
+  | (<NORMAL_BEHAVIOR>|<NORMAL_BEHAVIOUR>) {ret =  Behavior.NORMAL;}
+  | (<EXCEPTIONAL_BEHAVIOR>|<EXCEPTIONAL_BEHAVIOUR>) {ret =  Behavior.EXCEPTIONAL;}
+  | (<ABRUPT_BEHAVIOR>|<ABRUPT_BEHAVIOUR>) {ret =  Behavior.BREAK;}
+  | (<BREAK_BEHAVIOR>|<BREAK_BEHAVIOUR>) {ret =  Behavior.BREAK;}
+  | (<CONTINUE_BEHAVIOR>|<CONTINUE_BEHAVIOUR>){ret =  Behavior.CONTINUE;}
+  | (<RETURN_BEHAVIOR>|<RETURN_BEHAVIOUR>) {ret =  Behavior.RETURN;}
+  | (<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>) {ret =  Behavior.MODEL; }
+  )
+  {return ret;}
 }
 
 JmlClause ForallClause():
@@ -7457,3 +7762,719 @@ JmlClassLevelDeclaration JmlClassRepresents(ModifierHolder modifiers):
 
 //endregion
 
+
+//region Key additions
+/*
+Expression ADTGetter() :
+{
+    JavaToken begin;
+    Expression result;
+    Expression expr;
+}
+{
+    (
+    "\\indexOf" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new SeqIndexOf(expr,result);
+    }
+    |
+    "\\seq_length" "(" expr = Expression() ")"
+    {
+        result = new SeqLength(expr);
+    }
+    |
+    "\\seq_get" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new SeqGet(expr, result);
+    }
+    )
+    {
+        return result;
+    }
+}
+
+Expression ADTConstructor() :
+{
+    JavaToken begin;
+    Expression result;
+    Expression expr, expr2;
+    Token begin;
+}
+
+{
+    (
+    "\\singleton" {begin=token;} "(" expr = Expression() ")"
+    {
+        ParserUtil.checkValidSingletonReference(expr, begin);
+        result = new Singleton(expr);
+        setPrefixInfo(result);
+    }
+    |
+    "\\set_union" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new SetUnion(expr, result);
+        setPrefixInfo(result);
+    }
+    |
+    "\\intersect" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new Intersect(expr, result);
+        setPrefixInfo(result);
+    }
+    |
+    "\\set_minus" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new SetMinus(expr, result);
+        setPrefixInfo(result);
+    }
+    |
+    "\\all_fields" "(" expr = Expression() ")"
+    {
+        result = new AllFields(expr);
+        setPrefixInfo(result);
+    }
+    |
+    "\\all_objects" "(" expr = Expression() ")"
+    {
+        result = new AllObjects(expr);
+        setPrefixInfo(result);
+    }
+    |
+    "\\seq_singleton" "(" expr = Expression() ")"
+    {
+        result = new SeqSingleton(expr);
+        setPrefixInfo(result);
+    }
+    |
+    "\\seq_concat" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new SeqConcat(expr, result);
+        setPrefixInfo(result);
+    }
+    |
+    "\\seq_sub" "(" expr = Expression() "," expr2 = Expression() "," result = Expression() ")"
+    {
+        result = new SeqSub(expr, expr2, result);
+        setPrefixInfo(result);
+    }
+    |
+    "\\seq_reverse" "(" expr = Expression() ")"
+    {
+        result = new SeqReverse(expr);
+        setPrefixInfo(result);
+    }
+    |
+    "\\seq_put" "(" expr = Expression() "," expr2 = Expression() "," result = Expression() ")"
+    {
+        // desugaring
+        final Expression one = factory.createIntLiteral(1);
+        final Expression first = new SeqSub(expr, factory.createIntLiteral(0), factory.createMinus(expr2, one));
+        final Expression second = new SeqSingleton(result);
+        final Expression third = new SeqSub(expr, factory.createPlus(expr2,one), factory.createMinus(new SeqLength(expr),one));
+        result = new SeqConcat(first, new SeqConcat(second, third));
+        setPrefixInfo(result);
+    }
+    )
+    {
+      checkConstruction(result);
+      setPostfixInfo(result);
+      return result;
+  }
+}
+*/
+
+/*Expression KeyGeneralEscapeExpression() :
+{
+   JavaToken begin;
+   NodeList<Expression> arguments = null;
+}
+{
+    <JMLIDENTIFIER> { begin=token(); }
+    (
+        "("
+          { arguments = emptyNodeList(); }
+          [ arguments=ExpressionList() ]
+        ")"
+    )?
+    {
+      return new KeyEscapeExpression(range(begin, token()), begin, arguments);
+    }
+}*/
+
+Expression KeyIndexRange() :
+    /*
+     * Introduced to handle postfix style sequence ranges as top-level expressions.
+     * XXX does not yet work since Expression may contain dots
+     */
+{
+    Expression result, end;
+    JavaToken begin;
+}
+{
+    result = Expression()
+    [ ".." end = Expression()
+      { result = new KeyRangeExpression(range(result, token()), result, end); } ]
+    { return result; }
+}
+
+
+Statement KeyCatchAllStatement() :
+{
+  JavaToken begin;
+  Name qn;
+  BlockStmt block;
+}
+{
+  "#catchAll" {begin=token();} "(" qn = Name() ")" block = Block()
+  {
+      return new KeyCatchAllStatement(range(begin,token()), qn,block);
+  }
+}
+
+
+KeyMethodCallStatement KeyMethodCallStatement() :
+{
+  JavaToken begin;
+  Name qn = null;
+  BlockStmt block;
+  KeyAbstractExecutionContext ec;
+}
+{
+    <METHODFRAME> {begin = token(); }
+    "("
+     [LOOKAHEAD(3) ["result->"] qn = Name() ","]
+     (ec=KeyExecutionContext() | ec=KeyExecutionContextSV())
+    ")"
+    [":"]
+  block = Block()
+  {   return new KeyMethodCallStatement(range(begin, token()), qn, ec, block); }
+}
+
+KeyAbstractExecutionContext KeyExecutionContextSV():
+{}
+{
+  <SVIDENTIFIER>
+  {return new KeyExecutionContextSV(token().toTokenRange(), token().getText());}
+}
+
+KeyMethodBodyStatement KeyMethodBodyStatement() :
+{
+  Type bodySource;
+  Expression expr;
+  Name qn = null;
+}
+{
+    [LOOKAHEAD(20)
+        qn = Name() "=" ]
+    expr = Expression()
+    "@" bodySource = Type(emptyNodeList())
+    ";"
+  {
+    return new KeyMethodBodyStatement(range(qn!=null?qn:expr, token()), qn, expr, bodySource);
+  }
+}
+
+KeyAbstractExecutionContext KeyExecutionContext() :
+{
+  JavaToken begin;
+  Type classContext;
+  Expression runtimeInstance = null;
+  KeyMethodSignature methodSignature;
+}
+{
+  "source" {begin = token(); } "="
+  methodSignature = KeyMethodSignature() "@" classContext = Type(emptyNodeList())
+  [ "," "this" "=" runtimeInstance = Expression() ]
+
+  { return new KeyExecutionContext(range(begin, token()), classContext, methodSignature, runtimeInstance);
+  }
+}
+
+KeyMethodSignature KeyMethodSignature() :
+{
+     Name name;
+     Type tr;
+     NodeList<Type> paramTypes = emptyNodeList();
+}
+{
+     name = Name() "("
+        [ tr = Type(emptyNodeList()) { paramTypes.add(tr); }
+         ( "," tr = Type(emptyNodeList()) {
+                // check if more params are admissible (no more after a vararg) occurs in FormalParameter()
+                paramTypes.add(tr);
+           }
+         )*
+       ] ")"
+     {
+        return new KeyMethodSignature(range(name, token()), name, paramTypes);
+     }
+}
+
+/*
+KeyActiveCommentStatement KeyActiveCommentStatement() :
+{
+  JavaToken begin;
+}
+{
+  <SPECIAL_KEY_COMMENT>
+  {begin=token();}
+  { return new KeyActiveCommentStatement(begin); }
+}
+ */
+
+
+
+KeyTransactionStatement KeyTransactionStatement() :
+{
+  JavaToken begin;
+}
+{
+  ( <TRANSACTIONBEGIN>
+  | <TRANSACTIONCOMMIT>
+  | <TRANSACTIONFINISH>
+  | <TRANSACTIONABORT>
+  ) {begin=token();}
+
+  ";"
+  { return new KeyTransactionStatement(range(begin, token()), begin); }
+}
+
+KeyLoopScopeBlock KeyLoopScope() :
+{
+    KeyLoopScopeBlock result;
+    Expression indexPV;
+    BlockStmt block;
+    JavaToken begin;
+}
+{
+  <LOOPSCOPE> { begin = token(); }
+  "(" indexPV = Expression() ")"
+  block = Block()
+  { return new KeyLoopScopeBlock(range(begin, token()), indexPV, block); }
+}
+
+KeyMergePointStatement KeyMergePointStatement() :
+{
+    Expression expr = null;
+    KeyMergePointStatement result;
+    JavaToken begin;
+}
+{
+  <MERGE_POINT>  { begin = token(); }
+  "(" expr = Expression() ")"
+  ";"
+  { return new KeyMergePointStatement(range(begin, token()), expr); }
+}
+
+
+KeyExecStatement KeyExecStatement() :
+{
+    JavaToken begin, beginC;
+    BlockStmt block,execBlock;
+    Parameter param; Name name;
+    KeyCcatchSV cfsv;
+    NodeList<KeyCcatchBranch> branches = new NodeList<KeyCcatchBranch>();
+}
+{
+    "exec"
+    { begin = token(); }
+    execBlock = Block()
+    [
+        LOOKAHEAD(5)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Return" ")"
+        block = Block()
+        {
+            branches.add(new KeyCcatchReturn(range(beginC, token()), block));
+		}
+    ]
+    (
+        LOOKAHEAD(5)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Return" param = Parameter() ")"
+        block = Block()
+        {  branches.add(new KeyCcatchReturn(range(beginC, token()), param, block)); }
+    )*
+    [
+        LOOKAHEAD(5)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Break" ")"
+        block = Block()
+        {  branches.add(new KeyCcatchBreak(range(beginC, token()), block)); }
+    ]
+    (
+        LOOKAHEAD(5)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Break" name=Name() ")"
+        block = Block()
+        {  branches.add(new KeyCcatchBreak(range(beginC, token()), name, block)); }
+    )*
+
+    [
+        LOOKAHEAD(5)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Break" "*" ")"
+        block = Block()
+        {  branches.add(new KeyCcatchBreak(range(beginC, token()), "*", block)); }
+    ]
+
+    [
+        LOOKAHEAD(4)
+        ("ccatch"|"ccat")  {beginC=token();} "("  "\\Continue" ")"
+
+        block = Block()
+        {  branches.add(new KeyCcatchContinue(range(beginC, token()), block)); }
+    ]
+
+    (
+        LOOKAHEAD(4)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Continue" name=Name() ")"
+        block = Block()
+        {  branches.add(new KeyCcatchContinue(range(beginC, token()), name, block)); }
+    )*
+
+    [
+        LOOKAHEAD(4)
+        ("ccatch"|"ccat")  {beginC=token();} "("  "\\Continue" "*" ")"
+
+        block = Block()
+        {  branches.add(new KeyCcatchContinue(range(beginC, token()), "*", block)); }
+    ]
+    (
+        LOOKAHEAD(3)
+        ("ccatch"|"ccat") {beginC=token();} "("  param = Parameter() ")"
+        block = Block()
+        {  branches.add(new KeyCcatchParameter(range(beginC, token()), param, block)); }
+    )*
+    ( LOOKAHEAD(3) ["ccatch"|"ccat"] cfsv=CcatchSV() { branches.add(cfsv); } )*
+    { return new KeyExecStatement(range(begin, token()), execBlock, branches); }
+}
+
+KeyTypeSV TypeSV(NodeList<AnnotationExpr> annotations) :
+{
+    KeyTypeSV result;
+}
+{
+    <SVIDENTIFIER>
+	{
+	    return new KeyTypeSV(range(token(),token()), annotations,  token().getText());
+	}
+}
+
+
+KeyMetaConstructType TypeMC(NodeList<AnnotationExpr> annotations) :
+{
+    KeyMetaConstructType result;
+    Expression e; JavaToken begin;
+}
+{
+    <TYPEOF> {begin=token();} "(" e = Expression() ")"
+     {
+        result = new KeyMetaConstructType(range(begin, token()), annotations, "#typeof", e);
+        return result;
+     }
+}
+
+
+KeyMetaConstructExpression IsStaticMC() :
+{
+    Expression e; JavaToken begin;
+}
+{
+    <ISSTATIC> {begin=token();} "(" e = Expression() ")"
+    {
+        return new KeyMetaConstructExpression(range(begin, token()), begin, e);
+    }
+}
+
+KeyProgramVariableSV VariableSV() :
+{
+    KeyProgramVariableSV result;
+}
+{
+    <SVIDENTIFIER>
+	{
+	    return new KeyProgramVariableSV(token().toTokenRange(), token().getText());
+	}
+}
+
+
+KeyExpressionSV ExpressionSV() :
+{
+    KeyExpressionSV result;
+}
+{
+    <SVIDENTIFIER>
+	{
+        return new KeyExpressionSV(token().toTokenRange(), token().getText());
+    }
+}
+
+/*
+KeyCatchSV KeyCatchSV() :
+{
+}
+{
+    <SVIDENTIFIER>
+	{
+	    return new KeyCatchSV(token().getText());
+	}
+}
+
+KeyCcatchSV KeyCcatchSV() :
+{
+}
+{
+    <SVIDENTIFIER>
+    {
+        return new KeyCcatchSV(token().getText());
+    }
+}
+*/
+
+KeyStatementSV StatementSV() :
+{
+    KeyStatementSV result;
+}
+{
+  <SVIDENTIFIER> //TODO weigl remove SEMICOLON?
+  { return new KeyStatementSV(token().toTokenRange(), token().getText()); }
+}
+
+KeyMetaConstruct KeyMetaConstructStatement() :
+{
+    Statement loopStat;
+    JavaToken begin;
+    TryStmt tryStat;
+    CastExpr typeCast;
+    LabeledStmt labStat;
+    Statement stat;
+    Expression methRef, consRef, activeAccess;
+    KeyProgramVariableSV sv = null;
+    KeyExecCtxtSV execsv = null;
+    KeyJumpLabelSV innerLabel=null, outerLabel=null;
+    NodeList<Expression> loopInit;
+    KeyMetaConstruct ret;
+}
+{
+  (
+        "#unwind-loop" {begin=token();} "("
+            [ LOOKAHEAD(2) innerLabel = JumpLabelSV() ","]
+            [ LOOKAHEAD(2) outerLabel = JumpLabelSV() ","]
+              (  loopStat = WhileStatement()
+               | loopStat = ForStatement()
+               | loopStat = DoStatement()
+              )
+        ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), "#unwind-loop", loopStat, innerLabel, outerLabel);
+        }
+ |
+        "#unwind-loop-bounded" {begin=token();} "("
+            innerLabel = JumpLabelSV() "," outerLabel = JumpLabelSV() ","
+            (  loopStat = WhileStatement()
+            | loopStat = ForStatement()
+            | loopStat = DoStatement()
+            )
+        ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), "#unwind-loop-bounded", loopStat, innerLabel, outerLabel);
+        }
+ |
+       <FORINITUNFOLDTRANSFORMER> {begin=token();} "(" ( loopInit=ForInit() ) ")" ";"
+       {
+           ret =  new KeyMetaConstruct(range(begin, token()), begin, loopInit.get(0));
+       }
+ |
+        <LOOPSCOPEINVARIANTTRANSFORMER> {begin=token();} "(" ( loopStat=WhileStatement() ) ")" ";"
+        {
+           ret =  new KeyMetaConstruct(range(begin, token()), begin, loopStat);
+        }
+ |
+        <UNPACK> {begin=token();} "(" loopStat=ForStatement() ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, loopStat);
+        }
+  |
+        "#for-to-while" {begin=token();} "(" innerLabel = JumpLabelSV() "," outerLabel = JumpLabelSV() "," stat = Statement() ")"
+        {
+           ret =   new KeyMetaConstruct(range(begin, token()), begin, stat, innerLabel, outerLabel);
+        }
+  |
+        <SWITCHTOIF> {begin=token();} "(" stat = Statement() ")"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, stat);
+        }
+  |
+        "#do-break" {begin=token();} "(" labStat=LabeledStatement() ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, labStat);
+        }
+  |
+        "#evaluate-arguments" {begin=token();} "(" methRef = Expression() ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, methRef);
+        }
+  |
+        "#replace" {begin=token();} "(" stat = Statement() "," sv = VariableSV() ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, stat, sv);
+        }
+  |
+        "#method-call" {begin=token();} "("
+            [  LOOKAHEAD(2) sv = VariableSV() ","]
+            [  LOOKAHEAD(2) execsv = ExecutionContextSV() ","]
+            methRef = PrimaryExpression()
+        ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, methRef, sv, execsv);
+        }
+  |
+        "#expand-method-body" {begin=token();} "(" stat = Statement() ("," sv = VariableSV() )?  ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, stat, sv);
+        }
+  |
+        "#constructor-call" {begin=token();} "(" sv = VariableSV() "," consRef = ExpressionSV() ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, consRef, sv);
+        }
+  |
+        "#special-constructor-call" {begin=token();} "(" consRef = ExpressionSV() ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, consRef);
+        }
+  |
+        "#post-work" {begin=token();} "(" consRef = ExpressionSV() ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, consRef);
+        }
+  |
+        "#static-initialisation" {begin=token();} "(" activeAccess = PrimaryExpression() ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, activeAccess);
+        }
+  |
+        "#resolve-multiple-var-decl" {begin=token();} "(" stat = Statement() ")" ";"
+        {
+            ret =  new KeyMetaConstruct(range(begin, token()), begin, stat);
+        }
+  |
+        "#array-post-declaration" {begin=token();} "(" stat = Statement() ")" ";"
+        { ret =  new KeyMetaConstruct(range(begin, token()), begin, stat); }
+  |
+        "#init-array-creation" {begin=token();} "(" sv = VariableSV() "," consRef = ExpressionSV() ")" ";"
+        { ret =  new KeyMetaConstruct(range(begin, token()), begin, consRef, sv); }
+  |
+        "#init-array-creation-transient" {begin=token();} "(" sv = VariableSV() "," consRef = ExpressionSV() ")" ";"
+        { ret =  new KeyMetaConstruct(range(begin, token()), begin, consRef, sv); }
+  |
+        "#init-array-assignments" {begin=token();} "(" sv = VariableSV() "," consRef = ExpressionSV() ")" ";"
+        { ret =  new KeyMetaConstruct(range(begin, token()), begin, consRef, sv); }
+  |
+        "#enhancedfor-elim" {begin=token();} "(" loopStat=ForStatement() ")" ";"
+        { ret =  new KeyMetaConstruct(range(begin, token()), begin, loopStat); }
+  |
+        <REATTACHLOOPINVARIANT> {begin=token();} "(" loopStat = WhileStatement() ")" ";"
+        { ret =  new KeyMetaConstruct(range(begin, token()), begin, loopStat); }
+  ) 
+  {return ret;}
+}
+
+
+KeyContextStatementBlock StartBlock() :
+{
+    BlockStmt result = null;
+    NodeList<Statement> sl = new NodeList<Statement>();
+    Statement stat;
+    KeyExecCtxtSV ec = null;
+    KeyTypeSV tr = null;
+    KeyMethodSignatureSV pm = null;
+    KeyExpressionSV sv = null;
+    JavaToken begin;
+}
+{
+   "{" {begin=token();}
+        ( LOOKAHEAD(2)
+           ( <DOT>
+             ( LOOKAHEAD(2)
+		         pm=KeyMethodSignatureSV() "@" tr = TypeSV(emptyNodeList())  "(" (sv = ExpressionSV())? ")"
+		       |
+	             ec = ExecutionContextSV() )
+	       )?
+           <DOTDOT>
+           (stat = BlockStatement() { sl.add(stat); } )*
+           <ELLIPSIS>
+       |
+         ( stat = BlockStatement() {sl.add(stat); } )*
+       )
+   "}"
+   {
+        if (pm!=null) {
+            return new KeyContextStatementBlock(range(begin, token()), sl, tr, pm, sv);
+        } else{
+            return new KeyContextStatementBlock(range(begin, token()), sl,ec);
+        }
+   }
+}
+
+KeyJumpLabelSV JumpLabelSV() : {}
+{
+    <SVIDENTIFIER>
+	{
+        return new KeyJumpLabelSV(token().toTokenRange(), token().getText());
+	}
+}
+
+
+KeyExecCtxtSV ExecutionContextSV() : {}
+{
+    <SVIDENTIFIER>
+	{
+        return new KeyExecCtxtSV(token().toTokenRange(), token().getText());
+    }
+}
+
+KeyMethodSignatureSV KeyMethodSignatureSV() : {}
+{
+    <SVIDENTIFIER>
+    {
+        return new KeyMethodSignatureSV(token().toTokenRange(), token().getText());
+    }
+}
+
+KeyMetaConstructExpression KeyStaticEvaluate():
+{
+    JavaToken begin; Expression child;
+}
+{
+    "#static-evaluate" {begin=token();}  "(" child = InstanceOfExpression() ")"
+    {
+        return new KeyMetaConstructExpression(range(token(),token()), begin, child);
+    }
+}
+
+KeyMetaConstructExpression KeyCreateObjectSV():
+{
+    JavaToken begin; Expression child;
+}
+{
+    "#create-object"  {begin=token();} "(" child = ExpressionSV()  ")"
+    {
+        return new KeyMetaConstructExpression(range(begin, token()), "#create-object", child);
+    }
+}
+
+KeyMetaConstructExpression KeyLengthReferenceSV():
+{
+    JavaToken begin; Expression child;
+}
+{
+    "#length-reference"  {begin=token();} "(" child = ExpressionSV()  ")"
+    {
+        return new KeyMetaConstructExpression(range(begin, token()), "#length-reference", child);
+    }
+}
+
+KeyCcatchSV CcatchSV() :
+{
+}
+{
+    <SVIDENTIFIER>
+    { return new KeyCcatchSV(token().toTokenRange(), token().getText()); }
+}

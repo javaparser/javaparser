@@ -105,7 +105,7 @@ public class ModuleDeclaration extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleDeclaration setName(final Name name) {
+    public ModuleDeclaration setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -123,7 +123,7 @@ public class ModuleDeclaration extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public ModuleDeclaration setAnnotations(final @NonNull() NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
             return this;
@@ -156,7 +156,7 @@ public class ModuleDeclaration extends Node
         return super.remove(node);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isOpen() {
         return Objects.requireNonNull(isOpen);
@@ -178,7 +178,7 @@ public class ModuleDeclaration extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleDeclaration setDirectives(final NodeList<ModuleDirective> directives) {
+    public ModuleDeclaration setDirectives(final @NonNull() NodeList<ModuleDirective> directives) {
         assertNotNull(directives);
         if (directives == this.directives) {
             return this;
@@ -239,21 +239,21 @@ public class ModuleDeclaration extends Node
         return this;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> annotations() {
+    public @NonNull() NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ModuleDirective> directives() {
+    public @NonNull() NodeList<ModuleDirective> directives() {
         return Objects.requireNonNull(directives);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @NonNull() Name name() {
         return Objects.requireNonNull(name);
     }
 }

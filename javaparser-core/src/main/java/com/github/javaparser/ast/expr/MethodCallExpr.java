@@ -160,7 +160,7 @@ public class MethodCallExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MethodCallExpr setArguments(final NodeList<Expression> arguments) {
+    public MethodCallExpr setArguments(final @NonNull() NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
             return this;
@@ -173,7 +173,7 @@ public class MethodCallExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MethodCallExpr setName(final SimpleName name) {
+    public MethodCallExpr setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -186,7 +186,7 @@ public class MethodCallExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MethodCallExpr setScope(final Expression scope) {
+    public MethodCallExpr setScope(final @Nullable() Expression scope) {
         if (scope == this.scope) {
             return this;
         }
@@ -209,7 +209,7 @@ public class MethodCallExpr extends Expression
      * @return this, the MethodCallExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MethodCallExpr setTypeArguments(final NodeList<Type> typeArguments) {
+    public MethodCallExpr setTypeArguments(final @Nullable() NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return this;
         }
@@ -402,27 +402,27 @@ public class MethodCallExpr extends Expression
         return true;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> arguments() {
+    public @NonNull() NodeList<Expression> arguments() {
         return Objects.requireNonNull(arguments);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression scope() {
+    public @Nullable() Expression scope() {
         return scope;
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Type> typeArguments() {
+    public @Nullable() NodeList<Type> typeArguments() {
         return typeArguments;
     }
 }

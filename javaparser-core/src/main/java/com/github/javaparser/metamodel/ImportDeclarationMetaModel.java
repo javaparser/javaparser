@@ -51,6 +51,8 @@ public class ImportDeclarationMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel isJmlModelPropertyMetaModel;
 
+    public PropertyMetaModel isModulePropertyMetaModel;
+
     public PropertyMetaModel isStaticPropertyMetaModel;
 
     public PropertyMetaModel namePropertyMetaModel;

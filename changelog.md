@@ -1,6 +1,6 @@
-Next Release (Version 3.27.2-snapshot)
+Next Release (Version 3.28.1-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/214?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/215?closed=1)
 
 ### Added
 ### Changed
@@ -9,66 +9,101 @@ Next Release (Version 3.27.2-snapshot)
 ### Fixed
 ### Security
 
+Version 3.28.0
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/214?closed=1)
+
+### Added
+
+* [JEP 512] Add support for compact source files (PR [#4940](https://github.com/javaparser/javaparser/pull/4940) by [@johannescoetzee](https://github.com/johannescoetzee))
+* [JEP 513] Add support for flexible constructor bodies (PR [#4919](https://github.com/javaparser/javaparser/pull/4919) by [@johannescoetzee](https://github.com/johannescoetzee))
+* [JEP 511] Module Import Declarations (PR [#4910](https://github.com/javaparser/javaparser/pull/4910) by [@johannescoetzee](https://github.com/johannescoetzee))
+* [JEP 467] Add support for MarkdownComments (PR [#4899](https://github.com/javaparser/javaparser/pull/4899) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Refactor comment hierarchy in preparation for MarkdownComments (PR [#4885](https://github.com/javaparser/javaparser/pull/4885) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Add support for match-all patterns (PR [#4867](https://github.com/javaparser/javaparser/pull/4867) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### Changed
+
+* Improves issue 4188 resolution (PR [#4934](https://github.com/javaparser/javaparser/pull/4934) by [@jlerbsc](https://github.com/jlerbsc))
+* Add support for Java 23 and Java 24 (PR [#4901](https://github.com/javaparser/javaparser/pull/4901) by [@rpx99](https://github.com/rpx99))
+* Improved the code by removing code duplication from the method used to obtain methods declared in a class/interface/enumeration (PR [#4883](https://github.com/javaparser/javaparser/pull/4883) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* Fix: issue 4890 Method call resolution fails for variadic reference-type parameters with primitive arguments (PR [#4943](https://github.com/javaparser/javaparser/pull/4943) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4941 Type variables are not correctly mapped when inheriting between generic interfaces (PR [#4942](https://github.com/javaparser/javaparser/pull/4942) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4188 UnsolvedSymbolException resolving MethocCallExpr using MethodReferenceExpr (PR [#4931](https://github.com/javaparser/javaparser/pull/4931) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix grammar ambiguities causing crashes when using `assert` and `module` as names (PR [#4929](https://github.com/javaparser/javaparser/pull/4929) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fix: issue #3916 Method 'valueOf' cannot be resolved in context MyEnum.One.valueOf("") (PR [#4916](https://github.com/javaparser/javaparser/pull/4916) by [@jlerbsc](https://github.com/jlerbsc))
+* Adds the ability to use the word 'assert' prior to Java version 1.4 (PR [#4915](https://github.com/javaparser/javaparser/pull/4915) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Simplify code and possibly improve the resolution of extended interfaces when using qualified names (PR [#4882](https://github.com/javaparser/javaparser/pull/4882) by [@jlerbsc](https://github.com/jlerbsc))
+* test: improve SourceRoot coverage and apply spotless formatting #4795 (PR [#4881](https://github.com/javaparser/javaparser/pull/4881) by [@Joyce-5](https://github.com/Joyce-5))
+* Fix #4864: Correct toString() output in ReflectionRecordDeclaration (PR [#4879](https://github.com/javaparser/javaparser/pull/4879) by [@ChenduanZhang](https://github.com/ChenduanZhang))
+* Include source file path in failed ParseResult when parsing via SourceRoot #4786 (PR [#4874](https://github.com/javaparser/javaparser/pull/4874) by [@JIN-RUI-LIU](https://github.com/JIN-RUI-LIU))
+* Fixes unchecked warnings when calling Mockito.mock(Class) (PR [#4413](https://github.com/javaparser/javaparser/pull/4413) by [@matthieu-vergne](https://github.com/matthieu-vergne))
+
+### Developer Changes
+
+* fix(deps): update byte-buddy.version to v1.18.2 (PR [#4906](https://github.com/javaparser/javaparser/pull/4906) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action to v6 (PR [#4900](https://github.com/javaparser/javaparser/pull/4900) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action to v5.0.1 (PR [#4892](https://github.com/javaparser/javaparser/pull/4892) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency net.bytebuddy:byte-buddy-agent to v1.18.1 (PR [#4889](https://github.com/javaparser/javaparser/pull/4889) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency org.checkerframework:checker-qual to v3.52.0 (PR [#4886](https://github.com/javaparser/javaparser/pull/4886) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### Uncategorised
+
+* Add UnaryExpr, BinaryExpr, and some record/enum tests to improve overall test coverage (PR [#4930](https://github.com/javaparser/javaparser/pull/4930) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@rpx99](https://github.com/rpx99)
+* [@JIN-RUI-LIU](https://github.com/JIN-RUI-LIU)
+* [@Joyce-5](https://github.com/Joyce-5)
+* [@johannescoetzee](https://github.com/johannescoetzee)
+* [@matthieu-vergne](https://github.com/matthieu-vergne)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@ChenduanZhang](https://github.com/ChenduanZhang)
+
+
 Version 3.27.1
 --------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/213?closed=1)
 
 ### Changed
 
-* fix: switch expression improvement (PR [#4823](https://github.com/javaparser/javaparser/pull/4823)
-  by [@seokjun7410](https://github.com/seokjun7410))
+* fix: switch expression improvement (PR [#4823](https://github.com/javaparser/javaparser/pull/4823) by [@seokjun7410](https://github.com/seokjun7410))
 
 ### Fixed
 
-* Fix: Adjusts the range limits of lambda expression parameters to ignore brackets. (
-  PR [#4860](https://github.com/javaparser/javaparser/pull/4860) by [@jlerbsc](https://github.com/jlerbsc))
-* Fix issue 4846 (PR [#4855](https://github.com/javaparser/javaparser/pull/4855)
-  by [@PiTheGuy](https://github.com/PiTheGuy))
-* Revert checkstyle plugin upgrade (PR [#4836](https://github.com/javaparser/javaparser/pull/4836)
-  by [@jlerbsc](https://github.com/jlerbsc))
-* Fix: issue 4832 Resolving type of fully qualified varargs invocation throws IndexOutOfBoundsException (
-  PR [#4835](https://github.com/javaparser/javaparser/pull/4835) by [@jlerbsc](https://github.com/jlerbsc))
-* Fix: Issue 4829 Infinite loop in DifferenceElementCalculator when calling setPermittedTypes (
-  PR [#4834](https://github.com/javaparser/javaparser/pull/4834) by [@jlerbsc](https://github.com/jlerbsc))
-* XmlPrinter: fix duplicate attribute name in generated xml (
-  PR [#4806](https://github.com/javaparser/javaparser/pull/4806) by [@sgqy](https://github.com/sgqy))
-* Use lambda parameter counts and block bodies for improved resolution  (
-  PR [#4796](https://github.com/javaparser/javaparser/pull/4796)
-  by [@johannescoetzee](https://github.com/johannescoetzee))
-* Fix issue #4791 (PR [#4792](https://github.com/javaparser/javaparser/pull/4792)
-  by [@bannmann](https://github.com/bannmann))
+* Fix: Adjusts the range limits of lambda expression parameters to ignore brackets. (PR [#4860](https://github.com/javaparser/javaparser/pull/4860) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue 4846 (PR [#4855](https://github.com/javaparser/javaparser/pull/4855) by [@PiTheGuy](https://github.com/PiTheGuy))
+* Revert checkstyle plugin upgrade (PR [#4836](https://github.com/javaparser/javaparser/pull/4836) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4832 Resolving type of fully qualified varargs invocation throws IndexOutOfBoundsException (PR [#4835](https://github.com/javaparser/javaparser/pull/4835) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Issue 4829 Infinite loop in DifferenceElementCalculator when calling setPermittedTypes (PR [#4834](https://github.com/javaparser/javaparser/pull/4834) by [@jlerbsc](https://github.com/jlerbsc))
+* XmlPrinter: fix duplicate attribute name in generated xml (PR [#4806](https://github.com/javaparser/javaparser/pull/4806) by [@sgqy](https://github.com/sgqy))
+*  Use lambda parameter counts and block bodies for improved resolution  (PR [#4796](https://github.com/javaparser/javaparser/pull/4796) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fix issue #4791 (PR [#4792](https://github.com/javaparser/javaparser/pull/4792) by [@bannmann](https://github.com/bannmann))
 
 ### Developer Changes
 
-* fix(deps): update dependency org.checkerframework:checker-qual to v3.51.1 (
-  PR [#4862](https://github.com/javaparser/javaparser/pull/4862) by [@renovate[bot]](https://github.com/apps/renovate))
-* chore(deps): update dependency org.apache.maven.plugins:maven-javadoc-plugin to v3.12.0 (
-  PR [#4843](https://github.com/javaparser/javaparser/pull/4843) by [@renovate[bot]](https://github.com/apps/renovate))
-* fix(deps): update dependency com.google.guava:guava to v33.5.0-jre (
-  PR [#4839](https://github.com/javaparser/javaparser/pull/4839) by [@renovate[bot]](https://github.com/apps/renovate))
-* chore(deps): update codecov/codecov-action action to v5.5.1 (
-  PR [#4827](https://github.com/javaparser/javaparser/pull/4827) by [@renovate[bot]](https://github.com/apps/renovate))
-* fix(deps): update dependency org.checkerframework:checker-qual to v3.50.0 (
-  PR [#4825](https://github.com/javaparser/javaparser/pull/4825) by [@renovate[bot]](https://github.com/apps/renovate))
-* chore(deps): update actions/setup-java action to v5 (PR [#4822](https://github.com/javaparser/javaparser/pull/4822)
-  by [@renovate[bot]](https://github.com/apps/renovate))
-* chore(deps): update actions/checkout action to v5 (PR [#4811](https://github.com/javaparser/javaparser/pull/4811)
-  by [@renovate[bot]](https://github.com/apps/renovate))
-* chore(deps): update dependency com.puppycrawl.tools:checkstyle to v11 (
-  PR [#4808](https://github.com/javaparser/javaparser/pull/4808) by [@renovate[bot]](https://github.com/apps/renovate))
-* chore(deps): update dependency org.apache.maven.plugins:maven-surefire-plugin to v3.5.4 (
-  PR [#4701](https://github.com/javaparser/javaparser/pull/4701) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency org.checkerframework:checker-qual to v3.51.1 (PR [#4862](https://github.com/javaparser/javaparser/pull/4862) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-javadoc-plugin to v3.12.0 (PR [#4843](https://github.com/javaparser/javaparser/pull/4843) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency com.google.guava:guava to v33.5.0-jre (PR [#4839](https://github.com/javaparser/javaparser/pull/4839) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update codecov/codecov-action action to v5.5.1 (PR [#4827](https://github.com/javaparser/javaparser/pull/4827) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency org.checkerframework:checker-qual to v3.50.0 (PR [#4825](https://github.com/javaparser/javaparser/pull/4825) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/setup-java action to v5 (PR [#4822](https://github.com/javaparser/javaparser/pull/4822) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action to v5 (PR [#4811](https://github.com/javaparser/javaparser/pull/4811) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency com.puppycrawl.tools:checkstyle to v11 (PR [#4808](https://github.com/javaparser/javaparser/pull/4808) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-surefire-plugin to v3.5.4 (PR [#4701](https://github.com/javaparser/javaparser/pull/4701) by [@renovate[bot]](https://github.com/apps/renovate))
 
 ### Uncategorised
 
-* Improves documentation on LexicalPreservingPrinter (PR [#4820](https://github.com/javaparser/javaparser/pull/4820)
-  by [@jlerbsc](https://github.com/jlerbsc))
-* Improves documentation on the raw langage level (PR [#4819](https://github.com/javaparser/javaparser/pull/4819)
-  by [@jlerbsc](https://github.com/jlerbsc))
-* Fix javadoc of Name class (PR [#4789](https://github.com/javaparser/javaparser/pull/4789)
-  by [@bannmann](https://github.com/bannmann))
-* Fix NormalAnnotationExpr Javadoc (PR [#4784](https://github.com/javaparser/javaparser/pull/4784)
-  by [@bannmann](https://github.com/bannmann))
+* Improves documentation on LexicalPreservingPrinter (PR [#4820](https://github.com/javaparser/javaparser/pull/4820) by [@jlerbsc](https://github.com/jlerbsc))
+* Improves documentation on the raw langage level (PR [#4819](https://github.com/javaparser/javaparser/pull/4819) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix javadoc of Name class (PR [#4789](https://github.com/javaparser/javaparser/pull/4789) by [@bannmann](https://github.com/bannmann))
+* Fix NormalAnnotationExpr Javadoc (PR [#4784](https://github.com/javaparser/javaparser/pull/4784) by [@bannmann](https://github.com/bannmann))
 
 ### :heart: Contributors
 
@@ -80,6 +115,7 @@ Thank You to all contributors who worked on this release!
 * [@johannescoetzee](https://github.com/johannescoetzee)
 * [@PiTheGuy](https://github.com/PiTheGuy)
 * [@jlerbsc](https://github.com/jlerbsc)
+
 
 Version 3.27.0
 --------------
@@ -354,19 +390,14 @@ Version 3.25.10
 
 ### Fixed
 
-* Fix issue 4345 Strange error when trying to find erasure of generic t… (
-  PR [#4362](https://github.com/javaparser/javaparser/pull/4362) by [@jlerbsc](https://github.com/jlerbsc))
-* fix: issue 4358 prevent infinite cycles with static imports (
-  PR [#4359](https://github.com/javaparser/javaparser/pull/4359) by [@kdunee](https://github.com/kdunee))
-* Refactor `ResolvedReferenceType#equals` (PR [#4351](https://github.com/javaparser/javaparser/pull/4351)
-  by [@freya022](https://github.com/freya022))
-* fix: issue 4331 Cannot be 'abstract' and also 'private'. for a private method in an interface (
-  PR [#4332](https://github.com/javaparser/javaparser/pull/4332) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue 4345 Strange error when trying to find erasure of generic t… (PR [#4362](https://github.com/javaparser/javaparser/pull/4362) by [@jlerbsc](https://github.com/jlerbsc))
+* fix: issue 4358 prevent infinite cycles with static imports (PR [#4359](https://github.com/javaparser/javaparser/pull/4359) by [@kdunee](https://github.com/kdunee))
+* Refactor `ResolvedReferenceType#equals` (PR [#4351](https://github.com/javaparser/javaparser/pull/4351) by [@freya022](https://github.com/freya022))
+* fix: issue 4331 Cannot be 'abstract' and also 'private'. for a private method in an interface (PR [#4332](https://github.com/javaparser/javaparser/pull/4332) by [@jlerbsc](https://github.com/jlerbsc))
 
 ### Developer Changes
 
-* chore(deps): bump actions/checkout from 4.1.1 to 4.1.2 (PR [#4341](https://github.com/javaparser/javaparser/pull/4341)
-  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump actions/checkout from 4.1.1 to 4.1.2 (PR [#4341](https://github.com/javaparser/javaparser/pull/4341) by [@dependabot[bot]](https://github.com/apps/dependabot))
 
 ### :heart: Contributors
 
@@ -376,59 +407,41 @@ Thank You to all contributors who worked on this release!
 * [@freya022](https://github.com/freya022)
 * [@jlerbsc](https://github.com/jlerbsc)
 
+
+
 Version 3.25.9
 --------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/205?closed=1)
 
 ### Added
 
-* Fix: issue #3878 resolve MethodReference in ObjectCreationExpr (
-  PR [#4296](https://github.com/javaparser/javaparser/pull/4296) by [@fishautumn](https://github.com/fishautumn))
+* Fix: issue #3878 resolve MethodReference in ObjectCreationExpr (PR [#4296](https://github.com/javaparser/javaparser/pull/4296) by [@fishautumn](https://github.com/fishautumn))
 
 ### Changed
 
-* Switch order of literals to prevent NullPointerException (
-  PR [#4322](https://github.com/javaparser/javaparser/pull/4322) by [@citizenjosh](https://github.com/citizenjosh))
-* Minor refactoring to use the existing getArgumentPosition method (
-  PR [#4306](https://github.com/javaparser/javaparser/pull/4306) by [@jlerbsc](https://github.com/jlerbsc))
-* Optimize find ancestor (PR [#4294](https://github.com/javaparser/javaparser/pull/4294)
-  by [@magicwerk](https://github.com/magicwerk))
-* refac: Removes useless ExpressionHelper utility class and replaces some explicit casts by using the javaparser API (
-  PR [#4291](https://github.com/javaparser/javaparser/pull/4291) by [@jlerbsc](https://github.com/jlerbsc))
+* Switch order of literals to prevent NullPointerException (PR [#4322](https://github.com/javaparser/javaparser/pull/4322) by [@citizenjosh](https://github.com/citizenjosh))
+* Minor refactoring to use the existing getArgumentPosition method (PR [#4306](https://github.com/javaparser/javaparser/pull/4306) by [@jlerbsc](https://github.com/jlerbsc))
+* Optimize find ancestor (PR [#4294](https://github.com/javaparser/javaparser/pull/4294) by [@magicwerk](https://github.com/magicwerk))
+* refac: Removes useless ExpressionHelper utility class and replaces some explicit casts by using the javaparser API (PR [#4291](https://github.com/javaparser/javaparser/pull/4291) by [@jlerbsc](https://github.com/jlerbsc))
 
 ### Fixed
 
-* fix: Dead stores should be removed (sonar rule) (PR [#4329](https://github.com/javaparser/javaparser/pull/4329)
-  by [@jlerbsc](https://github.com/jlerbsc))
-* fix: Replace this if-then-else statement by a single return statement (sonar rule) (
-  PR [#4328](https://github.com/javaparser/javaparser/pull/4328) by [@jlerbsc](https://github.com/jlerbsc))
-* fix: issue 2043 getAccessSpecifier should return public for interface methods (
-  PR [#4317](https://github.com/javaparser/javaparser/pull/4317) by [@jlerbsc](https://github.com/jlerbsc))
-* Further improve correction of whitespace during difference application (
-  PR [#4316](https://github.com/javaparser/javaparser/pull/4316) by [@jlerbsc](https://github.com/jlerbsc))
-* Fix: issue #3946 Symbol solver is unable to resolve inherited inner classes (
-  PR [#4314](https://github.com/javaparser/javaparser/pull/4314) by [@jlerbsc](https://github.com/jlerbsc))
-* fix: issue 4311 IllegalStateException when removing all comments with LexicalPreservingPrinter (
-  PR [#4313](https://github.com/javaparser/javaparser/pull/4313) by [@jlerbsc](https://github.com/jlerbsc))
-* Fix: issue 3939 SymbolResolver.calculateType(Expression) may fails on first try, then succeed on later tries (
-  PR [#4290](https://github.com/javaparser/javaparser/pull/4290) by [@jlerbsc](https://github.com/jlerbsc))
-* Adds unit test for issue 4284 "ClassCastException when resolving MethodCallExpr inside an enhanced switch statement" (
-  PR [#4285](https://github.com/javaparser/javaparser/pull/4285) by [@jlerbsc](https://github.com/jlerbsc))
-* Change `SwitchStmt` to `SwitchNode` in `SwitchEntryContext` to avoid `ClassCastException` (
-  PR [#4283](https://github.com/javaparser/javaparser/pull/4283)
-  by [@PalashSharma20](https://github.com/PalashSharma20))
+* fix: Dead stores should be removed (sonar rule) (PR [#4329](https://github.com/javaparser/javaparser/pull/4329) by [@jlerbsc](https://github.com/jlerbsc))
+* fix: Replace this if-then-else statement by a single return statement (sonar rule) (PR [#4328](https://github.com/javaparser/javaparser/pull/4328) by [@jlerbsc](https://github.com/jlerbsc))
+* fix: issue 2043 getAccessSpecifier should return public for interface methods (PR [#4317](https://github.com/javaparser/javaparser/pull/4317) by [@jlerbsc](https://github.com/jlerbsc))
+* Further improve correction of whitespace during difference application (PR [#4316](https://github.com/javaparser/javaparser/pull/4316) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue #3946 Symbol solver is unable to resolve inherited inner classes (PR [#4314](https://github.com/javaparser/javaparser/pull/4314) by [@jlerbsc](https://github.com/jlerbsc))
+* fix: issue 4311 IllegalStateException when removing all comments with LexicalPreservingPrinter (PR [#4313](https://github.com/javaparser/javaparser/pull/4313) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3939 SymbolResolver.calculateType(Expression) may fails on first try, then succeed on later tries (PR [#4290](https://github.com/javaparser/javaparser/pull/4290) by [@jlerbsc](https://github.com/jlerbsc))
+* Adds unit test for issue 4284 "ClassCastException when resolving MethodCallExpr inside an enhanced switch statement" (PR [#4285](https://github.com/javaparser/javaparser/pull/4285) by [@jlerbsc](https://github.com/jlerbsc))
+* Change `SwitchStmt` to `SwitchNode` in `SwitchEntryContext` to avoid `ClassCastException` (PR [#4283](https://github.com/javaparser/javaparser/pull/4283) by [@PalashSharma20](https://github.com/PalashSharma20))
 
 ### Developer Changes
 
-* chore(deps): bump org.codehaus.mojo:exec-maven-plugin from 3.1.1 to 3.2.0 (
-  PR [#4323](https://github.com/javaparser/javaparser/pull/4323)
-  by [@dependabot[bot]](https://github.com/apps/dependabot))
-* chore(deps): update junit5 monorepo to v5.10.2 (PR [#4307](https://github.com/javaparser/javaparser/pull/4307)
-  by [@renovate[bot]](https://github.com/apps/renovate))
-* chore(deps): update codecov/codecov-action action to v4 (
-  PR [#4304](https://github.com/javaparser/javaparser/pull/4304) by [@renovate[bot]](https://github.com/apps/renovate))
-* chore(deps): update actions/cache action to v4 (PR [#4293](https://github.com/javaparser/javaparser/pull/4293)
-  by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): bump org.codehaus.mojo:exec-maven-plugin from 3.1.1 to 3.2.0 (PR [#4323](https://github.com/javaparser/javaparser/pull/4323) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update junit5 monorepo to v5.10.2 (PR [#4307](https://github.com/javaparser/javaparser/pull/4307) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update codecov/codecov-action action to v4 (PR [#4304](https://github.com/javaparser/javaparser/pull/4304) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/cache action to v4 (PR [#4293](https://github.com/javaparser/javaparser/pull/4293) by [@renovate[bot]](https://github.com/apps/renovate))
 
 ### :heart: Contributors
 
@@ -439,6 +452,7 @@ Thank You to all contributors who worked on this release!
 * [@PalashSharma20](https://github.com/PalashSharma20)
 * [@jlerbsc](https://github.com/jlerbsc)
 * [@fishautumn](https://github.com/fishautumn)
+
 
 Version 3.25.8
 --------------

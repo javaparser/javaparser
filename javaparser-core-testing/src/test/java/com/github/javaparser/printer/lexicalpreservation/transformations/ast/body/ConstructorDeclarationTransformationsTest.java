@@ -25,10 +25,13 @@ import static com.github.javaparser.ast.Modifier.DefaultKeyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
@@ -118,6 +121,34 @@ class ConstructorDeclarationTransformationsTest extends AbstractLexicalPreservin
     // ThrownExceptions
 
     // Body
+
+    @Test
+    void addingConstructorInvocationAsSecondStatement() {
+        ConstructorDeclaration cd = consider("public A() { int x; }");
+        cd.getBody().get().getStatements().add(new ExplicitConstructorInvocationStmt().setThis(false));
+        assertTransformedToString("public A() { int x; super();" + System.lineSeparator() + "}", cd);
+    }
+
+    @Test
+    void modifyingConstructorInvocationAsSecondStatement() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        ConstructorDeclaration cd = consider("public A() { int x; super(); }");
+        cd.getBody()
+                .get()
+                .getStatements()
+                .get(1)
+                .asExplicitConstructorInvocationStmt()
+                .setThis(true);
+        assertTransformedToString("public A() { int x; this(); }", cd);
+    }
+
+    @Test
+    void removingConstructorInvocationAsSecondStatement() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        ConstructorDeclaration cd = consider("public A() { int x; super(); }");
+        cd.getBody().get().getStatements().remove(1);
+        assertTransformedToString("public A() { int x; }", cd);
+    }
 
     // Annotations
 }

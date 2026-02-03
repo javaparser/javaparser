@@ -152,14 +152,14 @@ public class Parameter extends Node
         return type;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isVarArgs() {
         return Objects.requireNonNull(isVarArgs);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setType(final Type type) {
+    public Parameter setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -207,10 +207,10 @@ public class Parameter extends Node
 
     /**
      * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
-     *                    so please avoid passing null
+     * so please avoid passing null
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public Parameter setAnnotations(final @NonNull() NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
             return this;
@@ -223,7 +223,7 @@ public class Parameter extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setName(final SimpleName name) {
+    public Parameter setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -236,7 +236,7 @@ public class Parameter extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setModifiers(final NodeList<Modifier> modifiers) {
+    public Parameter setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -281,7 +281,7 @@ public class Parameter extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setVarArgsAnnotations(final NodeList<AnnotationExpr> varArgsAnnotations) {
+    public Parameter setVarArgsAnnotations(final @NonNull() NodeList<AnnotationExpr> varArgsAnnotations) {
         assertNotNull(varArgsAnnotations);
         if (varArgsAnnotations == this.varArgsAnnotations) {
             return this;
@@ -348,9 +348,9 @@ public class Parameter extends Node
     /**
      * Record components (parameters here) are implicitly final, even without the explicitly-added modifier.
      * https://openjdk.java.net/jeps/359#Restrictions-on-records
-     * <p>
+     *
      * If wanting to find out if the keyword {@code final} has been explicitly added to this parameter,
-     * you should use {@code node.hasModifier(Modifier.DefaultKeyword.FINAL)}
+     * you should use {@code node.hasModifier(Modifier.Keyword.FINAL)}
      *
      * @return true if the node parameter is explicitly final (keyword attached) or implicitly final (e.g. parameters to a record)
      */
@@ -367,33 +367,33 @@ public class Parameter extends Node
         return NodeWithFinalModifier.super.isFinal();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> annotations() {
+    public @NonNull() NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> varArgsAnnotations() {
+    public @NonNull() NodeList<AnnotationExpr> varArgsAnnotations() {
         return Objects.requireNonNull(varArgsAnnotations);
     }
 }

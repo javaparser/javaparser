@@ -115,7 +115,7 @@ public class FieldAccessExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldAccessExpr setName(final SimpleName name) {
+    public FieldAccessExpr setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -139,7 +139,7 @@ public class FieldAccessExpr extends Expression
      * @return this, the FieldAccessExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldAccessExpr setScope(final Expression scope) {
+    public FieldAccessExpr setScope(final @NonNull() Expression scope) {
         assertNotNull(scope);
         if (scope == this.scope) {
             return this;
@@ -163,7 +163,7 @@ public class FieldAccessExpr extends Expression
      * @return this, the FieldAccessExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldAccessExpr setTypeArguments(final NodeList<Type> typeArguments) {
+    public FieldAccessExpr setTypeArguments(final @Nullable() NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return this;
         }
@@ -284,21 +284,21 @@ public class FieldAccessExpr extends Expression
         return !isInternal();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression scope() {
+    public @NonNull() Expression scope() {
         return Objects.requireNonNull(scope);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Type> typeArguments() {
+    public @Nullable() NodeList<Type> typeArguments() {
         return typeArguments;
     }
 }

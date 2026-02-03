@@ -64,7 +64,7 @@ public class JmlOldClause extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlOldClause setDeclarations(final VariableDeclarationExpr declarations) {
+    public JmlOldClause setDeclarations(final @NonNull() VariableDeclarationExpr declarations) {
         assertNotNull(declarations);
         if (declarations == this.declarations) {
             return this;
@@ -130,9 +130,9 @@ public class JmlOldClause extends JmlClause {
         action.accept(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public VariableDeclarationExpr declarations() {
+    public @NonNull() VariableDeclarationExpr declarations() {
         return Objects.requireNonNull(declarations);
     }
 }

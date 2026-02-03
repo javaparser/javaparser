@@ -22,9 +22,7 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
@@ -34,6 +32,8 @@ import com.github.javaparser.ast.jml.doc.JmlDocStmt;
 import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -131,7 +131,7 @@ public interface VoidVisitor<A> {
 
     void visit(IntersectionType n, A arg);
 
-    void visit(JavadocComment n, A arg);
+    void visit(TraditionalJavadocComment n, A arg);
 
     void visit(LabeledStmt n, A arg);
 
@@ -246,6 +246,68 @@ public interface VoidVisitor<A> {
     void visit(TypePatternExpr n, A arg);
 
     void visit(RecordPatternExpr n, A arg);
+
+    void visit(MatchAllPatternExpr n, A arg);
+
+    void visit(MarkdownComment n, A arg);
+
+    void visit(KeyCcatchBreak n, A arg);
+
+    void visit(KeyCcatchContinue n, A arg);
+
+    void visit(KeyCcatchParameter n, A arg);
+
+    void visit(KeyCcatchReturn n, A arg);
+
+    void visit(KeyCatchAllStatement n, A arg);
+
+    void visit(KeyEscapeExpression n, A arg);
+
+    void visit(KeyExecStatement n, A arg);
+
+    void visit(KeyExecutionContext n, A arg);
+
+    void visit(KeyLoopScopeBlock n, A arg);
+
+    void visit(KeyMergePointStatement n, A arg);
+
+    void visit(KeyMethodBodyStatement n, A arg);
+
+    void visit(KeyMethodCallStatement n, A arg);
+
+    void visit(KeyMethodSignature n, A arg);
+
+    void visit(KeyRangeExpression n, A arg);
+
+    void visit(KeyTransactionStatement n, A arg);
+
+    void visit(KeyContextStatementBlock n, A arg);
+
+    void visit(KeyExecCtxtSV n, A arg);
+
+    void visit(KeyExpressionSV n, A arg);
+
+    void visit(KeyJumpLabelSV n, A arg);
+
+    void visit(KeyMetaConstructExpression n, A arg);
+
+    void visit(KeyMetaConstruct n, A arg);
+
+    void visit(KeyMetaConstructType n, A arg);
+
+    void visit(KeyMethodSignatureSV n, A arg);
+
+    void visit(KeyPassiveExpression n, A arg);
+
+    void visit(KeyProgramVariableSV n, A arg);
+
+    void visit(KeyStatementSV n, A arg);
+
+    void visit(KeyTypeSV n, A arg);
+
+    void visit(KeyCcatchSV n, A arg);
+
+    void visit(KeyExecutionContextSV n, A arg);
 
     void visit(JmlQuantifiedExpr jmlQuantifiedExpr, A arg);
 

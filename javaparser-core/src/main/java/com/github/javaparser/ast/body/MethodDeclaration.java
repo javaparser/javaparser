@@ -259,7 +259,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
      * @return this, the MethodDeclaration
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MethodDeclaration setBody(final BlockStmt body) {
+    public MethodDeclaration setBody(final @Nullable() BlockStmt body) {
         if (body == this.body) {
             return this;
         }
@@ -276,7 +276,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MethodDeclaration setType(final Type type) {
+    public MethodDeclaration setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -524,15 +524,15 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
         return Optional.of(this);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt body() {
+    public @Nullable() BlockStmt body() {
         return body;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 }

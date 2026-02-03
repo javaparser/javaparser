@@ -24,12 +24,13 @@ package com.github.javaparser.javadoc;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseJavadoc;
 import static com.github.javaparser.javadoc.description.JavadocInlineTag.Type.*;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
@@ -67,7 +68,7 @@ class JavadocTest {
     @Test
     void toCommentForEmptyJavadoc() {
         Javadoc javadoc = new Javadoc(new JavadocDescription());
-        assertEquals(new JavadocComment("" + LineSeparator.SYSTEM + "\t\t "), javadoc.toComment("\t\t"));
+        assertEquals(new TraditionalJavadocComment("" + LineSeparator.SYSTEM + "\t\t "), javadoc.toComment("\t\t"));
     }
 
     @Test
@@ -75,7 +76,7 @@ class JavadocTest {
         Javadoc javadoc =
                 new Javadoc(JavadocDescription.parseText("first line" + LineSeparator.SYSTEM + "second line"));
         assertEquals(
-                new JavadocComment("" + LineSeparator.SYSTEM + "\t\t * first line" + LineSeparator.SYSTEM
+                new TraditionalJavadocComment("" + LineSeparator.SYSTEM + "\t\t * first line" + LineSeparator.SYSTEM
                         + "\t\t * second line" + LineSeparator.SYSTEM + "\t\t "),
                 javadoc.toComment("\t\t"));
     }
@@ -86,7 +87,7 @@ class JavadocTest {
                 new Javadoc(JavadocDescription.parseText("first line" + LineSeparator.SYSTEM + "second line"));
         javadoc.addBlockTag("foo", "something useful");
         assertEquals(
-                new JavadocComment("" + LineSeparator.SYSTEM + "\t\t * first line" + LineSeparator.SYSTEM
+                new TraditionalJavadocComment("" + LineSeparator.SYSTEM + "\t\t * first line" + LineSeparator.SYSTEM
                         + "\t\t * second line" + LineSeparator.SYSTEM + "\t\t * " + LineSeparator.SYSTEM
                         + "\t\t * @foo something useful" + LineSeparator.SYSTEM + "\t\t "),
                 javadoc.toComment("\t\t"));
@@ -94,8 +95,10 @@ class JavadocTest {
 
     @Test
     void descriptionAndBlockTagsAreRetrievable() {
-        Javadoc javadoc = parseJavadoc("first line" + LineSeparator.SYSTEM + "second line" + LineSeparator.SYSTEM
-                + LineSeparator.SYSTEM + "@param node a node" + LineSeparator.SYSTEM + "@return result the result");
+        Javadoc javadoc = parseJavadoc(
+                "first line" + LineSeparator.SYSTEM + "second line" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                        + "@param node a node" + LineSeparator.SYSTEM + "@return result the result",
+                false);
         assertEquals(
                 "first line" + LineSeparator.SYSTEM + "second line",
                 javadoc.getDescription().toText());
@@ -112,7 +115,7 @@ class JavadocTest {
                 + LineSeparator.SYSTEM
                 + "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID."
                 + LineSeparator.SYSTEM;
-        Javadoc javadoc = parseJavadoc(docText);
+        Javadoc javadoc = parseJavadoc(docText, false);
 
         List<JavadocInlineTag> inlineTags = javadoc.getDescription().getElements().stream()
                 .filter(element -> element instanceof JavadocInlineTag)
@@ -143,8 +146,29 @@ class JavadocTest {
                 + LineSeparator.SYSTEM + " * "
                 + LineSeparator.SYSTEM + " * @param <T>"
                 + LineSeparator.SYSTEM;
-        Javadoc javadoc = parseJavadoc(comment);
+        Javadoc javadoc = parseJavadoc(comment, false);
         assertEquals(2, javadoc.getBlockTags().size());
+    }
+
+    @Test
+    void markdownJavadocParsed() {
+        String comment = "/// The type of the Object to be mapped." + LineSeparator.SYSTEM
+                + "    /// This interface maps the given Objects to existing ones in the database and"
+                + LineSeparator.SYSTEM + "    /// saves them."
+                + LineSeparator.SYSTEM + "    /// "
+                + LineSeparator.SYSTEM + "    /// @author censored"
+                + LineSeparator.SYSTEM + "    /// "
+                + LineSeparator.SYSTEM + "    /// @param <T>"
+                + LineSeparator.SYSTEM;
+        Javadoc javadoc = parseJavadoc(comment, true);
+        assertEqualsStringIgnoringEol(
+                "The type of the Object to be mapped.\n"
+                        + "This interface maps the given Objects to existing ones in the database and\n"
+                        + "saves them.",
+                javadoc.getDescription().toText());
+        assertEquals(2, javadoc.getBlockTags().size());
+        assertEquals("@author censored", javadoc.getBlockTags().get(0).toText());
+        assertEquals("@param <T>", javadoc.getBlockTags().get(1).toText());
     }
 
     @Test

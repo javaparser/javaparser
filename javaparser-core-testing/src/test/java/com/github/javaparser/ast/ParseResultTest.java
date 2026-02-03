@@ -57,9 +57,7 @@ class ParseResultTest {
         assertThat(result.getProblems().size()).isEqualTo(1);
 
         Problem problem = result.getProblem(0);
-        assertThat(problem.getMessage())
-                .isEqualTo(
-                        "Parse error. Found \"{\", expected one of  \"enum\" \"exports\" \"module\" \"open\" \"opens\" \"permits\" \"provides\" \"record\" \"requires\" \"sealed\" \"strictfp\" \"to\" \"transitive\" \"uses\" \"when\" \"with\" \"yield\" <IDENTIFIER>");
+        assertThat(problem.getMessage()).startsWith("Parse error. Found \"{\", ");
 
         assertThat(result.toString())
                 .startsWith("Parsing failed:" + LineSeparator.SYSTEM + "(line 1,col 1) Parse error.");

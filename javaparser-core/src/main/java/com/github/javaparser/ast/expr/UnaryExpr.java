@@ -131,7 +131,7 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public UnaryExpr setExpression(final Expression expression) {
+    public UnaryExpr setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -144,7 +144,7 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public UnaryExpr setOperator(final Operator operator) {
+    public UnaryExpr setOperator(final @NonNull() Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
             return this;
@@ -213,15 +213,15 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Operator operator() {
+    public @NonNull() Operator operator() {
         return Objects.requireNonNull(operator);
     }
 }

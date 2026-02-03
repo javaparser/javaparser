@@ -129,14 +129,14 @@ public class ExplicitConstructorInvocationStmt extends Statement
         return Optional.ofNullable(expression);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isThis() {
         return Objects.requireNonNull(isThis);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ExplicitConstructorInvocationStmt setArguments(final NodeList<Expression> arguments) {
+    public ExplicitConstructorInvocationStmt setArguments(final @NonNull() NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
             return this;
@@ -155,7 +155,7 @@ public class ExplicitConstructorInvocationStmt extends Statement
      * @return this, the ExplicitConstructorInvocationStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ExplicitConstructorInvocationStmt setExpression(final Expression expression) {
+    public ExplicitConstructorInvocationStmt setExpression(final @Nullable() Expression expression) {
         if (expression == this.expression) {
             return this;
         }
@@ -188,7 +188,7 @@ public class ExplicitConstructorInvocationStmt extends Statement
      * @return this, the ExplicitConstructorInvocationStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type> typeArguments) {
+    public ExplicitConstructorInvocationStmt setTypeArguments(final @Nullable() NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return this;
         }
@@ -315,21 +315,21 @@ public class ExplicitConstructorInvocationStmt extends Statement
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> arguments() {
+    public @NonNull() NodeList<Expression> arguments() {
         return Objects.requireNonNull(arguments);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @Nullable() Expression expression() {
         return expression;
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Type> typeArguments() {
+    public @Nullable() NodeList<Type> typeArguments() {
         return typeArguments;
     }
 }

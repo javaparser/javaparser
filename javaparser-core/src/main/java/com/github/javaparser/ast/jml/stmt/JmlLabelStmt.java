@@ -47,37 +47,13 @@ public class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLab
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlLabelStmt() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlLabelStmt asJmlLabelStmt() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlLabelStmt> toJmlLabelStmt() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlLabelStmt(Consumer<JmlLabelStmt> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getLabel() {
         return label;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabelStmt setLabel(final SimpleName label) {
+    public JmlLabelStmt setLabel(final @NonNull() SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {
             return this;
@@ -137,7 +113,7 @@ public class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLab
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabelStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlLabelStmt setJmlTags(final @NonNull() NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -164,15 +140,38 @@ public class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLab
         return super.remove(node);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> jmlTags() {
+    public @NonNull() NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName label() {
+    public @NonNull() SimpleName label() {
         return Objects.requireNonNull(label);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlLabelStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlLabelStmt asJmlLabelStmt() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlLabelStmt> toJmlLabelStmt() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlLabelStmt(Consumer<JmlLabelStmt> action) {
+        action.accept(this);
     }
 }

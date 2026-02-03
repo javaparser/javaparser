@@ -118,7 +118,7 @@ public class TypePatternExpr extends PatternExpr
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TypePatternExpr setName(final SimpleName name) {
+    public TypePatternExpr setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -167,7 +167,7 @@ public class TypePatternExpr extends PatternExpr
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TypePatternExpr setModifiers(final NodeList<Modifier> modifiers) {
+    public TypePatternExpr setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -218,15 +218,15 @@ public class TypePatternExpr extends PatternExpr
         action.accept(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 }

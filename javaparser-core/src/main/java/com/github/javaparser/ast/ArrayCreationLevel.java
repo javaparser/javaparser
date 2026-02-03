@@ -98,7 +98,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
      * @return this, the ArrayCreationLevel
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayCreationLevel setDimension(final Expression dimension) {
+    public ArrayCreationLevel setDimension(final @Nullable() Expression dimension) {
         if (dimension == this.dimension) {
             return this;
         }
@@ -120,7 +120,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayCreationLevel setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public ArrayCreationLevel setAnnotations(final @NonNull() NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
             return this;
@@ -191,15 +191,15 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return super.replace(node, replacementNode);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> annotations() {
+    public @NonNull() NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression dimension() {
+    public @Nullable() Expression dimension() {
         return dimension;
     }
 }

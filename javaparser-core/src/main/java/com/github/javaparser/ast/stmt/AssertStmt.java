@@ -44,7 +44,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * A usage of the keyword "assert"
  * <br>In {@code assert dead : "Wasn't expecting to be dead here";} the check is "dead" and the message is the string.
- *
  * @author Julio Vilmar Gesser
  */
 public class AssertStmt extends Statement {
@@ -101,7 +100,7 @@ public class AssertStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssertStmt setCheck(final Expression check) {
+    public AssertStmt setCheck(final @NonNull() Expression check) {
         assertNotNull(check);
         if (check == this.check) {
             return this;
@@ -120,7 +119,7 @@ public class AssertStmt extends Statement {
      * @return this, the AssertStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssertStmt setMessage(final Expression message) {
+    public AssertStmt setMessage(final @Nullable() Expression message) {
         if (message == this.message) {
             return this;
         }
@@ -206,15 +205,15 @@ public class AssertStmt extends Statement {
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression check() {
+    public @NonNull() Expression check() {
         return Objects.requireNonNull(check);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression message() {
+    public @Nullable() Expression message() {
         return message;
     }
 }

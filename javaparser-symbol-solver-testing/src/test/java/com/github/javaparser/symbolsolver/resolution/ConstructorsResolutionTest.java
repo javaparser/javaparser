@@ -273,7 +273,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ReflectionTypeSolverConstructionResolution");
         ConstructorDeclaration constructorDeclaration = Navigator.demandConstructor(clazz, 0);
         ExplicitConstructorInvocationStmt stmt = (ExplicitConstructorInvocationStmt)
-                constructorDeclaration.getBody().getStatement(0);
+                constructorDeclaration.getBody().get().getStatement(0);
 
         ResolvedConstructorDeclaration cd = stmt.resolve();
 
@@ -292,7 +292,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JarTypeSolverConstructionResolution");
         ConstructorDeclaration constructorDeclaration = Navigator.demandConstructor(clazz, 0);
         ExplicitConstructorInvocationStmt stmt = (ExplicitConstructorInvocationStmt)
-                constructorDeclaration.getBody().getStatement(0);
+                constructorDeclaration.getBody().get().getStatement(0);
 
         ResolvedConstructorDeclaration cd = stmt.resolve();
 

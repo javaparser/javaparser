@@ -47,7 +47,7 @@ public class JmlDoc extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlDoc setContent(final JavaToken content) {
+    public JmlDoc setContent(final @NonNull() JavaToken content) {
         assertNotNull(content);
         if (content == this.content) {
             return this;
@@ -79,9 +79,9 @@ public class JmlDoc extends Node {
         customInitialization();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JavaToken content() {
+    public @NonNull() JavaToken content() {
         return Objects.requireNonNull(content);
     }
 }

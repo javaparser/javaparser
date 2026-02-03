@@ -26,6 +26,7 @@ import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEo
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -44,9 +45,14 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.TestParser;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class PrettyPrintVisitorTest extends TestParser {
+    @BeforeAll
+    static void initParser() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+    }
 
     private Optional<ConfigurationOption> getOption(PrinterConfiguration config, ConfigOption cOption) {
         return config.get(new DefaultConfigurationOption(cOption));
@@ -520,5 +526,252 @@ class PrettyPrintVisitorTest extends TestParser {
         String expected = "public sealed interface I1 permits I2, C, D {\n" + "}\n";
 
         assertEqualsStringIgnoringEol(expected, cu.toString());
+    }
+
+    @Test
+    public void testMarkdownComment() {
+        String code = "class Foo {\n" + "\n"
+                + "    /// This is a markdown comment\n"
+                + "    /// for the foo method\n"
+                + "    void foo(Integer arg) {\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    public void testModuleImport() {
+        String code = "import module java.base;\n\n" + "class Foo {\n" + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printFlexibleConstructorBody() {
+        String code = "public class A {\n" + "\n"
+                + "    public A() {\n"
+                + "        int x;\n"
+                + "        super();\n"
+                + "    }\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printMinimalCompactClass() {
+        String code = "void main() {\n" + "    System.out.println(\"Hello, World!\");\n" + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithInstanceField() {
+        String code = "int count = 0;\n" + "\n" + "void main() {\n" + "    count++;\n" + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithMultipleMethods() {
+        String code = "int add(int a, int b) {\n" + "    return a + b;\n" + "}\n" + "\n" + "void main() {\n" + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithStaticAndInstanceMembers() {
+        String code = "static final String GREETING = \"Hello\";\n"
+                + "\n"
+                + "String name = \"World\";\n"
+                + "\n"
+                + "static String formatMessage(String msg) {\n"
+                + "    return msg.toUpperCase();\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithNestedClass() {
+        String code = "class Inner {\n"
+                + "\n"
+                + "    void greet() {\n"
+                + "        System.out.println(\"Hello from Inner\");\n"
+                + "    }\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "    Inner inner = new Inner();\n"
+                + "    inner.greet();\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithArrayField() {
+        String code =
+                "int[] numbers = { 1, 2, 3, 4, 5 };\n" + "\n" + "void main() {\n" + "    printNumbers();\n" + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithGenericMethod() {
+        String code = "<T> void printValue(T value) {\n"
+                + "    System.out.println(\"Value: \" + value);\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "    printValue(\"String\");\n"
+                + "    printValue(42);\n"
+                + "    printValue(3.14);\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithRecord() {
+        String code = "record Person(String name, int age) {\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "    Person p = new Person(\"Alice\", 30);\n"
+                + "    System.out.println(p.name() + \" is \" + p.age() + \" years old\");\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithEnum() {
+        String code = "enum Color {\n"
+                + "\n"
+                + "    RED, GREEN, BLUE\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "    for (Color c : Color.values()) {\n"
+                + "        System.out.println(c);\n"
+                + "    }\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithInterface() {
+        String code = "interface Printer {\n"
+                + "\n"
+                + "    void print();\n"
+                + "}\n"
+                + "\n"
+                + "class ConsolePrinter implements Printer {\n"
+                + "\n"
+                + "    public void print() {\n"
+                + "        System.out.println(\"Printing...\");\n"
+                + "    }\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "    Printer p = new ConsolePrinter();\n"
+                + "    p.print();\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithVarargs() {
+        String code = "int sum(int... numbers) {\n"
+                + "    int total = 0;\n"
+                + "    for (int n : numbers) {\n"
+                + "        total += n;\n"
+                + "    }\n"
+                + "    return total;\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "    System.out.println(sum(1, 2, 3, 4, 5));\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithExceptionHandling() {
+        String code = "void riskyOperation() throws Exception {\n"
+                + "    throw new Exception(\"Something went wrong\");\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "    try {\n"
+                + "        riskyOperation();\n"
+                + "    } catch (Exception e) {\n"
+                + "        System.out.println(\"Caught: \" + e.getMessage());\n"
+                + "    }\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithAnnotationDeclaration() {
+        String code = "@interface MyAnnotation {\n"
+                + "\n"
+                + "    String value() default \"\";\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "    System.out.println(\"Annotation declared\");\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithAnnotatedMethods() {
+        String code = "@Deprecated\n"
+                + "void oldMethod() {\n"
+                + "    System.out.println(\"This is deprecated\");\n"
+                + "}\n"
+                + "\n"
+                + "@Override\n"
+                + "public String toString() {\n"
+                + "    return \"AnnotatedMethod\";\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "    oldMethod();\n"
+                + "    System.out.println(toString());\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    @Test
+    void printCompactClassWithCustomAnnotationAndAnnotatedMethods() {
+        String code = "@interface Author {\n"
+                + "\n"
+                + "    String name();\n"
+                + "}\n"
+                + "\n"
+                + "@Override\n"
+                + "int calculate(int x) {\n"
+                + "    return x * 2;\n"
+                + "}\n"
+                + "\n"
+                + "void main() {\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, cu.toString());
     }
 }

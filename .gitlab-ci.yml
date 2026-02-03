@@ -1,0 +1,40 @@
+image: maven:latest
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode" # -s .m2/settings.xml
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
+build:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS compile
+
+test:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS --fail-at-end verify
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - "*/target/surefire-reports/TEST-*.xml"
+        - "*/target/failsafe-reports/TEST-*.xml"
+
+
+deploy:
+  stage: deploy
+  script:
+    - mvn $MAVEN_CLI_OPTS -s dev-files/settings.deploy.xml deploy
+  only:
+    - master
+
+force-deploy:
+  when: manual
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS -P run-snapshot -Dmaven.test.skip=true -s dev-files/settings.deploy.xml deploy

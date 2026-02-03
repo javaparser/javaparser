@@ -88,7 +88,7 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TypeExpr setType(final Type type) {
+    public TypeExpr setType(final @NonNull() Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -149,9 +149,9 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type type() {
+    public @NonNull() Type type() {
         return Objects.requireNonNull(type);
     }
 }

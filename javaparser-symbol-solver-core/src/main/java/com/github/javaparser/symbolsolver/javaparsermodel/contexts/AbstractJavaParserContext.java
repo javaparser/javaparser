@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.ast.expr.MatchAllPatternExpr.UNNAMED_PLACEHOLDER;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static java.util.Collections.singletonList;
 
@@ -317,19 +318,21 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
      * @param patternExpr the root of the pattern tree to traverse
      * @return all type pattern expressions discovered in the tree
      */
-    public List<TypePatternExpr> typePatternExprsDiscoveredInPattern(PatternExpr patternExpr) {
+    public List<TypePatternExpr> typePatternExprsDiscoveredInPattern(ComponentPatternExpr patternExpr) {
         List<TypePatternExpr> discoveredTypePatterns = new ArrayList<>();
-        Queue<PatternExpr> patternsToCheck = new ArrayDeque<>();
+        Queue<ComponentPatternExpr> patternsToCheck = new ArrayDeque<>();
         patternsToCheck.add(patternExpr);
 
         while (!patternsToCheck.isEmpty()) {
-            PatternExpr patternToCheck = patternsToCheck.remove();
+            ComponentPatternExpr patternToCheck = patternsToCheck.remove();
 
             if (patternToCheck.isTypePatternExpr()) {
-                discoveredTypePatterns.add(patternToCheck.asTypePatternExpr());
+                if (!patternToCheck.asTypePatternExpr().getNameAsString().equals(UNNAMED_PLACEHOLDER)) {
+                    discoveredTypePatterns.add(patternToCheck.asTypePatternExpr());
+                }
             } else if (patternToCheck.isRecordPatternExpr()) {
                 patternsToCheck.addAll(patternToCheck.asRecordPatternExpr().getPatternList());
-            } else {
+            } else if (!patternToCheck.isMatchAllPatternExpr()) {
                 throw new UnsupportedOperationException(String.format(
                         "Discovering type pattern expressions in %s not supported",
                         patternExpr.getClass().getName()));

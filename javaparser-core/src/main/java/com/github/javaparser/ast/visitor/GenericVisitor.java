@@ -22,8 +22,8 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
@@ -34,6 +34,8 @@ import com.github.javaparser.ast.jml.doc.JmlDocStmt;
 import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -83,7 +85,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(InitializerDeclaration n, A arg);
 
-    R visit(JavadocComment n, A arg);
+    R visit(TraditionalJavadocComment n, A arg);
 
     // - Type ----------------------------------------------
     R visit(ClassOrInterfaceType n, A arg);
@@ -251,6 +253,68 @@ public interface GenericVisitor<R, A> {
     R visit(TypePatternExpr n, A arg);
 
     R visit(RecordPatternExpr n, A arg);
+
+    R visit(MatchAllPatternExpr n, A arg);
+
+    R visit(MarkdownComment n, A arg);
+
+    R visit(KeyCcatchBreak n, A arg);
+
+    R visit(KeyCcatchContinue n, A arg);
+
+    R visit(KeyCcatchParameter n, A arg);
+
+    R visit(KeyCcatchReturn n, A arg);
+
+    R visit(KeyCatchAllStatement n, A arg);
+
+    R visit(KeyEscapeExpression n, A arg);
+
+    R visit(KeyExecStatement n, A arg);
+
+    R visit(KeyExecutionContext n, A arg);
+
+    R visit(KeyLoopScopeBlock n, A arg);
+
+    R visit(KeyMergePointStatement n, A arg);
+
+    R visit(KeyMethodBodyStatement n, A arg);
+
+    R visit(KeyMethodCallStatement n, A arg);
+
+    R visit(KeyMethodSignature n, A arg);
+
+    R visit(KeyRangeExpression n, A arg);
+
+    R visit(KeyTransactionStatement n, A arg);
+
+    R visit(KeyContextStatementBlock n, A arg);
+
+    R visit(KeyExecCtxtSV n, A arg);
+
+    R visit(KeyExpressionSV n, A arg);
+
+    R visit(KeyJumpLabelSV n, A arg);
+
+    R visit(KeyMetaConstructExpression n, A arg);
+
+    R visit(KeyMetaConstruct n, A arg);
+
+    R visit(KeyMetaConstructType n, A arg);
+
+    R visit(KeyMethodSignatureSV n, A arg);
+
+    R visit(KeyPassiveExpression n, A arg);
+
+    R visit(KeyProgramVariableSV n, A arg);
+
+    R visit(KeyStatementSV n, A arg);
+
+    R visit(KeyTypeSV n, A arg);
+
+    R visit(KeyCcatchSV n, A arg);
+
+    R visit(KeyExecutionContextSV n, A arg);
 
     R visit(JmlQuantifiedExpr n, A arg);
 

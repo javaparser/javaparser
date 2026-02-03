@@ -75,7 +75,7 @@ public class JmlClassExprDeclaration extends JmlClassLevelDeclaration<JmlClassEx
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClassExprDeclaration setInvariant(final Expression invariant) {
+    public JmlClassExprDeclaration setInvariant(final @NonNull() Expression invariant) {
         assertNotNull(invariant);
         if (invariant == this.invariant) {
             return this;
@@ -174,7 +174,7 @@ public class JmlClassExprDeclaration extends JmlClassLevelDeclaration<JmlClassEx
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClassExprDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public JmlClassExprDeclaration setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -186,61 +186,13 @@ public class JmlClassExprDeclaration extends JmlClassLevelDeclaration<JmlClassEx
         return this;
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlClassInvariantDeclaration() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassExprDeclaration asJmlClassInvariantDeclaration() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassExprDeclaration> toJmlClassInvariantDeclaration() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassInvariantDeclaration(Consumer<JmlClassExprDeclaration> action) {
-        action.accept(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlClassExprDeclaration() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassExprDeclaration asJmlClassExprDeclaration() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassExprDeclaration> toJmlClassExprDeclaration() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassExprDeclaration(Consumer<JmlClassExprDeclaration> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getKind() {
         return kind;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClassExprDeclaration setKind(final SimpleName kind) {
+    public JmlClassExprDeclaration setKind(final @NonNull() SimpleName kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -269,7 +221,7 @@ public class JmlClassExprDeclaration extends JmlClassLevelDeclaration<JmlClassEx
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClassExprDeclaration setName(final SimpleName name) {
+    public JmlClassExprDeclaration setName(final @Nullable() SimpleName name) {
         if (name == this.name) {
             return this;
         }
@@ -312,7 +264,7 @@ public class JmlClassExprDeclaration extends JmlClassLevelDeclaration<JmlClassEx
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClassExprDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlClassExprDeclaration setJmlTags(final @NonNull() NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -324,33 +276,56 @@ public class JmlClassExprDeclaration extends JmlClassLevelDeclaration<JmlClassEx
         return this;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression invariant() {
+    public @NonNull() Expression invariant() {
         return Objects.requireNonNull(invariant);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> jmlTags() {
+    public @NonNull() NodeList<SimpleName> jmlTags() {
         return Objects.requireNonNull(jmlTags);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName kind() {
+    public @NonNull() SimpleName kind() {
         return Objects.requireNonNull(kind);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @Nullable() SimpleName name() {
         return name;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlClassExprDeclaration() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlClassExprDeclaration asJmlClassExprDeclaration() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlClassExprDeclaration> toJmlClassExprDeclaration() {
+        return Optional.of(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlClassExprDeclaration(Consumer<JmlClassExprDeclaration> action) {
+        action.accept(this);
     }
 }

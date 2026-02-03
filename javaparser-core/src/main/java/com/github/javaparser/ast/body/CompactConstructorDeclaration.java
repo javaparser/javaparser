@@ -175,7 +175,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
      * @return this, the ConstructorDeclaration
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CompactConstructorDeclaration setBody(final BlockStmt body) {
+    public CompactConstructorDeclaration setBody(final @NonNull() BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -193,7 +193,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CompactConstructorDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public CompactConstructorDeclaration setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -211,7 +211,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CompactConstructorDeclaration setName(final SimpleName name) {
+    public CompactConstructorDeclaration setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -229,7 +229,8 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CompactConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
+    public CompactConstructorDeclaration setThrownExceptions(
+            final @NonNull() NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         if (thrownExceptions == this.thrownExceptions) {
             return this;
@@ -247,7 +248,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CompactConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+    public CompactConstructorDeclaration setTypeParameters(final @NonNull() NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
             return this;
@@ -408,33 +409,33 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
         customInitialization();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt body() {
+    public @NonNull() BlockStmt body() {
         return Objects.requireNonNull(body);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ReferenceType> thrownExceptions() {
+    public @NonNull() NodeList<ReferenceType> thrownExceptions() {
         return Objects.requireNonNull(thrownExceptions);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<TypeParameter> typeParameters() {
+    public @NonNull() NodeList<TypeParameter> typeParameters() {
         return Objects.requireNonNull(typeParameters);
     }
 }

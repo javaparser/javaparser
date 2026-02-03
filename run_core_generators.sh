@@ -13,7 +13,7 @@ pushd javaparser-core-generators
 popd
 
 # Fresh code has been generated in core, so rebuild the whole thing again.
-./mvnw --errors --show-version -B clean install -DskipTests
+./mvnw --errors --show-version -B clean compile -DskipTests
 if [ "$?" -ne 0 ]; then
     exit 1
 fi

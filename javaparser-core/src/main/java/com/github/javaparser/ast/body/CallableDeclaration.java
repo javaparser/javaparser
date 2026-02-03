@@ -140,7 +140,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setModifiers(final NodeList<Modifier> modifiers) {
+    public T setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return (T) this;
@@ -159,7 +159,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setName(final SimpleName name) {
+    public T setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return (T) this;
@@ -178,7 +178,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setParameters(final NodeList<Parameter> parameters) {
+    public T setParameters(final @NonNull() NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
             return (T) this;
@@ -197,7 +197,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
+    public T setThrownExceptions(final @NonNull() NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         if (thrownExceptions == this.thrownExceptions) {
             return (T) this;
@@ -216,7 +216,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+    public T setTypeParameters(final @NonNull() NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
             return (T) this;
@@ -461,7 +461,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setReceiverParameter(final ReceiverParameter receiverParameter) {
+    public T setReceiverParameter(final @Nullable() ReceiverParameter receiverParameter) {
         if (receiverParameter == this.receiverParameter) {
             return (T) this;
         }
@@ -490,7 +490,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setContracts(final NodeList<JmlContract> contracts) {
+    public T setContracts(final @NonNull() NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {
             return (T) this;
@@ -506,7 +506,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
      * Returns true if the method has a variable number of arguments
      */
     public boolean isVariableArityMethod() {
-        return getParameters().size() > 0 && getParameters().getLast().get().isVarArgs();
+        return getParameters().size() > 0 && getParameters().getOLast().get().isVarArgs();
     }
 
     /*
@@ -516,45 +516,45 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return !isVariableArityMethod();
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> contracts() {
-        return Objects.requireNonNull(contracts);
-    }
-
-    @NonNull()
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Parameter> parameters() {
+    public @NonNull() NodeList<Parameter> parameters() {
         return Objects.requireNonNull(parameters);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReceiverParameter receiverParameter() {
+    public @Nullable() ReceiverParameter receiverParameter() {
         return receiverParameter;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ReferenceType> thrownExceptions() {
+    public @NonNull() NodeList<ReferenceType> thrownExceptions() {
         return Objects.requireNonNull(thrownExceptions);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<TypeParameter> typeParameters() {
+    public @NonNull() NodeList<TypeParameter> typeParameters() {
         return Objects.requireNonNull(typeParameters);
+    }
+
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() NodeList<JmlContract> contracts() {
+        return Objects.requireNonNull(contracts);
     }
 }

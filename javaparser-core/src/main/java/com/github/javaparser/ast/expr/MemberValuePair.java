@@ -95,7 +95,7 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MemberValuePair setName(final SimpleName name) {
+    public MemberValuePair setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -108,7 +108,7 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MemberValuePair setValue(final Expression value) {
+    public MemberValuePair setValue(final @NonNull() Expression value) {
         assertNotNull(value);
         if (value == this.value) {
             return this;
@@ -149,15 +149,15 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
         return super.replace(node, replacementNode);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression value() {
+    public @NonNull() Expression value() {
         return Objects.requireNonNull(value);
     }
 }

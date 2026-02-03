@@ -20,8 +20,6 @@
  */
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -38,12 +36,12 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ConstructorDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A constructor declaration: {@code class X { X() { } }} where X(){} is the constructor declaration.
@@ -54,7 +52,7 @@ import org.jspecify.annotations.NonNull;
  * @author Julio Vilmar Gesser
  */
 public class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration>
-        implements NodeWithBlockStmt<ConstructorDeclaration>,
+        implements NodeWithOptionalBlockStmt<ConstructorDeclaration>,
                 NodeWithAccessModifiers<ConstructorDeclaration>,
                 NodeWithJavadoc<ConstructorDeclaration>,
                 NodeWithSimpleName<ConstructorDeclaration>,
@@ -63,6 +61,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
                 NodeWithTypeParameters<ConstructorDeclaration>,
                 Resolvable<ResolvedConstructorDeclaration> {
 
+    @OptionalProperty
     private BlockStmt body;
 
     public ConstructorDeclaration() {
@@ -114,21 +113,9 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
             SimpleName name,
             NodeList<Parameter> parameters,
             NodeList<ReferenceType> thrownExceptions,
-            BlockStmt body,
-            NodeList<JmlContract> contracts) {
-        this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body, null, contracts);
-    }
-
-    public ConstructorDeclaration(
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            NodeList<TypeParameter> typeParameters,
-            SimpleName name,
-            NodeList<Parameter> parameters,
-            NodeList<ReferenceType> thrownExceptions,
-            BlockStmt body,
-            ReceiverParameter receiverParameter) {
+            BlockStmt body) {
         this(
+                null,
                 modifiers,
                 annotations,
                 typeParameters,
@@ -136,7 +123,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
                 parameters,
                 thrownExceptions,
                 body,
-                receiverParameter,
+                null,
                 new NodeList<>());
     }
 
@@ -165,24 +152,24 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     }
 
     public ConstructorDeclaration(
-            TokenRange tokenRange,
+            TokenRange range,
             NodeList<Modifier> modifiers,
             NodeList<AnnotationExpr> annotations,
-            NodeList<TypeParameter> typeParameters,
+            NodeList<TypeParameter> list,
             SimpleName name,
             NodeList<Parameter> parameters,
             NodeList<ReferenceType> thrownExceptions,
-            BlockStmt body,
+            BlockStmt stmt,
             ReceiverParameter receiverParameter) {
         this(
-                tokenRange,
+                range,
                 modifiers,
                 annotations,
-                typeParameters,
+                list,
                 name,
                 parameters,
                 thrownExceptions,
-                body,
+                stmt,
                 receiverParameter,
                 new NodeList<>());
     }
@@ -229,8 +216,8 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt getBody() {
-        return body;
+    public Optional<BlockStmt> getBody() {
+        return Optional.ofNullable(body);
     }
 
     /**
@@ -240,8 +227,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
      * @return this, the ConstructorDeclaration
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ConstructorDeclaration setBody(final BlockStmt body) {
-        assertNotNull(body);
+    public ConstructorDeclaration setBody(final @Nullable() BlockStmt body) {
         if (body == this.body) {
             return this;
         }
@@ -341,9 +327,11 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         if (node == null) {
             return false;
         }
-        if (node == body) {
-            setBody((BlockStmt) replacementNode);
-            return true;
+        if (body != null) {
+            if (node == body) {
+                setBody((BlockStmt) replacementNode);
+                return true;
+            }
         }
         return super.replace(node, replacementNode);
     }
@@ -377,9 +365,39 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt body() {
-        return Objects.requireNonNull(body);
+    public @Nullable() BlockStmt body() {
+        return body;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public ConstructorDeclaration removeBody() {
+        return setBody((BlockStmt) null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public boolean remove(Node node) {
+        if (node == null) {
+            return false;
+        }
+        if (body != null) {
+            if (node == body) {
+                removeBody();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public NodeList<JmlContract> getContracts() {
+        return null;
+    }
+
+    @Override
+    public ConstructorDeclaration setContracts(NodeList<JmlContract> contracts) {
+        return null;
     }
 }

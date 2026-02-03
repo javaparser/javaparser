@@ -129,7 +129,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LambdaExpr setParameters(final NodeList<Parameter> parameters) {
+    public LambdaExpr setParameters(final @NonNull() NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
             return this;
@@ -150,7 +150,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LambdaExpr setBody(final Statement body) {
+    public LambdaExpr setBody(final @NonNull() Statement body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -174,7 +174,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         v.visit(this, arg);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isEnclosingParameters() {
         return Objects.requireNonNull(isEnclosingParameters);
@@ -306,7 +306,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LambdaExpr setContracts(final NodeList<JmlContract> contracts) {
+    public LambdaExpr setContracts(final @NonNull() NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;
@@ -318,21 +318,21 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return this;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement body() {
+    public @NonNull() Statement body() {
         return Objects.requireNonNull(body);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> contracts() {
-        return Objects.requireNonNull(contracts);
+    public @NonNull() NodeList<Parameter> parameters() {
+        return Objects.requireNonNull(parameters);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Parameter> parameters() {
-        return Objects.requireNonNull(parameters);
+    public @NonNull() NodeList<JmlContract> contracts() {
+        return Objects.requireNonNull(contracts);
     }
 }

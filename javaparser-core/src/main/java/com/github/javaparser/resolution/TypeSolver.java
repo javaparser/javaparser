@@ -73,6 +73,18 @@ public interface TypeSolver {
         throw new UnsolvedSymbolException(name, this.toString());
     }
 
+    SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName);
+
+    default ResolvedReferenceTypeDeclaration solveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+        SymbolReference<ResolvedReferenceTypeDeclaration> ref =
+                tryToSolveTypeInModule(qualifiedModuleName, simpleTypeName);
+        if (ref.isSolved()) {
+            return ref.getCorrespondingDeclaration();
+        }
+        throw new UnsolvedSymbolException(simpleTypeName, "module=" + qualifiedModuleName + " in " + this);
+    }
+
     /**
      * @return A resolved reference to {@code java.lang.Object}
      */

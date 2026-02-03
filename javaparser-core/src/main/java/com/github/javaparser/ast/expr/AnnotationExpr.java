@@ -74,7 +74,7 @@ public abstract class AnnotationExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AnnotationExpr setName(final Name name) {
+    public AnnotationExpr setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -149,9 +149,9 @@ public abstract class AnnotationExpr extends Expression
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @NonNull() Name name() {
         return Objects.requireNonNull(name);
     }
 }

@@ -74,7 +74,7 @@ public abstract class JmlClause extends Node implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClause setName(final SimpleName name) {
+    public JmlClause setName(final @Nullable() SimpleName name) {
         if (name == this.name) {
             return this;
         }
@@ -292,9 +292,9 @@ public abstract class JmlClause extends Node implements Jmlish {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClauseIf(Consumer<JmlClauseIf> action) {}
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @Nullable() SimpleName name() {
         return name;
     }
 }

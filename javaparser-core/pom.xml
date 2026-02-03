@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>jmlparser-parent</artifactId>
 		<groupId>io.github.jmltoolkit</groupId>
-		<version>3.27.1-b7-SNAPSHOT</version>
+		<version>3.28.0-J7.0-K10.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -12,49 +12,32 @@
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/jmltoolkit</url>
 	<description>The core parser functionality. This may be all you need.</description>
-
+	<dependencies>
+		<dependency>
+			<groupId>org.jspecify</groupId>
+			<artifactId>jspecify</artifactId>
+		</dependency>
+	</dependencies>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License</name>
-			<url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
+			<url>https://www.gnu.org/licenses/lgpl-3.0.html</url>
 			<distribution>repo</distribution>
 		</license>
 		<license>
 			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.jetbrains</groupId>
-			<artifactId>annotations</artifactId>
-			<version>24.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jspecify</groupId>
-			<artifactId>jspecify</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy-agent</artifactId>
-			<version>${byte-buddy.version}</version>
-		</dependency>
-	</dependencies>
-
-	<properties>
-		<build.timestamp>${maven.build.timestamp}</build.timestamp>
-	</properties>
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>com.helger.maven</groupId>
 				<artifactId>ph-javacc-maven-plugin</artifactId>
+				<version>5.0.1</version>
 				<executions>
 					<execution>
 						<id>javacc</id>
@@ -64,6 +47,7 @@
 						<configuration>
 							<grammarEncoding>${project.build.sourceEncoding}</grammarEncoding>
 							<jdkVersion>${java.version}</jdkVersion>
+							<javadocFriendlyComments>true</javadocFriendlyComments>
 						</configuration>
 					</execution>
 				</executions>

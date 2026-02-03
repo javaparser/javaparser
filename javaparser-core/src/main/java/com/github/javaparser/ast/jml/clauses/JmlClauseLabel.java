@@ -132,7 +132,7 @@ public class JmlClauseLabel extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLabel setExpr(final Expression expr) {
+    public JmlClauseLabel setExpr(final @NonNull() Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -150,7 +150,7 @@ public class JmlClauseLabel extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLabel setLabel(final SimpleName label) {
+    public JmlClauseLabel setLabel(final @Nullable() SimpleName label) {
         if (label == this.label) {
             return this;
         }
@@ -179,7 +179,7 @@ public class JmlClauseLabel extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLabel setKind(final JmlClauseKind kind) {
+    public JmlClauseLabel setKind(final @NonNull() JmlClauseKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -213,21 +213,21 @@ public class JmlClauseLabel extends JmlClause {
         action.accept(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expr() {
+    public @NonNull() Expression expr() {
         return Objects.requireNonNull(expr);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseKind kind() {
+    public @NonNull() JmlClauseKind kind() {
         return Objects.requireNonNull(kind);
     }
 
-    @Nullable()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName label() {
+    public @Nullable() SimpleName label() {
         return label;
     }
 }

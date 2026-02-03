@@ -714,6 +714,64 @@ public class RecordDeclarationTest {
         });
     }
 
+    /**
+     * "module" became a keyword in Java 9, but can still be used as an identifier
+     * in certain contexts. This test verifies the AST for a record named "module"
+     * that also uses "module" as a type and in object creation.
+     */
+    @Test
+    void recordWithModuleAsName() {
+        String s = "record module(String s) {\n"
+                + "  void foo() {\n"
+                + "    module m = new module(\"hello\");\n"
+                + "  }\n"
+                + "}\n";
+
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+
+        RecordDeclaration recordDeclaration =
+                cu.findFirst(RecordDeclaration.class).get();
+        assertEquals("module", recordDeclaration.getNameAsString());
+
+        // Verify the record has one parameter named "s" of type String
+        NodeList<Parameter> parameters = recordDeclaration.getParameters();
+        assertEquals(1, parameters.size());
+        Parameter parameter = parameters.get(0);
+        assertEquals("s", parameter.getNameAsString());
+        assertEquals("String", parameter.getTypeAsString());
+
+        // Verify the record has one method named "foo"
+        assertEquals(1, recordDeclaration.getMembers().size());
+        assertTrue(recordDeclaration.getMembers().get(0).isMethodDeclaration());
+        MethodDeclaration method = recordDeclaration.getMembers().get(0).asMethodDeclaration();
+        assertEquals("foo", method.getNameAsString());
+
+        // Verify the method body contains a variable declaration with object creation
+        assertEquals(1, method.getBody().get().getStatements().size());
+        assertTrue(method.getBody().get().getStatements().get(0).isExpressionStmt());
+
+        // Get the variable declaration expression
+        com.github.javaparser.ast.stmt.ExpressionStmt exprStmt =
+                method.getBody().get().getStatements().get(0).asExpressionStmt();
+        assertTrue(exprStmt.getExpression().isVariableDeclarationExpr());
+
+        com.github.javaparser.ast.expr.VariableDeclarationExpr varDecl =
+                exprStmt.getExpression().asVariableDeclarationExpr();
+        assertEquals("module", varDecl.getVariable(0).getTypeAsString());
+        assertEquals("m", varDecl.getVariable(0).getNameAsString());
+
+        // Verify the initializer is an object creation expression
+        assertTrue(varDecl.getVariable(0).getInitializer().isPresent());
+        assertTrue(varDecl.getVariable(0).getInitializer().get().isObjectCreationExpr());
+
+        ObjectCreationExpr objectCreation =
+                varDecl.getVariable(0).getInitializer().get().asObjectCreationExpr();
+        assertEquals("module", objectCreation.getTypeAsString());
+        assertEquals(1, objectCreation.getArguments().size());
+        assertEquals("\"hello\"", objectCreation.getArguments().get(0).toString());
+    }
+
     private void assertCompilationFails(String s) {
         assertThrows(AssertionFailedError.class, () -> {
             CompilationUnit cu = TestParser.parseCompilationUnit(s);

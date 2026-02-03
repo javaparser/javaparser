@@ -87,7 +87,7 @@ public class ArrayInitializerExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayInitializerExpr setValues(final NodeList<Expression> values) {
+    public ArrayInitializerExpr setValues(final @NonNull() NodeList<Expression> values) {
         assertNotNull(values);
         if (values == this.values) {
             return this;
@@ -165,9 +165,9 @@ public class ArrayInitializerExpr extends Expression {
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> values() {
+    public @NonNull() NodeList<Expression> values() {
         return Objects.requireNonNull(values);
     }
 }

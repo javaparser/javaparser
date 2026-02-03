@@ -111,7 +111,7 @@ public class PackageDeclaration extends Node
      * @param annotations the annotations to set
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PackageDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public PackageDeclaration setAnnotations(final @NonNull() NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
             return this;
@@ -129,7 +129,7 @@ public class PackageDeclaration extends Node
      * @param name the name to set
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PackageDeclaration setName(final Name name) {
+    public PackageDeclaration setName(final @NonNull() Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -187,15 +187,15 @@ public class PackageDeclaration extends Node
         return super.replace(node, replacementNode);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> annotations() {
+    public @NonNull() NodeList<AnnotationExpr> annotations() {
         return Objects.requireNonNull(annotations);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name name() {
+    public @NonNull() Name name() {
         return Objects.requireNonNull(name);
     }
 }

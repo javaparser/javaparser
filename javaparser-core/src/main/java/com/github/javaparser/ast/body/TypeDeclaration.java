@@ -126,7 +126,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setMembers(final NodeList<BodyDeclaration<?>> members) {
+    public T setMembers(final @NonNull() NodeList<BodyDeclaration<?>> members) {
         assertNotNull(members);
         if (members == this.members) {
             return (T) this;
@@ -140,7 +140,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setModifiers(final NodeList<Modifier> modifiers) {
+    public T setModifiers(final @NonNull() NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return (T) this;
@@ -154,7 +154,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setName(final SimpleName name) {
+    public T setName(final @NonNull() SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return (T) this;
@@ -215,7 +215,6 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      * If the declared type is a local class declaration, it will return Optional.empty().
      * If the declared type is a local record declaration, it will return Optional.empty().
      * If the declared type is not contained in a compilation unit, it will return Optional.empty().
-     *
      * @see com.github.javaparser.ast.stmt.LocalClassDeclarationStmt
      * @see com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt
      */
@@ -302,21 +301,21 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     public abstract ResolvedReferenceTypeDeclaration resolve();
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<BodyDeclaration<?>> members() {
+    public @NonNull() NodeList<BodyDeclaration<?>> members() {
         return Objects.requireNonNull(members);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> modifiers() {
+    public @NonNull() NodeList<Modifier> modifiers() {
         return Objects.requireNonNull(modifiers);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName name() {
+    public @NonNull() SimpleName name() {
         return Objects.requireNonNull(name);
     }
 }

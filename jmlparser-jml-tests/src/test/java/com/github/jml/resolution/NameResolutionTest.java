@@ -1,5 +1,7 @@
 package com.github.jml.resolution;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -12,7 +14,6 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.JavaRefersToJmlException;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
-import com.google.common.truth.Truth;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -142,7 +143,7 @@ class NameResolutionTest {
 
         v.messages.stream().sorted().forEach(errorLine -> System.out.format("//? %s%n", errorLine));
 
-        Truth.assertThat(v.messages).isEqualTo(errorLines);
+        assertThat(v.messages).isEqualTo(errorLines);
     }
 
     private static class ResolveAllVisitor extends VoidVisitorAdapter<Void> {

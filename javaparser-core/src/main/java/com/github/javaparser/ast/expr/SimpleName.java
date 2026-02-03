@@ -85,7 +85,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName setIdentifier(final String identifier) {
+    public SimpleName setIdentifier(final @NonNull() String identifier) {
         assertNonEmpty(identifier);
         if (identifier.equals(this.identifier)) {
             return this;
@@ -111,9 +111,9 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         return JavaParserMetaModel.simpleNameMetaModel;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String identifier() {
+    public @NonNull() String identifier() {
         return Objects.requireNonNull(identifier);
     }
 }

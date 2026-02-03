@@ -121,7 +121,7 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMultiCompareExpr setExpressions(final NodeList<Expression> expressions) {
+    public JmlMultiCompareExpr setExpressions(final @NonNull() NodeList<Expression> expressions) {
         assertNotNull(expressions);
         if (expressions == this.expressions) {
             return this;
@@ -139,7 +139,7 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMultiCompareExpr setOperators(final Operators operators) {
+    public JmlMultiCompareExpr setOperators(final @NonNull() Operators operators) {
         assertNotNull(operators);
         if (operators == this.operators) {
             return this;
@@ -179,15 +179,15 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
         return super.replace(node, replacementNode);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> expressions() {
+    public @NonNull() NodeList<Expression> expressions() {
         return Objects.requireNonNull(expressions);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Operators operators() {
+    public @NonNull() Operators operators() {
         return Objects.requireNonNull(operators);
     }
 }

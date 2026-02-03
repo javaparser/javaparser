@@ -147,7 +147,7 @@ public class JmlLabelExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabelExpr setExpression(final Expression expression) {
+    public JmlLabelExpr setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -165,7 +165,7 @@ public class JmlLabelExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabelExpr setKind(final Kind kind) {
+    public JmlLabelExpr setKind(final @NonNull() Kind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -191,7 +191,7 @@ public class JmlLabelExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabelExpr setLabel(final SimpleName label) {
+    public JmlLabelExpr setLabel(final @NonNull() SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {
             return this;
@@ -245,21 +245,21 @@ public class JmlLabelExpr extends Expression implements Jmlish {
         return JavaParserMetaModel.jmlLabelExprMetaModel;
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression expression() {
+    public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Kind kind() {
+    public @NonNull() Kind kind() {
         return Objects.requireNonNull(kind);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName label() {
+    public @NonNull() SimpleName label() {
         return Objects.requireNonNull(label);
     }
 }

@@ -23,17 +23,21 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import java.util.Optional;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
- * A node with a body that is a BlockStmt, which is optional.
+ * A node with a body that is a BlockStmt.
  */
+@NullMarked
 public interface NodeWithOptionalBlockStmt<N extends Node> {
 
     Optional<BlockStmt> getBody();
 
-    N setBody(BlockStmt block);
+    @Nullable
+    BlockStmt body();
 
-    N removeBody();
+    N setBody(@Nullable BlockStmt block);
 
     default BlockStmt createBody() {
         BlockStmt block = new BlockStmt();

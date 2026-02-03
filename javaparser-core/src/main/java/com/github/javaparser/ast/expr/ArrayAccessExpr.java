@@ -97,7 +97,7 @@ public class ArrayAccessExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayAccessExpr setIndex(final Expression index) {
+    public ArrayAccessExpr setIndex(final @NonNull() Expression index) {
         assertNotNull(index);
         if (index == this.index) {
             return this;
@@ -110,7 +110,7 @@ public class ArrayAccessExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayAccessExpr setName(final Expression name) {
+    public ArrayAccessExpr setName(final @NonNull() Expression name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -175,15 +175,15 @@ public class ArrayAccessExpr extends Expression {
         return Optional.of(this);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression index() {
+    public @NonNull() Expression index() {
         return Objects.requireNonNull(index);
     }
 
-    @NonNull()
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression name() {
+    public @NonNull() Expression name() {
         return Objects.requireNonNull(name);
     }
 }
