@@ -405,7 +405,7 @@ public class JavaParserFacade {
 
     /*
      * Returns the resolved Type of the {@code Node}. If the node is a method call
-     * expression and and the flag activates lambda expression resolution, the type
+     * expression and the flag activates lambda expression resolution, the type
      * of the arguments to the expression are looked up beforehand so that the type
      * resolution is as relevant as possible.
      */
@@ -422,6 +422,9 @@ public class JavaParserFacade {
                     }
                 }
                 ResolvedType res = getTypeConcrete(node, solveLambdas);
+                if (res == null) {
+                    throw new IllegalStateException("Resolved type is null for node: " + node);
+                }
                 node.setData(TYPE_WITH_LAMBDAS_RESOLVED, res);
                 Log.trace("getType on %s  -> %s", () -> node, () -> res);
             }

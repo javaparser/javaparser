@@ -23,6 +23,7 @@ package com.github.javaparser.ast.validator;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.EXPRESSION;
+import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_14;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
@@ -33,6 +34,7 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -70,6 +72,47 @@ class Java14ValidatorTest {
             assertProblems(
                     result,
                     "(line 1,col 11) Switch patterns not supported. Pay attention that this feature is supported starting from 'JAVA_21' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+        }
+
+        @Test
+        void switchExprMustHaveResultExpressions() {
+            ParseResult<Expression> result = javaParser.parse(
+                    EXPRESSION,
+                    provider(
+                            "switch(x){ case 1 -> throw new RuntimeException(); default -> throw new IllegalArgumentException(); }"));
+            assertProblems(result, "(line 1,col 1) Switch expression does not have any result expressions.");
+        }
+
+        @Test
+        void switchExprWithAtLeastOneResultExpressionAllowed() {
+            ParseResult<Expression> result = javaParser.parse(
+                    EXPRESSION, provider("switch(x){ case 1 -> throw new RuntimeException(); default -> 42; }"));
+            assertNoProblems(result);
+        }
+
+        /**
+         * Switch statements (not expressions) with all throwing cases are valid.
+         * The "must have result expressions" rule only applies to switch expressions.
+         */
+        @Test
+        void switchStmtWithAllThrowsAllowed() {
+            ParseResult<Statement> result = javaParser.parse(
+                    STATEMENT,
+                    provider(
+                            "switch(x){ case 1 -> throw new RuntimeException(); default -> throw new IllegalArgumentException(); }"));
+            assertNoProblems(result);
+        }
+
+        /**
+         * Classic colon-style switch statement with all throwing cases is valid.
+         */
+        @Test
+        void switchStmtColonStyleWithAllThrowsAllowed() {
+            ParseResult<Statement> result = javaParser.parse(
+                    STATEMENT,
+                    provider(
+                            "switch(x){ case 1: throw new RuntimeException(); default: throw new IllegalArgumentException(); }"));
+            assertNoProblems(result);
         }
     }
     /**
