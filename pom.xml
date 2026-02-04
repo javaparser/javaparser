@@ -406,7 +406,7 @@
                     <groupId>com.diffplug.spotless</groupId>
                     <artifactId>spotless-maven-plugin</artifactId>
                     <!-- This is the last version with Java 8 support -->
-                    <version>2.46.1</version>
+                    <version>3.2.1</version>
                     <configuration>
 						<lineEndings>UNIX</lineEndings>
                         <java>
