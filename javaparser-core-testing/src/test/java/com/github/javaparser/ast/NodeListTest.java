@@ -29,6 +29,7 @@ import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import java.lang.reflect.Field;
 import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -435,6 +436,486 @@ class NodeListTest extends AbstractLexicalPreservingTest {
                     iterator.next();
                 });
             }
+        }
+    }
+
+    @Nested
+    class FastIndexOfTest {
+
+        private boolean getIndicesInvalidated(NodeList<?> list) throws Exception {
+            Field field = NodeList.class.getDeclaredField("indicesInvalidated");
+            field.setAccessible(true);
+            return (boolean) field.get(list);
+        }
+
+        @Test
+        void basicLookup() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            NodeList<Name> list = nodeList(a, b, c);
+
+            assertEquals(0, list.fastIndexOf(a));
+            assertEquals(1, list.fastIndexOf(b));
+            assertEquals(2, list.fastIndexOf(c));
+        }
+
+        @Test
+        void returnsMinusOneForAbsentNode() {
+            Name a = new Name("a");
+            NodeList<Name> list = nodeList(a);
+
+            assertEquals(-1, list.fastIndexOf(new Name("z")));
+        }
+
+        @Test
+        void returnsMinusOneForNonNodeObject() {
+            NodeList<Name> list = nodeList(new Name("a"));
+
+            assertEquals(-1, list.fastIndexOf("not a node"));
+        }
+
+        @Test
+        void afterAppend() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a);
+            list.add(b);
+
+            assertEquals(0, list.fastIndexOf(a));
+            assertEquals(1, list.fastIndexOf(b));
+        }
+
+        @Test
+        void afterAddFirst() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a);
+            list.addFirst(b);
+
+            assertEquals(0, list.fastIndexOf(b));
+            assertEquals(1, list.fastIndexOf(a));
+        }
+
+        @Test
+        void afterInsertInMiddle() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            NodeList<Name> list = nodeList(a, c);
+            list.add(1, b);
+
+            assertEquals(0, list.fastIndexOf(a));
+            assertEquals(1, list.fastIndexOf(b));
+            assertEquals(2, list.fastIndexOf(c));
+        }
+
+        @Test
+        void afterRemoveLast() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            NodeList<Name> list = nodeList(a, b, c);
+            list.removeLast();
+
+            assertEquals(0, list.fastIndexOf(a));
+            assertEquals(1, list.fastIndexOf(b));
+            assertEquals(-1, list.fastIndexOf(c));
+        }
+
+        @Test
+        void afterRemoveFirst() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            NodeList<Name> list = nodeList(a, b, c);
+            list.removeFirst();
+
+            assertEquals(-1, list.fastIndexOf(a));
+            assertEquals(0, list.fastIndexOf(b));
+            assertEquals(1, list.fastIndexOf(c));
+        }
+
+        @Test
+        void afterRemoveMiddleByIndex() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            NodeList<Name> list = nodeList(a, b, c);
+            list.remove(1);
+
+            assertEquals(0, list.fastIndexOf(a));
+            assertEquals(-1, list.fastIndexOf(b));
+            assertEquals(1, list.fastIndexOf(c));
+        }
+
+        @Test
+        void afterRemoveByReference() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a, b);
+            list.remove(a);
+
+            assertEquals(-1, list.fastIndexOf(a));
+            assertEquals(0, list.fastIndexOf(b));
+        }
+
+        @Test
+        void afterSet() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            Name z = new Name("z");
+            NodeList<Name> list = nodeList(a, b, c);
+            list.set(1, z);
+
+            assertEquals(0, list.fastIndexOf(a));
+            assertEquals(-1, list.fastIndexOf(b));
+            assertEquals(2, list.fastIndexOf(c));
+            assertEquals(1, list.fastIndexOf(z));
+        }
+
+        @Test
+        void afterSort() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            NodeList<Name> list = nodeList(c, a, b);
+            list.sort(Comparator.comparing(Name::asString));
+
+            assertEquals(0, list.fastIndexOf(a));
+            assertEquals(1, list.fastIndexOf(b));
+            assertEquals(2, list.fastIndexOf(c));
+        }
+
+        @Test
+        void afterClear() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a, b);
+            list.clear();
+
+            assertEquals(-1, list.fastIndexOf(a));
+            assertEquals(-1, list.fastIndexOf(b));
+        }
+
+        @Test
+        void afterReplaceAll() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a, b);
+            list.replaceAll(n -> new Name(n.asString().toUpperCase()));
+
+            // Original nodes are no longer in the list
+            assertEquals(-1, list.fastIndexOf(a));
+            assertEquals(-1, list.fastIndexOf(b));
+            // New nodes are findable
+            assertEquals(0, list.fastIndexOf(list.get(0)));
+            assertEquals(1, list.fastIndexOf(list.get(1)));
+        }
+
+        @Test
+        void usesEquality() {
+            Name a1 = new Name("a");
+            Name a2 = new Name("a");
+            assertEquals(a1, a2);
+            assertNotSame(a1, a2);
+
+            NodeList<Name> list = nodeList(a1);
+
+            assertEquals(0, list.fastIndexOf(a1));
+            assertEquals(0, list.fastIndexOf(a2));
+        }
+
+        @Test
+        void duplicateEqualNodesDistinguished() {
+            Name a1 = new Name("a");
+            Name a2 = new Name("a");
+            Name b = new Name("b");
+            assertEquals(a1, a2);
+            assertNotSame(a1, a2);
+
+            NodeList<Name> list = nodeList(a1, b, a2);
+
+            // fastIndexOf finds the actual reference's position, not the first equals match
+            assertEquals(0, list.fastIndexOf(a1));
+            assertEquals(2, list.fastIndexOf(a2));
+            // indexOf always returns the first equals match
+            assertEquals(0, list.indexOf(a1));
+            assertEquals(0, list.indexOf(a2));
+        }
+
+        @Test
+        void consistentWithIndexOfAfterMultipleMutations() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            Name d = new Name("d");
+            Name e = new Name("e");
+            Name z = new Name("z");
+            NodeList<Name> list = nodeList(a, b, c);
+
+            list.add(d);
+            list.addFirst(e);
+            list.remove(b);
+            list.set(2, z);
+
+            for (int i = 0; i < list.size(); i++) {
+                Name node = list.get(i);
+                assertEquals(i, list.fastIndexOf(node), "fastIndexOf mismatch for node at position " + i);
+            }
+        }
+
+        @Test
+        void repeatedCallsWithoutMutation() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            NodeList<Name> list = nodeList(a, b, c);
+
+            for (int i = 0; i < 5; i++) {
+                assertEquals(0, list.fastIndexOf(a));
+                assertEquals(1, list.fastIndexOf(b));
+                assertEquals(2, list.fastIndexOf(c));
+            }
+        }
+
+        @Test
+        void onEmptyList() {
+            NodeList<Name> list = nodeList();
+
+            assertEquals(-1, list.fastIndexOf(new Name("a")));
+        }
+
+        @Test
+        void onSingleElementList() {
+            Name a = new Name("a");
+            NodeList<Name> list = nodeList(a);
+
+            assertEquals(0, list.fastIndexOf(a));
+            assertEquals(-1, list.fastIndexOf(new Name("z")));
+        }
+
+        @Test
+        void freshListHasValidatedIndices() throws Exception {
+            NodeList<Name> list = nodeList(new Name("a"), new Name("b"));
+
+            assertFalse(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void fastIndexOfResetsInvalidatedFlag() throws Exception {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(b);
+            list.addFirst(a);
+            assertTrue(getIndicesInvalidated(list));
+
+            list.fastIndexOf(a);
+
+            assertFalse(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void appendDoesNotInvalidate() throws Exception {
+            Name a = new Name("a");
+            NodeList<Name> list = nodeList(a);
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+
+            list.add(new Name("b"));
+
+            assertFalse(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void multipleAppendsDoNotInvalidate() throws Exception {
+            Name a = new Name("a");
+            NodeList<Name> list = nodeList(a);
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+
+            list.add(new Name("b"));
+            list.add(new Name("c"));
+            list.add(new Name("d"));
+
+            assertFalse(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void addFirstInvalidates() throws Exception {
+            Name a = new Name("a");
+            NodeList<Name> list = nodeList(a);
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+
+            list.addFirst(new Name("b"));
+
+            assertTrue(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void insertInMiddleInvalidates() throws Exception {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a, b);
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+
+            list.add(1, new Name("c"));
+
+            assertTrue(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void removeLastDoesNotInvalidate() throws Exception {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a, b);
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+
+            list.removeLast();
+
+            assertFalse(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void removeFirstInvalidates() throws Exception {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a, b);
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+
+            list.removeFirst();
+
+            assertTrue(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void removeMiddleInvalidates() throws Exception {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            NodeList<Name> list = nodeList(a, b, c);
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+
+            list.remove(1);
+
+            assertTrue(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void setDoesNotInvalidate() throws Exception {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a, b);
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+
+            list.set(0, new Name("z"));
+
+            assertFalse(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void sortInvalidates() throws Exception {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(b, a);
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+
+            list.sort(Comparator.comparing(Name::asString));
+
+            assertTrue(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void fastIndexOfAfterInvalidationResetsFlag() throws Exception {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a, b);
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+
+            list.addFirst(new Name("c"));
+            assertTrue(getIndicesInvalidated(list));
+
+            list.fastIndexOf(a);
+            assertFalse(getIndicesInvalidated(list));
+        }
+
+        // --- nodeListIndex field tests ---
+
+        @Test
+        void nodeListIndexSetCorrectlyAfterFastIndexOf() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            NodeList<Name> list = nodeList(a, b, c);
+            list.fastIndexOf(a);
+
+            assertEquals(0, a.getNodeListIndex());
+            assertEquals(1, b.getNodeListIndex());
+            assertEquals(2, c.getNodeListIndex());
+        }
+
+        @Test
+        void nodeListIndexClearedOnRemoval() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            NodeList<Name> list = nodeList(a, b);
+            list.fastIndexOf(a);
+
+            list.remove(a);
+
+            assertEquals(-1, a.getNodeListIndex());
+        }
+
+        @Test
+        void nodeListIndexUpdatedOnReplacement() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name z = new Name("z");
+            NodeList<Name> list = nodeList(a, b);
+            list.fastIndexOf(a);
+
+            list.set(0, z);
+
+            assertEquals(-1, a.getNodeListIndex());
+            assertEquals(0, z.getNodeListIndex());
+            assertEquals(1, b.getNodeListIndex());
+        }
+
+        @Test
+        void appendSetsCorrectNodeListIndex() throws Exception {
+            Name a = new Name("a");
+            NodeList<Name> list = nodeList(a);
+            list.fastIndexOf(a);
+
+            Name b = new Name("b");
+            list.add(b);
+
+            assertEquals(0, a.getNodeListIndex());
+            assertEquals(1, b.getNodeListIndex());
+            assertFalse(getIndicesInvalidated(list));
+        }
+
+        @Test
+        void nodeListIndexClearedOnRemoveByIndex() {
+            Name a = new Name("a");
+            Name b = new Name("b");
+            Name c = new Name("c");
+            NodeList<Name> list = nodeList(a, b, c);
+            list.fastIndexOf(a);
+
+            Name removed = list.remove(1);
+
+            assertSame(b, removed);
+            assertEquals(-1, b.getNodeListIndex());
         }
     }
 }
