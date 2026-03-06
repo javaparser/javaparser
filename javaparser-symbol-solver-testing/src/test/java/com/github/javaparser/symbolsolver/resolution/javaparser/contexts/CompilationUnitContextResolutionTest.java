@@ -43,10 +43,14 @@ import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUn
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,6 +61,17 @@ import org.junit.jupiter.api.Test;
 class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
+
+    /** Fixture root for static import cycle (works from repo root or module dir). */
+    private static Path fixtureRootForStaticImportCycle() throws URISyntaxException {
+        try {
+            return adaptPath("src/test/resources/static_import_cycle_fixture/app");
+        } catch (IllegalArgumentException e) {
+            return Paths.get(CompilationUnitContextResolutionTest.class.getClassLoader()
+                    .getResource("static_import_cycle_fixture/app")
+                    .toURI());
+        }
+    }
 
     @BeforeEach
     void setup() {
@@ -267,5 +282,43 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
                         .getType()
                         .asReferenceType()
                         .getQualifiedName());
+    }
+
+    /**
+     * Verifies that resolving the symbol "Lion" in ElephantBuilder's compilation unit does
+     * <b>not</b> cause a {@link StackOverflowError} when cyclic static imports are present.
+     * <p>
+     * ElephantBuilder has {@code import static ...ZooTestConstants.*;} and uses
+     * {@code Lion.OBJCODE}. Resolving "Lion" enters
+     * {@link CompilationUnitContext#solveSymbol(String)}, which tries each static-import type;
+     * those types (ZooTestConstants, ElephantTestConstants, etc.) form a cycle via their
+     * own static imports. Without the "member in type only" fix, re-entry into CUC via the type's
+     * parent context causes unbounded recursion and StackOverflowError.
+     * <p>
+     * This test triggers that path directly with {@code CUC.solveSymbol("Lion")}. With the
+     * fix, resolution succeeds (Lion from zoo-sdk-stub) or returns unsolved; without it, the test fails with StackOverflowError.
+     */
+    @Test
+    void resolveMethodCallsInDocumentBuilderWithCyclicStaticImportsWithoutStackOverflow() throws IOException, URISyntaxException {
+        Path fixtureRoot = fixtureRootForStaticImportCycle();
+        Path testJava = fixtureRoot.resolve("src/test/java");
+        Path mainJava = fixtureRoot.resolve("src/main/java");
+        Path zooSdkStub = fixtureRoot.getParent().resolve("zoo-sdk-stub/src/main/java");
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
+        typeSolver.add(new ReflectionTypeSolver());
+        typeSolver.add(new JavaParserTypeSolver(testJava));
+        typeSolver.add(new JavaParserTypeSolver(mainJava));
+        typeSolver.add(new JavaParserTypeSolver(zooSdkStub));
+
+        CompilationUnit cu = parseSampleWithStandardExtension(
+                "static_import_cycle_fixture/app/src/test/java/junit4/zoo/builders/ElephantBuilder",
+                typeSolver);
+
+        try {
+            new CompilationUnitContext(cu, typeSolver).solveSymbol("Lion");
+        } catch (StackOverflowError e) {
+            throw new AssertionError("Cyclic static imports must not cause StackOverflow (fix: resolvingMemberInTypeOnly in CompilationUnitContext)", e);
+        }
+        // With the fix, "Lion" resolves from zoo-sdk-stub; the cycle is traversed without StackOverflow.
     }
 }
