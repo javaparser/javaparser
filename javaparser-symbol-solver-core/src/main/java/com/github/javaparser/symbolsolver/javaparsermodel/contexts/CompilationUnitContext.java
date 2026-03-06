@@ -36,9 +36,9 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -48,12 +48,26 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     private static final String DEFAULT_PACKAGE = "java.lang";
 
-    // Contains the names of static import declarations with asterisks that have
-    // already been resolved. The aim is to keep a history of name searches for the
-    // same resolution attempt in order to avoid a recursive issue leading to a
-    // stackoverflow exception. See issues 4450 & 2720
-    private static ThreadLocal<List<String>> resolvedStaticImport =
-            ThreadLocal.withInitial(() -> new ArrayList<String>());
+    /**
+     * When true, we are resolving a symbol as a member of a type (inside solveSymbolInType).
+     * Re-entry into this CUC via the type's parent returns unsolved to break cyclic static imports.
+     */
+    private static final ThreadLocal<Boolean> RESOLVING_MEMBER_IN_TYPE_ONLY =
+            ThreadLocal.withInitial(() -> false);
+
+    /** Runs the supplier with the "member in type only" flag set; resets the flag in finally. */
+    private static <T> T runWithMemberInTypeOnlyScope(Supplier<T> supplier) {
+        RESOLVING_MEMBER_IN_TYPE_ONLY.set(true);
+        try {
+            return supplier.get();
+        } finally {
+            RESOLVING_MEMBER_IN_TYPE_ONLY.set(false);
+        }
+    }
+
+    private static boolean isResolvingMemberInTypeOnly() {
+        return Boolean.TRUE.equals(RESOLVING_MEMBER_IN_TYPE_ONLY.get());
+    }
 
     ///
     /// Static methods
@@ -73,6 +87,11 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        // Break cyclic static imports: when we were resolving "member in type only" and the type's
+        // context delegated to this CU (its parent), do not iterate static imports (would re-enter cycle).
+        if (isResolvingMemberInTypeOnly()) {
+            return SymbolReference.unsolved();
+        }
 
         // solve absolute references
         String itName = name;
@@ -81,7 +100,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             String memberName = getMember(itName);
             SymbolReference<ResolvedTypeDeclaration> type = this.solveType(typeName);
             if (type.isSolved()) {
-                return new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName);
+                return runWithMemberInTypeOnlyScope(() ->
+                        new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName));
             }
             itName = typeName;
         }
@@ -91,19 +111,11 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             if (importDecl.isStatic()) {
                 if (importDecl.isAsterisk()) {
                     String qName = importDecl.getNameAsString();
-                    // Try to resolve the name in from declarations imported with asterisks only if
-                    // they have not already been analysed, otherwise this can lead to an infinite
-                    // loop via circular dependencies.
-                    if (!isAlreadyResolved(qName)) {
-                        resolvedStaticImport.get().add(qName);
-                        ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
-
-                        SymbolReference<? extends ResolvedValueDeclaration> ref =
-                                new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
-                        if (ref.isSolved()) {
-                            resolvedStaticImport.remove(); // clear the search history
-                            return ref;
-                        }
+                    ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
+                    SymbolReference<? extends ResolvedValueDeclaration> ref = runWithMemberInTypeOnlyScope(() ->
+                            new SymbolSolver(typeSolver).solveSymbolInType(importedType, name));
+                    if (ref.isSolved()) {
+                        return ref;
                     }
                 } else {
                     String whole = importDecl.getNameAsString();
@@ -114,20 +126,14 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
                     if (memberName.equals(name)) {
                         ResolvedTypeDeclaration importedType = typeSolver.solveType(typeName);
-                        return new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName);
+                        return runWithMemberInTypeOnlyScope(() ->
+                                new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName));
                     }
                 }
             }
         }
 
-        // Clear of the search history because we don't want this context to be reused
-        // in another search.
-        resolvedStaticImport.remove();
         return SymbolReference.unsolved();
-    }
-
-    private boolean isAlreadyResolved(String qName) {
-        return resolvedStaticImport.get().contains(qName);
     }
 
     @Override
