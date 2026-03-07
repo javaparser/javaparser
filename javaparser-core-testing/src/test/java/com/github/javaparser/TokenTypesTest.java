@@ -49,13 +49,13 @@ public class TokenTypesTest {
         int switchEntries = tokenTypesCu.findAll(SwitchEntry.class).size() - 1;
 
         // The amount of "case XXX:" in TokenTypes.java should be equal to the amount of tokens JavaCC knows about:
-        assertEquals(tokenCount, switchEntries);
+        assertEquals(tokenCount + 1, switchEntries);
     }
 
     @TestFactory
     Stream<DynamicTest> everyTokenHasACategory0() {
         final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
-        return IntStream.range(0, tokenCount - 1)
+        return IntStream.range(0, tokenCount)
                 .mapToObj(it -> DynamicTest.dynamicTest("TokenType: " + it, () -> {
                     try {
                         TokenTypes.getCategory(it);
