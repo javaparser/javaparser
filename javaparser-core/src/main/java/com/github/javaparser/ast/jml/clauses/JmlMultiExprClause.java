@@ -27,7 +27,7 @@ import org.jspecify.annotations.Nullable;
  * @author Alexander Weigl
  * @version 1 (25.02.22)
  */
-public class JmlMultiExprClause extends JmlClause  {
+public class JmlMultiExprClause extends JmlClause {
 
     private JmlClauseKind kind;
 

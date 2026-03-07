@@ -28,7 +28,7 @@ import org.jspecify.annotations.Nullable;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlClauseLabel extends JmlClause  implements NodeWithExpression<JmlClauseIf>  {
+public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlClauseIf> {
 
     private JmlClauseKind kind;
 
