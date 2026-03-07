@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.key.KeyTransactionStatement;
+import com.github.javaparser.ast.key.KeyTransactionStmt;
 import java.util.Optional;
 
 /**
@@ -40,7 +40,7 @@ public class KeyTransactionStatementMetaModel extends StatementMetaModel {
     KeyTransactionStatementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(
                 superBaseNodeMetaModel,
-                KeyTransactionStatement.class,
+                KeyTransactionStmt.class,
                 "KeyTransactionStatement",
                 "com.github.javaparser.ast.key",
                 false,

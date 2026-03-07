@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.key.KeyExecStatement;
+import com.github.javaparser.ast.key.KeyExecStmt;
 import java.util.Optional;
 
 /**
@@ -40,7 +40,7 @@ public class KeyExecStatementMetaModel extends StatementMetaModel {
     KeyExecStatementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(
                 superBaseNodeMetaModel,
-                KeyExecStatement.class,
+                KeyExecStmt.class,
                 "KeyExecStatement",
                 "com.github.javaparser.ast.key",
                 false,

@@ -600,7 +600,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final KeyCatchAllStatement n, final Void arg) {
+    public Integer visit(final KeyCatchAllStmt n, final Void arg) {
         return n.hashCode();
     }
 
@@ -610,7 +610,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final KeyExecStatement n, final Void arg) {
+    public Integer visit(final KeyExecStmt n, final Void arg) {
         return n.hashCode();
     }
 
@@ -620,12 +620,12 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final KeyLoopScopeBlock n, final Void arg) {
+    public Integer visit(final KeyLoopScopeBlockStmt n, final Void arg) {
         return n.hashCode();
     }
 
     @Override
-    public Integer visit(final KeyMergePointStatement n, final Void arg) {
+    public Integer visit(final KeyMergePointStmt n, final Void arg) {
         return n.hashCode();
     }
 
@@ -635,7 +635,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final KeyMethodCallStatement n, final Void arg) {
+    public Integer visit(final KeyMethodCallStmt n, final Void arg) {
         return n.hashCode();
     }
 
@@ -645,12 +645,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final KeyRangeExpression n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final KeyTransactionStatement n, final Void arg) {
+    public Integer visit(final KeyTransactionStmt n, final Void arg) {
         return n.hashCode();
     }
 
@@ -791,21 +786,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final JmlMethodSignature n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final JmlDocsBodyDeclaration n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final JmlDocsTypeDeclaration n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final JmlDocsStatements n, final Void arg) {
         return n.hashCode();
     }
 

@@ -58,7 +58,7 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
         super(tokenRange);
         setKind(kind);
         setLabel(label);
-        setExpr(expression);
+        setExpression(expression);
         customInitialization();
     }
 
@@ -100,7 +100,7 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
             return false;
         }
         if (node == expression) {
-            setExpr((Expression) replacementNode);
+            setExpression((Expression) replacementNode);
             return true;
         }
         if (label != null) {
@@ -133,7 +133,7 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLabel setExpr(final @NonNull() Expression expression) {
+    public JmlClauseLabel setExpr(@NonNull() final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -216,7 +216,8 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public @NonNull() Expression expr() {
+    @NonNull()
+    public Expression expr() {
         return Objects.requireNonNull(expression);
     }
 
@@ -232,14 +233,27 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
         return label;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
     }
 
-    @Override
-    public JmlClauseLabel setExpression(Expression expression) {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClauseLabel setExpression(final @NonNull() Expression expression) {
+        assertNotNull(expression);
+        if (expression == this.expression) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null) this.expression.setParentNode(null);
         this.expression = expression;
+        setAsParentNodeOf(expression);
         return this;
+    }
+
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() Expression expression() {
+        return Objects.requireNonNull(expression);
     }
 }

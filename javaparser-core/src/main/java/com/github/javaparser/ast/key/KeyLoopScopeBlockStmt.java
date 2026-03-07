@@ -14,20 +14,20 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.KeyLoopScopeBlockMetaModel;
+import com.github.javaparser.metamodel.KeyLoopScopeBlockStmtMetaModel;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 
-public class KeyLoopScopeBlock extends Statement {
+public class KeyLoopScopeBlockStmt extends Statement {
 
     private Expression indexPV;
 
     private BlockStmt block;
 
     @AllFieldsConstructor
-    public KeyLoopScopeBlock(Expression indexPV, BlockStmt block) {
+    public KeyLoopScopeBlockStmt(Expression indexPV, BlockStmt block) {
         this.indexPV = indexPV;
         this.block = block;
     }
@@ -36,7 +36,7 @@ public class KeyLoopScopeBlock extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyLoopScopeBlock(TokenRange tokenRange, Expression indexPV, BlockStmt block) {
+    public KeyLoopScopeBlockStmt(TokenRange tokenRange, Expression indexPV, BlockStmt block) {
         super(tokenRange);
         setIndexPV(indexPV);
         setBlock(block);
@@ -61,7 +61,7 @@ public class KeyLoopScopeBlock extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyLoopScopeBlock setBlock(final @NonNull() BlockStmt block) {
+    public KeyLoopScopeBlockStmt setBlock(final @NonNull() BlockStmt block) {
         assertNotNull(block);
         if (block == this.block) {
             return this;
@@ -79,7 +79,7 @@ public class KeyLoopScopeBlock extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyLoopScopeBlock setIndexPV(final @NonNull() Expression indexPV) {
+    public KeyLoopScopeBlockStmt setIndexPV(final @NonNull() Expression indexPV) {
         assertNotNull(indexPV);
         if (indexPV == this.indexPV) {
             return this;
@@ -110,14 +110,8 @@ public class KeyLoopScopeBlock extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public KeyLoopScopeBlock clone() {
-        return (KeyLoopScopeBlock) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public KeyLoopScopeBlockMetaModel getMetaModel() {
-        return JavaParserMetaModel.keyLoopScopeBlockMetaModel;
+    public KeyLoopScopeBlockStmt clone() {
+        return (KeyLoopScopeBlockStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -128,19 +122,19 @@ public class KeyLoopScopeBlock extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyLoopScopeBlock asKeyLoopScopeBlock() {
+    public KeyLoopScopeBlockStmt asKeyLoopScopeBlock() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyLoopScopeBlock> toKeyLoopScopeBlock() {
+    public Optional<KeyLoopScopeBlockStmt> toKeyLoopScopeBlock() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyLoopScopeBlock(Consumer<KeyLoopScopeBlock> action) {
+    public void ifKeyLoopScopeBlock(Consumer<KeyLoopScopeBlockStmt> action) {
         action.accept(this);
     }
 
@@ -154,5 +148,29 @@ public class KeyLoopScopeBlock extends Statement {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @NonNull() Expression indexPV() {
         return Objects.requireNonNull(indexPV);
+    }
+
+    @Override
+    public boolean isKeyLoopScopeBlockStmt() {
+        return true;
+    }
+
+    @Override
+    public KeyLoopScopeBlockStmt asKeyLoopScopeBlockStmt() {
+        return this;
+    }
+
+    @Override
+    public Optional<KeyLoopScopeBlockStmt> toKeyLoopScopeBlockStmt() {
+        return Optional.of(this);
+    }
+
+    public void ifKeyLoopScopeBlockStmt(Consumer<KeyLoopScopeBlockStmt> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public KeyLoopScopeBlockStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.keyLoopScopeBlockStmtMetaModel;
     }
 }

@@ -72,12 +72,6 @@ public class JmlDoc extends Node {
         return (JmlDoc) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlDocMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlDocMetaModel;
-    }
-
     /**
      * This constructor is used by the parser and is considered private.
      */
@@ -105,5 +99,11 @@ public class JmlDoc extends Node {
             return tokenRange.get().getBegin();
         }
         return new JavaToken(GeneratedJavaParserConstants.JML_BLOCK_COMMENT, getContent());
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlDocMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlDocMetaModel;
     }
 }

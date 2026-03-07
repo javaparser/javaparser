@@ -1544,13 +1544,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlClauseLabel n, final Object arg) {
-        Expression expr = cloneNode(n.getExpr(), arg);
+        Expression expression = cloneNode(n.getExpression(), arg);
         SimpleName label = cloneNode(n.getLabel(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Comment> associatedSpecificationComments =
                 cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlClauseLabel r = new JmlClauseLabel(n.getTokenRange().orElse(null), n.getKind(), label, expr);
+        JmlClauseLabel r = new JmlClauseLabel(n.getTokenRange().orElse(null), n.getKind(), label, expression);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1714,12 +1714,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final JmlClauseIf n, final Object arg) {
         Expression condition = cloneNode(n.getCondition(), arg);
-        Expression then = cloneNode(n.getThen(), arg);
+        Expression expression = cloneNode(n.getExpression(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Comment> associatedSpecificationComments =
                 cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlClauseIf r = new JmlClauseIf(n.getTokenRange().orElse(null), name, condition, n.getKind(), then);
+        JmlClauseIf r = new JmlClauseIf(n.getTokenRange().orElse(null), name, condition, n.getKind(), expression);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1981,13 +1981,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final KeyCatchAllStatement n, final Object arg) {
+    public Visitable visit(final KeyCatchAllStmt n, final Object arg) {
         BlockStmt block = cloneNode(n.getBlock(), arg);
         Name label = cloneNode(n.getLabel(), arg);
         NodeList<Comment> associatedSpecificationComments =
                 cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeyCatchAllStatement r = new KeyCatchAllStatement(n.getTokenRange().orElse(null), label, block);
+        KeyCatchAllStmt r = new KeyCatchAllStmt(n.getTokenRange().orElse(null), label, block);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -2009,13 +2009,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final KeyExecStatement n, final Object arg) {
+    public Visitable visit(final KeyExecStmt n, final Object arg) {
         NodeList<KeyCcatchBranch> branches = cloneList(n.getBranches(), arg);
         BlockStmt execBlock = cloneNode(n.getExecBlock(), arg);
         NodeList<Comment> associatedSpecificationComments =
                 cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeyExecStatement r = new KeyExecStatement(n.getTokenRange().orElse(null), execBlock, branches);
+        KeyExecStmt r = new KeyExecStmt(n.getTokenRange().orElse(null), execBlock, branches);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -2038,13 +2038,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final KeyLoopScopeBlock n, final Object arg) {
+    public Visitable visit(final KeyLoopScopeBlockStmt n, final Object arg) {
         BlockStmt block = cloneNode(n.getBlock(), arg);
         Expression indexPV = cloneNode(n.getIndexPV(), arg);
         NodeList<Comment> associatedSpecificationComments =
                 cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeyLoopScopeBlock r = new KeyLoopScopeBlock(n.getTokenRange().orElse(null), indexPV, block);
+        KeyLoopScopeBlockStmt r = new KeyLoopScopeBlockStmt(n.getTokenRange().orElse(null), indexPV, block);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -2052,12 +2052,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final KeyMergePointStatement n, final Object arg) {
+    public Visitable visit(final KeyMergePointStmt n, final Object arg) {
         Expression expr = cloneNode(n.getExpr(), arg);
         NodeList<Comment> associatedSpecificationComments =
                 cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeyMergePointStatement r = new KeyMergePointStatement(n.getTokenRange().orElse(null), expr);
+        KeyMergePointStmt r = new KeyMergePointStmt(n.getTokenRange().orElse(null), expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -2080,14 +2080,14 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final KeyMethodCallStatement n, final Object arg) {
+    public Visitable visit(final KeyMethodCallStmt n, final Object arg) {
         BlockStmt block = cloneNode(n.getBlock(), arg);
         KeyAbstractExecutionContext context = cloneNode(n.getContext(), arg);
         Name name = cloneNode(n.getName(), arg);
         NodeList<Comment> associatedSpecificationComments =
                 cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeyMethodCallStatement r = new KeyMethodCallStatement(n.getTokenRange().orElse(null), name, context, block);
+        KeyMethodCallStmt r = new KeyMethodCallStmt(n.getTokenRange().orElse(null), name, context, block);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -2109,26 +2109,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final KeyRangeExpression n, final Object arg) {
-        Expression lower = cloneNode(n.getLower(), arg);
-        Expression upper = cloneNode(n.getUpper(), arg);
+    public Visitable visit(final KeyTransactionStmt n, final Object arg) {
         NodeList<Comment> associatedSpecificationComments =
                 cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeyRangeExpression r = new KeyRangeExpression(n.getTokenRange().orElse(null), lower, upper);
-        r.setComment(comment);
-        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
-        copyData(n, r);
-        return r;
-    }
-
-    @Override
-    public Visitable visit(final KeyTransactionStatement n, final Object arg) {
-        NodeList<Comment> associatedSpecificationComments =
-                cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
-        Comment comment = cloneNode(n.getComment(), arg);
-        KeyTransactionStatement r =
-                new KeyTransactionStatement(n.getTokenRange().orElse(null), n.getType());
+        KeyTransactionStmt r = new KeyTransactionStmt(n.getTokenRange().orElse(null), n.getType());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -2518,21 +2503,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
         return r;
-    }
-
-    @Override
-    public Visitable visit(final JmlDocsBodyDeclaration n, final Object arg) {
-        return null;
-    }
-
-    @Override
-    public Visitable visit(final JmlDocsTypeDeclaration n, final Object arg) {
-        return null;
-    }
-
-    @Override
-    public Visitable visit(final JmlDocsStatements n, final Object arg) {
-        return null;
     }
 
     @Override

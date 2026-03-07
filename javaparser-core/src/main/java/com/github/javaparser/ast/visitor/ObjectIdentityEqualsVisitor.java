@@ -688,7 +688,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final KeyCatchAllStatement n, final Visitable arg) {
+    public Boolean visit(final KeyCatchAllStmt n, final Visitable arg) {
         return n == arg;
     }
 
@@ -698,7 +698,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final KeyExecStatement n, final Visitable arg) {
+    public Boolean visit(final KeyExecStmt n, final Visitable arg) {
         return n == arg;
     }
 
@@ -708,12 +708,12 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final KeyLoopScopeBlock n, final Visitable arg) {
+    public Boolean visit(final KeyLoopScopeBlockStmt n, final Visitable arg) {
         return n == arg;
     }
 
     @Override
-    public Boolean visit(final KeyMergePointStatement n, final Visitable arg) {
+    public Boolean visit(final KeyMergePointStmt n, final Visitable arg) {
         return n == arg;
     }
 
@@ -723,7 +723,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final KeyMethodCallStatement n, final Visitable arg) {
+    public Boolean visit(final KeyMethodCallStmt n, final Visitable arg) {
         return n == arg;
     }
 
@@ -733,12 +733,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final KeyRangeExpression n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final KeyTransactionStatement n, final Visitable arg) {
+    public Boolean visit(final KeyTransactionStmt n, final Visitable arg) {
         return n == arg;
     }
 
@@ -879,21 +874,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     public Boolean visit(final JmlMethodSignature n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final JmlDocsBodyDeclaration n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final JmlDocsTypeDeclaration n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final JmlDocsStatements n, final Visitable arg) {
         return n == arg;
     }
 

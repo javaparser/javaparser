@@ -686,7 +686,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyCatchAllStatement n, final A arg) {
+    public void visit(final KeyCatchAllStmt n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -696,7 +696,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyExecStatement n, final A arg) {
+    public void visit(final KeyExecStmt n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -706,12 +706,12 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyLoopScopeBlock n, final A arg) {
+    public void visit(final KeyLoopScopeBlockStmt n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
-    public void visit(final KeyMergePointStatement n, final A arg) {
+    public void visit(final KeyMergePointStmt n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -721,7 +721,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyMethodCallStatement n, final A arg) {
+    public void visit(final KeyMethodCallStmt n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -731,12 +731,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyRangeExpression n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final KeyTransactionStatement n, final A arg) {
+    public void visit(final KeyTransactionStmt n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -877,21 +872,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlDoc n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JmlDocsBodyDeclaration n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JmlDocsTypeDeclaration n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JmlDocsStatements n, final A arg) {
         defaultAction(n, arg);
     }
 

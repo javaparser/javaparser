@@ -845,7 +845,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlClauseLabel n, final A arg) {
-        n.getExpr().accept(this, arg);
+        n.getExpression().accept(this, arg);
         n.getLabel().ifPresent(l -> l.accept(this, arg));
         n.getName().ifPresent(l -> l.accept(this, arg));
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
@@ -950,7 +950,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlClauseIf n, final A arg) {
         n.getCondition().accept(this, arg);
-        n.getThen().accept(this, arg);
+        n.getExpression().accept(this, arg);
         n.getName().ifPresent(l -> l.accept(this, arg));
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -1077,7 +1077,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyCatchAllStatement n, final A arg) {
+    public void visit(final KeyCatchAllStmt n, final A arg) {
         n.getBlock().accept(this, arg);
         n.getLabel().accept(this, arg);
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
@@ -1093,7 +1093,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyExecStatement n, final A arg) {
+    public void visit(final KeyExecStmt n, final A arg) {
         n.getBranches().forEach(p -> p.accept(this, arg));
         n.getExecBlock().accept(this, arg);
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
@@ -1110,7 +1110,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyLoopScopeBlock n, final A arg) {
+    public void visit(final KeyLoopScopeBlockStmt n, final A arg) {
         n.getBlock().accept(this, arg);
         n.getIndexPV().accept(this, arg);
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
@@ -1118,7 +1118,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyMergePointStatement n, final A arg) {
+    public void visit(final KeyMergePointStmt n, final A arg) {
         n.getExpr().accept(this, arg);
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -1134,7 +1134,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyMethodCallStatement n, final A arg) {
+    public void visit(final KeyMethodCallStmt n, final A arg) {
         n.getBlock().accept(this, arg);
         n.getContext().accept(this, arg);
         n.getName().ifPresent(l -> l.accept(this, arg));
@@ -1151,15 +1151,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeyRangeExpression n, final A arg) {
-        n.getLower().accept(this, arg);
-        n.getUpper().accept(this, arg);
-        n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
-        n.getComment().ifPresent(l -> l.accept(this, arg));
-    }
-
-    @Override
-    public void visit(final KeyTransactionStatement n, final A arg) {
+    public void visit(final KeyTransactionStmt n, final A arg) {
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -1393,32 +1385,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getArgumentTypes().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getReceiver().ifPresent(l -> l.accept(this, arg));
-        n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
-        n.getComment().ifPresent(l -> l.accept(this, arg));
-    }
-
-    @Override
-    public void visit(final JmlDocsBodyDeclaration n, final A arg) {
-        n.getJmlDocs().forEach(p -> p.accept(this, arg));
-        n.getAnnotations().forEach(p -> p.accept(this, arg));
-        n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
-        n.getComment().ifPresent(l -> l.accept(this, arg));
-    }
-
-    @Override
-    public void visit(final JmlDocsTypeDeclaration n, final A arg) {
-        n.getJmlDocs().forEach(p -> p.accept(this, arg));
-        n.getMembers().forEach(p -> p.accept(this, arg));
-        n.getModifiers().forEach(p -> p.accept(this, arg));
-        n.getName().accept(this, arg);
-        n.getAnnotations().forEach(p -> p.accept(this, arg));
-        n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
-        n.getComment().ifPresent(l -> l.accept(this, arg));
-    }
-
-    @Override
-    public void visit(final JmlDocsStatements n, final A arg) {
-        n.getJmlDocs().forEach(p -> p.accept(this, arg));
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }

@@ -1016,7 +1016,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Override
     public Boolean visit(final JmlClauseLabel n, final Visitable arg) {
         final JmlClauseLabel n2 = (JmlClauseLabel) arg;
-        if (!nodeEquals(n.getExpr(), n2.getExpr())) return false;
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) return false;
         if (!objEquals(n.getKind(), n2.getKind())) return false;
         if (!nodeEquals(n.getLabel(), n2.getLabel())) return false;
         if (!nodeEquals(n.getName(), n2.getName())) return false;
@@ -1140,8 +1140,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     public Boolean visit(final JmlClauseIf n, final Visitable arg) {
         final JmlClauseIf n2 = (JmlClauseIf) arg;
         if (!nodeEquals(n.getCondition(), n2.getCondition())) return false;
+        if (!nodeEquals(n.getExpression(), n2.getExpression())) return false;
         if (!objEquals(n.getKind(), n2.getKind())) return false;
-        if (!nodeEquals(n.getThen(), n2.getThen())) return false;
         if (!nodeEquals(n.getName(), n2.getName())) return false;
         if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
         return true;
@@ -1292,8 +1292,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final KeyCatchAllStatement n, final Visitable arg) {
-        final KeyCatchAllStatement n2 = (KeyCatchAllStatement) arg;
+    public Boolean visit(final KeyCatchAllStmt n, final Visitable arg) {
+        final KeyCatchAllStmt n2 = (KeyCatchAllStmt) arg;
         if (!nodeEquals(n.getBlock(), n2.getBlock())) return false;
         if (!nodeEquals(n.getLabel(), n2.getLabel())) return false;
         if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
@@ -1310,8 +1310,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final KeyExecStatement n, final Visitable arg) {
-        final KeyExecStatement n2 = (KeyExecStatement) arg;
+    public Boolean visit(final KeyExecStmt n, final Visitable arg) {
+        final KeyExecStmt n2 = (KeyExecStmt) arg;
         if (!nodesEquals(n.getBranches(), n2.getBranches())) return false;
         if (!nodeEquals(n.getExecBlock(), n2.getExecBlock())) return false;
         if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
@@ -1329,8 +1329,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final KeyLoopScopeBlock n, final Visitable arg) {
-        final KeyLoopScopeBlock n2 = (KeyLoopScopeBlock) arg;
+    public Boolean visit(final KeyLoopScopeBlockStmt n, final Visitable arg) {
+        final KeyLoopScopeBlockStmt n2 = (KeyLoopScopeBlockStmt) arg;
         if (!nodeEquals(n.getBlock(), n2.getBlock())) return false;
         if (!nodeEquals(n.getIndexPV(), n2.getIndexPV())) return false;
         if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
@@ -1338,8 +1338,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final KeyMergePointStatement n, final Visitable arg) {
-        final KeyMergePointStatement n2 = (KeyMergePointStatement) arg;
+    public Boolean visit(final KeyMergePointStmt n, final Visitable arg) {
+        final KeyMergePointStmt n2 = (KeyMergePointStmt) arg;
         if (!nodeEquals(n.getExpr(), n2.getExpr())) return false;
         if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
         return true;
@@ -1356,8 +1356,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final KeyMethodCallStatement n, final Visitable arg) {
-        final KeyMethodCallStatement n2 = (KeyMethodCallStatement) arg;
+    public Boolean visit(final KeyMethodCallStmt n, final Visitable arg) {
+        final KeyMethodCallStmt n2 = (KeyMethodCallStmt) arg;
         if (!nodeEquals(n.getBlock(), n2.getBlock())) return false;
         if (!nodeEquals(n.getContext(), n2.getContext())) return false;
         if (!nodeEquals(n.getName(), n2.getName())) return false;
@@ -1375,17 +1375,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final KeyRangeExpression n, final Visitable arg) {
-        final KeyRangeExpression n2 = (KeyRangeExpression) arg;
-        if (!nodeEquals(n.getLower(), n2.getLower())) return false;
-        if (!nodeEquals(n.getUpper(), n2.getUpper())) return false;
-        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
-        return true;
-    }
-
-    @Override
-    public Boolean visit(final KeyTransactionStatement n, final Visitable arg) {
-        final KeyTransactionStatement n2 = (KeyTransactionStatement) arg;
+    public Boolean visit(final KeyTransactionStmt n, final Visitable arg) {
+        final KeyTransactionStmt n2 = (KeyTransactionStmt) arg;
         if (!objEquals(n.getType(), n2.getType())) return false;
         if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
         return true;
@@ -1656,35 +1647,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     public Boolean visit(final JmlDoc n, final Visitable arg) {
         final JmlDoc n2 = (JmlDoc) arg;
         if (!objEquals(n.getContent(), n2.getContent())) return false;
-        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
-        return true;
-    }
-
-    @Override
-    public Boolean visit(final JmlDocsBodyDeclaration n, final Visitable arg) {
-        final JmlDocsBodyDeclaration n2 = (JmlDocsBodyDeclaration) arg;
-        if (!nodesEquals(n.getJmlDocs(), n2.getJmlDocs())) return false;
-        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) return false;
-        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
-        return true;
-    }
-
-    @Override
-    public Boolean visit(final JmlDocsTypeDeclaration n, final Visitable arg) {
-        final JmlDocsTypeDeclaration n2 = (JmlDocsTypeDeclaration) arg;
-        if (!nodesEquals(n.getJmlDocs(), n2.getJmlDocs())) return false;
-        if (!nodesEquals(n.getMembers(), n2.getMembers())) return false;
-        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) return false;
-        if (!nodeEquals(n.getName(), n2.getName())) return false;
-        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) return false;
-        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
-        return true;
-    }
-
-    @Override
-    public Boolean visit(final JmlDocsStatements n, final Visitable arg) {
-        final JmlDocsStatements n2 = (JmlDocsStatements) arg;
-        if (!nodesEquals(n.getJmlDocs(), n2.getJmlDocs())) return false;
         if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
         return true;
     }

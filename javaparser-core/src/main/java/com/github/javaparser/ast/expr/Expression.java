@@ -29,8 +29,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.key.KeyEscapeExpression;
 import com.github.javaparser.ast.key.KeyPassiveExpression;
-import com.github.javaparser.ast.key.KeyRangeExpression;
-import com.github.javaparser.ast.key.KeyTransactionStatement;
+import com.github.javaparser.ast.key.KeyTransactionStmt;
 import com.github.javaparser.ast.key.sv.KeyExpressionSV;
 import com.github.javaparser.ast.key.sv.KeyMetaConstructExpression;
 import com.github.javaparser.ast.key.sv.KeyProgramVariableSV;
@@ -989,36 +988,22 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyRangeExpression asKeyRangeExpression() {
-        throw new IllegalStateException(f(
-                "%s is not KeyRangeExpression, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyRangeExpression> toKeyRangeExpression() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyRangeExpression(Consumer<KeyRangeExpression> action) {}
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyTransactionStatement() {
         return true;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyTransactionStatement asKeyTransactionStatement() {
+    public KeyTransactionStmt asKeyTransactionStatement() {
         return null;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyTransactionStatement> toKeyTransactionStatement() {
+    public Optional<KeyTransactionStmt> toKeyTransactionStatement() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyTransactionStatement(Consumer<KeyTransactionStatement> action) {}
+    public void ifKeyTransactionStatement(Consumer<KeyTransactionStmt> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyExpressionSV() {

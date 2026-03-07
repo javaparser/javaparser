@@ -7906,22 +7906,6 @@ Expression ADTConstructor() :
     }
 }*/
 
-Expression KeyIndexRange() :
-    /*
-     * Introduced to handle postfix style sequence ranges as top-level expressions.
-     * XXX does not yet work since Expression may contain dots
-     */
-{
-    Expression result, end;
-    JavaToken begin;
-}
-{
-    result = Expression()
-    [ <DOTDOT> end = Expression()
-      { result = new KeyRangeExpression(range(result, token()), result, end); } ]
-    { return result; }
-}
-
 
 Statement KeyCatchAllStatement() :
 {
@@ -7932,12 +7916,12 @@ Statement KeyCatchAllStatement() :
 {
   "#catchAll" {begin=token();} "(" qn = Name() ")" block = Block()
   {
-      return new KeyCatchAllStatement(range(begin,token()), qn,block);
+      return new KeyCatchAllStmt(range(begin,token()), qn,block);
   }
 }
 
 
-KeyMethodCallStatement KeyMethodCallStatement() :
+KeyMethodCallStmt KeyMethodCallStatement() :
 {
   JavaToken begin;
   Name qn = null;
@@ -7952,7 +7936,7 @@ KeyMethodCallStatement KeyMethodCallStatement() :
     ")"
     [":"]
   block = Block()
-  {   return new KeyMethodCallStatement(range(begin, token()), qn, ec, block); }
+  {   return new KeyMethodCallStmt(range(begin, token()), qn, ec, block); }
 }
 
 KeyAbstractExecutionContext KeyExecutionContextSV():
@@ -8029,7 +8013,7 @@ KeyActiveCommentStatement KeyActiveCommentStatement() :
 
 
 
-KeyTransactionStatement KeyTransactionStatement() :
+KeyTransactionStmt KeyTransactionStatement() :
 {
   JavaToken begin;
 }
@@ -8041,12 +8025,12 @@ KeyTransactionStatement KeyTransactionStatement() :
   ) {begin=token();}
 
   ";"
-  { return new KeyTransactionStatement(range(begin, token()), begin); }
+  { return new KeyTransactionStmt(range(begin, token()), begin); }
 }
 
-KeyLoopScopeBlock KeyLoopScope() :
+KeyLoopScopeBlockStmt KeyLoopScope() :
 {
-    KeyLoopScopeBlock result;
+    KeyLoopScopeBlockStmt result;
     Expression indexPV;
     BlockStmt block;
     JavaToken begin;
@@ -8055,24 +8039,24 @@ KeyLoopScopeBlock KeyLoopScope() :
   <LOOPSCOPE> { begin = token(); }
   "(" indexPV = Expression() ")"
   block = Block()
-  { return new KeyLoopScopeBlock(range(begin, token()), indexPV, block); }
+  { return new KeyLoopScopeBlockStmt(range(begin, token()), indexPV, block); }
 }
 
-KeyMergePointStatement KeyMergePointStatement() :
+KeyMergePointStmt KeyMergePointStatement() :
 {
     Expression expr = null;
-    KeyMergePointStatement result;
+    KeyMergePointStmt result;
     JavaToken begin;
 }
 {
   <MERGE_POINT>  { begin = token(); }
   "(" expr = Expression() ")"
   ";"
-  { return new KeyMergePointStatement(range(begin, token()), expr); }
+  { return new KeyMergePointStmt(range(begin, token()), expr); }
 }
 
 
-KeyExecStatement KeyExecStatement() :
+KeyExecStmt KeyExecStatement() :
 {
     JavaToken begin, beginC;
     BlockStmt block,execBlock;
@@ -8147,7 +8131,7 @@ KeyExecStatement KeyExecStatement() :
         {  branches.add(new KeyCcatchParameter(range(beginC, token()), param, block)); }
     )*
     ( LOOKAHEAD(3) ["ccatch"|"ccat"] cfsv=CcatchSV() { branches.add(cfsv); } )*
-    { return new KeyExecStatement(range(begin, token()), execBlock, branches); }
+    { return new KeyExecStmt(range(begin, token()), execBlock, branches); }
 }
 
 KeyTypeSV TypeSV(NodeList<AnnotationExpr> annotations) :

@@ -12,7 +12,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.KeyTransactionStatementMetaModel;
+import com.github.javaparser.metamodel.KeyTransactionStmtMetaModel;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -30,16 +30,16 @@ import org.jspecify.annotations.NonNull;
 /// }
 /// ```
 /// @author weigl
-public class KeyTransactionStatement extends Statement {
+public class KeyTransactionStmt extends Statement {
 
     private TransactionType type;
 
     @AllFieldsConstructor
-    public KeyTransactionStatement(TransactionType type) {
+    public KeyTransactionStmt(TransactionType type) {
         this.type = type;
     }
 
-    public KeyTransactionStatement(TokenRange range, JavaToken begin) {
+    public KeyTransactionStmt(TokenRange range, JavaToken begin) {
         super(range);
         setType(TransactionType.byName(begin.getText()));
     }
@@ -84,7 +84,7 @@ public class KeyTransactionStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyTransactionStatement setType(final @NonNull() TransactionType type) {
+    public KeyTransactionStmt setType(final @NonNull() TransactionType type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -96,21 +96,15 @@ public class KeyTransactionStatement extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public KeyTransactionStatement clone() {
-        return (KeyTransactionStatement) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public KeyTransactionStatementMetaModel getMetaModel() {
-        return JavaParserMetaModel.keyTransactionStatementMetaModel;
+    public KeyTransactionStmt clone() {
+        return (KeyTransactionStmt) accept(new CloneVisitor(), null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyTransactionStatement(TokenRange tokenRange, TransactionType type) {
+    public KeyTransactionStmt(TokenRange tokenRange, TransactionType type) {
         super(tokenRange);
         setType(type);
         customInitialization();
@@ -124,19 +118,19 @@ public class KeyTransactionStatement extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyTransactionStatement asKeyTransactionStatement() {
+    public KeyTransactionStmt asKeyTransactionStatement() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyTransactionStatement> toKeyTransactionStatement() {
+    public Optional<KeyTransactionStmt> toKeyTransactionStatement() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyTransactionStatement(Consumer<KeyTransactionStatement> action) {
+    public void ifKeyTransactionStatement(Consumer<KeyTransactionStmt> action) {
         action.accept(this);
     }
 
@@ -144,5 +138,29 @@ public class KeyTransactionStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @NonNull() TransactionType type() {
         return Objects.requireNonNull(type);
+    }
+
+    @Override
+    public boolean isKeyTransactionStmt() {
+        return true;
+    }
+
+    @Override
+    public KeyTransactionStmt asKeyTransactionStmt() {
+        return this;
+    }
+
+    @Override
+    public Optional<KeyTransactionStmt> toKeyTransactionStmt() {
+        return Optional.of(this);
+    }
+
+    public void ifKeyTransactionStmt(Consumer<KeyTransactionStmt> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public KeyTransactionStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.keyTransactionStmtMetaModel;
     }
 }

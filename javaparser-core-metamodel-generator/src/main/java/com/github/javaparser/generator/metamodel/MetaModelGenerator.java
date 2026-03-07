@@ -34,10 +34,10 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
-import com.github.javaparser.ast.key.JmlDoc;
 import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
@@ -162,19 +162,6 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.expr.MatchAllPatternExpr.class);
             add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
 
-            add(JmlDoc.class);
-            add(JmlDocDeclaration.class);
-            add(JmlDocStmt.class);
-            add(JmlDocType.class);
-
-            add(JmlQuantifiedExpr.class);
-            add(JmlTypeExpr.class);
-            add(JmlBinaryInfixExpr.class);
-            add(JmlLetExpr.class);
-            add(JmlMultiCompareExpr.class);
-            add(JmlLabelExpr.class);
-            add(JmlSetComprehensionExpr.class);
-
             add(com.github.javaparser.ast.stmt.AssertStmt.class);
             add(com.github.javaparser.ast.stmt.BlockStmt.class);
             add(com.github.javaparser.ast.stmt.BreakStmt.class);
@@ -199,6 +186,36 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.stmt.UnparsableStmt.class);
             add(com.github.javaparser.ast.stmt.WhileStmt.class);
             add(com.github.javaparser.ast.stmt.YieldStmt.class);
+
+            add(com.github.javaparser.ast.type.ArrayType.class);
+            add(com.github.javaparser.ast.type.ClassOrInterfaceType.class);
+            add(com.github.javaparser.ast.type.IntersectionType.class);
+            add(com.github.javaparser.ast.type.PrimitiveType.class);
+            add(com.github.javaparser.ast.type.TypeParameter.class);
+            add(com.github.javaparser.ast.type.UnionType.class);
+            add(com.github.javaparser.ast.type.UnknownType.class);
+            add(com.github.javaparser.ast.type.VarType.class);
+            add(com.github.javaparser.ast.type.VoidType.class);
+            add(com.github.javaparser.ast.type.WildcardType.class);
+
+            add(com.github.javaparser.ast.modules.ModuleExportsDirective.class);
+            add(com.github.javaparser.ast.modules.ModuleOpensDirective.class);
+            add(com.github.javaparser.ast.modules.ModuleProvidesDirective.class);
+            add(com.github.javaparser.ast.modules.ModuleRequiresDirective.class);
+            add(com.github.javaparser.ast.modules.ModuleUsesDirective.class);
+
+            add(JmlDoc.class);
+            add(JmlDocDeclaration.class);
+            add(JmlDocStmt.class);
+            add(JmlDocType.class);
+
+            add(JmlQuantifiedExpr.class);
+            add(JmlTypeExpr.class);
+            add(JmlBinaryInfixExpr.class);
+            add(JmlLetExpr.class);
+            add(JmlMultiCompareExpr.class);
+            add(JmlLabelExpr.class);
+            add(JmlSetComprehensionExpr.class);
 
             add(JmlStatement.class);
             add(JmlGhostStmt.class);
@@ -231,45 +248,28 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(JmlRepresentsDeclaration.class);
             add(JmlClassAccessibleDeclaration.class);
 
-            add(com.github.javaparser.ast.type.ArrayType.class);
-            add(com.github.javaparser.ast.type.ClassOrInterfaceType.class);
-            add(com.github.javaparser.ast.type.IntersectionType.class);
-            add(com.github.javaparser.ast.type.PrimitiveType.class);
-            add(com.github.javaparser.ast.type.TypeParameter.class);
-            add(com.github.javaparser.ast.type.UnionType.class);
-            add(com.github.javaparser.ast.type.UnknownType.class);
-            add(com.github.javaparser.ast.type.VarType.class);
-            add(com.github.javaparser.ast.type.VoidType.class);
-            add(com.github.javaparser.ast.type.WildcardType.class);
-
-            add(com.github.javaparser.ast.modules.ModuleExportsDirective.class);
-            add(com.github.javaparser.ast.modules.ModuleOpensDirective.class);
-            add(com.github.javaparser.ast.modules.ModuleProvidesDirective.class);
-            add(com.github.javaparser.ast.modules.ModuleRequiresDirective.class);
-            add(com.github.javaparser.ast.modules.ModuleUsesDirective.class);
-
             // KEY
             add(KeyAbstractExecutionContext.class);
-            add(KeyCatchAllStatement.class);
+            add(KeyCatchAllStmt.class);
             add(KeyCcatchBranch.class);
             add(KeyCcatchBreak.class);
             add(KeyCcatchContinue.class);
             add(KeyCcatchParameter.class);
             add(KeyCcatchReturn.class);
             add(KeyEscapeExpression.class);
-            add(KeyExecStatement.class);
+            add(KeyExecStmt.class);
             add(KeyExecutionContext.class);
-            add(KeyLoopScopeBlock.class);
-            add(KeyMergePointStatement.class);
+            add(KeyLoopScopeBlockStmt.class);
+            add(KeyMergePointStmt.class);
             add(KeyMethodBodyStatement.class);
-            add(KeyMethodCallStatement.class);
+            add(KeyMethodCallStmt.class);
             add(KeyMethodSignature.class);
             // add(KeyRangeExpression.class);
-            add(KeyTransactionStatement.class);
+            add(KeyTransactionStmt.class);
             // add(JmlDoc.class);
-            add(JmlDocsBodyDeclaration.class);
-            add(JmlDocsTypeDeclaration.class);
-            add(JmlDocsStatements.class);
+            // add(JmlDocsBodyDeclaration.class);
+            // add(JmlDocsTypeDeclaration.class);
+            // add(JmlDocsStatements.class);
             add(KeYMarkerStatement.class);
             // add(KeyActiveCommentStatement.class);
 

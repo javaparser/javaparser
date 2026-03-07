@@ -697,7 +697,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final KeyCatchAllStatement n, final A arg) {
+    public R visit(final KeyCatchAllStmt n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -707,7 +707,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final KeyExecStatement n, final A arg) {
+    public R visit(final KeyExecStmt n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -717,12 +717,12 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final KeyLoopScopeBlock n, final A arg) {
+    public R visit(final KeyLoopScopeBlockStmt n, final A arg) {
         return defaultAction(n, arg);
     }
 
     @Override
-    public R visit(final KeyMergePointStatement n, final A arg) {
+    public R visit(final KeyMergePointStmt n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -732,7 +732,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final KeyMethodCallStatement n, final A arg) {
+    public R visit(final KeyMethodCallStmt n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -742,12 +742,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final KeyRangeExpression n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final KeyTransactionStatement n, final A arg) {
+    public R visit(final KeyTransactionStmt n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -888,21 +883,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final JmlMethodSignature n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlDocsBodyDeclaration n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlDocsTypeDeclaration n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlDocsStatements n, final A arg) {
         return defaultAction(n, arg);
     }
 

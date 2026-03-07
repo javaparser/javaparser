@@ -242,17 +242,6 @@ public class Modifier extends Node {
         return keyword;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Modifier setKeyword(final Modifier.Keyword keyword) {
-        assertNotNull(keyword);
-        if (keyword == this.keyword) {
-            return this;
-        }
-        notifyPropertyChange(ObservableProperty.KEYWORD, this.keyword, keyword);
-        this.keyword = keyword;
-        return this;
-    }
-
     /**
      * Utility method that instantiaties "Modifier"s for the keywords,
      * and puts them in a NodeList.
@@ -286,5 +275,16 @@ public class Modifier extends Node {
     public Modifier(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Modifier setKeyword(final @NonNull() Keyword keyword) {
+        assertNotNull(keyword);
+        if (keyword == this.keyword) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.KEYWORD, this.keyword, keyword);
+        this.keyword = keyword;
+        return this;
     }
 }

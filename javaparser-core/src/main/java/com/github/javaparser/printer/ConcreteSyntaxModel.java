@@ -39,7 +39,6 @@ import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.doc.JmlDocModifier;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
-import com.github.javaparser.ast.jml.type.*;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
@@ -1232,7 +1231,7 @@ public class ConcreteSyntaxModel {
                         newline()));
         // region JML
         concreteSyntaxModelByClass.put(
-                JmlClauseIf.class, sequence(attribute(KIND), attribute(THEN), token(WHEN), attribute(CONDITION)));
+                JmlClauseIf.class, sequence(attribute(KIND), attribute(CONDITION), token(WHEN), attribute(CONDITION)));
         concreteSyntaxModelByClass.put(JmlLabelStmt.class, sequence(list(JML_TAGS), attribute(LABEL), token(COLON)));
         concreteSyntaxModelByClass.put(
                 JmlMethodSignature.class,
@@ -1291,7 +1290,6 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(
                 JmlClassExprDeclaration.class,
                 sequence(child(MODIFIERS), space(), token(INVARIANT), space(), child(EXPRESSION), semicolon()));
-
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlContract.class, sequence());
         concreteSyntaxModelByClass.put(
@@ -1352,7 +1350,6 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(
                 JmlSignalsOnlyClause.class, sequence(token(SIGNALS_ONLY), child(TYPES), semicolon(), newline()));
         // endregion
-
         // region KEY
         // TODO weigl maybe one day someone will complete this, but currently we do not need
         // the support of concrete syntax model.
@@ -1360,18 +1357,18 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(KeyCcatchContinue.class, sequence());
         concreteSyntaxModelByClass.put(KeyCcatchParameter.class, sequence());
         concreteSyntaxModelByClass.put(KeyCcatchReturn.class, sequence());
-        concreteSyntaxModelByClass.put(KeyCatchAllStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCatchAllStmt.class, sequence());
         concreteSyntaxModelByClass.put(KeyCcatchSV.class, attribute(TEXT));
         concreteSyntaxModelByClass.put(KeyContextStatementBlock.class, sequence());
         concreteSyntaxModelByClass.put(KeyEscapeExpression.class, sequence());
         concreteSyntaxModelByClass.put(KeyExecCtxtSV.class, attribute(TEXT));
-        concreteSyntaxModelByClass.put(KeyExecStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyExecStmt.class, sequence());
         concreteSyntaxModelByClass.put(KeyExecutionContext.class, sequence());
         concreteSyntaxModelByClass.put(KeyExecutionContextSV.class, attribute(TEXT));
         concreteSyntaxModelByClass.put(KeyExpressionSV.class, attribute(TEXT));
         concreteSyntaxModelByClass.put(KeyJumpLabelSV.class, attribute(TEXT));
         concreteSyntaxModelByClass.put(
-                KeyLoopScopeBlock.class,
+                KeyLoopScopeBlockStmt.class,
                 sequence(
                         token(LOOPSCOPE),
                         token(LPAREN),
@@ -1382,23 +1379,21 @@ public class ConcreteSyntaxModel {
                         attribute(BLOCK),
                         newline(),
                         token(RBRACE)));
-        concreteSyntaxModelByClass.put(KeyMergePointStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMergePointStmt.class, sequence());
         concreteSyntaxModelByClass.put(KeyMetaConstructExpression.class, sequence());
         concreteSyntaxModelByClass.put(KeyMetaConstruct.class, sequence());
         concreteSyntaxModelByClass.put(KeyMetaConstructType.class, sequence());
         concreteSyntaxModelByClass.put(KeyMethodBodyStatement.class, sequence());
-        concreteSyntaxModelByClass.put(KeyMethodCallStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMethodCallStmt.class, sequence());
         concreteSyntaxModelByClass.put(KeyMethodSignature.class, sequence());
         concreteSyntaxModelByClass.put(KeyMethodSignatureSV.class, attribute(TEXT));
         concreteSyntaxModelByClass.put(
                 KeyPassiveExpression.class, sequence(token(AT), token(LPAREN), attribute(EXPR), token(RPAREN)));
         concreteSyntaxModelByClass.put(KeyProgramVariableSV.class, attribute(TEXT));
-        concreteSyntaxModelByClass.put(KeyRangeExpression.class, sequence());
         concreteSyntaxModelByClass.put(KeyStatementSV.class, attribute(TEXT));
-        concreteSyntaxModelByClass.put(KeyTransactionStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyTransactionStmt.class, sequence());
         concreteSyntaxModelByClass.put(KeyTypeSV.class, attribute(TEXT));
         // endregion
-
         List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter(c -> !c.isAbstract()
                         && !Comment.class.isAssignableFrom(c.getType())

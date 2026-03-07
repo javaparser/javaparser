@@ -264,27 +264,25 @@ public interface GenericVisitor<R, A> {
 
     R visit(KeyCcatchReturn n, A arg);
 
-    R visit(KeyCatchAllStatement n, A arg);
+    R visit(KeyCatchAllStmt n, A arg);
 
     R visit(KeyEscapeExpression n, A arg);
 
-    R visit(KeyExecStatement n, A arg);
+    R visit(KeyExecStmt n, A arg);
 
     R visit(KeyExecutionContext n, A arg);
 
-    R visit(KeyLoopScopeBlock n, A arg);
+    R visit(KeyLoopScopeBlockStmt n, A arg);
 
-    R visit(KeyMergePointStatement n, A arg);
+    R visit(KeyMergePointStmt n, A arg);
 
     R visit(KeyMethodBodyStatement n, A arg);
 
-    R visit(KeyMethodCallStatement n, A arg);
+    R visit(KeyMethodCallStmt n, A arg);
 
     R visit(KeyMethodSignature n, A arg);
 
-    R visit(KeyRangeExpression n, A arg);
-
-    R visit(KeyTransactionStatement n, A arg);
+    R visit(KeyTransactionStmt n, A arg);
 
     R visit(KeyContextStatementBlock n, A arg);
 
@@ -381,12 +379,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlLabelStmt n, A arg);
 
     R visit(JmlMethodSignature n, A arg);
-
-    R visit(JmlDocsBodyDeclaration n, A arg);
-
-    R visit(JmlDocsTypeDeclaration n, A arg);
-
-    R visit(JmlDocsStatements n, A arg);
 
     R visit(KeYMarkerStatement n, A arg);
 }

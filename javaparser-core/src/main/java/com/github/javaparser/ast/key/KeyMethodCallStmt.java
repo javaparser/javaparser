@@ -14,7 +14,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.KeyMethodCallStatementMetaModel;
+import com.github.javaparser.metamodel.KeyMethodCallStmtMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,7 +28,7 @@ import org.jspecify.annotations.Nullable;
 /// }
 /// ```
 /// @author weigl
-public class KeyMethodCallStatement extends Statement {
+public class KeyMethodCallStmt extends Statement {
 
     @OptionalProperty
     private Name name;
@@ -38,7 +38,7 @@ public class KeyMethodCallStatement extends Statement {
     private BlockStmt block;
 
     @AllFieldsConstructor
-    public KeyMethodCallStatement(Name name, KeyExecutionContext context, BlockStmt block) {
+    public KeyMethodCallStmt(Name name, KeyExecutionContext context, BlockStmt block) {
         this(null, name, context, block);
     }
 
@@ -46,8 +46,7 @@ public class KeyMethodCallStatement extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyMethodCallStatement(
-            TokenRange tokenRange, Name name, KeyAbstractExecutionContext context, BlockStmt block) {
+    public KeyMethodCallStmt(TokenRange tokenRange, Name name, KeyAbstractExecutionContext context, BlockStmt block) {
         super(tokenRange);
         setName(name);
         setContext(context);
@@ -75,19 +74,19 @@ public class KeyMethodCallStatement extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyMethodCallStatement asKeyMethodCallStatement() {
+    public KeyMethodCallStmt asKeyMethodCallStatement() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyMethodCallStatement> toKeyMethodCallStatement() {
+    public Optional<KeyMethodCallStmt> toKeyMethodCallStatement() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyMethodCallStatement(Consumer<KeyMethodCallStatement> action) {
+    public void ifKeyMethodCallStatement(Consumer<KeyMethodCallStmt> action) {
         action.accept(this);
     }
 
@@ -97,7 +96,7 @@ public class KeyMethodCallStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodCallStatement setBlock(final @NonNull() BlockStmt block) {
+    public KeyMethodCallStmt setBlock(final @NonNull() BlockStmt block) {
         assertNotNull(block);
         if (block == this.block) {
             return this;
@@ -115,7 +114,7 @@ public class KeyMethodCallStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodCallStatement setContext(final @NonNull() KeyAbstractExecutionContext context) {
+    public KeyMethodCallStmt setContext(final @NonNull() KeyAbstractExecutionContext context) {
         assertNotNull(context);
         if (context == this.context) {
             return this;
@@ -133,7 +132,7 @@ public class KeyMethodCallStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodCallStatement setName(final @Nullable() Name name) {
+    public KeyMethodCallStmt setName(final @Nullable() Name name) {
         if (name == this.name) {
             return this;
         }
@@ -184,18 +183,12 @@ public class KeyMethodCallStatement extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public KeyMethodCallStatement clone() {
-        return (KeyMethodCallStatement) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public KeyMethodCallStatementMetaModel getMetaModel() {
-        return JavaParserMetaModel.keyMethodCallStatementMetaModel;
+    public KeyMethodCallStmt clone() {
+        return (KeyMethodCallStmt) accept(new CloneVisitor(), null);
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public KeyMethodCallStatement removeName() {
+    public KeyMethodCallStmt removeName() {
         return setName((Name) null);
     }
 
@@ -215,5 +208,29 @@ public class KeyMethodCallStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @Nullable() Name name() {
         return name;
+    }
+
+    @Override
+    public boolean isKeyMethodCallStmt() {
+        return true;
+    }
+
+    @Override
+    public KeyMethodCallStmt asKeyMethodCallStmt() {
+        return this;
+    }
+
+    @Override
+    public Optional<KeyMethodCallStmt> toKeyMethodCallStmt() {
+        return Optional.of(this);
+    }
+
+    public void ifKeyMethodCallStmt(Consumer<KeyMethodCallStmt> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public KeyMethodCallStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.keyMethodCallStmtMetaModel;
     }
 }

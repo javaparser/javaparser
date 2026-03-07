@@ -43,12 +43,13 @@ import java.util.List;
  */
 public class ModifierValidator extends VisitorValidator {
 
-    private final Modifier.DefaultKeyword[] interfaceWithNothingSpecial = new Modifier.DefaultKeyword[] {
-        PUBLIC,
-        PROTECTED,
+    private final Modifier.DefaultKeyword[] interfaceWithNothingSpecial = new Modifier.DefaultKeyword[] { // JML
+        // JML
+        PUBLIC, // JML
+        PROTECTED, // JML
         ABSTRACT,
         FINAL,
-        SYNCHRONIZED, // JML
+        SYNCHRONIZED,
         NATIVE,
         STRICTFP,
         JML_PURE,
@@ -66,14 +67,15 @@ public class ModifierValidator extends VisitorValidator {
         JML_SPEC_PRIVATE
     };
 
-    private final Modifier.DefaultKeyword[] interfaceWithStaticAndDefault = new Modifier.DefaultKeyword[] {
-        PUBLIC,
-        PROTECTED,
-        ABSTRACT,
-        STATIC,
+    private final Modifier.DefaultKeyword[] interfaceWithStaticAndDefault = new Modifier.DefaultKeyword[] { // JML
+        // JML
+        PUBLIC, // JML
+        PROTECTED, // JML
+        ABSTRACT, // JML
+        STATIC, // JML
         FINAL,
         SYNCHRONIZED,
-        NATIVE, // JML
+        NATIVE,
         STRICTFP,
         DEFAULT,
         JML_PURE,
@@ -91,31 +93,33 @@ public class ModifierValidator extends VisitorValidator {
         JML_SPEC_PRIVATE
     };
 
-    private final Modifier.DefaultKeyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.DefaultKeyword[] {
-        PUBLIC,
-        PROTECTED,
-        PRIVATE,
-        ABSTRACT,
-        STATIC,
-        FINAL,
-        SYNCHRONIZED,
-        NATIVE, // JML
-        STRICTFP,
-        DEFAULT,
-        JML_PURE,
-        JML_STRICTLY_PURE,
-        JML_NULLABLE,
-        JML_NULLABLE_BY_DEFAULT,
-        JML_NON_NULL,
-        JML_NON_NULL_ELEMENTS,
-        JML_HELPER,
-        JML_TWO_STATE,
-        JML_NO_STATE,
-        JML_SPEC_PACKAGE,
-        JML_SPEC_PRIVATE,
-        JML_SPEC_PUBLIC,
-        JML_SPEC_PRIVATE
-    };
+    private final Modifier.DefaultKeyword[] interfaceWithStaticAndDefaultAndPrivate =
+            new Modifier.DefaultKeyword[] { // JML
+                // JML
+                PUBLIC, // JML
+                PROTECTED, // JML
+                PRIVATE, // JML
+                ABSTRACT, // JML
+                STATIC, // JML
+                FINAL,
+                SYNCHRONIZED,
+                NATIVE,
+                STRICTFP,
+                DEFAULT,
+                JML_PURE,
+                JML_STRICTLY_PURE,
+                JML_NULLABLE,
+                JML_NULLABLE_BY_DEFAULT,
+                JML_NON_NULL,
+                JML_NON_NULL_ELEMENTS,
+                JML_HELPER,
+                JML_TWO_STATE,
+                JML_NO_STATE,
+                JML_SPEC_PACKAGE,
+                JML_SPEC_PRIVATE,
+                JML_SPEC_PUBLIC,
+                JML_SPEC_PRIVATE
+            };
 
     private final boolean hasStrictfp;
 
@@ -142,13 +146,15 @@ public class ModifierValidator extends VisitorValidator {
 
     private void validateClassModifiers(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isTopLevelType()) {
-            validateModifiers(
-                    n,
-                    reporter,
-                    PUBLIC,
+            // JML
+            // JML
+            validateModifiers( // JML
+                    n, // JML
+                    reporter, // JML
+                    PUBLIC, // JML
                     ABSTRACT,
                     FINAL,
-                    STRICTFP, // JML
+                    STRICTFP,
                     SEALED,
                     NON_SEALED,
                     JML_PURE,
@@ -165,16 +171,18 @@ public class ModifierValidator extends VisitorValidator {
                     JML_SPEC_PUBLIC,
                     JML_SPEC_PRIVATE);
         } else if (n.isNestedType()) {
-            validateModifiers(
-                    n,
-                    reporter,
-                    PUBLIC,
-                    PROTECTED,
-                    PRIVATE,
-                    ABSTRACT,
+            // JML
+            // JML
+            validateModifiers( // JML
+                    n, // JML
+                    reporter, // JML
+                    PUBLIC, // JML
+                    PROTECTED, // JML
+                    PRIVATE, // JML
+                    ABSTRACT, // JML
                     STATIC,
                     FINAL,
-                    STRICTFP, // JML
+                    STRICTFP,
                     SEALED,
                     NON_SEALED,
                     JML_PURE,
@@ -191,12 +199,14 @@ public class ModifierValidator extends VisitorValidator {
                     JML_SPEC_PUBLIC,
                     JML_SPEC_PRIVATE);
         } else if (n.isLocalClassDeclaration()) {
-            validateModifiers(
-                    n,
-                    reporter,
+            // JML
+            // JML
+            validateModifiers( // JML
+                    n, // JML
+                    reporter, // JML
                     ABSTRACT,
                     FINAL,
-                    STRICTFP, // JML
+                    STRICTFP,
                     SEALED,
                     NON_SEALED,
                     JML_PURE,
@@ -247,10 +257,12 @@ public class ModifierValidator extends VisitorValidator {
 
     @Override
     public void visit(ConstructorDeclaration n, ProblemReporter reporter) {
-        validateModifiers(
+        // JML
+        // JML
+        validateModifiers( // JML
                 n,
                 reporter,
-                PUBLIC, // JML
+                PUBLIC,
                 PROTECTED,
                 PRIVATE,
                 JML_PURE,
@@ -351,16 +363,18 @@ public class ModifierValidator extends VisitorValidator {
                         validateModifiers(n, reporter, interfaceWithNothingSpecial);
                     }
                 } else {
-                    validateModifiers(
-                            n,
-                            reporter,
-                            PUBLIC,
-                            PROTECTED,
-                            PRIVATE,
-                            ABSTRACT,
+                    // JML
+                    // JML
+                    validateModifiers( // JML
+                            n, // JML
+                            reporter, // JML
+                            PUBLIC, // JML
+                            PROTECTED, // JML
+                            PRIVATE, // JML
+                            ABSTRACT, // JML
                             STATIC,
                             FINAL,
-                            SYNCHRONIZED, // JML
+                            SYNCHRONIZED,
                             NATIVE,
                             STRICTFP,
                             JML_PURE,

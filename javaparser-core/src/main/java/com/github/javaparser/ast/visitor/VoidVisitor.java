@@ -260,27 +260,25 @@ public interface VoidVisitor<A> {
 
     void visit(KeyCcatchReturn n, A arg);
 
-    void visit(KeyCatchAllStatement n, A arg);
+    void visit(KeyCatchAllStmt n, A arg);
 
     void visit(KeyEscapeExpression n, A arg);
 
-    void visit(KeyExecStatement n, A arg);
+    void visit(KeyExecStmt n, A arg);
 
     void visit(KeyExecutionContext n, A arg);
 
-    void visit(KeyLoopScopeBlock n, A arg);
+    void visit(KeyLoopScopeBlockStmt n, A arg);
 
-    void visit(KeyMergePointStatement n, A arg);
+    void visit(KeyMergePointStmt n, A arg);
 
     void visit(KeyMethodBodyStatement n, A arg);
 
-    void visit(KeyMethodCallStatement n, A arg);
+    void visit(KeyMethodCallStmt n, A arg);
 
     void visit(KeyMethodSignature n, A arg);
 
-    void visit(KeyRangeExpression n, A arg);
-
-    void visit(KeyTransactionStatement n, A arg);
+    void visit(KeyTransactionStmt n, A arg);
 
     void visit(KeyContextStatementBlock n, A arg);
 
@@ -377,12 +375,6 @@ public interface VoidVisitor<A> {
     void visit(JmlLabelStmt n, A arg);
 
     void visit(JmlMethodSignature n, A arg);
-
-    void visit(JmlDocsBodyDeclaration n, A arg);
-
-    void visit(JmlDocsTypeDeclaration n, A arg);
-
-    void visit(JmlDocsStatements n, A arg);
 
     void visit(KeYMarkerStatement n, A arg);
 }

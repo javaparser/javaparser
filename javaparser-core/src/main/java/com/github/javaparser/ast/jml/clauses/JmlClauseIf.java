@@ -58,7 +58,7 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
             return true;
         }
         if (node == expression) {
-            setThen((Expression) replacementNode);
+            setExpression((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -123,12 +123,12 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setThen(final @NonNull() Expression expression) {
+    public JmlClauseIf setThen(@NonNull() final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.THEN, this.expression, expression);
+        notifyPropertyChange(ObservableProperty.CONDITION, this.expression, expression);
         if (this.expression != null) this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
@@ -174,7 +174,7 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
         super(tokenRange, name);
         setCondition(condition);
         setKind(kind);
-        setThen(expression);
+        setExpression(expression);
         customInitialization();
     }
 
@@ -192,17 +192,32 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public @NonNull() Expression then() {
+    @NonNull()
+    public Expression then() {
         return Objects.requireNonNull(expression);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
-        return null;
+        return expression;
     }
 
-    @Override
-    public JmlClauseIf setExpression(Expression expression) {
-        return null;
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClauseIf setExpression(final @NonNull() Expression expression) {
+        assertNotNull(expression);
+        if (expression == this.expression) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null) this.expression.setParentNode(null);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
+        return this;
+    }
+
+    @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public @NonNull() Expression expression() {
+        return Objects.requireNonNull(expression);
     }
 }

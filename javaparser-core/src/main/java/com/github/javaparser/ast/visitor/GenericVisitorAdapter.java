@@ -2281,7 +2281,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final JmlClauseLabel n, final A arg) {
         R result;
         {
-            result = n.getExpr().accept(this, arg);
+            result = n.getExpression().accept(this, arg);
             if (result != null) return result;
         }
         if (n.getLabel().isPresent()) {
@@ -2549,7 +2549,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null) return result;
         }
         {
-            result = n.getThen().accept(this, arg);
+            result = n.getExpression().accept(this, arg);
             if (result != null) return result;
         }
         if (n.getName().isPresent()) {
@@ -2928,7 +2928,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final KeyCatchAllStatement n, final A arg) {
+    public R visit(final KeyCatchAllStmt n, final A arg) {
         R result;
         {
             result = n.getBlock().accept(this, arg);
@@ -2972,7 +2972,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final KeyExecStatement n, final A arg) {
+    public R visit(final KeyExecStmt n, final A arg) {
         R result;
         {
             result = n.getBranches().accept(this, arg);
@@ -3020,7 +3020,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final KeyLoopScopeBlock n, final A arg) {
+    public R visit(final KeyLoopScopeBlockStmt n, final A arg) {
         R result;
         {
             result = n.getBlock().accept(this, arg);
@@ -3042,7 +3042,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final KeyMergePointStatement n, final A arg) {
+    public R visit(final KeyMergePointStmt n, final A arg) {
         R result;
         {
             result = n.getExpr().accept(this, arg);
@@ -3086,7 +3086,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final KeyMethodCallStatement n, final A arg) {
+    public R visit(final KeyMethodCallStmt n, final A arg) {
         R result;
         {
             result = n.getBlock().accept(this, arg);
@@ -3134,29 +3134,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final KeyRangeExpression n, final A arg) {
-        R result;
-        {
-            result = n.getLower().accept(this, arg);
-            if (result != null) return result;
-        }
-        {
-            result = n.getUpper().accept(this, arg);
-            if (result != null) return result;
-        }
-        if (n.getAssociatedSpecificationComments().isPresent()) {
-            result = n.getAssociatedSpecificationComments().get().accept(this, arg);
-            if (result != null) return result;
-        }
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            if (result != null) return result;
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(final KeyTransactionStatement n, final A arg) {
+    public R visit(final KeyTransactionStmt n, final A arg) {
         R result;
         if (n.getAssociatedSpecificationComments().isPresent()) {
             result = n.getAssociatedSpecificationComments().get().accept(this, arg);
@@ -3778,80 +3756,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         if (n.getReceiver().isPresent()) {
             result = n.getReceiver().get().accept(this, arg);
-            if (result != null) return result;
-        }
-        if (n.getAssociatedSpecificationComments().isPresent()) {
-            result = n.getAssociatedSpecificationComments().get().accept(this, arg);
-            if (result != null) return result;
-        }
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            if (result != null) return result;
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(final JmlDocsBodyDeclaration n, final A arg) {
-        R result;
-        {
-            result = n.getJmlDocs().accept(this, arg);
-            if (result != null) return result;
-        }
-        {
-            result = n.getAnnotations().accept(this, arg);
-            if (result != null) return result;
-        }
-        if (n.getAssociatedSpecificationComments().isPresent()) {
-            result = n.getAssociatedSpecificationComments().get().accept(this, arg);
-            if (result != null) return result;
-        }
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            if (result != null) return result;
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(final JmlDocsTypeDeclaration n, final A arg) {
-        R result;
-        {
-            result = n.getJmlDocs().accept(this, arg);
-            if (result != null) return result;
-        }
-        {
-            result = n.getMembers().accept(this, arg);
-            if (result != null) return result;
-        }
-        {
-            result = n.getModifiers().accept(this, arg);
-            if (result != null) return result;
-        }
-        {
-            result = n.getName().accept(this, arg);
-            if (result != null) return result;
-        }
-        {
-            result = n.getAnnotations().accept(this, arg);
-            if (result != null) return result;
-        }
-        if (n.getAssociatedSpecificationComments().isPresent()) {
-            result = n.getAssociatedSpecificationComments().get().accept(this, arg);
-            if (result != null) return result;
-        }
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            if (result != null) return result;
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(final JmlDocsStatements n, final A arg) {
-        R result;
-        {
-            result = n.getJmlDocs().accept(this, arg);
             if (result != null) return result;
         }
         if (n.getAssociatedSpecificationComments().isPresent()) {

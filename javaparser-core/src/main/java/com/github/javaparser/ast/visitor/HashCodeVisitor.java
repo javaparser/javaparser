@@ -1118,7 +1118,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlClauseLabel n, final Void arg) {
-        return (n.getExpr().accept(this, arg)) * 31
+        return (n.getExpression().accept(this, arg)) * 31
                 + (n.getKind().hashCode()) * 31
                 + (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31
                 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31
@@ -1256,8 +1256,8 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final JmlClauseIf n, final Void arg) {
         return (n.getCondition().accept(this, arg)) * 31
+                + (n.getExpression().accept(this, arg)) * 31
                 + (n.getKind().hashCode()) * 31
-                + (n.getThen().accept(this, arg)) * 31
                 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31
                 + (n.getAssociatedSpecificationComments().isPresent()
                                 ? n.getAssociatedSpecificationComments().get().accept(this, arg)
@@ -1439,7 +1439,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final KeyCatchAllStatement n, final Void arg) {
+    public Integer visit(final KeyCatchAllStmt n, final Void arg) {
         return (n.getBlock().accept(this, arg)) * 31
                 + (n.getLabel().accept(this, arg)) * 31
                 + (n.getAssociatedSpecificationComments().isPresent()
@@ -1461,7 +1461,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final KeyExecStatement n, final Void arg) {
+    public Integer visit(final KeyExecStmt n, final Void arg) {
         return (n.getBranches().accept(this, arg)) * 31
                 + (n.getExecBlock().accept(this, arg)) * 31
                 + (n.getAssociatedSpecificationComments().isPresent()
@@ -1484,7 +1484,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final KeyLoopScopeBlock n, final Void arg) {
+    public Integer visit(final KeyLoopScopeBlockStmt n, final Void arg) {
         return (n.getBlock().accept(this, arg)) * 31
                 + (n.getIndexPV().accept(this, arg)) * 31
                 + (n.getAssociatedSpecificationComments().isPresent()
@@ -1495,7 +1495,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final KeyMergePointStatement n, final Void arg) {
+    public Integer visit(final KeyMergePointStmt n, final Void arg) {
         return (n.getExpr().accept(this, arg)) * 31
                 + (n.getAssociatedSpecificationComments().isPresent()
                                 ? n.getAssociatedSpecificationComments().get().accept(this, arg)
@@ -1517,7 +1517,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final KeyMethodCallStatement n, final Void arg) {
+    public Integer visit(final KeyMethodCallStmt n, final Void arg) {
         return (n.getBlock().accept(this, arg)) * 31
                 + (n.getContext().accept(this, arg)) * 31
                 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31
@@ -1540,18 +1540,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final KeyRangeExpression n, final Void arg) {
-        return (n.getLower().accept(this, arg)) * 31
-                + (n.getUpper().accept(this, arg)) * 31
-                + (n.getAssociatedSpecificationComments().isPresent()
-                                ? n.getAssociatedSpecificationComments().get().accept(this, arg)
-                                : 0)
-                        * 31
-                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
-    public Integer visit(final KeyTransactionStatement n, final Void arg) {
+    public Integer visit(final KeyTransactionStmt n, final Void arg) {
         return (n.getType().hashCode()) * 31
                 + (n.getAssociatedSpecificationComments().isPresent()
                                 ? n.getAssociatedSpecificationComments().get().accept(this, arg)
@@ -1882,41 +1871,6 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
         return (n.getArgumentTypes().accept(this, arg)) * 31
                 + (n.getName().accept(this, arg)) * 31
                 + (n.getReceiver().isPresent() ? n.getReceiver().get().accept(this, arg) : 0) * 31
-                + (n.getAssociatedSpecificationComments().isPresent()
-                                ? n.getAssociatedSpecificationComments().get().accept(this, arg)
-                                : 0)
-                        * 31
-                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
-    public Integer visit(final JmlDocsBodyDeclaration n, final Void arg) {
-        return (n.getJmlDocs().accept(this, arg)) * 31
-                + (n.getAnnotations().accept(this, arg)) * 31
-                + (n.getAssociatedSpecificationComments().isPresent()
-                                ? n.getAssociatedSpecificationComments().get().accept(this, arg)
-                                : 0)
-                        * 31
-                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
-    public Integer visit(final JmlDocsTypeDeclaration n, final Void arg) {
-        return (n.getJmlDocs().accept(this, arg)) * 31
-                + (n.getMembers().accept(this, arg)) * 31
-                + (n.getModifiers().accept(this, arg)) * 31
-                + (n.getName().accept(this, arg)) * 31
-                + (n.getAnnotations().accept(this, arg)) * 31
-                + (n.getAssociatedSpecificationComments().isPresent()
-                                ? n.getAssociatedSpecificationComments().get().accept(this, arg)
-                                : 0)
-                        * 31
-                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
-    public Integer visit(final JmlDocsStatements n, final Void arg) {
-        return (n.getJmlDocs().accept(this, arg)) * 31
                 + (n.getAssociatedSpecificationComments().isPresent()
                                 ? n.getAssociatedSpecificationComments().get().accept(this, arg)
                                 : 0)

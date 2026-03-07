@@ -47,7 +47,7 @@ public class JmlClauseLabelMetaModel extends JmlClauseMetaModel {
                 false);
     }
 
-    public PropertyMetaModel exprPropertyMetaModel;
+    public PropertyMetaModel expressionPropertyMetaModel;
 
     public PropertyMetaModel kindPropertyMetaModel;
 

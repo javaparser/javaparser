@@ -44,33 +44,41 @@ public class KeYMarkerStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeYMarkerStatement() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeYMarkerStatement asKeYMarkerStatement() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeYMarkerStatement> toKeYMarkerStatement() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeYMarkerStatement(Consumer<KeYMarkerStatement> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public int getKind() {
         return kind;
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public int kind() {
         return Objects.requireNonNull(kind);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeYMarkerStatement setKind(final int kind) {
         if (kind == this.kind) {
             return this;
@@ -81,11 +89,13 @@ public class KeYMarkerStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeYMarkerStatement clone() {
         return (KeYMarkerStatement) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeYMarkerStatementMetaModel getMetaModel() {
         return JavaParserMetaModel.keYMarkerStatementMetaModel;
     }
@@ -93,6 +103,7 @@ public class KeYMarkerStatement extends Statement {
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public KeYMarkerStatement(TokenRange tokenRange, int kind) {
         super(tokenRange);
         setKind(kind);

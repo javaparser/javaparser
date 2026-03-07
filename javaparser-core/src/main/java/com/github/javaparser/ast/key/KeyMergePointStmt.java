@@ -13,7 +13,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.KeyMergePointStatementMetaModel;
+import com.github.javaparser.metamodel.KeyMergePointStmtMetaModel;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -21,12 +21,12 @@ import org.jspecify.annotations.NonNull;
 
 /// A statement marking a merge point for the theorem prover, carries an `expr`;
 /// @author weigl
-public class KeyMergePointStatement extends Statement {
+public class KeyMergePointStmt extends Statement {
 
     private Expression expr;
 
     @AllFieldsConstructor
-    public KeyMergePointStatement(Expression expr) {
+    public KeyMergePointStmt(Expression expr) {
         this(null, expr);
     }
 
@@ -34,7 +34,7 @@ public class KeyMergePointStatement extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyMergePointStatement(TokenRange tokenRange, Expression expr) {
+    public KeyMergePointStmt(TokenRange tokenRange, Expression expr) {
         super(tokenRange);
         setExpr(expr);
         customInitialization();
@@ -67,14 +67,8 @@ public class KeyMergePointStatement extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public KeyMergePointStatement clone() {
-        return (KeyMergePointStatement) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public KeyMergePointStatementMetaModel getMetaModel() {
-        return JavaParserMetaModel.keyMergePointStatementMetaModel;
+    public KeyMergePointStmt clone() {
+        return (KeyMergePointStmt) accept(new CloneVisitor(), null);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -83,7 +77,7 @@ public class KeyMergePointStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMergePointStatement setExpr(final @NonNull() Expression expr) {
+    public KeyMergePointStmt setExpr(final @NonNull() Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -103,19 +97,19 @@ public class KeyMergePointStatement extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyMergePointStatement asKeyMergePointStatement() {
+    public KeyMergePointStmt asKeyMergePointStatement() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyMergePointStatement> toKeyMergePointStatement() {
+    public Optional<KeyMergePointStmt> toKeyMergePointStatement() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyMergePointStatement(Consumer<KeyMergePointStatement> action) {
+    public void ifKeyMergePointStatement(Consumer<KeyMergePointStmt> action) {
         action.accept(this);
     }
 
@@ -123,5 +117,29 @@ public class KeyMergePointStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @NonNull() Expression expr() {
         return Objects.requireNonNull(expr);
+    }
+
+    @Override
+    public boolean isKeyMergePointStmt() {
+        return true;
+    }
+
+    @Override
+    public KeyMergePointStmt asKeyMergePointStmt() {
+        return this;
+    }
+
+    @Override
+    public Optional<KeyMergePointStmt> toKeyMergePointStmt() {
+        return Optional.of(this);
+    }
+
+    public void ifKeyMergePointStmt(Consumer<KeyMergePointStmt> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public KeyMergePointStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.keyMergePointStmtMetaModel;
     }
 }

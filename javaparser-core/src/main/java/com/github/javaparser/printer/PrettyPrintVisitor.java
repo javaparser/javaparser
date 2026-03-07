@@ -853,7 +853,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeyCatchAllStatement n, Void arg) {
+    public void visit(KeyCatchAllStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print("#catchAll");
@@ -876,7 +876,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeyExecStatement n, Void arg) {
+    public void visit(KeyExecStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print("exec");
@@ -904,7 +904,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeyLoopScopeBlock n, Void arg) {
+    public void visit(KeyLoopScopeBlockStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print("loop-scope");
@@ -915,7 +915,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeyMergePointStatement n, Void arg) {
+    public void visit(KeyMergePointStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print("merge_point");
@@ -939,7 +939,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeyMethodCallStatement n, Void arg) {
+    public void visit(KeyMethodCallStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print("method-frame");
@@ -969,16 +969,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeyRangeExpression n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printComment(n.getComment(), arg);
-        n.getLower().accept(this, arg);
-        printer.print("..");
-        n.getUpper().accept(this, arg);
-    }
-
-    @Override
-    public void visit(KeyTransactionStatement n, Void arg) {
+    public void visit(KeyTransactionStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print(n.getType().symbol);
@@ -1111,21 +1102,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print(n.getText());
-    }
-
-    @Override
-    public void visit(JmlDocsBodyDeclaration n, Void arg) {
-        n.jmlDocs().accept(this, arg);
-    }
-
-    @Override
-    public void visit(JmlDocsTypeDeclaration n, Void arg) {
-        n.jmlDocs().accept(this, arg);
-    }
-
-    @Override
-    public void visit(JmlDocsStatements n, Void arg) {
-        n.jmlDocs().accept(this, arg);
     }
 
     @Override

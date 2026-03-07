@@ -14,20 +14,20 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.KeyExecStatementMetaModel;
+import com.github.javaparser.metamodel.KeyExecStmtMetaModel;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 
-public class KeyExecStatement extends Statement {
+public class KeyExecStmt extends Statement {
 
     private BlockStmt execBlock;
 
     private NodeList<KeyCcatchBranch> branches;
 
     @AllFieldsConstructor
-    public KeyExecStatement(BlockStmt execBlock, NodeList<KeyCcatchBranch> branches) {
+    public KeyExecStmt(BlockStmt execBlock, NodeList<KeyCcatchBranch> branches) {
         this(null, execBlock, branches);
     }
 
@@ -35,7 +35,7 @@ public class KeyExecStatement extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyExecStatement(TokenRange tokenRange, BlockStmt execBlock, NodeList<KeyCcatchBranch> branches) {
+    public KeyExecStmt(TokenRange tokenRange, BlockStmt execBlock, NodeList<KeyCcatchBranch> branches) {
         super(tokenRange);
         setExecBlock(execBlock);
         setBranches(branches);
@@ -60,7 +60,7 @@ public class KeyExecStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecStatement setBranches(final @NonNull() NodeList<KeyCcatchBranch> branches) {
+    public KeyExecStmt setBranches(final @NonNull() NodeList<KeyCcatchBranch> branches) {
         assertNotNull(branches);
         if (branches == this.branches) {
             return this;
@@ -78,7 +78,7 @@ public class KeyExecStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecStatement setExecBlock(final @NonNull() BlockStmt execBlock) {
+    public KeyExecStmt setExecBlock(final @NonNull() BlockStmt execBlock) {
         assertNotNull(execBlock);
         if (execBlock == this.execBlock) {
             return this;
@@ -126,14 +126,8 @@ public class KeyExecStatement extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public KeyExecStatement clone() {
-        return (KeyExecStatement) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public KeyExecStatementMetaModel getMetaModel() {
-        return JavaParserMetaModel.keyExecStatementMetaModel;
+    public KeyExecStmt clone() {
+        return (KeyExecStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -144,19 +138,19 @@ public class KeyExecStatement extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyExecStatement asKeyExecStatement() {
+    public KeyExecStmt asKeyExecStatement() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyExecStatement> toKeyExecStatement() {
+    public Optional<KeyExecStmt> toKeyExecStatement() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyExecStatement(Consumer<KeyExecStatement> action) {
+    public void ifKeyExecStatement(Consumer<KeyExecStmt> action) {
         action.accept(this);
     }
 
@@ -170,5 +164,29 @@ public class KeyExecStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @NonNull() BlockStmt execBlock() {
         return Objects.requireNonNull(execBlock);
+    }
+
+    @Override
+    public boolean isKeyExecStmt() {
+        return true;
+    }
+
+    @Override
+    public KeyExecStmt asKeyExecStmt() {
+        return this;
+    }
+
+    @Override
+    public Optional<KeyExecStmt> toKeyExecStmt() {
+        return Optional.of(this);
+    }
+
+    public void ifKeyExecStmt(Consumer<KeyExecStmt> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public KeyExecStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.keyExecStmtMetaModel;
     }
 }

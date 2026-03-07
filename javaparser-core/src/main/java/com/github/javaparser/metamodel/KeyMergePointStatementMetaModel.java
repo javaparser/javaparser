@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.key.KeyMergePointStatement;
+import com.github.javaparser.ast.key.KeyMergePointStmt;
 import java.util.Optional;
 
 /**
@@ -40,7 +40,7 @@ public class KeyMergePointStatementMetaModel extends StatementMetaModel {
     KeyMergePointStatementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(
                 superBaseNodeMetaModel,
-                KeyMergePointStatement.class,
+                KeyMergePointStmt.class,
                 "KeyMergePointStatement",
                 "com.github.javaparser.ast.key",
                 false,
