@@ -751,6 +751,15 @@ public final class JavaParserMetaModel {
         keyTransactionStatementMetaModel
                 .getConstructorParameters()
                 .add(keyTransactionStatementMetaModel.typePropertyMetaModel);
+        jmlDocMetaModel.getConstructorParameters().add(jmlDocMetaModel.contentPropertyMetaModel);
+        jmlDocsBodyDeclarationMetaModel
+                .getConstructorParameters()
+                .add(jmlDocsBodyDeclarationMetaModel.jmlDocsPropertyMetaModel);
+        jmlDocsTypeDeclarationMetaModel
+                .getConstructorParameters()
+                .add(jmlDocsTypeDeclarationMetaModel.jmlDocsPropertyMetaModel);
+        jmlDocsStatementsMetaModel.getConstructorParameters().add(jmlDocsStatementsMetaModel.jmlDocsPropertyMetaModel);
+        keYMarkerStatementMetaModel.getConstructorParameters().add(keYMarkerStatementMetaModel.kindPropertyMetaModel);
         keyContextStatementBlockMetaModel
                 .getConstructorParameters()
                 .add(keyContextStatementBlockMetaModel.statementsPropertyMetaModel);
@@ -858,6 +867,11 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(integerLiteralExprMetaModel);
         nodeMetaModels.add(intersectionTypeMetaModel);
         nodeMetaModels.add(javadocCommentMetaModel);
+        nodeMetaModels.add(jmlDocMetaModel);
+        nodeMetaModels.add(jmlDocsBodyDeclarationMetaModel);
+        nodeMetaModels.add(jmlDocsStatementsMetaModel);
+        nodeMetaModels.add(jmlDocsTypeDeclarationMetaModel);
+        nodeMetaModels.add(keYMarkerStatementMetaModel);
         nodeMetaModels.add(jmlBeginStmtMetaModel);
         nodeMetaModels.add(jmlBinaryInfixExprMetaModel);
         nodeMetaModels.add(jmlCallableClauseMetaModel);
@@ -4684,6 +4698,57 @@ public final class JavaParserMetaModel {
         keyTransactionStatementMetaModel
                 .getDeclaredPropertyMetaModels()
                 .add(keyTransactionStatementMetaModel.typePropertyMetaModel);
+        jmlDocMetaModel.contentPropertyMetaModel = new PropertyMetaModel(
+                jmlDocMetaModel,
+                "content",
+                com.github.javaparser.JavaToken.class,
+                Optional.empty(),
+                false,
+                false,
+                false,
+                false);
+        jmlDocMetaModel.getDeclaredPropertyMetaModels().add(jmlDocMetaModel.contentPropertyMetaModel);
+        jmlDocsBodyDeclarationMetaModel.jmlDocsPropertyMetaModel = new PropertyMetaModel(
+                jmlDocsBodyDeclarationMetaModel,
+                "jmlDocs",
+                com.github.javaparser.ast.key.JmlDoc.class,
+                Optional.of(jmlDocMetaModel),
+                false,
+                false,
+                true,
+                false);
+        jmlDocsBodyDeclarationMetaModel
+                .getDeclaredPropertyMetaModels()
+                .add(jmlDocsBodyDeclarationMetaModel.jmlDocsPropertyMetaModel);
+        jmlDocsTypeDeclarationMetaModel.jmlDocsPropertyMetaModel = new PropertyMetaModel(
+                jmlDocsTypeDeclarationMetaModel,
+                "jmlDocs",
+                com.github.javaparser.ast.key.JmlDoc.class,
+                Optional.of(jmlDocMetaModel),
+                false,
+                false,
+                true,
+                false);
+        jmlDocsTypeDeclarationMetaModel
+                .getDeclaredPropertyMetaModels()
+                .add(jmlDocsTypeDeclarationMetaModel.jmlDocsPropertyMetaModel);
+        jmlDocsStatementsMetaModel.jmlDocsPropertyMetaModel = new PropertyMetaModel(
+                jmlDocsStatementsMetaModel,
+                "jmlDocs",
+                com.github.javaparser.ast.key.JmlDoc.class,
+                Optional.of(jmlDocMetaModel),
+                false,
+                false,
+                true,
+                false);
+        jmlDocsStatementsMetaModel
+                .getDeclaredPropertyMetaModels()
+                .add(jmlDocsStatementsMetaModel.jmlDocsPropertyMetaModel);
+        keYMarkerStatementMetaModel.kindPropertyMetaModel = new PropertyMetaModel(
+                keYMarkerStatementMetaModel, "kind", int.class, Optional.empty(), false, false, false, false);
+        keYMarkerStatementMetaModel
+                .getDeclaredPropertyMetaModels()
+                .add(keYMarkerStatementMetaModel.kindPropertyMetaModel);
         keyContextStatementBlockMetaModel.contextPropertyMetaModel = new PropertyMetaModel(
                 keyContextStatementBlockMetaModel,
                 "context",
@@ -5560,6 +5625,22 @@ public final class JavaParserMetaModel {
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final KeyTransactionStatementMetaModel keyTransactionStatementMetaModel =
             new KeyTransactionStatementMetaModel(Optional.of(statementMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final JmlDocsBodyDeclarationMetaModel jmlDocsBodyDeclarationMetaModel =
+            new JmlDocsBodyDeclarationMetaModel(Optional.of(bodyDeclarationMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final JmlDocsTypeDeclarationMetaModel jmlDocsTypeDeclarationMetaModel =
+            new JmlDocsTypeDeclarationMetaModel(Optional.of(typeDeclarationMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final JmlDocsStatementsMetaModel jmlDocsStatementsMetaModel =
+            new JmlDocsStatementsMetaModel(Optional.of(statementMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final KeYMarkerStatementMetaModel keYMarkerStatementMetaModel =
+            new KeYMarkerStatementMetaModel(Optional.of(statementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final KeyContextStatementBlockMetaModel keyContextStatementBlockMetaModel =

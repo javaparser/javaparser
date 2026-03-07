@@ -27,6 +27,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
@@ -462,7 +463,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(NodeList n, A arg) {
+    public void visit(NodeList<?> n, A arg) {
         defaultAction(n, arg);
     }
 
@@ -830,11 +831,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlDoc n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
     public void visit(final JmlDocType n, final A arg) {
         defaultAction(n, arg);
     }
@@ -876,6 +872,31 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlMethodSignature n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlDoc n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlDocsBodyDeclaration n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlDocsTypeDeclaration n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlDocsStatements n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final KeYMarkerStatement n, final A arg) {
         defaultAction(n, arg);
     }
 }

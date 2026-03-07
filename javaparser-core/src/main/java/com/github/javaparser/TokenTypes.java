@@ -108,8 +108,11 @@ public class TokenTypes {
             case JAVADOC_COMMENT:
             case MULTI_LINE_COMMENT:
                 return JavaToken.Category.COMMENT;
+            case JML_BLOCK_COMMENT:
+            case JML_LINE_COMMENT:
             case ABSTRACT:
             case ASSERT:
+            case GHOST:
             case BOOLEAN:
             case BREAK:
             case BYTE:
@@ -249,7 +252,6 @@ public class TokenTypes {
             case PEER:
             case REP:
             case READ_ONLY:
-            case GHOST:
             case END:
             case HELPER:
             case HENCE_BY:
@@ -357,10 +359,6 @@ public class TokenTypes {
             case WORKING_SPACE_REDUNDANTLY:
             case WRITABLE:
             case DOTDOT:
-            case JML_LINE_COMMENT:
-            case JML_ENTER_MULTILINE_COMMENT:
-            case ENTER_JML_BLOCK_COMMENT:
-            case JML_BLOCK_COMMENT:
             case JML_MULTI_LINE_COMMENT:
             case TRANSACTIONBEGIN:
             case TRANSACTIONCOMMIT:
@@ -491,6 +489,8 @@ public class TokenTypes {
                 return JavaToken.Category.OPERATOR;
             // The following are tokens that are only used internally by the lexer
             case ENTER_JAVADOC_COMMENT:
+            case ENTER_JML_BLOCK_COMMENT:
+            case JML_ENTER_MULTILINE_COMMENT:
             case ENTER_MULTILINE_COMMENT:
             case COMMENT_CONTENT:
             case HEX_DIGITS:

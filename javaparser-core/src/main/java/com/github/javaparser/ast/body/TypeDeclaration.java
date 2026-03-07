@@ -67,6 +67,10 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         this(null, new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>());
     }
 
+    public TypeDeclaration(TokenRange range) {
+        this(range, new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>());
+    }
+
     public TypeDeclaration(NodeList<Modifier> modifiers, String name) {
         this(null, modifiers, new NodeList<>(), new SimpleName(name), new NodeList<>());
     }

@@ -20,11 +20,11 @@
  */
 package com.github.javaparser.ast.nodeTypes;
 
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import java.util.Arrays;
@@ -49,9 +49,9 @@ public interface NodeWithModifiers<N extends Node> {
     N setModifiers(NodeList<Modifier> modifiers);
 
     @SuppressWarnings("unchecked")
-    default N addModifier(Modifier.Keyword... newModifiers) {
+    default N addModifier(Keyword... newModifiers) {
         NodeList<Modifier> existingModifiers = new NodeList<>(getModifiers());
-        for (Modifier.Keyword newModifier : newModifiers) {
+        for (Keyword newModifier : newModifiers) {
             boolean alreadyPresent = existingModifiers.stream().anyMatch(m -> m.getKeyword() == newModifier);
             if (!alreadyPresent) {
                 existingModifiers.add(new Modifier(newModifier));
@@ -62,8 +62,8 @@ public interface NodeWithModifiers<N extends Node> {
     }
 
     @SuppressWarnings("unchecked")
-    default N removeModifier(Modifier.Keyword... modifiersToRemove) {
-        List<Modifier.Keyword> modifiersToRemoveAsList = Arrays.asList(modifiersToRemove);
+    default N removeModifier(Keyword... modifiersToRemove) {
+        List<Keyword> modifiersToRemoveAsList = Arrays.asList(modifiersToRemove);
         NodeList<Modifier> remaining = getModifiers().stream()
                 .filter(existingModifier -> !modifiersToRemoveAsList.contains(existingModifier.getKeyword()))
                 .collect(toNodeList());
@@ -71,7 +71,7 @@ public interface NodeWithModifiers<N extends Node> {
         return (N) this;
     }
 
-    default N setModifier(Modifier.Keyword m, boolean set) {
+    default N setModifier(Keyword m, boolean set) {
         if (set) {
             return addModifier(m);
         }
@@ -82,7 +82,7 @@ public interface NodeWithModifiers<N extends Node> {
      * @param modifier the modifer being searched for
      * @return true if the modifier has been explicitly added to this node, else false
      */
-    default boolean hasModifier(Modifier.Keyword modifier) {
+    default boolean hasModifier(Keyword modifier) {
         for (Modifier m : getModifiers()) {
             if (m.getKeyword() == modifier) {
                 return true;

@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
@@ -1773,15 +1774,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final JmlDoc n, final Visitable arg) {
-        final JmlDoc n2 = (JmlDoc) arg;
-        if (!objEquals(n.getContent(), n2.getContent())) return false;
-        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
-        if (!nodeEquals(n.getComment(), n2.getComment())) return false;
-        return true;
-    }
-
-    @Override
     public Boolean visit(final JmlDocType n, final Visitable arg) {
         final JmlDocType n2 = (JmlDocType) arg;
         if (!nodesEquals(n.getJmlComments(), n2.getJmlComments())) return false;
@@ -1870,6 +1862,56 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodesEquals(n.getArgumentTypes(), n2.getArgumentTypes())) return false;
         if (!nodeEquals(n.getName(), n2.getName())) return false;
         if (!nodeEquals(n.getReceiver(), n2.getReceiver())) return false;
+        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
+        if (!nodeEquals(n.getComment(), n2.getComment())) return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlDoc n, final Visitable arg) {
+        final JmlDoc n2 = (JmlDoc) arg;
+        if (!objEquals(n.getContent(), n2.getContent())) return false;
+        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
+        if (!nodeEquals(n.getComment(), n2.getComment())) return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlDocsBodyDeclaration n, final Visitable arg) {
+        final JmlDocsBodyDeclaration n2 = (JmlDocsBodyDeclaration) arg;
+        if (!nodesEquals(n.getJmlDocs(), n2.getJmlDocs())) return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) return false;
+        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
+        if (!nodeEquals(n.getComment(), n2.getComment())) return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlDocsTypeDeclaration n, final Visitable arg) {
+        final JmlDocsTypeDeclaration n2 = (JmlDocsTypeDeclaration) arg;
+        if (!nodesEquals(n.getJmlDocs(), n2.getJmlDocs())) return false;
+        if (!nodesEquals(n.getMembers(), n2.getMembers())) return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) return false;
+        if (!nodeEquals(n.getName(), n2.getName())) return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations())) return false;
+        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
+        if (!nodeEquals(n.getComment(), n2.getComment())) return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlDocsStatements n, final Visitable arg) {
+        final JmlDocsStatements n2 = (JmlDocsStatements) arg;
+        if (!nodesEquals(n.getJmlDocs(), n2.getJmlDocs())) return false;
+        if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
+        if (!nodeEquals(n.getComment(), n2.getComment())) return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeYMarkerStatement n, final Visitable arg) {
+        final KeYMarkerStatement n2 = (KeYMarkerStatement) arg;
+        if (!objEquals(n.getKind(), n2.getKind())) return false;
         if (!nodesEquals(n.getAssociatedSpecificationComments(), n2.getAssociatedSpecificationComments())) return false;
         if (!nodeEquals(n.getComment(), n2.getComment())) return false;
         return true;

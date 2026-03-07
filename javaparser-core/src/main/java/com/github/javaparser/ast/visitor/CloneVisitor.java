@@ -35,6 +35,7 @@ import com.github.javaparser.ast.jml.clauses.JmlSignalsClause;
 import com.github.javaparser.ast.jml.clauses.JmlSignalsOnlyClause;
 import com.github.javaparser.ast.jml.clauses.JmlSimpleExprClause;
 import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
@@ -2377,18 +2378,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final JmlDoc n, final Object arg) {
-        NodeList<Comment> associatedSpecificationComments =
-                cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
-        Comment comment = cloneNode(n.getComment(), arg);
-        JmlDoc r = new JmlDoc(n.getTokenRange().orElse(null), n.getContent());
-        r.setComment(comment);
-        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
-        copyData(n, r);
-        return r;
-    }
-
-    @Override
     public Visitable visit(final JmlDocType n, final Object arg) {
         NodeList<JmlDoc> jmlComments = cloneList(n.getJmlComments(), arg);
         NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
@@ -2513,6 +2502,45 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
                 cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlMethodSignature r = new JmlMethodSignature(n.getTokenRange().orElse(null), receiver, name, argumentTypes);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlDoc n, final Object arg) {
+        NodeList<Comment> associatedSpecificationComments =
+                cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlDoc r = new JmlDoc(n.getTokenRange().orElse(null), n.getContent());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocsBodyDeclaration n, final Object arg) {
+        return null;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocsTypeDeclaration n, final Object arg) {
+        return null;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocsStatements n, final Object arg) {
+        return null;
+    }
+
+    @Override
+    public Visitable visit(final KeYMarkerStatement n, final Object arg) {
+        NodeList<Comment> associatedSpecificationComments =
+                cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeYMarkerStatement r = new KeYMarkerStatement(n.getTokenRange().orElse(null), n.getKind());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

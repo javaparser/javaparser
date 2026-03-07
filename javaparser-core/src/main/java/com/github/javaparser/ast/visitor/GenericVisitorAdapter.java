@@ -1961,7 +1961,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(NodeList n, A arg) {
+    public R visit(NodeList<?> n, A arg) {
         for (final Object v : n) {
             R result = ((Node) v).accept(this, arg);
             if (result != null) {
@@ -3780,6 +3780,94 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             result = n.getReceiver().get().accept(this, arg);
             if (result != null) return result;
         }
+        if (n.getAssociatedSpecificationComments().isPresent()) {
+            result = n.getAssociatedSpecificationComments().get().accept(this, arg);
+            if (result != null) return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null) return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlDocsBodyDeclaration n, final A arg) {
+        R result;
+        {
+            result = n.getJmlDocs().accept(this, arg);
+            if (result != null) return result;
+        }
+        {
+            result = n.getAnnotations().accept(this, arg);
+            if (result != null) return result;
+        }
+        if (n.getAssociatedSpecificationComments().isPresent()) {
+            result = n.getAssociatedSpecificationComments().get().accept(this, arg);
+            if (result != null) return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null) return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlDocsTypeDeclaration n, final A arg) {
+        R result;
+        {
+            result = n.getJmlDocs().accept(this, arg);
+            if (result != null) return result;
+        }
+        {
+            result = n.getMembers().accept(this, arg);
+            if (result != null) return result;
+        }
+        {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null) return result;
+        }
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null) return result;
+        }
+        {
+            result = n.getAnnotations().accept(this, arg);
+            if (result != null) return result;
+        }
+        if (n.getAssociatedSpecificationComments().isPresent()) {
+            result = n.getAssociatedSpecificationComments().get().accept(this, arg);
+            if (result != null) return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null) return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlDocsStatements n, final A arg) {
+        R result;
+        {
+            result = n.getJmlDocs().accept(this, arg);
+            if (result != null) return result;
+        }
+        if (n.getAssociatedSpecificationComments().isPresent()) {
+            result = n.getAssociatedSpecificationComments().get().accept(this, arg);
+            if (result != null) return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null) return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeYMarkerStatement n, final A arg) {
+        R result;
         if (n.getAssociatedSpecificationComments().isPresent()) {
             result = n.getAssociatedSpecificationComments().get().accept(this, arg);
             if (result != null) return result;

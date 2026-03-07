@@ -235,7 +235,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
         Solver symbolSolver = new SymbolSolver(typeSolver);
 
-        MethodUsage ref = symbolSolver.solveMethod("getTypes", Collections.emptyList(), callToGetTypes);
+        MethodUsage ref = symbolSolver.solveMethod("getTypes", Collections.emptyList(), callToGetTypes, null);
 
         assertEquals("getTypes", ref.getName());
         assertEquals(
@@ -254,7 +254,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
         Solver symbolSolver = new SymbolSolver(typeSolver);
-        MethodUsage ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToStream);
+        MethodUsage ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToStream, null);
 
         assertEquals("stream", ref.getName());
         assertEquals("java.util.Collection", ref.declaringType().getQualifiedName());
@@ -271,7 +271,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(
                 new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
         Solver symbolSolver = new SymbolSolver(typeSolver);
-        MethodUsage ref = symbolSolver.solveMethod("trim", Collections.emptyList(), callToTrim);
+        MethodUsage ref = symbolSolver.solveMethod("trim", Collections.emptyList(), callToTrim, null);
 
         assertEquals("trim", ref.getName());
         assertEquals("java.lang.String", ref.declaringType().getQualifiedName());
@@ -332,7 +332,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         Solver symbolSolver = new SymbolSolver(typeSolver);
-        MethodUsage ref = symbolSolver.solveMethod("isEmpty", Collections.emptyList(), call);
+        MethodUsage ref = symbolSolver.solveMethod("isEmpty", Collections.emptyList(), call, null);
 
         assertEquals("isEmpty", ref.getName());
         assertEquals("java.lang.String", ref.declaringType().getQualifiedName());

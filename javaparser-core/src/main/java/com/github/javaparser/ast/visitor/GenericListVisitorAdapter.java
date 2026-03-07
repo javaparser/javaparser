@@ -2048,7 +2048,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(NodeList n, A arg) {
+    public List<R> visit(NodeList<?> n, A arg) {
         return ((NodeList<? extends Node>) n)
                 .stream()
                         .filter(Objects::nonNull)
@@ -3947,6 +3947,98 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             tmp = n.getReceiver().get().accept(this, arg);
             if (tmp != null) result.addAll(tmp);
         }
+        if (n.getAssociatedSpecificationComments().isPresent()) {
+            tmp = n.getAssociatedSpecificationComments().get().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final JmlDocsBodyDeclaration n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getJmlDocs().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        {
+            tmp = n.getAnnotations().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        if (n.getAssociatedSpecificationComments().isPresent()) {
+            tmp = n.getAssociatedSpecificationComments().get().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final JmlDocsTypeDeclaration n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getJmlDocs().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        {
+            tmp = n.getMembers().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        {
+            tmp = n.getModifiers().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        {
+            tmp = n.getName().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        {
+            tmp = n.getAnnotations().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        if (n.getAssociatedSpecificationComments().isPresent()) {
+            tmp = n.getAssociatedSpecificationComments().get().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final JmlDocsStatements n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getJmlDocs().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        if (n.getAssociatedSpecificationComments().isPresent()) {
+            tmp = n.getAssociatedSpecificationComments().get().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeYMarkerStatement n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
         if (n.getAssociatedSpecificationComments().isPresent()) {
             tmp = n.getAssociatedSpecificationComments().get().accept(this, arg);
             if (tmp != null) result.addAll(tmp);

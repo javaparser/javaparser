@@ -26,9 +26,13 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.body.*;
+import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.key.sv.KeyContextStatementBlock;
 import com.github.javaparser.ast.key.sv.KeyExecCtxtSV;
 import com.github.javaparser.ast.key.sv.KeyMetaConstruct;
@@ -725,6 +729,40 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyTransactionStatement(Consumer<KeyTransactionStatement> action) {}
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlDocsStatements() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlDocsStatements asJmlDocsStatements() {
+        throw new IllegalStateException(
+                f("%s is not JmlDocsStatements, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlDocsStatements> toJmlDocsStatements() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlDocsStatements(Consumer<JmlDocsStatements> action) {}
+
+    public boolean isKeYMarkerStatement() {
+        return false;
+    }
+
+    public KeYMarkerStatement asKeYMarkerStatement() {
+        throw new IllegalStateException(f(
+                "%s is not KeYMarkerStatement, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeYMarkerStatement> toKeYMarkerStatement() {
+        return Optional.empty();
+    }
+
+    public void ifKeYMarkerStatement(Consumer<KeYMarkerStatement> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlDocStmt() {

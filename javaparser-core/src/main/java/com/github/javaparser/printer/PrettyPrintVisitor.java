@@ -33,6 +33,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
@@ -1110,6 +1111,26 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print(n.getText());
+    }
+
+    @Override
+    public void visit(JmlDocsBodyDeclaration n, Void arg) {
+        n.jmlDocs().accept(this, arg);
+    }
+
+    @Override
+    public void visit(JmlDocsTypeDeclaration n, Void arg) {
+        n.jmlDocs().accept(this, arg);
+    }
+
+    @Override
+    public void visit(JmlDocsStatements n, Void arg) {
+        n.jmlDocs().accept(this, arg);
+    }
+
+    @Override
+    public void visit(KeYMarkerStatement n, Void arg) {
+        printer.println("//KEY MARKER STATEMENT: " + n.getKind());
     }
 
     @Override

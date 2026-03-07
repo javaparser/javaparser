@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.FINAL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 import com.github.javaparser.TokenRange;
@@ -193,7 +192,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         NodeList<Modifier> modifiers = getModifiers();
         if (modifiers != null) {
             getModifiers().forEach(modifier -> {
-                if (modifier.getKeyword().equals(FINAL)) {
+                if (modifier.getKeyword().equals(Modifier.DefaultKeyword.FINAL)) {
                     modifier.setData(PHANTOM_KEY, newIsCompact);
                 }
             });
@@ -229,7 +228,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
                             @SuppressWarnings("unchecked")
                             NodeList<Modifier> newModifiers = (NodeList<Modifier>) newValue;
                             newModifiers.forEach(modifier -> {
-                                if (modifier.getKeyword().equals(FINAL)) {
+                                if (modifier.getKeyword().equals(Modifier.DefaultKeyword.FINAL)) {
                                     modifier.setData(PHANTOM_KEY, isCompact);
                                 }
                             });

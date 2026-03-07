@@ -34,14 +34,14 @@ Just add the following to your maven configuration or tailor to your own depende
 <dependency>
     <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-symbol-solver-core</artifactId>
-    <version>3.28.0-K10.1-SNAPSHOT</version>
+    <version>3.28.0-K13.4</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.28.0-K10.1-SNAPSHOT'
+implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.28.0-K13.4'
 ```
 
 Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver.
@@ -56,14 +56,14 @@ Using the dependency above will add both JavaParser and JavaSymbolSolver to your
 <dependency>
     <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.28.0-K10.1-SNAPSHOT</version>
+    <version>3.28.0-K13.4</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-implementation 'com.github.javaparser:javaparser-core:3.28.0-K10.1-SNAPSHOT'
+implementation 'com.github.javaparser:javaparser-core:3.28.0-K13.4'
 ```
 
 ## How To Compile Sources
@@ -90,7 +90,7 @@ The `run_metamodel_generator.sh` script will rebuild the metamodel,
 which is used by the code generators which are run by `run_core_generators.sh`
 Make sure that `javaparser-core` at least compiles before you run these.
 
-**Note**: for Eclipse IDE follow the steps described in the wiki: https://github.com/javaparser/javaparser/wiki/Eclipse-Project-Setup-Guide
+**Note**: for Eclipse IDE follow the steps described in the [wiki](https://github.com/javaparser/javaparser/wiki/Eclipse-Project-Setup-Guide).
 
 
 ## Structural Changes
@@ -103,26 +103,15 @@ Make sure that `javaparser-core` at least compiles before you run these.
   For method this is already covered by the grammar.
 
 * New Statements
-    * KeyMetaConstructStatement
-    * StatementSV
-    * KeyMethodCallStatement
-    * KeyMethodBodyStatement
-    * KeyTransactionStatement
-    * KeyMergePointStatement
-    * KeyLoopScope
-    * KeyCatchAllStatement
-    * KeyExecStatement
-    * KeyMethodCallStatement
-* Expression
-    * UnaryExpression
-        * KeyGeneralEscapeExpression
-        * KeyCreateObjectSV
-        * KeyLengthReferenceSV
-    * Cast expression allows schema type variables and meta constructs.
-    * PrimaryExpression
-        * PassiveExpression
-        * KeyStaticEvaluate
-        * IsStaticMC
+    * [`KeyMetaConstruct`](javaparser-core/src/main/java/com/github/javaparser/ast/key/sv/KeyMetaConstruct.java)
+    * [`KeyMethodCallStatement`](javaparser-core/src/main/java/com/github/javaparser/ast/key/KeyMethodCallStatement.java)
+    * [`KeyMethodBodyStatement`]()
+    * [`KeyTransactionStatement`]()
+    * [`KeyMergePointStatement`]()
+    * [`KeyLoopScopeBlock`]()
+    * [`KeyCatchAllStatement`]()
+    * [`KeyExecStatement`]()
+    * [`KeyMethodCallStatement`]()
 * Primitive types
     * `\bigint`
     * `\real`

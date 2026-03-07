@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
@@ -725,7 +726,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(NodeList n, A arg) {
+    public void visit(NodeList<?> n, A arg) {
         for (Object node : n) {
             ((Node) node).accept(this, arg);
         }
@@ -1392,6 +1393,38 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getArgumentTypes().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getReceiver().ifPresent(l -> l.accept(this, arg));
+        n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlDocsBodyDeclaration n, final A arg) {
+        n.getJmlDocs().forEach(p -> p.accept(this, arg));
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlDocsTypeDeclaration n, final A arg) {
+        n.getJmlDocs().forEach(p -> p.accept(this, arg));
+        n.getMembers().forEach(p -> p.accept(this, arg));
+        n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getName().accept(this, arg);
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlDocsStatements n, final A arg) {
+        n.getJmlDocs().forEach(p -> p.accept(this, arg));
+        n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeYMarkerStatement n, final A arg) {
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }

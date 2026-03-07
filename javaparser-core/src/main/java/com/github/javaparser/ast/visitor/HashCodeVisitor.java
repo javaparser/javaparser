@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
@@ -667,7 +668,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
-    public Integer visit(NodeList n, Void arg) {
+    public Integer visit(NodeList<?> n, Void arg) {
         int result = 0;
         for (Object node : n) {
             result += 31 * ((Visitable) node).accept(this, arg);
@@ -1881,6 +1882,51 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
         return (n.getArgumentTypes().accept(this, arg)) * 31
                 + (n.getName().accept(this, arg)) * 31
                 + (n.getReceiver().isPresent() ? n.getReceiver().get().accept(this, arg) : 0) * 31
+                + (n.getAssociatedSpecificationComments().isPresent()
+                                ? n.getAssociatedSpecificationComments().get().accept(this, arg)
+                                : 0)
+                        * 31
+                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final JmlDocsBodyDeclaration n, final Void arg) {
+        return (n.getJmlDocs().accept(this, arg)) * 31
+                + (n.getAnnotations().accept(this, arg)) * 31
+                + (n.getAssociatedSpecificationComments().isPresent()
+                                ? n.getAssociatedSpecificationComments().get().accept(this, arg)
+                                : 0)
+                        * 31
+                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final JmlDocsTypeDeclaration n, final Void arg) {
+        return (n.getJmlDocs().accept(this, arg)) * 31
+                + (n.getMembers().accept(this, arg)) * 31
+                + (n.getModifiers().accept(this, arg)) * 31
+                + (n.getName().accept(this, arg)) * 31
+                + (n.getAnnotations().accept(this, arg)) * 31
+                + (n.getAssociatedSpecificationComments().isPresent()
+                                ? n.getAssociatedSpecificationComments().get().accept(this, arg)
+                                : 0)
+                        * 31
+                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final JmlDocsStatements n, final Void arg) {
+        return (n.getJmlDocs().accept(this, arg)) * 31
+                + (n.getAssociatedSpecificationComments().isPresent()
+                                ? n.getAssociatedSpecificationComments().get().accept(this, arg)
+                                : 0)
+                        * 31
+                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeYMarkerStatement n, final Void arg) {
+        return n.getKind() * 31
                 + (n.getAssociatedSpecificationComments().isPresent()
                                 ? n.getAssociatedSpecificationComments().get().accept(this, arg)
                                 : 0)

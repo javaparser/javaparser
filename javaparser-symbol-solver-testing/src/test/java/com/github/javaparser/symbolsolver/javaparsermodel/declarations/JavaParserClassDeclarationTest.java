@@ -1152,27 +1152,28 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
 
         SymbolReference<ResolvedMethodDeclaration> res;
 
-        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of());
+        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of(), null);
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isStatic()",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
 
         res = constructorDeclaration.solveMethod(
                 "isThrows",
-                ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolverNewCode)));
+                ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolverNewCode)),
+                null);
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
 
         res = constructorDeclaration.solveMethod(
-                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(String.class, typeSolverNewCode)));
+                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(String.class, typeSolverNewCode)), null);
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.String)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
 
         // This is solved because it is raw
         res = constructorDeclaration.solveMethod(
-                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(Class.class, typeSolverNewCode)));
+                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(Class.class, typeSolverNewCode)), null);
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
@@ -1185,10 +1186,10 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
 
         SymbolReference<ResolvedMethodDeclaration> res;
 
-        res = constructorDeclaration.solveMethod("unexistingMethod", ImmutableList.of());
+        res = constructorDeclaration.solveMethod("unexistingMethod", ImmutableList.of(), null);
         assertFalse(res.isSolved());
 
-        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN));
+        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN), null);
         assertFalse(res.isSolved());
     }
 
@@ -1205,7 +1206,7 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
                 (ResolvedReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolverNewCode);
         ResolvedReferenceType classOfStringType = (ResolvedReferenceType) rawClassType.replaceTypeVariables(
                 rawClassType.getTypeDeclaration().get().getTypeParameters().get(0), stringType);
-        res = constructorDeclaration.solveMethod("isThrows", ImmutableList.of(classOfStringType));
+        res = constructorDeclaration.solveMethod("isThrows", ImmutableList.of(classOfStringType), null);
         assertFalse(res.isSolved());
     }
 

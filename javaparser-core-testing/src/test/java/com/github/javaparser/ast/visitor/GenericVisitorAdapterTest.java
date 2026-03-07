@@ -615,7 +615,7 @@ public class GenericVisitorAdapterTest {
         ConstructorDeclaration node = mock(ConstructorDeclaration.class);
 
         // When
-        Mockito.when(node.getBody()).thenReturn(Optional.of(mock(BlockStmt.class)));
+        Mockito.when(node.getBody().get()).thenReturn(Optional.of(mock(BlockStmt.class)));
         Mockito.when(node.getModifiers()).thenReturn(mock(NodeList.class));
         Mockito.when(node.getName()).thenReturn(mock(SimpleName.class));
         Mockito.when(node.getParameters()).thenReturn(mock(NodeList.class));

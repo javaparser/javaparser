@@ -267,7 +267,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      */
     @Override
     public boolean isFinal() {
-        return hasModifier(FINAL) || isDeclaredInInterface();
+        return hasModifier(Modifier.DefaultKeyword.FINAL) || isDeclaredInInterface();
     }
 
     /*
@@ -275,7 +275,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      */
     @Override
     public boolean isPublic() {
-        return hasModifier(PUBLIC) || isDeclaredInInterface();
+        return hasModifier(DefaultKeyword.PUBLIC) || isDeclaredInInterface();
     }
 
     /*

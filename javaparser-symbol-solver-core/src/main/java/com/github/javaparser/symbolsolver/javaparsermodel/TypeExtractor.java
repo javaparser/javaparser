@@ -643,7 +643,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (parentNode instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) parentNode;
             int pos = getParamPos(node);
-            SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
+            SymbolReference<ResolvedMethodDeclaration> refMethod =
+                    facade.solve(callExpr, false, JavaParserFacade.find(callExpr));
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(
                         parentNode.toString(), callExpr.getName().getId());

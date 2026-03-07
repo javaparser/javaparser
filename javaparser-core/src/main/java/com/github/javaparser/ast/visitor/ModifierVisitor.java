@@ -34,6 +34,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
@@ -1289,7 +1290,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(NodeList n, A arg) {
+    public Visitable visit(NodeList<?> n, A arg) {
         if (n.isEmpty()) {
             return n;
         }
@@ -1301,9 +1302,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         }
         for (Pair<Node, Node> change : changeList) {
             if (change.b == null) {
-                removeElementByObjectIdentity(n, change.a);
+                removeElementByObjectIdentity((NodeList<Node>) n, change.a);
             } else {
-                replaceElementByObjectIdentity(n, change.a, change.b);
+                replaceElementByObjectIdentity((NodeList<Node>) n, change.a, change.b);
             }
         }
         return n;
@@ -2430,6 +2431,30 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setArgumentTypes(argumentTypes);
         n.setName(name);
         n.setReceiver(receiver);
+        n.setAssociatedSpecificationComments(associatedSpecificationComments);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocsBodyDeclaration n, final A arg) {
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocsTypeDeclaration n, final A arg) {
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocsStatements n, final A arg) {
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeYMarkerStatement n, final A arg) {
+        NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setAssociatedSpecificationComments(associatedSpecificationComments);
         n.setComment(comment);
         return n;

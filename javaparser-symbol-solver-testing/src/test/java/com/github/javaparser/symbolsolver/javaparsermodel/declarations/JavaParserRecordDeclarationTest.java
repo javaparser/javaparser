@@ -371,7 +371,7 @@ public class JavaParserRecordDeclarationTest {
                 (JavaParserRecordDeclaration) recordDeclaration.resolve();
 
         SymbolReference<ResolvedMethodDeclaration> symbol =
-                resolvedRecordDeclaration.solveMethod("s", Collections.emptyList());
+                resolvedRecordDeclaration.solveMethod("s", Collections.emptyList(), null);
         assertTrue(symbol.isSolved());
         ResolvedMethodDeclaration resolvedCall = symbol.getCorrespondingDeclaration();
 

@@ -23,6 +23,7 @@ package com.github.javaparser.ast.nodeTypes;
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.ast.Modifier.Keyword;
+import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
@@ -80,7 +81,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers the modifiers like {@link Modifier.DefaultKeyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(Class<?> typeClass, String name, Modifier.DefaultKeyword... modifiers) {
+    default FieldDeclaration addField(Class<?> typeClass, String name, Modifier.Keyword... modifiers) {
         tryAddImportToParentCompilationUnit(typeClass);
         return addField(typeClass.getSimpleName(), name, modifiers);
     }
@@ -93,7 +94,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers the modifiers like {@link Modifier.DefaultKeyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(String type, String name, Modifier.DefaultKeyword... modifiers) {
+    default FieldDeclaration addField(String type, String name, Modifier.Keyword... modifiers) {
         return addField(parseType(type), name, modifiers);
     }
 
@@ -105,7 +106,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers the modifiers like {@link Modifier.DefaultKeyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(Type type, String name, Modifier.DefaultKeyword... modifiers) {
+    default FieldDeclaration addField(Type type, String name, Modifier.Keyword... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         VariableDeclarator variable = new VariableDeclarator(type, name);
         fieldDeclaration.getVariables().add(variable);
@@ -153,7 +154,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addFieldWithInitializer(
-            Type type, String name, Expression initializer, Modifier.DefaultKeyword... modifiers) {
+            Type type, String name, Expression initializer, Keyword... modifiers) {
         FieldDeclaration declaration = addField(type, name, modifiers);
         declaration.getVariables().iterator().next().setInitializer(initializer);
         return declaration;
@@ -283,7 +284,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers the modifiers like {@link Modifier.DefaultKeyword#PUBLIC}
      * @return the created constructor
      */
-    default ConstructorDeclaration addConstructor(Modifier.DefaultKeyword... modifiers) {
+    default ConstructorDeclaration addConstructor(Keyword... modifiers) {
         ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
         constructorDeclaration.setModifiers(createModifierList(modifiers));
         constructorDeclaration.setName(getName());

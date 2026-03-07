@@ -27,6 +27,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.key.KeyCcatchReturn;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
@@ -60,6 +61,9 @@ public class JavaParserFactory {
         }
         if (node instanceof CompilationUnit) {
             return new CompilationUnitContext((CompilationUnit) node, typeSolver);
+        }
+        if (node instanceof KeyCcatchReturn kcr) {
+            return new KeyCcatchReturnContext(kcr, typeSolver);
         }
         if (node instanceof EnclosedExpr) {
             return new EnclosedExprContext((EnclosedExpr) node, typeSolver);

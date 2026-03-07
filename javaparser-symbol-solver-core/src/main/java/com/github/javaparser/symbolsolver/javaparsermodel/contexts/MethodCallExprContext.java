@@ -77,7 +77,8 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     }
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name, List<ResolvedType> argumentsTypes, ResolvedReferenceTypeDeclaration invocationContext) {
         ResolvedType typeOfScope;
         if (wrappedNode.hasScope()) {
             Expression scope = wrappedNode.getScope().get();
@@ -87,7 +88,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
                 if (ref.isSolved()) {
                     SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(
-                            ref.getCorrespondingDeclaration(), name, argumentsTypes);
+                            ref.getCorrespondingDeclaration(), name, argumentsTypes, invocationContext);
                     if (m.isSolved()) {
                         MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
                         methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
@@ -148,7 +149,10 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
 
         if (rrtds.isEmpty()) {
@@ -161,7 +165,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
             SymbolReference<ResolvedMethodDeclaration> res =
-                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
+                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false, invocationContext);
             if (res.isSolved()) {
                 return res;
             }
@@ -175,7 +179,11 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     ///
 
     private Optional<MethodUsage> solveMethodAsUsage(
-            ResolvedReferenceType refType, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
+            ResolvedReferenceType refType,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            Context invokationContext,
+            ResolvedReferenceTypeDeclaration callContext) {
         if (!refType.getTypeDeclaration().isPresent()) {
             return Optional.empty();
         }
@@ -185,7 +193,8 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 name,
                 argumentsTypes,
                 invokationContext,
-                refType.typeParametersValues());
+                refType.typeParametersValues(),
+                callContext);
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
 

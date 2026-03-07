@@ -43,7 +43,7 @@ import java.util.List;
  */
 public class ModifierValidator extends VisitorValidator {
 
-    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[] {
+    private final Modifier.DefaultKeyword[] interfaceWithNothingSpecial = new Modifier.DefaultKeyword[] {
         PUBLIC,
         PROTECTED,
         ABSTRACT,
@@ -66,7 +66,7 @@ public class ModifierValidator extends VisitorValidator {
         JML_SPEC_PRIVATE
     };
 
-    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[] {
+    private final Modifier.DefaultKeyword[] interfaceWithStaticAndDefault = new Modifier.DefaultKeyword[] {
         PUBLIC,
         PROTECTED,
         ABSTRACT,
@@ -91,7 +91,7 @@ public class ModifierValidator extends VisitorValidator {
         JML_SPEC_PRIVATE
     };
 
-    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[] {
+    private final Modifier.DefaultKeyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.DefaultKeyword[] {
         PUBLIC,
         PROTECTED,
         PRIVATE,
@@ -329,7 +329,7 @@ public class ModifierValidator extends VisitorValidator {
         if (n.isAbstract()) {
             final SeparatedItemStringBuilder builder =
                     new SeparatedItemStringBuilder("Cannot be 'abstract' and also '", "', '", "'.");
-            for (Modifier.Keyword m : asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
+            for (Modifier.DefaultKeyword m : asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
                 if (n.hasModifier(m)) {
                     builder.append(m.asString());
                 }
@@ -419,7 +419,7 @@ public class ModifierValidator extends VisitorValidator {
     }
 
     private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(
-            T n, ProblemReporter reporter, Modifier.Keyword... allowedModifiers) {
+            T n, ProblemReporter reporter, Modifier.DefaultKeyword... allowedModifiers) {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
         validateAtMostOneOf(n, reporter, JML_INSTANCE, STATIC);
@@ -436,10 +436,11 @@ public class ModifierValidator extends VisitorValidator {
         }
     }
 
-    private Modifier.Keyword[] removeModifierFromArray(Modifier.Keyword m, Modifier.Keyword[] allowedModifiers) {
-        final List<Modifier.Keyword> newModifiers = new ArrayList<>(asList(allowedModifiers));
+    private Modifier.DefaultKeyword[] removeModifierFromArray(
+            Modifier.DefaultKeyword m, Modifier.DefaultKeyword[] allowedModifiers) {
+        final List<Modifier.DefaultKeyword> newModifiers = new ArrayList<>(asList(allowedModifiers));
         newModifiers.remove(m);
-        allowedModifiers = newModifiers.toArray(new Modifier.Keyword[0]);
+        allowedModifiers = newModifiers.toArray(new Modifier.DefaultKeyword[0]);
         return allowedModifiers;
     }
 
@@ -454,15 +455,15 @@ public class ModifierValidator extends VisitorValidator {
 
     private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateAtMostOneOf(
             T t, ProblemReporter reporter, Modifier.DefaultKeyword... modifiers) {
-        List<Modifier.Keyword> foundModifiers = new ArrayList<>();
-        for (Modifier.Keyword m : modifiers) {
+        List<Modifier.DefaultKeyword> foundModifiers = new ArrayList<>();
+        for (Modifier.DefaultKeyword m : modifiers) {
             if (t.hasModifier(m)) {
                 foundModifiers.add(m);
             }
         }
         if (foundModifiers.size() > 1) {
             SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Can have only one of '", "', '", "'.");
-            for (Modifier.Keyword m : foundModifiers) {
+            for (Modifier.DefaultKeyword m : foundModifiers) {
                 builder.append(m.asString());
             }
             reporter.report(t, builder.toString());

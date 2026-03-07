@@ -28,10 +28,8 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
-import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
-import com.github.javaparser.ast.jml.doc.JmlDocStmt;
-import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
@@ -216,7 +214,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(TypeExpr n, A arg);
 
-    R visit(NodeList n, A arg);
+    R visit(NodeList<?> n, A arg);
 
     R visit(Name n, A arg);
 
@@ -383,4 +381,12 @@ public interface GenericVisitor<R, A> {
     R visit(JmlLabelStmt n, A arg);
 
     R visit(JmlMethodSignature n, A arg);
+
+    R visit(JmlDocsBodyDeclaration n, A arg);
+
+    R visit(JmlDocsTypeDeclaration n, A arg);
+
+    R visit(JmlDocsStatements n, A arg);
+
+    R visit(KeYMarkerStatement n, A arg);
 }

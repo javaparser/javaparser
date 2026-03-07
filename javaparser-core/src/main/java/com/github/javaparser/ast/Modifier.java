@@ -37,6 +37,7 @@ import org.jspecify.annotations.NonNull;
 /**
  * A modifier, like private, public, or volatile.
  */
+@SuppressWarnings("unused")
 public class Modifier extends Node {
 
     public static Modifier publicModifier() {
@@ -123,19 +124,19 @@ public class Modifier extends Node {
         return new Modifier(DefaultKeyword.JML_SPEC_PRIVATE);
     }
 
-    public interface Keyword {
-
-        String asString();
-
-        String name();
-    }
-
     public static Modifier sealedModifier() {
         return new Modifier(DefaultKeyword.SEALED);
     }
 
     public static Modifier nonSealedModifier() {
         return new Modifier(DefaultKeyword.NON_SEALED);
+    }
+
+    public interface Keyword {
+
+        String name();
+
+        String asString();
     }
 
     /**
@@ -157,7 +158,7 @@ public class Modifier extends Node {
         TRANSITIVE("transitive"),
         SEALED("sealed"),
         NON_SEALED("non-sealed"),
-        // JML
+        // KEY
         JML_PACKAGE("package"),
         JML_PURE("pure"),
         JML_STRICTLY_PURE("strictly_pure"),
@@ -180,6 +181,9 @@ public class Modifier extends Node {
         JML_CODE_BIGINT_MATH("code_bigint_math"),
         JML_CODE_JAVA_MATH("code_java_math"),
         JML_CODE_SAFE_MATH("code_safe_math"),
+        JML_SPEC_BIGINT_MATH("spec_bigint_math"),
+        JML_SPEC_JAVA_MATH("spec_java_math"),
+        JML_SPEC_SAFE_MATH("spec_safe_math"),
         JML_CODE("code"),
         JML_OT_PEER("peer"),
         JML_OT_REP("rep"),
@@ -239,7 +243,7 @@ public class Modifier extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Modifier setKeyword(final @NonNull() Keyword keyword) {
+    public Modifier setKeyword(final Modifier.Keyword keyword) {
         assertNotNull(keyword);
         if (keyword == this.keyword) {
             return this;
@@ -253,7 +257,7 @@ public class Modifier extends Node {
      * Utility method that instantiaties "Modifier"s for the keywords,
      * and puts them in a NodeList.
      */
-    public static NodeList<Modifier> createModifierList(Modifier.Keyword... modifiers) {
+    public static NodeList<Modifier> createModifierList(Keyword... modifiers) {
         return Arrays.stream(modifiers).map(Modifier::new).collect(toNodeList());
     }
 

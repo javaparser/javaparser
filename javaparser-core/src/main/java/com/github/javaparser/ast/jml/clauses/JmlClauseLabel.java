@@ -28,7 +28,7 @@ import org.jspecify.annotations.Nullable;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlClauseIf> {
+public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlClauseLabel> {
 
     private JmlClauseKind kind;
 
@@ -230,5 +230,16 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @Nullable() SimpleName label() {
         return label;
+    }
+
+    @Override
+    public Expression getExpression() {
+        return expression;
+    }
+
+    @Override
+    public JmlClauseLabel setExpression(Expression expression) {
+        this.expression = expression;
+        return this;
     }
 }

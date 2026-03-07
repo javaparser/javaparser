@@ -22,14 +22,15 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
-import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
-import com.github.javaparser.ast.jml.doc.JmlDocStmt;
-import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
@@ -45,7 +46,7 @@ import com.github.javaparser.ast.type.*;
  */
 public interface VoidVisitor<A> {
 
-    void visit(NodeList n, A arg);
+    void visit(NodeList<?> n, A arg);
 
     void visit(AnnotationDeclaration n, A arg);
 
@@ -376,4 +377,12 @@ public interface VoidVisitor<A> {
     void visit(JmlLabelStmt n, A arg);
 
     void visit(JmlMethodSignature n, A arg);
+
+    void visit(JmlDocsBodyDeclaration n, A arg);
+
+    void visit(JmlDocsTypeDeclaration n, A arg);
+
+    void visit(JmlDocsStatements n, A arg);
+
+    void visit(KeYMarkerStatement n, A arg);
 }

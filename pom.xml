@@ -20,7 +20,7 @@
 	<groupId>io.github.jmltoolkit</groupId>
 	<artifactId>jmlparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.28.0-J8.0-K10.1-SNAPSHOT</version>
+	<version>3.28.0-J8.0-K13.4</version>
 
 	<url>https://github.com/wadoon/jmlparser</url>
 	<inceptionYear>2021</inceptionYear>

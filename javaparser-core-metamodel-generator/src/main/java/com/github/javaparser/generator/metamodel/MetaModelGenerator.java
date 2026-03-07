@@ -37,6 +37,7 @@ import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.JmlDoc;
 import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
@@ -263,8 +264,13 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(KeyMethodBodyStatement.class);
             add(KeyMethodCallStatement.class);
             add(KeyMethodSignature.class);
-            add(KeyRangeExpression.class);
+            // add(KeyRangeExpression.class);
             add(KeyTransactionStatement.class);
+            // add(JmlDoc.class);
+            add(JmlDocsBodyDeclaration.class);
+            add(JmlDocsTypeDeclaration.class);
+            add(JmlDocsStatements.class);
+            add(KeYMarkerStatement.class);
             // add(KeyActiveCommentStatement.class);
 
             // KeY-Schema
