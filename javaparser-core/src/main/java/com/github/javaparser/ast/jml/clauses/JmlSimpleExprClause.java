@@ -27,7 +27,7 @@ import org.jspecify.annotations.Nullable;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlSimpleExprClause extends JmlClause implements MethodContractable, BlockContractable {
+public class JmlSimpleExprClause extends JmlClause {
 
     private JmlClauseKind kind;
 

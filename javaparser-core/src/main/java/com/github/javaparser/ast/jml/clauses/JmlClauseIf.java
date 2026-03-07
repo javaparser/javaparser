@@ -8,6 +8,8 @@ import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithCondition;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -23,17 +25,17 @@ import org.jspecify.annotations.NonNull;
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public class JmlClauseIf extends JmlClause implements MethodContractable {
+public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClauseIf>, NodeWithCondition<JmlClauseIf> {
 
     private JmlClauseKind kind;
 
-    private Expression then;
+    private Expression expression;
 
     private Expression condition;
 
     @AllFieldsConstructor
-    public JmlClauseIf(SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
-        this(null, name, condition, kind, then);
+    public JmlClauseIf(SimpleName name, Expression condition, JmlClauseKind kind, Expression expression) {
+        this(null, name, condition, kind, expression);
     }
 
     /**
@@ -55,7 +57,7 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
             setCondition((Expression) replacementNode);
             return true;
         }
-        if (node == then) {
+        if (node == expression) {
             setThen((Expression) replacementNode);
             return true;
         }
@@ -117,19 +119,19 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getThen() {
-        return then;
+        return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setThen(final @NonNull() Expression then) {
-        assertNotNull(then);
-        if (then == this.then) {
+    public JmlClauseIf setThen(final @NonNull() Expression expression) {
+        assertNotNull(expression);
+        if (expression == this.expression) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.THEN, this.then, then);
-        if (this.then != null) this.then.setParentNode(null);
-        this.then = then;
-        setAsParentNodeOf(then);
+        notifyPropertyChange(ObservableProperty.THEN, this.expression, expression);
+        if (this.expression != null) this.expression.setParentNode(null);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
         return this;
     }
 
@@ -168,11 +170,11 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlClauseIf(
-            TokenRange tokenRange, SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
+            TokenRange tokenRange, SimpleName name, Expression condition, JmlClauseKind kind, Expression expression) {
         super(tokenRange, name);
         setCondition(condition);
         setKind(kind);
-        setThen(then);
+        setThen(expression);
         customInitialization();
     }
 
@@ -191,6 +193,16 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @NonNull() Expression then() {
-        return Objects.requireNonNull(then);
+        return Objects.requireNonNull(expression);
+    }
+
+    @Override
+    public Expression getExpression() {
+        return null;
+    }
+
+    @Override
+    public JmlClauseIf setExpression(Expression expression) {
+        return null;
     }
 }

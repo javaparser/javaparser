@@ -10,6 +10,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -27,42 +28,42 @@ import org.jspecify.annotations.Nullable;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlClauseLabel extends JmlClause {
+public class JmlClauseLabel extends JmlClause  implements NodeWithExpression<JmlClauseIf>  {
 
     private JmlClauseKind kind;
 
     @OptionalProperty
     private SimpleName label;
 
-    private Expression expr;
+    private Expression expression;
 
     public JmlClauseLabel() {
         this(JmlClauseKind.NONE, null, new BooleanLiteralExpr(true));
     }
 
-    public JmlClauseLabel(SimpleName label, Expression expr) {
-        this(JmlClauseKind.NONE, label, expr);
+    public JmlClauseLabel(SimpleName label, Expression expression) {
+        this(JmlClauseKind.NONE, label, expression);
     }
 
     @AllFieldsConstructor
-    public JmlClauseLabel(JmlClauseKind kind, SimpleName label, Expression expr) {
-        this(null, kind, label, expr);
+    public JmlClauseLabel(JmlClauseKind kind, SimpleName label, Expression expression) {
+        this(null, kind, label, expression);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseLabel(TokenRange tokenRange, JmlClauseKind kind, SimpleName label, Expression expr) {
+    public JmlClauseLabel(TokenRange tokenRange, JmlClauseKind kind, SimpleName label, Expression expression) {
         super(tokenRange);
         setKind(kind);
         setLabel(label);
-        setExpr(expr);
+        setExpr(expression);
         customInitialization();
     }
 
-    public JmlClauseLabel(TokenRange range, JavaToken kind, SimpleName label, Expression expr) {
-        this(range, JmlClauseKind.getKindByToken(kind), label, expr);
+    public JmlClauseLabel(TokenRange range, JavaToken kind, SimpleName label, Expression expression) {
+        this(range, JmlClauseKind.getKindByToken(kind), label, expression);
     }
 
     @Override
@@ -98,7 +99,7 @@ public class JmlClauseLabel extends JmlClause {
         if (node == null) {
             return false;
         }
-        if (node == expr) {
+        if (node == expression) {
             setExpr((Expression) replacementNode);
             return true;
         }
@@ -128,19 +129,19 @@ public class JmlClauseLabel extends JmlClause {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpr() {
-        return expr;
+        return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLabel setExpr(final @NonNull() Expression expr) {
-        assertNotNull(expr);
-        if (expr == this.expr) {
+    public JmlClauseLabel setExpr(final @NonNull() Expression expression) {
+        assertNotNull(expression);
+        if (expression == this.expression) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-        if (this.expr != null) this.expr.setParentNode(null);
-        this.expr = expr;
-        setAsParentNodeOf(expr);
+        notifyPropertyChange(ObservableProperty.EXPR, this.expression, expression);
+        if (this.expression != null) this.expression.setParentNode(null);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
         return this;
     }
 
@@ -216,7 +217,7 @@ public class JmlClauseLabel extends JmlClause {
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @NonNull() Expression expr() {
-        return Objects.requireNonNull(expr);
+        return Objects.requireNonNull(expression);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()

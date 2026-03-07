@@ -24,7 +24,7 @@ import org.jspecify.annotations.NonNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlSignalsClause extends JmlClause implements MethodContractable, BlockContractable {
+public class JmlSignalsClause extends JmlClause {
 
     private Parameter parameter;
 

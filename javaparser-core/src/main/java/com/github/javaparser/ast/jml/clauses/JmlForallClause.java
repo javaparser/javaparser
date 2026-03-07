@@ -23,7 +23,7 @@ import org.jspecify.annotations.NonNull;
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public class JmlForallClause extends JmlClause implements MethodContractable {
+public class JmlForallClause extends JmlClause {
 
     private NodeList<Parameter> boundedVariables;
 
