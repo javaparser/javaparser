@@ -202,6 +202,11 @@
 			<id>gitlab-maven</id>
 			<url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
 		</snapshotRepository>
+
+		<site>
+			<id>${project.build.directory}-site</id>
+			<url>file://${project.build.outputDirectory}/s</url>
+		</site>
 	</distributionManagement>
 
 	<build>
@@ -216,7 +221,26 @@
 					<useIncrementalCompilation>false</useIncrementalCompilation>
 				</configuration>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.6.2</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.6.3</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -253,7 +277,7 @@
 				<plugin>
 					<groupId>org.sonatype.plugins</groupId>
 					<artifactId>nexus-staging-maven-plugin</artifactId>
-					<version>1.6.7</version>
+					<version>1.7.0</version>
 					<extensions>true</extensions>
 					<configuration>
 						<serverId>ossrh</serverId>
@@ -328,7 +352,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.4.0</version>
+					<version>3.5.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -387,10 +411,64 @@
 						<failOnError>false</failOnError>
 					</configuration>
 				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-scm-publish-plugin</artifactId>
+					<version>3.1.0</version>
+					<configuration>
+						<pubScmUrl>${project.scm.developerConnection}</pubScmUrl>
+						<scmBranch>gh-pages</scmBranch>
+					</configuration>
+				</plugin>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.21.0</version>
+					<version>4.0.0-M16</version>
+					<configuration>
+						<stagingDirectory>target/site-stage</stagingDirectory>
+						<reportPlugins>
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-project-info-reports-plugin</artifactId>
+								<version>2.4</version>
+							</plugin>
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-javadoc-plugin</artifactId>
+								<version>2.8</version>
+								<configuration></configuration>
+								<reportSets>
+									<reportSet>
+										<id>non-aggregate</id>
+										<configuration>
+											<!-- Specific configuration for the aggregate report -->
+											<sourcepath>${project.build.sourceDirectory}/../generated</sourcepath>
+										</configuration>
+										<reports>
+											<report>javadoc</report>
+										</reports>
+									</reportSet>
+									<reportSet>
+										<id>aggregate</id>
+										<configuration>
+											<!-- Specific configuration for the aggregate report -->
+											<sourcepath>${project.build.sourceDirectory}/../generated</sourcepath>
+										</configuration>
+										<reports>
+											<report>aggregate</report>
+										</reports>
+									</reportSet>
+								</reportSets>
+							</plugin>
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-surefire-report-plugin</artifactId>
+								<version>3.5.5</version>
+							</plugin>
+						</reportPlugins>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>biz.aQute.bnd</groupId>
@@ -400,7 +478,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-report-plugin</artifactId>
-                    <version>3.5.4</version>
+                    <version>3.5.5</version>
                     <configuration>
                         <aggregate>true</aggregate>
                         <!--also set this to link to generated source reports-->
@@ -410,7 +488,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.5.4</version>
+					<version>3.5.5</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -430,7 +508,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>3.9.0</version>
+					<version>3.10.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -462,7 +540,7 @@
 					<groupId>com.diffplug.spotless</groupId>
 					<artifactId>spotless-maven-plugin</artifactId>
 					<!-- This is the last version with Java 8 support -->
-					<version>3.2.1</version>
+					<version>3.3.0</version>
 					<configuration>
 						<java>
 							<!-- google-java-format, but better: see https://github.com/palantir/palantir-java-format -->
@@ -486,7 +564,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>3.3.1</version>
+				<version>3.5.5</version>
 				<configuration>
 					<aggregate>true</aggregate>
 				</configuration>
