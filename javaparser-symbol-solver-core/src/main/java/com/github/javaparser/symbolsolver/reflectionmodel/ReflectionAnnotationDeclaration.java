@@ -193,7 +193,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration
             final String name,
             final List<ResolvedType> parameterTypes,
             final Context invokationContext,
-            final List<ResolvedType> typeParameterValues) {
+            final List<ResolvedType> typeParameterValues, ResolvedReferenceTypeDeclaration callContext) {
         Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(
                 name, parameterTypes, typeSolver, invokationContext, typeParameterValues, this, clazz);
         if (res.isPresent()) {
@@ -226,8 +226,8 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            final String name, final List<ResolvedType> argumentsTypes, final boolean staticOnly) {
-        return ReflectionMethodResolutionLogic.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, clazz);
+            final String name, final List<ResolvedType> argumentsTypes, final boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
+        return ReflectionMethodResolutionLogic.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, clazz, invocationContext);
     }
 
     @Override

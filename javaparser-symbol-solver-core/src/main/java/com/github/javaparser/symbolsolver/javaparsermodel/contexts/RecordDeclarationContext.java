@@ -104,9 +104,9 @@ public class RecordDeclarationContext extends AbstractJavaParserContext<RecordDe
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
         SymbolReference<ResolvedMethodDeclaration> resolvedExplicitMethod =
-                javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly);
+                javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly, invocationContext);
 
         if (!resolvedExplicitMethod.isSolved() && argumentsTypes.isEmpty()) {
             // If the method could not be resolved and has no arguments, then it could be an implicit getter for

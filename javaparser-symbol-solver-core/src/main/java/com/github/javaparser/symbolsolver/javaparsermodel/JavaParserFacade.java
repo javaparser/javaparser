@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
-import static com.github.javaparser.resolution.model.SymbolReference.solved;
-import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
@@ -34,6 +30,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.*;
 import com.github.javaparser.resolution.declarations.*;
@@ -51,8 +48,13 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
+
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+import static com.github.javaparser.resolution.model.SymbolReference.solved;
+import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
 
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.
@@ -63,8 +65,10 @@ public class JavaParserFacade {
 
     // Start of static class
 
-    private static final DataKey<ResolvedType> TYPE_WITH_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {};
-    private static final DataKey<ResolvedType> TYPE_WITHOUT_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {};
+    private static final DataKey<ResolvedType> TYPE_WITH_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {
+    };
+    private static final DataKey<ResolvedType> TYPE_WITHOUT_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {
+    };
 
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
 
@@ -130,8 +134,15 @@ public class JavaParserFacade {
                 .orElseThrow(() -> new IllegalArgumentException(expr.getClass().getCanonicalName()));
     }
 
+    @SuppressWarnings("rawtypes")
+    public static ResolvedReferenceTypeDeclaration find(Expression methodCallExpr) {
+        Optional<Node> parent = methodCallExpr.getParentNode();
+        Optional<TypeDeclaration> typeDeclaration = methodCallExpr.findAncestor(TypeDeclaration.class);
+        return typeDeclaration.map(TypeDeclaration::resolve).orElse(null);
+    }
+
     public SymbolReference<ResolvedMethodDeclaration> solve(MethodCallExpr methodCallExpr) {
-        return solve(methodCallExpr, true);
+        return solve(methodCallExpr, true, find(methodCallExpr));
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solve(MethodReferenceExpr methodReferenceExpr) {
@@ -316,14 +327,15 @@ public class JavaParserFacade {
     /**
      * Given a method call find out to which method declaration it corresponds.
      */
-    public SymbolReference<ResolvedMethodDeclaration> solve(MethodCallExpr methodCallExpr, boolean solveLambdas) {
+    public SymbolReference<ResolvedMethodDeclaration> solve(MethodCallExpr methodCallExpr, boolean solveLambdas,
+                                                            ResolvedReferenceTypeDeclaration invocationContext) {
         List<ResolvedType> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
 
         solveArguments(methodCallExpr, methodCallExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
 
         SymbolReference<ResolvedMethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver)
-                .solveMethod(methodCallExpr.getName().getId(), argumentTypes, false);
+                .solveMethod(methodCallExpr.getName().getId(), argumentTypes, false, invocationContext);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
@@ -338,7 +350,7 @@ public class JavaParserFacade {
         // pass empty argument list to be populated
         List<ResolvedType> argumentTypes = new LinkedList<>();
         return JavaParserFactory.getContext(methodReferenceExpr, typeSolver)
-                .solveMethod(methodReferenceExpr.getIdentifier(), argumentTypes, false);
+                .solveMethod(methodReferenceExpr.getIdentifier(), argumentTypes, false, find(methodReferenceExpr));
     }
 
     public SymbolReference<ResolvedAnnotationDeclaration> solve(AnnotationExpr annotationExpr) {
@@ -753,19 +765,19 @@ public class JavaParserFacade {
             if (parent instanceof BodyDeclaration) {
                 if (parent instanceof TypeDeclaration
                         && ((TypeDeclaration<?>) parent)
-                                .getFullyQualifiedName()
-                                .orElse("")
-                                .endsWith(className)) {
+                        .getFullyQualifiedName()
+                        .orElse("")
+                        .endsWith(className)) {
                     return parent;
                 }
                 detachFlag = true;
             }
             if (parent instanceof ObjectCreationExpr
                     && ((ObjectCreationExpr) parent)
-                            .getType()
-                            .getName()
-                            .asString()
-                            .equals(className)) {
+                    .getType()
+                    .getName()
+                    .asString()
+                    .equals(className)) {
                 if (detachFlag) {
                     return parent;
                 }
@@ -776,9 +788,8 @@ public class JavaParserFacade {
     /**
      * Convert a {@link Type} into the corresponding {@link ResolvedType}.
      *
-     * @param type      The type to be converted.
-     * @param context   The current context.
-     *
+     * @param type    The type to be converted.
+     * @param context The current context.
      * @return The type resolved.
      */
     protected ResolvedType convertToUsage(Type type, Context context) {
@@ -792,7 +803,6 @@ public class JavaParserFacade {
      * Convert a {@link Type} into the corresponding {@link ResolvedType}.
      *
      * @param type The type to be converted.
-     *
      * @return The type resolved.
      */
     public ResolvedType convertToUsage(Type type) {
@@ -836,7 +846,7 @@ public class JavaParserFacade {
         }
         Context context = JavaParserFactory.getContext(call, typeSolver);
         Optional<MethodUsage> methodUsage =
-                context.solveMethodAsUsage(call.getName().getId(), params);
+                context.solveMethodAsUsage(call.getName().getId(), params, null);
         if (!methodUsage.isPresent()) {
             throw new UnsolvedSymbolException("Method '" + call.getName() + "' cannot be resolved in context " + call
                     + " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context
@@ -893,9 +903,7 @@ public class JavaParserFacade {
      * Convert a {@link Class} into the corresponding {@link ResolvedType}.
      *
      * @param clazz The class to be converted.
-     *
      * @return The class resolved.
-     *
      * @deprecated instead consider SymbolSolver.classToResolvedType(Class<?> clazz)
      */
     @Deprecated

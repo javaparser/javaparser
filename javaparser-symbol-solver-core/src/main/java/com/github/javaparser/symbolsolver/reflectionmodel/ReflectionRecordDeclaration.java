@@ -148,7 +148,8 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
     @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         Predicate<Method> staticFilter = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
 
         List<ResolvedMethodDeclaration> candidateSolvedMethods = new ArrayList<>();
@@ -176,7 +177,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
         // Next consider methods declared within extended superclasses.
         getSuperClass().flatMap(ResolvedReferenceType::getTypeDeclaration).ifPresent(superClassTypeDeclaration -> {
             SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(
-                    superClassTypeDeclaration, name, argumentsTypes, staticOnly);
+                    superClassTypeDeclaration, name, argumentsTypes, staticOnly, invocationContext);
             if (ref.isSolved()) {
                 candidateSolvedMethods.add(ref.getCorrespondingDeclaration());
             }
@@ -186,7 +187,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
         for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
             interfaceDeclaration.getTypeDeclaration().ifPresent(interfaceTypeDeclaration -> {
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(
-                        interfaceTypeDeclaration, name, argumentsTypes, staticOnly);
+                        interfaceTypeDeclaration, name, argumentsTypes, staticOnly, invocationContext);
                 if (ref.isSolved()) {
                     candidateSolvedMethods.add(ref.getCorrespondingDeclaration());
                 }
@@ -200,7 +201,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
         if (candidateSolvedMethods.isEmpty()) {
             return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
         }
-        return MethodResolutionLogic.findMostApplicable(candidateSolvedMethods, name, argumentsTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicable(candidateSolvedMethods, name, argumentsTypes, typeSolver, invocationContext);
     }
 
     @Override
@@ -217,7 +218,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
             String name,
             List<ResolvedType> argumentsTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameterValues) {
+            List<ResolvedType> typeParameterValues, ResolvedReferenceTypeDeclaration callContext) {
         List<MethodUsage> methodUsages = new ArrayList<>();
 
         List<Method> allMethods = Arrays.stream(clazz.getDeclaredMethods())
@@ -248,7 +249,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
         getSuperClass().ifPresent(superClass -> {
             superClass.getTypeDeclaration().ifPresent(superClassTypeDeclaration -> {
                 ContextHelper.solveMethodAsUsage(
-                                superClassTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues)
+                                superClassTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues, callContext)
                         .ifPresent(methodUsages::add);
             });
         });
@@ -258,7 +259,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
                     .getTypeDeclaration()
                     .flatMap(superClassTypeDeclaration -> interfaceDeclaration.getTypeDeclaration())
                     .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(
-                            interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues))
+                            interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues, callContext))
                     .ifPresent(methodUsages::add);
         }
         Optional<MethodUsage> ref =

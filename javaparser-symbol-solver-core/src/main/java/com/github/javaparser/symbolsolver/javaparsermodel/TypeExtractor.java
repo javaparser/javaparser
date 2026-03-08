@@ -29,6 +29,7 @@ import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -752,7 +753,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (parentNode instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) parentNode;
             int pos = getParamPos(node);
-            SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
+            SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false,
+                    JavaParserFacade.find(callExpr));
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(
                         parentNode.toString(), callExpr.getName().getId());

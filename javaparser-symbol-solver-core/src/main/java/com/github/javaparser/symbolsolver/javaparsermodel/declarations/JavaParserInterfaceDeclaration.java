@@ -281,8 +281,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getContext().solveMethod(name, argumentsTypes, staticOnly);
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
+        return getContext().solveMethod(name, argumentsTypes, staticOnly, invocationContext);
     }
 
     @Override
@@ -290,8 +290,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
             String name,
             List<ResolvedType> argumentTypes,
             Context invocationContext,
-            List<ResolvedType> typeParameters) {
-        return getContext().solveMethodAsUsage(name, argumentTypes);
+            List<ResolvedType> typeParameters, ResolvedReferenceTypeDeclaration callContext) {
+        return getContext().solveMethodAsUsage(name, argumentTypes, callContext);
     }
 
     @Override

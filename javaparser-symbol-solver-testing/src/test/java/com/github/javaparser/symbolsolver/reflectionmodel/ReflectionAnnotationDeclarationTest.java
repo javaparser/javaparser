@@ -81,7 +81,7 @@ class ReflectionAnnotationDeclarationTest {
         ReflectionAnnotationDeclaration annotation =
                 (ReflectionAnnotationDeclaration) typeSolver.solveType(WithValue.class.getCanonicalName());
         final SymbolReference<ResolvedMethodDeclaration> symbolReference =
-                annotation.solveMethod("value", Collections.emptyList(), false);
+                annotation.solveMethod("value", Collections.emptyList(), false, null);
         assertEquals("value", symbolReference.getCorrespondingDeclaration().getName());
     }
 

@@ -61,7 +61,7 @@ public class MethodReferenceExprContext extends ExpressionContext<MethodReferenc
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
         if ("new".equals(name)) {
             throw new UnsupportedOperationException("Constructor calls not yet resolvable");
         }
@@ -80,12 +80,12 @@ public class MethodReferenceExprContext extends ExpressionContext<MethodReferenc
 
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
             SymbolReference<ResolvedMethodDeclaration> firstResAttempt =
-                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
+                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false, invocationContext);
             if (firstResAttempt.isSolved()) {
                 return firstResAttempt;
             }
             SymbolReference<ResolvedMethodDeclaration> secondResAttempt =
-                    MethodResolutionLogic.solveMethodInType(rrtd, name, Collections.emptyList(), false);
+                    MethodResolutionLogic.solveMethodInType(rrtd, name, Collections.emptyList(), false, invocationContext);
             if (secondResAttempt.isSolved()) {
                 return secondResAttempt;
             }

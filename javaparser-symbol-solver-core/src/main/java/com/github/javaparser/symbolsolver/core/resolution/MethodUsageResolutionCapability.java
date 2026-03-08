@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.core.resolution;
 
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +33,5 @@ public interface MethodUsageResolutionCapability {
             String name,
             List<ResolvedType> argumentTypes,
             Context invocationContext,
-            List<ResolvedType> typeParameters);
+            List<ResolvedType> typeParameters, ResolvedReferenceTypeDeclaration callContext);
 }

@@ -1032,27 +1032,27 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest
 
         SymbolReference<ResolvedMethodDeclaration> res;
 
-        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of());
+        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of(), null);
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isStatic()",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
 
         res = constructorDeclaration.solveMethod(
                 "isThrows",
-                ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolver)));
+                ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolver)), null);
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
 
         res = constructorDeclaration.solveMethod(
-                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(String.class, typeSolver)));
+                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(String.class, typeSolver)), null);
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.String)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
 
         // This is solved because it is raw
         res = constructorDeclaration.solveMethod(
-                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(Class.class, typeSolver)));
+                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(Class.class, typeSolver)), null);
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
@@ -1065,10 +1065,10 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest
 
         SymbolReference<ResolvedMethodDeclaration> res;
 
-        res = constructorDeclaration.solveMethod("unexistingMethod", ImmutableList.of());
+        res = constructorDeclaration.solveMethod("unexistingMethod", ImmutableList.of(), null);
         assertEquals(false, res.isSolved());
 
-        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN));
+        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN), null);
         assertEquals(false, res.isSolved());
     }
 

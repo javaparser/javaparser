@@ -64,8 +64,8 @@ public class AnnotationDeclarationContext extends AbstractJavaParserContext<Anno
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly);
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
+        return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly, invocationContext);
     }
 
     ///
