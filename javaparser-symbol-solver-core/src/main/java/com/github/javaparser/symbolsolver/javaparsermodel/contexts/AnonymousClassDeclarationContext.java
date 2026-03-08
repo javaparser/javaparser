@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -60,10 +60,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly,
-            ResolvedReferenceTypeDeclaration invocationContext) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         List<ResolvedMethodDeclaration> candidateMethods = myDeclaration.getDeclaredMethods().stream()
                 .filter(m -> m.getName().equals(name) && (!staticOnly || m.isStatic()))
                 .collect(Collectors.toList());
@@ -72,7 +69,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
             for (ResolvedReferenceType ancestor : myDeclaration.getAncestors()) {
                 ancestor.getTypeDeclaration().ifPresent(ancestorTypeDeclaration -> {
                     SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
-                            ancestorTypeDeclaration, name, argumentsTypes, staticOnly, invocationContext);
+                            ancestorTypeDeclaration, name, argumentsTypes, staticOnly);
 
                     // consider methods from superclasses and only default methods from interfaces :
                     // not true, we should keep abstract as a valid candidate
@@ -89,7 +86,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
         if (candidateMethods.isEmpty()) {
             SymbolReference<ResolvedMethodDeclaration> parentSolution = getParent()
                     .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                    .solveMethod(name, argumentsTypes, staticOnly, invocationContext);
+                    .solveMethod(name, argumentsTypes, staticOnly);
             if (parentSolution.isSolved()) {
                 candidateMethods.add(parentSolution.getCorrespondingDeclaration());
             }
@@ -99,18 +96,13 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
         if (candidateMethods.isEmpty()
                 && myDeclaration.getSuperTypeDeclaration().isInterface()) {
             SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
-                    new ReflectionClassDeclaration(Object.class, typeSolver),
-                    name,
-                    argumentsTypes,
-                    false,
-                    invocationContext);
+                    new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, false);
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
         }
 
-        return MethodResolutionLogic.findMostApplicable(
-                candidateMethods, name, argumentsTypes, typeSolver, invocationContext);
+        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
     }
 
     @Override

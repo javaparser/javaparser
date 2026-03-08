@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -143,10 +143,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
     @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly,
-            ResolvedReferenceTypeDeclaration invocationContext) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         Predicate<Method> staticFilter = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
 
         List<ResolvedMethodDeclaration> candidateSolvedMethods = new ArrayList<>();
@@ -174,7 +171,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         // Next consider methods declared within extended superclasses.
         getSuperClass().flatMap(ResolvedReferenceType::getTypeDeclaration).ifPresent(superClassTypeDeclaration -> {
             SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(
-                    superClassTypeDeclaration, name, argumentsTypes, staticOnly, invocationContext);
+                    superClassTypeDeclaration, name, argumentsTypes, staticOnly);
             if (ref.isSolved()) {
                 candidateSolvedMethods.add(ref.getCorrespondingDeclaration());
             }
@@ -184,7 +181,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
             interfaceDeclaration.getTypeDeclaration().ifPresent(interfaceTypeDeclaration -> {
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(
-                        interfaceTypeDeclaration, name, argumentsTypes, staticOnly, invocationContext);
+                        interfaceTypeDeclaration, name, argumentsTypes, staticOnly);
                 if (ref.isSolved()) {
                     candidateSolvedMethods.add(ref.getCorrespondingDeclaration());
                 }
@@ -198,8 +195,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         if (candidateSolvedMethods.isEmpty()) {
             return SymbolReference.unsolved();
         }
-        return MethodResolutionLogic.findMostApplicable(
-                candidateSolvedMethods, name, argumentsTypes, typeSolver, invocationContext);
+        return MethodResolutionLogic.findMostApplicable(candidateSolvedMethods, name, argumentsTypes, typeSolver);
     }
 
     @Override
@@ -217,8 +213,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
             String name,
             List<ResolvedType> argumentsTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameterValues,
-            ResolvedReferenceTypeDeclaration callContext) {
+            List<ResolvedType> typeParameterValues) {
         List<MethodUsage> methodUsages = new ArrayList<>();
 
         List<Method> allMethods = Arrays.stream(clazz.getDeclaredMethods())
@@ -249,12 +244,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         getSuperClass().ifPresent(superClass -> {
             superClass.getTypeDeclaration().ifPresent(superClassTypeDeclaration -> {
                 ContextHelper.solveMethodAsUsage(
-                                superClassTypeDeclaration,
-                                name,
-                                argumentsTypes,
-                                invokationContext,
-                                typeParameterValues,
-                                callContext)
+                                superClassTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues)
                         .ifPresent(methodUsages::add);
             });
         });
@@ -264,12 +254,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
                     .getTypeDeclaration()
                     .flatMap(superClassTypeDeclaration -> interfaceDeclaration.getTypeDeclaration())
                     .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(
-                            interfaceTypeDeclaration,
-                            name,
-                            argumentsTypes,
-                            invokationContext,
-                            typeParameterValues,
-                            callContext))
+                            interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues))
                     .ifPresent(methodUsages::add);
         }
         Optional<MethodUsage> ref =

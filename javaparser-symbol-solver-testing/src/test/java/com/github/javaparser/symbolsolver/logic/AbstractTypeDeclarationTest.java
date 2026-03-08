@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -38,6 +38,7 @@ public abstract class AbstractTypeDeclarationTest extends AbstractSymbolResoluti
      * Should say if an {@link AbstractTypeDeclaration} is functional interface.
      *
      * @param typeDeclaration The type declaration to check.
+     *
      * @return {@code True}
      */
     public abstract boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration);

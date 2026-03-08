@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -54,9 +54,9 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                 MethodUsageResolutionCapability,
                 SymbolResolutionCapability {
 
-    private final TypeSolver typeSolver;
-    private final ClassOrInterfaceDeclaration wrappedNode;
-    private final JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
+    private TypeSolver typeSolver;
+    private ClassOrInterfaceDeclaration wrappedNode;
+    private JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
 
     public JavaParserInterfaceDeclaration(ClassOrInterfaceDeclaration wrappedNode, TypeSolver typeSolver) {
         if (!wrappedNode.isInterface()) {
@@ -252,7 +252,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     /**
      * This method is deprecated because it receives the TypesSolver as a parameter.
      * Eventually we would like to remove all usages of TypeSolver as a parameter.
-     * <p>
+     *
      * Also, resolution should move out of declarations, so that they are pure declarations and the resolution should
      * work for JavaParser, Reflection and Javassist classes in the same way and not be specific to the three
      * implementations.
@@ -281,11 +281,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly,
-            ResolvedReferenceTypeDeclaration invocationContext) {
-        return getContext().solveMethod(name, argumentsTypes, staticOnly, invocationContext);
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return getContext().solveMethod(name, argumentsTypes, staticOnly);
     }
 
     @Override
@@ -293,9 +290,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
             String name,
             List<ResolvedType> argumentTypes,
             Context invocationContext,
-            List<ResolvedType> typeParameters,
-            ResolvedReferenceTypeDeclaration callContext) {
-        return getContext().solveMethodAsUsage(name, argumentTypes, callContext);
+            List<ResolvedType> typeParameters) {
+        return getContext().solveMethodAsUsage(name, argumentTypes);
     }
 
     @Override

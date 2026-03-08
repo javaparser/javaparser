@@ -20,22 +20,20 @@ import java.io.IOException;
 public interface Provider {
     /**
      * Reads characters into an array
-     *
-     * @param buffer Destination buffer
-     * @param offset Offset at which to start storing characters
-     * @param len    The maximum possible number of characters to read
+     * @param buffer  Destination buffer
+     * @param offset   Offset at which to start storing characters
+     * @param len      The maximum possible number of characters to read
      * @return The number of characters read, or -1 if all read
-     * @throws IOException
+     * @exception  IOException
      */
     public int read(char buffer[], int offset, int len) throws IOException;
-
+    
     /**
      * Closes the stream and releases any system resources associated with
      * it.
-     *
-     * @throws IOException
+     * @exception IOException
      */
-    public void close() throws IOException;
-
+     public void close() throws IOException;
+    
 }
 /* JavaCC - OriginalChecksum=89684d4e3db82aa5e480d095c170b352 (do not edit this line) */

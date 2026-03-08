@@ -9,11 +9,11 @@ import com.github.javaparser.jml.JmlUtility;
  * @author Alexander Weigl
  * @version 1 (12/9/21)
  */
-public interface NodeWithContracts<T extends Node> {
+public interface NodeWithContracts<N extends Node> {
 
     NodeList<JmlContract> getContracts();
 
-    T setContracts(NodeList<JmlContract> contracts);
+    N setContracts(NodeList<JmlContract> contracts);
 
     default void addContracts(JmlContract contracts) {
         final var jmlContracts = getContracts();

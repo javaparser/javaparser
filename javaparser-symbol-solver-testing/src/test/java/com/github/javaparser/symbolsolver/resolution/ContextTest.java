@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -235,7 +235,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
         Solver symbolSolver = new SymbolSolver(typeSolver);
 
-        MethodUsage ref = symbolSolver.solveMethod("getTypes", Collections.emptyList(), callToGetTypes, null);
+        MethodUsage ref = symbolSolver.solveMethod("getTypes", Collections.emptyList(), callToGetTypes);
 
         assertEquals("getTypes", ref.getName());
         assertEquals(
@@ -254,7 +254,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
         Solver symbolSolver = new SymbolSolver(typeSolver);
-        MethodUsage ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToStream, null);
+        MethodUsage ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToStream);
 
         assertEquals("stream", ref.getName());
         assertEquals("java.util.Collection", ref.declaringType().getQualifiedName());
@@ -271,7 +271,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(
                 new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
         Solver symbolSolver = new SymbolSolver(typeSolver);
-        MethodUsage ref = symbolSolver.solveMethod("trim", Collections.emptyList(), callToTrim, null);
+        MethodUsage ref = symbolSolver.solveMethod("trim", Collections.emptyList(), callToTrim);
 
         assertEquals("trim", ref.getName());
         assertEquals("java.lang.String", ref.declaringType().getQualifiedName());
@@ -332,7 +332,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         Solver symbolSolver = new SymbolSolver(typeSolver);
-        MethodUsage ref = symbolSolver.solveMethod("isEmpty", Collections.emptyList(), call, null);
+        MethodUsage ref = symbolSolver.solveMethod("isEmpty", Collections.emptyList(), call);
 
         assertEquals("isEmpty", ref.getName());
         assertEquals("java.lang.String", ref.declaringType().getQualifiedName());
@@ -830,8 +830,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     void parametersExposedToChildForConstructor() {
         ConstructorDeclaration constructor =
                 parse("Foo(int myParam) { aCall(); }", ParseStart.CLASS_BODY).asConstructorDeclaration();
-        assertOneParamExposedToChildInContextNamed(
-                constructor, constructor.getBody().get(), "myParam");
+        assertOneParamExposedToChildInContextNamed(constructor, constructor.getBody().get(), "myParam");
         assertNoParamsExposedToChildInContextNamed(constructor, constructor.getParameter(0), "myParam");
     }
 

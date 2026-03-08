@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -332,7 +332,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void genericConstructorTest() {
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver)))
@@ -388,7 +388,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
         JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         ResolvedType functionType = new SymbolSolver(typeSolver).classToResolvedType(Function.class);
         SymbolReference<ResolvedMethodDeclaration> method =
-                compilationUnit.solveMethod("map", Collections.singletonList(functionType), false, null);
+                compilationUnit.solveMethod("map", Collections.singletonList(functionType), false);
         assertTrue(method.isSolved());
         assertEquals(
                 "box.Box.map(java.util.function.Function<T, U>)",

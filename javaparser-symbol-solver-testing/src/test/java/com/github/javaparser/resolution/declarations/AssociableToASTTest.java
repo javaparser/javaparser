@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -33,9 +33,10 @@ public interface AssociableToASTTest {
     /**
      * Helper method to cast the instance to the correct {@link Class}.
      *
-     * @param instance The instance to be casted.
-     * @param clazz    The expected {@link Class}.
-     * @param <T>      The expected type.
+     * @param instance  The instance to be casted.
+     * @param clazz     The expected {@link Class}.
+     * @param <T>       The expected type.
+     *
      * @return The instance casted as the correct type.
      */
     default <T extends AssociableToAST> T safeCast(AssociableToAST instance, Class<T> clazz) {
@@ -55,6 +56,7 @@ public interface AssociableToASTTest {
      * Get the node that can be associated with an AST.
      *
      * @param associableToAST The node that can be associated with an AST.
+     *
      * @return The node being wrapped.
      */
     Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST);

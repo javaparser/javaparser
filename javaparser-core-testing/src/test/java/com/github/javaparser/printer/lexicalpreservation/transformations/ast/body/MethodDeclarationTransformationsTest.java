@@ -163,8 +163,8 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
                 + LineSeparator.SYSTEM + "  ///"
                 + LineSeparator.SYSTEM + "  public void oneMethod() {"
                 + LineSeparator.SYSTEM + "  }"
-                + LineSeparator.SYSTEM + LineSeparator.SYSTEM
-                + "  ///"
+                + LineSeparator.SYSTEM
+                + LineSeparator.SYSTEM + "  ///"
                 + LineSeparator.SYSTEM + "  /// Comment A"
                 + LineSeparator.SYSTEM + "  ///"
                 + LineSeparator.SYSTEM + "  public void anotherMethod() {"

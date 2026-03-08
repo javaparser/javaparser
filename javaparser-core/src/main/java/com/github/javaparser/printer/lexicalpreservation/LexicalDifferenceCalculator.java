@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -19,8 +19,6 @@
  * GNU Lesser General Public License for more details.
  */
 package com.github.javaparser.printer.lexicalpreservation;
-
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Modifier;
@@ -363,94 +361,52 @@ class LexicalDifferenceCalculator {
     }
 
     public static int toToken(Modifier modifier) {
-        if (modifier.getKeyword() instanceof Modifier.DefaultKeyword dk) {
-            switch (dk) {
-                case DEFAULT:
-                    break;
-                case PUBLIC:
-                    return GeneratedJavaParserConstants.PUBLIC;
-                case PRIVATE:
-                    return GeneratedJavaParserConstants.PRIVATE;
-                case PROTECTED:
-                    return GeneratedJavaParserConstants.PROTECTED;
-                case STATIC:
-                    return GeneratedJavaParserConstants.STATIC;
-                case FINAL:
-                    return GeneratedJavaParserConstants.FINAL;
-                case ABSTRACT:
-                    return GeneratedJavaParserConstants.ABSTRACT;
-                case TRANSIENT:
-                    return GeneratedJavaParserConstants.TRANSIENT;
-                case SYNCHRONIZED:
-                    return GeneratedJavaParserConstants.SYNCHRONIZED;
-                case VOLATILE:
-                    return GeneratedJavaParserConstants.VOLATILE;
-                case NATIVE:
-                    return GeneratedJavaParserConstants.NATIVE;
-                case STRICTFP:
-                    return GeneratedJavaParserConstants.STRICTFP;
-                case TRANSITIVE:
-                    return GeneratedJavaParserConstants.TRANSITIVE;
-                case SEALED:
-                    return GeneratedJavaParserConstants.SEALED;
-                case NON_SEALED:
-                    return GeneratedJavaParserConstants.NON_SEALED;
-                case JML_PACKAGE:
-                    return GeneratedJavaParserConstants.SPEC_PACKAGE;
-                case JML_PURE:
-                    return GeneratedJavaParserConstants.PURE;
-                case JML_STRICTLY_PURE:
-                    return GeneratedJavaParserConstants.STRICTLY_PURE;
-                case JML_HELPER:
-                    return GeneratedJavaParserConstants.HELPER;
-                case JML_INSTANCE:
-                    return GeneratedJavaParserConstants.INSTANCE;
-                case JML_NULLABLE_BY_DEFAULT:
-                    return GeneratedJavaParserConstants.NULLABLE_BY_DEFAULT;
-                case JML_NON_NULL:
-                    return GeneratedJavaParserConstants.NON_NULL;
-                case JML_NULLABLE:
-                    return GeneratedJavaParserConstants.NULLABLE;
-                case JML_GHOST:
-                    return GeneratedJavaParserConstants.GHOST;
-                case JML_MODEL:
-                    return GeneratedJavaParserConstants.MODEL;
-                case JML_SPEC_PUBLIC:
-                    return GeneratedJavaParserConstants.SPEC_PACKAGE;
-                case JML_SPEC_PACKAGE:
-                    return GeneratedJavaParserConstants.SPEC_PACKAGE;
-                case JML_SPEC_PROTECTED:
-                    return GeneratedJavaParserConstants.SPEC_PROTECTED;
-                case JML_SPEC_PRIVATE:
-                    return GeneratedJavaParserConstants.SPEC_PRIVATE;
-                case JML_NO_STATE:
-                    return GeneratedJavaParserConstants.NO_STATE;
-                case JML_TWO_STATE:
-                    break;
-                case JML_NON_NULL_BY_DEFAULT:
-                    break;
-                case JML_NON_NULL_ELEMENTS:
-                    break;
-                case JML_UNPARSABLE_MODIFIERS:
-                    break;
-                case JML_CODE_BIGINT_MATH:
-                    break;
-                case JML_CODE_JAVA_MATH:
-                    break;
-                case JML_CODE_SAFE_MATH:
-                    break;
-                case JML_CODE:
-                    break;
-                case JML_OT_PEER:
-                    break;
-                case JML_OT_REP:
-                    break;
-                case JML_OT_READ_ONLY:
-                    break;
-            }
-        }
-        throw new UnsupportedOperationException(
-                "Not supported keyword" + modifier.getKeyword().name());
+        return switch ((Modifier.DefaultKeyword) modifier.getKeyword()) {
+            case DEFAULT -> GeneratedJavaParserConstants.DEFAULT;
+            case PUBLIC -> GeneratedJavaParserConstants.PUBLIC;
+            case PRIVATE -> GeneratedJavaParserConstants.PRIVATE;
+            case PROTECTED -> GeneratedJavaParserConstants.PROTECTED;
+            case STATIC -> GeneratedJavaParserConstants.STATIC;
+            case FINAL -> GeneratedJavaParserConstants.FINAL;
+            case ABSTRACT -> GeneratedJavaParserConstants.ABSTRACT;
+            case TRANSIENT -> GeneratedJavaParserConstants.TRANSIENT;
+            case SYNCHRONIZED -> GeneratedJavaParserConstants.SYNCHRONIZED;
+            case VOLATILE -> GeneratedJavaParserConstants.VOLATILE;
+            case NATIVE -> GeneratedJavaParserConstants.NATIVE;
+            case STRICTFP -> GeneratedJavaParserConstants.STRICTFP;
+            case TRANSITIVE -> GeneratedJavaParserConstants.TRANSITIVE;
+            case SEALED -> GeneratedJavaParserConstants.SEALED;
+            case NON_SEALED -> GeneratedJavaParserConstants.NON_SEALED;
+            case JML_PACKAGE -> GeneratedJavaParserConstants.PACKAGE;
+            case JML_PURE -> GeneratedJavaParserConstants.PURE;
+            case JML_STRICTLY_PURE -> GeneratedJavaParserConstants.STRICTLY_PURE;
+            case JML_HELPER -> GeneratedJavaParserConstants.HELPER;
+            case JML_INSTANCE -> GeneratedJavaParserConstants.INSTANCE;
+            case JML_NULLABLE_BY_DEFAULT -> GeneratedJavaParserConstants.NULLABLE_BY_DEFAULT;
+            case JML_NON_NULL -> GeneratedJavaParserConstants.NON_NULL;
+            case JML_NULLABLE -> GeneratedJavaParserConstants.NULLABLE;
+            case JML_GHOST -> GeneratedJavaParserConstants.GHOST;
+            case JML_MODEL -> GeneratedJavaParserConstants.MODEL;
+            case JML_SPEC_PUBLIC -> GeneratedJavaParserConstants.SPEC_PUBLIC;
+            case JML_SPEC_PACKAGE -> GeneratedJavaParserConstants.SPEC_PACKAGE;
+            case JML_SPEC_PROTECTED -> GeneratedJavaParserConstants.SPEC_PROTECTED;
+            case JML_SPEC_PRIVATE -> GeneratedJavaParserConstants.SPEC_PRIVATE;
+            case JML_NO_STATE -> GeneratedJavaParserConstants.NO_STATE;
+            case JML_TWO_STATE -> GeneratedJavaParserConstants.TWO_STATE;
+            case JML_NON_NULL_BY_DEFAULT -> GeneratedJavaParserConstants.NON_NULL_BY_DEFAULT;
+            case JML_CODE_BIGINT_MATH -> GeneratedJavaParserConstants.CODE_BIGINT_MATH;
+            case JML_CODE_JAVA_MATH -> GeneratedJavaParserConstants.CODE_JAVA_MATH;
+            case JML_CODE_SAFE_MATH -> GeneratedJavaParserConstants.CODE_SAFE_MATH;
+            case JML_SPEC_BIGINT_MATH -> GeneratedJavaParserConstants.SPEC_BIGINT_MATH;
+            case JML_SPEC_JAVA_MATH -> GeneratedJavaParserConstants.SPEC_JAVA_MATH;
+            case JML_SPEC_SAFE_MATH -> GeneratedJavaParserConstants.SPEC_SAFE_MATH;
+            case JML_CODE -> GeneratedJavaParserConstants.CODE;
+            case JML_OT_PEER -> GeneratedJavaParserConstants.PEER;
+            case JML_OT_REP -> GeneratedJavaParserConstants.REP;
+            case JML_OT_READ_ONLY -> GeneratedJavaParserConstants.READ_ONLY;
+            default -> throw new UnsupportedOperationException(
+                    "Not supported keyword" + modifier.getKeyword().name());
+        };
     }
 
     // /

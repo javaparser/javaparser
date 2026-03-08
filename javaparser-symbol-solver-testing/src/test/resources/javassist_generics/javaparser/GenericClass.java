@@ -5,11 +5,9 @@ import java.util.Map;
 
 public class GenericClass<S> {
 
-    public GenericClass(S s) {
-    }
+    public GenericClass(S s) {}
 
-    public GenericClass(Foo foo) {
-    }
+    public GenericClass(Foo foo) {}
 
     public S get() {
         return null;
@@ -19,7 +17,7 @@ public class GenericClass<S> {
         return null;
     }
 
-    public <T, V> Map<T, V> genericMethodWithDoubleTypedReturnType() {
+    public <T,V> Map<T,V> genericMethodWithDoubleTypedReturnType() {
         return null;
     }
 

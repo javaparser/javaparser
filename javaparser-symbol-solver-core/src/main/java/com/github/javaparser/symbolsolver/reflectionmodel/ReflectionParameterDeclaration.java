@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -37,11 +37,12 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
     private String name;
 
     /**
+     *
      * @param type
      * @param genericType
      * @param typeSolver
      * @param variadic
-     * @param name        can potentially be null
+     * @param name can potentially be null
      */
     public ReflectionParameterDeclaration(
             Class<?> type, java.lang.reflect.Type genericType, TypeSolver typeSolver, boolean variadic, String name) {
@@ -53,6 +54,7 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
     }
 
     /**
+     *
      * @return the name, which can be potentially null
      */
     @Override

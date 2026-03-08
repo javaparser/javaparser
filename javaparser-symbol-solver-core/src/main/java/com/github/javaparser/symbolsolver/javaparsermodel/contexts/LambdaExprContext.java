@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -38,7 +38,6 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.SymbolDeclarator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
@@ -234,12 +233,9 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly,
-            ResolvedReferenceTypeDeclaration invocationContext) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
-        return solveMethodInParentContext(name, argumentsTypes, false, invocationContext);
+        return solveMethodInParentContext(name, argumentsTypes, false);
     }
 
     @Override

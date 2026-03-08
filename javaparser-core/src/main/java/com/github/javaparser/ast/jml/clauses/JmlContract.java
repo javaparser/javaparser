@@ -7,6 +7,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.jml.NodeWithJmlTags;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.Behavior;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -24,7 +25,8 @@ import org.jspecify.annotations.Nullable;
  * @author Alexander Weigl
  * @version 1 (3/14/21)
  */
-public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract>, NodeWithJmlTags<JmlContract> {
+public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract>, NodeWithJmlTags<JmlContract>,
+    NodeWithAccessModifiers<JmlContract> {
 
     private NodeList<SimpleName> jmlTags = new NodeList<>();
 

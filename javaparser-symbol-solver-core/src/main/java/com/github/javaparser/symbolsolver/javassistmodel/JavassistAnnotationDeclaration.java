@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -40,9 +40,9 @@ import javassist.CtClass;
  */
 public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration implements ResolvedAnnotationDeclaration {
 
-    private final CtClass ctClass;
-    private final TypeSolver typeSolver;
-    private final JavassistTypeDeclarationAdapter javassistTypeDeclarationAdapter;
+    private CtClass ctClass;
+    private TypeSolver typeSolver;
+    private JavassistTypeDeclarationAdapter javassistTypeDeclarationAdapter;
 
     @Override
     public String toString() {
@@ -67,7 +67,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     public String getClassName() {
         String qualifiedName = getQualifiedName();
         if (qualifiedName.contains(".")) {
-            return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1);
+            return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1, qualifiedName.length());
         }
         return qualifiedName;
     }

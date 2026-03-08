@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -203,10 +203,9 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
     /// Public methods
     ///
 
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> parameterTypes, ResolvedReferenceTypeDeclaration invocationContext) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes) {
         Context ctx = getContext();
-        return ctx.solveMethod(name, parameterTypes, false, invocationContext);
+        return ctx.solveMethod(name, parameterTypes, false);
     }
 
     @Override
@@ -214,9 +213,8 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
             String name,
             List<ResolvedType> argumentTypes,
             Context invocationContext,
-            List<ResolvedType> typeParameters,
-            ResolvedReferenceTypeDeclaration callContext) {
-        return getContext().solveMethodAsUsage(name, argumentTypes, callContext);
+            List<ResolvedType> typeParameters) {
+        return getContext().solveMethodAsUsage(name, argumentTypes);
     }
 
     /**
@@ -395,12 +393,9 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly,
-            ResolvedReferenceTypeDeclaration invocationContext) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
 
-        return getContext().solveMethod(name, argumentsTypes, staticOnly, invocationContext);
+        return getContext().solveMethod(name, argumentsTypes, staticOnly);
     }
 
     @Override

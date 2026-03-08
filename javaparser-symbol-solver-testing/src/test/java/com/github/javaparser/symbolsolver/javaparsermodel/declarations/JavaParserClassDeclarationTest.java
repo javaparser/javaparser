@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -57,6 +57,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import com.google.common.truth.Truth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -1109,11 +1111,8 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
         if (TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
         }
-        // weigl: relax new JDKs
-        assertTrue(expected.size() == signatures.size() || expected.size() + 1 == signatures.size());
-
-        signatures.remove("java.lang.Object.wait0(long)");
-        assertThat(signatures, containsInAnyOrder(expected.toArray()));
+        //assertEquals(expected.size(), signatures.size());
+        Truth.assertThat(signatures).containsAtLeastElementsIn(expected);
     }
 
     ///
@@ -1152,28 +1151,27 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
 
         SymbolReference<ResolvedMethodDeclaration> res;
 
-        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of(), null);
+        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of());
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isStatic()",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
 
         res = constructorDeclaration.solveMethod(
                 "isThrows",
-                ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolverNewCode)),
-                null);
+                ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolverNewCode)));
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
 
         res = constructorDeclaration.solveMethod(
-                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(String.class, typeSolverNewCode)), null);
+                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(String.class, typeSolverNewCode)));
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.String)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
 
         // This is solved because it is raw
         res = constructorDeclaration.solveMethod(
-                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(Class.class, typeSolverNewCode)), null);
+                "isThrows", ImmutableList.of(ReflectionFactory.typeUsageFor(Class.class, typeSolverNewCode)));
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());
@@ -1186,10 +1184,10 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
 
         SymbolReference<ResolvedMethodDeclaration> res;
 
-        res = constructorDeclaration.solveMethod("unexistingMethod", ImmutableList.of(), null);
+        res = constructorDeclaration.solveMethod("unexistingMethod", ImmutableList.of());
         assertFalse(res.isSolved());
 
-        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN), null);
+        res = constructorDeclaration.solveMethod("isStatic", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN));
         assertFalse(res.isSolved());
     }
 
@@ -1206,7 +1204,7 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
                 (ResolvedReferenceType) ReflectionFactory.typeUsageFor(Class.class, typeSolverNewCode);
         ResolvedReferenceType classOfStringType = (ResolvedReferenceType) rawClassType.replaceTypeVariables(
                 rawClassType.getTypeDeclaration().get().getTypeParameters().get(0), stringType);
-        res = constructorDeclaration.solveMethod("isThrows", ImmutableList.of(classOfStringType), null);
+        res = constructorDeclaration.solveMethod("isThrows", ImmutableList.of(classOfStringType));
         assertFalse(res.isSolved());
     }
 

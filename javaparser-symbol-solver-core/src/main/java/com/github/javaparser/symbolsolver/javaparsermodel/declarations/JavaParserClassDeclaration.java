@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -54,9 +54,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     /// Fields
     ///
 
-    private final TypeSolver typeSolver;
-    private final ClassOrInterfaceDeclaration wrappedNode;
-    private final JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
+    private TypeSolver typeSolver;
+    private ClassOrInterfaceDeclaration wrappedNode;
+    private JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
 
     ///
     /// Constructors
@@ -155,10 +155,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     /// Public methods
     ///
 
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> parameterTypes, ResolvedReferenceTypeDeclaration invocationContext) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes) {
         Context ctx = getContext();
-        return ctx.solveMethod(name, parameterTypes, false, invocationContext);
+        return ctx.solveMethod(name, parameterTypes, false);
     }
 
     @Override
@@ -166,9 +165,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             String name,
             List<ResolvedType> argumentTypes,
             Context invocationContext,
-            List<ResolvedType> typeParameters,
-            ResolvedReferenceTypeDeclaration callContext) {
-        return getContext().solveMethodAsUsage(name, argumentTypes, callContext);
+            List<ResolvedType> typeParameters) {
+        return getContext().solveMethodAsUsage(name, argumentTypes);
     }
 
     /**
@@ -332,11 +330,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly,
-            ResolvedReferenceTypeDeclaration invocationContext) {
-        return getContext().solveMethod(name, argumentsTypes, staticOnly, invocationContext);
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return getContext().solveMethod(name, argumentsTypes, staticOnly);
     }
 
     @Override
@@ -468,7 +463,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         String className = classOrInterfaceType.getName().getId();
         if (classOrInterfaceType.getScope().isPresent()) {
             // look for the qualified name (for example class of type Rectangle2D.Double)
-            className = classOrInterfaceType.getScope().get() + "." + className;
+            className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
 
         // Since this is used to resolve reference to "extended" and "implemented" types, and since these type

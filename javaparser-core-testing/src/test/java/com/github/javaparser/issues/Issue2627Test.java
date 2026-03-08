@@ -48,7 +48,9 @@ public class Issue2627Test {
 
     private static Stream<Arguments> arguments_minimal() {
         return Stream.of(
-                Arguments.of("methodA", 258, 260), Arguments.of("methodB", 163, 164), Arguments.of("methodC", 3, 4));
+                Arguments.of("methodA", 258, 260),
+                Arguments.of("methodB", 163, 164),
+                Arguments.of("methodC", 3, 4));
     }
 
     private static Stream<Arguments> arguments_original() {
@@ -81,40 +83,6 @@ public class Issue2627Test {
                 .findFirst()
                 .get();
     }
-
-    //    @Test
-    //    public void cuLength_minimal() throws IOException {
-    //        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
-    //
-    //        final Range cuRange = cu.getRange().get();
-    //
-    //        int lineCount = cuRange.end.line - cuRange.begin.line;
-    //
-    //    }
-
-    //    @Test
-    //    public void commentPositions_minimal() throws IOException {
-    //        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
-    //
-    //        List<Comment> allComments = cu.getAllComments();
-    //        for (int i = 0; i < allComments.size(); i++) {
-    //            Comment comment = allComments.get(i);
-    //            Optional<Range> optionalRange = comment.getRange();
-    //            if (optionalRange.isPresent()) {
-    //                Range range = optionalRange.get();
-    //                final TokenRange tokens = comment.getTokenRange().get();
-    //                int tokenIndex = 0;
-    //                for (JavaToken token : tokens) {
-    //                    System.out.println("token " + tokenIndex + " = " + token);
-    //                    tokenIndex++;
-    //                }
-    //                System.out.println(tokens);
-    //            }
-    //        }
-    //
-    //
-    ////        assertNodeInExpectedLines(cu, 1, 288);
-    //    }
 
     @ParameterizedTest
     @MethodSource("arguments_minimal")

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -36,8 +36,8 @@ import javassist.bytecode.SignatureAttribute;
  * @author Federico Tomassetti
  */
 public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
-    private final CtField ctField;
-    private final TypeSolver typeSolver;
+    private CtField ctField;
+    private TypeSolver typeSolver;
 
     public JavassistFieldDeclaration(CtField ctField, TypeSolver typeSolver) {
         this.ctField = ctField;

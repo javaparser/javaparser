@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,8 +22,6 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import static java.util.Comparator.comparing;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.ast.AccessSpecifier;
@@ -40,6 +38,8 @@ import com.google.common.collect.ImmutableSet;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import com.google.common.truth.Truth;
 import org.junit.jupiter.api.Test;
 
 class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
@@ -314,17 +314,17 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         // Serializable, Cloneable, Iterable<E>, Collection<E>, List<E>, RandomAccess
-        assertThat(
-                ImmutableSet.of(
-                        Serializable.class.getCanonicalName(),
-                        Cloneable.class.getCanonicalName(),
-                        List.class.getCanonicalName(),
-                        RandomAccess.class.getCanonicalName(),
-                        Collection.class.getCanonicalName(),
-                        Iterable.class.getCanonicalName()),
-                everyItem(in(arraylist.getAllInterfaces().stream()
-                        .map(i -> i.getQualifiedName())
-                        .collect(Collectors.toSet()))));
+        var actual = arraylist.getAllInterfaces().stream()
+                .map(ResolvedReferenceType::getQualifiedName)
+                .collect(Collectors.toSet());
+        Truth.assertThat(actual).containsExactly(
+                Serializable.class.getCanonicalName(),
+                SequencedCollection.class.getCanonicalName(),
+                Cloneable.class.getCanonicalName(),
+                List.class.getCanonicalName(),
+                RandomAccess.class.getCanonicalName(),
+                Collection.class.getCanonicalName(),
+                Iterable.class.getCanonicalName());
     }
 
     @Test
@@ -431,14 +431,17 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         arraylist.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        // weigl: disable for later JDKs
-        // assertEquals(9, ancestors.size());
+        assertEquals(10, ancestors.size());
 
         ResolvedTypeVariable typeVariable =
                 new ResolvedTypeVariable(arraylist.getTypeParameters().get(0));
         assertEquals(
                 new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(RandomAccess.class, typeResolver)),
                 ancestors.get("java.util.RandomAccess"));
+        assertEquals(
+                new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver)),
+                ancestors.get("java.util.SequencedCollection"));
+
         assertEquals(
                 new ReferenceTypeImpl(
                         new ReflectionClassDeclaration(AbstractCollection.class, typeResolver),
@@ -595,12 +598,12 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedReferenceType interfaze;
 
         interfaze = constructorDeclaration.getInterfaces().get(0);
-        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt", interfaze.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt", interfaze.getQualifiedName());
         assertEquals(
                 "com.github.javaparser.ast.body.ConstructorDeclaration",
                 interfaze
                         .typeParametersMap()
-                        .getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.N")
+                        .getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt.N")
                         .get()
                         .asReferenceType()
                         .getQualifiedName());
@@ -731,18 +734,18 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration)
                 typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         List<ResolvedReferenceType> interfaces = constructorDeclaration.getAllInterfaces();
-        assertEquals(34, interfaces.size());
+        assertEquals(35, interfaces.size());
 
         ResolvedReferenceType interfaze;
         int i = 0;
 
         interfaze = constructorDeclaration.getAllInterfaces().get(i++);
-        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt", interfaze.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt", interfaze.getQualifiedName());
         assertEquals(
                 "com.github.javaparser.ast.body.ConstructorDeclaration",
                 interfaze
                         .typeParametersMap()
-                        .getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.N")
+                        .getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt.N")
                         .get()
                         .asReferenceType()
                         .getQualifiedName());
@@ -1107,17 +1110,17 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
                         .asReferenceType()
                         .getQualifiedName());
 
-        ancestor = ancestors.get(1);
-        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt", ancestor.getQualifiedName());
+        ancestor = ancestors.get(2);
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt", ancestor.getQualifiedName());
         assertEquals(
                 "com.github.javaparser.ast.body.ConstructorDeclaration",
                 ancestor.typeParametersMap()
-                        .getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.N")
+                        .getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt.N")
                         .get()
                         .asReferenceType()
                         .getQualifiedName());
 
-        ancestor = ancestors.get(2);
+        ancestor = ancestors.get(1);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithJavadoc", ancestor.getQualifiedName());
         assertEquals(
                 "com.github.javaparser.ast.body.ConstructorDeclaration",
@@ -1242,6 +1245,16 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
                         .getQualifiedName());
 
         ancestor = ancestors.remove(0);
+        assertEquals("com.github.javaparser.ast.jml.NodeWithContracts", ancestor.getQualifiedName());
+        assertEquals(
+                "com.github.javaparser.ast.body.ConstructorDeclaration",
+                ancestor.typeParametersMap()
+                        .getValueBySignature("com.github.javaparser.ast.jml.NodeWithContracts.N")
+                        .get()
+                        .asReferenceType()
+                        .getQualifiedName());
+
+        ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", ancestor.getQualifiedName());
         assertEquals(
                 "com.github.javaparser.ast.body.ConstructorDeclaration",
@@ -1251,15 +1264,6 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
                         .asReferenceType()
                         .getQualifiedName());
 
-        ancestor = ancestors.remove(0);
-        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt", ancestor.getQualifiedName());
-        assertEquals(
-                "com.github.javaparser.ast.body.ConstructorDeclaration",
-                ancestor.typeParametersMap()
-                        .getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.N")
-                        .get()
-                        .asReferenceType()
-                        .getQualifiedName());
 
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithDeclaration", ancestor.getQualifiedName());
@@ -1284,12 +1288,23 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
                         .asReferenceType()
                         .getQualifiedName());
 
+
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithModifiers", ancestor.getQualifiedName());
         assertEquals(
                 "com.github.javaparser.ast.body.ConstructorDeclaration",
                 ancestor.typeParametersMap()
                         .getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithModifiers.N")
+                        .get()
+                        .asReferenceType()
+                        .getQualifiedName());
+
+        ancestor = ancestors.remove(0);
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt", ancestor.getQualifiedName());
+        assertEquals(
+                "com.github.javaparser.ast.body.ConstructorDeclaration",
+                ancestor.typeParametersMap()
+                        .getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt.N")
                         .get()
                         .asReferenceType()
                         .getQualifiedName());
@@ -1303,6 +1318,7 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
                         .get()
                         .asReferenceType()
                         .getQualifiedName());
+
 
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithParameters", ancestor.getQualifiedName());

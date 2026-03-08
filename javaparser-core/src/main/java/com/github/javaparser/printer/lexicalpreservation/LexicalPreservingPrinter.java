@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -148,6 +148,24 @@ public class LexicalPreservingPrinter {
             if (property == ObservableProperty.RANGE || property == ObservableProperty.COMMENTED_NODE) {
                 return;
             }
+            // Handle node replacements with TokenOwnerDetector
+            if (oldValue instanceof Node && newValue instanceof Node) {
+                Node oldNode = (Node) oldValue;
+                Node newNode = (Node) newValue;
+                // Find the actual token owner
+                Node tokenOwner = TokenOwnerDetector.findTokenOwner(oldNode);
+                // Check if we need to regenerate the token owner instead of just the parent
+                if (TokenOwnerDetector.needsRegeneration(observedNode, tokenOwner, oldNode)) {
+                    NodeText tokenOwnerText = getOrCreateNodeText(tokenOwner);
+                    if (tokenOwnerText != null) {
+                        // Regenerate the token owner's NodeText instead of the observed node
+                        LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(
+                                tokenOwnerText, tokenOwner, property, oldValue, newValue);
+                        // Early exit - we've handled the change
+                        return;
+                    }
+                }
+            }
             if (property == ObservableProperty.COMMENT) {
                 Optional<Node> parentNode = observedNode.getParentNode();
                 NodeText nodeText = parentNode
@@ -156,9 +174,7 @@ public class LexicalPreservingPrinter {
                 if (oldValue == null) {
                     // this case corresponds to the addition of a comment
                     // Find the position of the comment node and put in front of it the [...]
-                    int // Find the position of the comment node and put in front of it the [...]
-                            //
-                            index = parentNode.isPresent() ? nodeText.findChild(observedNode) : 0;
+                    int index = parentNode.isPresent() ? nodeText.findChild(observedNode) : 0;
                     /* Add the same indentation to the comment as the previous node
                      * for example if we want to add a comment on the body of the method declaration :
                      * Actual code
@@ -179,13 +195,26 @@ public class LexicalPreservingPrinter {
                      * }
                      * }
                      */
-                    fixIndentOfAddedNode(nodeText, index - 1);
+                    // Extract the existing indentation of the line where we'll insert the comment
+                    List<TextElement> precedingElements = nodeText.getElements().subList(0, index);
+                    List<TextElement> existingIndent =
+                            IndentationCalculator.computeFromPrecedingElements(precedingElements);
+                    // Insert the comment (WITHOUT adding indentation before, we'll add it after the EOL)
                     LineSeparator lineSeparator = observedNode.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
                     for (TokenTextElement element : makeCommentTokens((Comment) newValue)) {
                         nodeText.addElement(index++, element);
                     }
+                    // Insert EOL
                     nodeText.addToken(index, eolTokenKind(lineSeparator), lineSeparator.asRawString());
-                    // code indentation after inserting an eol token may be wrong
+                    index++;
+                    // Restore the indentation for the node that follows
+                    for (TextElement indentElement : existingIndent) {
+                        if (indentElement instanceof TokenTextElement) {
+                            TokenTextElement tokenElement = (TokenTextElement) indentElement;
+                            nodeText.addElement(
+                                    index++, new TokenTextElement(tokenElement.getTokenKind(), tokenElement.getText()));
+                        }
+                    }
                 } else if (newValue == null) {
                     // this case corresponds to a deletion of a comment
                     if (oldValue instanceof Comment) {
@@ -211,7 +240,8 @@ public class LexicalPreservingPrinter {
                     // this is a replacement of a comment
                     List<TokenTextElement> matchingTokens =
                             findTokenTextElementForComment((Comment) oldValue, nodeText);
-                    if (matchingTokens.size() != 1) {
+                    if ((oldValue instanceof MarkdownComment && matchingTokens.isEmpty())
+                            || (!(oldValue instanceof MarkdownComment) && matchingTokens.size() != 1)) {
                         throw new IllegalStateException("The matching comment to be replaced could not be found");
                     }
                     Comment newComment = (Comment) newValue;
@@ -513,30 +543,31 @@ public class LexicalPreservingPrinter {
             if (index <= 0) {
                 return;
             }
-            TextElement currentSpaceCandidate = null;
+            // finds the existing indentation
+            List<TextElement> existingIndent = IndentationCalculator.computeFromPrecedingElements(
+                    nodeText.getElements().subList(0, index + 1));
+            if (existingIndent.isEmpty()) {
+                return;
+            }
+            // Find the last newline before index
+            int lastNewlineIndex = -1;
             for (int i = index; i >= 0; i--) {
-                TextElement spaceCandidate = nodeText.getTextElement(i);
-                if (spaceCandidate.isSpaceOrTab()) {
-                    // save the current indentation char
-                    currentSpaceCandidate = nodeText.getTextElement(i);
-                }
-                if (!spaceCandidate.isSpaceOrTab()) {
-                    if (spaceCandidate.isNewline() && i != index) {
-                        int numberOfIndentationCharacters = index - i;
-                        for (int j = 0; j < numberOfIndentationCharacters; j++) {
-                            if (currentSpaceCandidate != null) {
-                                // use the current (or last) indentation character
-                                nodeText.addElement(
-                                        index,
-                                        new TokenTextElement(
-                                                JavaToken.Kind.SPACE.getKind(), currentSpaceCandidate.expand()));
-                            } else {
-                                // use the default indentation character
-                                nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
-                            }
-                        }
-                    }
+                if (nodeText.getTextElement(i).isNewline()) {
+                    lastNewlineIndex = i;
                     break;
+                }
+            }
+            // If there is no newline or if the newline is just before the index, do nothing.
+            if (lastNewlineIndex == -1 || lastNewlineIndex == index - 1) {
+                return;
+            }
+            // Apply the computed indentation
+            // The indentation elements are inserted at the given index.
+            for (TextElement indentElement : existingIndent) {
+                if (indentElement instanceof TokenTextElement) {
+                    TokenTextElement tokenElement = (TokenTextElement) indentElement;
+                    nodeText.addElement(
+                            index, new TokenTextElement(tokenElement.getTokenKind(), tokenElement.getText()));
                 }
             }
         }
@@ -729,7 +760,8 @@ public class LexicalPreservingPrinter {
     private static NodeText interpret(Node node, CsmElement csm, NodeText nodeText) {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel =
                 new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
-        List<TextElement> indentation = findIndentation(node);
+        List<TextElement> initialIndentation = findIndentation(node);
+        IndentationContext indentationContext = new IndentationContext(initialIndentation);
         boolean pendingIndentation = false;
         // Add a comment and line separator if necessary
         node.getComment().ifPresent(comment -> {
@@ -746,17 +778,13 @@ public class LexicalPreservingPrinter {
                 int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);
                 if (calculatedSyntaxModel.elements.size() > indexCurrentElement
                         && !(calculatedSyntaxModel.elements.get(indexCurrentElement + 1) instanceof CsmUnindent)) {
-                    for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
-                        indentation.add(new TokenTextElement(SPACE, " "));
-                    }
+                    indentationContext.increase();
                 }
             } else if (element instanceof CsmUnindent) {
-                for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE && indentation.size() > 0; i++) {
-                    indentation.remove(indentation.size() - 1);
-                }
+                indentationContext.decrease();
             }
             if (pendingIndentation && !(element instanceof CsmToken && ((CsmToken) element).isNewLine())) {
-                indentation.forEach(nodeText::addElement);
+                indentationContext.getCurrent().forEach(nodeText::addElement);
             }
             pendingIndentation = false;
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {
@@ -844,18 +872,13 @@ public class LexicalPreservingPrinter {
     private static ObservableProperty findNodeListName(NodeList<?> nodeList) {
         Node parent = nodeList.getParentNodeForChildren();
         for (Method m : parent.getClass().getMethods()) {
-            if (m.getAnnotation(com.github.javaparser.ast.key.IgnoreLexPrinting.class) != null) {
-                continue;
-            }
             if (m.getParameterCount() == 0
                     && m.getReturnType().getCanonicalName().equals(JAVAPARSER_AST_NODELIST)) {
                 try {
                     Object raw = m.invoke(parent);
                     if (!(raw instanceof NodeList)) {
-                        // TODO weigl fix on feature/key.
-                        continue;
-                        // throw new IllegalStateException(
-                        //        "Expected NodeList, found " + raw.getClass().getCanonicalName());
+                        throw new IllegalStateException(
+                                "Expected NodeList, found " + raw.getClass().getCanonicalName());
                     }
                     NodeList<?> result = (NodeList<?>) raw;
                     if (result == nodeList) {

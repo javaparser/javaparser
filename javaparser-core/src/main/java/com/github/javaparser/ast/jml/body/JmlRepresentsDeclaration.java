@@ -9,6 +9,7 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -30,7 +31,9 @@ import org.jspecify.annotations.NonNull;
  * @version 1 (3/11/21)
  */
 public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepresentsDeclaration>
-        implements NodeWithModifiers<JmlRepresentsDeclaration>, NodeWithName<JmlRepresentsDeclaration> {
+        implements NodeWithName<JmlRepresentsDeclaration>,
+        NodeWithModifiers<JmlRepresentsDeclaration>,
+        NodeWithAccessModifiers<JmlRepresentsDeclaration> {
 
     private NodeList<Modifier> modifiers;
 

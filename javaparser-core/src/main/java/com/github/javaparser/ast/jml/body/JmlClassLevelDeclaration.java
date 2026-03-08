@@ -6,6 +6,8 @@ import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.jml.NodeWithJmlTags;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClassLevelDeclarationMetaModel;

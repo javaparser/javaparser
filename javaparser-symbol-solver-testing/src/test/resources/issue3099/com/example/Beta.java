@@ -22,10 +22,9 @@
 package com.example;
 
 class Beta implements Alpha.CustomInterface {
+  
+  public interface CustomInterface<T> {}
 
-    public interface CustomInterface<T> {
-    }
-
-    private final CustomInterface<Object> instanceOfBetaInnerClass;
+  private final CustomInterface<Object> instanceOfBetaInnerClass;
 
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -34,6 +34,7 @@ import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.SymbolDeclarator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.key.KeyCcatchReturnContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.*;
 import java.util.Optional;
 

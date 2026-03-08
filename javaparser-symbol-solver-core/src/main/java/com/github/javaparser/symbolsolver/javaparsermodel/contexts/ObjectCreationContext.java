@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -72,11 +72,8 @@ public class ObjectCreationContext extends ExpressionContext<ObjectCreationExpr>
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly,
-            ResolvedReferenceTypeDeclaration invocationContext) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver)
-                .solveMethod(name, argumentsTypes, false, invocationContext);
+                .solveMethod(name, argumentsTypes, false);
     }
 }

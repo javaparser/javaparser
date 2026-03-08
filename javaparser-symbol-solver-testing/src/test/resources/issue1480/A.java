@@ -1,7 +1,5 @@
-public class A {
-    public void foo() {
-    }
 
-    private void bar() {
-    }
+public class A {
+  public void foo() {}
+  private void bar() {}
 }

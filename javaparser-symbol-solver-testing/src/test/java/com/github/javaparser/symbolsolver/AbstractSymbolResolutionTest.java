@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -52,7 +52,6 @@ public abstract class AbstractSymbolResolutionTest {
 
     /**
      * An initial attempt at allowing JDK-specific test cases. It is a work-in-progress, and subject to change.
-     *
      * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
      */
     @Deprecated
@@ -119,9 +118,7 @@ public abstract class AbstractSymbolResolutionTest {
                 return JDK18;
             }
 
-            // weigl just return JDK18
             return JDK18;
-            // throw new IllegalStateException("Unable to determine the current version of java running");
         }
 
         /**

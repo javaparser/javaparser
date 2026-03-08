@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -648,8 +648,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         rawArrayList.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        // weigl: disable test, in new JDKs the number is 10 (SequencedCollection was added)
-        // assertEquals(9, ancestors.size());
+        assertEquals(10, ancestors.size());
 
         ResolvedTypeVariable tv =
                 new ResolvedTypeVariable(arraylist.getTypeParameters().get(0));
@@ -685,6 +684,9 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         assertEquals(
                 new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Serializable.class, typeResolver)),
                 ancestors.get("java.io.Serializable"));
+        assertEquals(
+                new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver)),
+                ancestors.get("java.util.SequencedCollection"));
     }
 
     @Test
@@ -696,8 +698,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         listOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        // weigl: disable new JDKs are different
-        // assertEquals(2, ancestors.size());
+        assertEquals(3, ancestors.size());
 
         assertEquals(
                 new ReferenceTypeImpl(
@@ -707,6 +708,11 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                 new ReferenceTypeImpl(
                         new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(string)),
                 ancestors.get("java.lang.Iterable"));
+        assertEquals(
+                new ReferenceTypeImpl(
+                        new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver), ImmutableList.of(string)),
+                ancestors.get("java.util.SequencedCollection"));
+
     }
 
     @Test
@@ -744,8 +750,6 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         abstractListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        // weigl: disable new JDKs are different
-        // assertEquals(5, ancestors.size());
 
         assertEquals(
                 new ReferenceTypeImpl(
@@ -767,6 +771,12 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                 new ReferenceTypeImpl(
                         new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(string)),
                 ancestors.get("java.lang.Iterable"));
+        assertEquals(
+                new ReferenceTypeImpl(
+                        new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver), ImmutableList.of(string)),
+                ancestors.get("java.util.SequencedCollection"));
+
+        assertEquals(6, ancestors.size());
     }
 
     @Test
@@ -778,9 +788,12 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         arrayListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        // weigl: disable new JDKs are different
-        // assertEquals(9, ancestors.size());
+        assertEquals(10, ancestors.size());
 
+        assertEquals(
+                new ReferenceTypeImpl(
+                        new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver), ImmutableList.of(string)),
+                ancestors.get("java.util.SequencedCollection"));
         assertEquals(
                 new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(RandomAccess.class, typeResolver)),
                 ancestors.get("java.util.RandomAccess"));

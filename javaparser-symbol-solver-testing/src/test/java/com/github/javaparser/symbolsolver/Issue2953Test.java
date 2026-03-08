@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -49,7 +49,7 @@ public class Issue2953Test {
 
         JavassistEnumDeclaration enumA = (JavassistEnumDeclaration) typeResolver.solveType("foo.A");
         SymbolReference<ResolvedMethodDeclaration> method =
-                enumA.solveMethod("equalByCode", Arrays.asList(ResolvedPrimitiveType.INT), false, null); // XXX
+                enumA.solveMethod("equalByCode", Arrays.asList(ResolvedPrimitiveType.INT), false);
         assertTrue(method.isSolved());
     }
 

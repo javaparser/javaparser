@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -77,8 +77,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     }
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(
-            String name, List<ResolvedType> argumentsTypes, ResolvedReferenceTypeDeclaration invocationContext) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
         ResolvedType typeOfScope;
         if (wrappedNode.hasScope()) {
             Expression scope = wrappedNode.getScope().get();
@@ -88,7 +87,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
                 if (ref.isSolved()) {
                     SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(
-                            ref.getCorrespondingDeclaration(), name, argumentsTypes, invocationContext);
+                            ref.getCorrespondingDeclaration(), name, argumentsTypes);
                     if (m.isSolved()) {
                         MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
                         methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
@@ -149,10 +148,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly,
-            ResolvedReferenceTypeDeclaration invocationContext) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
 
         if (rrtds.isEmpty()) {
@@ -165,7 +161,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
             SymbolReference<ResolvedMethodDeclaration> res =
-                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false, invocationContext);
+                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
             if (res.isSolved()) {
                 return res;
             }
@@ -179,11 +175,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     ///
 
     private Optional<MethodUsage> solveMethodAsUsage(
-            ResolvedReferenceType refType,
-            String name,
-            List<ResolvedType> argumentsTypes,
-            Context invokationContext,
-            ResolvedReferenceTypeDeclaration callContext) {
+            ResolvedReferenceType refType, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
         if (!refType.getTypeDeclaration().isPresent()) {
             return Optional.empty();
         }
@@ -193,8 +185,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 name,
                 argumentsTypes,
                 invokationContext,
-                refType.typeParametersValues(),
-                callContext);
+                refType.typeParametersValues());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
 

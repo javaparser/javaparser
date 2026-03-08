@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -28,9 +28,9 @@ import com.github.javaparser.resolution.model.SymbolReference;
 
 /**
  * <p>
- * Required to prevent recursive access to the "parent node" (not necessarily the same as the "parent context").
+ *     Required to prevent recursive access to the "parent node" (not necessarily the same as the "parent context").
  * </p><p>
- * Consider, for example, this code where the cursor is currently at the node of type {@code ArrayAccessExpr}:
+ *     Consider, for example, this code where the cursor is currently at the node of type {@code ArrayAccessExpr}:
  * </p>
  * <pre>{@code
  *     var1.perPriority[index].recovered
@@ -73,6 +73,9 @@ import com.github.javaparser.resolution.model.SymbolReference;
  * }</pre>
  *     </li>
  * </ul>
+ *
+ *
+ *
  *
  * @author Roger Howell
  */

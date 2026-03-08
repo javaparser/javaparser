@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2013-2026 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -228,24 +248,7 @@ public class JavaParserRecordDeclarationTest {
     ///
 
     @Test
-    @EnabledForJreRange(max = org.junit.jupiter.api.condition.JRE.JAVA_13)
-    void getGetAncestors_javaLangRecord_notAvailable() {
-        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithImplements);
-        CompilationUnit compilationUnit = x.getResult().get();
-
-        RecordDeclaration recordDeclaration =
-                compilationUnit.findFirst(RecordDeclaration.class).get();
-        ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = recordDeclaration.resolve();
-
-        /*
-         * `java.lang.Record` will have been introduced from  JRE14 preview / JRE16 release
-         *  -- thus the `java.lang.Record` ancestor will not be available via classloader/reflection before these versions
-         */
-        assertThrows(UnsolvedSymbolException.class, () -> resolvedReferenceTypeDeclaration.getAncestors());
-    }
-
-    @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void getGetAncestors_javaLangRecord_available() {
         ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithImplements);
         CompilationUnit compilationUnit = x.getResult().get();
@@ -261,7 +264,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetDeclaredFields() {
         ParseResult<CompilationUnit> x = javaParser.parse("record Test(String s, Integer i) {}");
         CompilationUnit compilationUnit = x.getResult().get();
@@ -279,7 +282,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetDeclaredMethods() {
         ParseResult<CompilationUnit> x = javaParser.parse("record Test(String s, Integer i) {\n"
                 + "    public int foo(int x) {\n"
@@ -316,7 +319,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetSuperclass() {
         ParseResult<CompilationUnit> cu = javaParser.parse("record Foo(String s) {}");
 
@@ -331,7 +334,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testImplicitGetterResolution() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n"
                 + "record Test(String s) {\n"
@@ -361,7 +364,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testImplicitGetterSolvingFromDecl() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n" + "record Test(String s) { }");
 
@@ -371,7 +374,7 @@ public class JavaParserRecordDeclarationTest {
                 (JavaParserRecordDeclaration) recordDeclaration.resolve();
 
         SymbolReference<ResolvedMethodDeclaration> symbol =
-                resolvedRecordDeclaration.solveMethod("s", Collections.emptyList(), null);
+                resolvedRecordDeclaration.solveMethod("s", Collections.emptyList());
         assertTrue(symbol.isSolved());
         ResolvedMethodDeclaration resolvedCall = symbol.getCorrespondingDeclaration();
 
@@ -392,7 +395,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testImplicitConstructor() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\nrecord Test(String s) { }");
 
@@ -414,7 +417,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testNonCanonicalConstructor() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n"
                 + "record Test(String s) {\n"
@@ -453,7 +456,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testInheritedMethods() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n" + "interface Foo {\n"
                 + "    default void foo() {}\n"
@@ -476,7 +479,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetAllStaticFields() {
         ParseResult<CompilationUnit> cu = javaParser.parse(
                 "package test;\n" + "record Test(String s) {\n" + "    static Integer value = 2;" + "}");
@@ -496,7 +499,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetAllNonStaticFields() {
         ParseResult<CompilationUnit> cu = javaParser.parse(
                 "package test;\n" + "record Test(String s) {\n" + "    static Integer value = 2;" + "}");
@@ -516,7 +519,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     public void testStaticMethod() {
         ParserConfiguration.LanguageLevel oldLevel =
                 StaticJavaParser.getParserConfiguration().getLanguageLevel();
@@ -549,13 +552,16 @@ public class JavaParserRecordDeclarationTest {
         }
     }
 
+    @Test
     void testGenericInvocation() {
-        ParseResult<CompilationUnit> cu = javaParser.parse("record GenericBox<T> (T value) {}\n" + "class Test {\n"
-                + "  public static void main(String[] args) {\n"
-                + "    GenericBox<Integer> box = new GenericBox<>(2);\n"
-                + "    System.out.println(box.value());\n"
-                + "  }\n"
-                + "}");
+        ParseResult<CompilationUnit> cu = javaParser.parse("""
+                record GenericBox<T> (T value) {}
+                class Test {
+                  public static void main(String[] args) {
+                    GenericBox<Integer> box = new GenericBox<>(2);
+                    System.out.println(box.value());
+                  }
+                }""");
 
         MethodCallExpr valueCall = cu.getResult().get().findAll(MethodCallExpr.class).stream()
                 .filter(call -> call.getNameAsString().equals("value"))
@@ -569,15 +575,16 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void genericConstructorTest() {
-        ParseResult<CompilationUnit> cu = javaParser.parse("record GenericBox<T>(T value) {}\n"
-                + "class Test {\n"
-                + "  public static void main(String[] args) {\n"
-                + "    GenericBox<Integer> box = new GenericBox<>(2);\n"
-                + "    System.out.println(box.value());\n"
-                + "  }\n"
-                + "}");
+        ParseResult<CompilationUnit> cu = javaParser.parse("""
+                record GenericBox<T>(T value) {}
+                class Test {
+                  public static void main(String[] args) {
+                    GenericBox<Integer> box = new GenericBox<>(2);
+                    System.out.println(box.value());
+                  }
+                }""");
 
         ObjectCreationExpr constructorInvocation =
                 cu.getResult().get().findFirst(ObjectCreationExpr.class).get();

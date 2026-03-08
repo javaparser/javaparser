@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -39,9 +39,9 @@ import java.util.stream.Collectors;
  */
 public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration implements ResolvedAnnotationDeclaration {
 
-    private final com.github.javaparser.ast.body.AnnotationDeclaration wrappedNode;
-    private final TypeSolver typeSolver;
-    private final JavaParserTypeAdapter<AnnotationDeclaration> javaParserTypeAdapter;
+    private com.github.javaparser.ast.body.AnnotationDeclaration wrappedNode;
+    private TypeSolver typeSolver;
+    private JavaParserTypeAdapter<AnnotationDeclaration> javaParserTypeAdapter;
 
     public JavaParserAnnotationDeclaration(AnnotationDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;

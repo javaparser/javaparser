@@ -1,13 +1,14 @@
-public class Test {
-    public class InnerTest {
-        public InnerTest(int i) {
-        }
-    }
+public class Test
+{
+   public class InnerTest
+   {
+       public InnerTest(int i) {}
+   }
+    
+   public Test() {
+   }
 
-    public Test() {
-    }
-
-    public static void main(String[] args) {
-        new Test().new InnerTest();
-    }
+   public static void main( String[] args ) { 
+       new Test().new InnerTest();
+   }
 }

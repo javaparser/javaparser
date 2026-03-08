@@ -1,6 +1,4 @@
 package foo;
-
 public class OtherClass {
-    public static class InnerClass {
-    }
+    public static class InnerClass {}
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -36,7 +36,6 @@ public class ConstructorContext extends AbstractMethodLikeDeclarationContext<Con
     ///
     /// Constructors
     ///
-
     public ConstructorContext(ConstructorDeclaration wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
@@ -45,8 +44,7 @@ public class ConstructorContext extends AbstractMethodLikeDeclarationContext<Con
     public List<Parameter> parametersExposedToChild(Node child) {
         // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the
         // direct child?
-        var b = wrappedNode.getBody();
-        if (b.isPresent() && child == b.get()) {
+        if (child == wrappedNode.getBody().get()) {
             return wrappedNode.getParameters();
         }
         return Collections.emptyList();

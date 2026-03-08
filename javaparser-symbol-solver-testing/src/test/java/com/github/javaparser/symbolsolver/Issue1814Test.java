@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.*;
@@ -53,8 +54,8 @@ class Issue1814Test extends AbstractResolutionTest {
         final CompilationUnit compilationUnit = new CompilationUnit();
         compilationUnit.setPackageDeclaration("java.lang");
         // construct a fake java.lang.Object class with only one method (java.lang.Object#equals(java.lang.Object)
-        final ClassOrInterfaceDeclaration clazz = compilationUnit.addClass("Object", Modifier.DefaultKeyword.PUBLIC);
-        final MethodDeclaration equals = clazz.addMethod("equals", Modifier.DefaultKeyword.PUBLIC);
+        final ClassOrInterfaceDeclaration clazz = compilationUnit.addClass("Object",PUBLIC);
+        final MethodDeclaration equals = clazz.addMethod("equals", PUBLIC);
         equals.addParameter("Object", "obj");
         final BlockStmt body = new BlockStmt();
         body.addStatement("return this == obj;");

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -82,7 +82,7 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     /**
      * @param projectName is one of "java-symbol-solver-core", "java-symbol-solver-logic", "java-symbol-solver-model"
-     * @param fileName    describes the file being analyzed
+     * @param fileName describes the file being analyzed
      */
     private void parse(String projectName, String fileName) throws IOException {
         Path sourceFile = src.resolve(projectName + "/" + fileName + ".java");

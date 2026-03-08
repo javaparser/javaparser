@@ -98,8 +98,12 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             // Check if 'other' can be boxed to match this type
             if (isCorrespondingBoxingType(other.describe())) return true;
             // KeY: Ask the typeDeclaration (e.g., \bigint) if it is assignable by int.
-            if (this.typeDeclaration.isAssignableBy(other)) {
-                return true;
+            try {
+                if (this.typeDeclaration.isAssignableBy(other)) {
+                    return true;
+                }
+            } catch (UnsupportedOperationException e) {
+                //ignore
             }
             // All numeric types extend Number
             return other.isNumericType()

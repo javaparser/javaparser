@@ -95,7 +95,7 @@ class JavaParserTest {
         ParseResult<CompilationUnit> cu = parseWithUnicodeEscapes(code);
         assertFalse(cu.getResult().isPresent());
         assertEquals(
-                "Lexical error at line 1, column 34.  Encountered: '\\\"' (34), after prefix \"\\\"\\\\uABC\"",
+                "Lexical error at line 1, column 34.  Encountered: \"\\\"\" (34), after : \"\\\"\\\\uABC\"",
                 cu.getProblem(0).getMessage());
     }
 

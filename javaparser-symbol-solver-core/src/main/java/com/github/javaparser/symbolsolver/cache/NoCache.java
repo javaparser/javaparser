@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -38,6 +38,7 @@ public class NoCache<K, V> implements Cache<K, V> {
      *
      * @param <expectedK> The expected type for the key.
      * @param <expectedV> The expected type for the value.
+     *
      * @return A newly created instance of {@link NoCache}.
      */
     public static <expectedK, expectedV> NoCache<expectedK, expectedV> create() {

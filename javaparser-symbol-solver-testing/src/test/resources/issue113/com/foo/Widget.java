@@ -3,6 +3,9 @@
  */
 package com.foo;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
@@ -12,9 +15,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
-import java.io.File;
-import java.io.IOException;
 
 public class Widget extends com.foo.base.Widget {
     private static final String PROJECT_ROOT = "/Users/peloquina/dev/javasymbolsolver-issue";
@@ -31,7 +31,7 @@ public class Widget extends com.foo.base.Widget {
 
         JavaParserFacade parserFacade = JavaParserFacade.get(combinedTypeSolver);
         MethodDeclaration methodDeclaration = compilationUnit.getNodesByType(MethodDeclaration.class).stream()
-                .filter(node -> node.getName().equals("doSomething")).findAny().orElse(null);
+              .filter(node -> node.getName().equals("doSomething")).findAny().orElse(null);
         methodDeclaration.getNodesByType(MethodCallExpr.class).forEach(parserFacade::solve);
     }
 

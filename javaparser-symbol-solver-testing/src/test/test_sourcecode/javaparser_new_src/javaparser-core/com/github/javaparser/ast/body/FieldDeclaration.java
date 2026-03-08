@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- *
+ * 
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License
+ * b) the terms of the Apache License 
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -101,13 +101,16 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     /**
      * Creates a {@link FieldDeclaration}.
      *
-     * @param modifiers modifiers
-     * @param type      type
-     * @param variable  variable declarator
+     * @param modifiers
+     *            modifiers
+     * @param type
+     *            type
+     * @param variable
+     *            variable declarator
      * @return instance of {@link FieldDeclaration}
      */
     public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type,
-                                          VariableDeclarator variable) {
+                                                          VariableDeclarator variable) {
         List<VariableDeclarator> variables = new ArrayList<>();
         variables.add(variable);
         return new FieldDeclaration(modifiers, type, variables);
@@ -116,9 +119,12 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     /**
      * Creates a {@link FieldDeclaration}.
      *
-     * @param modifiers modifiers
-     * @param type      type
-     * @param name      field name
+     * @param modifiers
+     *            modifiers
+     * @param type
+     *            type
+     * @param name
+     *            field name
      * @return instance of {@link FieldDeclaration}
      */
     public static FieldDeclaration create(EnumSet<Modifier> modifiers, Type type, String name) {
@@ -139,9 +145,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     /**
      * Return the modifiers of this member declaration.
-     *
-     * @return modifiers
+     * 
      * @see Modifier
+     * @return modifiers
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -178,10 +184,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     /**
      * Create a getter for this field, <b>will only work if this field declares only 1 identifier and if this field is
      * already added to a ClassOrInterfaceDeclaration</b>
-     *
+     * 
      * @return the {@link MethodDeclaration} created
      * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
-     *                               class or enum
+     *             class or enum
      */
     public MethodDeclaration createGetter() {
         if (getVariables().size() != 1)
@@ -210,10 +216,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     /**
      * Create a setter for this field, <b>will only work if this field declares only 1 identifier and if this field is
      * already added to a ClassOrInterfaceDeclaration</b>
-     *
+     * 
      * @return the {@link MethodDeclaration} created
      * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
-     *                               class or enum
+     *             class or enum
      */
     public MethodDeclaration createSetter() {
         if (getVariables().size() != 1)

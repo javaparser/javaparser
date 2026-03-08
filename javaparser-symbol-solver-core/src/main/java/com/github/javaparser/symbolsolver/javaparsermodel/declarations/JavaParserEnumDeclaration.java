@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -190,8 +190,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             String name,
             List<ResolvedType> argumentTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameters,
-            ResolvedReferenceTypeDeclaration callContext) {
+            List<ResolvedType> typeParameters) {
         if (VALUES.equals(name) && argumentTypes.isEmpty()) {
             return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver)));
         }
@@ -202,15 +201,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver)));
             }
         }
-        return getContext().solveMethodAsUsage(name, argumentTypes, callContext);
+        return getContext().solveMethodAsUsage(name, argumentTypes);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly,
-            ResolvedReferenceTypeDeclaration invocationContext) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         if (VALUES.equals(name) && argumentsTypes.isEmpty()) {
             return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver));
         }
@@ -221,7 +217,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 return SymbolReference.solved(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver));
             }
         }
-        return getContext().solveMethod(name, argumentsTypes, staticOnly, invocationContext);
+        return getContext().solveMethod(name, argumentsTypes, staticOnly);
     }
 
     @Override

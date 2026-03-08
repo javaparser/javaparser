@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -79,8 +79,7 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         list.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        // weigl: disable due to new JDK versions
-        // assertEquals(2, ancestors.size());
+        assertEquals(3, ancestors.size());
 
         // Since List is an interface, Object cannot be an ancestor of List
         ResolvedTypeVariable typeVariable =
@@ -95,6 +94,12 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
                         new ReflectionInterfaceDeclaration(Iterable.class, typeResolver),
                         ImmutableList.of(typeVariable)),
                 ancestors.get("java.lang.Iterable"));
+        assertEquals(
+                new ReferenceTypeImpl(
+                        new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver),
+                        ImmutableList.of(typeVariable)),
+                ancestors.get("java.util.SequencedCollection"));
+
     }
 
     @Test
@@ -102,7 +107,6 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         List<ResolvedReferenceType> ancestors = list.getAllAncestors(ResolvedReferenceTypeDeclaration.breadthFirstFunc);
-
         assertEquals(3, ancestors.size());
 
         ResolvedTypeVariable typeVariable =

@@ -8,6 +8,8 @@ import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalSimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -15,15 +17,18 @@ import com.github.javaparser.metamodel.JmlClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public abstract class JmlClause extends Node implements Jmlish {
+@NullMarked
+public abstract class JmlClause extends Node implements Jmlish, NodeWithOptionalSimpleName<JmlClause> {
 
-    @OptionalProperty
+    @OptionalProperty @Nullable
     private SimpleName name;
 
     public JmlClause() {
@@ -31,7 +36,7 @@ public abstract class JmlClause extends Node implements Jmlish {
     }
 
     @AllFieldsConstructor
-    public JmlClause(final SimpleName name) {
+    public JmlClause(@Nullable final SimpleName name) {
         this(null, name);
     }
 
@@ -39,7 +44,7 @@ public abstract class JmlClause extends Node implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClause(TokenRange tokenRange, SimpleName name) {
+    public JmlClause(@Nullable TokenRange tokenRange, @Nullable SimpleName name) {
         super(tokenRange);
         setName(name);
         customInitialization();
@@ -69,6 +74,7 @@ public abstract class JmlClause extends Node implements Jmlish {
     public abstract JmlClauseKind getKind();
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
     public Optional<SimpleName> getName() {
         return Optional.ofNullable(name);
     }

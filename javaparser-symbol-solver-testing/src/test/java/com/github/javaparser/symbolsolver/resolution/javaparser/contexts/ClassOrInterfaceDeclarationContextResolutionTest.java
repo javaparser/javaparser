@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -346,8 +346,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
-        SymbolReference<ResolvedMethodDeclaration> ref =
-                context.solveMethod("foo0", ImmutableList.of(), false, null); // XXX
+        SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo0", ImmutableList.of(), false);
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -359,8 +358,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
-        SymbolReference<ResolvedMethodDeclaration> ref =
-                context.solveMethod("foo1", ImmutableList.of(), false, null); // XXX
+        SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo1", ImmutableList.of(), false);
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -372,8 +370,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
-        SymbolReference<ResolvedMethodDeclaration> ref =
-                context.solveMethod("foo2", ImmutableList.of(), false, null); // XXX
+        SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo2", ImmutableList.of(), false);
         assertEquals(true, ref.isSolved());
         assertEquals("Super", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -387,8 +384,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         ResolvedType intType = ResolvedPrimitiveType.INT;
 
-        SymbolReference<ResolvedMethodDeclaration> ref =
-                context.solveMethod("foo3", ImmutableList.of(intType), false, null); // XXX
+        SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo3", ImmutableList.of(intType), false);
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -403,7 +399,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
 
         SymbolReference<ResolvedMethodDeclaration> ref =
-                context.solveMethod("foo4", ImmutableList.of(stringType), false, null); // XXX
+                context.solveMethod("foo4", ImmutableList.of(stringType), false);
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -416,7 +412,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
             ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
             Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
             SymbolReference<ResolvedMethodDeclaration> ref =
-                    context.solveMethod("foo5", ImmutableList.of(NullType.INSTANCE), false, null); // XX
+                    context.solveMethod("foo5", ImmutableList.of(NullType.INSTANCE), false);
         });
     }
 
@@ -427,7 +423,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         Context context =
                 new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo0", ImmutableList.of(), null); // XX
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo0", ImmutableList.of());
         assertEquals(true, ref.isPresent());
         assertEquals("A", ref.get().declaringType().getName());
         assertEquals(0, ref.get().getNoParams());
@@ -440,7 +436,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         Context context =
                 new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo1", ImmutableList.of(), null); // XXX
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo1", ImmutableList.of());
         assertEquals(true, ref.isPresent());
         assertEquals("A", ref.get().declaringType().getName());
         assertEquals(0, ref.get().getNoParams());
@@ -453,7 +449,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         Context context =
                 new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo2", ImmutableList.of(), null); // XXX
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo2", ImmutableList.of());
         assertEquals(true, ref.isPresent());
         assertEquals("Super", ref.get().declaringType().getName());
         assertEquals(0, ref.get().getNoParams());
@@ -468,7 +464,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         ResolvedType intType = ResolvedPrimitiveType.INT;
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo3", ImmutableList.of(intType), null); // XXX
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo3", ImmutableList.of(intType));
         assertEquals(true, ref.isPresent());
         assertEquals("A", ref.get().declaringType().getName());
         assertEquals(1, ref.get().getNoParams());
@@ -483,7 +479,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo4", ImmutableList.of(stringType), null); // XX
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo4", ImmutableList.of(stringType));
         assertEquals(true, ref.isPresent());
         assertEquals("A", ref.get().declaringType().getName());
         assertEquals(1, ref.get().getNoParams());
@@ -496,8 +492,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
             ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
             Context context =
                     new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
-            Optional<MethodUsage> ref =
-                    context.solveMethodAsUsage("foo5", ImmutableList.of(NullType.INSTANCE), null); // XXX
+            Optional<MethodUsage> ref = context.solveMethodAsUsage("foo5", ImmutableList.of(NullType.INSTANCE));
         });
     }
 }

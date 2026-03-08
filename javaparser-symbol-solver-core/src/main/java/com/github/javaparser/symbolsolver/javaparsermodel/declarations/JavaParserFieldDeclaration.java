@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.STATIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.VOLATILE;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import com.github.javaparser.ast.AccessSpecifier;
@@ -40,9 +42,9 @@ import java.util.Optional;
  */
 public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
 
-    private final VariableDeclarator variableDeclarator;
-    private final com.github.javaparser.ast.body.FieldDeclaration wrappedNode;
-    private final TypeSolver typeSolver;
+    private VariableDeclarator variableDeclarator;
+    private com.github.javaparser.ast.body.FieldDeclaration wrappedNode;
+    private TypeSolver typeSolver;
 
     public JavaParserFieldDeclaration(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
         if (typeSolver == null) {
@@ -69,12 +71,12 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
 
     @Override
     public boolean isStatic() {
-        return wrappedNode.hasModifier(Modifier.DefaultKeyword.STATIC);
+        return wrappedNode.hasModifier(STATIC);
     }
 
     @Override
     public boolean isVolatile() {
-        return wrappedNode.hasModifier(Modifier.DefaultKeyword.VOLATILE);
+        return wrappedNode.hasModifier(VOLATILE);
     }
 
     @Override

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -81,7 +81,7 @@ class ReflectionAnnotationDeclarationTest {
         ReflectionAnnotationDeclaration annotation =
                 (ReflectionAnnotationDeclaration) typeSolver.solveType(WithValue.class.getCanonicalName());
         final SymbolReference<ResolvedMethodDeclaration> symbolReference =
-                annotation.solveMethod("value", Collections.emptyList(), false, null);
+                annotation.solveMethod("value", Collections.emptyList(), false);
         assertEquals("value", symbolReference.getCorrespondingDeclaration().getName());
     }
 

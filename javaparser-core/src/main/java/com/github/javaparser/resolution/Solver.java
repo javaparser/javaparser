@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,7 +21,6 @@ package com.github.javaparser.resolution;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
@@ -44,17 +43,9 @@ public interface Solver {
 
     SymbolReference<? extends ResolvedTypeDeclaration> solveType(String name, Node node);
 
-    MethodUsage solveMethod(
-            String methodName,
-            List<ResolvedType> argumentsTypes,
-            Context context,
-            ResolvedReferenceTypeDeclaration invocationContext);
+    MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Context context);
 
-    MethodUsage solveMethod(
-            String methodName,
-            List<ResolvedType> argumentsTypes,
-            Node node,
-            ResolvedReferenceTypeDeclaration invocationContext);
+    MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Node node);
 
     ResolvedTypeDeclaration solveType(Type type);
 

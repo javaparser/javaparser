@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -135,8 +135,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
             String name,
             List<ResolvedType> argumentsTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameterValues,
-            ResolvedReferenceTypeDeclaration callContext) {
+            List<ResolvedType> typeParameterValues) {
         return JavassistUtils.solveMethodAsUsage(
                 name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
     }
@@ -191,12 +190,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
     @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly,
-            ResolvedReferenceTypeDeclaration invocationContext) {
-        return JavassistUtils.solveMethod(
-                name, argumentsTypes, staticOnly, typeSolver, this, ctClass, invocationContext);
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
     }
 
     public ResolvedType getUsage(Node node) {

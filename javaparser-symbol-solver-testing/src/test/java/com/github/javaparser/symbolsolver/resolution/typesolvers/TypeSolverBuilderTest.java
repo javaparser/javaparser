@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -292,7 +292,7 @@ class TypeSolverBuilderTest {
      * Assert a class can be resolved inside the current type solver.
      *
      * @param typeSolver The type solver to search.
-     * @param className  The class to find.
+     * @param className The class to find.
      */
     private static void assertIsSolved(TypeSolver typeSolver, String className) {
         assertTrue(typeSolver.hasType(className), String.format("Unable to solve type %s", className));
@@ -302,7 +302,7 @@ class TypeSolverBuilderTest {
      * Assert a class can't be resolved inside the current type solver.
      *
      * @param typeSolver The type solver to search.
-     * @param className  The class to find.
+     * @param className The class to find.
      */
     private static void assertNotSolved(TypeSolver typeSolver, String className) {
         assertFalse(

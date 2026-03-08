@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -227,7 +227,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         Context context = new CompilationUnitContext(cu, typeSolver);
 
         SymbolReference<ResolvedMethodDeclaration> ref =
-                context.solveMethod("assertFalse", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN), false, null);
+                context.solveMethod("assertFalse", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN), false);
         assertEquals(true, ref.isSolved());
         assertEquals("assertFalse", ref.getCorrespondingDeclaration().getName());
         assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -248,8 +248,8 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod(
-                "assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), false, null);
+        SymbolReference<ResolvedMethodDeclaration> ref =
+                context.solveMethod("assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), false);
         assertEquals(true, ref.isSolved());
         assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
         assertEquals(2, ref.getCorrespondingDeclaration().getNumberOfParams());

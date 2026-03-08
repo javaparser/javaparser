@@ -21,6 +21,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 /**
  * @author Federico Tomassetti
+ *
  * @deprecated Use {@link com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException} instead
  */
 // Use the one in model instead

@@ -7,6 +7,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -25,7 +26,7 @@ import org.jspecify.annotations.Nullable;
  * @version 1 (3/11/21)
  */
 public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlClassAccessibleDeclaration>
-        implements NodeWithModifiers<JmlClassAccessibleDeclaration> {
+        implements NodeWithModifiers<JmlClassAccessibleDeclaration>, NodeWithAccessModifiers<JmlClassAccessibleDeclaration> {
 
     private NodeList<Modifier> modifiers;
 

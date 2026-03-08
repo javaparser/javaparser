@@ -146,7 +146,7 @@ public class JavaParserFacade {
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solve(MethodCallExpr methodCallExpr) {
-        return solve(methodCallExpr, true, find(methodCallExpr));
+        return solve(methodCallExpr, true);
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solve(MethodReferenceExpr methodReferenceExpr) {
@@ -331,15 +331,14 @@ public class JavaParserFacade {
     /**
      * Given a method call find out to which method declaration it corresponds.
      */
-    public SymbolReference<ResolvedMethodDeclaration> solve(
-            MethodCallExpr methodCallExpr, boolean solveLambdas, ResolvedReferenceTypeDeclaration invocationContext) {
+    public SymbolReference<ResolvedMethodDeclaration> solve(MethodCallExpr methodCallExpr, boolean solveLambdas) {
         List<ResolvedType> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
 
         solveArguments(methodCallExpr, methodCallExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
 
         SymbolReference<ResolvedMethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver)
-                .solveMethod(methodCallExpr.getName().getId(), argumentTypes, false, invocationContext);
+                .solveMethod(methodCallExpr.getName().getId(), argumentTypes, false);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
@@ -354,7 +353,7 @@ public class JavaParserFacade {
         // pass empty argument list to be populated
         List<ResolvedType> argumentTypes = new LinkedList<>();
         return JavaParserFactory.getContext(methodReferenceExpr, typeSolver)
-                .solveMethod(methodReferenceExpr.getIdentifier(), argumentTypes, false, find(methodReferenceExpr));
+                .solveMethod(methodReferenceExpr.getIdentifier(), argumentTypes, false);
     }
 
     public SymbolReference<ResolvedAnnotationDeclaration> solve(AnnotationExpr annotationExpr) {
@@ -853,7 +852,7 @@ public class JavaParserFacade {
         }
         Context context = JavaParserFactory.getContext(call, typeSolver);
         Optional<MethodUsage> methodUsage =
-                context.solveMethodAsUsage(call.getName().getId(), params, null);
+                context.solveMethodAsUsage(call.getName().getId(), params);
         if (!methodUsage.isPresent()) {
             throw new UnsolvedSymbolException("Method '" + call.getName() + "' cannot be resolved in context " + call
                     + " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context

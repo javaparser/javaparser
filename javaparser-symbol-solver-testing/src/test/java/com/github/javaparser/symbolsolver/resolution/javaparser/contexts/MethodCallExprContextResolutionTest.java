@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -80,7 +80,7 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 
         Context context = new MethodCallExprContext(methodCallExpr, typeSolver);
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo", Collections.emptyList(), null); // XX
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo", Collections.emptyList());
         assertTrue(ref.isPresent());
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
     }
@@ -101,7 +101,7 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 
         MethodCallExprContext context = new MethodCallExprContext(methodCallExpr, typeSolver);
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, Collections.emptyList(), null); // XXX
+        Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, Collections.emptyList());
         assertTrue(ref.isPresent());
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
         assertEquals(
@@ -132,7 +132,7 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
         List<ResolvedType> argumentsTypes = new ArrayList<>();
         argumentsTypes.add(new ReferenceTypeImpl(stringType));
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, argumentsTypes, null); // XXX
+        Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, argumentsTypes);
         assertTrue(ref.isPresent());
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
         assertEquals(

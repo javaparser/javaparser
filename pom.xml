@@ -608,6 +608,12 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
+				<groupId>com.google.truth</groupId>
+				<artifactId>truth</artifactId>
+				<version>1.4.5</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
                 <version>6.0.2</version>
