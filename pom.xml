@@ -158,15 +158,15 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>21</java.version>
-        <maven.compiler.release>${java.version}</maven.compiler.release>
-        <byte-buddy.version>1.18.4</byte-buddy.version>
-        <!--
-        <argLine>
-            -javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'
-        </argLine>
-        -->
-        <build.timestamp>2025-10-04T00:00:00Z</build.timestamp>
+		<java.version>21</java.version>
+		<maven.compiler.release>${java.version}</maven.compiler.release>
+		<byte-buddy.version>1.18.4</byte-buddy.version>
+		<!--
+		<argLine>
+			-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'
+		</argLine>
+		-->
+		<build.timestamp>2025-10-04T00:00:00Z</build.timestamp>
 		<jacoco.javaagent/>
 
 		<sonar.organization>wadoon</sonar.organization>
@@ -180,9 +180,9 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:git://github.com/wadoon/jmlparser.git</connection>
-		<developerConnection>scm:git:git@github.com:wadoon/jmlparser.git</developerConnection>
-		<url>https://github.com/wadoon/jmlparser.git</url>
+		<connection>scm:git:git://github.com/jmltoolkit/jmlparser.git</connection>
+		<developerConnection>scm:git:git@github.com:jmltoolkit/jmlparser.git</developerConnection>
+		<url>https://github.com/jmltoolkit/jmlparser</url>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -215,8 +215,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<!--    <source>${java.version}</source>
-						<target>${java.version}</target> -->
 					<release>${java.version}</release>
 					<useIncrementalCompilation>false</useIncrementalCompilation>
 				</configuration>
@@ -257,7 +255,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.15.0</version>
+					<version>3.15.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -318,37 +316,7 @@
 						</execution>
 					</executions>
 				</plugin>
-				<!-- NEW: Plugin for publishing to Maven Central -->
-				<!--<plugin>
-					<groupId>org.sonatype.central</groupId>
-					<artifactId>central-publishing-maven-plugin</artifactId>
-					<version>0.10.0</version>
-					<extensions>true</extensions>
-					<configuration>
-						<publishingServerId>central-portal</publishingServerId>
-						<excludeArtifacts>
-							<excludeArtifact>com.github.javaparser:javaparser-core-testing</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-core-testing-bdd</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-symbol-solver-testing</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-core-metamodel-generator</excludeArtifact>
-						</excludeArtifacts>
-					</configuration>
-			</plugin>
-				<plugin>
-					<groupId>org.sonatype.central</groupId>
-					<artifactId>central-publishing-maven-plugin</artifactId>
-					<version>0.10.0</version>
-					<extensions>true</extensions>
-					<configuration>
-						<publishingServerId>central</publishingServerId>
-						 Automatic publication after validation ->
-						<autoPublish>true</autoPublish>
-						 Wait until the publication is effective ->
-						<waitUntil>published</waitUntil>
-						- Readable name to identify the deployment ->
-						<deploymentName>${project.artifactId}-${project.version}</deploymentName>
-					</configuration>
-				</plugin>-->
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
@@ -417,7 +385,9 @@
 					<artifactId>maven-scm-publish-plugin</artifactId>
 					<version>3.1.0</version>
 					<configuration>
-						<pubScmUrl>${project.scm.developerConnection}</pubScmUrl>
+						<pubScmUrl>
+							scm:git:git@github.com:jmltoolkit/jmltoolkit.github.io.git
+						</pubScmUrl>
 						<scmBranch>gh-pages</scmBranch>
 					</configuration>
 				</plugin>
@@ -425,71 +395,32 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>4.0.0-M16</version>
-					<configuration>
-						<stagingDirectory>target/site-stage</stagingDirectory>
-						<reportPlugins>
-							<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-project-info-reports-plugin</artifactId>
-								<version>2.4</version>
-							</plugin>
-							<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-javadoc-plugin</artifactId>
-								<version>2.8</version>
-								<configuration></configuration>
-								<reportSets>
-									<reportSet>
-										<id>non-aggregate</id>
-										<configuration>
-											<!-- Specific configuration for the aggregate report -->
-											<sourcepath>${project.build.sourceDirectory}/../generated</sourcepath>
-										</configuration>
-										<reports>
-											<report>javadoc</report>
-										</reports>
-									</reportSet>
-									<reportSet>
-										<id>aggregate</id>
-										<configuration>
-											<!-- Specific configuration for the aggregate report -->
-											<sourcepath>${project.build.sourceDirectory}/../generated</sourcepath>
-										</configuration>
-										<reports>
-											<report>aggregate</report>
-										</reports>
-									</reportSet>
-								</reportSets>
-							</plugin>
-							<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-surefire-report-plugin</artifactId>
-								<version>3.5.5</version>
-							</plugin>
-						</reportPlugins>
-					</configuration>
+					<version>3.21.0</version>
 				</plugin>
+
 				<plugin>
 					<groupId>biz.aQute.bnd</groupId>
 					<artifactId>bnd-maven-plugin</artifactId>
-                    <version>7.2.1</version>
+					<version>7.2.1</version>
 				</plugin>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-report-plugin</artifactId>
-                    <version>3.5.5</version>
-                    <configuration>
-                        <aggregate>true</aggregate>
-                        <!--also set this to link to generated source reports-->
-                        <linkXRef>true</linkXRef>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+					<version>3.5.5</version>
+					<configuration>
+						<aggregate>true</aggregate>
+						<!--also set this to link to generated source reports-->
+						<linkXRef>true</linkXRef>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>3.5.5</version>
 				</plugin>
+
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
@@ -503,7 +434,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>templating-maven-plugin</artifactId>
-                    <version>3.1.0</version>
+					<version>3.1.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -513,7 +444,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>versions-maven-plugin</artifactId>
-                    <version>2.21.0</version>
+					<version>2.21.0</version>
 					<configuration>
 						<generateBackupPoms>false</generateBackupPoms>
 					</configuration>
@@ -532,7 +463,7 @@
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
-                            <version>13.1.0</version>
+							<version>13.1.0</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -569,6 +500,43 @@
 					<aggregate>true</aggregate>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.9.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<id>non-aggregate</id>
+						<configuration>
+							<!-- Specific configuration for the aggregate report -->
+							<sourcepath>${project.build.sourceDirectory}/../generated</sourcepath>
+						</configuration>
+						<reports>
+							<report>javadoc</report>
+						</reports>
+					</reportSet>
+					<reportSet>
+						<inherited>false</inherited>
+						<id>aggregate</id>
+						<configuration>
+							<!-- Specific configuration for the aggregate report -->
+							<sourcepath>${project.build.sourceDirectory}/../generated</sourcepath>
+						</configuration>
+						<reports>
+							<report>aggregate</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>3.5.5</version>
+			</plugin>
 		</plugins>
 	</reporting>
 
@@ -591,15 +559,15 @@
 				<version>33.5.0-jre</version>
 			</dependency>
 			<dependency>
-                <groupId>com.google.truth</groupId>
-                <artifactId>truth</artifactId>
-                <version>1.4.5</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
+				<groupId>com.google.truth</groupId>
+				<artifactId>truth</artifactId>
+				<version>1.4.5</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.checkerframework</groupId>
 				<artifactId>checker-qual</artifactId>
-                <version>3.53.1</version>
+				<version>3.53.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hamcrest</groupId>
@@ -616,7 +584,7 @@
 			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
-                <version>6.0.2</version>
+				<version>6.0.2</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
