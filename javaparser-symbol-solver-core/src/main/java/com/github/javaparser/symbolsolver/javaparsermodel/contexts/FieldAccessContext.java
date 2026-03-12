@@ -77,9 +77,9 @@ public class FieldAccessContext extends ExpressionContext<FieldAccessExpr> {
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
+            String name, List<ResolvedType> parameterTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
         return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver)
-                .solveMethod(name, parameterTypes, false);
+                .solveMethod(name, parameterTypes, false, invocationContext);
     }
 
     @Override

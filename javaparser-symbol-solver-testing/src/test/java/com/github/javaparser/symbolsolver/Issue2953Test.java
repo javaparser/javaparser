@@ -49,7 +49,7 @@ public class Issue2953Test {
 
         JavassistEnumDeclaration enumA = (JavassistEnumDeclaration) typeResolver.solveType("foo.A");
         SymbolReference<ResolvedMethodDeclaration> method =
-                enumA.solveMethod("equalByCode", Arrays.asList(ResolvedPrimitiveType.INT), false);
+                enumA.solveMethod("equalByCode", Arrays.asList(ResolvedPrimitiveType.INT), false, null); // XXX
         assertTrue(method.isSolved());
     }
 

@@ -388,7 +388,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
         JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         ResolvedType functionType = new SymbolSolver(typeSolver).classToResolvedType(Function.class);
         SymbolReference<ResolvedMethodDeclaration> method =
-                compilationUnit.solveMethod("map", Collections.singletonList(functionType), false);
+                compilationUnit.solveMethod("map", Collections.singletonList(functionType), false, null);
         assertTrue(method.isSolved());
         assertEquals(
                 "box.Box.map(java.util.function.Function<T, U>)",

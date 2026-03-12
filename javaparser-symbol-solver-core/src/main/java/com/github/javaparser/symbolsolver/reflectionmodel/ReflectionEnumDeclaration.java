@@ -198,8 +198,8 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
-        return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly, typeSolver, this, clazz);
+            String name, List<ResolvedType> parameterTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
+        return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly, typeSolver, this, clazz, invocationContext);
     }
 
     @Override
@@ -207,7 +207,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
             String name,
             List<ResolvedType> parameterTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameterValues) {
+            List<ResolvedType> typeParameterValues, ResolvedReferenceTypeDeclaration callContext) {
         Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(
                 name, parameterTypes, typeSolver, invokationContext, typeParameterValues, this, clazz);
         if (res.isPresent()) {

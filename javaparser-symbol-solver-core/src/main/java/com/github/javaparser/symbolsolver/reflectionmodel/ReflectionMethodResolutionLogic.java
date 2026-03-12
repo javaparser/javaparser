@@ -52,7 +52,8 @@ class ReflectionMethodResolutionLogic {
             boolean staticOnly,
             TypeSolver typeSolver,
             ResolvedReferenceTypeDeclaration scopeType,
-            Class clazz) {
+            Class clazz,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         List<ResolvedMethodDeclaration> methods = new ArrayList<>();
         Predicate<Method> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
         for (Method method : clazz.getMethods()) {
@@ -67,7 +68,7 @@ class ReflectionMethodResolutionLogic {
         for (ResolvedReferenceType ancestor : scopeType.getAncestors()) {
             ancestor.getTypeDeclaration().ifPresent(ancestorTypeDeclaration -> {
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(
-                        ancestorTypeDeclaration, name, parameterTypes, staticOnly);
+                        ancestorTypeDeclaration, name, parameterTypes, staticOnly, invocationContext);
                 if (ref.isSolved()) {
                     methods.add(ref.getCorrespondingDeclaration());
                 }
@@ -79,13 +80,13 @@ class ReflectionMethodResolutionLogic {
                     new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
             objectClass.getTypeDeclaration().ifPresent(objectTypeDeclaration -> {
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(
-                        objectTypeDeclaration, name, parameterTypes, staticOnly);
+                        objectTypeDeclaration, name, parameterTypes, staticOnly, invocationContext);
                 if (ref.isSolved()) {
                     methods.add(ref.getCorrespondingDeclaration());
                 }
             });
         }
-        return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver, invocationContext);
     }
 
     static Optional<MethodUsage> solveMethodAsUsage(
@@ -123,7 +124,7 @@ class ReflectionMethodResolutionLogic {
                 ResolvedReferenceTypeDeclaration ancestorTypeDeclaration =
                         ancestor.getTypeDeclaration().get();
                 SymbolReference<ResolvedMethodDeclaration> ref =
-                        MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration, name, argumentsTypes);
+                        MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration, name, argumentsTypes, null); //XXX
                 if (ref.isSolved()) {
                     ResolvedMethodDeclaration correspondingDeclaration = ref.getCorrespondingDeclaration();
                     MethodUsage methodUsage =
@@ -139,7 +140,7 @@ class ReflectionMethodResolutionLogic {
                     .getTypeDeclaration();
             if (optionalObjectClass.isPresent()) {
                 SymbolReference<ResolvedMethodDeclaration> ref =
-                        MethodResolutionLogic.solveMethodInType(optionalObjectClass.get(), name, argumentsTypes);
+                        MethodResolutionLogic.solveMethodInType(optionalObjectClass.get(), name, argumentsTypes, null);//XXX
                 if (ref.isSolved()) {
                     MethodUsage usage = replaceParams(
                             typeParameterValues, optionalObjectClass.get(), ref.getCorrespondingDeclaration());

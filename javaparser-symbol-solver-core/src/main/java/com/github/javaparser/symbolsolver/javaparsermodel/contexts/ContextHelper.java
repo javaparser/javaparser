@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
@@ -43,11 +44,11 @@ public class ContextHelper {
             String name,
             List<ResolvedType> argumentsTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameters) {
+            List<ResolvedType> typeParameters, ResolvedReferenceTypeDeclaration callContext) {
 
         if (typeDeclaration instanceof MethodUsageResolutionCapability) {
             return ((MethodUsageResolutionCapability) typeDeclaration)
-                    .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters);
+                    .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters, callContext);
         }
         throw new UnsupportedOperationException(typeDeclaration.toString());
     }

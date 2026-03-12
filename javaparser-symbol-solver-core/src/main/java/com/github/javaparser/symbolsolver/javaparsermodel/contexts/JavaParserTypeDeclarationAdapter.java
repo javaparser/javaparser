@@ -256,7 +256,8 @@ public class JavaParserTypeDeclarationAdapter {
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
 
         // Begin by locating methods declared "here"
         List<ResolvedMethodDeclaration> candidateMethods = typeDeclaration.getDeclaredMethods().stream()
@@ -282,7 +283,7 @@ public class JavaParserTypeDeclarationAdapter {
                     // not true, we should keep abstract as a valid candidate
                     // abstract are removed in MethodResolutionLogic.isApplicable is necessary
                     SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
-                            ancestorTypeDeclaration.get(), name, argumentsTypes, staticOnly);
+                            ancestorTypeDeclaration.get(), name, argumentsTypes, staticOnly, invocationContext);
                     if (res.isSolved()) {
                         candidateMethods.add(res.getCorrespondingDeclaration());
                     }
@@ -298,7 +299,7 @@ public class JavaParserTypeDeclarationAdapter {
         if (candidateMethods.isEmpty() && !staticOnly) {
             SymbolReference<ResolvedMethodDeclaration> parentSolution = context.getParent()
                     .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                    .solveMethod(name, argumentsTypes, staticOnly);
+                    .solveMethod(name, argumentsTypes, staticOnly, invocationContext);
             if (parentSolution.isSolved()) {
                 candidateMethods.add(parentSolution.getCorrespondingDeclaration());
             }
@@ -307,13 +308,13 @@ public class JavaParserTypeDeclarationAdapter {
         // if is interface and candidate method list is empty, we should check the Object Methods
         if (candidateMethods.isEmpty() && typeDeclaration.isInterface()) {
             SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
-                    typeSolver.getSolvedJavaLangObject(), name, argumentsTypes, false);
+                    typeSolver.getSolvedJavaLangObject(), name, argumentsTypes, false, invocationContext);
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
         }
 
-        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver, invocationContext);
     }
 
     public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes) {

@@ -135,7 +135,7 @@ public class JavassistRecordDeclaration extends AbstractTypeDeclaration
             String name,
             List<ResolvedType> argumentsTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameterValues) {
+            List<ResolvedType> typeParameterValues, ResolvedReferenceTypeDeclaration callContext) {
         return JavassistUtils.solveMethodAsUsage(
                 name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
     }
@@ -347,7 +347,7 @@ public class JavassistRecordDeclaration extends AbstractTypeDeclaration
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
+        return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass, invocationContext);
     }
 }

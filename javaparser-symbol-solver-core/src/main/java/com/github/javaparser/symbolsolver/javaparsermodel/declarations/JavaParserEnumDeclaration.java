@@ -190,7 +190,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             String name,
             List<ResolvedType> argumentTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameters) {
+            List<ResolvedType> typeParameters, ResolvedReferenceTypeDeclaration callContext) {
         if (VALUES.equals(name) && argumentTypes.isEmpty()) {
             return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver)));
         }
@@ -201,12 +201,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver)));
             }
         }
-        return getContext().solveMethodAsUsage(name, argumentTypes);
+        return getContext().solveMethodAsUsage(name, argumentTypes, callContext);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
         if (VALUES.equals(name) && argumentsTypes.isEmpty()) {
             return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver));
         }
@@ -217,7 +217,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 return SymbolReference.solved(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver));
             }
         }
-        return getContext().solveMethod(name, argumentsTypes, staticOnly);
+        return getContext().solveMethod(name, argumentsTypes, staticOnly, invocationContext);
     }
 
     @Override

@@ -227,7 +227,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         Context context = new CompilationUnitContext(cu, typeSolver);
 
         SymbolReference<ResolvedMethodDeclaration> ref =
-                context.solveMethod("assertFalse", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN), false);
+                context.solveMethod("assertFalse", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN), false, null);
         assertEquals(true, ref.isSolved());
         assertEquals("assertFalse", ref.getCorrespondingDeclaration().getName());
         assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -249,7 +249,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         Context context = new CompilationUnitContext(cu, typeSolver);
 
         SymbolReference<ResolvedMethodDeclaration> ref =
-                context.solveMethod("assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), false);
+                context.solveMethod("assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), false, null);
         assertEquals(true, ref.isSolved());
         assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
         assertEquals(2, ref.getCorrespondingDeclaration().getNumberOfParams());
