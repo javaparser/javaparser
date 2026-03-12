@@ -1382,7 +1382,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     private void printSwitchNode(SwitchNode n, Void arg) {
         printComment(n.getComment(), arg);
-        printer.print("switch(");
+        printer.print("switch");
+        if (getOption(ConfigOption.SPACE_BEFORE_SWITCH_PAREN).isPresent()) {
+            printer.print(" ");
+        }
+        printer.print("(");
         n.getSelector().accept(this, arg);
         printer.println(") {");
         if (n.getEntries() != null) {

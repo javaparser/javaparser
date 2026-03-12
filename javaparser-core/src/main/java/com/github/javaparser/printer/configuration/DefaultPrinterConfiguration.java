@@ -54,6 +54,16 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         COLUMN_ALIGN_PARAMETERS(Boolean.class),
         COLUMN_ALIGN_FIRST_METHOD_CHAIN(Boolean.class),
         /**
+         * Insert a space before the opening parenthesis of a switch statement if true, don't if false
+         * <pre>{@code
+         * switch (x) {            switch(x) {
+         * case 1:                 case 1:
+         *     return y;               return y;
+         * }                       }
+         * }<pre>
+         */
+        SPACE_BEFORE_SWITCH_PAREN(Boolean.class),
+        /**
          * Indent the case when it is true, don't if false
          * <pre>{@code
          * switch(x) {            switch(x) {

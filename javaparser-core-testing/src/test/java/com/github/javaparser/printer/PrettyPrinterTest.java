@@ -698,6 +698,23 @@ class PrettyPrinterTest {
     }
 
     @Test
+    public void testSwitchWithSpaceBeforeParen() {
+        String code = "class Foo {\n" + "\n"
+                + "    void foo(Integer arg) {\n"
+                + "        switch (foo) {\n"
+                + "            case 1 ->\n"
+                + "                System.out.println(1);\n"
+                + "        }\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        PrinterConfiguration config = new DefaultPrinterConfiguration();
+        config.addOption(new DefaultConfigurationOption(ConfigOption.SPACE_BEFORE_SWITCH_PAREN));
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter(config).print(cu));
+    }
+
+    @Test
     public void testMarkdownComment() {
         String code = "class Foo {\n" + "\n"
                 + "    /// This is a markdown comment\n"
