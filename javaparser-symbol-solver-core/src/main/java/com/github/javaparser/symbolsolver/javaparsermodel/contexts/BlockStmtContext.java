@@ -81,7 +81,7 @@ public class BlockStmtContext extends StatementContext<BlockStmt> {
      */
     @Override
     public List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
-        int position = wrappedNode.getStatements().indexOf(child);
+        int position = wrappedNode.getStatements().fastIndexOf(child);
         if (position == -1) {
             throw new RuntimeException();
         }
