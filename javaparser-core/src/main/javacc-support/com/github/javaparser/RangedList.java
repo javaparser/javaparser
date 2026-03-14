@@ -29,7 +29,7 @@ import com.github.javaparser.ast.NodeList;
  */
 class RangedList<T extends Node> {
     /* A ranged list MUST be set to a begin and end,
-       or these temporary values will leak out */
+    or these temporary values will leak out */
     TokenRange range = new TokenRange(JavaToken.INVALID, JavaToken.INVALID);
     NodeList<T> list;
 

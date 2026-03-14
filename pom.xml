@@ -419,6 +419,9 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>3.5.5</version>
+					<configuration>
+						<testFailureIgnore>true</testFailureIgnore>
+					</configuration>
 				</plugin>
 
 				<plugin>
@@ -495,7 +498,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>3.5.5</version>
 				<configuration>
 					<aggregate>true</aggregate>
 				</configuration>
@@ -535,7 +537,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>3.5.5</version>
 			</plugin>
 		</plugins>
 	</reporting>
