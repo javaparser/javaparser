@@ -143,7 +143,7 @@ public final class CodeGenerationUtils {
      * "target/(test-)classes", giving the directory containing the pom.xml.
      */
     public static Path mavenModuleRoot(Class<?> c) {
-        return classLoaderRoot(c).resolve(Paths.get("..", "..")).normalize();
+        return classLoaderRoot(c).resolve(Paths.get("..", "..", "..", "..")).normalize();
     }
 
     /**

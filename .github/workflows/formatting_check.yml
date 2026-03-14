@@ -39,9 +39,9 @@ jobs:
         with:
           java-version: '21'
           distribution: 'zulu'
-          cache: 'maven'
+          cache: 'gradle'
       - name: Validate Project Checkstyle
-        run: ./mvnw -B checkstyle:check
+        run: ./gradle checkstyleMain
 
   spotless_check:
     name: Spotless check
@@ -56,10 +56,10 @@ jobs:
         with:
           java-version: '21'
           distribution: 'zulu'
-          cache: 'maven'
+          cache: 'gradle'
       - name: Generate code and format
         run: |
-          ./run_core_metamodel_generator.sh
-          # ./run_core_generators.sh automatically runs ./mvnw spotless:apply
-          ./run_core_generators.sh
+          ./gradlew :jmlparser-metamodel-generators:run
+          ./gradlew :jmlparser-core-generators:run
+          ./gradlew spotlessCheck
           git diff --exit-code

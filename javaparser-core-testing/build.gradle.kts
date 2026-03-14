@@ -10,13 +10,10 @@ plugins {
 
 dependencies {
     api(project(":jmlparser-core"))
-    testImplementation(libs.org.junit.jupiter.junit.jupiter.engine)
-    testImplementation(libs.org.junit.jupiter.junit.jupiter.params)
-    testImplementation(libs.org.hamcrest.hamcrest)
-    testImplementation(libs.org.assertj.assertj.core)
+    testImplementation(libs.bundles.testing)
+    testRuntimeOnly(libs.bundles.testing.runtime)
     testImplementation(libs.com.squareup.okhttp3.okhttp)
     testImplementation(libs.com.squareup.okhttp3.okhttp.jvm)
-    testImplementation(libs.org.mockito.mockito.inline)
 }
 
 description = "io.github.jmltoolkit:jmlparser-core-testing"

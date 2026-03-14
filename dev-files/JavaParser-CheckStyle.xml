@@ -3,6 +3,11 @@
 		"http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker">
 
+	<module name="SuppressionSingleFilter">
+		<property name="files" value="GeneratedJavaParser.java"/>
+	</module>
+
+
 	<!-- Based on documentation: https://github.com/javaparser/javaparser/wiki/Coding-Guidelines -->
 
 	<property name="fileExtensions" value="java"/>

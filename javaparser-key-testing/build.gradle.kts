@@ -11,11 +11,8 @@ plugins {
 dependencies {
     testImplementation(project(":jmlparser-core"))
     testImplementation(project(":jmlparser-symbol-solver-core"))
-    testImplementation(libs.org.junit.jupiter.junit.jupiter.engine)
-    testImplementation(libs.org.junit.jupiter.junit.jupiter.params)
-    testImplementation(libs.org.hamcrest.hamcrest.library.x1)
-    testImplementation(libs.org.assertj.assertj.core)
-    testImplementation(libs.com.squareup.okhttp3.okhttp.x1)
+    testImplementation(libs.bundles.testing)
+    testRuntimeOnly(libs.bundles.testing.runtime)
 }
 
 description = "io.github.jmltoolkit:javaparser-key-testing"
