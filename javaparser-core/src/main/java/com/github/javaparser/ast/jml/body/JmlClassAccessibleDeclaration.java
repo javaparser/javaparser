@@ -26,7 +26,8 @@ import org.jspecify.annotations.Nullable;
  * @version 1 (3/11/21)
  */
 public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlClassAccessibleDeclaration>
-        implements NodeWithModifiers<JmlClassAccessibleDeclaration>, NodeWithAccessModifiers<JmlClassAccessibleDeclaration> {
+        implements NodeWithModifiers<JmlClassAccessibleDeclaration>,
+                NodeWithAccessModifiers<JmlClassAccessibleDeclaration> {
 
     private NodeList<Modifier> modifiers;
 

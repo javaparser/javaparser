@@ -366,17 +366,13 @@ public interface Context {
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
     default SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // Default to solving within the parent context.
         return solveMethodInParentContext(name, argumentsTypes, staticOnly);
     }
 
     default SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(
-            String name,
-            List<ResolvedType> argumentsTypes,
-            boolean staticOnly) {
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
             return SymbolReference.unsolved();
@@ -389,6 +385,5 @@ public interface Context {
      * Similar to solveMethod but we return a MethodUsage.
      * A MethodUsage corresponds to a MethodDeclaration plus the resolved type variables.
      */
-    Optional<MethodUsage> solveMethodAsUsage(
-            String name, List<ResolvedType> argumentsTypes);
+    Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes);
 }

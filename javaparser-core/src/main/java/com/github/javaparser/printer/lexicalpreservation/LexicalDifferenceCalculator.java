@@ -404,8 +404,9 @@ class LexicalDifferenceCalculator {
             case JML_OT_PEER -> GeneratedJavaParserConstants.PEER;
             case JML_OT_REP -> GeneratedJavaParserConstants.REP;
             case JML_OT_READ_ONLY -> GeneratedJavaParserConstants.READ_ONLY;
-            default -> throw new UnsupportedOperationException(
-                    "Not supported keyword" + modifier.getKeyword().name());
+            default ->
+                throw new UnsupportedOperationException(
+                        "Not supported keyword" + modifier.getKeyword().name());
         };
     }
 

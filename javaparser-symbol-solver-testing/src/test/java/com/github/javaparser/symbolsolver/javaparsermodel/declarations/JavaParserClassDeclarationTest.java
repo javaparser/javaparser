@@ -22,8 +22,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.JavaParserAdapter;
@@ -53,12 +51,11 @@ import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.truth.Truth;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import com.google.common.truth.Truth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -1111,7 +1108,7 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
         if (TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
         }
-        //assertEquals(expected.size(), signatures.size());
+        // assertEquals(expected.size(), signatures.size());
         Truth.assertThat(signatures).containsAtLeastElementsIn(expected);
     }
 

@@ -21,11 +21,11 @@
 
 package com.github.javaparser;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Helper class for {@link GeneratedJavaParser}

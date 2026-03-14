@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -54,7 +53,7 @@ class Issue1814Test extends AbstractResolutionTest {
         final CompilationUnit compilationUnit = new CompilationUnit();
         compilationUnit.setPackageDeclaration("java.lang");
         // construct a fake java.lang.Object class with only one method (java.lang.Object#equals(java.lang.Object)
-        final ClassOrInterfaceDeclaration clazz = compilationUnit.addClass("Object",PUBLIC);
+        final ClassOrInterfaceDeclaration clazz = compilationUnit.addClass("Object", PUBLIC);
         final MethodDeclaration equals = clazz.addMethod("equals", PUBLIC);
         equals.addParameter("Object", "obj");
         final BlockStmt body = new BlockStmt();

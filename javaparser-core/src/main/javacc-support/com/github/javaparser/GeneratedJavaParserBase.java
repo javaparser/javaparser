@@ -21,6 +21,11 @@
 
 package com.github.javaparser;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.EOF;
+import static com.github.javaparser.ast.type.ArrayType.unwrapArrayTypes;
+import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -31,13 +36,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.Pair;
-
 import java.util.*;
-
-import static com.github.javaparser.GeneratedJavaParserConstants.EOF;
-import static com.github.javaparser.ast.type.ArrayType.unwrapArrayTypes;
-import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Base class for {@link GeneratedJavaParser}
@@ -121,7 +120,6 @@ abstract class GeneratedJavaParserBase {
         return null;
     }
 
-
     /**
      * Return a TokenRange spanning from begin to end
      */
@@ -147,22 +145,20 @@ abstract class GeneratedJavaParserBase {
      */
     TokenRange range(Node begin, Node end) {
         if (storeTokens) {
-            return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
+            return new TokenRange(
+                    begin.getTokenRange().get().getBegin(),
+                    end.getTokenRange().get().getEnd());
         }
         return null;
     }
 
-
     public JavaToken orIfInvalid(Object... nodesOrTokens) {
-        if (!storeTokens)
-            return null;
+        if (!storeTokens) return null;
 
         for (Object nort : nodesOrTokens) {
             if (nort == null) continue;
-            if (nort instanceof JavaToken j && j.valid())
-                return j;
-            if (nort instanceof Node n)
-                return n.getTokenRange().get().getBegin();
+            if (nort instanceof JavaToken j && j.valid()) return j;
+            if (nort instanceof Node n) return n.getTokenRange().get().getBegin();
         }
         return null;
     }
@@ -214,7 +210,7 @@ abstract class GeneratedJavaParserBase {
     }
 
     /* Called from within a catch block to skip forward to a known token,
-        and report the occurred exception as a problem. */
+    and report the occurred exception as a problem. */
     TokenRange recover(int recoveryTokenType, ParseException p) {
         JavaToken begin = null;
         if (p.currentToken != null) {
@@ -261,7 +257,7 @@ abstract class GeneratedJavaParserBase {
     }
 
     /* Called from within a catch block to skip forward to a known token,
-        and report the occurred exception as a problem. */
+    and report the occurred exception as a problem. */
     TokenRange recoverStatement(int recoveryTokenType, int lBraceType, int rBraceType, ParseException p) {
         JavaToken begin = null;
         if (p.currentToken != null) {
@@ -353,7 +349,10 @@ abstract class GeneratedJavaParserBase {
     private void propagateRangeGrowthOnRight(Node node, Node endNode) {
         if (storeTokens) {
             node.getParentNode().ifPresent(nodeParent -> {
-                boolean isChildOnTheRightBorderOfParent = node.getTokenRange().get().getEnd().equals(nodeParent.getTokenRange().get().getEnd());
+                boolean isChildOnTheRightBorderOfParent = node.getTokenRange()
+                        .get()
+                        .getEnd()
+                        .equals(nodeParent.getTokenRange().get().getEnd());
                 if (isChildOnTheRightBorderOfParent) {
                     propagateRangeGrowthOnRight(nodeParent, endNode);
                 }
@@ -369,11 +368,29 @@ abstract class GeneratedJavaParserBase {
         if (ret instanceof EnclosedExpr) {
             Expression inner = ((EnclosedExpr) ret).getInner();
             SimpleName id = ((NameExpr) inner).getName();
-            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(id.getTokenRange().orElse(null), new NodeList<>(), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
+            NodeList<Parameter> params = add(
+                    new NodeList<>(),
+                    new Parameter(
+                            id.getTokenRange().orElse(null),
+                            new NodeList<>(),
+                            new NodeList<>(),
+                            new UnknownType(),
+                            false,
+                            new NodeList<>(),
+                            id));
             ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();
-            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().orElse(null), new NodeList<>(), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
+            NodeList<Parameter> params = add(
+                    new NodeList<>(),
+                    new Parameter(
+                            ret.getTokenRange().orElse(null),
+                            new NodeList<>(),
+                            new NodeList<>(),
+                            new UnknownType(),
+                            false,
+                            new NodeList<>(),
+                            id));
             ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
@@ -384,7 +401,8 @@ abstract class GeneratedJavaParserBase {
             castExpr.setExpression(inner);
             propagateRangeGrowthOnRight(castExpr, inner);
         } else {
-            addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
+            addProblem(
+                    "Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
         }
         return ret;
     }
@@ -392,7 +410,13 @@ abstract class GeneratedJavaParserBase {
     /**
      * Throws together an ArrayCreationExpr from a lot of pieces
      */
-    ArrayCreationExpr juggleArrayCreation(TokenRange range, List<TokenRange> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
+    ArrayCreationExpr juggleArrayCreation(
+            TokenRange range,
+            List<TokenRange> levelRanges,
+            Type type,
+            NodeList<Expression> dimensions,
+            List<NodeList<AnnotationExpr>> arrayAnnotations,
+            ArrayInitializerExpr arrayInitializerExpr) {
         NodeList<ArrayCreationLevel> levels = new NodeList<>();
 
         for (int i = 0; i < arrayAnnotations.size(); i++) {
@@ -408,7 +432,8 @@ abstract class GeneratedJavaParserBase {
         Pair<Type, List<ArrayType.ArrayBracketPair>> partialParts = unwrapArrayTypes(partialType);
         Type elementType = partialParts.a;
         List<ArrayType.ArrayBracketPair> leftMostBrackets = partialParts.b;
-        return wrapInArrayTypes(elementType, additionalBrackets, leftMostBrackets).clone();
+        return wrapInArrayTypes(elementType, additionalBrackets, leftMostBrackets)
+                .clone();
     }
 
     /**
@@ -449,10 +474,7 @@ abstract class GeneratedJavaParserBase {
             if (image.equals(escapedTokenText)) {
                 sb.append(image);
             } else {
-                sb.append(" ")
-                        .append(escapedTokenText)
-                        .append(" ")
-                        .append(image);
+                sb.append(" ").append(escapedTokenText).append(" ").append(image);
             }
             token = token.next;
         }
@@ -476,10 +498,13 @@ abstract class GeneratedJavaParserBase {
         }
         if (scope.isFieldAccessExpr()) {
             FieldAccessExpr fieldAccessExpr = scope.asFieldAccessExpr();
-            return new Name(fieldAccessExpr.getTokenRange().orElse(null), scopeToName(fieldAccessExpr.getScope()), fieldAccessExpr.getName().getIdentifier());
-
+            return new Name(
+                    fieldAccessExpr.getTokenRange().orElse(null),
+                    scopeToName(fieldAccessExpr.getScope()),
+                    fieldAccessExpr.getName().getIdentifier());
         }
-        throw new IllegalStateException("Unexpected expression type: " + scope.getClass().getSimpleName());
+        throw new IllegalStateException(
+                "Unexpected expression type: " + scope.getClass().getSimpleName());
     }
 
     String unquote(String s) {
@@ -518,14 +543,12 @@ abstract class GeneratedJavaParserBase {
         // We also know at this point that at least one body declaration exists, otherwise allMatch would have matched
         // the empty list.
 
-        ClassOrInterfaceDeclaration compactClass = new ClassOrInterfaceDeclaration(
-                new NodeList<Modifier>(),
-                false,
-                "$COMPACT_CLASS"
-        );
+        ClassOrInterfaceDeclaration compactClass =
+                new ClassOrInterfaceDeclaration(new NodeList<Modifier>(), false, "$COMPACT_CLASS");
 
         Optional<TokenRange> maybeStartingRange = bodyDeclarations.get(0).getTokenRange();
-        Optional<TokenRange> maybeEndRange = bodyDeclarations.get(bodyDeclarations.size() - 1).getTokenRange();
+        Optional<TokenRange> maybeEndRange =
+                bodyDeclarations.get(bodyDeclarations.size() - 1).getTokenRange();
         if (maybeStartingRange.isPresent() && maybeEndRange.isPresent()) {
             JavaToken begin = maybeStartingRange.get().getBegin();
             JavaToken end = maybeEndRange.get().getEnd();

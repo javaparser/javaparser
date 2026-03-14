@@ -21,11 +21,10 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.comments.*;
-
-import java.util.ArrayDeque;
-
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
+
+import com.github.javaparser.ast.comments.*;
+import java.util.ArrayDeque;
 
 /**
  * Base class for {@link com.github.javaparser.GeneratedJavaParserTokenManager}
@@ -53,13 +52,13 @@ abstract class GeneratedJavaParserTokenManagerBase {
         while (!tokens.isEmpty() && TokenTypes.isWhitespace(tokens.peekLast().kind)) {
             Token lastToken = tokens.removeLast();
 
-
             if (TokenTypes.isComment(lastToken.kind)) {
                 tokens.addLast(lastToken);
                 break;
             } else {
                 if (tokens.isEmpty()) {
-                    throw new IllegalArgumentException("createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens");
+                    throw new IllegalArgumentException(
+                            "createMarkdownCommentFromTokenList may not be called with a token list consisting only of whitespace tokens");
                 }
 
                 if (TokenTypes.isEndOfLineToken(lastToken.kind)) {
@@ -70,10 +69,7 @@ abstract class GeneratedJavaParserTokenManagerBase {
             }
         }
 
-        TokenRange range = new TokenRange(
-                tokens.peekFirst().javaToken,
-                tokens.peekLast().javaToken
-        );
+        TokenRange range = new TokenRange(tokens.peekFirst().javaToken, tokens.peekLast().javaToken);
 
         StringBuilder contentBuilder = new StringBuilder();
 

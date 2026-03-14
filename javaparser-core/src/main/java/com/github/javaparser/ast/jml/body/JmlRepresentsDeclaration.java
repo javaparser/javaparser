@@ -32,8 +32,8 @@ import org.jspecify.annotations.NonNull;
  */
 public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepresentsDeclaration>
         implements NodeWithName<JmlRepresentsDeclaration>,
-        NodeWithModifiers<JmlRepresentsDeclaration>,
-        NodeWithAccessModifiers<JmlRepresentsDeclaration> {
+                NodeWithModifiers<JmlRepresentsDeclaration>,
+                NodeWithAccessModifiers<JmlRepresentsDeclaration> {
 
     private NodeList<Modifier> modifiers;
 

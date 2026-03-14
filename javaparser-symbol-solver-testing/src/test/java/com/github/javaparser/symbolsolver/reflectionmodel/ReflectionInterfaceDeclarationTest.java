@@ -99,7 +99,6 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
                         new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver),
                         ImmutableList.of(typeVariable)),
                 ancestors.get("java.util.SequencedCollection"));
-
     }
 
     @Test
