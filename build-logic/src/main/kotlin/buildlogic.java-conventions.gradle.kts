@@ -54,7 +54,6 @@ configure<CheckstyleExtension> {
 
 
 tasks.checkstyleMain {
-    sourceSets.clear()
     source("src/main/java")
 }
 
