@@ -1,0 +1,56 @@
+.version {
+    font-size: 80%;
+    margin: 1em;
+}
+
+.ast {
+    font-family: monospace;
+}
+
+.code {
+    font-family: monospace;
+    white-space: pre;
+}
+
+.ast li {
+    line-height: 180%;
+}
+
+.value {
+    background: rgb(133 88 255 / 30%);
+    border: 1px solid rgb(133 88 255 / 80%);
+    border-radius: 2px;
+    padding: .1ex;
+}
+
+.type-name {
+    background: rgb(109 248 46 / 30%);
+    border: 1px solid rgb(109 248 46 / 80%);
+    border-radius: 2px;
+    padding: .1ex;
+}
+
+.attrib-name {
+    background: rgb(251 78 251 / 30%);
+    border: 1px solid rgb(251 78 251 / 80%);
+    border-radius: 2px;
+    padding: .1ex;
+}
+
+.range {
+    background: #888;
+    color: white;
+    border-radius: 2px;
+    padding: .1ex;
+    margin-left: 2em;
+}
+
+.jmlish {
+    background: rgba(100, 150, 250, .3);
+    margin: 1em;
+}
+
+
+.accordion input:checked ~ .accordion-body, .accordion[open] .accordion-body {
+    overflow: scroll;
+}

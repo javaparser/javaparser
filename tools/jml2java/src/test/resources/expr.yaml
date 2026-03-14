@@ -1,0 +1,81 @@
+- expr: |
+    true
+  result: |
+    { } true
+- expr: |
+    2 + 3
+  result: |
+    { } 2 + 3
+
+
+- expr: |
+    !(a != null && b != null) ==> a == b
+  result: |
+    { } !(!(a != null && b != null)) || a == b
+
+- expr: |
+    a != null && b != null ==> a == b
+  result: |
+    { } !(a != null && b != null) || a == b
+
+- expr: |
+    ary[2] == 2
+  result: |
+    { } ary[2] == 2
+
+- expr: |
+    (\forall int i; 0<=i<ary.length; ary[i] == i)
+  result: |
+    { boolean result_0 = true; 
+      int i; { i = 0; } 
+      int high_1; { high_1 = 0; } 
+      while (i < high_1 && result_0) { 
+        boolean pred_2; { pred_2 = ary[i] == i; } 
+        if (pred_2) result_0 = true; 
+        { high_1 = 0; } 
+      } 
+    } 
+    result_0
+
+- expr: |
+    this.self.self.ary[0] == 1
+  result: |
+    { } this.self.self.ary[0] == 1
+
+- expr: |
+    this.self.self.ary[0] == 1
+  result: |
+    { } this.self.self.ary[0] == 1
+
+- expr: |
+    (new int[] {1,2,3}).length == 3
+  result: |
+    { } (new int[] { 1, 2, 3 }).length == 3
+
+- expr: |
+    (new int[3]).length == 3
+  result: |
+    { } (new int[3]).length == 3
+
+- expr: |
+    (new int[3][2]).length == 3
+  result: |
+    { } (new int[3][2]).length == 3
+
+- expr: |
+    (\let int[][] x = { {1}, {2} }; x.length ) == 2
+  result: |
+    { 
+      int _gen_1; 
+      { 
+        int[][] x = { { 1 }, { 2 } }; 
+        _gen_1 = x.length; 
+      } 
+      final var _gen_2 = _gen_1 == 2; 
+    } 
+    _gen_2
+
+- expr: |
+    (\let int x = 5; x)
+  resultInt: |
+    (let ((x 5)) x)

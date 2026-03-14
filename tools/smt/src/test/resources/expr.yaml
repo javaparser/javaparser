@@ -1,0 +1,91 @@
+- expr: |
+    true
+  result: |
+    true
+- expr: |
+    2 + 3
+  resultBv: |
+    (bvadd ((_ int2bv 32) 2) ((_ int2bv 32) 3))
+  resultInt: |
+    (+ 2 3)
+- expr: |
+    a != null && b != null ==> a == b
+  result: |
+    (declare-const a Object)
+    (declare-const b Object)
+    (=> (and (not (= a null)) (not (= b null))) (= a b))
+
+- expr: |
+    ary[2] == 2
+  resultInt: |
+    (declare-const ary (Array Int Int))
+    (= (select ary 2) 2)
+  resultBv: |
+    (declare-const ary (Array (_ BitVec 32) (_ BitVec 32)))
+    (= (select ary ((_ int2bv 32) 2)) ((_ int2bv 32) 2))
+
+- expr: |
+    (\forall int i; 0<=i<ary.length; ary[i] == i)
+  resultInt: |
+    (declare-const ary (Array Int Int))
+    (forall ((i Int)) (=> (and (<= 0 i) (< i (int$length ary))) (= (select ary i) i)))
+  resultBv: |
+    (declare-const ary (Array (_ BitVec 32) (_ BitVec 32)))
+    (forall ((i (_ BitVec 32))) (=> (and (bvsle ((_ int2bv 32) 0) i) (bvslt i (bv$length ary))) (= (select ary i) i)))
+
+- expr: |
+    this.self.self.ary[0] == 1
+  resultInt: |
+    (= (select (ary (self (self this))) 0) 1)
+
+- expr: |
+    this.self.self.ary[0] == 1
+  resultInt: |
+    (= (select (ary (self (self this))) 0) 1)
+
+- expr: |
+    (new int[] {1,2,3}).length == 3
+  resultInt: |
+    (declare-const anon_array_1 (Array Int Int))
+    (assert (store anon_array_1 0 1))
+    (assert (store anon_array_1 1 2))
+    (assert (store anon_array_1 2 3))
+    (assert (= (int$length anon_array_1) 3))
+    (= (int$length anon_array_1) 3)
+
+- expr: |
+    (new int[3]).length == 3
+  resultInt: |
+    (declare-const anon_array_1 (Array Int Int))
+    (assert (= (int$length anon_array_1) 3))
+    (= (int$length anon_array_1) 3)
+
+- expr: |
+    (new int[3][2]).length == 3
+  resultInt: |
+    (declare-const anon_array_1 (Array Int (Array Int Int)))
+    (assert (= (int$length anon_array_1) 3))
+    (assert (forall ((idx0 Int)) (= (int$length (select anon_array_1 idx0)) 2)))
+    (= (int$length anon_array_1) 3)
+
+- expr: |
+    (\let int[][] x = { {1}, {2} }; x.length ) == 2
+  resultInt: |
+    (declare-const anon_array_2 (Array Int Int))
+    (assert (store anon_array_2 0 1))
+    (assert (= (int$length anon_array_2) 1))
+    (declare-const anon_array_3 (Array Int Int))
+    (assert (store anon_array_3 0 2))
+    (assert (= (int$length anon_array_3) 1))
+    (declare-const anon_array_1 (Array Int (Array Int Int)))
+    (assert (store anon_array_1 0 anon_array_2))
+    (assert (store anon_array_1 1 anon_array_3))
+    (assert (= (int$length anon_array_1) 2))
+    (= (let ((x anon_array_1)) (int$length x)) 2)
+
+
+
+- expr: |
+    (\let int x = 5; x)
+  resultInt: |
+    (let ((x 5)) x)

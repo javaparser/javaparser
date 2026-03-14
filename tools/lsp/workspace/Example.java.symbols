@@ -1,0 +1,8 @@
+ Example.java	File	Example.java:3:14
+> Example	Class	Example.java:3:14
+>> anon invariant	Property	Example.java:6:9
+>> foo	Field	Example.java:8:16
+>> bar	Method	Example.java:15:22
+>>> model_behavior	Key	Example.java:11:5
+>>>> req1 : REQUIRES	EnumMember	Example.java:12:5
+>>>> Clause ENSURES	EnumMember	Example.java:13:5

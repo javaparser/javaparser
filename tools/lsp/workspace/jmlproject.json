@@ -1,0 +1,10 @@
+{
+    "enabledKeys": [],
+    "usedKeys": [],
+    "sourcePaths": [],
+    "disabledLinter": [],
+    "disabledCodeActions": [
+        "jml.verify.liskov",
+        "jml.welldefinedness-check"
+    ]
+}
