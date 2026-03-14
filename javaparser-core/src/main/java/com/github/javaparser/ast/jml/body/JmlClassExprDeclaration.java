@@ -1,5 +1,7 @@
 package com.github.javaparser.ast.jml.body;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
@@ -14,22 +16,18 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClassExprDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
 public class JmlClassExprDeclaration extends JmlClassLevelDeclaration<JmlClassExprDeclaration>
-        implements NodeWithModifiers<JmlClassExprDeclaration>,
-        NodeWithAccessModifiers<JmlClassExprDeclaration> {
+        implements NodeWithModifiers<JmlClassExprDeclaration>, NodeWithAccessModifiers<JmlClassExprDeclaration> {
 
     private SimpleName kind;
 

@@ -26,7 +26,6 @@ import static com.github.javaparser.ast.Modifier.DefaultKeyword.VOLATILE;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;

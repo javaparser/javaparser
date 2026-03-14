@@ -25,8 +25,11 @@ import org.jspecify.annotations.Nullable;
  * @author Alexander Weigl
  * @version 1 (3/14/21)
  */
-public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract>, NodeWithJmlTags<JmlContract>,
-    NodeWithAccessModifiers<JmlContract> {
+public class JmlContract extends Node
+        implements Jmlish,
+                NodeWithModifiers<JmlContract>,
+                NodeWithJmlTags<JmlContract>,
+                NodeWithAccessModifiers<JmlContract> {
 
     private NodeList<SimpleName> jmlTags = new NodeList<>();
 

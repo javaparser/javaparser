@@ -710,9 +710,9 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                 ancestors.get("java.lang.Iterable"));
         assertEquals(
                 new ReferenceTypeImpl(
-                        new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver), ImmutableList.of(string)),
+                        new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver),
+                        ImmutableList.of(string)),
                 ancestors.get("java.util.SequencedCollection"));
-
     }
 
     @Test
@@ -773,7 +773,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                 ancestors.get("java.lang.Iterable"));
         assertEquals(
                 new ReferenceTypeImpl(
-                        new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver), ImmutableList.of(string)),
+                        new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver),
+                        ImmutableList.of(string)),
                 ancestors.get("java.util.SequencedCollection"));
 
         assertEquals(6, ancestors.size());
@@ -792,7 +793,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         assertEquals(
                 new ReferenceTypeImpl(
-                        new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver), ImmutableList.of(string)),
+                        new ReflectionInterfaceDeclaration(SequencedCollection.class, typeResolver),
+                        ImmutableList.of(string)),
                 ancestors.get("java.util.SequencedCollection"));
         assertEquals(
                 new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(RandomAccess.class, typeResolver)),

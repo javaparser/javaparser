@@ -20,15 +20,14 @@
  */
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
+import java.util.Optional;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-
-import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
  * A node with a name.
@@ -56,7 +55,8 @@ public interface NodeWithOptionalSimpleName<N extends Node> {
         return getName().map(NameExpr::new);
     }
 
-    @Nullable SimpleName name();
+    @Nullable
+    SimpleName name();
 
     default @Nullable String nameAsString() {
         return name() != null ? name().getIdentifier() : null;
@@ -65,5 +65,4 @@ public interface NodeWithOptionalSimpleName<N extends Node> {
     default @Nullable NameExpr nameAsExpression() {
         return name() != null ? new NameExpr(name()) : null;
     }
-
 }

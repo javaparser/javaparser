@@ -103,7 +103,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                     return true;
                 }
             } catch (UnsupportedOperationException e) {
-                //ignore
+                // ignore
             }
             // All numeric types extend Number
             return other.isNumericType()

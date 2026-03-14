@@ -332,7 +332,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void genericConstructorTest() {
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver)))

@@ -93,12 +93,8 @@ public class SymbolSolver implements Solver {
     }
 
     @Override
-    public MethodUsage solveMethod(
-            String methodName,
-            List<ResolvedType> argumentsTypes,
-            Context context) {
-        SymbolReference<ResolvedMethodDeclaration> decl =
-                context.solveMethod(methodName, argumentsTypes, false);
+    public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Context context) {
+        SymbolReference<ResolvedMethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, false);
         if (!decl.isSolved()) {
             throw new UnsolvedSymbolException(context.toString(), methodName);
         }
@@ -106,12 +102,8 @@ public class SymbolSolver implements Solver {
     }
 
     @Override
-    public MethodUsage solveMethod(
-            String methodName,
-            List<ResolvedType> argumentsTypes,
-            Node node) {
-        return solveMethod(
-                methodName, argumentsTypes, JavaParserFactory.getContext(node, typeSolver));
+    public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Node node) {
+        return solveMethod(methodName, argumentsTypes, JavaParserFactory.getContext(node, typeSolver));
     }
 
     @Override

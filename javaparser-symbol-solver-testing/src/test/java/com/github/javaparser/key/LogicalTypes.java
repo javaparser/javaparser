@@ -25,8 +25,8 @@ import org.junit.jupiter.api.Test;
 public class LogicalTypes {
     @Test
     void resolveMap() {
-        CompilationUnit cu = StaticJavaParser.parse(
-                "public class A { public \\seq test; " + "public \\map abc() { return test;} }");
+        CompilationUnit cu =
+                StaticJavaParser.parse("public class A { public \\seq test; " + "public \\map abc() { return test;} }");
 
         TypeSolver typeSolver = new TypeSolverBuilder()
                 .withCurrentJRE()

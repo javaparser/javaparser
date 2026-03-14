@@ -9,7 +9,6 @@ import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalSimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -17,7 +16,6 @@ import com.github.javaparser.metamodel.JmlClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -28,7 +26,8 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public abstract class JmlClause extends Node implements Jmlish, NodeWithOptionalSimpleName<JmlClause> {
 
-    @OptionalProperty @Nullable
+    @OptionalProperty
+    @Nullable
     private SimpleName name;
 
     public JmlClause() {

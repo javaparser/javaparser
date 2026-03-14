@@ -33,7 +33,6 @@ import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.Navigator;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -47,7 +46,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
 
 public class JavaParserRecordDeclarationTest {
 
@@ -248,7 +246,7 @@ public class JavaParserRecordDeclarationTest {
     ///
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void getGetAncestors_javaLangRecord_available() {
         ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithImplements);
         CompilationUnit compilationUnit = x.getResult().get();
@@ -264,7 +262,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetDeclaredFields() {
         ParseResult<CompilationUnit> x = javaParser.parse("record Test(String s, Integer i) {}");
         CompilationUnit compilationUnit = x.getResult().get();
@@ -282,7 +280,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetDeclaredMethods() {
         ParseResult<CompilationUnit> x = javaParser.parse("record Test(String s, Integer i) {\n"
                 + "    public int foo(int x) {\n"
@@ -319,7 +317,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetSuperclass() {
         ParseResult<CompilationUnit> cu = javaParser.parse("record Foo(String s) {}");
 
@@ -334,7 +332,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testImplicitGetterResolution() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n"
                 + "record Test(String s) {\n"
@@ -364,7 +362,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testImplicitGetterSolvingFromDecl() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n" + "record Test(String s) { }");
 
@@ -395,7 +393,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testImplicitConstructor() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\nrecord Test(String s) { }");
 
@@ -417,7 +415,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testNonCanonicalConstructor() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n"
                 + "record Test(String s) {\n"
@@ -456,7 +454,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testInheritedMethods() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n" + "interface Foo {\n"
                 + "    default void foo() {}\n"
@@ -479,7 +477,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetAllStaticFields() {
         ParseResult<CompilationUnit> cu = javaParser.parse(
                 "package test;\n" + "record Test(String s) {\n" + "    static Integer value = 2;" + "}");
@@ -499,7 +497,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetAllNonStaticFields() {
         ParseResult<CompilationUnit> cu = javaParser.parse(
                 "package test;\n" + "record Test(String s) {\n" + "    static Integer value = 2;" + "}");
@@ -519,7 +517,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     public void testStaticMethod() {
         ParserConfiguration.LanguageLevel oldLevel =
                 StaticJavaParser.getParserConfiguration().getLanguageLevel();
@@ -575,7 +573,7 @@ public class JavaParserRecordDeclarationTest {
     }
 
     @Test
-    //@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    // @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void genericConstructorTest() {
         ParseResult<CompilationUnit> cu = javaParser.parse("""
                 record GenericBox<T>(T value) {}

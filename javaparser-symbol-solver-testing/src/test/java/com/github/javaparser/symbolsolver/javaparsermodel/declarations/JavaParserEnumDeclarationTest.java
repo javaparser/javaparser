@@ -21,8 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.*;
@@ -50,11 +48,10 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.truth.Truth;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import com.google.common.truth.Truth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
