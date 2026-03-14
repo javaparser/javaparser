@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.jmltoolkit"
-version = "3.28.0-J8.0-K13.4"
+version = "3.28.0-J8.0-K13.5"
 
 repositories {
     maven {

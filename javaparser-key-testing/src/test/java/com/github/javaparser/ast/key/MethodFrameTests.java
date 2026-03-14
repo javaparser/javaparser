@@ -1,16 +1,12 @@
 package com.github.javaparser.ast.key;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -19,19 +15,30 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.google.common.truth.Truth;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class MethodFrameTests {
     @Test
     void mftest1() throws IOException {
         loadAndResolveAll(new File("src/test/resources/nameResolution/A.java"));
+    }
+
+
+    @Test
+    void mftestB() throws IOException {
+        loadAndResolveAll(new File("src/test/resources/nameResolution/B.java"));
     }
 
     private void loadAndResolveAll(File file) throws IOException {
@@ -70,31 +77,56 @@ public class MethodFrameTests {
         @Override
         public void visit(NameExpr n, Void arg) {
             resolve(n);
+            super.visit(n, arg);
         }
 
         @Override
         public void visit(FieldAccessExpr n, Void arg) {
             resolve(n);
+            super.visit(n, arg);
+        }
+
+        @Override
+        public void visit(MethodCallExpr n, Void arg) {
+            resolve(n);
+            super.visit(n, arg);
+        }
+
+        @Override
+        public void visit(ObjectCreationExpr n, Void arg) {
+            resolve(n);
+            super.visit(n, arg);
         }
 
         public <T extends ResolvedDeclaration, N extends Expression & Resolvable<T>> void resolve(N n) {
+            Path base = n.findCompilationUnit()
+                    .flatMap(CompilationUnit::getStorage)
+                    .map(it -> it.getPath().getParent()).get();
             String pos = n.getRange().map(it -> it.begin.toString()).orElse("_");
+
             try {
                 ResolvedDeclaration rtype = n.resolve();
-
-                Node t = rtype.toAst().get();
-                String target = t.getRange().map(it -> it.begin.toString()).orElse("_");
-
-                messages.add(String.format("name: %s@%s to %s@%s", n, pos, rtype.getName(), target));
+                String target;
                 try {
-                    n.getSymbolResolver().calculateType(n);
-                    messages.add(String.format("type: %s@%s", n, pos));
+                    Node t = rtype.toAst().get();
+                    target = t.getRange().map(it -> it.begin.toString()).orElse("_");
+                    target += " in " + t.findCompilationUnit()
+                            .flatMap(CompilationUnit::getStorage)
+                            .map(it -> base.relativize(it.getPath()).toString())
+                            .orElse(null);
+                }catch (NoSuchElementException e) {
+                    target = "_";
+                }
+
+                messages.add(String.format("name: %s@%s refers to %s@%s", n, pos, rtype.getName(), target));
+                try {
+                    var x = n.getSymbolResolver().calculateType(n);
+                    messages.add(String.format("type: %s@%s refers to %s", n, pos, x));
                 } catch (UnsolvedSymbolException e) {
-                    messages.add(String.format("e type: %s@%s", n, pos));
+                    messages.add(String.format("ERROR type: %s@%s", n, pos));
                 }
             } catch (UnsolvedSymbolException e) {
-                messages.add(String.format("e name: %s@%s", n, pos));
-                // e.printStackTrace();
+                messages.add(String.format("ERROR name: %s@%s", n, pos));
             }
         }
     }
