@@ -23,6 +23,7 @@ val javaBuildFile by tasks.registering(Copy::class) {
         "version" to project.version
     )
 }
+tasks.compileJava { dependsOn(javaBuildFile) }
 
 val javaccOutput = layout.buildDirectory.dir("generated-src/main/javacc").get().asFile.absolutePath
 val javaccInput = "src/main/javacc/java.jj"

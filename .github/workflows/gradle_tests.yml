@@ -84,12 +84,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          ./gradlew test
+          ./gradlew --continue --parallel test
 
       - name: Test reporting
         uses: dorny/test-reporter@v2
         if: success() || failure()
         with:
           name: Test Report
-          path: "**/build/reports/test/**/*.xml"
+          path: "**/build/reports/tests/test/**/*.xml"
           reporter: java-junit

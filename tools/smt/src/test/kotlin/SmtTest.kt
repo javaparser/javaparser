@@ -47,15 +47,15 @@ class SmtTest {
             val yaml = Yaml()
             val obj: List<Map<String, Any>> = yaml.load(inputStream)
             return obj.stream().map<DynamicTest>(Function<Map<String, Any>, DynamicTest> { m: Map<String, Any> ->
-                val a = m["expr"] as String?
+                val a = m["expr"] as String
                 val result = m["result"] as String?
                 val resultInt = m["resultInt"] as String?
                 val resultBv = m["resultBv"] as String?
-                DynamicTest.dynamicTest(a, Executable {
+                DynamicTest.dynamicTest(a) {
                     if (resultInt != null) smtTranslation(a, resultInt, true)
                     if (resultBv != null) smtTranslation(a, resultBv, false)
                     if (result != null) smtTranslation(a, result, false)
-                })
+                }
             })
         }
     }
@@ -68,7 +68,7 @@ class SmtTest {
         }
         val expr = e.result.get()
         expr.setParentNode(parent)
-        val smtLog: SmtQuery = SmtQuery()
+        val smtLog = SmtQuery()
         val actualExpr: SExpr = SMTFacade.toSmt(expr, smtLog, useInt)
 
         val sw = StringWriter()

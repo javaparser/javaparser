@@ -26,7 +26,7 @@ class Jml2JavaTests : TestWithJavaParser() {
             val yaml = Yaml()
             val obj: List<Map<String, Any>> = yaml.load(inputStream)
             return obj.stream().map { m: Map<String, Any> ->
-                val a = m["expr"] as String?
+                val a = m["expr"] as String
                 val result = m["result"] as String?
                 DynamicTest.dynamicTest(a) {
                     if (result != null) jml2JavaTranslation(a, result)
@@ -35,7 +35,10 @@ class Jml2JavaTests : TestWithJavaParser() {
         }
     }
 
-    private fun jml2JavaTranslation(input: String?, expected: String) {
+    private fun jml2JavaTranslation(
+        input: String?,
+        expected: String,
+    ) {
         val e: ParseResult<Expression> = parser.parseJmlExpression(input)
         if (!e.isSuccessful) {
             e.problems.forEach(Consumer { x: Problem? -> System.err.println(x) })
@@ -48,13 +51,12 @@ class Jml2JavaTests : TestWithJavaParser() {
         val dpp = DefaultPrettyPrinter()
         val sblock = dpp.print(actual.a)
         val sexpr = dpp.print(actual.b)
-        Truth.assertThat(trimAllWs("$sblock $sexpr"))
+        Truth
+            .assertThat(trimAllWs("$sblock $sexpr"))
             .isEqualTo(trimAllWs(expected))
     }
 
     companion object {
-        private fun trimAllWs(expected: String): String {
-            return expected.replace("\\s+".toRegex(), " ").trim { it <= ' ' }
-        }
+        private fun trimAllWs(expected: String): String = expected.replace("\\s+".toRegex(), " ").trim { it <= ' ' }
     }
 }

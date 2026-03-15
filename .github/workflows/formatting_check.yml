@@ -41,7 +41,7 @@ jobs:
           distribution: 'zulu'
           cache: 'gradle'
       - name: Validate Project Checkstyle
-        run: ./gradle checkstyleMain
+        run: ./gradlew checkstyleMain
 
   spotless_check:
     name: Spotless check
