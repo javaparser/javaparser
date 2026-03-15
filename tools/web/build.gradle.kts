@@ -5,8 +5,7 @@ plugins {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-    api(libs.jmlcore)
-    api(libs.jmlsymbol)
+    api(project(":jmlparser-symbol-solver-core"))
 
     implementation(libs.ktor.core)
     implementation(libs.ktor.html)

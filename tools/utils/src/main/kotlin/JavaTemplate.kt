@@ -45,7 +45,7 @@ class JavaTemplate<T : Node>(private val template: T) {
         }
 
         override fun substitutionOf(node: Node): Node {
-            if (node is SimpleName) node.setIdentifier(map[node.asString()])
+            if (node is SimpleName) node.setIdentifier(map[node.asString()]!!)
             return node
         }
     }

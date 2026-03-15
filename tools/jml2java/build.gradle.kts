@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":utils"))
+    api(project(":tools:utils"))
     testImplementation(kotlin("serialization"))
     testImplementation(libs.snakeyaml)
 }

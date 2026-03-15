@@ -1,28 +1,17 @@
 plugins {
     kotlin("jvm")
-    `java-library`
+    id("buildlogic.java-conventions")
 }
-
-group = "io.github.jmltoolkit"
-
 
 val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-dependencies {
-}
+dependencies {}
 
 testing {
     suites {
         val test by getting(JvmTestSuite::class) {
             useKotlinTest()
         }
-    }
-}
-
-// Apply a specific Java toolchain to ease working on different environments.
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -35,11 +24,12 @@ repositories {
 
 dependencies {
     //truth = { module = "com.google.truth:truth", version = "1.10.1" }
-    testImplementation(libs.findLibrary("truth").get())
-    api(libs.findLibrary("jmlcore").get()) { isChanging = true}
 
-    testImplementation("org.junit.jupiter:junit-jupiter-engine")
-    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    api(project(":jmlparser-core"))
+
+
+    testImplementation(libs.findBundle("testing").get())
+    testRuntimeOnly(libs.findBundle("testing-runtime").get())
 }
 
 tasks.named<Test>("test") {
@@ -59,15 +49,6 @@ testing {
             useJUnitJupiter()
         }
     }
-}
-
-java {
-    // Auto JDK setup
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of("21"))
-    }
-    withSourcesJar()
-    withJavadocJar()
 }
 
 tasks.compileJava {

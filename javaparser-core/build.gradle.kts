@@ -13,10 +13,19 @@ dependencies {
     javacc("com.helger:parser-generator-cc:2.0.1")
 }
 
+val javaBuildFile by tasks.registering(Copy::class) {
+    from("src/main/java-templates/")
+    includeEmptyDirs = false
+
+    into(layout.buildDirectory.dir("generated-src/main/javacc/"))
+    expand(
+        "name" to project.name,
+        "version" to project.version
+    )
+}
+
 val javaccOutput = layout.buildDirectory.dir("generated-src/main/javacc").get().asFile.absolutePath
 val javaccInput = "src/main/javacc/java.jj"
-
-
 val compileJavacc by tasks.registering(JavaExec::class) {
     inputs.file(javaccInput).withPathSensitivity(PathSensitivity.RELATIVE)
     outputs.dir(javaccOutput)

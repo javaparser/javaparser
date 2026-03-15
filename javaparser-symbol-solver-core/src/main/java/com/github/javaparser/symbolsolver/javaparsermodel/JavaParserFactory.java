@@ -28,7 +28,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.key.KeyCcatchReturn;
-import com.github.javaparser.ast.key.KeyMethodCallStatement;
+import com.github.javaparser.ast.key.KeyMethodCallStmt;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
@@ -53,7 +53,7 @@ public class JavaParserFactory {
             return new KeyCcatchReturnContext(kcr, typeSolver);
         }
 
-        if (node instanceof KeyMethodCallStatement kcr) {
+        if (node instanceof KeyMethodCallStmt kcr) {
             return new KeyMethodCallStatementContext(kcr, typeSolver);
         }
 

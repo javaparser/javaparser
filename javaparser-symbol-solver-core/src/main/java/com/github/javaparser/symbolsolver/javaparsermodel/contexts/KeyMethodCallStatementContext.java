@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.key.KeyExecutionContext;
-import com.github.javaparser.ast.key.KeyMethodCallStatement;
+import com.github.javaparser.ast.key.KeyMethodCallStmt;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -27,12 +27,12 @@ import java.util.Optional;
  * @author Alexander Weigl
  * @version 1 (3/14/26)
  */
-public class KeyMethodCallStatementContext extends AbstractJavaParserContext<KeyMethodCallStatement> {
+public class KeyMethodCallStatementContext extends AbstractJavaParserContext<KeyMethodCallStmt> {
     private final Context context;
     private final String selfName;
     private final ResolvedType selfType;
 
-    public KeyMethodCallStatementContext(KeyMethodCallStatement kcr, TypeSolver typeSolver) {
+    public KeyMethodCallStatementContext(KeyMethodCallStmt kcr, TypeSolver typeSolver) {
         super(kcr, typeSolver);
 
         KeyExecutionContext sourceSpecification = (KeyExecutionContext) kcr.getContext();
@@ -57,9 +57,9 @@ public class KeyMethodCallStatementContext extends AbstractJavaParserContext<Key
 
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
-                                                    ResolvedReferenceTypeDeclaration invocationContext) {
-        return context.solveMethodAsUsage(name, argumentsTypes, invocationContext);
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes){
+                                                    //ResolvedReferenceTypeDeclaration invocationContext) {
+        return context.solveMethodAsUsage(name, argumentsTypes);
     }
 
     @Override
@@ -108,13 +108,17 @@ public class KeyMethodCallStatementContext extends AbstractJavaParserContext<Key
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
-        return context.solveMethodInParentContext(name, argumentsTypes, staticOnly, invocationContext);
+    public SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(String name,
+                                                                                 List<ResolvedType> argumentsTypes,
+                                                                                 boolean staticOnly) {
+        return context.solveMethodInParentContext(name, argumentsTypes, staticOnly);
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
-        return context.solveMethod(name, argumentsTypes, staticOnly, invocationContext);
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes,
+            boolean staticOnly) {
+        return context.solveMethod(name, argumentsTypes, staticOnly);
     }
 
     @Override

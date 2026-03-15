@@ -3,6 +3,5 @@ plugins {
 }
 
 dependencies {
-    api(libs.jmlcore)
 }
 

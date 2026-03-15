@@ -3,11 +3,9 @@ plugins {
 }
 
 dependencies {
-    api(libs.jmlcore)
-    api(libs.jmlsymbol)
+    api(project(":jmlparser-symbol-solver-core"))
     api(libs.gson)
     implementation(libs.logback)
     implementation("se.bjurr.violations:violations-lib:1.160.4")
-
-    testImplementation(project(":utils"))
+    testImplementation(project(":tools:utils"))
 }

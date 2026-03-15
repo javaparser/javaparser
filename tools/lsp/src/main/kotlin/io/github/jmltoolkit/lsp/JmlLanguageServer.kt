@@ -3,6 +3,7 @@ package io.github.jmltoolkit.lsp
 import io.github.jmltoolkit.lsp.actions.LspAction
 import io.github.jmltoolkit.lsp.highlighting.LEGEND
 import org.eclipse.lsp4j.*
+import org.eclipse.lsp4j.jsonrpc.messages.Either
 import org.eclipse.lsp4j.services.*
 import java.util.*
 import java.util.concurrent.CompletableFuture
@@ -55,8 +56,8 @@ class JmlLanguageServer : LanguageServer, LanguageClientAware {
             capabilities.semanticTokensProvider = SemanticTokensWithRegistrationOptions(
                 LEGEND, SemanticTokensServerFull(false), false,
                 listOf(
-                    DocumentFilter("java", "file", "*.java"),
-                    DocumentFilter("key", "file", "*.key"),
+                    DocumentFilter("java", "file", Either.forLeft("*.java")),
+                    DocumentFilter("key", "file", Either.forLeft("*.key")),
                 )
             )
 

@@ -24,7 +24,7 @@ import java.io.StringReader
 import java.util.*
 import java.util.stream.Collectors
 
-const val version = "${JavaParserBuild.PROJECT_VERSION} (${JavaParserBuild.MAVEN_BUILD_TIMESTAMP})"
+const val version = "${JavaParserBuild.PROJECT_VERSION}"
 
 fun main() {
     embeddedServer(Netty, port = 8000, watchPaths = listOf("classes", "resources")) {
@@ -69,17 +69,18 @@ private suspend fun RoutingContext.renderPage(params: Parameters? = null) {
                         if (inputText != null) {
                             +inputText
                         } else {
-                            +"""
-                                    public class JmlTest {
-                                        /*@
-                                            requires true;
-                                            ensures true;
-                                            assignable \strictly_nothing;
-                                        */
-                                        public void foo() {
-                                        
-                                        }
+                            +
+                                """
+                                public class JmlTest {
+                                    /*@
+                                        requires true;
+                                        ensures true;
+                                        assignable \strictly_nothing;
+                                    */
+                                    public void foo() {
+                                    
                                     }
+                                }
                                 """.trimIndent()
                         }
                     }
@@ -111,8 +112,6 @@ private suspend fun RoutingContext.renderPage(params: Parameters? = null) {
                 val result = jpb.parse(StringReader(inputText))
                 val stopTime = System.nanoTime()
                 val durationNano = stopTime - startTime
-
-
 
                 accordion("Processing Information") {
                     ul {
@@ -187,11 +186,12 @@ private suspend fun RoutingContext.renderPage(params: Parameters? = null) {
     }
 }
 
-
 @HtmlTagMarker
 inline fun FlowContent.accordion(
-    title: String = "", icon: String = "", isOpen: Boolean = false,
-    crossinline block: DIV.() -> Unit
+    title: String = "",
+    icon: String = "",
+    isOpen: Boolean = false,
+    crossinline block: DIV.() -> Unit,
 ) {
     details("accordion") {
         open = isOpen
@@ -207,14 +207,15 @@ inline fun FlowContent.accordion(
 
 @HtmlTagMarker
 inline fun FlowOrInteractiveOrPhrasingContent.spectreCheckBox(
-    name: String? = null, label: String = "", crossinline block: INPUT.() -> Unit
+    name: String? = null,
+    label: String = "",
+    crossinline block: INPUT.() -> Unit,
 ) {
     label("form-checkbox d-inline-block") {
         input(type = InputType.checkBox, name = name) { block(this) }
         i("form-icon") { +label }
     }
 }
-
 
 open class DefaultPage : io.ktor.server.html.Template<HTML> {
     val body = Placeholder<FlowContent>()
@@ -226,7 +227,7 @@ open class DefaultPage : io.ktor.server.html.Template<HTML> {
             title("JmlParser -- Playground")
 
             styleLink("/assets/spectre.min.css")
-            //styleLink("/assets/spectre-exp.min.css")
+            // styleLink("/assets/spectre-exp.min.css")
             styleLink("/assets/spectre-icons.min.css")
             styleLink("/assets/style.css")
 
@@ -258,9 +259,7 @@ open class DefaultPage : io.ktor.server.html.Template<HTML> {
                         div("divider-vert") { /*attributes["data-content"] = "|"*/ }
                         div("column col-5") { insert(right) }
                     }
-
                 }
-
             }
             script {
                 unsafe {
@@ -278,7 +277,10 @@ open class DefaultPage : io.ktor.server.html.Template<HTML> {
     }
 }
 
-private fun UL.printNode(n: Node, text: String = "") {
+private fun UL.printNode(
+    n: Node,
+    text: String = "",
+) {
     val isJml = n is Jmlish
     val clazz = if (isJml) "jmlish" else ""
 
@@ -295,7 +297,7 @@ private fun UL.printNode(n: Node, text: String = "") {
                     val l2 = it.end.line
                     val c2 = it.end.column
                     onClick = "javascript:select($l1,$c1, $l2, $c2);"
-                    +"${l1}/${c1} - ${l2}/${c2}"
+                    +"$l1/$c1 - $l2/$c2"
                 }
             }
         }
@@ -303,14 +305,17 @@ private fun UL.printNode(n: Node, text: String = "") {
         ul {
             val metaModel: NodeMetaModel = n.metaModel
             val allPropertyMetaModels = metaModel.allPropertyMetaModels
-            val attributes = allPropertyMetaModels.stream().filter { obj: PropertyMetaModel -> obj.isAttribute }
-                .filter { obj: PropertyMetaModel -> obj.isSingular }
-                .collect(Collectors.toList())
-            val subNodes = allPropertyMetaModels.stream().filter { obj: PropertyMetaModel -> obj.isNode }
-                .filter { obj: PropertyMetaModel -> obj.isSingular }
-                .collect(Collectors.toList())
-            val subLists = allPropertyMetaModels.stream().filter { obj: PropertyMetaModel -> obj.isNodeList }
-                .collect(Collectors.toList())
+            val attributes =
+                allPropertyMetaModels
+                    .filter { obj: PropertyMetaModel -> obj.isAttribute }
+                    .filter { obj: PropertyMetaModel -> obj.isSingular }
+            val subNodes =
+                allPropertyMetaModels
+                    .filter { obj: PropertyMetaModel -> obj.isNode }
+                    .filter { obj: PropertyMetaModel -> obj.isSingular }
+            val subLists =
+                allPropertyMetaModels
+                    .filter { obj: PropertyMetaModel -> obj.isNodeList }
 
             for (attributeMetaModel in attributes) {
                 li {
@@ -345,7 +350,6 @@ private fun UL.printNode(n: Node, text: String = "") {
                             }
                         }
                     }
-
                 }
             }
         }

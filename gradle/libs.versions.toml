@@ -14,18 +14,24 @@ org-checkerframework-checker-qual = "3.53.1"
 org-eclipse-parsson-parsson = "1.1.7"
 org-hamcrest-hamcrest = "3.0"
 org-hamcrest-hamcrest-library = "3.0"
-org-hamcrest-hamcrest-library-x1 = "2.2"
 org-javassist-javassist = "3.30.2-GA"
 org-jbehave-jbehave-core = "5.2.0"
 org-jspecify-jspecify = "1.0.0"
-org-junit = "6.0.2"
+org-junit = "6.0.3"
 org-mockito-mockito-inline = "5.2.0"
+
+gson = "2.13.2"
+logback = "1.5.32"
+clickt = "5.1.0"
+kotlin = "2.2.21"
+ktor = "3.4.1"
+
+jdk = "21"
 
 [libraries]
 com-google-guava-guava = { module = "com.google.guava:guava", version.ref = "com-google-guava-guava" }
 com-squareup-okhttp3-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "com-squareup-okhttp3-okhttp" }
 com-squareup-okhttp3-okhttp-jvm = { module = "com.squareup.okhttp3:okhttp-jvm", version.ref = "com-squareup-okhttp3-okhttp-jvm" }
-com-squareup-okhttp3-okhttp-x1 = { module = "com.squareup.okhttp3:okhttp", version.ref = "com-squareup-okhttp3-okhttp-x1" }
 jakarta-json-jakarta-json-api = { module = "jakarta.json:jakarta.json-api", version.ref = "jakarta-json-jakarta-json-api" }
 net-bytebuddy-byte-buddy-agent = { module = "net.bytebuddy:byte-buddy-agent", version.ref = "net-bytebuddy-byte-buddy-agent" }
 org-checkerframework-checker-qual = { module = "org.checkerframework:checker-qual", version.ref = "org-checkerframework-checker-qual" }
@@ -45,6 +51,19 @@ com-google-truth-truth = { module = "com.google.truth:truth", version.ref = "com
 org-hamcrest-hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "org-hamcrest-hamcrest" }
 org-hamcrest-hamcrest-library = { module = "org.hamcrest:hamcrest-library", version.ref = "org-hamcrest-hamcrest-library" }
 
+clickt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clickt" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+lombok = { module = "org.projectlombok:lombok", version = "1.18.42" }
+snakeyaml = { module = "org.yaml:snakeyaml", version = "2.6" }
+kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+ktor-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-html = { module = "io.ktor:ktor-html-builder", version = "1.6.8" }
+ktor-statuspages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
+ktor-severhtml = { module = "io.ktor:ktor-server-html-builder", version.ref = "ktor" }
+
 
 [bundles]
 
@@ -54,3 +73,5 @@ testing = ["org-junit-jupiter-junit-jupiter-params", "org-junit-jupiter-junit-ju
 
 testing-runtime = ["org-junit-jupiter-junit-jupiter-engine"]
 
+[plugins]
+jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

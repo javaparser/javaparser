@@ -24,7 +24,6 @@ package com.github.javaparser;
  * Core information about this library.
  */
 public class JavaParserBuild {
-    public static final String PROJECT_VERSION = "${project.version}";
-    public static final String PROJECT_NAME = "${project.name}";
-    public static final String PROJECT_BUILD_FINAL_NAME = "${project.build.finalName}";
+    public static final String PROJECT_VERSION = "${version}";
+    public static final String PROJECT_NAME = "${name}";
 }

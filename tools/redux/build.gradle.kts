@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":utils"))
+    implementation(project(":tools:utils"))
 }

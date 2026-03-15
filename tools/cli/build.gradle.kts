@@ -4,11 +4,11 @@ plugins {
 
 dependencies {
     implementation(libs.clickt)
-    implementation(libs.jmlcore)
-    implementation(project(":wd"))
-    implementation(project(":xpath"))
-    implementation(project(":prettyprinting"))
-    implementation(project(":lint"))
-    implementation(project(":stat"))
-    implementation(project(":jml2java"))
+    implementation(project(":jmlparser-core"))
+    implementation(project(":tools:wd"))
+    implementation(project(":tools:xpath"))
+    implementation(project(":tools:prettyprinting"))
+    implementation(project(":tools:lint"))
+    implementation(project(":tools:stat"))
+    implementation(project(":tools:jml2java"))
 }

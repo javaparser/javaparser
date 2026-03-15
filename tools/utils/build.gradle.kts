@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    api(libs.jmlsymbol)
+    api(project(":jmlparser-symbol-solver-core"))
     testImplementation(libs.snakeyaml)
 }

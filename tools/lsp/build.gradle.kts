@@ -8,8 +8,7 @@ plugins {
 version = "1.0-SNAPSHOT"
 
 dependencies {
-    api(libs.jmlcore)
-    api(libs.jmlsymbol)
+    api(project(":jmlparser-symbol-solver-core"))
 
     testImplementation(kotlin("test"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.10.0")
@@ -19,13 +18,13 @@ dependencies {
     runtimeOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 
-    implementation(project(":utils"))
-    implementation(project(":smt"))
-    implementation(project(":wd"))
-    implementation(project(":stat"))
-    implementation(project(":redux"))
-    implementation(project(":lint"))
-    implementation(project(":jml2java"))
+    implementation(project(":tools:utils"))
+    implementation(project(":tools:smt"))
+    implementation(project(":tools:wd"))
+    implementation(project(":tools:stat"))
+    implementation(project(":tools:redux"))
+    implementation(project(":tools:lint"))
+    implementation(project(":tools:jml2java"))
 
     implementation("org.tinylog:tinylog-api-kotlin:2.7.0")
     implementation("org.tinylog:tinylog-api:2.8.0-M1")

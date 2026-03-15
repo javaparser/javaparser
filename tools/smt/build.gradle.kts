@@ -3,9 +3,8 @@ plugins {
 }
 
 dependencies {
-    api(libs.jmlcore)
-    implementation(libs.guava)
-    implementation(project(":utils"))
+    //implementation(libs)
+    implementation(project(":tools:utils"))
 
 
     testImplementation(libs.snakeyaml)

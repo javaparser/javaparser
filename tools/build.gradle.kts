@@ -1,1 +1,0 @@
-group = "io.github.jmltoolkit"

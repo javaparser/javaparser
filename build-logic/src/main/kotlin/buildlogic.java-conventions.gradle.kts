@@ -18,7 +18,16 @@ repositories {
 dependencies {
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_21
+// Apply a specific Java toolchain to ease working on different environments.
+
+java {
+    // Auto JDK setup
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of("21"))
+    }
+    withSourcesJar()
+    withJavadocJar()
+}
 
 publishing {
     publications.create<MavenPublication>("maven") {
@@ -52,8 +61,6 @@ configure<CheckstyleExtension> {
     isShowViolations = true
 }
 
-
 tasks.checkstyleMain {
     source("src/main/java")
 }
-

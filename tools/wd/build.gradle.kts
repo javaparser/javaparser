@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    api(libs.jmlcore)
-    api(libs.jmlsymbol)
-    api(project(":smt"))
+    api(project(":jmlparser-symbol-solver-core"))
+    api(project(":tools:smt"))
 }
