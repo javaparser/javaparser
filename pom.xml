@@ -158,15 +158,15 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>21</java.version>
-		<maven.compiler.release>${java.version}</maven.compiler.release>
-		<byte-buddy.version>1.18.4</byte-buddy.version>
-		<!--
-		<argLine>
-			-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'
-		</argLine>
-		-->
-		<build.timestamp>2025-10-04T00:00:00Z</build.timestamp>
+        <java.version>21</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <byte-buddy.version>1.18.5</byte-buddy.version>
+        <!--
+        <argLine>
+            -javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'
+        </argLine>
+        -->
+        <build.timestamp>2025-10-04T00:00:00Z</build.timestamp>
 		<jacoco.javaagent/>
 
 		<sonar.organization>wadoon</sonar.organization>
@@ -466,7 +466,7 @@
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
-							<version>13.1.0</version>
+                            <version>13.2.0</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -585,7 +585,7 @@
 			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
-				<version>6.0.2</version>
+                <version>6.0.3</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
