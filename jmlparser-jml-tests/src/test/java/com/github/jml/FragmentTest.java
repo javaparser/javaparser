@@ -8,10 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+
+import org.junit.jupiter.api.*;
 
 /**
  * @author Alexander Weigl
@@ -51,6 +49,11 @@ class FragmentTest {
             System.out.println(f.getAbsolutePath());
         }
         Assertions.assertTrue(r.isSuccessful());
+    }
+
+    @Test
+    void test() throws FileNotFoundException {
+        testClassLevel(new File("/home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fragments/decl_1153518565.txt"));
     }
 
     private boolean ignorableMessages(String message) {

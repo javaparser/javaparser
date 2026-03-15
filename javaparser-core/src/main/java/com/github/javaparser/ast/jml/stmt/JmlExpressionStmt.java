@@ -31,7 +31,7 @@ import org.jspecify.annotations.NonNull;
 public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<JmlExpressionStmt> {
 
     public enum JmlStmtKind implements JmlKeyword {
-        ASSERT(GeneratedJavaParserConstants.ASSERT),
+        ASSERT(GeneratedJavaParserConstants.JML_ASSERT),
         ASSERT_REDUNDANTLY(GeneratedJavaParserConstants.ASSERT_REDUNDANTLY),
         ASSUME(GeneratedJavaParserConstants.ASSUME),
         ASSUME_REDUNDANTLY(GeneratedJavaParserConstants.ASSUME_REDUNDANTLY),

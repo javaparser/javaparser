@@ -187,6 +187,7 @@ public class TokenTypes {
             case ALSO:
             case ANTIVALENCE:
             case ASSERT_REDUNDANTLY:
+            case JML_ASSERT:
             case ASSIGNABLE:
             case ASSIGNABLE_REDUNDANTLY:
             case ASSUME:

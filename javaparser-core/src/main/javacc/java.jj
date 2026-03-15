@@ -232,6 +232,7 @@ TOKEN : {
 | <ACCESSIBLE_REDUNDANTLY: "accessible_redundantly">
 | <ALSO: "also">
 | <ANTIVALENCE: "<=!=>">
+| <JML_ASSERT: "assert">
 | <ASSERT_REDUNDANTLY: "assert_redundantly">
 | <ASSIGNABLE: "assignable">
 | <ASSIGNABLE_REDUNDANTLY: "assignable_redundantly">
@@ -660,11 +661,14 @@ MORE :
 
 
 /* RESERVED WORDS AND LITERALS */
+<DEFAULT> TOKEN :{
+	< ASSERT: "assert" > // ASSERT in JML contracts is called JML_ASSERT
+}
+
 <DEFAULT,JML_MULTI_CONTRACT,JML_SINGLE_CONTRACT>
 TOKEN :
 {
   < ABSTRACT: "abstract" >
-| < ASSERT: "assert" >
 | < BOOLEAN: "boolean" >
 | < BREAK: "break" >
 | < BYTE: "byte" >
@@ -5312,11 +5316,13 @@ Statement BlockStatementOrig():
          	// try assert statement separate from more general Statement() because assert can be confused with VariableDeclarationExpression sometimes
             LOOKAHEAD( AssertStatement() )
             ret = AssertStatement()
-         /*|
-            LOOKAHEAD(JmlDocStatements())
-            ret = JmlDocStatements()*/
+    /*     |
+         	// try JML statement separate from more general Statement() because assert/assume & Co.
+         	// can be confused with VariableDeclarationExpression sometimes
+            LOOKAHEAD( JmlStatement() )
+            ret = JmlStatement()*/
          |
-            LOOKAHEAD( VariableDeclarationExpression() )
+            LOOKAHEAD( VariableDeclarationExpression() ";" )
             expr = VariableDeclarationExpression()
             ";"
             { ret = new ExpressionStmt(range(expr, token()), expr); }
@@ -7014,7 +7020,7 @@ JmlStatement JmlStatement():
 }
 {
   (
-    (<ASSERT> | <ASSUME> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY> | <SET>)
+    ( <JML_ASSERT> | <ASSUME> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY> | <SET> | <ASSERT_REDUNDANTLY> )
     { begin = token(); }
     expr=Expression()
     ";"

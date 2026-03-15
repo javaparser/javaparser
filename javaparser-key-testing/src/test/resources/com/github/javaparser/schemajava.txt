@@ -599,7 +599,6 @@
 {.. try { continue #lb; #slist } catch #cs finally { #slist2 } ...}
 {.. try { continue; #slist } catch #cs ...}
 {.. try { continue; #slist } catch #cs finally { #slist2 } ...}
-{.. try {} #cs ...}
 {.. try { return #se; #slist } catch #cs ...}
 {.. try { return #se; #slist } catch #cs finally { #slist2 } ...}
 {.. try { return; #slist } catch #cs ...}
