@@ -52,8 +52,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
      * When true, we are resolving a symbol as a member of a type (inside solveSymbolInType).
      * Re-entry into this CUC via the type's parent returns unsolved to break cyclic static imports.
      */
-    private static final ThreadLocal<Boolean> RESOLVING_MEMBER_IN_TYPE_ONLY =
-            ThreadLocal.withInitial(() -> false);
+    private static final ThreadLocal<Boolean> RESOLVING_MEMBER_IN_TYPE_ONLY = ThreadLocal.withInitial(() -> false);
 
     /** Runs the supplier with the "member in type only" flag set; resets the flag in finally. */
     private static <T> T runWithMemberInTypeOnlyScope(Supplier<T> supplier) {
@@ -112,8 +111,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 if (importDecl.isAsterisk()) {
                     String qName = importDecl.getNameAsString();
                     ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
-                    SymbolReference<? extends ResolvedValueDeclaration> ref = runWithMemberInTypeOnlyScope(() ->
-                            new SymbolSolver(typeSolver).solveSymbolInType(importedType, name));
+                    SymbolReference<? extends ResolvedValueDeclaration> ref = runWithMemberInTypeOnlyScope(
+                            () -> new SymbolSolver(typeSolver).solveSymbolInType(importedType, name));
                     if (ref.isSolved()) {
                         return ref;
                     }
@@ -126,8 +125,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
                     if (memberName.equals(name)) {
                         ResolvedTypeDeclaration importedType = typeSolver.solveType(typeName);
-                        return runWithMemberInTypeOnlyScope(() ->
-                                new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName));
+                        return runWithMemberInTypeOnlyScope(
+                                () -> new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName));
                     }
                 }
             }

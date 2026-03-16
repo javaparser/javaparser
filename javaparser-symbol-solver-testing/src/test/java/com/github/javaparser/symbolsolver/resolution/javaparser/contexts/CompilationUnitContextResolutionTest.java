@@ -67,7 +67,8 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         try {
             return adaptPath("src/test/resources/static_import_cycle_fixture/app");
         } catch (IllegalArgumentException e) {
-            return Paths.get(CompilationUnitContextResolutionTest.class.getClassLoader()
+            return Paths.get(CompilationUnitContextResolutionTest.class
+                    .getClassLoader()
                     .getResource("static_import_cycle_fixture/app")
                     .toURI());
         }
@@ -299,7 +300,8 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
      * fix, resolution succeeds (Lion from zoo-sdk-stub) or returns unsolved; without it, the test fails with StackOverflowError.
      */
     @Test
-    void resolveMethodCallsInDocumentBuilderWithCyclicStaticImportsWithoutStackOverflow() throws IOException, URISyntaxException {
+    void resolveMethodCallsInDocumentBuilderWithCyclicStaticImportsWithoutStackOverflow()
+            throws IOException, URISyntaxException {
         Path fixtureRoot = fixtureRootForStaticImportCycle();
         Path testJava = fixtureRoot.resolve("src/test/java");
         Path mainJava = fixtureRoot.resolve("src/main/java");
@@ -311,13 +313,14 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         typeSolver.add(new JavaParserTypeSolver(zooSdkStub));
 
         CompilationUnit cu = parseSampleWithStandardExtension(
-                "static_import_cycle_fixture/app/src/test/java/junit4/zoo/builders/ElephantBuilder",
-                typeSolver);
+                "static_import_cycle_fixture/app/src/test/java/junit4/zoo/builders/ElephantBuilder", typeSolver);
 
         try {
             new CompilationUnitContext(cu, typeSolver).solveSymbol("Lion");
         } catch (StackOverflowError e) {
-            throw new AssertionError("Cyclic static imports must not cause StackOverflow (fix: resolvingMemberInTypeOnly in CompilationUnitContext)", e);
+            throw new AssertionError(
+                    "Cyclic static imports must not cause StackOverflow (fix: resolvingMemberInTypeOnly in CompilationUnitContext)",
+                    e);
         }
         // With the fix, "Lion" resolves from zoo-sdk-stub; the cycle is traversed without StackOverflow.
     }
