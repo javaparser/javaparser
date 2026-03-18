@@ -251,7 +251,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(JmlClauseLabel n, Boolean arg) {
+    public ResolvedType visit(JmlLabledClause n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -311,7 +311,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(JmlClauseIf n, Boolean arg) {
+    public ResolvedType visit(JmlConditionalClause n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -562,6 +562,11 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
 
     @Override
     public ResolvedType visit(KeYMarkerStatement n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlInfFlowClause n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 

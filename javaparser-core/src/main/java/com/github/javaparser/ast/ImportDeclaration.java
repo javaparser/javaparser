@@ -21,7 +21,6 @@
 package com.github.javaparser.ast;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
@@ -63,13 +62,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
         // declaration of the form ‘x.*’ by specifying only ‘x’.
         // On the other hand, if the isAsterisk parameter is false, we can check that we haven't tried to directly
         // create an import declaration of the form ‘x.*’.
-        this(
-                null,
-                getNameFromString(name),
-                isStatic,
-                isAsterisk ? isAsterisk : hasAsterisk(name),
-                isModule,
-                isJmlModel);
+        this(null, getNameFromString(name), isStatic, isAsterisk ? isAsterisk : hasAsterisk(name), isModule, isJmlModel);
     }
 
     /**
@@ -111,13 +104,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ImportDeclaration(
-            TokenRange tokenRange,
-            Name name,
-            boolean isStatic,
-            boolean isAsterisk,
-            boolean isModule,
-            boolean isJmlModel) {
+    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk, boolean isModule, boolean isJmlModel) {
         super(tokenRange);
         setName(name);
         setStatic(isStatic);
@@ -216,7 +203,8 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

@@ -1,11 +1,11 @@
 package com.github.javaparser.ast.jml.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -24,7 +24,7 @@ import org.jspecify.annotations.NonNull;
  * @author Alexander Weigl
  * @version 1 (7/3/21)
  */
-public class JmlBinaryInfixExpr extends Expression {
+public class JmlBinaryInfixExpr extends JmlExpression {
 
     private Expression left;
 
@@ -109,7 +109,8 @@ public class JmlBinaryInfixExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
-        if (this.left != null) this.left.setParentNode(null);
+        if (this.left != null)
+            this.left.setParentNode(null);
         this.left = left;
         setAsParentNodeOf(left);
         return this;
@@ -127,7 +128,8 @@ public class JmlBinaryInfixExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
-        if (this.operator != null) this.operator.setParentNode(null);
+        if (this.operator != null)
+            this.operator.setParentNode(null);
         this.operator = operator;
         setAsParentNodeOf(operator);
         return this;
@@ -145,7 +147,8 @@ public class JmlBinaryInfixExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
-        if (this.right != null) this.right.setParentNode(null);
+        if (this.right != null)
+            this.right.setParentNode(null);
         this.right = right;
         setAsParentNodeOf(right);
         return this;

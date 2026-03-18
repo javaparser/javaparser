@@ -18,6 +18,7 @@ public interface NodeWithContracts<N extends Node> {
     default void addContracts(JmlContract contracts) {
         final var jmlContracts = getContracts();
         jmlContracts.add(contracts);
-        if (jmlContracts.size() == 1) JmlUtility.fixRangeContracts(this);
+        if (jmlContracts.size() == 1)
+            JmlUtility.fixRangeContracts(this);
     }
 }

@@ -32,6 +32,7 @@ import com.github.javaparser.utils.StringEscapeUtils;
 import com.github.javaparser.utils.Utils;
 import java.util.Optional;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Node;
 
 /**
  * A literal character.

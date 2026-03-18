@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.key;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -67,7 +66,8 @@ public class KeyLoopScopeBlockStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BLOCK, this.block, block);
-        if (this.block != null) this.block.setParentNode(null);
+        if (this.block != null)
+            this.block.setParentNode(null);
         this.block = block;
         setAsParentNodeOf(block);
         return this;
@@ -85,7 +85,8 @@ public class KeyLoopScopeBlockStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.INDEX_P_V, this.indexPV, indexPV);
-        if (this.indexPV != null) this.indexPV.setParentNode(null);
+        if (this.indexPV != null)
+            this.indexPV.setParentNode(null);
         this.indexPV = indexPV;
         setAsParentNodeOf(indexPV);
         return this;
@@ -151,25 +152,31 @@ public class KeyLoopScopeBlockStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyLoopScopeBlockStmt() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyLoopScopeBlockStmt asKeyLoopScopeBlockStmt() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyLoopScopeBlockStmt> toKeyLoopScopeBlockStmt() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyLoopScopeBlockStmt(Consumer<KeyLoopScopeBlockStmt> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyLoopScopeBlockStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.keyLoopScopeBlockStmtMetaModel;
     }

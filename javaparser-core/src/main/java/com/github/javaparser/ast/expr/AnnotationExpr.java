@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -44,8 +43,7 @@ import org.jspecify.annotations.NonNull;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class AnnotationExpr extends Expression
-        implements NodeWithName<AnnotationExpr>, Resolvable<ResolvedAnnotationDeclaration> {
+public abstract class AnnotationExpr extends Expression implements NodeWithName<AnnotationExpr>, Resolvable<ResolvedAnnotationDeclaration> {
 
     protected Name name;
 
@@ -80,7 +78,8 @@ public abstract class AnnotationExpr extends Expression
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

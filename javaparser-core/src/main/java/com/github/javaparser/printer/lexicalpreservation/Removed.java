@@ -40,8 +40,10 @@ public class Removed implements DifferenceElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Removed removed = (Removed) o;
         return element.equals(removed.element);
     }
@@ -61,8 +63,7 @@ public class Removed implements DifferenceElement {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) element;
             return csmChild.getChild();
         }
-        throw new IllegalStateException(
-                "Removed is not a " + LexicalDifferenceCalculator.CsmChild.class.getSimpleName());
+        throw new IllegalStateException("Removed is not a " + LexicalDifferenceCalculator.CsmChild.class.getSimpleName());
     }
 
     public int getTokenType() {

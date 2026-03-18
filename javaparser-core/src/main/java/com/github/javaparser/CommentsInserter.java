@@ -22,7 +22,6 @@ package com.github.javaparser;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
 import static java.util.stream.Collectors.toList;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -53,7 +52,8 @@ class CommentsInserter {
      * the comments.
      */
     private void insertComments(CompilationUnit cu, TreeSet<Comment> comments) {
-        if (comments.isEmpty()) return;
+        if (comments.isEmpty())
+            return;
         /* I should sort all the direct children and the comments, if a comment
         is the first thing then it is a comment to the CompilationUnit */
         // FIXME if there is no package it could be also a comment to the following class...
@@ -61,10 +61,7 @@ class CommentsInserter {
         // cases
         List<Node> children = cu.getChildNodes();
         Comment firstComment = comments.iterator().next();
-        if (cu.getPackageDeclaration().isPresent()
-                && (children.isEmpty()
-                        || PositionUtils.areInOrder(
-                                firstComment, cu.getPackageDeclaration().get()))) {
+        if (cu.getPackageDeclaration().isPresent() && (children.isEmpty() || PositionUtils.areInOrder(firstComment, cu.getPackageDeclaration().get()))) {
             cu.setComment(firstComment);
             comments.remove(firstComment);
         }
@@ -75,7 +72,8 @@ class CommentsInserter {
      * returns the node that were not attributed.
      */
     void insertComments(Node node, TreeSet<Comment> commentsToAttribute) {
-        if (commentsToAttribute.isEmpty()) return;
+        if (commentsToAttribute.isEmpty())
+            return;
         if (node instanceof CompilationUnit) {
             insertComments((CompilationUnit) node, commentsToAttribute);
         }
@@ -86,16 +84,11 @@ class CommentsInserter {
         */
         // Never attribute comments to modifiers.
         List<Node> // Never attribute comments to modifiers.
-                children = node.getChildNodes().stream()
-                        .filter(n -> !(n instanceof Modifier))
-                        .collect(toList());
+        children = node.getChildNodes().stream().filter(n -> !(n instanceof Modifier)).collect(toList());
         boolean attributeToAnnotation = !(configuration.isIgnoreAnnotationsWhenAttributingComments());
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
-            commentsInsideChild.addAll(commentsToAttribute.stream()
-                    .filter(comment -> comment.hasRange())
-                    .filter(comment -> PositionUtils.nodeContains(child, comment, !attributeToAnnotation))
-                    .collect(toList()));
+            commentsInsideChild.addAll(commentsToAttribute.stream().filter(comment -> comment.hasRange()).filter(comment -> PositionUtils.nodeContains(child, comment, !attributeToAnnotation)).collect(toList()));
             commentsToAttribute.removeAll(commentsInsideChild);
             insertComments(child, commentsInsideChild);
         }
@@ -117,8 +110,7 @@ class CommentsInserter {
         childrenAndComments.addAll(children);
         commentsToAttribute.removeAll(attributedComments);
         childrenAndComments.addAll(commentsToAttribute);
-        PositionUtils.sortByBeginPosition(
-                childrenAndComments, configuration.isIgnoreAnnotationsWhenAttributingComments());
+        PositionUtils.sortByBeginPosition(childrenAndComments, configuration.isIgnoreAnnotationsWhenAttributingComments());
         for (Node thing : childrenAndComments) {
             if (thing instanceof Comment) {
                 previousComment = (Comment) thing;
@@ -127,8 +119,7 @@ class CommentsInserter {
                 }
             } else {
                 if (previousComment != null && !thing.getComment().isPresent()) {
-                    if (!configuration.isDoNotAssignCommentsPrecedingEmptyLines()
-                            || !thereAreLinesBetween(previousComment, thing)) {
+                    if (!configuration.isDoNotAssignCommentsPrecedingEmptyLines() || !thereAreLinesBetween(previousComment, thing)) {
                         thing.setComment(previousComment);
                         attributedComments.add(previousComment);
                         previousComment = null;
@@ -149,19 +140,13 @@ class CommentsInserter {
         /* I can attribute in line comments to elements preceeding them, if
         there is something contained in their line */
         List<Comment> attributedComments = new LinkedList<>();
-        commentsToAttribute.stream()
-                .filter(comment -> comment.hasRange())
-                .filter(Comment::isLineComment)
-                .forEach(comment -> children.stream()
-                        .filter(child -> child.hasRange())
-                        .forEach(child -> {
-                            Range commentRange = comment.getRange().get();
-                            Range childRange = child.getRange().get();
-                            if (childRange.end.line == commentRange.begin.line
-                                    && attributeLineCommentToNodeOrChild(child, comment.asLineComment())) {
-                                attributedComments.add(comment);
-                            }
-                        }));
+        commentsToAttribute.stream().filter(comment -> comment.hasRange()).filter(Comment::isLineComment).forEach(comment -> children.stream().filter(child -> child.hasRange()).forEach(child -> {
+            Range commentRange = comment.getRange().get();
+            Range childRange = child.getRange().get();
+            if (childRange.end.line == commentRange.begin.line && attributeLineCommentToNodeOrChild(child, comment.asLineComment())) {
+                attributedComments.add(comment);
+            }
+        }));
         commentsToAttribute.removeAll(attributedComments);
     }
 
@@ -171,8 +156,7 @@ class CommentsInserter {
         }
         // The node start and end at the same line as the comment,
         // let's give to it the comment
-        if (node.getBegin().get().line == lineComment.getBegin().get().line
-                && !node.getComment().isPresent()) {
+        if (node.getBegin().get().line == lineComment.getBegin().get().line && !node.getComment().isPresent()) {
             if (!(node instanceof Comment)) {
                 node.setComment(lineComment);
             }
@@ -204,7 +188,8 @@ class CommentsInserter {
     }
 
     private boolean commentIsOnNextLine(Node a, Comment c) {
-        if (!c.hasRange() || !a.hasRange()) return false;
+        if (!c.hasRange() || !a.hasRange())
+            return false;
         return c.getRange().get().end.line + 1 == a.getRange().get().begin.line;
     }
 }

@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.key.sv;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;

@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import java.util.Optional;
+import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,13 +38,7 @@ public class JmlRepresentsDeclarationMetaModel extends JmlClassLevelDeclarationM
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlRepresentsDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                JmlRepresentsDeclaration.class,
-                "JmlRepresentsDeclaration",
-                "com.github.javaparser.ast.jml.body",
-                false,
-                false);
+        super(superBaseNodeMetaModel, JmlRepresentsDeclaration.class, "JmlRepresentsDeclaration", "com.github.javaparser.ast.jml.body", false, false);
     }
 
     public PropertyMetaModel exprPropertyMetaModel;

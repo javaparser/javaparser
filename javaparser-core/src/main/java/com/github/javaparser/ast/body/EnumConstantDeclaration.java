@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -51,11 +50,7 @@ import org.jspecify.annotations.NonNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration>
-        implements NodeWithJavadoc<EnumConstantDeclaration>,
-                NodeWithSimpleName<EnumConstantDeclaration>,
-                NodeWithArguments<EnumConstantDeclaration>,
-                Resolvable<ResolvedEnumConstantDeclaration> {
+public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration> implements NodeWithJavadoc<EnumConstantDeclaration>, NodeWithSimpleName<EnumConstantDeclaration>, NodeWithArguments<EnumConstantDeclaration>, Resolvable<ResolvedEnumConstantDeclaration> {
 
     private SimpleName name;
 
@@ -72,11 +67,7 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
     }
 
     @AllFieldsConstructor
-    public EnumConstantDeclaration(
-            NodeList<AnnotationExpr> annotations,
-            SimpleName name,
-            NodeList<Expression> arguments,
-            NodeList<BodyDeclaration<?>> classBody) {
+    public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> arguments, NodeList<BodyDeclaration<?>> classBody) {
         this(null, annotations, name, arguments, classBody);
     }
 
@@ -84,12 +75,7 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public EnumConstantDeclaration(
-            TokenRange tokenRange,
-            NodeList<AnnotationExpr> annotations,
-            SimpleName name,
-            NodeList<Expression> arguments,
-            NodeList<BodyDeclaration<?>> classBody) {
+    public EnumConstantDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> arguments, NodeList<BodyDeclaration<?>> classBody) {
         super(tokenRange, annotations);
         setName(name);
         setArguments(arguments);
@@ -131,7 +117,8 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
             return this;
         }
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        if (this.arguments != null) this.arguments.setParentNode(null);
+        if (this.arguments != null)
+            this.arguments.setParentNode(null);
         this.arguments = arguments;
         setAsParentNodeOf(arguments);
         return this;
@@ -144,7 +131,8 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
             return this;
         }
         notifyPropertyChange(ObservableProperty.CLASS_BODY, this.classBody, classBody);
-        if (this.classBody != null) this.classBody.setParentNode(null);
+        if (this.classBody != null)
+            this.classBody.setParentNode(null);
         this.classBody = classBody;
         setAsParentNodeOf(classBody);
         return this;
@@ -157,7 +145,8 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

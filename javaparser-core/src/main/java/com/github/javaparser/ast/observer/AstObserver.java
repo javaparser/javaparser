@@ -32,8 +32,8 @@ public interface AstObserver {
      * Type of change occurring on a List
      */
     enum ListChangeType {
-        ADDITION,
-        REMOVAL
+
+        ADDITION, REMOVAL
     }
 
     /**

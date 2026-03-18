@@ -38,13 +38,7 @@ public class KeYCcatchContinueMetaModel extends KeYCcatchBranchMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeYCcatchContinueMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                KeyCcatchContinue.class,
-                "KeYCcatchContinue",
-                "com.github.javaparser.ast.key",
-                false,
-                false);
+        super(superBaseNodeMetaModel, KeyCcatchContinue.class, "KeYCcatchContinue", "com.github.javaparser.ast.key", false, false);
     }
 
     public PropertyMetaModel blockPropertyMetaModel;

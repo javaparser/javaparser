@@ -844,7 +844,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlClauseLabel n, final A arg) {
+    public void visit(final JmlLabledClause n, final A arg) {
         n.getExpression().accept(this, arg);
         n.getLabel().ifPresent(l -> l.accept(this, arg));
         n.getName().ifPresent(l -> l.accept(this, arg));
@@ -948,7 +948,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlClauseIf n, final A arg) {
+    public void visit(final JmlConditionalClause n, final A arg) {
         n.getCondition().accept(this, arg);
         n.getExpression().accept(this, arg);
         n.getName().ifPresent(l -> l.accept(this, arg));
@@ -1391,6 +1391,18 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final KeYMarkerStatement n, final A arg) {
+        n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlInfFlowClause n, final A arg) {
+        n.getBy().forEach(p -> p.accept(this, arg));
+        n.getDeclassifies().forEach(p -> p.accept(this, arg));
+        n.getErases().forEach(p -> p.accept(this, arg));
+        n.getExpressions().forEach(p -> p.accept(this, arg));
+        n.getNewObjects().forEach(p -> p.accept(this, arg));
+        n.getName().ifPresent(l -> l.accept(this, arg));
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }

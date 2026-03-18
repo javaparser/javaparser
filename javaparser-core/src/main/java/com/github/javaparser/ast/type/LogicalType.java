@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.type;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -62,10 +61,7 @@ import java.util.stream.Collectors;
  *
  * @author Julio Vilmar Gesser
  */
-public class LogicalType extends ReferenceType
-        implements NodeWithSimpleName<LogicalType>,
-                NodeWithAnnotations<LogicalType>,
-                NodeWithTypeArguments<LogicalType> {
+public class LogicalType extends ReferenceType implements NodeWithSimpleName<LogicalType>, NodeWithAnnotations<LogicalType>, NodeWithTypeArguments<LogicalType> {
 
     private SimpleName name;
 
@@ -88,8 +84,7 @@ public class LogicalType extends ReferenceType
     }
 
     @AllFieldsConstructor
-    public LogicalType(
-            final SimpleName name, final NodeList<Type> typeArguments, final NodeList<AnnotationExpr> annotations) {
+    public LogicalType(final SimpleName name, final NodeList<Type> typeArguments, final NodeList<AnnotationExpr> annotations) {
         this(null, name, typeArguments, annotations);
     }
 
@@ -97,11 +92,7 @@ public class LogicalType extends ReferenceType
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LogicalType(
-            TokenRange tokenRange,
-            SimpleName name,
-            NodeList<Type> typeArguments,
-            NodeList<AnnotationExpr> annotations) {
+    public LogicalType(TokenRange tokenRange, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
         setName(name);
         setTypeArguments(typeArguments);
@@ -116,7 +107,8 @@ public class LogicalType extends ReferenceType
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {}
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
@@ -130,7 +122,8 @@ public class LogicalType extends ReferenceType
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -153,7 +146,8 @@ public class LogicalType extends ReferenceType
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null) this.typeArguments.setParentNode(null);
+        if (this.typeArguments != null)
+            this.typeArguments.setParentNode(null);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(typeArguments);
         return this;
@@ -170,8 +164,7 @@ public class LogicalType extends ReferenceType
      */
     @Override
     public String toDescriptor() {
-        return String.format(
-                "S%s;", resolve().asReferenceType().getQualifiedName().replace(".", "/"));
+        return String.format("S%s;", resolve().asReferenceType().getQualifiedName().replace(".", "/"));
     }
 
     @Override
@@ -201,9 +194,7 @@ public class LogicalType extends ReferenceType
         ResolvedTypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
         List<ResolvedType> typeParameters = Collections.emptyList();
         if (getTypeArguments().isPresent()) {
-            typeParameters = getTypeArguments().get().stream()
-                    .map((pt) -> pt.convertToUsage(context))
-                    .collect(Collectors.toList());
+            typeParameters = getTypeArguments().get().stream().map((pt) -> pt.convertToUsage(context)).collect(Collectors.toList());
         }
         if (typeDeclaration.isTypeParameter()) {
             return new ResolvedTypeVariable(typeDeclaration.asTypeParameter());

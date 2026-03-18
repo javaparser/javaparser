@@ -210,7 +210,7 @@ class JmlCatchSymbols : GenericVisitorAdapter<MutableList<DocumentSymbol>?, Unit
         return super.visit(n, arg)
     }
 
-    override fun visit(n: JmlClauseIf?, arg: Unit?): MutableList<DocumentSymbol>? {
+    override fun visit(n: JmlConditionalClause?, arg: Unit?): MutableList<DocumentSymbol>? {
         return super.visit(n, arg)
     }
 

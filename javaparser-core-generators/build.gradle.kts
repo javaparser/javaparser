@@ -11,6 +11,7 @@ dependencies {
 description = "io.github.jmltoolkit:jmlparser-core-generators"
 
 val run by tasks.registering(JavaExec::class) {
+    classpath = sourceSets.main.get().runtimeClasspath
     mainClass = "com.github.javaparser.generator.core.CoreGenerator"
     args = listOf("$projectDir")
 }

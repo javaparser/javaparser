@@ -78,11 +78,15 @@ public class ResolvedWildcard implements ResolvedType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ResolvedWildcard)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof ResolvedWildcard))
+            return false;
         ResolvedWildcard that = (ResolvedWildcard) o;
-        if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null) return false;
-        if (type != that.type) return false;
+        if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null)
+            return false;
+        if (type != that.type)
+            return false;
         return true;
     }
 
@@ -143,10 +147,7 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(
-            ResolvedTypeParameterDeclaration tpToReplace,
-            ResolvedType replaced,
-            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
@@ -177,8 +178,8 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     public enum BoundType {
-        SUPER,
-        EXTENDS
+
+        SUPER, EXTENDS
     }
 
     /*

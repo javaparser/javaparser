@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.jml.clauses;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -42,7 +41,8 @@ public class JmlSignalsOnlyClause extends JmlClause {
         customInitialization();
     }
 
-    public JmlSignalsOnlyClause() {}
+    public JmlSignalsOnlyClause() {
+    }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
@@ -118,7 +118,8 @@ public class JmlSignalsOnlyClause extends JmlClause {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
-        if (this.types != null) this.types.setParentNode(null);
+        if (this.types != null)
+            this.types.setParentNode(null);
         this.types = types;
         setAsParentNodeOf(types);
         return this;

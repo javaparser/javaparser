@@ -106,13 +106,7 @@ class TypeOwnerStrategy implements TokenOwnerDetector.DetectionStrategy {
             }
             final Node currentNode = current;
             // Check each context using Optional chaining for clean code
-            Optional<Node> owner = Optionals.or(
-                    () -> checkVariableContext(parent, currentNode),
-                    () -> checkParameterContext(parent, currentNode),
-                    () -> checkMethodContext(parent, currentNode),
-                    () -> checkClassContext(parent, currentNode),
-                    () -> checkExpressionContext(parent, currentNode),
-                    () -> checkStatementContext(parent, currentNode));
+            Optional<Node> owner = Optionals.or(() -> checkVariableContext(parent, currentNode), () -> checkParameterContext(parent, currentNode), () -> checkMethodContext(parent, currentNode), () -> checkClassContext(parent, currentNode), () -> checkExpressionContext(parent, currentNode), () -> checkStatementContext(parent, currentNode));
             if (owner.isPresent()) {
                 return owner.get();
             }

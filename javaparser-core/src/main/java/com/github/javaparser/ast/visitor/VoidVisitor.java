@@ -310,7 +310,7 @@ public interface VoidVisitor<A> {
 
     void visit(JmlQuantifiedExpr jmlQuantifiedExpr, A arg);
 
-    void visit(JmlClauseLabel n, A arg);
+    void visit(JmlLabledClause n, A arg);
 
     void visit(JmlExpressionStmt n, A arg);
 
@@ -334,7 +334,7 @@ public interface VoidVisitor<A> {
 
     void visit(JmlRefiningStmt n, A arg);
 
-    void visit(JmlClauseIf n, A arg);
+    void visit(JmlConditionalClause n, A arg);
 
     void visit(JmlClassExprDeclaration n, A arg);
 
@@ -377,4 +377,6 @@ public interface VoidVisitor<A> {
     void visit(JmlMethodSignature n, A arg);
 
     void visit(KeYMarkerStatement n, A arg);
+
+    void visit(JmlInfFlowClause n, A arg);
 }

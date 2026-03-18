@@ -22,4 +22,5 @@ package com.github.javaparser.ast.validator.postprocessors;
 /**
  * Processes the generic AST into a Java 21 AST and validates it.
  */
-public class Java21PostProcessor extends Java20PostProcessor {}
+public class Java21PostProcessor extends Java20PostProcessor {
+}

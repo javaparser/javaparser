@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.jml.clauses;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -106,40 +105,11 @@ public class JmlCallableClause extends JmlClause {
             return this;
         }
         notifyPropertyChange(ObservableProperty.METHOD_SIGNATURES, this.methodSignatures, methodSignatures);
-        if (this.methodSignatures != null) this.methodSignatures.setParentNode(null);
+        if (this.methodSignatures != null)
+            this.methodSignatures.setParentNode(null);
         this.methodSignatures = methodSignatures;
         setAsParentNodeOf(methodSignatures);
         return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null) {
-            return false;
-        }
-        for (int i = 0; i < methodSignatures.size(); i++) {
-            if (methodSignatures.get(i) == node) {
-                methodSignatures.remove(i);
-                return true;
-            }
-        }
-        return super.remove(node);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null) {
-            return false;
-        }
-        for (int i = 0; i < methodSignatures.size(); i++) {
-            if (methodSignatures.get(i) == node) {
-                methodSignatures.set(i, (JmlMethodSignature) replacementNode);
-                return true;
-            }
-        }
-        return super.replace(node, replacementNode);
     }
 
     /**
@@ -156,5 +126,33 @@ public class JmlCallableClause extends JmlClause {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @NonNull() NodeList<JmlMethodSignature> methodSignatures() {
         return Objects.requireNonNull(methodSignatures);
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null) {
+            return false;
+        }
+        for (int i = 0; i < methodSignatures.size(); i++) {
+            if (methodSignatures.get(i) == node) {
+                methodSignatures.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null) {
+            return false;
+        }
+        for (int i = 0; i < methodSignatures.size(); i++) {
+            if (methodSignatures.get(i) == node) {
+                methodSignatures.set(i, (JmlMethodSignature) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.key.sv;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -20,6 +19,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
+import com.github.javaparser.ast.Node;
 
 public class KeyTypeSV extends Type {
 

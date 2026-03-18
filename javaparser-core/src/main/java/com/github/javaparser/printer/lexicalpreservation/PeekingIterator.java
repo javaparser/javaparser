@@ -196,7 +196,8 @@ public class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E>
      * Returns -1 if the listiterator is at the beginning of the list.
      */
     public int currentIndex() {
-        if (!hasPrevious()) return previousIndex();
+        if (!hasPrevious())
+            return previousIndex();
         return nextIndex() - 1;
     }
 

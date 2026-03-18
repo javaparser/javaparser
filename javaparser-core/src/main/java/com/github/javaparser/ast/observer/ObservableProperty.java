@@ -34,6 +34,7 @@ import java.util.Optional;
  */
 @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
 public enum ObservableProperty {
+
     ANNOTATIONS(Type.MULTIPLE_REFERENCE),
     ANONYMOUS_CLASS_BODY(Type.MULTIPLE_REFERENCE),
     ARGUMENTS(Type.MULTIPLE_REFERENCE),
@@ -47,6 +48,7 @@ public enum ObservableProperty {
     BODY(Type.SINGLE_REFERENCE),
     BOUNDED_VARIABLES(Type.MULTIPLE_REFERENCE),
     BRANCHES(Type.MULTIPLE_REFERENCE),
+    BY(Type.MULTIPLE_REFERENCE),
     CALLEE(Type.SINGLE_REFERENCE),
     CATCH_CLAUSES(Type.MULTIPLE_REFERENCE),
     CHECK(Type.SINGLE_REFERENCE),
@@ -65,6 +67,7 @@ public enum ObservableProperty {
     CONTRACTS(Type.MULTIPLE_REFERENCE),
     DECL(Type.SINGLE_REFERENCE),
     DECLARATIONS(Type.SINGLE_REFERENCE),
+    DECLASSIFIES(Type.MULTIPLE_REFERENCE),
     DEFAULT(Type.SINGLE_ATTRIBUTE),
     DEFAULT_VALUE(Type.SINGLE_REFERENCE),
     DIMENSION(Type.SINGLE_REFERENCE),
@@ -75,6 +78,7 @@ public enum ObservableProperty {
     ELSE_STMT(Type.SINGLE_REFERENCE),
     ENCLOSING_PARAMETERS(Type.SINGLE_ATTRIBUTE),
     ENTRIES(Type.MULTIPLE_REFERENCE),
+    ERASES(Type.MULTIPLE_REFERENCE),
     EXEC_BLOCK(Type.SINGLE_REFERENCE),
     EXPR(Type.SINGLE_REFERENCE),
     EXPRESSION(Type.SINGLE_REFERENCE),
@@ -115,6 +119,7 @@ public enum ObservableProperty {
     MODULE(Type.SINGLE_ATTRIBUTE),
     MODULE_NAMES(Type.MULTIPLE_REFERENCE),
     NAME(Type.SINGLE_REFERENCE),
+    NEW_OBJECTS(Type.MULTIPLE_REFERENCE),
     OPEN(Type.SINGLE_ATTRIBUTE),
     OPERATOR(Type.SINGLE_ATTRIBUTE),
     OPERATORS(Type.SINGLE_ATTRIBUTE),
@@ -180,10 +185,8 @@ public enum ObservableProperty {
     COMMENTED_NODE;
 
     enum Type {
-        SINGLE_ATTRIBUTE(false, false),
-        SINGLE_REFERENCE(false, true),
-        MULTIPLE_ATTRIBUTE(true, false),
-        MULTIPLE_REFERENCE(true, true);
+
+        SINGLE_ATTRIBUTE(false, false), SINGLE_REFERENCE(false, true), MULTIPLE_ATTRIBUTE(true, false), MULTIPLE_REFERENCE(true, true);
 
         private boolean multiple;
 
@@ -200,9 +203,7 @@ public enum ObservableProperty {
     private boolean derived;
 
     public static ObservableProperty fromCamelCaseName(String camelCaseName) {
-        Optional<ObservableProperty> observableProperty = Arrays.stream(values())
-                .filter(v -> v.camelCaseName().equals(camelCaseName))
-                .findFirst();
+        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();
         if (observableProperty.isPresent()) {
             return observableProperty.get();
         }
@@ -260,9 +261,7 @@ public enum ObservableProperty {
                 }
                 return null;
             }
-            throw new RuntimeException(String.format(
-                    "Property %s returned %s (%s)",
-                    this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
+            throw new RuntimeException(String.format("Property %s returned %s (%s)", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
         } catch (ClassCastException e) {
             throw new RuntimeException(e);
         }
@@ -292,10 +291,7 @@ public enum ObservableProperty {
             }
             return null;
         } catch (ClassCastException e) {
-            throw new RuntimeException(
-                    "Unable to get list value for " + this.name() + " from " + node + " (class: "
-                            + node.getClass().getSimpleName() + ")",
-                    e);
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
     }
 
@@ -304,10 +300,7 @@ public enum ObservableProperty {
         try {
             return (Collection) rawValue;
         } catch (ClassCastException e) {
-            throw new RuntimeException(
-                    "Unable to get list value for " + this.name() + " from " + node + " (class: "
-                            + node.getClass().getSimpleName() + ")",
-                    e);
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
     }
 
@@ -330,10 +323,7 @@ public enum ObservableProperty {
         try {
             return node.getClass().getMethod(getterName).invoke(node);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(
-                    "Unable to get value for " + this.name() + " from " + node + " ("
-                            + node.getClass().getSimpleName() + ")",
-                    e);
+            throw new RuntimeException("Unable to get value for " + this.name() + " from " + node + " (" + node.getClass().getSimpleName() + ")", e);
         }
     }
 

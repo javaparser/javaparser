@@ -291,7 +291,7 @@ class StatVisitor(
         }
     }
 
-    override fun visit(n: JmlClauseIf, arg: Element) {
+    override fun visit(n: JmlConditionalClause, arg: Element) {
         super.visit(n, arg)
     }
 

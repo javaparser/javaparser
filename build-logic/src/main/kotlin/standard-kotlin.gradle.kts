@@ -1,3 +1,7 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
+import com.vanniktech.maven.publish.SourcesJar
+
 plugins {
     kotlin("jvm")
     id("buildlogic.java-conventions")
@@ -5,31 +9,14 @@ plugins {
 
 val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-dependencies {}
-
-testing {
-    suites {
-        val test by getting(JvmTestSuite::class) {
-            useKotlinTest()
-        }
-    }
-}
-
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    //maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots/")
-}
-
 dependencies {
-    //truth = { module = "com.google.truth:truth", version = "1.10.1" }
-
     api(project(":jmlparser-core"))
-
-
     testImplementation(libs.findBundle("testing").get())
     testRuntimeOnly(libs.findBundle("testing-runtime").get())
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 tasks.named<Test>("test") {
@@ -45,7 +32,6 @@ tasks.named<Test>("test") {
 testing {
     suites {
         val test by getting(JvmTestSuite::class) {
-            //useKotlinTest("1.9.20")
             useJUnitJupiter()
         }
     }
@@ -57,8 +43,8 @@ tasks.compileJava {
     options.compilerArgs.addAll(
         listOf(
             "-Xlint:all", // Enables all recommended warnings.
-            "-Werror" // Terminates compilation when warnings occur.
-        )
+            "-Werror", // Terminates compilation when warnings occur.
+        ),
     )
     options.encoding = "UTF-8"
 }
@@ -68,9 +54,19 @@ tasks.jar {
         attributes(
             mapOf(
                 "Implementation-Title" to project.name,
-                "Implementation-Version" to project.version
-            )
+                "Implementation-Version" to project.version,
+            ),
         )
     }
 }
 
+/*
+mavenPublishing {
+    configure(
+        KotlinJvm(
+            javadocJar = JavadocJar.Dokka("dokkaHtml"),
+            sourcesJar = SourcesJar.Sources(),
+        ),
+    )
+}
+*/

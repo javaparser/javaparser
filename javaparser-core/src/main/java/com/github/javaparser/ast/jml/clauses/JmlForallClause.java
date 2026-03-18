@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.jml.clauses;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -66,7 +65,8 @@ public class JmlForallClause extends JmlClause {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BOUNDED_VARIABLES, this.boundedVariables, boundedVariables);
-        if (this.boundedVariables != null) this.boundedVariables.setParentNode(null);
+        if (this.boundedVariables != null)
+            this.boundedVariables.setParentNode(null);
         this.boundedVariables = boundedVariables;
         setAsParentNodeOf(boundedVariables);
         return this;

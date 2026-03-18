@@ -38,12 +38,6 @@ public class SignalsMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     SignalsMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                JmlSignalsClause.class,
-                "Signals",
-                "com.github.javaparser.ast.clauses",
-                false,
-                false);
+        super(superBaseNodeMetaModel, JmlSignalsClause.class, "Signals", "com.github.javaparser.ast.clauses", false, false);
     }
 }

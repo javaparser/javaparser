@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.key;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -66,7 +65,8 @@ public class KeyMethodSignature extends Node {
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -84,7 +84,8 @@ public class KeyMethodSignature extends Node {
             return this;
         }
         notifyPropertyChange(ObservableProperty.PARAM_TYPES, this.paramTypes, paramTypes);
-        if (this.paramTypes != null) this.paramTypes.setParentNode(null);
+        if (this.paramTypes != null)
+            this.paramTypes.setParentNode(null);
         this.paramTypes = paramTypes;
         setAsParentNodeOf(paramTypes);
         return this;

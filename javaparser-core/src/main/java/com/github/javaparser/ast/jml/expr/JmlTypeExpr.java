@@ -1,10 +1,10 @@
 package com.github.javaparser.ast.jml.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -23,7 +23,7 @@ import org.jspecify.annotations.NonNull;
  * @author Alexander Weigl
  * @version 1 (12/29/21)
  */
-public class JmlTypeExpr extends Expression {
+public class JmlTypeExpr extends JmlExpression {
 
     private Type type;
 
@@ -66,7 +66,8 @@ public class JmlTypeExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) this.type.setParentNode(null);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;

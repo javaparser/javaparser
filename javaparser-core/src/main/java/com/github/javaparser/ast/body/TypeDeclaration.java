@@ -22,7 +22,6 @@ package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -49,13 +48,7 @@ import org.jspecify.annotations.NonNull;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends BodyDeclaration<T>
-        implements NodeWithSimpleName<T>,
-                NodeWithJavadoc<T>,
-                NodeWithMembers<T>,
-                NodeWithAccessModifiers<T>,
-                NodeWithStaticModifier<T>,
-                NodeWithStrictfpModifier<T> {
+public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends BodyDeclaration<T> implements NodeWithSimpleName<T>, NodeWithJavadoc<T>, NodeWithMembers<T>, NodeWithAccessModifiers<T>, NodeWithStaticModifier<T>, NodeWithStrictfpModifier<T> {
 
     private SimpleName name;
 
@@ -76,11 +69,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     }
 
     @AllFieldsConstructor
-    public TypeDeclaration(
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            SimpleName name,
-            NodeList<BodyDeclaration<?>> members) {
+    public TypeDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         this(null, modifiers, annotations, name, members);
     }
 
@@ -88,12 +77,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TypeDeclaration(
-            TokenRange tokenRange,
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            SimpleName name,
-            NodeList<BodyDeclaration<?>> members) {
+    public TypeDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setName(name);
@@ -136,7 +120,8 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
             return (T) this;
         }
         notifyPropertyChange(ObservableProperty.MEMBERS, this.members, members);
-        if (this.members != null) this.members.setParentNode(null);
+        if (this.members != null)
+            this.members.setParentNode(null);
         this.members = members;
         setAsParentNodeOf(members);
         return (T) this;
@@ -150,7 +135,8 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
             return (T) this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null) this.modifiers.setParentNode(null);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return (T) this;
@@ -164,7 +150,8 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
             return (T) this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return (T) this;
@@ -207,11 +194,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      * @return methods or constructors whose signatures match the passed signature.
      */
     public List<CallableDeclaration<?>> getCallablesWithSignature(CallableDeclaration.Signature signature) {
-        return getMembers().stream()
-                .filter(m -> m instanceof CallableDeclaration)
-                .map(m -> ((CallableDeclaration<?>) m))
-                .filter(m -> m.getSignature().equals(signature))
-                .collect(toList());
+        return getMembers().stream().filter(m -> m instanceof CallableDeclaration).map(m -> ((CallableDeclaration<?>) m)).filter(m -> m.getSignature().equals(signature)).collect(toList());
     }
 
     /**
@@ -224,14 +207,9 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      */
     public Optional<String> getFullyQualifiedName() {
         if (isTopLevelType()) {
-            return findCompilationUnit().map(cu -> cu.getPackageDeclaration()
-                    .map(pd -> pd.getNameAsString())
-                    .map(pkg -> pkg + "." + getNameAsString())
-                    .orElseGet(() -> getNameAsString()));
+            return findCompilationUnit().map(cu -> cu.getPackageDeclaration().map(pd -> pd.getNameAsString()).map(pkg -> pkg + "." + getNameAsString()).orElseGet(() -> getNameAsString()));
         }
-        return findAncestor(TypeDeclaration.class)
-                .map(td -> (TypeDeclaration<?>) td)
-                .flatMap(td -> td.getFullyQualifiedName().map(fqn -> fqn + "." + getNameAsString()));
+        return findAncestor(TypeDeclaration.class).map(td -> (TypeDeclaration<?>) td).flatMap(td -> td.getFullyQualifiedName().map(fqn -> fqn + "." + getNameAsString()));
     }
 
     /**

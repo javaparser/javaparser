@@ -22,7 +22,6 @@ package com.github.javaparser;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.singletonList;
-
 import com.github.javaparser.utils.LineSeparator;
 import java.util.List;
 

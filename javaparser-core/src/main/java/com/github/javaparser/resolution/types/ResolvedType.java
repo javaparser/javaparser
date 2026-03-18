@@ -177,10 +177,7 @@ public interface ResolvedType {
      * By replacing these values I could also infer some type equivalence.
      * Those would be collected in the given map.
      */
-    default ResolvedType replaceTypeVariables(
-            ResolvedTypeParameterDeclaration tp,
-            ResolvedType replaced,
-            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    default ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         return this;
     }
 
@@ -210,8 +207,7 @@ public interface ResolvedType {
      * Returns true if the ResolvedType is a numeric
      */
     default boolean isNumericType() {
-        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes())
-                .anyMatch(rpt -> rpt.isAssignableBy(this));
+        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt -> rpt.isAssignableBy(this));
     }
 
     // /

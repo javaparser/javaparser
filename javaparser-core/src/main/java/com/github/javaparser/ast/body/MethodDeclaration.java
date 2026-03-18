@@ -22,7 +22,6 @@ package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -60,21 +59,7 @@ import org.jspecify.annotations.Nullable;
  *
  * @author Julio Vilmar Gesser
  */
-public class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
-        implements NodeWithType<MethodDeclaration, Type>,
-                NodeWithOptionalBlockStmt<MethodDeclaration>,
-                NodeWithJavadoc<MethodDeclaration>,
-                NodeWithDeclaration,
-                NodeWithSimpleName<MethodDeclaration>,
-                NodeWithParameters<MethodDeclaration>,
-                NodeWithThrownExceptions<MethodDeclaration>,
-                NodeWithTypeParameters<MethodDeclaration>,
-                NodeWithAccessModifiers<MethodDeclaration>,
-                NodeWithAbstractModifier<MethodDeclaration>,
-                NodeWithStaticModifier<MethodDeclaration>,
-                NodeWithFinalModifier<MethodDeclaration>,
-                NodeWithStrictfpModifier<MethodDeclaration>,
-                Resolvable<ResolvedMethodDeclaration> {
+public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration, NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>, NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration>, NodeWithAccessModifiers<MethodDeclaration>, NodeWithAbstractModifier<MethodDeclaration>, NodeWithStaticModifier<MethodDeclaration>, NodeWithFinalModifier<MethodDeclaration>, NodeWithStrictfpModifier<MethodDeclaration>, Resolvable<ResolvedMethodDeclaration> {
 
     private Type type;
 
@@ -82,154 +67,36 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
     private BlockStmt body;
 
     public MethodDeclaration() {
-        this(
-                null,
-                new NodeList<>(),
-                new NodeList<>(),
-                new NodeList<>(),
-                new ClassOrInterfaceType(),
-                new SimpleName(),
-                new NodeList<>(),
-                new NodeList<>(),
-                new BlockStmt(),
-                null,
-                new NodeList<>());
+        this(null, new NodeList<>(), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt(), null, new NodeList<>());
     }
 
     public MethodDeclaration(final NodeList<Modifier> modifiers, final Type type, final String name) {
-        this(
-                null,
-                modifiers,
-                new NodeList<>(),
-                new NodeList<>(),
-                type,
-                new SimpleName(name),
-                new NodeList<>(),
-                new NodeList<>(),
-                new BlockStmt(),
-                null,
-                new NodeList<>());
+        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt(), null, new NodeList<>());
     }
 
-    public MethodDeclaration(
-            final NodeList<Modifier> modifiers,
-            final String name,
-            final Type type,
-            final NodeList<Parameter> parameters) {
-        this(
-                null,
-                modifiers,
-                new NodeList<>(),
-                new NodeList<>(),
-                type,
-                new SimpleName(name),
-                parameters,
-                new NodeList<>(),
-                new BlockStmt(),
-                null,
-                new NodeList<>());
+    public MethodDeclaration(final NodeList<Modifier> modifiers, final String name, final Type type, final NodeList<Parameter> parameters) {
+        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), parameters, new NodeList<>(), new BlockStmt(), null, new NodeList<>());
     }
 
-    public MethodDeclaration(
-            final NodeList<Modifier> modifiers,
-            final NodeList<AnnotationExpr> annotations,
-            final NodeList<TypeParameter> typeParameters,
-            final Type type,
-            final SimpleName name,
-            final NodeList<Parameter> parameters,
-            final NodeList<ReferenceType> thrownExceptions,
-            final BlockStmt body) {
-        this(
-                null,
-                modifiers,
-                annotations,
-                typeParameters,
-                type,
-                name,
-                parameters,
-                thrownExceptions,
-                body,
-                null,
-                new NodeList<>());
+    public MethodDeclaration(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
+        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, null, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public MethodDeclaration(
-            final NodeList<Modifier> modifiers,
-            final NodeList<AnnotationExpr> annotations,
-            final NodeList<TypeParameter> typeParameters,
-            final Type type,
-            final SimpleName name,
-            final NodeList<Parameter> parameters,
-            final NodeList<ReferenceType> thrownExceptions,
-            final BlockStmt body,
-            ReceiverParameter receiverParameter,
-            final NodeList<JmlContract> contracts) {
-        this(
-                null,
-                modifiers,
-                annotations,
-                typeParameters,
-                type,
-                name,
-                parameters,
-                thrownExceptions,
-                body,
-                receiverParameter,
-                contracts);
+    public MethodDeclaration(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body, ReceiverParameter receiverParameter, final NodeList<JmlContract> contracts) {
+        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter, contracts);
     }
 
-    public MethodDeclaration(
-            TokenRange tokenRange,
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            NodeList<TypeParameter> typeParameters,
-            Type type,
-            SimpleName name,
-            NodeList<Parameter> parameters,
-            NodeList<ReferenceType> thrownExceptions,
-            BlockStmt body,
-            ReceiverParameter receiverParameter) {
-        this(
-                tokenRange,
-                modifiers,
-                annotations,
-                typeParameters,
-                type,
-                name,
-                parameters,
-                thrownExceptions,
-                body,
-                receiverParameter,
-                new NodeList<>());
+    public MethodDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
+        this(tokenRange, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter, new NodeList<>());
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public MethodDeclaration(
-            TokenRange tokenRange,
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            NodeList<TypeParameter> typeParameters,
-            Type type,
-            SimpleName name,
-            NodeList<Parameter> parameters,
-            NodeList<ReferenceType> thrownExceptions,
-            BlockStmt body,
-            ReceiverParameter receiverParameter,
-            NodeList<JmlContract> contracts) {
-        super(
-                tokenRange,
-                modifiers,
-                annotations,
-                typeParameters,
-                name,
-                parameters,
-                thrownExceptions,
-                receiverParameter,
-                contracts);
+    public MethodDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
+        super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter, contracts);
         setType(type);
         setBody(body);
         customInitialization();
@@ -264,7 +131,8 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) this.body.setParentNode(null);
+        if (this.body != null)
+            this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
@@ -282,7 +150,8 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) this.type.setParentNode(null);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;
@@ -323,8 +192,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
      * @return method declaration as String
      */
     @Override
-    public String getDeclarationAsString(
-            boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
+    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = getAccessSpecifier();
@@ -398,10 +266,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
     }
 
     private boolean isImplicitlyPublic() {
-        return getAccessSpecifier() == AccessSpecifier.NONE
-                && hasParentNode()
-                && getParentNode().get() instanceof ClassOrInterfaceDeclaration
-                && ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface();
+        return getAccessSpecifier() == AccessSpecifier.NONE && hasParentNode() && getParentNode().get() instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface();
     }
 
     /*
@@ -414,10 +279,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
     }
 
     private boolean isImplicitlyAbstract() {
-        return hasParentNode()
-                && getParentNode().get() instanceof ClassOrInterfaceDeclaration
-                && ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface()
-                && Arrays.asList(STATIC, DEFAULT, PRIVATE).stream().noneMatch(modifier -> hasModifier(modifier));
+        return hasParentNode() && getParentNode().get() instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface() && Arrays.asList(STATIC, DEFAULT, PRIVATE).stream().noneMatch(modifier -> hasModifier(modifier));
     }
 
     public boolean isNative() {

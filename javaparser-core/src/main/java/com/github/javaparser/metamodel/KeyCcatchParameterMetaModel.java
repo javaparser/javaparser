@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.key.KeyCcatchParameter;
 import java.util.Optional;
+import com.github.javaparser.ast.key.KeyCcatchParameter;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,13 +38,7 @@ public class KeyCcatchParameterMetaModel extends KeyCcatchBranchMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyCcatchParameterMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                KeyCcatchParameter.class,
-                "KeyCcatchParameter",
-                "com.github.javaparser.ast.key",
-                false,
-                false);
+        super(superBaseNodeMetaModel, KeyCcatchParameter.class, "KeyCcatchParameter", "com.github.javaparser.ast.key", false, false);
     }
 
     public PropertyMetaModel blockPropertyMetaModel;

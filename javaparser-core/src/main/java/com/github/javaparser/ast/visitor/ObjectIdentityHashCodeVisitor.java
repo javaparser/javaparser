@@ -461,7 +461,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final JmlClauseLabel n, final Void arg) {
+    public Integer visit(final JmlLabledClause n, final Void arg) {
         return n.hashCode();
     }
 
@@ -521,7 +521,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final JmlClauseIf n, final Void arg) {
+    public Integer visit(final JmlConditionalClause n, final Void arg) {
         return n.hashCode();
     }
 
@@ -791,6 +791,11 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final KeYMarkerStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlInfFlowClause n, final Void arg) {
         return n.hashCode();
     }
 }

@@ -38,13 +38,7 @@ public class KeyExecStatementMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyExecStatementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                KeyExecStmt.class,
-                "KeyExecStatement",
-                "com.github.javaparser.ast.key",
-                false,
-                false);
+        super(superBaseNodeMetaModel, KeyExecStmt.class, "KeyExecStatement", "com.github.javaparser.ast.key", false, false);
     }
 
     public PropertyMetaModel branchesPropertyMetaModel;

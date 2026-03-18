@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.jml.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -28,13 +27,14 @@ import org.jspecify.annotations.NonNull;
 /// ```
 /// @author Alexander Weigl
 /// @version 1 (3/20/21)
-public class JmlSetComprehensionExpr extends Expression implements Jmlish {
+public class JmlSetComprehensionExpr extends JmlExpression {
 
     private VariableDeclarator binding;
 
     private Expression predicate;
 
-    public JmlSetComprehensionExpr() {}
+    public JmlSetComprehensionExpr() {
+    }
 
     @AllFieldsConstructor
     public JmlSetComprehensionExpr(VariableDeclarator binding, Expression predicate) {
@@ -101,7 +101,8 @@ public class JmlSetComprehensionExpr extends Expression implements Jmlish {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BINDING, this.binding, binding);
-        if (this.binding != null) this.binding.setParentNode(null);
+        if (this.binding != null)
+            this.binding.setParentNode(null);
         this.binding = binding;
         setAsParentNodeOf(binding);
         return this;
@@ -119,7 +120,8 @@ public class JmlSetComprehensionExpr extends Expression implements Jmlish {
             return this;
         }
         notifyPropertyChange(ObservableProperty.PREDICATE, this.predicate, predicate);
-        if (this.predicate != null) this.predicate.setParentNode(null);
+        if (this.predicate != null)
+            this.predicate.setParentNode(null);
         this.predicate = predicate;
         setAsParentNodeOf(predicate);
         return this;

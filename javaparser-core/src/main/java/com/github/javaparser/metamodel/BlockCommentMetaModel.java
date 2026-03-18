@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.comments.BlockComment;
 import java.util.Optional;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,12 +38,6 @@ public class BlockCommentMetaModel extends CommentMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     BlockCommentMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                BlockComment.class,
-                "BlockComment",
-                "com.github.javaparser.ast.comments",
-                false,
-                false);
+        super(superBaseNodeMetaModel, BlockComment.class, "BlockComment", "com.github.javaparser.ast.comments", false, false);
     }
 }

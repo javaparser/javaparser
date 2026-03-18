@@ -1,18 +1,20 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     `java-library`
-    `maven-publish`
     id("test-report-aggregation")
     id("com.diffplug.spotless")
     checkstyle
+    signing
 }
 
+val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
 group = "io.github.jmltoolkit"
-version = "3.28.0-J8.0-K13.5"
+version = project.properties["version"] ?: "unspecified"
 
 repositories {
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+    mavenCentral()
 }
 
 dependencies {
@@ -23,40 +25,45 @@ dependencies {
 java {
     // Auto JDK setup
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of("21"))
+        libs.findVersion("jdk").ifPresent {
+            languageVersion.set(JavaLanguageVersion.of(it.toString()))
+        }
     }
-    withSourcesJar()
-    withJavadocJar()
-}
-
-publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
-    }
+    //withSourcesJar()
+    //withJavadocJar()
 }
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+    options.compilerArgs.add("-parameters")
 }
 
 tasks.withType<Javadoc> {
+    val options = options as StandardJavadocDocletOptions
     options.encoding = "UTF-8"
+    isFailOnError = false
+    options.addBooleanOption("Xdoclint:none", true)
+    options.addBooleanOption("html5", true)
 }
 
-tasks.withType<Test> {
-    workingDir = projectDir
-    useJUnitPlatform()
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+        }
+    }
 }
 
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {
     java {
         removeUnusedImports()
-        palantirJavaFormat("2.86.0").formatJavadoc(false).style("PALANTIR")
+        val version = libs.findVersion("palantirJavaFormat").get().strictVersion
+        palantirJavaFormat(version).formatJavadoc(false).style("PALANTIR")
     }
 }
 
 configure<CheckstyleExtension> {
-    toolVersion = "13.1.0"
+    toolVersion = libs.findVersion("checkstyleVersion").get().strictVersion
     configFile = file("$rootDir/dev-files/JavaParser-CheckStyle.xml")
     isShowViolations = true
 }

@@ -42,8 +42,10 @@ public class Kept implements DifferenceElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Kept kept = (Kept) o;
         return element.equals(kept.element);
     }

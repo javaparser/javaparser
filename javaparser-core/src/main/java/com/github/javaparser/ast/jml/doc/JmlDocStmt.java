@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.jml.doc;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -113,7 +112,8 @@ public class JmlDocStmt extends Statement implements JmlDocContainer {
             return this;
         }
         notifyPropertyChange(ObservableProperty.JML_COMMENTS, this.jmlComments, jmlComments);
-        if (this.jmlComments != null) this.jmlComments.setParentNode(null);
+        if (this.jmlComments != null)
+            this.jmlComments.setParentNode(null);
         this.jmlComments = jmlComments;
         setAsParentNodeOf(jmlComments);
         return this;

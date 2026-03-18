@@ -24,5 +24,6 @@ public class AbstractModifier extends Node {
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {}
+    public <A> void accept(VoidVisitor<A> v, A arg) {
+    }
 }

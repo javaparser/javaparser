@@ -40,8 +40,10 @@ public class Added implements DifferenceElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Added added = (Added) o;
         return element.equals(added.element);
     }
@@ -90,8 +92,7 @@ public class Added implements DifferenceElement {
         if (element instanceof CsmToken) {
             return new TokenTextElement(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent());
         }
-        throw new UnsupportedOperationException(
-                "Unsupported element type: " + element.getClass().getSimpleName());
+        throw new UnsupportedOperationException("Unsupported element type: " + element.getClass().getSimpleName());
     }
 
     /*

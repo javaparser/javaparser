@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.jml.clauses;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -63,7 +62,8 @@ public class JmlMethodSignature extends Node {
             return this;
         }
         notifyPropertyChange(ObservableProperty.ARGUMENT_TYPES, this.argumentTypes, argumentTypes);
-        if (this.argumentTypes != null) this.argumentTypes.setParentNode(null);
+        if (this.argumentTypes != null)
+            this.argumentTypes.setParentNode(null);
         this.argumentTypes = argumentTypes;
         setAsParentNodeOf(argumentTypes);
         return this;
@@ -81,7 +81,8 @@ public class JmlMethodSignature extends Node {
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -98,7 +99,8 @@ public class JmlMethodSignature extends Node {
             return this;
         }
         notifyPropertyChange(ObservableProperty.RECEIVER, this.receiver, receiver);
-        if (this.receiver != null) this.receiver.setParentNode(null);
+        if (this.receiver != null)
+            this.receiver.setParentNode(null);
         this.receiver = receiver;
         setAsParentNodeOf(receiver);
         return this;
@@ -161,12 +163,6 @@ public class JmlMethodSignature extends Node {
         return (JmlMethodSignature) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlMethodSignatureMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlMethodSignatureMetaModel;
-    }
-
     /**
      * This constructor is used by the parser and is considered private.
      */
@@ -195,5 +191,10 @@ public class JmlMethodSignature extends Node {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @Nullable() Type receiver() {
         return receiver;
+    }
+
+    @Override
+    public JmlMethodSignatureMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlMethodSignatureMetaModel;
     }
 }

@@ -48,10 +48,13 @@ public class Reshuffled implements DifferenceElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Reshuffled that = (Reshuffled) o;
-        if (!previousOrder.equals(that.previousOrder)) return false;
+        if (!previousOrder.equals(that.previousOrder))
+            return false;
         return nextOrder.equals(that.nextOrder);
     }
 
@@ -105,9 +108,7 @@ public class Reshuffled implements DifferenceElement {
      * Replaces all eol tokens in the list by the specified line separator token
      */
     private List<CsmElement> replaceTokens(List<CsmElement> elements, CsmElement lineSeparator) {
-        return elements.stream()
-                .map(element -> isNewLineToken(element) ? lineSeparator : element)
-                .collect(Collectors.toList());
+        return elements.stream().map(element -> isNewLineToken(element) ? lineSeparator : element).collect(Collectors.toList());
     }
 
     /*

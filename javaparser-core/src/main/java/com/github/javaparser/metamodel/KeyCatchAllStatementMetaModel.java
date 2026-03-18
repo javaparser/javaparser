@@ -38,13 +38,7 @@ public class KeyCatchAllStatementMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyCatchAllStatementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                KeyCatchAllStmt.class,
-                "KeyCatchAllStatement",
-                "com.github.javaparser.ast.key",
-                false,
-                false);
+        super(superBaseNodeMetaModel, KeyCatchAllStmt.class, "KeyCatchAllStatement", "com.github.javaparser.ast.key", false, false);
     }
 
     public PropertyMetaModel blockPropertyMetaModel;

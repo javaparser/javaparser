@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.jml.body;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -74,7 +73,8 @@ public class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDeclar
             return this;
         }
         notifyPropertyChange(ObservableProperty.DECL, this.decl, decl);
-        if (this.decl != null) this.decl.setParentNode(null);
+        if (this.decl != null)
+            this.decl.setParentNode(null);
         this.decl = decl;
         setAsParentNodeOf(decl);
         return this;
@@ -124,7 +124,8 @@ public class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDeclar
             return this;
         }
         notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
-        if (this.jmlTags != null) this.jmlTags.setParentNode(null);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
         this.jmlTags = jmlTags;
         setAsParentNodeOf(jmlTags);
         return this;

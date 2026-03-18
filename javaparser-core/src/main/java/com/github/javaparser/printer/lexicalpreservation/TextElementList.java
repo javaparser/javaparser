@@ -195,8 +195,7 @@ public class TextElementList implements TextElementSequence {
     @Override
     public void removeRange(int fromIndex, int toIndex) {
         if (!isValidIndex(fromIndex) || !isValidIndex(toIndex) || fromIndex > toIndex) {
-            throw new IndexOutOfBoundsException(
-                    "Invalid range: [" + fromIndex + ", " + toIndex + "] for size " + elements.size());
+            throw new IndexOutOfBoundsException("Invalid range: [" + fromIndex + ", " + toIndex + "] for size " + elements.size());
         }
         // toIndex is inclusive, subList.clear() expects exclusive upper bound
         elements.subList(fromIndex, toIndex + 1).clear();
@@ -275,8 +274,10 @@ public class TextElementList implements TextElementSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof TextElementList)) return false;
+        if (this == obj)
+            return true;
+        if (!(obj instanceof TextElementList))
+            return false;
         TextElementList other = (TextElementList) obj;
         return elements.equals(other.elements);
     }

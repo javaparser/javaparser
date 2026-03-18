@@ -266,17 +266,21 @@ TOKEN : {
 | <CONTINUES_REDUNDANTLY: "continues_redundantly">
 | <CONTINUE_BEHAVIOR: "continue_behavior">
 | <CONTINUE_BEHAVIOUR: "continue_behaviour">
-| <DECLASSIFIES : "declassifies">
+| <DECLASSIFIES : "\\declassifies">
 | <DECREASES: "decreases">
 | <DECREASES_REDUNDANTLY: "decreases_redundantly">
 | <DECREASING: "decreasing">
 | <DECREASING_REDUNDANTLY: "decreasing_redundantly">
 | <DETERMINES : "determines">
+| <LOOP_DETERMINES : "loop_determines">
+| <SEPARATES : "separates">
+| <LOOP_SEPARATES : "loop_separates">
+| <NEW_OBJECTS : "\\new_objects">
+| <BY : "\\by">
 | <DIVERGES: "diverges">
 | <DIVERGES_REDUNDANTLY: "diverges_redundantly">
 | <DURATION: "\\duration">
 | <DURATION_REDUNDANTLY: "duration_redundantly">
-//| <ELEMTYPE: "\\elemtype">
 | <ENSURES: "ensures">
 | <ENSURES_REDUNDANTLY: "ensures_redundantly">
 | <ENSURES_FREE: "ensures_free">
@@ -284,8 +288,7 @@ TOKEN : {
 | <EQUIVALENCE: "<==>">
 | <IMPLICATION: "==>">
 | <IMPLICATION_BACKWARD: "<==">
-| <ERASES :  "erases">
-//| <EVERYTHING: "\\everything">
+| <ERASES :  "\\erases">
 | <EXAMPLE: "example">
 | <EXCEPTIONAL_BEHAVIOR: "exceptional_behavior">
 | <EXCEPTIONAL_BEHAVIOUR: "exceptional_behaviour">
@@ -352,7 +355,6 @@ TOKEN : {
 | <MONITORS_FOR: "monitors_for">
 | <NESTED_CONTRACT_END : "|}">
 | <NESTED_CONTRACT_START : "{|">
-| <NEW_OBJECT : "new_objects">
 //| <ESC_NONNULLELEMENTS: "\\nonnullelements">
 | <NONNULLELEMENTS: "nonnullelements">
 | <NON_NULL: "non_null">
@@ -3549,8 +3551,9 @@ String Identifier():
         | <CONSTRUCTOR> | <CONTINUES> | <CONTINUES_REDUNDANTLY> | <IMMUTABLE>
         | <CONTINUE_BEHAVIOR> | <CONTINUE_BEHAVIOUR> | <DECLASSIFIES > | <DECREASES>
         | <DECREASES_REDUNDANTLY> | <DECREASING> | <DECREASING_REDUNDANTLY> | <DETERMINES >
+        | <LOOP_DETERMINES> | <SEPARATES> | <LOOP_SEPARATES> | <BY> | <NEW_OBJECTS> | <ERASES>
         | <DIVERGES> | <DIVERGES_REDUNDANTLY> | <DURATION_REDUNDANTLY> | <ENSURES>
-        | <ENSURES_REDUNDANTLY> | <ENSURES_FREE> | <REQUIRES_FREE> | <ERASES>
+        | <ENSURES_REDUNDANTLY> | <ENSURES_FREE> | <REQUIRES_FREE>
         | <EXAMPLE> | <EXCEPTIONAL_BEHAVIOR> | <EXCEPTIONAL_BEHAVIOUR> | <EXCEPTIONAL_EXAMPLE>
         | <EXSURES> | <EXSURES_REDUNDANTLY> | <EXTRACT> | <FIELD> | <FORALL>
         | <FOR_EXAMPLE> | <GHOST> | <HELPER> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY>
@@ -3560,7 +3563,7 @@ String Identifier():
         | <MAINTAINING_REDUNDANTLY> | <MAPS> | <MAPS_REDUNDANTLY> | <MEASURED_BY>
         | <MEASURED_BY_REDUNDANTLY> | <METHOD> | <MODEL> | <MODEL_PROGRAM> | <MODIFIABLE>
         | <MODIFIABLE_REDUNDANTLY> | <MODIFIES> | <MODIFIES_REDUNDANTLY> | <MONITORED>
-        | <MONITORS_FOR> | <NEW_OBJECT > | <NON_NULL> | <NORMAL_BEHAVIOR> | <NORMAL_BEHAVIOUR>
+        | <MONITORS_FOR> | <NON_NULL> | <NORMAL_BEHAVIOR> | <NORMAL_BEHAVIOUR>
         | <NORMAL_EXAMPLE> | <NULLABLE> | <NULLABLE_BY_DEFAULT> | <OLD> | <OR> //| <OLD_ESC>
         | <POST> | <POST_REDUNDANTLY> | <PRE> | <PRE_REDUNDANTLY> | <PURE>
         | <READABLE> | <REFINING> | <REPRESENTS> | <REPRESENTS_REDUNDANTLY> | <REQUIRES_REDUNDANTLY>
@@ -7151,10 +7154,42 @@ JmlClause JmlLoopInvClauses():
   | ret=JmlDecreasesClause()
   | ret=JmlDefaultClause()
   | ret=JmlMultiExprClauses()
+  | ret=JmlInfFlowClause()
   )
   ";"
   {return ret;}
 }
+
+JmlInfFlowClause JmlInfFlowClause():
+{
+    NodeList<SimpleName> heaps = new NodeList<>();
+    Expression e;
+    JavaToken begin;
+    SimpleName name = null;
+    NodeList<Expression> determined = emptyNodeList();
+    NodeList<Expression> by = emptyNodeList();
+    NodeList<Expression> declassifies = emptyNodeList();
+    NodeList<Expression> erases = emptyNodeList();
+    NodeList<Expression> newObjects = emptyNodeList();
+}
+{
+	(<DETERMINES> | <SEPARATES> | <LOOP_SEPARATES> | <LOOP_DETERMINES> )
+	{begin = token();}
+	[LOOKAHEAD(2) name = SimpleName() ":"]
+	determined = ExpressionList()
+	[ <BY> by=ExpressionList() ]
+	(
+		  <DECLASSIFIES> declassifies = ExpressionList()
+		| <ERASES> 	     erases = ExpressionList()
+		| <NEW_OBJECTS>  newObjects = ExpressionList()
+	)*
+	<SEMICOLON>
+    { return new JmlInfFlowClause(range(begin, token()), begin, name, determined, by, declassifies, erases, newObjects); }
+}
+
+
+
+
 
 NodeList<JmlContract> JmlContracts():
 {
@@ -7231,6 +7266,7 @@ JmlClause JmlContractClause():
   | ret=JmlAccessibleClause()
   | ret=JmlDefaultClause()
   | ret=JmlMultiExprClauses()
+  | ret=JmlInfFlowClause()
   )
   ";"
   {return ret;}
@@ -7300,7 +7336,7 @@ JmlClause JmlBreaksClause():
   (<BREAKS> |<BREAKS_REDUNDANTLY>)  { begin = token();}
   <LPAREN> (label=SimpleName())? <RPAREN>
   expr=Expression()
-  { return new JmlClauseLabel(range(begin, token()), begin, label, expr); }
+  { return new JmlLabledClause(range(begin, token()), begin, label, expr); }
 }
 
 JmlClause JmlContinuesClause():
@@ -7313,7 +7349,7 @@ JmlClause JmlContinuesClause():
   (<CONTINUES>|<CONTINUES_REDUNDANTLY>) { begin = token();}
   <LPAREN> (label=SimpleName())? <RPAREN>
   expr=Expression()
-  { return new JmlClauseLabel(range(begin, token()), begin, label, expr); }
+  { return new JmlLabledClause(range(begin, token()), begin, label, expr); }
 }
 
 JmlClause JmlReturnsClause():

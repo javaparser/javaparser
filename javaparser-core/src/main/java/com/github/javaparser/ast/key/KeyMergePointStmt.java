@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.key;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -83,7 +82,8 @@ public class KeyMergePointStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-        if (this.expr != null) this.expr.setParentNode(null);
+        if (this.expr != null)
+            this.expr.setParentNode(null);
         this.expr = expr;
         setAsParentNodeOf(expr);
         return this;
@@ -120,25 +120,31 @@ public class KeyMergePointStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyMergePointStmt() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyMergePointStmt asKeyMergePointStmt() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyMergePointStmt> toKeyMergePointStmt() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyMergePointStmt(Consumer<KeyMergePointStmt> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyMergePointStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.keyMergePointStmtMetaModel;
     }

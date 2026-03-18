@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.stmt;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -90,14 +89,14 @@ public class LocalClassDeclarationStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocalClassDeclarationStmt setClassDeclaration(
-            final @NonNull() ClassOrInterfaceDeclaration classDeclaration) {
+    public LocalClassDeclarationStmt setClassDeclaration(final @NonNull() ClassOrInterfaceDeclaration classDeclaration) {
         assertNotNull(classDeclaration);
         if (classDeclaration == this.classDeclaration) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CLASS_DECLARATION, this.classDeclaration, classDeclaration);
-        if (this.classDeclaration != null) this.classDeclaration.setParentNode(null);
+        if (this.classDeclaration != null)
+            this.classDeclaration.setParentNode(null);
         this.classDeclaration = classDeclaration;
         setAsParentNodeOf(classDeclaration);
         return this;

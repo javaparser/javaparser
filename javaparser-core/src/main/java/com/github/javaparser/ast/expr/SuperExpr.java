@@ -34,6 +34,7 @@ import com.github.javaparser.metamodel.SuperExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.Nullable;
+import java.util.Objects;
 
 /**
  * An occurrence of the "super" keyword. <br>
@@ -93,7 +94,8 @@ public class SuperExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
-        if (this.typeName != null) this.typeName.setParentNode(null);
+        if (this.typeName != null)
+            this.typeName.setParentNode(null);
         this.typeName = typeName;
         setAsParentNodeOf(typeName);
         return this;

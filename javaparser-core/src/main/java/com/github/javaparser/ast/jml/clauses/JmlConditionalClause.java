@@ -1,7 +1,5 @@
 package com.github.javaparser.ast.jml.clauses;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -15,17 +13,18 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.JmlClauseIfMetaModel;
+import com.github.javaparser.metamodel.JmlConditionalClauseMetaModel;
+import org.jspecify.annotations.NonNull;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import org.jspecify.annotations.NonNull;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClauseIf>, NodeWithCondition<JmlClauseIf> {
+public class JmlConditionalClause extends JmlClause implements NodeWithExpression<JmlConditionalClause>, NodeWithCondition<JmlConditionalClause> {
 
     private JmlClauseKind kind;
 
@@ -34,7 +33,7 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
     private Expression condition;
 
     @AllFieldsConstructor
-    public JmlClauseIf(SimpleName name, Expression condition, JmlClauseKind kind, Expression expression) {
+    public JmlConditionalClause(SimpleName name, Expression condition, JmlClauseKind kind, Expression expression) {
         this(null, name, condition, kind, expression);
     }
 
@@ -42,7 +41,7 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseIf(TokenRange tokenRange) {
+    public JmlConditionalClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -66,8 +65,8 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlClauseIf clone() {
-        return (JmlClauseIf) accept(new CloneVisitor(), null);
+    public JmlConditionalClause clone() {
+        return (JmlConditionalClause) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -94,20 +93,21 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setCondition(final @NonNull() Expression condition) {
+    public JmlConditionalClause setCondition(final @NonNull() Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        if (this.condition != null) this.condition.setParentNode(null);
+        if (this.condition != null)
+            this.condition.setParentNode(null);
         this.condition = condition;
         setAsParentNodeOf(condition);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setKind(final @NonNull() JmlClauseKind kind) {
+    public JmlConditionalClause setKind(final @NonNull() JmlClauseKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -123,13 +123,14 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setThen(@NonNull() final Expression expression) {
+    public JmlConditionalClause setThen(@NonNull() final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONDITION, this.expression, expression);
-        if (this.expression != null) this.expression.setParentNode(null);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
@@ -143,34 +144,27 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClauseIf asJmlClauseIf() {
+    public JmlConditionalClause asJmlClauseIf() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClauseIf> toJmlClauseIf() {
+    public Optional<JmlConditionalClause> toJmlClauseIf() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClauseIf(Consumer<JmlClauseIf> action) {
+    public void ifJmlClauseIf(Consumer<JmlConditionalClause> action) {
         action.accept(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlClauseIfMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlClauseIfMetaModel;
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseIf(
-            TokenRange tokenRange, SimpleName name, Expression condition, JmlClauseKind kind, Expression expression) {
+    public JmlConditionalClause(TokenRange tokenRange, SimpleName name, Expression condition, JmlClauseKind kind, Expression expression) {
         super(tokenRange, name);
         setCondition(condition);
         setKind(kind);
@@ -203,13 +197,14 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setExpression(final @NonNull() Expression expression) {
+    public JmlConditionalClause setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) this.expression.setParentNode(null);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
@@ -219,5 +214,11 @@ public class JmlClauseIf extends JmlClause implements NodeWithExpression<JmlClau
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlConditionalClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlConditionalClauseMetaModel;
     }
 }

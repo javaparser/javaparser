@@ -49,6 +49,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
      * an unknown tag.
      */
     public enum Type {
+
         CODE,
         DOC_ROOT,
         INHERIT_DOC,
@@ -106,11 +107,15 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         JavadocInlineTag that = (JavadocInlineTag) o;
-        if (tagName != null ? !tagName.equals(that.tagName) : that.tagName != null) return false;
-        if (type != that.type) return false;
+        if (tagName != null ? !tagName.equals(that.tagName) : that.tagName != null)
+            return false;
+        if (type != that.type)
+            return false;
         return content != null ? content.equals(that.content) : that.content == null;
     }
 
@@ -124,7 +129,6 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     @Override
     public String toString() {
-        return "JavadocInlineTag{" + "tagName='" + tagName + '\'' + ", type=" + type + ", content='" + content + '\''
-                + '}';
+        return "JavadocInlineTag{" + "tagName='" + tagName + '\'' + ", type=" + type + ", content='" + content + '\'' + '}';
     }
 }

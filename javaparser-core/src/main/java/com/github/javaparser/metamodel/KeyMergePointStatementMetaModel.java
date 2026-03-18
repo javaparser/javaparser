@@ -38,13 +38,7 @@ public class KeyMergePointStatementMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyMergePointStatementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                KeyMergePointStmt.class,
-                "KeyMergePointStatement",
-                "com.github.javaparser.ast.key",
-                false,
-                false);
+        super(superBaseNodeMetaModel, KeyMergePointStmt.class, "KeyMergePointStatement", "com.github.javaparser.ast.key", false, false);
     }
 
     public PropertyMetaModel exprPropertyMetaModel;

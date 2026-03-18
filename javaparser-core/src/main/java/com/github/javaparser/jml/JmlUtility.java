@@ -24,9 +24,7 @@ public class JmlUtility {
         Optional<JmlContract> first;
         var m = ((Node) n);
         var r = m.getRange();
-        if (r.isPresent()
-                && (first = n.getContracts().getOFirst()).isPresent()
-                && first.get().getRange().isPresent()) {
+        if (r.isPresent() && (first = n.getContracts().getOFirst()).isPresent() && first.get().getRange().isPresent()) {
             m.setRange(r.get().withBegin(first.get().getRange().get().begin));
         }
     }
@@ -106,7 +104,8 @@ class NodeIterator implements Iterator<Node> {
         if (toSupply.isEmpty()) {
             explore();
         }
-        if (!toSupply.isEmpty()) return toSupply.poll();
+        if (!toSupply.isEmpty())
+            return toSupply.poll();
         throw new IllegalStateException("no more elements");
     }
 

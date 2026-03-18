@@ -22,7 +22,6 @@ package com.github.javaparser.ast;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -143,6 +142,7 @@ public class Modifier extends Node {
      * The Java modifier keywords.
      */
     public enum DefaultKeyword implements Keyword {
+
         DEFAULT("default"),
         PUBLIC("public"),
         PROTECTED("protected"),

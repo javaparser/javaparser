@@ -59,7 +59,7 @@ public class CoreGenerator {
         StaticJavaParser.setConfiguration(parserConfiguration);
 
         final Path generatedJavaCcRoot =
-                Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
+                Paths.get(args[0], "..", "javaparser-core", "build", "generated-src", "main", "javacc");
         final SourceRoot generatedJavaCcSourceRoot =
                 new SourceRoot(generatedJavaCcRoot.normalize(), parserConfiguration)
                 //                .setPrinter(LexicalPreservingPrinter::print)

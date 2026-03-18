@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.body.ReceiverParameter;
 import java.util.Optional;
+import com.github.javaparser.ast.body.ReceiverParameter;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,13 +38,7 @@ public class ReceiverParameterMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ReceiverParameterMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                ReceiverParameter.class,
-                "ReceiverParameter",
-                "com.github.javaparser.ast.body",
-                false,
-                false);
+        super(superBaseNodeMetaModel, ReceiverParameter.class, "ReceiverParameter", "com.github.javaparser.ast.body", false, false);
     }
 
     public PropertyMetaModel annotationsPropertyMetaModel;

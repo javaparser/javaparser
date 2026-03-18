@@ -14,15 +14,15 @@ repositories {
 }
 
 dependencies {
-    implementation("com.diffplug.gradle.spotless:com.diffplug.gradle.spotless.gradle.plugin:8.3.0")
-
+    implementation("com.diffplug.gradle.spotless:com.diffplug.gradle.spotless.gradle.plugin:8.4.0")
+    implementation("com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin:0.36.0")
     add("implementation", libs.findLibrary("kotlin-gradle").get())
 
     // https://github.com/Kotlin/dokka
     // Dokka is a documentation engine for Kotlin like JavaDoc for Java
-    //add("implementation", libs.findLibrary("dokka-gradle").get())
+    // add("implementation", libs.findLibrary("dokka-gradle").get())
 
     // https://detekt.dev/docs/gettingstarted/gradle/
     // A static code analyzer for Kotlin
-    //add("implementation", libs.findLibrary("detekt-gradle").get())
+    // add("implementation", libs.findLibrary("detekt-gradle").get())
 }

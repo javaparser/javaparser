@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -58,11 +57,13 @@ public interface NodeWithOptionalSimpleName<N extends Node> {
     @Nullable
     SimpleName name();
 
-    default @Nullable String nameAsString() {
+    @Nullable
+    default String nameAsString() {
         return name() != null ? name().getIdentifier() : null;
     }
 
-    default @Nullable NameExpr nameAsExpression() {
+    @Nullable
+    default NameExpr nameAsExpression() {
         return name() != null ? new NameExpr(name()) : null;
     }
 }

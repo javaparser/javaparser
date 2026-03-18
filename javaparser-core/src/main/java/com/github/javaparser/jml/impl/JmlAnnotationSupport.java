@@ -30,8 +30,7 @@ public class JmlAnnotationSupport extends Processor {
     @Override
     public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (result.isSuccessful()) {
-            Map<String, Modifier.DefaultKeyword> a2m =
-                    JmlAnnotationSupport.this.configuration.getAnnotationToModifier();
+            Map<String, Modifier.DefaultKeyword> a2m = JmlAnnotationSupport.this.configuration.getAnnotationToModifier();
             TreeVisitor visitor = new JmlAnnotationTranslator(a2m, result.getProblems());
             result.getResult().ifPresent(visitor::visitPreOrder);
         }
@@ -61,12 +60,7 @@ class JmlAnnotationTranslator extends TreeVisitor {
                         NodeWithModifiers<?> m = (NodeWithModifiers<?>) node;
                         m.addModifier(a2m.get(fqn));
                     } catch (ClassCastException e) {
-                        problemReport.report(
-                                annotation,
-                                "Could not translate annotation %s into a modifier. "
-                                        + "Target node '%s' does support modifiers.",
-                                annotation.getName(),
-                                node.getMetaModel().getTypeName());
+                        problemReport.report(annotation, "Could not translate annotation %s into a modifier. " + "Target node '%s' does support modifiers.", annotation.getName(), node.getMetaModel().getTypeName());
                     }
                 }
             }

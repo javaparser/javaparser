@@ -26,7 +26,6 @@ import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
-
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
@@ -106,8 +105,7 @@ import org.jspecify.annotations.Nullable;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class Node
-        implements Cloneable, HasParentNode<Node>, Visitable, NodeWithRange<Node>, NodeWithTokenRange<Node> {
+public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable, NodeWithRange<Node>, NodeWithTokenRange<Node> {
 
     /**
      * Different registration mode for observers on nodes.
@@ -132,8 +130,8 @@ public abstract class Node
     }
 
     public enum Parsedness {
-        PARSED,
-        UNPARSABLE
+
+        PARSED, UNPARSABLE
     }
 
     /**
@@ -155,8 +153,7 @@ public abstract class Node
     // usefull to find if the node is a phantom node
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration =
-            new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
+    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
     @InternalProperty
     private Range range;
@@ -200,7 +197,8 @@ public abstract class Node
      * It can't be written in the constructor itself because it will
      * be overwritten during code generation.
      */
-    protected void customInitialization() {}
+    protected void customInitialization() {
+    }
 
     /*
      * If there is a printer defined in CompilationUnit, returns it
@@ -214,9 +212,7 @@ public abstract class Node
      * Return the printer initialized with the specified configuration
      */
     protected Printer getPrinter(PrinterConfiguration configuration) {
-        return findCompilationUnit()
-                .map(c -> c.getPrinter(configuration))
-                .orElseGet(() -> createDefaultPrinter(configuration));
+        return findCompilationUnit().map(c -> c.getPrinter(configuration)).orElseGet(() -> createDefaultPrinter(configuration));
     }
 
     protected Printer createDefaultPrinter() {
@@ -263,13 +259,10 @@ public abstract class Node
     @Override
     public Node setTokenRange(TokenRange tokenRange) {
         this.tokenRange = tokenRange;
-        if (tokenRange == null
-                || !(tokenRange.getBegin().hasRange() && tokenRange.getEnd().hasRange())) {
+        if (tokenRange == null || !(tokenRange.getBegin().hasRange() && tokenRange.getEnd().hasRange())) {
             range = null;
         } else {
-            range = new Range(
-                    tokenRange.getBegin().getRange().get().begin,
-                    tokenRange.getEnd().getRange().get().end);
+            range = new Range(tokenRange.getBegin().getRange().get().begin, tokenRange.getEnd().getRange().get().end);
         }
         return this;
     }
@@ -338,8 +331,7 @@ public abstract class Node
                 ConfigurablePrinter configurablePrinter = (ConfigurablePrinter) printer;
                 PrinterConfiguration config = configurablePrinter.getConfiguration();
                 if (config != null) {
-                    config.addOption(new DefaultConfigurationOption(
-                            ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
+                    config.addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
                     configurablePrinter.setConfiguration(config);
                 }
             }
@@ -710,7 +702,7 @@ public abstract class Node
         if (mode == null) {
             throw new IllegalArgumentException("Mode should be not null");
         }
-        switch (mode) {
+        switch(mode) {
             case JUST_THIS_NODE:
                 register(observer);
                 break;
@@ -734,7 +726,8 @@ public abstract class Node
         for (PropertyMetaModel property : getMetaModel().getAllPropertyMetaModels()) {
             if (property.isNodeList()) {
                 NodeList<?> nodeList = (NodeList<?>) property.getValue(this);
-                if (nodeList != null) nodeList.register(observer);
+                if (nodeList != null)
+                    nodeList.register(observer);
             }
         }
     }
@@ -871,37 +864,35 @@ public abstract class Node
     }
 
     public SymbolResolver getSymbolResolver() {
-        return findCompilationUnit()
-                .map(cu -> {
-                    if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
-                        return cu.getData(SYMBOL_RESOLVER_KEY);
-                    }
-                    throw new IllegalStateException(
-                            "Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
-                })
-                .orElseThrow(() -> new IllegalStateException("The node is not inserted in a CompilationUnit"));
+        return findCompilationUnit().map(cu -> {
+            if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
+                return cu.getData(SYMBOL_RESOLVER_KEY);
+            }
+            throw new IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
+        }).orElseThrow(() -> new IllegalStateException("The node is not inserted in a CompilationUnit"));
     }
 
     // We need to expose it because we will need to use it to inject the SymbolSolver
-    public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {};
+    public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
+    };
 
-    public static final DataKey<LineSeparator> LINE_SEPARATOR_KEY = new DataKey<LineSeparator>() {};
+    public static final DataKey<LineSeparator> LINE_SEPARATOR_KEY = new DataKey<LineSeparator>() {
+    };
 
     // We need to expose it because we will need to use it to inject the printer
-    public static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {};
+    public static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {
+    };
 
-    protected static final DataKey<Boolean> PHANTOM_KEY = new DataKey<Boolean>() {};
+    protected static final DataKey<Boolean> PHANTOM_KEY = new DataKey<Boolean>() {
+    };
 
     public enum TreeTraversal {
-        PREORDER,
-        BREADTHFIRST,
-        POSTORDER,
-        PARENTS,
-        DIRECT_CHILDREN
+
+        PREORDER, BREADTHFIRST, POSTORDER, PARENTS, DIRECT_CHILDREN
     }
 
     private Iterator<Node> treeIterator(TreeTraversal traversal) {
-        switch (traversal) {
+        switch(traversal) {
             case BREADTHFIRST:
                 return new BreadthFirstIterator(this);
             case POSTORDER:
@@ -925,16 +916,14 @@ public abstract class Node
      * Make a stream of nodes using traversal algorithm "traversal".
      */
     public Stream<Node> stream(TreeTraversal traversal) {
-        return StreamSupport.stream(
-                Spliterators.spliteratorUnknownSize(treeIterator(traversal), NONNULL | DISTINCT), false);
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(treeIterator(traversal), NONNULL | DISTINCT), false);
     }
 
     /**
      * Make a stream of nodes using pre-order traversal.
      */
     public Stream<Node> stream() {
-        return StreamSupport.stream(
-                Spliterators.spliteratorUnknownSize(treeIterator(PREORDER), NONNULL | DISTINCT), false);
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(treeIterator(PREORDER), NONNULL | DISTINCT), false);
     }
 
     /**
@@ -994,7 +983,8 @@ public abstract class Node
     public <T extends Node> List<T> findAll(Class<T> nodeType, Predicate<T> predicate) {
         final List<T> found = new ArrayList<>();
         walk(nodeType, n -> {
-            if (predicate.test(n)) found.add(n);
+            if (predicate.test(n))
+                found.add(n);
         });
         return found;
     }
@@ -1291,9 +1281,7 @@ public abstract class Node
      * Returns true if the node has an (optional) scope expression eg. method calls (object.method())
      */
     public boolean hasScope() {
-        return (NodeWithOptionalScope.class.isAssignableFrom(this.getClass())
-                        && ((NodeWithOptionalScope) this).getScope().isPresent())
-                || (NodeWithScope.class.isAssignableFrom(this.getClass()) && ((NodeWithScope) this).getScope() != null);
+        return (NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent()) || (NodeWithScope.class.isAssignableFrom(this.getClass()) && ((NodeWithScope) this).getScope() != null);
     }
 
     /*
@@ -1305,15 +1293,7 @@ public abstract class Node
 
     private boolean isPhantom(Node node) {
         if (!node.containsData(PHANTOM_KEY)) {
-            boolean res = (node.getParentNode().isPresent()
-                            && node.getParentNode().get().hasRange()
-                            && node.hasRange()
-                            && !node.getParentNode()
-                                    .get()
-                                    .getRange()
-                                    .get()
-                                    .contains(node.getRange().get())
-                    || inPhantomNode(node, LEVELS_TO_EXPLORE));
+            boolean res = (node.getParentNode().isPresent() && node.getParentNode().get().hasRange() && node.hasRange() && !node.getParentNode().get().getRange().get().contains(node.getRange().get()) || inPhantomNode(node, LEVELS_TO_EXPLORE));
             node.setData(PHANTOM_KEY, res);
         }
         return node.getData(PHANTOM_KEY);
@@ -1323,9 +1303,7 @@ public abstract class Node
      * A node contained in a phantom node is also a phantom node. We limit how many levels up we check just for performance reasons.
      */
     private boolean inPhantomNode(Node node, int levels) {
-        return node.getParentNode().isPresent()
-                && (isPhantom(node.getParentNode().get())
-                        || inPhantomNode(node.getParentNode().get(), levels - 1));
+        return node.getParentNode().isPresent() && (isPhantom(node.getParentNode().get()) || inPhantomNode(node.getParentNode().get(), levels - 1));
     }
 
     /**
@@ -1337,16 +1315,13 @@ public abstract class Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Node setAssociatedSpecificationComments(
-            final @Nullable() NodeList<Comment> associatedSpecificationComments) {
+    public Node setAssociatedSpecificationComments(final @Nullable() NodeList<Comment> associatedSpecificationComments) {
         if (associatedSpecificationComments == this.associatedSpecificationComments) {
             return this;
         }
-        notifyPropertyChange(
-                ObservableProperty.ASSOCIATED_SPECIFICATION_COMMENTS,
-                this.associatedSpecificationComments,
-                associatedSpecificationComments);
-        if (this.associatedSpecificationComments != null) this.associatedSpecificationComments.setParentNode(null);
+        notifyPropertyChange(ObservableProperty.ASSOCIATED_SPECIFICATION_COMMENTS, this.associatedSpecificationComments, associatedSpecificationComments);
+        if (this.associatedSpecificationComments != null)
+            this.associatedSpecificationComments.setParentNode(null);
         this.associatedSpecificationComments = associatedSpecificationComments;
         setAsParentNodeOf(associatedSpecificationComments);
         return this;

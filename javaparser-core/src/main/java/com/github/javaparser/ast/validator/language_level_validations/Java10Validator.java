@@ -32,8 +32,7 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Var
  */
 public class Java10Validator extends Java9Validator {
 
-    final Validator varOnlyOnLocalVariableDefinitionAndForAndTry =
-            new SingleNodeTypeValidator<>(VarType.class, new VarValidator(false));
+    final Validator varOnlyOnLocalVariableDefinitionAndForAndTry = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(false));
 
     public Java10Validator() {
         super();

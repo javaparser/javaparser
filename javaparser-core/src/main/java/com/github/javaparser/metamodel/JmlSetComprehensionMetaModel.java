@@ -38,13 +38,7 @@ public class JmlSetComprehensionMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlSetComprehensionMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                JmlSetComprehensionExpr.class,
-                "JmlSetComprehensionExpr",
-                "com.github.javaparser.ast.jml.expr",
-                false,
-                false);
+        super(superBaseNodeMetaModel, JmlSetComprehensionExpr.class, "JmlSetComprehensionExpr", "com.github.javaparser.ast.jml.expr", false, false);
     }
 
     public PropertyMetaModel bindingPropertyMetaModel;

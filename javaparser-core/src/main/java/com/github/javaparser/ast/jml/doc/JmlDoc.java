@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.jml.doc;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;

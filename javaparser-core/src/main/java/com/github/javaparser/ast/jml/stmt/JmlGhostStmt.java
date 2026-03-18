@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.jml.stmt;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -71,7 +70,8 @@ public class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGho
             return this;
         }
         notifyPropertyChange(ObservableProperty.STATEMENT, this.statement, statement);
-        if (this.statement != null) this.statement.setParentNode(null);
+        if (this.statement != null)
+            this.statement.setParentNode(null);
         this.statement = statement;
         setAsParentNodeOf(statement);
         return this;
@@ -109,7 +109,8 @@ public class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGho
             return this;
         }
         notifyPropertyChange(ObservableProperty.STATEMENT, this.statement, statement);
-        if (this.statement != null) this.statement.setParentNode(null);
+        if (this.statement != null)
+            this.statement.setParentNode(null);
         this.statement = statement;
         setAsParentNodeOf(statement);
         return this;
@@ -133,7 +134,8 @@ public class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGho
             return this;
         }
         notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
-        if (this.jmlTags != null) this.jmlTags.setParentNode(null);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
         this.jmlTags = jmlTags;
         setAsParentNodeOf(jmlTags);
         return this;

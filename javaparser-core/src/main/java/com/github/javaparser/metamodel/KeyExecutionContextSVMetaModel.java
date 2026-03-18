@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.key.sv.KeyExecutionContextSV;
 import java.util.Optional;
+import com.github.javaparser.ast.key.sv.KeyExecutionContextSV;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,13 +38,7 @@ public class KeyExecutionContextSVMetaModel extends KeyAbstractExecutionContextM
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyExecutionContextSVMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                KeyExecutionContextSV.class,
-                "KeyExecutionContextSV",
-                "com.github.javaparser.ast.key.sv",
-                false,
-                false);
+        super(superBaseNodeMetaModel, KeyExecutionContextSV.class, "KeyExecutionContextSV", "com.github.javaparser.ast.key.sv", false, false);
     }
 
     public PropertyMetaModel textPropertyMetaModel;

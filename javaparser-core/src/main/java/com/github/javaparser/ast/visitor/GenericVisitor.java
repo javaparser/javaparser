@@ -314,7 +314,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlQuantifiedExpr n, A arg);
 
-    R visit(JmlClauseLabel n, A arg);
+    R visit(JmlLabledClause n, A arg);
 
     R visit(JmlExpressionStmt n, A arg);
 
@@ -338,7 +338,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlRefiningStmt n, A arg);
 
-    R visit(JmlClauseIf n, A arg);
+    R visit(JmlConditionalClause n, A arg);
 
     R visit(JmlClassExprDeclaration n, A arg);
 
@@ -381,4 +381,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlMethodSignature n, A arg);
 
     R visit(KeYMarkerStatement n, A arg);
+
+    R visit(JmlInfFlowClause n, A arg);
 }

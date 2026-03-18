@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.jml.clauses;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -23,12 +22,13 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import com.github.javaparser.metamodel.JmlLabledClauseMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlClauseLabel> {
+public class JmlLabledClause extends JmlClause implements NodeWithExpression<JmlLabledClause> {
 
     private JmlClauseKind kind;
 
@@ -37,16 +37,16 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
 
     private Expression expression;
 
-    public JmlClauseLabel() {
+    public JmlLabledClause() {
         this(JmlClauseKind.NONE, null, new BooleanLiteralExpr(true));
     }
 
-    public JmlClauseLabel(SimpleName label, Expression expression) {
+    public JmlLabledClause(SimpleName label, Expression expression) {
         this(JmlClauseKind.NONE, label, expression);
     }
 
     @AllFieldsConstructor
-    public JmlClauseLabel(JmlClauseKind kind, SimpleName label, Expression expression) {
+    public JmlLabledClause(JmlClauseKind kind, SimpleName label, Expression expression) {
         this(null, kind, label, expression);
     }
 
@@ -54,7 +54,7 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseLabel(TokenRange tokenRange, JmlClauseKind kind, SimpleName label, Expression expression) {
+    public JmlLabledClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName label, Expression expression) {
         super(tokenRange);
         setKind(kind);
         setLabel(label);
@@ -62,7 +62,7 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
         customInitialization();
     }
 
-    public JmlClauseLabel(TokenRange range, JavaToken kind, SimpleName label, Expression expression) {
+    public JmlLabledClause(TokenRange range, JavaToken kind, SimpleName label, Expression expression) {
         this(range, JmlClauseKind.getKindByToken(kind), label, expression);
     }
 
@@ -114,15 +114,15 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlClauseLabel clone() {
-        return (JmlClauseLabel) accept(new CloneVisitor(), null);
+    public JmlLabledClause clone() {
+        return (JmlLabledClause) accept(new CloneVisitor(), null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseLabel(TokenRange tokenRange) {
+    public JmlLabledClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -133,13 +133,14 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLabel setExpr(@NonNull() final Expression expression) {
+    public JmlLabledClause setExpr(@NonNull() final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPR, this.expression, expression);
-        if (this.expression != null) this.expression.setParentNode(null);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
@@ -151,25 +152,20 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLabel setLabel(final @Nullable() SimpleName label) {
+    public JmlLabledClause setLabel(final @Nullable() SimpleName label) {
         if (label == this.label) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null) this.label.setParentNode(null);
+        if (this.label != null)
+            this.label.setParentNode(null);
         this.label = label;
         setAsParentNodeOf(label);
         return this;
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlClauseLabelMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlClauseLabelMetaModel;
-    }
-
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public JmlClauseLabel removeLabel() {
+    public JmlLabledClause removeLabel() {
         return setLabel((SimpleName) null);
     }
 
@@ -180,7 +176,7 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLabel setKind(final @NonNull() JmlClauseKind kind) {
+    public JmlLabledClause setKind(final @NonNull() JmlClauseKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -198,19 +194,19 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClauseLabel asJmlClauseLabel() {
+    public JmlLabledClause asJmlClauseLabel() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClauseLabel> toJmlClauseLabel() {
+    public Optional<JmlLabledClause> toJmlClauseLabel() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClauseLabel(Consumer<JmlClauseLabel> action) {
+    public void ifJmlClauseLabel(Consumer<JmlLabledClause> action) {
         action.accept(this);
     }
 
@@ -239,13 +235,14 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLabel setExpression(final @NonNull() Expression expression) {
+    public JmlLabledClause setExpression(final @NonNull() Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) this.expression.setParentNode(null);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
@@ -255,5 +252,11 @@ public class JmlClauseLabel extends JmlClause implements NodeWithExpression<JmlC
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @NonNull() Expression expression() {
         return Objects.requireNonNull(expression);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlLabledClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlLabledClauseMetaModel;
     }
 }

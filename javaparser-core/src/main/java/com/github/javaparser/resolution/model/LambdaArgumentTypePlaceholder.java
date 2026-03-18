@@ -46,8 +46,7 @@ public class LambdaArgumentTypePlaceholder implements ResolvedType {
         this.bodyBlockHasExplicitNonVoidReturn = Optional.empty();
     }
 
-    public LambdaArgumentTypePlaceholder(
-            int pos, int parameterCount, Optional<Boolean> bodyBlockHasExplicitNonVoidReturn) {
+    public LambdaArgumentTypePlaceholder(int pos, int parameterCount, Optional<Boolean> bodyBlockHasExplicitNonVoidReturn) {
         this.pos = pos;
         this.parameterCount = Optional.of(parameterCount);
         this.bodyBlockHasExplicitNonVoidReturn = bodyBlockHasExplicitNonVoidReturn;

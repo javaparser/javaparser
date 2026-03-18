@@ -18,6 +18,7 @@ include(":jmlparser-core-generators")
 include(":jmlparser-core")
 include(":jmlparser-symbol-solver-core")
 include(":jmlparser-symbol-solver-testing")
+
 project(":jmlparser-core-serialization").projectDir = file("javaparser-core-serialization")
 project(":jmlparser-core-testing").projectDir = file("javaparser-core-testing")
 project(":jmlparser-core-testing-bdd").projectDir = file("javaparser-core-testing-bdd")

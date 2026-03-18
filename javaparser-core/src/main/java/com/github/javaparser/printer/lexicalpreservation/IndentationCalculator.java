@@ -20,7 +20,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.printer.lexicalpreservation.IndentationConstants.STANDARD_INDENTATION_SIZE;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -214,8 +213,7 @@ public final class IndentationCalculator {
         // Example scenario where this matters:
         //   "public[space][space]" - backward scan finds "public" and resets,
         //   but we still need to count the 2 trailing spaces.
-        if (index < nodeText.numberOfElements()
-                && nodeText.getTextElement(index).isSpaceOrTab()) {
+        if (index < nodeText.numberOfElements() && nodeText.getTextElement(index).isSpaceOrTab()) {
             for (int i = index; i < nodeText.numberOfElements(); i++) {
                 // Stop at newline - end of current line
                 if (nodeText.getTextElement(i).isNewline()) {
@@ -272,8 +270,7 @@ public final class IndentationCalculator {
         if (!ctx.hasExtraCharacters()) {
             return index;
         }
-        int toRemove =
-                ctx.getExtraCharacters() > charactersToPreserve ? ctx.getExtraCharacters() - charactersToPreserve : 0;
+        int toRemove = ctx.getExtraCharacters() > charactersToPreserve ? ctx.getExtraCharacters() - charactersToPreserve : 0;
         int newIndex = removeExcessIndentation(nodeText, ctx.getStartIndex(), toRemove);
         // Adjust for preserved characters
         return toRemove > 0 ? newIndex + charactersToPreserve : newIndex;
@@ -345,8 +342,10 @@ public final class IndentationCalculator {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
             EnforcingContext that = (EnforcingContext) o;
             return startIndex == that.startIndex && extraCharacters == that.extraCharacters;
         }
