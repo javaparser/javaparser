@@ -38,7 +38,7 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Unable to get the name");
     }
 
     @Override
