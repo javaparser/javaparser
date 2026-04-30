@@ -5,7 +5,7 @@ plugins {
     id("test-report-aggregation")
     id("com.diffplug.spotless")
     checkstyle
-    signing
+    id("com.github.ben-manes.versions")
 }
 
 val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")

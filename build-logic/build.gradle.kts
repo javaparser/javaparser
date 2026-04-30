@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-
 val libs: VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 plugins {
@@ -16,6 +13,9 @@ repositories {
 dependencies {
     implementation("com.diffplug.gradle.spotless:com.diffplug.gradle.spotless.gradle.plugin:8.4.0")
     implementation("com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin:0.36.0")
+    implementation("com.github.ben-manes:gradle-versions-plugin:0.53.0")
+
+
     add("implementation", libs.findLibrary("kotlin-gradle").get())
 
     // https://github.com/Kotlin/dokka

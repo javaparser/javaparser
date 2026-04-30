@@ -1,10 +1,10 @@
 import com.vanniktech.maven.publish.JavaLibrary
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.SourcesJar
-import gradle.kotlin.dsl.accessors._b2e15ab532fa56af5145b0688116cfcb.signing
 
 plugins {
     id("com.vanniktech.maven.publish")
+    signing
 }
 
 
