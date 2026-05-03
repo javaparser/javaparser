@@ -427,7 +427,7 @@
             <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.30.2-GA</version>
+                <version>3.31.0-GA</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -437,7 +437,7 @@
 			<dependency>
 				<groupId>org.checkerframework</groupId>
 				<artifactId>checker-qual</artifactId>
-				<version>3.54.0</version>
+				<version>3.55.1</version>
 			</dependency>
             <dependency>
                 <groupId>org.hamcrest</groupId>
