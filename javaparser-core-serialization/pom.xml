@@ -27,22 +27,25 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<jpms.moduleName>com.github.javaparser.core.serialization</jpms.moduleName>
 	</properties>
 
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>biz.aQute.bnd</groupId>
+				<artifactId>bnd-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>
-						<manifestEntries>
-							<Automatic-Module-Name>com.github.javaparser.core.serialization</Automatic-Module-Name>
-						</manifestEntries>
+						<!-- Pick up the manifest produced by bnd-maven-plugin's bnd-process goal (MJAR-193). -->
+						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 
