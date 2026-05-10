@@ -117,7 +117,8 @@ class NodeText {
     int findElement(TextElementMatcher matcher, int from) {
         int res = tryToFindElement(matcher, from);
         if (res == NOT_FOUND) {
-            throw new IllegalArgumentException(String.format("I could not find child '%s' from position %d. Elements: %s", matcher, from, elements.toList()));
+            throw new IllegalArgumentException(String.format(
+                    "I could not find child '%s' from position %d. Elements: %s", matcher, from, elements.toList()));
         }
         return res;
     }

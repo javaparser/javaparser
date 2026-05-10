@@ -76,5 +76,6 @@ class ArrayExprTest {
                 ((FieldAccessExpr) field.getVariables().get(0).getInitializer().get()).resolve();
         assertEquals("length", resolvedValueDeclaration.getName());
         assertEquals(ResolvedPrimitiveType.INT, resolvedValueDeclaration.getType());
+        assertTrue(resolvedValueDeclaration.isArrayLength());
     }
 }

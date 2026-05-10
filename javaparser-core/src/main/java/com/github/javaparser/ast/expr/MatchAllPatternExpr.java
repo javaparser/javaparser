@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011, 2013-2025 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *

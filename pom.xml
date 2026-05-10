@@ -20,7 +20,7 @@
 	<groupId>io.github.jmltoolkit</groupId>
 	<artifactId>jmlparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.28.0-J8.0-K13.4</version>
+	<version>3.28.1-J8.0-K13.4</version>
 
 	<url>https://github.com/wadoon/jmlparser</url>
 	<inceptionYear>2021</inceptionYear>
@@ -160,13 +160,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>21</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
-        <byte-buddy.version>1.18.5</byte-buddy.version>
+		<byte-buddy.version>1.18.8-jdk5</byte-buddy.version>
         <!--
         <argLine>
             -javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'
         </argLine>
         -->
-        <build.timestamp>2025-10-04T00:00:00Z</build.timestamp>
+		<build.timestamp>2026-05-04T00:00:00Z</build.timestamp>
 		<jacoco.javaagent/>
 
 		<sonar.organization>wadoon</sonar.organization>
@@ -476,6 +476,7 @@
 					<!-- This is the last version with Java 8 support -->
 					<version>3.3.0</version>
 					<configuration>
+						<lineEndings>UNIX</lineEndings>
 						<java>
 							<!-- google-java-format, but better: see https://github.com/palantir/palantir-java-format -->
 							<palantirJavaFormat>
@@ -485,6 +486,8 @@
 								</formatJavadoc>          <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
 							</palantirJavaFormat>
 						</java>
+                        <trimTrailingWhitespace/>
+      					<endWithNewline/>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -552,12 +555,12 @@
 			<dependency>
 				<groupId>org.javassist</groupId>
 				<artifactId>javassist</artifactId>
-				<version>3.30.2-GA</version>
+                <version>3.31.0-GA</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>33.5.0-jre</version>
+                <version>33.6.0-jre</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.truth</groupId>
@@ -568,7 +571,7 @@
 			<dependency>
 				<groupId>org.checkerframework</groupId>
 				<artifactId>checker-qual</artifactId>
-				<version>3.53.1</version>
+				<version>3.55.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hamcrest</groupId>
@@ -585,7 +588,7 @@
 			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
-                <version>6.0.3</version>
+				<version>5.14.4</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

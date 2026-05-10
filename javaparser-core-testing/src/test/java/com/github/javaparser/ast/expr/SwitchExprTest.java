@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -78,12 +78,15 @@ class SwitchExprTest {
 
     @Test
     void aThrowStatement() {
-        SwitchExpr switchExpr = parseExpression(
-                        "switch (k) {\n" + "        case 1 -> throw new Exception(\"one\");\n" + "    }")
+        SwitchExpr switchExpr = parseExpression("switch (k) {\n"
+                        + "        case 1 -> throw new Exception(\"one\");\n"
+                        + "        case 2 -> 42;\n"
+                        + "    }")
                 .findFirst(SwitchExpr.class)
                 .get();
 
         assertEquals(THROWS_STATEMENT, switchExpr.getEntry(0).getType());
+        assertEquals(EXPRESSION, switchExpr.getEntry(1).getType());
     }
 
     @Test

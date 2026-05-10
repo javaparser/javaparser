@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractGenerator {
 
     protected static final String COPYRIGHT_NOTICE_JP_CORE = "\n" + " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n"
-            + " * Copyright (C) 2011, 2013-2024 The JavaParser Team.\n"
+            + " * Copyright (C) 2011, 2013-2026 The JavaParser Team.\n"
             + " *\n"
             + " * This file is part of JavaParser.\n"
             + " *\n"
@@ -74,7 +74,7 @@ public abstract class AbstractGenerator {
             + " ";
 
     protected static final String COPYRIGHT_NOTICE_JP_SS = "\n" + " * Copyright (C) 2015-2016 Federico Tomassetti\n"
-            + " * Copyright (C) 2017-2024 The JavaParser Team.\n"
+            + " * Copyright (C) 2017-2026 The JavaParser Team.\n"
             + " *\n"
             + " * This file is part of JavaParser.\n"
             + " *\n"

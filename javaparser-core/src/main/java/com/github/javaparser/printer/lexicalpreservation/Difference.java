@@ -242,7 +242,8 @@ public class Difference {
      * The number of consecutive whitespace (or tab) characters
      */
     private EnforcingIndentationContext defineEnforcingIndentationContext(NodeText nodeText, int startIndex) {
-        IndentationCalculator.EnforcingContext ctx = IndentationCalculator.analyzeEnforcingContext(nodeText, startIndex);
+        IndentationCalculator.EnforcingContext ctx =
+                IndentationCalculator.analyzeEnforcingContext(nodeText, startIndex);
         return new EnforcingIndentationContext(ctx.getStartIndex(), ctx.getExtraCharacters());
     }
 
@@ -963,9 +964,12 @@ public class Difference {
     private int adjustIndentation(List<TextElement> indentation, NodeText nodeText, int nodeTextIndex, boolean followedByUnindent) {
         List<TextElement> indentationAdj = processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1));
         if (nodeTextIndex < nodeText.numberOfElements() && nodeText.getTextElement(nodeTextIndex).isToken(RBRACE)) {
-            indentationAdj = indentationAdj.subList(0, indentationAdj.size() - Math.min(IndentationConstants.STANDARD_INDENTATION_SIZE, indentationAdj.size()));
+            indentationAdj = indentationAdj.subList(0,
+                    indentationAdj.size()
+                            - Math.min(IndentationConstants.STANDARD_INDENTATION_SIZE, indentationAdj.size()));
         } else if (followedByUnindent) {
-            indentationAdj = indentationAdj.subList(0, Math.max(0, indentationAdj.size() - IndentationConstants.STANDARD_INDENTATION_SIZE));
+            indentationAdj = indentationAdj.subList(
+                    0, Math.max(0, indentationAdj.size() - IndentationConstants.STANDARD_INDENTATION_SIZE));
         }
         for (TextElement e : indentationAdj) {
             if ((nodeTextIndex < nodeText.numberOfElements()) && nodeText.getTextElement(nodeTextIndex).isSpaceOrTab()) {

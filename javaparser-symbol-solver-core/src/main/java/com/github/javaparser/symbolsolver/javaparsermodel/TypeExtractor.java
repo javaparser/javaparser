@@ -392,7 +392,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                             // "case L -> e;" - the result is the expression value.
                             // The expression is wrapped in a single ExpressionStmt
                             return entry.getStatements()
-                                    .getOFirst()
+                                    .getFirst()
                                     .map(statement -> statement.accept(this, solveLambdas))
                                     .orElseThrow(() -> new IllegalStateException("Empty switch entry"));
                         case BLOCK:
@@ -400,7 +400,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                             // The block is wrapped in a single BlockStmt, search within it for yield
                             // Blocks may not have a yield if they throw, so return null in that case
                             return entry.getStatements()
-                                    .getOFirst()
+                                    .getFirst()
                                     .flatMap(block -> findYieldForSwitch(block, node))
                                     .map(YieldStmt::getExpression)
                                     .map(expr -> expr.accept(this, solveLambdas))

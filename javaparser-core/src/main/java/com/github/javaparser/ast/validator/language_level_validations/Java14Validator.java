@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,10 +21,12 @@
 package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.body.RecordDeclaration;
+import com.github.javaparser.ast.expr.SwitchExpr;
 import com.github.javaparser.ast.validator.RecordAsTypeIdentifierNotAllowed;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.ast.validator.language_level_validations.chunks.RecordDeclarationValidator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.SwitchExprValidator;
 
 /**
  * This validator validates according to Java 14 syntax rules.
@@ -48,6 +50,8 @@ public class Java14Validator extends Java13Validator {
 
     final Validator recordDeclarationValidator = new SingleNodeTypeValidator<>(RecordDeclaration.class, new RecordDeclarationValidator());
 
+    final Validator switchExprValidator = new SingleNodeTypeValidator<>(SwitchExpr.class, new SwitchExprValidator());
+
     public Java14Validator() {
         super();
         // Released Language Features
@@ -63,6 +67,7 @@ public class Java14Validator extends Java13Validator {
             remove(noSwitchExpressions);
             remove(onlyOneLabelInSwitchCase);
             remove(noYield);
+            add(switchExprValidator);
         }
     }
 }

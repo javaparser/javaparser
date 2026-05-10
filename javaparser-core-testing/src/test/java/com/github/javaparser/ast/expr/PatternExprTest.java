@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2013-2026 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
@@ -173,6 +193,24 @@ public class PatternExprTest {
 
         ComponentPatternExpr thirdChild = patternList.get(2);
         assertTrue(thirdChild.isMatchAllPatternExpr());
+    }
+
+    @Test
+    public void emptyRecordPatternListShouldWork() {
+        // JLS 14.30: RecordPattern = ReferenceType ( [ComponentPatternList] )
+        // The component list is optional — "Point()" is valid.
+        Expression expr = parseExpression("x instanceof Point()");
+
+        assertTrue(expr.isInstanceOfExpr());
+        InstanceOfExpr instanceOfExpr = expr.asInstanceOfExpr();
+        assertTrue(instanceOfExpr.getPattern().isPresent());
+
+        ComponentPatternExpr pattern = instanceOfExpr.getPattern().get();
+        assertTrue(pattern.isRecordPatternExpr());
+
+        RecordPatternExpr recordPattern = pattern.asRecordPatternExpr();
+        assertEquals("Point", recordPattern.getTypeAsString());
+        assertTrue(recordPattern.getPatternList().isEmpty());
     }
 
     @Test

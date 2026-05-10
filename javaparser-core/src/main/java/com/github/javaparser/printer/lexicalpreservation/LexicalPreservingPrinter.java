@@ -159,7 +159,8 @@ public class LexicalPreservingPrinter {
                     NodeText tokenOwnerText = getOrCreateNodeText(tokenOwner);
                     if (tokenOwnerText != null) {
                         // Regenerate the token owner's NodeText instead of the observed node
-                        LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(tokenOwnerText, tokenOwner, property, oldValue, newValue);
+                        LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(
+                                tokenOwnerText, tokenOwner, property, oldValue, newValue);
                         // Early exit - we've handled the change
                         return;
                     }
@@ -503,6 +504,19 @@ public class LexicalPreservingPrinter {
                 if (nodeText.getTextElement(i).isNewline()) {
                     lastNewlineIndex = i;
                     break;
+                }
+            }
+            // If there is no newline or if the newline is just before the index, do nothing.
+            if (lastNewlineIndex == -1 || lastNewlineIndex == index - 1) {
+                return;
+            }
+            // Apply the computed indentation
+            // The indentation elements are inserted at the given index.
+            for (TextElement indentElement : existingIndent) {
+                if (indentElement instanceof TokenTextElement) {
+                    TokenTextElement tokenElement = (TokenTextElement) indentElement;
+                    nodeText.addElement(
+                            index, new TokenTextElement(tokenElement.getTokenKind(), tokenElement.getText()));
                 }
             }
             // If there is no newline or if the newline is just before the index, do nothing.
