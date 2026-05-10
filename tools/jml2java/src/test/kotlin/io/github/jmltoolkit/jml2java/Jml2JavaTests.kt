@@ -2,8 +2,12 @@ package io.github.jmltoolkit.jml2java
 
 import com.github.javaparser.ParseResult
 import com.github.javaparser.Problem
+import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.expr.Expression
 import com.github.javaparser.printer.DefaultPrettyPrinter
+import com.github.javaparser.symbolsolver.JavaSymbolSolver
+import com.github.javaparser.symbolsolver.resolution.SymbolSolver
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver
 import com.google.common.truth.Truth
 import io.github.jmltoolkit.utils.TestWithJavaParser
 import org.junit.jupiter.api.Assertions
@@ -19,6 +23,10 @@ import java.util.stream.Stream
  * @version 1 (04.10.22)
  */
 class Jml2JavaTests : TestWithJavaParser() {
+    val pseudoCompilationUnit = CompilationUnit().also {
+        JavaSymbolSolver(ReflectionTypeSolver(true)).inject(it)
+    }
+
     @TestFactory
     @Throws(IOException::class)
     fun j2jTranslation(): Stream<DynamicTest> {
@@ -45,7 +53,7 @@ class Jml2JavaTests : TestWithJavaParser() {
             Assertions.fail<Any>("Error during parsing")
         }
         val expr = e.result.get()
-        expr.setParentNode(parent)
+        expr.setParentNode(pseudoCompilationUnit)
         val actual = Jml2JavaFacade.translate(expr)
 
         val dpp = DefaultPrettyPrinter()
@@ -55,8 +63,6 @@ class Jml2JavaTests : TestWithJavaParser() {
             .assertThat(trimAllWs("$sblock $sexpr"))
             .isEqualTo(trimAllWs(expected))
     }
-
-    companion object {
-        private fun trimAllWs(expected: String): String = expected.replace("\\s+".toRegex(), " ").trim { it <= ' ' }
-    }
 }
+
+private fun trimAllWs(expected: String): String = expected.replace("\\s+".toRegex(), " ").trim { it <= ' ' }

@@ -78,7 +78,7 @@ class ReflectionMethodDeclarationTest {
                 .get()
                 .getDeclaration();
 
-        assertEquals("arg0", myMethod.getParam(0).getName());
-        assertEquals("arg1", myMethod.getParam(1).getName());
+        assertEquals("a", myMethod.getParam(0).getName());
+        assertEquals("c", myMethod.getParam(1).getName());
     }
 }

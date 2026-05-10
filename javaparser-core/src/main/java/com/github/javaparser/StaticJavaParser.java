@@ -20,15 +20,15 @@
  */
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.ArbitraryNodeContainer;
+import com.github.javaparser.ast.jml.clauses.JmlClause;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -40,6 +40,7 @@ import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.quality.NotNull;
 import com.github.javaparser.quality.Preconditions;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
@@ -82,7 +83,7 @@ public final class StaticJavaParser {
      * Parses the Java code contained in the {@link InputStream} and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param in {@link InputStream} containing Java source code. It will be closed after parsing.
+     * @param in       {@link InputStream} containing Java source code. It will be closed after parsing.
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -112,7 +113,7 @@ public final class StaticJavaParser {
      * Parses the Java code contained in a {@link File} and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param file {@link File} containing Java source code. It will be closed after parsing.
+     * @param file     {@link File} containing Java source code. It will be closed after parsing.
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -144,10 +145,10 @@ public final class StaticJavaParser {
      * Parses the Java code contained in a file and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param path path to a file containing Java source code
+     * @param path     path to a file containing Java source code
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
-     * @throws IOException the path could not be accessed
+     * @throws IOException           the path could not be accessed
      * @throws ParseProblemException if the source code has parser errors
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
@@ -165,7 +166,7 @@ public final class StaticJavaParser {
      * @param path path to a file containing Java source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
-     * @throws IOException the path could not be accessed
+     * @throws IOException           the path could not be accessed
      */
     public static CompilationUnit parse(@NotNull final Path path) throws IOException {
         Preconditions.checkNotNull(path, "Parameter path can't be null.");
@@ -177,10 +178,10 @@ public final class StaticJavaParser {
      * {@link CompilationUnit} that represents it.<br>
      *
      * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
-     * leading "/" is not allowed in pathToResource
+     *             leading "/" is not allowed in pathToResource
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
-     * @throws IOException the path could not be accessed
+     * @throws IOException           the path could not be accessed
      */
     public static CompilationUnit parseResource(@NotNull final String path) throws IOException {
         Preconditions.checkNotNull(path, "Parameter path can't be null.");
@@ -191,12 +192,12 @@ public final class StaticJavaParser {
      * Parses the Java code contained in a resource and returns a
      * {@link CompilationUnit} that represents it.<br>
      *
-     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
-     * leading "/" is not allowed in pathToResource
+     * @param path     path to a resource containing Java source code. As resource is accessed through a class loader, a
+     *                 leading "/" is not allowed in pathToResource
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
-     * @throws IOException the path could not be accessed
+     * @throws IOException           the path could not be accessed
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
@@ -211,11 +212,11 @@ public final class StaticJavaParser {
      * {@link CompilationUnit} that represents it.<br>
      *
      * @param classLoader the classLoader that is asked to load the resource
-     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
-     * leading "/" is not allowed in pathToResource
+     * @param path        path to a resource containing Java source code. As resource is accessed through a class loader, a
+     *                    leading "/" is not allowed in pathToResource
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
-     * @throws IOException the path could not be accessed
+     * @throws IOException           the path could not be accessed
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
@@ -550,6 +551,35 @@ public final class StaticJavaParser {
     }
 
     public static <T extends Expression> T parseJmlExpression(String expression) {
-        return (T) handleResult(newParser().parseJmlExpression(expression));
+        return newParserAdapted().parseJmlExpression(expression);
     }
+
+    public static ArbitraryNodeContainer parseJmlClassLevel(String content) {
+        return newParserAdapted().parseJmlClassLevel(content);
+    }
+
+    public static ArbitraryNodeContainer parseJmlMethodLevel(String content) {
+        return newParserAdapted().parseJmlMethodLevel(content);
+    }
+
+    public static ArbitraryNodeContainer parseJmlTypeLevel(String content) {
+        return newParserAdapted().parseJmlTypeLevel(content);
+    }
+
+    public static ArbitraryNodeContainer parseJmlModifierLevel(String content) {
+        return newParserAdapted().parseJmlModifierLevel(content);
+    }
+
+    public static JmlContract parseJmlContract(String content) {
+        return newParserAdapted().parseJmlContract(content);
+    }
+
+    public static NodeList<JmlContract> parseJmlContracts(String content) {
+        return newParserAdapted().parseJmlContracts(content);
+    }
+
+    public static JmlClause parseJmlClause(String content) {
+        return newParserAdapted().parseJmlClause(content);
+    }
+
 }

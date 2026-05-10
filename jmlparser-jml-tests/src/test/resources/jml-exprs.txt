@@ -2,3 +2,5 @@ true
 false
 (\forall int i, j; true)
 (\forall int i, j; i >= 0 && i < ar.length && j >= 0 && j < ar.length; ar[i][j] == ar[j][i])
+(\let int x = 1; x)
+(\let int[][] x = { {1},{2},{3} }; x.length)

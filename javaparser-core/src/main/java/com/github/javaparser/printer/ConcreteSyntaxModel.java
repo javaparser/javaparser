@@ -23,6 +23,7 @@ package com.github.javaparser.printer;
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.GeneratedJavaParserConstants.INVARIANT;
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
+import static com.github.javaparser.ast.observer.ObservableProperty.BY;
 import static com.github.javaparser.ast.observer.ObservableProperty.TYPE;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
@@ -248,6 +249,18 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(JmlBeginStmt.class, token(BEGIN));
         concreteSyntaxModelByClass.put(JmlMethodDeclaration.class, sequence(child(CONTRACT), child(METHOD_DECLARATION)));
         concreteSyntaxModelByClass.put(JmlSignalsOnlyClause.class, sequence(token(SIGNALS_ONLY), child(TYPES), semicolon(), newline()));
+        concreteSyntaxModelByClass.put(JmlInfFlowClause.class, sequence(attribute(KIND), attribute(EXPRESSIONS),
+                attribute(EXPRESSIONS),
+                token(GeneratedJavaParserConstants.BY),
+                attribute(BY),
+                token(GeneratedJavaParserConstants.DECLASSIFIES),
+                attribute(ObservableProperty.DECLASSIFIES),
+                token(GeneratedJavaParserConstants.ERASES),
+                attribute(ObservableProperty.ERASES),
+                token(GeneratedJavaParserConstants.NEW_OBJECTS),
+                attribute(ObservableProperty.NEW_OBJECTS),
+                semicolon(), newline()
+                ));
         // endregion
 
         // region KEY

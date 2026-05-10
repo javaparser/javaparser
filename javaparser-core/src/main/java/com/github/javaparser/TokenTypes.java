@@ -121,6 +121,9 @@ public class TokenTypes {
             case CLASS:
             case CONST:
             case CONTINUE:
+            case LOOP_DETERMINES:
+            case LOOP_SEPARATES:
+            case SEPARATES:
             case _DEFAULT:
             case DO:
             case DOUBLE:

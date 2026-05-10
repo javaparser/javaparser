@@ -19,15 +19,16 @@
  */
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.ArbitraryNodeContainer;
+import com.github.javaparser.ast.jml.clauses.JmlClause;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
+import com.github.javaparser.ast.key.sv.KeyContextStatementBlock;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -37,6 +38,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
+
 import java.io.*;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -47,7 +49,6 @@ public class JavaParserAdapter {
      * Wraps the {@link JavaParser}.
      *
      * @param parser The java parser to be used.
-     *
      * @return The created QuickJavaParser.
      */
     public static JavaParserAdapter of(JavaParser parser) {
@@ -68,9 +69,7 @@ public class JavaParserAdapter {
      * Helper function to handle the result in a simpler way.
      *
      * @param result The result to be handled.
-     *
-     * @param <T> The return type.
-     *
+     * @param <T>    The return type.
      * @return The parsed value.
      */
     private <T extends Node> T handleResult(ParseResult<T> result) {
@@ -195,4 +194,47 @@ public class JavaParserAdapter {
     public ArrayInitializerExpr parseArrayInitializerExpr(String arrayInitializerExpr) {
         return handleResult(getParser().parseArrayInitializerExpr(arrayInitializerExpr));
     }
+
+    // region JML
+    public <T extends Expression> T parseJmlExpression(String expression) {
+        return (T) handleResult(getParser().parseJmlExpression(expression));
+    }
+
+    public ArbitraryNodeContainer parseJmlClassLevel(String content) {
+        return handleResult(getParser().parseJmlTypeLevel(content));
+    }
+
+    public ArbitraryNodeContainer parseJmlTypeLevel(String content) {
+        return handleResult(getParser().parseJmlTypeLevel(content));
+    }
+
+    public ArbitraryNodeContainer parseJmlModifierLevel(String content) {
+        return handleResult(getParser().parseJmlModifierLevel(content));
+    }
+
+    public KeyContextStatementBlock parseSchemaBlock(String block) {
+        return handleResult(getParser().parseSchemaBlock(block));
+    }
+
+    public JmlContract parseJmlContract(String content) {
+        return handleResult(getParser().parseJmlContract(content));
+    }
+
+    public NodeList<JmlContract> parseJmlContracts(String content) {
+        var result = getParser().parseJmlContracts(content);
+        if (result.isSuccessful()) {
+            var cont = result.getResult().get();
+            return new NodeList<>(cont.getChildren().stream().map(it -> (JmlContract) it).toList());
+        }
+        throw new ParseProblemException(result.getProblems());
+    }
+
+    public JmlClause parseJmlClause(String content) {
+        return handleResult(getParser().parseJmlClause(content));
+    }
+
+    public ArbitraryNodeContainer parseJmlMethodLevel(String content) {
+        return handleResult(getParser().parseJmlMethodLevel(content));
+    }
+    //endregion
 }

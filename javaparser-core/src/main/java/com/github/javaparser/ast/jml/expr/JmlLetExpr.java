@@ -31,8 +31,7 @@ public class JmlLetExpr extends JmlExpression {
 
     @AllFieldsConstructor
     public JmlLetExpr(VariableDeclarationExpr variables, Expression body) {
-        this.variables = variables;
-        this.body = body;
+        this(null, variables, body);
     }
 
     @Override

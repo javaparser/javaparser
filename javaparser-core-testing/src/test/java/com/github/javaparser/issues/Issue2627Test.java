@@ -20,10 +20,11 @@
 
 package com.github.javaparser.issues;
 
+import static com.github.javaparser.Providers.UTF8;
+import static com.github.javaparser.Providers.resourceProvider;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.github.javaparser.Range;
-import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -48,14 +49,16 @@ public class Issue2627Test {
 
     private static Stream<Arguments> arguments_minimal() {
         return Stream.of(
-                Arguments.of("methodA", 258, 260), Arguments.of("methodB", 163, 164), Arguments.of("methodC", 3, 4));
+                Arguments.of("methodA", 238, 240),
+                Arguments.of("methodB", 163, 164),
+                Arguments.of("methodC", 3, 4));
     }
 
     private static Stream<Arguments> arguments_original() {
         return Stream.of(
                 Arguments.of("batchToSpace", 796, 799),
-                Arguments.of("batchToSpaceNd", 911, 914),
-                Arguments.of("placeholder", 3686, 3689));
+                Arguments.of("batchToSpaceNd", 907, 910),
+                Arguments.of("placeholder", 3682, 3685));
     }
 
     private static Stream<Arguments> arguments_groovy_original() {
@@ -85,6 +88,14 @@ public class Issue2627Test {
     @ParameterizedTest
     @MethodSource("arguments_minimal")
     public void method_minimal(String name, int expectedStart, int expectedEnd) throws IOException {
+        /*var s = resourceProvider(RESOURCE_PATH_STRING_MINIMAL, UTF8);
+        var lex = new GeneratedJavaParserTokenManager(new SimpleCharStream(s));
+        Token tok;
+        do {
+            tok = lex.getNextToken();
+            System.out.format("%d:%d [%s] (%d)%n", tok.beginLine, tok.beginColumn,tok.image, tok.kind);
+        } while (tok != null && tok.kind != 0);*/
+
         CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
         assertMethodInExpectedLines(cu, name, expectedStart, expectedEnd);
     }

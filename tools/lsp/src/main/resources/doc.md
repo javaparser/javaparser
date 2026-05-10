@@ -1,4 +1,4 @@
-%keywords continue_behavior continue_behaviour exceptional_behavior return_behavior normal_behavior model_behavior
+%keywords continue_behavior continue_behaviour exceptional_behavior return_behavior normal_behavior model_behavior behavior
 
 ## Behavior
 

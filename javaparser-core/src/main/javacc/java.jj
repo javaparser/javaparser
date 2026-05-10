@@ -458,7 +458,6 @@ TOKEN : {
 TOKEN_MGR_DECLS :
 {
     private List<JavaToken> tokens = new ArrayList<JavaToken>();
-    private List<JavaToken> tokeJmlExpressionStmtns = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
     private JavaToken homeToken;
     private Stack<Token> tokenWorkStack = new Stack<Token>();
@@ -1193,13 +1192,6 @@ MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
 // Need to recognize an escaped " to prevent it from parsing as "backslash doublequote" -
 // which might match that doublequote with following doublequotes.
 <IN_TEXT_BLOCK> MORE :{ <TEXT_BLOCK_CONTENT:  ( "\\" "\"" | ~[] ) > }
-
-/*
-<JML_SINGLE_CONTRACT, JML_MULTI_CONTRACT>
-TOKEN: {
-  <JML_IDENTIFIER: "\\" <IDENTIFIER> >
-}
-*/
 
 /* IDENTIFIERS */
 <DEFAULT,JML_SINGLE_CONTRACT,JML_MULTI_CONTRACT>
@@ -7579,7 +7571,16 @@ void JmlClassLevelInner(ModifierHolder modifiers,  NodeList<Node> ret):
 	  { ret.add(new JmlMethodDeclaration(range(method, method), new NodeList<>(), method, null)); }
 }
 
-
+ArbitraryNodeContainer JmlContractsStart():
+{
+    NodeList<JmlContract> contracts;
+}
+{
+	contracts = JmlContracts()
+    {
+        return new ArbitraryNodeContainer(contracts);
+    }
+}
 
 ArbitraryNodeContainer JmlClassLevelStart():
 {

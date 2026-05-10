@@ -168,7 +168,7 @@ public class JmlProcessor extends Processor {
                         } else if (child instanceof Modifier) {
                             ((NodeWithModifiers<?>) next).getModifiers().add((Modifier) child);
                         } else if (child instanceof JmlContract) {
-                            ((NodeWithContracts<?>) next).addContracts((JmlContract) child);
+                            ((NodeWithContracts<?>) next).addContract((JmlContract) child);
                         } else {
                             reporter.report(child, "JML construct " + child.getClass().getSimpleName() + " not supported at this position.");
                         }
@@ -255,7 +255,7 @@ public class JmlProcessor extends Processor {
                         reporter.report(child, "You passed a contract but there is following " + "statement to carry it.");
                     } else {
                         try {
-                            ((NodeWithContracts<?>) nextStatement).addContracts((JmlContract) child);
+                            ((NodeWithContracts<?>) nextStatement).addContract((JmlContract) child);
                         } catch (ClassCastException e) {
                             reporter.report(nextStatement, "You passed a JML contract but the following " + "statement is not able to carry contract. " + nextStatement.getMetaModel().getTypeName());
                         }

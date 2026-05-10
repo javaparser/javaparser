@@ -244,7 +244,7 @@ class Jml2JavaTranslator {
             val inner = BlockStmt()
             val target = newTargetForAssignment()
             val type: ResolvedType = n.body.calculateResolvedType()
-            arg.addAndGetStatement<ExpressionStmt>(
+            arg.addAndGetStatement(
                 ExpressionStmt(
                     VariableDeclarationExpr(
                         JMLUtils.resolvedType2Type(type),

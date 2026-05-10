@@ -27,6 +27,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.jml.JmlKeyword;
+import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -46,7 +47,7 @@ import org.jspecify.annotations.NonNull;
  *
  * @author Alexander Weigl
  */
-public class JmlQuantifiedExpr extends JmlExpression {
+public class JmlQuantifiedExpr extends JmlExpression implements NodeWithParameters<JmlQuantifiedExpr> {
 
     public interface JmlBinder extends JmlKeyword {
     }
@@ -311,5 +312,16 @@ public class JmlQuantifiedExpr extends JmlExpression {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public @NonNull() NodeList<Parameter> variables() {
         return Objects.requireNonNull(variables);
+    }
+
+
+    @Override
+    public NodeList<Parameter> getParameters() {
+        return getVariables();
+    }
+
+    @Override
+    public JmlQuantifiedExpr setParameters(NodeList<Parameter> parameters) {
+        return setVariables(parameters);
     }
 }

@@ -19,9 +19,10 @@ public class ArbitraryNodeContainer extends Node {
         this(new NodeList<>());
     }
 
-    public ArbitraryNodeContainer(NodeList<Node> children) {
+    public ArbitraryNodeContainer(NodeList<? extends Node> children) {
         super(null);
-        this.children = children;
+        this.children = new NodeList<>();
+        this.children.addAll(children);
     }
 
     @Override
