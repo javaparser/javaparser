@@ -49,13 +49,16 @@ public class SwitchExprTest {
 
     @Test
     public void switchPatternShouldResolve() {
-        CompilationUnit cu = parse("class Test {\n" + "    public void foo(Object o) {\n"
-                + "        switch (o) {\n"
-                + "            case String s -> System.out.println(s);\n"
-                + "            case null, default -> {}\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void foo(Object o) {
+                        switch (o) {
+                            case String s -> System.out.println(s);
+                            case null, default -> {}
+                        };
+                    }
+                }\
+                """);
 
         NameExpr name = Navigator.findNameExpression(cu, "s").get();
         assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -63,13 +66,16 @@ public class SwitchExprTest {
 
     @Test
     public void switchPatternWithGuardShouldResolve() {
-        CompilationUnit cu = parse("class Test {\n" + "    public void foo(Object o) {\n"
-                + "        switch (o) {\n"
-                + "            case String s when s.length() > 5 -> System.out.println(s);\n"
-                + "            case null, default -> {}\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void foo(Object o) {
+                        switch (o) {
+                            case String s when s.length() > 5 -> System.out.println(s);
+                            case null, default -> {}
+                        };
+                    }
+                }\
+                """);
 
         cu.findAll(NameExpr.class).stream()
                 .filter(nameExpr -> nameExpr.getNameAsString().equals("s"))
@@ -81,13 +87,16 @@ public class SwitchExprTest {
 
     @Test
     public void switchPatternWithNonMatchingNameShouldNotResolve() {
-        CompilationUnit cu = parse("class Test {\n" + "    public void foo(Object o) {\n"
-                + "        switch (o) {\n"
-                + "            case String t -> System.out.println(s);\n"
-                + "            case null, default -> {}\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void foo(Object o) {
+                        switch (o) {
+                            case String t -> System.out.println(s);
+                            case null, default -> {}
+                        };
+                    }
+                }\
+                """);
 
         Executable resolveS = () -> Navigator.findNameExpression(cu, "s").get().resolve();
 
@@ -96,14 +105,17 @@ public class SwitchExprTest {
 
     @Test
     public void switchPatternInOtherCaseShouldNotResolve() {
-        CompilationUnit cu = parse("class Test {\n" + "    public void foo(Object o) {\n"
-                + "        switch (o) {\n"
-                + "            case String t -> {}\n"
-                + "            case Integer i -> System.out.println(t);\n"
-                + "            case null, default -> {}\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void foo(Object o) {
+                        switch (o) {
+                            case String t -> {}
+                            case Integer i -> System.out.println(t);
+                            case null, default -> {}
+                        };
+                    }
+                }\
+                """);
 
         Executable resolveS = () -> Navigator.findNameExpression(cu, "t").get().resolve();
 
@@ -112,13 +124,16 @@ public class SwitchExprTest {
 
     @Test
     public void nestedSwitchRecordPatternShouldResolve() {
-        CompilationUnit cu = parse("class Test {\n" + "    public void foo(Object o) {\n"
-                + "        switch (o) {\n"
-                + "            case Box(InnerBox(Integer i), InnerBox(String s)) -> System.out.println(s);\n"
-                + "            case null, default -> {}\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void foo(Object o) {
+                        switch (o) {
+                            case Box(InnerBox(Integer i), InnerBox(String s)) -> System.out.println(s);
+                            case null, default -> {}
+                        };
+                    }
+                }\
+                """);
 
         NameExpr name = Navigator.findNameExpression(cu, "s").get();
         assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -129,15 +144,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprAsMethodArgShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        System.out.println(\n"
-                + "            switch (\"a\") {\n"
-                + "                case \"a\" -> 3;\n"
-                + "                default -> 0;\n"
-                + "            });\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        System.out.println(
+                            switch ("a") {
+                                case "a" -> 3;
+                                default -> 0;
+                            });
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -149,15 +166,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprReturningStringShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        String result = switch (1) {\n"
-                + "            case 1 -> \"one\";\n"
-                + "            case 2 -> \"two\";\n"
-                + "            default -> \"other\";\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        String result = switch (1) {
+                            case 1 -> "one";
+                            case 2 -> "two";
+                            default -> "other";
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -169,17 +188,19 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithYieldShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        int result = switch (\"x\") {\n"
-                + "            case \"a\" -> 1;\n"
-                + "            default -> {\n"
-                + "                int val = 42;\n"
-                + "                yield val;\n"
-                + "            }\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch ("x") {
+                            case "a" -> 1;
+                            default -> {
+                                int val = 42;
+                                yield val;
+                            }
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -191,19 +212,21 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithMultipleYieldPathsShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test(boolean condition) {\n"
-                + "        int result = switch (\"x\") {\n"
-                + "            default -> {\n"
-                + "                if (condition) {\n"
-                + "                    yield 1;\n"
-                + "                } else {\n"
-                + "                    yield 2;\n"
-                + "                }\n"
-                + "            }\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test(boolean condition) {
+                        int result = switch ("x") {
+                            default -> {
+                                if (condition) {
+                                    yield 1;
+                                } else {
+                                    yield 2;
+                                }
+                            }
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -216,16 +239,18 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithColonStyleShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        int result = switch (\"x\") {\n"
-                + "            case \"a\":\n"
-                + "                yield 1;\n"
-                + "            default:\n"
-                + "                yield 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch ("x") {
+                            case "a":
+                                yield 1;
+                            default:
+                                yield 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -238,17 +263,19 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithColonStyleAndMultipleStatementsShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        int result = switch (\"x\") {\n"
-                + "            case \"a\":\n"
-                + "                int val = 42;\n"
-                + "                yield val;\n"
-                + "            default:\n"
-                + "                yield 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch ("x") {
+                            case "a":
+                                int val = 42;
+                                yield val;
+                            default:
+                                yield 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -261,15 +288,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithMixedPrimitiveTypesShouldResolveToLub() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        var result = switch (1) {\n"
-                + "            case 1 -> 1;\n"
-                + "            case 2 -> 2L;\n"
-                + "            default -> 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        var result = switch (1) {
+                            case 1 -> 1;
+                            case 2 -> 2L;
+                            default -> 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -281,15 +310,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithMixedReferenceTypesShouldResolveToLub() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        var result = switch (1) {\n"
-                + "            case 1 -> \"hello\";\n"
-                + "            case 2 -> new StringBuilder();\n"
-                + "            default -> \"world\";\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        var result = switch (1) {
+                            case 1 -> "hello";
+                            case 2 -> new StringBuilder();
+                            default -> "world";
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -303,15 +334,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithBoxedAndUnboxedTypesShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        var result = switch (1) {\n"
-                + "            case 1 -> 1;\n"
-                + "            case 2 -> Integer.valueOf(2);\n"
-                + "            default -> 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        var result = switch (1) {
+                            case 1 -> 1;
+                            case 2 -> Integer.valueOf(2);
+                            default -> 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -325,13 +358,16 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithThrowCaseShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n" + "    public void test() {\n"
-                + "        int result = switch (\"x\") {\n"
-                + "            case \"error\" -> throw new RuntimeException();\n"
-                + "            default -> 42;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch ("x") {
+                            case "error" -> throw new RuntimeException();
+                            default -> 42;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -343,12 +379,15 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithDefaultOnlyShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n" + "    public void test() {\n"
-                + "        String result = switch (\"x\") {\n"
-                + "            default -> \"default value\";\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        String result = switch ("x") {
+                            default -> "default value";
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -360,16 +399,19 @@ public class SwitchExprTest {
      */
     @Test
     public void nestedSwitchExprShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n" + "    public void test() {\n"
-                + "        int result = switch (\"outer\") {\n"
-                + "            case \"outer\" -> switch (\"inner\") {\n"
-                + "                case \"inner\" -> 1;\n"
-                + "                default -> 2;\n"
-                + "            };\n"
-                + "            default -> 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch ("outer") {
+                            case "outer" -> switch ("inner") {
+                                case "inner" -> 1;
+                                default -> 2;
+                            };
+                            default -> 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -381,13 +423,16 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprInCastContextShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n" + "    public void test() {\n"
-                + "        Number result = (Number) switch (1) {\n"
-                + "            case 1 -> 1;\n"
-                + "            default -> 2L;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        Number result = (Number) switch (1) {
+                            case 1 -> 1;
+                            default -> 2L;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -400,13 +445,16 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprInTernaryContextShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n" + "    public void test(boolean condition) {\n"
-                + "        int result = condition ? switch (1) {\n"
-                + "            case 1 -> 10;\n"
-                + "            default -> 20;\n"
-                + "        } : 0;\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test(boolean condition) {
+                        int result = condition ? switch (1) {
+                            case 1 -> 10;
+                            default -> 20;
+                        } : 0;
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -418,14 +466,16 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprAsReturnValueShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public String test() {\n"
-                + "        return switch (1) {\n"
-                + "            case 1 -> \"one\";\n"
-                + "            default -> \"other\";\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public String test() {
+                        return switch (1) {
+                            case 1 -> "one";
+                            default -> "other";
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -438,15 +488,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithMixedBooleanTypesShouldResolveToBoolean() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        var result = switch (1) {\n"
-                + "            case 1 -> true;\n"
-                + "            case 2 -> Boolean.FALSE;\n"
-                + "            default -> false;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        var result = switch (1) {
+                            case 1 -> true;
+                            case 2 -> Boolean.FALSE;
+                            default -> false;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -458,15 +510,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithAllNullResultsShouldResolveToNullType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        Object result = switch (1) {\n"
-                + "            case 1 -> null;\n"
-                + "            case 2 -> null;\n"
-                + "            default -> null;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        Object result = switch (1) {
+                            case 1 -> null;
+                            case 2 -> null;
+                            default -> null;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -479,15 +533,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithNullAndReferenceTypeShouldResolveToReferenceType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        var result = switch (1) {\n"
-                + "            case 1 -> \"hello\";\n"
-                + "            case 2 -> null;\n"
-                + "            default -> \"world\";\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        var result = switch (1) {
+                            case 1 -> "hello";
+                            case 2 -> null;
+                            default -> "world";
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -500,15 +556,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithPrimitiveAndReferenceTypeShouldBoxThenLub() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        var result = switch (1) {\n"
-                + "            case 1 -> 42;\n"
-                + "            case 2 -> \"hello\";\n"
-                + "            default -> 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        var result = switch (1) {
+                            case 1 -> 42;
+                            case 2 -> "hello";
+                            default -> 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -523,14 +581,16 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithAllThrowsShouldBeInvalid() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        int result = switch (1) {\n"
-                + "            case 1 -> throw new IllegalArgumentException();\n"
-                + "            default -> throw new RuntimeException();\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch (1) {
+                            case 1 -> throw new IllegalArgumentException();
+                            default -> throw new RuntimeException();
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         // When all cases throw, there are no result expressions to infer the type from.
@@ -544,15 +604,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithFloatAndDoubleShouldResolveToDouble() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        var result = switch (1) {\n"
-                + "            case 1 -> 1.0f;\n"
-                + "            case 2 -> 2.0;\n"
-                + "            default -> 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        var result = switch (1) {
+                            case 1 -> 1.0f;
+                            case 2 -> 2.0;
+                            default -> 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -564,15 +626,17 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithIntAndFloatShouldResolveToFloat() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        var result = switch (1) {\n"
-                + "            case 1 -> 1;\n"
-                + "            case 2 -> 2.0f;\n"
-                + "            default -> 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        var result = switch (1) {
+                            case 1 -> 1;
+                            case 2 -> 2.0f;
+                            default -> 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -585,17 +649,19 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithColonStyleFallThroughShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        int result = switch (1) {\n"
-                + "            case 1:\n"
-                + "            case 2:\n"
-                + "                yield 10;\n"
-                + "            default:\n"
-                + "                yield 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch (1) {
+                            case 1:
+                            case 2:
+                                yield 10;
+                            default:
+                                yield 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -608,16 +674,18 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithColonStyleThrowShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        int result = switch (1) {\n"
-                + "            case 1:\n"
-                + "                yield 10;\n"
-                + "            default:\n"
-                + "                throw new IllegalArgumentException();\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch (1) {
+                            case 1:
+                                yield 10;
+                            default:
+                                throw new IllegalArgumentException();
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -630,21 +698,23 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithColonStyleMultipleFallThroughShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        String result = switch (1) {\n"
-                + "            case 1:\n"
-                + "            case 2:\n"
-                + "            case 3:\n"
-                + "                yield \"low\";\n"
-                + "            case 4:\n"
-                + "            case 5:\n"
-                + "                yield \"high\";\n"
-                + "            default:\n"
-                + "                yield \"other\";\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        String result = switch (1) {
+                            case 1:
+                            case 2:
+                            case 3:
+                                yield "low";
+                            case 4:
+                            case 5:
+                                yield "high";
+                            default:
+                                yield "other";
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -657,18 +727,20 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithColonStyleDefaultThrowsShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        String result = switch (1) {\n"
-                + "            case 1:\n"
-                + "                yield \"one\";\n"
-                + "            case 2:\n"
-                + "                yield \"two\";\n"
-                + "            default:\n"
-                + "                throw new IllegalArgumentException(\"unexpected\");\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        String result = switch (1) {
+                            case 1:
+                                yield "one";
+                            case 2:
+                                yield "two";
+                            default:
+                                throw new IllegalArgumentException("unexpected");
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -681,19 +753,21 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithColonStyleMixedFallThroughAndThrowShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        int result = switch (1) {\n"
-                + "            case 1:\n"
-                + "            case 2:\n"
-                + "                yield 10;\n"
-                + "            case 3:\n"
-                + "                throw new RuntimeException();\n"
-                + "            default:\n"
-                + "                yield 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch (1) {
+                            case 1:
+                            case 2:
+                                yield 10;
+                            case 3:
+                                throw new RuntimeException();
+                            default:
+                                yield 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -706,16 +780,18 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithBlockThrowShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        int result = switch (1) {\n"
-                + "            case 1 -> {\n"
-                + "                throw new IllegalArgumentException();\n"
-                + "            }\n"
-                + "            default -> 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch (1) {
+                            case 1 -> {
+                                throw new IllegalArgumentException();
+                            }
+                            default -> 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -728,22 +804,24 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithNestedSwitchInBlockShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        int result = switch (1) {\n"
-                + "            case 1 -> {\n"
-                + "                String inner = switch (\"x\") {\n"
-                + "                    case \"a\" -> {\n"
-                + "                        yield \"inner result\";\n"
-                + "                    }\n"
-                + "                    default -> \"default\";\n"
-                + "                };\n"
-                + "                yield 42;\n"
-                + "            }\n"
-                + "            default -> 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch (1) {
+                            case 1 -> {
+                                String inner = switch ("x") {
+                                    case "a" -> {
+                                        yield "inner result";
+                                    }
+                                    default -> "default";
+                                };
+                                yield 42;
+                            }
+                            default -> 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();
@@ -757,22 +835,24 @@ public class SwitchExprTest {
      */
     @Test
     public void switchExprWithNestedSwitchInStatementGroupShouldResolveType() {
-        CompilationUnit cu = parse("class Test {\n"
-                + "    public void test() {\n"
-                + "        int result = switch (1) {\n"
-                + "            case 1:\n"
-                + "                String inner = switch (\"x\") {\n"
-                + "                    case \"a\":\n"
-                + "                        yield \"inner result\";\n"
-                + "                    default:\n"
-                + "                        yield \"default\";\n"
-                + "                };\n"
-                + "                yield 42;\n"
-                + "            default:\n"
-                + "                yield 0;\n"
-                + "        };\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Test {
+                    public void test() {
+                        int result = switch (1) {
+                            case 1:
+                                String inner = switch ("x") {
+                                    case "a":
+                                        yield "inner result";
+                                    default:
+                                        yield "default";
+                                };
+                                yield 42;
+                            default:
+                                yield 0;
+                        };
+                    }
+                }\
+                """);
 
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         ResolvedType resolvedType = switchExpr.calculateResolvedType();

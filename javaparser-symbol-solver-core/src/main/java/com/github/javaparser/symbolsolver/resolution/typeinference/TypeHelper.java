@@ -54,15 +54,13 @@ public class TypeHelper {
         if (type instanceof InferenceVariable) {
             return false;
         }
-        if (type instanceof ResolvedReferenceType) {
-            ResolvedReferenceType referenceType = (ResolvedReferenceType) type;
+        if (type instanceof ResolvedReferenceType referenceType) {
             return referenceType.typeParametersValues().stream().allMatch(it -> isProperType(it));
         }
         if (type instanceof LazyType) {
             return type.asReferenceType().typeParametersValues().stream().allMatch(it -> isProperType(it));
         }
-        if (type instanceof ResolvedWildcard) {
-            ResolvedWildcard wildcard = (ResolvedWildcard) type;
+        if (type instanceof ResolvedWildcard wildcard) {
             if (wildcard.isBounded()) {
                 return isProperType(wildcard.getBoundedType());
             }
@@ -181,7 +179,7 @@ public class TypeHelper {
         Optional<ResolvedPrimitiveType> correspondingPrimitiveTypeForS = Arrays.stream(ResolvedPrimitiveType.values())
                 .filter(pt -> pt.getBoxTypeQName().equals(s.asReferenceType().getQualifiedName()))
                 .findFirst();
-        if (!correspondingPrimitiveTypeForS.isPresent()) {
+        if (correspondingPrimitiveTypeForS.isEmpty()) {
             return false;
         }
         throw new UnsupportedOperationException("areCompatibleThroughWideningReferenceConversion s=" + s + ", t=" + t);

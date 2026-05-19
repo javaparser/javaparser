@@ -133,35 +133,35 @@ public interface ResolvedType {
     // / Downcasting
     // /
     default ResolvedArrayType asArrayType() {
-        throw new UnsupportedOperationException(String.format("%s is not an Array", this));
+        throw new UnsupportedOperationException("%s is not an Array".formatted(this));
     }
 
     default ResolvedReferenceType asReferenceType() {
-        throw new UnsupportedOperationException(String.format("%s is not a Reference Type", this));
+        throw new UnsupportedOperationException("%s is not a Reference Type".formatted(this));
     }
 
     default ResolvedTypeParameterDeclaration asTypeParameter() {
-        throw new UnsupportedOperationException(String.format("%s is not a Type parameter", this));
+        throw new UnsupportedOperationException("%s is not a Type parameter".formatted(this));
     }
 
     default ResolvedTypeVariable asTypeVariable() {
-        throw new UnsupportedOperationException(String.format("%s is not a Type variable", this));
+        throw new UnsupportedOperationException("%s is not a Type variable".formatted(this));
     }
 
     default ResolvedPrimitiveType asPrimitive() {
-        throw new UnsupportedOperationException(String.format("%s is not a Primitive type", this));
+        throw new UnsupportedOperationException("%s is not a Primitive type".formatted(this));
     }
 
     default ResolvedWildcard asWildcard() {
-        throw new UnsupportedOperationException(String.format("%s is not a Wildcard", this));
+        throw new UnsupportedOperationException("%s is not a Wildcard".formatted(this));
     }
 
     default ResolvedLambdaConstraintType asConstraintType() {
-        throw new UnsupportedOperationException(String.format("%s is not a constraint type", this));
+        throw new UnsupportedOperationException("%s is not a constraint type".formatted(this));
     }
 
     default ResolvedUnionType asUnionType() {
-        throw new UnsupportedOperationException(String.format("%s is not a union type", this));
+        throw new UnsupportedOperationException("%s is not a union type".formatted(this));
     }
 
     // /

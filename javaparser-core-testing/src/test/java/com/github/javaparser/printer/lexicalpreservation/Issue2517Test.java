@@ -33,19 +33,25 @@ public class Issue2517Test extends AbstractLexicalPreservingTest {
     @Test
     public void test() {
 
-        considerCode("public class A {\n" + "    public A(String a , String b) {\n"
-                + "    }\n"
-                + "    public static A m() {\n"
-                + "      return new A(\"a\",\"b\");\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                public class A {
+                    public A(String a , String b) {
+                    }
+                    public static A m() {
+                      return new A("a","b");
+                    }
+                }\
+                """);
 
-        String expected = "public class A {\n" + "    public A(String a , String b) {\n"
-                + "    }\n"
-                + "    public static A m() {\n"
-                + "      return new A(\"b\", \"a\");\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                public class A {
+                    public A(String a , String b) {
+                    }
+                    public static A m() {
+                      return new A("b", "a");
+                    }
+                }\
+                """;
 
         ObjectCreationExpr cd = cu.findFirst(ObjectCreationExpr.class).get();
         NodeList<Expression> args = cd.getArguments();

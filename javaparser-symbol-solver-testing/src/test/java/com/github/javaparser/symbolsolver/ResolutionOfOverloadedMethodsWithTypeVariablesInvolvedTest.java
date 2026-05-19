@@ -33,20 +33,22 @@ public class ResolutionOfOverloadedMethodsWithTypeVariablesInvolvedTest {
 
     @Test
     void test() {
-        String code = "public class Box<E> {\n"
-                + "    private E element;\n"
-                + "\n"
-                + "    public Box(E element) {\n"
-                + "        this.element = element;\n"
-                + "    }\n"
-                + "\n"
-                + "    @Override\n"
-                + "    public String toString() {\n"
-                + "        StringBuilder builder = new StringBuilder();\n"
-                + "        builder.append(element == this ? \"(this box)\" : element);\n"
-                + "        return builder.toString();\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class Box<E> {
+                    private E element;
+                
+                    public Box(E element) {
+                        this.element = element;
+                    }
+                
+                    @Override
+                    public String toString() {
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(element == this ? "(this box)" : element);
+                        return builder.toString();
+                    }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
 

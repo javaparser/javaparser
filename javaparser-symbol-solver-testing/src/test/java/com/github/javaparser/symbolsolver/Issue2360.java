@@ -34,17 +34,20 @@ class Issue2360 extends AbstractSymbolResolutionTest {
 
     @Test
     void testUnaryExprResolvedViaUnaryNumericPromotion_char() {
-        String source = "public class Test\n" + "{\n"
-                + "   public class InnerClass\n"
-                + "   {\n"
-                + "       public InnerClass(char c) {}\n"
-                + "       public InnerClass(int i) {}\n"
-                + "   }\n"
-                + "    \n"
-                + "   public Test() {\n"
-                + "     new InnerClass(+'.'); \n"
-                + "   }\n"
-                + "}";
+        String source = """
+                public class Test
+                {
+                   public class InnerClass
+                   {
+                       public InnerClass(char c) {}
+                       public InnerClass(int i) {}
+                   }
+                   \s
+                   public Test() {
+                     new InnerClass(+'.');\s
+                   }
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
@@ -58,18 +61,21 @@ class Issue2360 extends AbstractSymbolResolutionTest {
 
     @Test
     void testUnaryExprResolvedViaUnaryNumericPromotion_byte() {
-        String source = "public class Test\n" + "{\n"
-                + "   public class InnerClass\n"
-                + "   {\n"
-                + "       public InnerClass(char c) {}\n"
-                + "       public InnerClass(int i) {}\n"
-                + "   }\n"
-                + "    \n"
-                + "   public Test() {\n"
-                + "     byte b = 0;\n"
-                + "     new InnerClass(+b); \n"
-                + "   }\n"
-                + "}";
+        String source = """
+                public class Test
+                {
+                   public class InnerClass
+                   {
+                       public InnerClass(char c) {}
+                       public InnerClass(int i) {}
+                   }
+                   \s
+                   public Test() {
+                     byte b = 0;
+                     new InnerClass(+b);\s
+                   }
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
@@ -83,18 +89,21 @@ class Issue2360 extends AbstractSymbolResolutionTest {
 
     @Test
     void testUnaryExprResolvedViaUnaryNumericPromotion_short() {
-        String source = "public class Test\n" + "{\n"
-                + "   public class InnerClass\n"
-                + "   {\n"
-                + "       public InnerClass(char c) {}\n"
-                + "       public InnerClass(int i) {}\n"
-                + "   }\n"
-                + "    \n"
-                + "   public Test() {\n"
-                + "     short b = 0;\n"
-                + "     new InnerClass(+b); \n"
-                + "   }\n"
-                + "}";
+        String source = """
+                public class Test
+                {
+                   public class InnerClass
+                   {
+                       public InnerClass(char c) {}
+                       public InnerClass(int i) {}
+                   }
+                   \s
+                   public Test() {
+                     short b = 0;
+                     new InnerClass(+b);\s
+                   }
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));

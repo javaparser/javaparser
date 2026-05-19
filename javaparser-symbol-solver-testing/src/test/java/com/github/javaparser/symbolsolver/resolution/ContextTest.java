@@ -680,7 +680,14 @@ class ContextTest extends AbstractSymbolResolutionTest {
     void localVariableDeclarationInScope() {
         String name = "a";
         CompilationUnit cu = parse(
-                "class A {\n" + "  void foo() {\n" + "    SomeClass a;\n" + "    a.aField;\n" + "  }\n" + "}",
+                """
+                class A {
+                  void foo() {
+                    SomeClass a;
+                    a.aField;
+                  }
+                }\
+                """,
                 ParseStart.COMPILATION_UNIT);
 
         // The block statement expose to the 2nd statement the local var
@@ -699,14 +706,17 @@ class ContextTest extends AbstractSymbolResolutionTest {
     void localVariableDeclarationInScopeWithMultipleLocalesVariables() {
         String name = "a";
         CompilationUnit cu = parse(
-                "class A {\n" + "  void foo() {\n"
-                        + "    SomeClass a;\n"
-                        + "    SomeClass b;\n"
-                        + "    a.aField;\n"
-                        + "    SomeClass c;\n"
-                        + "    c.cField;\n"
-                        + "  }\n"
-                        + "}",
+                """
+                class A {
+                  void foo() {
+                    SomeClass a;
+                    SomeClass b;
+                    a.aField;
+                    SomeClass c;
+                    c.cField;
+                  }
+                }\
+                """,
                 ParseStart.COMPILATION_UNIT);
 
         // The block statement expose to the 2nd statement the local var
@@ -1125,11 +1135,12 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
             @Test
             void instanceOfPatternExprVariableDeclaration_variableDeclaratorStatements1() {
-                String x = "" + "{\n"
-                        + "    boolean x = a instanceof String s;\n"
-                        + "    boolean result = s.contains(\"b\");\n"
-                        + "}\n"
-                        + "";
+                String x = """
+                        {
+                            boolean x = a instanceof String s;
+                            boolean result = s.contains("b");
+                        }
+                        """;
                 BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK)
                         .asBlockStmt();
 
@@ -1154,12 +1165,13 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
             @Test
             void instanceOfPatternExprVariableDeclaration_variableDeclaratorStatements2() {
-                String x = "" + "{\n"
-                        + "    boolean x = (a instanceof String s);\n"
-                        + "    boolean y = !(a instanceof String s);\n"
-                        + "    boolean result = s.contains(\"b\");\n"
-                        + "}\n"
-                        + "";
+                String x = """
+                        {
+                            boolean x = (a instanceof String s);
+                            boolean y = !(a instanceof String s);
+                            boolean result = s.contains("b");
+                        }
+                        """;
                 BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK)
                         .asBlockStmt();
 
@@ -1190,11 +1202,12 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
             @Test
             void instanceOfPatternExprVariableDeclaration_variableDeclaratorStatements3() {
-                String x = "" + "{\n"
-                        + "    boolean x = !(a instanceof String s);\n"
-                        + "    boolean result = s.contains(\"b\");\n"
-                        + "}\n"
-                        + "";
+                String x = """
+                        {
+                            boolean x = !(a instanceof String s);
+                            boolean result = s.contains("b");
+                        }
+                        """;
                 BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK)
                         .asBlockStmt();
 
@@ -1447,10 +1460,11 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 @Test
                 void instanceOfPattern_ifBlock1() {
-                    String x = "" + "if (a instanceof String s) {\n"
-                            + "    result = s.contains(\"in scope\");\n"
-                            + "}\n"
-                            + "";
+                    String x = """
+                            if (a instanceof String s) {
+                                result = s.contains("in scope");
+                            }
+                            """;
                     IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT)
                             .asIfStmt();
 
@@ -1467,10 +1481,11 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 @Test
                 void instanceOfPattern_ifBlock1_noBraces() {
-                    String x = "" + "if (a instanceof String s) \n"
-                            + "    result = s.contains(\"in scope\");\n"
-                            + "\n"
-                            + "";
+                    String x = """
+                            if (a instanceof String s)\s
+                                result = s.contains("in scope");
+                            
+                            """;
                     IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT)
                             .asIfStmt();
 
@@ -1487,10 +1502,11 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 @Test
                 void instanceOfPattern_ifBlock1_negatedCondition() {
-                    String x = "" + "if (!(a instanceof String s)) {\n"
-                            + "    result = s.contains(\"NOT in scope\");\n"
-                            + "}\n"
-                            + "";
+                    String x = """
+                            if (!(a instanceof String s)) {
+                                result = s.contains("NOT in scope");
+                            }
+                            """;
                     IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT)
                             .asIfStmt();
 
@@ -1506,10 +1522,11 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 @Test
                 void instanceOfPattern_ifBlock1_noBraces_negatedCondition() {
-                    String x = "" + "if (!(a instanceof String s)) \n"
-                            + "    result = s.contains(\"NOT in scope\");\n"
-                            + "\n"
-                            + "";
+                    String x = """
+                            if (!(a instanceof String s))\s
+                                result = s.contains("NOT in scope");
+                            
+                            """;
                     IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT)
                             .asIfStmt();
 
@@ -1525,15 +1542,16 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 @Test
                 void instanceOfPattern_ifElseBlock1() {
-                    String x = "" + "{\n"
-                            + "    List s;\n"
-                            + "    if (!(a instanceof String s)) {\n"
-                            + "        result = s.contains(\"in scope\");\n"
-                            + "    } else if (true) {\n"
-                            + "        result = s.contains(\"in scope\");\n"
-                            + "    }\n"
-                            + "}\n"
-                            + "";
+                    String x = """
+                            {
+                                List s;
+                                if (!(a instanceof String s)) {
+                                    result = s.contains("in scope");
+                                } else if (true) {
+                                    result = s.contains("in scope");
+                                }
+                            }
+                            """;
                     BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK)
                             .asBlockStmt();
 
@@ -1559,19 +1577,20 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 @Test
                 void instanceOfPattern_ifElseBlock2() {
-                    String x = "" + "{\n"
-                            + "    List s;\n"
-                            + "    if (!(a instanceof String s)) {\n"
-                            + "        result = s.contains(\"\");\n"
-                            + "    } else if (true) {\n"
-                            + "        result = s.contains(\"\");\n"
-                            + "    } else if (true) {\n"
-                            + "        result = s.contains(\"\");\n"
-                            + "    } else {\n"
-                            + "        result = s.contains(\"\");\n"
-                            + "    }\n"
-                            + "}\n"
-                            + "";
+                    String x = """
+                            {
+                                List s;
+                                if (!(a instanceof String s)) {
+                                    result = s.contains("");
+                                } else if (true) {
+                                    result = s.contains("");
+                                } else if (true) {
+                                    result = s.contains("");
+                                } else {
+                                    result = s.contains("");
+                                }
+                            }
+                            """;
                     BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK)
                             .asBlockStmt();
 
@@ -1611,19 +1630,20 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 @Test
                 void instanceOfPattern_ifElseBlock3() {
-                    String x = "" + "{\n"
-                            + "    List s;\n"
-                            + "    if (false) {\n"
-                            + "        result = s.contains(\"\");\n"
-                            + "    } else if (!(a instanceof String s)) {\n"
-                            + "        result = s.contains(\"\");\n"
-                            + "    } else if (true) {\n"
-                            + "        result = s.contains(\"\");\n"
-                            + "    } else {\n"
-                            + "        result = s.contains(\"\");\n"
-                            + "    }\n"
-                            + "}\n"
-                            + "";
+                    String x = """
+                            {
+                                List s;
+                                if (false) {
+                                    result = s.contains("");
+                                } else if (!(a instanceof String s)) {
+                                    result = s.contains("");
+                                } else if (true) {
+                                    result = s.contains("");
+                                } else {
+                                    result = s.contains("");
+                                }
+                            }
+                            """;
                     BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK)
                             .asBlockStmt();
 

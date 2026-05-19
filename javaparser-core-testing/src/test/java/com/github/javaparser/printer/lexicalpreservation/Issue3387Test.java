@@ -43,15 +43,18 @@ public class Issue3387Test extends AbstractLexicalPreservingTest {
                 .add("}")
                 .toString());
 
-        String expected = "class A {\n" + "\n"
-                + "\t/**\n"
-                + "\t * Change Javadoc\n"
-                + "\t */\n"
-                + "\tpublic void setTheNumber(int number) {\n"
-                + "\t\tnumber = number;\n"
-                + "\t}\n"
-                + "\n"
-                + "}";
+        String expected = """
+                class A {
+                
+                	/**
+                	 * Change Javadoc
+                	 */
+                	public void setTheNumber(int number) {
+                		number = number;
+                	}
+                
+                }\
+                """;
 
         MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
         // create new javadoc comment

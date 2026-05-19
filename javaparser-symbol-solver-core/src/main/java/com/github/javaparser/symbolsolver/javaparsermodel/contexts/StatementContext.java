@@ -54,7 +54,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     public static SymbolReference<? extends ResolvedValueDeclaration> solveInBlock(
             String name, TypeSolver typeSolver, Statement stmt) {
         Optional<Node> optionalParentNode = stmt.getParentNode();
-        if (!optionalParentNode.isPresent()) {
+        if (optionalParentNode.isEmpty()) {
             return SymbolReference.unsolved();
         }
 
@@ -88,7 +88,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
     public static Optional<Value> solveInBlockAsValue(String name, TypeSolver typeSolver, Statement stmt) {
         Optional<Node> optionalParentNode = stmt.getParentNode();
-        if (!optionalParentNode.isPresent()) {
+        if (optionalParentNode.isEmpty()) {
             return Optional.empty();
         }
 
@@ -131,13 +131,13 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
 
         // If there is no parent
-        if (!getParent().isPresent()) {
+        if (getParent().isEmpty()) {
             return Optional.empty();
         }
         Context parentContext = getParent().get();
 
         Optional<Node> optionalParentNode = wrappedNode.getParentNode();
-        if (!optionalParentNode.isPresent()) {
+        if (optionalParentNode.isEmpty()) {
             return Optional.empty();
         }
 
@@ -219,7 +219,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
 
         Optional<Node> optionalParentNode = wrappedNode.getParentNode();
-        if (!optionalParentNode.isPresent()) {
+        if (optionalParentNode.isEmpty()) {
             return SymbolReference.unsolved();
         }
 
@@ -239,7 +239,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         if (parentOfWrappedNode instanceof LambdaExpr) {
             return solveSymbolInParentContext(name);
         }
-        if (parentOfWrappedNode instanceof NodeWithStatements) {
+        if (parentOfWrappedNode instanceof NodeWithStatements<?> nodeWithStmt) {
             // If we choose to not solve adjacent statements abort the solution process here.
             // In the calling context (the context that calls this) we will attempt to
             // resolve all prior adjacent statements, and then the common parent as the fallback.
@@ -251,8 +251,6 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             if (!iterateAdjacentStmts) {
                 return SymbolReference.unsolved();
             }
-
-            NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) parentOfWrappedNode;
 
             // Assuming the wrapped node exists within the parent's collection of statements...
             int position = nodeWithStmt.getStatements().indexOf(wrappedNode);
@@ -281,7 +279,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
                     // }
                     continue;
                 }
-                if (prevContext instanceof StatementContext) {
+                if (prevContext instanceof StatementContext<?> context) {
                     // We have an explicit check for "StatementContext" to prevent a factorial increase of visited
                     // statements.
                     //
@@ -301,7 +299,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
                     // adjacent statements".
                     // Since each visited "prevContext" does not look at its adjacent statements we only visit each
                     // statement once in this while loop.
-                    symbolReference = ((StatementContext<?>) prevContext).solveSymbol(name, false);
+                    symbolReference = context.solveSymbol(name, false);
                 } else {
                     symbolReference = prevContext.solveSymbol(name);
                 }

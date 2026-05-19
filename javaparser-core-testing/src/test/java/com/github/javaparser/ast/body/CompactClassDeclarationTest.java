@@ -141,14 +141,16 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithStaticAndInstanceMembers() {
-        String s = "static final String GREETING = \"Hello\";\n"
-                + "String name = \"World\";\n"
-                + "\n"
-                + "static String formatMessage(String msg) {\n"
-                + "    return msg.toUpperCase();\n"
-                + "}\n"
-                + "\n"
-                + "void main() {}\n";
+        String s = """
+                static final String GREETING = "Hello";
+                String name = "World";
+                
+                static String formatMessage(String msg) {
+                    return msg.toUpperCase();
+                }
+                
+                void main() {}
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -183,16 +185,18 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithNestedClass() {
-        String s = "class Inner {\n"
-                + "    void greet() {\n"
-                + "        System.out.println(\"Hello from Inner\");\n"
-                + "    }\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    Inner inner = new Inner();\n"
-                + "    inner.greet();\n"
-                + "}\n";
+        String s = """
+                class Inner {
+                    void greet() {
+                        System.out.println("Hello from Inner");
+                    }
+                }
+                
+                void main() {
+                    Inner inner = new Inner();
+                    inner.greet();
+                }
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -247,15 +251,17 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithGenericMethod() {
-        String s = "<T> void printValue(T value) {\n"
-                + "    System.out.println(\"Value: \" + value);\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    printValue(\"String\");\n"
-                + "    printValue(42);\n"
-                + "    printValue(3.14);\n"
-                + "}\n";
+        String s = """
+                <T> void printValue(T value) {
+                    System.out.println("Value: " + value);
+                }
+                
+                void main() {
+                    printValue("String");
+                    printValue(42);
+                    printValue(3.14);
+                }
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -292,12 +298,14 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithRecord() {
-        String s = "record Person(String name, int age) {}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    Person p = new Person(\"Alice\", 30);\n"
-                + "    System.out.println(p.name() + \" is \" + p.age() + \" years old\");\n"
-                + "}\n";
+        String s = """
+                record Person(String name, int age) {}
+                
+                void main() {
+                    Person p = new Person("Alice", 30);
+                    System.out.println(p.name() + " is " + p.age() + " years old");
+                }
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -322,15 +330,17 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithEnum() {
-        String s = "enum Color {\n"
-                + "    RED, GREEN, BLUE\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    for (Color c : Color.values()) {\n"
-                + "        System.out.println(c);\n"
-                + "    }\n"
-                + "}\n";
+        String s = """
+                enum Color {
+                    RED, GREEN, BLUE
+                }
+                
+                void main() {
+                    for (Color c : Color.values()) {
+                        System.out.println(c);
+                    }
+                }
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -356,20 +366,22 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithInterface() {
-        String s = "interface Printer {\n"
-                + "    void print();\n"
-                + "}\n"
-                + "\n"
-                + "class ConsolePrinter implements Printer {\n"
-                + "    public void print() {\n"
-                + "        System.out.println(\"Printing...\");\n"
-                + "    }\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    Printer p = new ConsolePrinter();\n"
-                + "    p.print();\n"
-                + "}\n";
+        String s = """
+                interface Printer {
+                    void print();
+                }
+                
+                class ConsolePrinter implements Printer {
+                    public void print() {
+                        System.out.println("Printing...");
+                    }
+                }
+                
+                void main() {
+                    Printer p = new ConsolePrinter();
+                    p.print();
+                }
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -400,17 +412,19 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithVarargs() {
-        String s = "int sum(int... numbers) {\n"
-                + "    int total = 0;\n"
-                + "    for (int n : numbers) {\n"
-                + "        total += n;\n"
-                + "    }\n"
-                + "    return total;\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    System.out.println(sum(1, 2, 3, 4, 5));\n"
-                + "}\n";
+        String s = """
+                int sum(int... numbers) {
+                    int total = 0;
+                    for (int n : numbers) {
+                        total += n;
+                    }
+                    return total;
+                }
+                
+                void main() {
+                    System.out.println(sum(1, 2, 3, 4, 5));
+                }
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -438,17 +452,19 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithExceptionHandling() {
-        String s = "void riskyOperation() throws Exception {\n"
-                + "    throw new Exception(\"Something went wrong\");\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    try {\n"
-                + "        riskyOperation();\n"
-                + "    } catch (Exception e) {\n"
-                + "        System.out.println(\"Caught: \" + e.getMessage());\n"
-                + "    }\n"
-                + "}\n";
+        String s = """
+                void riskyOperation() throws Exception {
+                    throw new Exception("Something went wrong");
+                }
+                
+                void main() {
+                    try {
+                        riskyOperation();
+                    } catch (Exception e) {
+                        System.out.println("Caught: " + e.getMessage());
+                    }
+                }
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -475,13 +491,15 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithAnnotationDeclaration() {
-        String s = "@interface MyAnnotation {\n"
-                + "    String value() default \"\";\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    System.out.println(\"Annotation declared\");\n"
-                + "}\n";
+        String s = """
+                @interface MyAnnotation {
+                    String value() default "";
+                }
+                
+                void main() {
+                    System.out.println("Annotation declared");
+                }
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -511,13 +529,15 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithAnnotationDeclarationAfterMainMethod() {
-        String s = "void main() {\n"
-                + "    System.out.println(\"Annotation declared\");\n"
-                + "}\n"
-                + "@interface MyAnnotation {\n"
-                + "    String value() default \"\";\n"
-                + "}\n"
-                + "\n";
+        String s = """
+                void main() {
+                    System.out.println("Annotation declared");
+                }
+                @interface MyAnnotation {
+                    String value() default "";
+                }
+                
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -547,20 +567,22 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithAnnotatedMethods() {
-        String s = "@Deprecated\n"
-                + "void oldMethod() {\n"
-                + "    System.out.println(\"This is deprecated\");\n"
-                + "}\n"
-                + "\n"
-                + "@Override\n"
-                + "public String toString() {\n"
-                + "    return \"AnnotatedMethod\";\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    oldMethod();\n"
-                + "    System.out.println(toString());\n"
-                + "}\n";
+        String s = """
+                @Deprecated
+                void oldMethod() {
+                    System.out.println("This is deprecated");
+                }
+                
+                @Override
+                public String toString() {
+                    return "AnnotatedMethod";
+                }
+                
+                void main() {
+                    oldMethod();
+                    System.out.println(toString());
+                }
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -594,16 +616,18 @@ class CompactClassDeclarationTest {
 
     @Test
     void compactClassWithCustomAnnotationAndAnnotatedMethods() {
-        String s = "@interface Author {\n"
-                + "    String name();\n"
-                + "}\n"
-                + "\n"
-                + "@Override\n"
-                + "int calculate(int x) {\n"
-                + "    return x * 2;\n"
-                + "}\n"
-                + "\n"
-                + "void main() {}\n";
+        String s = """
+                @interface Author {
+                    String name();
+                }
+                
+                @Override
+                int calculate(int x) {
+                    return x * 2;
+                }
+                
+                void main() {}
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
         ClassOrInterfaceDeclaration classDecl = cu.getType(0).asClassOrInterfaceDeclaration();

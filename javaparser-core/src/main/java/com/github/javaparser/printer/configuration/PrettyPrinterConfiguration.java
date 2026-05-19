@@ -142,9 +142,8 @@ public class PrettyPrinterConfiguration implements PrinterConfiguration {
     }
 
     public boolean isIgnoreComments() {
-        return !wrappedConfiguration
-                .get(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS))
-                .isPresent();
+        return wrappedConfiguration
+                .get(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS)).isEmpty();
     }
 
     public boolean isSpaceAroundOperators() {

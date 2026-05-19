@@ -153,7 +153,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     @Override
     default String getQualifiedName() {
-        return String.format("%s.%s", getContainerId(), getName());
+        return "%s.%s".formatted(getContainerId(), getName());
     }
 
     /**

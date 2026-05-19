@@ -75,8 +75,7 @@ public class NameLogic {
      * there are exceptions as the FieldAccessExpr
      */
     public static boolean isAName(Node node) {
-        if (node instanceof FieldAccessExpr) {
-            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
+        if (node instanceof FieldAccessExpr fieldAccessExpr) {
             return isAName(fieldAccessExpr.getScope());
         }
         return node instanceof SimpleName
@@ -86,16 +85,14 @@ public class NameLogic {
     }
 
     private static Node getQualifier(Node node) {
-        if (node instanceof FieldAccessExpr) {
-            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
+        if (node instanceof FieldAccessExpr fieldAccessExpr) {
             return fieldAccessExpr.getScope();
         }
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     private static Node getRightMostName(Node node) {
-        if (node instanceof FieldAccessExpr) {
-            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
+        if (node instanceof FieldAccessExpr fieldAccessExpr) {
             return fieldAccessExpr.getName();
         }
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
@@ -111,7 +108,7 @@ public class NameLogic {
         if (!isAName(name)) {
             throw new IllegalArgumentException("The given node is not a name");
         }
-        if (!name.getParentNode().isPresent()) {
+        if (name.getParentNode().isEmpty()) {
             throw new IllegalArgumentException("We cannot understand the role of a name if it has no parent");
         }
         if (whenParentIs(
@@ -344,7 +341,7 @@ public class NameLogic {
     }
 
     public static NameCategory classifyReference(Node name, TypeSolver typeSolver) {
-        if (!name.getParentNode().isPresent()) {
+        if (name.getParentNode().isEmpty()) {
             throw new IllegalArgumentException("We cannot understand the category of a name if it has no parent");
         }
         if (classifyRole(name) != NameRole.REFERENCE) {
@@ -1067,24 +1064,23 @@ public class NameLogic {
         if (!isAName(name)) {
             throw new IllegalArgumentException("A name was expected");
         }
-        if (name instanceof Name) {
-            return ((Name) name).asString();
+        if (name instanceof Name name1) {
+            return name1.asString();
         }
-        if (name instanceof SimpleName) {
-            return ((SimpleName) name).getIdentifier();
+        if (name instanceof SimpleName simpleName) {
+            return simpleName.getIdentifier();
         }
-        if (name instanceof ClassOrInterfaceType) {
-            return ((ClassOrInterfaceType) name).asString();
+        if (name instanceof ClassOrInterfaceType type) {
+            return type.asString();
         }
-        if (name instanceof FieldAccessExpr) {
-            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) name;
+        if (name instanceof FieldAccessExpr fieldAccessExpr) {
             if (isAName(fieldAccessExpr.getScope())) {
                 return nameAsString(fieldAccessExpr.getScope()) + "." + nameAsString(fieldAccessExpr.getName());
             }
             throw new IllegalArgumentException();
         }
-        if (name instanceof NameExpr) {
-            return ((NameExpr) name).getNameAsString();
+        if (name instanceof NameExpr expr) {
+            return expr.getNameAsString();
         }
         throw new UnsupportedOperationException(
                 "Unknown type of name found: " + name + " (" + name.getClass().getCanonicalName() + ")");

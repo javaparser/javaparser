@@ -36,15 +36,17 @@ public class Issue2943Test {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-        CompilationUnit cu = StaticJavaParser.parse("package foo;\n"
-                + "import java.util.stream.Collectors;\n"
-                + "import java.util.stream.IntStream;\n"
-                + "import java.util.stream.Stream;\n"
-                + "public class TestPeek {\n"
-                + "    public void foo() {\n"
-                + "        Stream.of(1,2,3).peek(info -> { System.out.println(info); }).collect(Collectors.toList());\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = StaticJavaParser.parse("""
+                package foo;
+                import java.util.stream.Collectors;
+                import java.util.stream.IntStream;
+                import java.util.stream.Stream;
+                public class TestPeek {
+                    public void foo() {
+                        Stream.of(1,2,3).peek(info -> { System.out.println(info); }).collect(Collectors.toList());
+                    }
+                }\
+                """);
 
         for (MethodCallExpr methodCallExpr : cu.findAll(MethodCallExpr.class)) {
             assertDoesNotThrow(methodCallExpr::resolve);

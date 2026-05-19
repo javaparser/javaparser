@@ -40,13 +40,16 @@ public class Issue2132Test extends AbstractSymbolResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         StaticJavaParser.setConfiguration(config);
 
-        String s = "class A {\n" + "    void method() {\n"
-                + "        String s = \"\";\n"
-                + "        {\n"
-                + "          s.length();\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                class A {
+                    void method() {
+                        String s = "";
+                        {
+                          s.length();
+                        }
+                    }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(s);
         MethodCallExpr mce = cu.findFirst(MethodCallExpr.class).get();
         assertEquals("int", mce.calculateResolvedType().describe());

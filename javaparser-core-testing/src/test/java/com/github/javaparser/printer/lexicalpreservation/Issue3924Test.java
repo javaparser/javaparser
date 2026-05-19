@@ -29,25 +29,27 @@ public class Issue3924Test extends AbstractLexicalPreservingTest {
 
     @Test
     void test() {
-        considerCode("/*\n" + " * Licensed under the Apache License, Version 2.0 (the \"License\");\n"
-                + " * you may not use this file except in compliance with the License.\n"
-                + " * You may obtain a copy of the License at\n"
-                + " */\n"
-                + "\n"
-                + "@XmlSchema(\n"
-                + "		xmlns = {\n"
-                + "				@XmlNs(prefix = \"order\", namespaceURI = \"http://www.camel.apache.org/jaxb/example/order/1\"),\n"
-                + "				@XmlNs(prefix = \"address\", namespaceURI = \"http://www.camel.apache.org/jaxb/example/address/1\")\n"
-                + "		}\n"
-                + ")\n"
-                + "package net.revelc.code.imp;\n"
-                + "\n"
-                + "import net.revelc.code.imp.Something;\n"
-                + "\n"
-                + "@Component\n"
-                + "public class UnusedImports {\n"
-                + "}\n"
-                + "");
+        considerCode("""
+                /*
+                 * Licensed under the Apache License, Version 2.0 (the "License");
+                 * you may not use this file except in compliance with the License.
+                 * You may obtain a copy of the License at
+                 */
+                
+                @XmlSchema(
+                		xmlns = {
+                				@XmlNs(prefix = "order", namespaceURI = "http://www.camel.apache.org/jaxb/example/order/1"),
+                				@XmlNs(prefix = "address", namespaceURI = "http://www.camel.apache.org/jaxb/example/address/1")
+                		}
+                )
+                package net.revelc.code.imp;
+                
+                import net.revelc.code.imp.Something;
+                
+                @Component
+                public class UnusedImports {
+                }
+                """);
 
         LexicalPreservingPrinter.setup(cu);
         cu.getImport(0).remove();

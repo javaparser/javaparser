@@ -90,10 +90,14 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
      */
     @Test
     void subinterfaceCanBeFunctionalByDclaringAnAbstractMethodWhichIsNotAMemberOfObject() {
-        String code = "interface NonFunc {\n"
-                + "    boolean equals(Object obj);\n" + "}\n"
-                + "interface Func extends NonFunc {\n"
-                + "    int compare(String o1, String o2);\n" + "}";
+        String code = """
+                interface NonFunc {
+                    boolean equals(Object obj);
+                }
+                interface Func extends NonFunc {
+                    int compare(String o1, String o2);
+                }\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Func");
@@ -109,9 +113,12 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
      */
     @Test
     void isFunctionalBecauseItHasOneAbstractNonObjectMethod() {
-        String code = "interface Comparator<T> {\n"
-                + "    boolean equals(Object obj);\n"
-                + "    int compare(T o1, T o2);\n" + "}";
+        String code = """
+                interface Comparator<T> {
+                    boolean equals(Object obj);
+                    int compare(T o1, T o2);
+                }\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Comparator");
@@ -145,9 +152,11 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
      */
     @Test
     void isFunctionalInterfaceBecauseInheritedAbstractMethodsHaveTheSameSignature() {
-        String code = "interface X { int m(Iterable<String> arg); }\n"
-                + "interface Y { int m(Iterable<String> arg); }\n"
-                + "interface Z extends X, Y {}";
+        String code = """
+                interface X { int m(Iterable<String> arg); }
+                interface Y { int m(Iterable<String> arg); }
+                interface Z extends X, Y {}\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Z");
@@ -164,9 +173,11 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
     @Test
     @Disabled("Return-Type-Substituable must be implemented on reference type")
     void isFunctionalInterfaceBecauseOfSubsignatureAndSubstitutableReturnType() {
-        String code = "interface X { Iterable m(Iterable<String> arg); }\n"
-                + "interface Y { Iterable<String> m(Iterable arg); }\n"
-                + "interface Z extends X, Y {}";
+        String code = """
+                interface X { Iterable m(Iterable<String> arg); }
+                interface Y { Iterable<String> m(Iterable arg); }
+                interface Z extends X, Y {}\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Z");
@@ -207,12 +218,14 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
      */
     @Test
     void bazIsAFunctionalInterfaceBecauseMethodsItInheritsFromFooHaveTheSameSignature() {
-        String code = "interface Foo<T, N extends Number> {\n"
-                + "    void m(T arg);\n"
-                + "    void m(N arg);\n"
-                + "}\n"
-                + "interface Bar extends Foo<String, Integer> {}\n"
-                + "interface Baz extends Foo<Integer, Integer> {}";
+        String code = """
+                interface Foo<T, N extends Number> {
+                    void m(T arg);
+                    void m(N arg);
+                }
+                interface Bar extends Foo<String, Integer> {}
+                interface Baz extends Foo<Integer, Integer> {}\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Baz");
@@ -232,10 +245,12 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
      */
     @Test
     void withGenericMethodsWithSameSignatures() {
-        String code = "interface Action<T> {};\n"
-                + "interface X { <T> T execute(Action<T> a); }\n"
-                + "interface Y { <S> S execute(Action<S> a); }\n"
-                + "interface Exec extends X, Y {}\n";
+        String code = """
+                interface Action<T> {};
+                interface X { <T> T execute(Action<T> a); }
+                interface Y { <S> S execute(Action<S> a); }
+                interface Exec extends X, Y {}
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Exec");
@@ -250,10 +265,12 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
      */
     @Test
     void withGenericMethodsWithDifferentSignaturesAndSameErasure() {
-        String code = "interface Action<T> {};\n"
-                + "interface X { <T>   T execute(Action<T> a); }\n"
-                + "interface Y { <S,T> S execute(Action<S> a); }\n"
-                + "interface Exec extends X, Y {}";
+        String code = """
+                interface Action<T> {};
+                interface X { <T>   T execute(Action<T> a); }
+                interface Y { <S,T> S execute(Action<S> a); }
+                interface Exec extends X, Y {}\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Exec");
@@ -289,9 +306,12 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
     @Disabled("Waiting Return-Type-Substituable is fully implemented on reference type.")
     void genericFunctionalInterfacesWithGenericParameter() {
         String code =
-                "    public interface Foo<T> extends java.util.function.Function<String, T> {\n" + "        @Override\n"
-                        + "        T apply(String c);\n"
-                        + "    }\n";
+                """
+                    public interface Foo<T> extends java.util.function.Function<String, T> {
+                        @Override
+                        T apply(String c);
+                    }
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Foo");

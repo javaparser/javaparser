@@ -26,7 +26,6 @@ import static com.github.javaparser.utils.Utils.decapitalize;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Utilities that can be useful when generating code.
@@ -76,7 +75,7 @@ public final class CodeGenerationUtils {
      * A shortcut to String.format.
      */
     public static String f(String format, Object... params) {
-        return String.format(format, params);
+        return format.formatted(params);
     }
 
     /**
@@ -88,7 +87,7 @@ public final class CodeGenerationUtils {
      */
     public static Path fileInPackageAbsolutePath(String root, String pkg, String file) {
         pkg = packageToPath(pkg);
-        return Paths.get(root, pkg, file).normalize();
+        return Path.of(root, pkg, file).normalize();
     }
 
     public static Path fileInPackageAbsolutePath(Path root, String pkg, String file) {
@@ -101,7 +100,7 @@ public final class CodeGenerationUtils {
      */
     public static Path fileInPackageRelativePath(String pkg, String file) {
         pkg = packageToPath(pkg);
-        return Paths.get(pkg, file).normalize();
+        return Path.of(pkg, file).normalize();
     }
 
     /**
@@ -119,7 +118,7 @@ public final class CodeGenerationUtils {
      */
     public static Path packageAbsolutePath(String root, String pkg) {
         pkg = packageToPath(pkg);
-        return Paths.get(root, pkg).normalize();
+        return Path.of(root, pkg).normalize();
     }
 
     public static Path packageAbsolutePath(Path root, String pkg) {
@@ -131,7 +130,7 @@ public final class CodeGenerationUtils {
      */
     public static Path classLoaderRoot(Class<?> c) {
         try {
-            return Paths.get(
+            return Path.of(
                     c.getProtectionDomain().getCodeSource().getLocation().toURI());
         } catch (URISyntaxException e) {
             throw new AssertionError("Bug in JavaParser, please report.", e);
@@ -143,7 +142,7 @@ public final class CodeGenerationUtils {
      * "target/(test-)classes", giving the directory containing the pom.xml.
      */
     public static Path mavenModuleRoot(Class<?> c) {
-        return classLoaderRoot(c).resolve(Paths.get("..", "..")).normalize();
+        return classLoaderRoot(c).resolve(Path.of("..", "..")).normalize();
     }
 
     /**

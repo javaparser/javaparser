@@ -35,14 +35,17 @@ import org.junit.jupiter.api.Test;
 public class Issue4703Test {
     @Test
     void ecisResolutionTest() {
-        String clazz = "public class Test {\n" + "    public Test(Test test, int... values) {\n"
-                + "        System.out.println(test);\n"
-                + "        System.out.println(values);\n"
-                + "    }\n"
-                + "    public Test(int... values) {\n"
-                + "        this(null, values);\n"
-                + "    }\n"
-                + "}";
+        String clazz = """
+                public class Test {
+                    public Test(Test test, int... values) {
+                        System.out.println(test);
+                        System.out.println(values);
+                    }
+                    public Test(int... values) {
+                        this(null, values);
+                    }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(clazz);
         final List<ConstructorDeclaration> all = cu.findAll(ConstructorDeclaration.class);
@@ -53,14 +56,17 @@ public class Issue4703Test {
 
     @Test
     void specificEcisResolutionTest() {
-        String clazz = "public class Test {\n" + "    public Test(Test test, int... values) {\n"
-                + "        System.out.println(test);\n"
-                + "        System.out.println(values);\n"
-                + "    }\n"
-                + "    public Test(int... values) {\n"
-                + "        this(new Test(), values);\n"
-                + "    }\n"
-                + "}";
+        String clazz = """
+                public class Test {
+                    public Test(Test test, int... values) {
+                        System.out.println(test);
+                        System.out.println(values);
+                    }
+                    public Test(int... values) {
+                        this(new Test(), values);
+                    }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(clazz);
         final List<ConstructorDeclaration> all = cu.findAll(ConstructorDeclaration.class);

@@ -108,11 +108,11 @@ public class SymbolSolver implements Solver {
 
     @Override
     public ResolvedTypeDeclaration solveType(Type type) {
-        if (type instanceof ClassOrInterfaceType) {
+        if (type instanceof ClassOrInterfaceType interfaceType) {
 
             // FIXME should call typesolver here!
 
-            String name = ((ClassOrInterfaceType) type).getNameWithScope();
+            String name = interfaceType.getNameWithScope();
             SymbolReference<ResolvedTypeDeclaration> ref =
                     JavaParserFactory.getContext(type, typeSolver).solveType(name);
             if (!ref.isSolved()) {
@@ -143,8 +143,8 @@ public class SymbolSolver implements Solver {
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(
             ResolvedTypeDeclaration typeDeclaration, String name) {
-        if (typeDeclaration instanceof SymbolResolutionCapability) {
-            return ((SymbolResolutionCapability) typeDeclaration).solveSymbol(name, typeSolver);
+        if (typeDeclaration instanceof SymbolResolutionCapability capability) {
+            return capability.solveSymbol(name, typeSolver);
         }
         return SymbolReference.unsolved();
     }
@@ -159,11 +159,11 @@ public class SymbolSolver implements Solver {
     @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveTypeInType(
             ResolvedTypeDeclaration typeDeclaration, String name) {
-        if (typeDeclaration instanceof JavaParserClassDeclaration) {
-            return ((JavaParserClassDeclaration) typeDeclaration).solveType(name);
+        if (typeDeclaration instanceof JavaParserClassDeclaration declaration) {
+            return declaration.solveType(name);
         }
-        if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
-            return ((JavaParserInterfaceDeclaration) typeDeclaration).solveType(name);
+        if (typeDeclaration instanceof JavaParserInterfaceDeclaration declaration1) {
+            return declaration1.solveType(name);
         }
         return SymbolReference.unsolved();
     }

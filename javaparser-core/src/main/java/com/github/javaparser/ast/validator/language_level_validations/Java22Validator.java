@@ -52,8 +52,7 @@ public class Java22Validator extends Java21Validator {
                 if (parentNode instanceof VariableDeclarator || parentNode instanceof TypePatternExpr) {
                     return;
                 }
-                if (parentNode instanceof Parameter) {
-                    Parameter parameter = (Parameter) parentNode;
+                if (parentNode instanceof Parameter parameter) {
                     if (reportNoParent(parameter, reporter)) {
                         return;
                     }
@@ -82,7 +81,7 @@ public class Java22Validator extends Java21Validator {
 
     final Validator matchAllPatternNotTopLevel =
             new SingleNodeTypeValidator<>(MatchAllPatternExpr.class, (patternExpr, reporter) -> {
-                if (!patternExpr.getParentNode().isPresent()
+                if (patternExpr.getParentNode().isEmpty()
                         || !(patternExpr.getParentNode().get() instanceof PatternExpr)) {
                     reporter.report(patternExpr, "MatchAllPatternExpr cannot be used as a top-level pattern");
                 }
@@ -101,11 +100,11 @@ public class Java22Validator extends Java21Validator {
     });
 
     private static boolean declaresNamedPatternVar(Expression expr) {
-        if (expr instanceof TypePatternExpr) {
-            return !((TypePatternExpr) expr).getName().getIdentifier().equals("_");
+        if (expr instanceof TypePatternExpr patternExpr) {
+            return !patternExpr.getName().getIdentifier().equals("_");
         }
-        if (expr instanceof RecordPatternExpr) {
-            return ((RecordPatternExpr) expr)
+        if (expr instanceof RecordPatternExpr patternExpr1) {
+            return patternExpr1
                     .getPatternList().stream().anyMatch(Java22Validator::declaresNamedPatternVar);
         }
         return false;

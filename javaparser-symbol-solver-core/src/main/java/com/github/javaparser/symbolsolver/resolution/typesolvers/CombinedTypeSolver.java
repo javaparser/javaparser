@@ -180,7 +180,7 @@ public class CombinedTypeSolver implements TypeSolver {
      * Create the key that should be used for module cache lookups.
      */
     public static String createModuleTypeName(String moduleQualifiedName, String simpleTypeName) {
-        return String.format("<%s>.%s", moduleQualifiedName, simpleTypeName);
+        return "<%s>.%s".formatted(moduleQualifiedName, simpleTypeName);
     }
 
     @Override

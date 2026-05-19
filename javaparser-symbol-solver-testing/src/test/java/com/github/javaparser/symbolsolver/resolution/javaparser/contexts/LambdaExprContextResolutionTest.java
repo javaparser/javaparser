@@ -43,7 +43,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -86,7 +85,7 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         VariableDeclarator field = Navigator.demandField(clazz, "functional");
         LambdaExpr lambdaExpr = (LambdaExpr) field.getInitializer().get();
 
-        Path src = Paths.get("src/test/resources");
+        Path src = Path.of("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(src), new LeanParserConfiguration()));

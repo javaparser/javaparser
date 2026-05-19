@@ -55,15 +55,18 @@ class Issue314Test extends AbstractResolutionTest {
 
     @Test
     void resolveReferenceToFieldInheritedByInterface() {
-        String code = "package foo.bar;\n" + "interface  A {\n"
-                + "        int a = 0;\n"
-                + "    }\n"
-                + "    \n"
-                + "    class B implements A {\n"
-                + "        int getA() {\n"
-                + "            return a;\n"
-                + "        }\n"
-                + "    }";
+        String code = """
+                package foo.bar;
+                interface  A {
+                        int a = 0;
+                    }
+                   \s
+                    class B implements A {
+                        int getA() {
+                            return a;
+                        }
+                    }\
+                """;
         CompilationUnit cu = parse(code);
         NameExpr refToA = Navigator.findNameExpression(Navigator.demandClass(cu, "B"), "a")
                 .get();

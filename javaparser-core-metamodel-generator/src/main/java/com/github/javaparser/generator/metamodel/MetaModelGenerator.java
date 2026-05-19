@@ -42,7 +42,6 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.SourceRoot;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -206,7 +205,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         if (args.length != 1) {
             throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
         }
-        final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
+        final Path root = Path.of(args[0], "..", "javaparser-core", "src", "main", "java");
         final ParserConfiguration parserConfiguration = new ParserConfiguration()
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.RAW)
                 .setStoreTokens(false);

@@ -187,7 +187,7 @@ public class TypeParameter extends ReferenceType
 
     @Override
     public String toDescriptor() {
-        return String.format("L%s;", resolve().qualifiedName());
+        return "L%s;".formatted(resolve().qualifiedName());
     }
 
     @Override

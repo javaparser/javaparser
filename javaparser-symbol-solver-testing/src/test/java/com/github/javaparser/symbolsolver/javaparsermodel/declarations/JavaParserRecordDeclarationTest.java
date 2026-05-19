@@ -301,11 +301,13 @@ public class JavaParserRecordDeclarationTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetDeclaredMethods() {
-        ParseResult<CompilationUnit> x = javaParser.parse("record Test(String s, Integer i) {\n"
-                + "    public int foo(int x) {\n"
-                + "        return x + i;\n"
-                + "    }\n"
-                + "}");
+        ParseResult<CompilationUnit> x = javaParser.parse("""
+                record Test(String s, Integer i) {
+                    public int foo(int x) {
+                        return x + i;
+                    }
+                }\
+                """);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration =
@@ -353,12 +355,14 @@ public class JavaParserRecordDeclarationTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testImplicitGetterResolution() {
-        ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n"
-                + "record Test(String s) {\n"
-                + "    public String foo() {\n"
-                + "        return s();\n"
-                + "    }\n"
-                + "}");
+        ParseResult<CompilationUnit> cu = javaParser.parse("""
+                package test;
+                record Test(String s) {
+                    public String foo() {
+                        return s();
+                    }
+                }\
+                """);
 
         MethodCallExpr sCall =
                 Navigator.findMethodCall(cu.getResult().get(), "s").get();
@@ -436,10 +440,12 @@ public class JavaParserRecordDeclarationTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testNonCanonicalConstructor() {
-        ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n"
-                + "record Test(String s) {\n"
-                + "    public Test(Object o) { s = o.toString(); }\n"
-                + "}");
+        ParseResult<CompilationUnit> cu = javaParser.parse("""
+                package test;
+                record Test(String s) {
+                    public Test(Object o) { s = o.toString(); }
+                }\
+                """);
 
         RecordDeclaration recordDeclaration =
                 cu.getResult().get().findFirst(RecordDeclaration.class).get();
@@ -475,10 +481,13 @@ public class JavaParserRecordDeclarationTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testInheritedMethods() {
-        ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n" + "interface Foo {\n"
-                + "    default void foo() {}\n"
-                + "}\n"
-                + "record Test(String s)  implements Foo {}");
+        ParseResult<CompilationUnit> cu = javaParser.parse("""
+                package test;
+                interface Foo {
+                    default void foo() {}
+                }
+                record Test(String s)  implements Foo {}\
+                """);
 
         RecordDeclaration recordDeclaration =
                 cu.getResult().get().findFirst(RecordDeclaration.class).get();
@@ -499,7 +508,12 @@ public class JavaParserRecordDeclarationTest {
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetAllStaticFields() {
         ParseResult<CompilationUnit> cu = javaParser.parse(
-                "package test;\n" + "record Test(String s) {\n" + "    static Integer value = 2;" + "}");
+                """
+                package test;
+                record Test(String s) {
+                    static Integer value = 2;\
+                }\
+                """);
 
         RecordDeclaration recordDeclaration =
                 cu.getResult().get().findFirst(RecordDeclaration.class).get();
@@ -519,7 +533,12 @@ public class JavaParserRecordDeclarationTest {
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetAllNonStaticFields() {
         ParseResult<CompilationUnit> cu = javaParser.parse(
-                "package test;\n" + "record Test(String s) {\n" + "    static Integer value = 2;" + "}");
+                """
+                package test;
+                record Test(String s) {
+                    static Integer value = 2;\
+                }\
+                """);
 
         RecordDeclaration recordDeclaration =
                 cu.getResult().get().findFirst(RecordDeclaration.class).get();
@@ -543,22 +562,25 @@ public class JavaParserRecordDeclarationTest {
         StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16);
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit compilationUnit =
-                StaticJavaParser.parse("public interface IUtil {\n" + "    record WrapperRecord(String name){}\n"
-                        + "}\n"
-                        + "\n"
-                        + "public class Util implements IUtil {\n"
-                        + "    public static Util create(String key) {\n"
-                        + "        return new Util();\n"
-                        + "    }\n"
-                        + "}\n"
-                        + "                \n"
-                        + "public class Test {\n"
-                        + "                \n"
-                        + "    public void test() {\n"
-                        + "        Util.create(\"foo\");\n"
-                        + "    }\n"
-                        + "                \n"
-                        + "}\n");
+                StaticJavaParser.parse("""
+                        public interface IUtil {
+                            record WrapperRecord(String name){}
+                        }
+                        
+                        public class Util implements IUtil {
+                            public static Util create(String key) {
+                                return new Util();
+                            }
+                        }
+                                       \s
+                        public class Test {
+                                       \s
+                            public void test() {
+                                Util.create("foo");
+                            }
+                                       \s
+                        }
+                        """);
         StaticJavaParser.getParserConfiguration().setLanguageLevel(oldLevel);
 
         for (MethodDeclaration method : compilationUnit.findAll(MethodDeclaration.class)) {
@@ -570,12 +592,15 @@ public class JavaParserRecordDeclarationTest {
     }
 
     void testGenericInvocation() {
-        ParseResult<CompilationUnit> cu = javaParser.parse("record GenericBox<T> (T value) {}\n" + "class Test {\n"
-                + "  public static void main(String[] args) {\n"
-                + "    GenericBox<Integer> box = new GenericBox<>(2);\n"
-                + "    System.out.println(box.value());\n"
-                + "  }\n"
-                + "}");
+        ParseResult<CompilationUnit> cu = javaParser.parse("""
+                record GenericBox<T> (T value) {}
+                class Test {
+                  public static void main(String[] args) {
+                    GenericBox<Integer> box = new GenericBox<>(2);
+                    System.out.println(box.value());
+                  }
+                }\
+                """);
 
         MethodCallExpr valueCall = cu.getResult().get().findAll(MethodCallExpr.class).stream()
                 .filter(call -> call.getNameAsString().equals("value"))
@@ -591,13 +616,15 @@ public class JavaParserRecordDeclarationTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void genericConstructorTest() {
-        ParseResult<CompilationUnit> cu = javaParser.parse("record GenericBox<T>(T value) {}\n"
-                + "class Test {\n"
-                + "  public static void main(String[] args) {\n"
-                + "    GenericBox<Integer> box = new GenericBox<>(2);\n"
-                + "    System.out.println(box.value());\n"
-                + "  }\n"
-                + "}");
+        ParseResult<CompilationUnit> cu = javaParser.parse("""
+                record GenericBox<T>(T value) {}
+                class Test {
+                  public static void main(String[] args) {
+                    GenericBox<Integer> box = new GenericBox<>(2);
+                    System.out.println(box.value());
+                  }
+                }\
+                """);
 
         ObjectCreationExpr constructorInvocation =
                 cu.getResult().get().findFirst(ObjectCreationExpr.class).get();

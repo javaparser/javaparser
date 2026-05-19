@@ -203,18 +203,21 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
 
     @Test
     void testTypesWithSameNameInPackageAndNestedMethodDeclaration() {
-        String code = "package implements_duplicate;\n" + "\n"
-                + "import java.util.Formattable;\n"
-                + "\n"
-                + "public abstract class A implements Formattable {\n"
-                + "\n"
-                + "    public interface Formattable {\n"
-                + "    }\n"
-                + "\n"
-                + "    public void foo(Formattable f) {\n"
-                + "    }\n"
-                + "\n"
-                + "}\n";
+        String code = """
+                package implements_duplicate;
+                
+                import java.util.Formattable;
+                
+                public abstract class A implements Formattable {
+                
+                    public interface Formattable {
+                    }
+                
+                    public void foo(Formattable f) {
+                    }
+                
+                }
+                """;
 
         StaticJavaParser.getParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));

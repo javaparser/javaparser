@@ -166,7 +166,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
             if (!importDecl.isAsterisk()) {
                 String qName = importDecl.getNameAsString();
-                boolean defaultPackage = !importDecl.getName().getQualifier().isPresent();
+                boolean defaultPackage = importDecl.getName().getQualifier().isEmpty();
                 boolean found =
                         !defaultPackage && importDecl.getName().getIdentifier().equals(name);
                 if (!found && prefix != null) {

@@ -75,8 +75,7 @@ public final class Navigator {
         ConstructorDeclaration found = null;
         int i = 0;
         for (BodyDeclaration<?> bd : td.getMembers()) {
-            if (bd instanceof ConstructorDeclaration) {
-                ConstructorDeclaration cd = (ConstructorDeclaration) bd;
+            if (bd instanceof ConstructorDeclaration cd) {
                 if (i == index) {
                     found = cd;
                     break;
@@ -92,7 +91,7 @@ public final class Navigator {
 
     public static EnumDeclaration demandEnum(CompilationUnit cu, String qualifiedName) {
         Optional<TypeDeclaration<?>> res = findType(cu, qualifiedName);
-        if (!res.isPresent()) {
+        if (res.isEmpty()) {
             throw new IllegalStateException("No type found");
         }
         if (!(res.get() instanceof EnumDeclaration)) {
@@ -103,8 +102,7 @@ public final class Navigator {
 
     public static VariableDeclarator demandField(ClassOrInterfaceDeclaration cd, String name) {
         for (BodyDeclaration<?> bd : cd.getMembers()) {
-            if (bd instanceof FieldDeclaration) {
-                FieldDeclaration fd = (FieldDeclaration) bd;
+            if (bd instanceof FieldDeclaration fd) {
                 for (VariableDeclarator vd : fd.getVariables()) {
                     if (vd.getName().getId().equals(name)) {
                         return vd;
@@ -126,8 +124,7 @@ public final class Navigator {
     public static MethodDeclaration demandMethod(TypeDeclaration<?> cd, String name) {
         MethodDeclaration found = null;
         for (BodyDeclaration<?> bd : cd.getMembers()) {
-            if (bd instanceof MethodDeclaration) {
-                MethodDeclaration md = (MethodDeclaration) bd;
+            if (bd instanceof MethodDeclaration md) {
                 if (md.getNameAsString().equals(name)) {
                     if (found != null) {
                         throw new IllegalStateException("Ambiguous getName");
@@ -214,8 +211,8 @@ public final class Navigator {
     }
 
     private static Optional<SwitchStmt> findSwitchHelper(Node node) {
-        if (node instanceof SwitchStmt) {
-            return Optional.of((SwitchStmt) node);
+        if (node instanceof SwitchStmt stmt) {
+            return Optional.of(stmt);
         }
         return node.findFirst(SwitchStmt.class);
     }
@@ -251,9 +248,9 @@ public final class Navigator {
         final String typeName = getOuterTypeName(qualifiedName);
         Optional<TypeDeclaration<?>> type = Optional.empty();
         for (Node n : td.getMembers()) {
-            if (n instanceof TypeDeclaration
-                    && ((TypeDeclaration<?>) n).getName().getId().equals(typeName)) {
-                type = Optional.of((TypeDeclaration<?>) n);
+            if (n instanceof TypeDeclaration<?> declaration
+                    && declaration.getName().getId().equals(typeName)) {
+                type = Optional.of(declaration);
                 break;
             }
         }

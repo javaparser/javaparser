@@ -44,7 +44,6 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -306,7 +305,7 @@ public class JavaParserTypeSolver implements TypeSolver {
             String dirToParse = null;
             // As an optimization we first try to look in the canonical position where we expect to find the file
             if (FileUtils.isValidPath(filePath.toString())) {
-                Path srcFile = Paths.get(filePath.toString());
+                Path srcFile = Path.of(filePath.toString());
                 Optional<CompilationUnit> compilationUnit = parse(srcFile);
                 if (compilationUnit.isPresent()) {
                     Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration =
@@ -324,7 +323,7 @@ public class JavaParserTypeSolver implements TypeSolver {
             // If this is not possible we parse all files
             // We try just in the same package, for classes defined in a file not named as the class itself
             if (FileUtils.isValidPath(dirToParse)) {
-                List<CompilationUnit> compilationUnits = parseDirectory(Paths.get(dirToParse));
+                List<CompilationUnit> compilationUnits = parseDirectory(Path.of(dirToParse));
                 for (CompilationUnit compilationUnit : compilationUnits) {
                     Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration =
                             Navigator.findType(compilationUnit, typeName.toString());

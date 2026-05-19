@@ -146,23 +146,26 @@ class EnumResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void testResolveValueOfMethod() {
-        String s = "public class ClassTest {\n" + "    public enum SecurityPolicyScopedTemplatesKeys {\n"
-                + "        SUSPICIOUS(\"suspicious\");\n"
-                + "        private String displayName;\n"
-                + "\n"
-                + "        private SecurityPolicyScopedTemplatesKeys(String displayName) {\n"
-                + "            this.displayName = displayName;\n"
-                + "        }\n"
-                + "\n"
-                + "        public String getDisplayName() {\n"
-                + "            return this.displayName;\n"
-                + "        }\n"
-                + "    }\n"
-                + "\n"
-                + "    public void m() {\n"
-                + "        SecurityPolicyScopedTemplatesKeys a = SecurityPolicyScopedTemplatesKeys.valueOf(\"SUSPICIOUS\");\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                public class ClassTest {
+                    public enum SecurityPolicyScopedTemplatesKeys {
+                        SUSPICIOUS("suspicious");
+                        private String displayName;
+                
+                        private SecurityPolicyScopedTemplatesKeys(String displayName) {
+                            this.displayName = displayName;
+                        }
+                
+                        public String getDisplayName() {
+                            return this.displayName;
+                        }
+                    }
+                
+                    public void m() {
+                        SecurityPolicyScopedTemplatesKeys a = SecurityPolicyScopedTemplatesKeys.valueOf("SUSPICIOUS");
+                    }
+                }\
+                """;
         TypeSolver typeSolver = new ReflectionTypeSolver();
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(s);
@@ -178,23 +181,26 @@ class EnumResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void testResolveValuesMethod() {
-        String s = "public class ClassTest {\n" + "    public enum SecurityPolicyScopedTemplatesKeys {\n"
-                + "        SUSPICIOUS(\"suspicious\");\n"
-                + "        private String displayName;\n"
-                + "\n"
-                + "        private SecurityPolicyScopedTemplatesKeys(String displayName) {\n"
-                + "            this.displayName = displayName;\n"
-                + "        }\n"
-                + "\n"
-                + "        public String getDisplayName() {\n"
-                + "            return this.displayName;\n"
-                + "        }\n"
-                + "    }\n"
-                + "\n"
-                + "    public SecurityPolicyScopedTemplatesKeys m(int id) {\n"
-                + "        return SecurityPolicyScopedTemplatesKeys.values()[id];\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                public class ClassTest {
+                    public enum SecurityPolicyScopedTemplatesKeys {
+                        SUSPICIOUS("suspicious");
+                        private String displayName;
+                
+                        private SecurityPolicyScopedTemplatesKeys(String displayName) {
+                            this.displayName = displayName;
+                        }
+                
+                        public String getDisplayName() {
+                            return this.displayName;
+                        }
+                    }
+                
+                    public SecurityPolicyScopedTemplatesKeys m(int id) {
+                        return SecurityPolicyScopedTemplatesKeys.values()[id];
+                    }
+                }\
+                """;
         TypeSolver typeSolver = new ReflectionTypeSolver();
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(s);
@@ -209,23 +215,26 @@ class EnumResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void testResolveValuesMethodAndReturnType() {
-        String s = "public class ClassTest {\n" + "    public enum SecurityPolicyScopedTemplatesKeys {\n"
-                + "        SUSPICIOUS(\"suspicious\");\n"
-                + "        private String displayName;\n"
-                + "\n"
-                + "        private SecurityPolicyScopedTemplatesKeys(String displayName) {\n"
-                + "            this.displayName = displayName;\n"
-                + "        }\n"
-                + "\n"
-                + "        public String getDisplayName() {\n"
-                + "            return this.displayName;\n"
-                + "        }\n"
-                + "\n"
-                + "        public SecurityPolicyScopedTemplatesKeys m(int id) {\n"
-                + "            return values()[id];\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                public class ClassTest {
+                    public enum SecurityPolicyScopedTemplatesKeys {
+                        SUSPICIOUS("suspicious");
+                        private String displayName;
+                
+                        private SecurityPolicyScopedTemplatesKeys(String displayName) {
+                            this.displayName = displayName;
+                        }
+                
+                        public String getDisplayName() {
+                            return this.displayName;
+                        }
+                
+                        public SecurityPolicyScopedTemplatesKeys m(int id) {
+                            return values()[id];
+                        }
+                    }
+                }\
+                """;
         TypeSolver typeSolver = new ReflectionTypeSolver();
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(s);

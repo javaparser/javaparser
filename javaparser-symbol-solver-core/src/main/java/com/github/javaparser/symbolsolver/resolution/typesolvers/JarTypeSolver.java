@@ -33,7 +33,6 @@ import com.github.javaparser.utils.Pair;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -73,7 +72,7 @@ public class JarTypeSolver implements TypeSolver {
      */
     private static String convertEntryPathToClassName(String entryPath) {
         if (!entryPath.endsWith(CLASS_EXTENSION)) {
-            throw new IllegalArgumentException(String.format("The entry path should end with %s", CLASS_EXTENSION));
+            throw new IllegalArgumentException("The entry path should end with %s".formatted(CLASS_EXTENSION));
         }
         String className = entryPath.substring(0, entryPath.length() - CLASS_EXTENSION.length());
         className = className.replace('/', '.');
@@ -93,7 +92,7 @@ public class JarTypeSolver implements TypeSolver {
      */
     private static String convertEntryPathToClassPoolName(String entryPath) {
         if (!entryPath.endsWith(CLASS_EXTENSION)) {
-            throw new IllegalArgumentException(String.format("The entry path should end with %s", CLASS_EXTENSION));
+            throw new IllegalArgumentException("The entry path should end with %s".formatted(CLASS_EXTENSION));
         }
         String className = entryPath.substring(0, entryPath.length() - CLASS_EXTENSION.length());
         return className.replace('/', '.');
@@ -218,7 +217,7 @@ public class JarTypeSolver implements TypeSolver {
      * @throws IOException If an I/O error occurs while reading the JarFile or .class file hierarchy.
      */
     private void registerKnownClassesFor(String pathToJarOrClassFileHierarchy) throws IOException {
-        Path jarOrClassFileHierarchy = Paths.get(pathToJarOrClassFileHierarchy);
+        Path jarOrClassFileHierarchy = Path.of(pathToJarOrClassFileHierarchy);
         if (Files.isDirectory(jarOrClassFileHierarchy)) {
             try (Stream<Path> classFiles = Files.walk(jarOrClassFileHierarchy)) {
                 classFiles

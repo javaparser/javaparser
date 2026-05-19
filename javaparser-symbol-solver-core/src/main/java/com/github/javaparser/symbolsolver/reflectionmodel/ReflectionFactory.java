@@ -67,15 +67,13 @@ public class ReflectionFactory {
     }
 
     public static ResolvedType typeUsageFor(java.lang.reflect.Type type, TypeSolver typeSolver) {
-        if (type instanceof java.lang.reflect.TypeVariable) {
-            java.lang.reflect.TypeVariable<?> tv = (java.lang.reflect.TypeVariable<?>) type;
+        if (type instanceof java.lang.reflect.TypeVariable<?> tv) {
             boolean declaredOnClass = tv.getGenericDeclaration() instanceof java.lang.reflect.Type;
             ResolvedTypeParameterDeclaration typeParameter =
                     new ReflectionTypeParameter(tv, declaredOnClass, typeSolver);
             return new ResolvedTypeVariable(typeParameter);
         }
-        if (type instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType) type;
+        if (type instanceof ParameterizedType pt) {
             ResolvedReferenceType rawType =
                     typeUsageFor(pt.getRawType(), typeSolver).asReferenceType();
             List<java.lang.reflect.Type> actualTypes = new ArrayList<>();
@@ -85,8 +83,7 @@ public class ReflectionFactory {
                     .asReferenceType();
             return rawType;
         }
-        if (type instanceof Class) {
-            Class<?> c = (Class<?>) type;
+        if (type instanceof Class<?> c) {
             if (c.isPrimitive()) {
                 if (c.getName().equals(Void.TYPE.getName())) {
                     return ResolvedVoidType.INSTANCE;
@@ -98,12 +95,10 @@ public class ReflectionFactory {
             }
             return new ReferenceTypeImpl(typeDeclarationFor(c, typeSolver));
         }
-        if (type instanceof GenericArrayType) {
-            GenericArrayType genericArrayType = (GenericArrayType) type;
+        if (type instanceof GenericArrayType genericArrayType) {
             return new ResolvedArrayType(typeUsageFor(genericArrayType.getGenericComponentType(), typeSolver));
         }
-        if (type instanceof WildcardType) {
-            WildcardType wildcardType = (WildcardType) type;
+        if (type instanceof WildcardType wildcardType) {
             if (wildcardType.getLowerBounds().length > 0 && wildcardType.getUpperBounds().length > 0) {
                 if (wildcardType.getUpperBounds().length == 1
                         && wildcardType.getUpperBounds()[0].getTypeName().equals(JAVA_LANG_OBJECT)) {

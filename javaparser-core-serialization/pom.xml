@@ -26,7 +26,7 @@
 	</licenses>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>17</java.version>
 		<jpms.moduleName>com.github.javaparser.core.serialization</jpms.moduleName>
 	</properties>
 

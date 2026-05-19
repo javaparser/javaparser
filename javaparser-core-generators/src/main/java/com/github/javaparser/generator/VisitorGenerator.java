@@ -70,7 +70,7 @@ public abstract class VisitorGenerator extends Generator {
                 .get();
 
         Optional<ClassOrInterfaceDeclaration> visitorClassOptional = compilationUnit.getClassByName(visitorClassName);
-        if (!visitorClassOptional.isPresent()) {
+        if (visitorClassOptional.isEmpty()) {
             visitorClassOptional = compilationUnit.getInterfaceByName(visitorClassName);
         }
         final ClassOrInterfaceDeclaration visitorClass = visitorClassOptional.get();

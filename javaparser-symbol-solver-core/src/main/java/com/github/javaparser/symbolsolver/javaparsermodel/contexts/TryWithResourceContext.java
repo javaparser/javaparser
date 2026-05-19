@@ -52,8 +52,8 @@ public class TryWithResourceContext extends StatementContext<TryStmt> {
     @Override
     public Optional<Value> solveSymbolAsValue(String name) {
         for (Expression expr : wrappedNode.getResources()) {
-            if (expr instanceof VariableDeclarationExpr) {
-                for (VariableDeclarator v : ((VariableDeclarationExpr) expr).getVariables()) {
+            if (expr instanceof VariableDeclarationExpr declarationExpr) {
+                for (VariableDeclarator v : declarationExpr.getVariables()) {
                     if (v.getName().getIdentifier().equals(name)) {
                         ResolvedValueDeclaration decl = JavaParserSymbolDeclaration.localVar(v, typeSolver);
                         return Optional.of(Value.from(decl));
@@ -71,8 +71,8 @@ public class TryWithResourceContext extends StatementContext<TryStmt> {
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         for (Expression expr : wrappedNode.getResources()) {
-            if (expr instanceof VariableDeclarationExpr) {
-                for (VariableDeclarator v : ((VariableDeclarationExpr) expr).getVariables()) {
+            if (expr instanceof VariableDeclarationExpr declarationExpr) {
+                for (VariableDeclarator v : declarationExpr.getVariables()) {
                     if (v.getName().getIdentifier().equals(name)) {
                         return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(v, typeSolver));
                     }
@@ -99,8 +99,8 @@ public class TryWithResourceContext extends StatementContext<TryStmt> {
         for (int i = 0; i < resources.size(); i++) {
             if (child == resources.get(i)) {
                 return resources.subList(0, i).stream()
-                        .map(e -> e instanceof VariableDeclarationExpr
-                                ? ((VariableDeclarationExpr) e).getVariables()
+                        .map(e -> e instanceof VariableDeclarationExpr vde
+                                ? vde.getVariables()
                                 : Collections.<VariableDeclarator>emptyList())
                         .flatMap(List::stream)
                         .collect(Collectors.toList());
@@ -109,8 +109,8 @@ public class TryWithResourceContext extends StatementContext<TryStmt> {
         if (child == wrappedNode.getTryBlock()) {
             List<VariableDeclarator> res = new LinkedList<>();
             for (Expression expr : resources) {
-                if (expr instanceof VariableDeclarationExpr) {
-                    res.addAll(((VariableDeclarationExpr) expr).getVariables());
+                if (expr instanceof VariableDeclarationExpr declarationExpr) {
+                    res.addAll(declarationExpr.getVariables());
                 }
             }
             return res;

@@ -202,12 +202,14 @@ class JavaParserAPIIntegrationTest extends AbstractSymbolResolutionTest {
 
     @Test
     void resolveParameterDeclarationOnConstructor() throws IOException {
-        String code = "class Foo {\n"
-                + "    	String baz;\n"
-                + "    	Foo(String baz){\n"
-                + "    		this.baz = baz;\n"
-                + "    	}"
-                + "}";
+        String code = """
+                class Foo {
+                    	String baz;
+                    	Foo(String baz){
+                    		this.baz = baz;
+                    	}\
+                }\
+                """;
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));
@@ -244,13 +246,15 @@ class JavaParserAPIIntegrationTest extends AbstractSymbolResolutionTest {
 
     @Test()
     void resolveParameterDeclarationOnCatchClauseExpr() throws IOException {
-        String code = "class Foo {\n"
-                + "        void m() {\n"
-                + "        	try {\n"
-                + "                throw new java.io.FileNotFoundException();\n"
-                + "            } catch (java.io.IOException ioe) {}\n"
-                + "        }\n"
-                + "}";
+        String code = """
+                class Foo {
+                        void m() {
+                        	try {
+                                throw new java.io.FileNotFoundException();
+                            } catch (java.io.IOException ioe) {}
+                        }
+                }\
+                """;
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));
@@ -276,9 +280,11 @@ class JavaParserAPIIntegrationTest extends AbstractSymbolResolutionTest {
 
     @Test()
     void resolveParameterDeclarationOnLambdaExprWithoutTypeInference() throws IOException {
-        String code = "class Foo {\n"
-                + "    	  java.util.function.Consumer<Long> consumer = (Long a) -> { System.out.println(a); };\n"
-                + "}";
+        String code = """
+                class Foo {
+                    	  java.util.function.Consumer<Long> consumer = (Long a) -> { System.out.println(a); };
+                }\
+                """;
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));

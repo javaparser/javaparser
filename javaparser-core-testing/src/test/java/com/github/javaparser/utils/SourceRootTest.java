@@ -37,7 +37,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -128,7 +127,7 @@ class SourceRootTest {
         try (MockedStatic<Files> mockedFiles = Mockito.mockStatic(Files.class)) {
             mockedFiles.when(() -> Files.isHidden(Mockito.any())).thenReturn(false);
             mockedFiles.when(() -> Files.isDirectory(Mockito.any())).thenReturn(true);
-            SourceRoot root = new SourceRoot(Paths.get("tests/01"));
+            SourceRoot root = new SourceRoot(Path.of("tests/01"));
             assertTrue(root.isSensibleDirectoryToEnter(root.getRoot()));
         }
     }
@@ -156,7 +155,7 @@ class SourceRootTest {
         String s = r.toString();
         assertFalse(s.contains(" for "));
         // sourcePath set -> message contains " for <path>"
-        Path p = Paths.get("SomeFile.java").toAbsolutePath();
+        Path p = Path.of("SomeFile.java").toAbsolutePath();
         ParseResult<CompilationUnit> r2 = new ParseResult<>(null, Collections.singletonList(problem), null);
         r2.setSourcePath(p);
         assertTrue(r2.getSourcePath().isPresent());
@@ -166,8 +165,8 @@ class SourceRootTest {
     @Test
     void resolvePathRelativeToNewRoot() {
         SourceRoot sr = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class));
-        Path newRoot = Paths.get("root");
-        Path relative = Paths.get("pkg/../pkg/A.java");
+        Path newRoot = Path.of("root");
+        Path relative = Path.of("pkg/../pkg/A.java");
         Path got = sr.resolvePath(newRoot, relative);
         assertEquals(newRoot.resolve("pkg/A.java").normalize(), got);
     }
@@ -175,8 +174,8 @@ class SourceRootTest {
     @Test
     void resolvePathKeepsAbsolutePath() {
         SourceRoot sr = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class));
-        Path abs = Paths.get("absdir/../absdir/B.java").toAbsolutePath();
-        Path newRoot = Paths.get("anotherRoot");
+        Path abs = Path.of("absdir/../absdir/B.java").toAbsolutePath();
+        Path newRoot = Path.of("anotherRoot");
         Path got = sr.resolvePath(newRoot, abs);
         assertEquals(abs.normalize(), got, "absolute path must not be re-rooted");
     }
@@ -184,9 +183,9 @@ class SourceRootTest {
     @Test
     void resolvePathNullArgsThrowException() {
         SourceRoot sr = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class));
-        Path p = Paths.get("pkg/C.java");
+        Path p = Path.of("pkg/C.java");
         assertThrows(NullPointerException.class, () -> sr.resolvePath(null, p));
-        assertThrows(NullPointerException.class, () -> sr.resolvePath(Paths.get("root"), null));
+        assertThrows(NullPointerException.class, () -> sr.resolvePath(Path.of("root"), null));
     }
 
     @Test

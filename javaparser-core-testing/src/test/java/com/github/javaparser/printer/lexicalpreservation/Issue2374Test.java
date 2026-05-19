@@ -37,17 +37,22 @@ public class Issue2374Test extends AbstractLexicalPreservingTest {
             "Test disabled because this test fails on Ubuntu systems regardless of the Java version, but works on Windows and macOS systems")
     public void test() {
         String lineComment = "Example comment";
-        considerCode("public class Bar {\n" + "    public void foo() {\n"
-                + "        System.out.print(\"Hello\");\n"
-                + "    }\n"
-                + "}");
-        String expected = "public class Bar {\n"
-                + "    public void foo() {\n"
-                + "        System.out.print(\"Hello\");\n"
-                + "        //Example comment\n"
-                + "        System.out.println(\"World!\");\n"
-                + "    }\n"
-                + "}";
+        considerCode("""
+                public class Bar {
+                    public void foo() {
+                        System.out.print("Hello");
+                    }
+                }\
+                """);
+        String expected = """
+                public class Bar {
+                    public void foo() {
+                        System.out.print("Hello");
+                        //Example comment
+                        System.out.println("World!");
+                    }
+                }\
+                """;
         // contruct a statement with a comment
         Statement stmt = StaticJavaParser.parseStatement("System.out.println(\"World!\");");
         stmt.setLineComment(lineComment);

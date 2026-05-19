@@ -68,11 +68,13 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalAnd1() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "        if (o instanceof String value && value.length() > 5) { }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                            if (o instanceof String value && value.length() > 5) { }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -80,11 +82,13 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalAnd1Negated() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "        if (!(o instanceof String value) && value.length() > 5) { }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                            if (!(o instanceof String value) && value.length() > 5) { }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -92,13 +96,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalAnd2_1() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o, boolean b) {\n"
-                    + "        if (o instanceof String value && b) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o, boolean b) {
+                            if (o instanceof String value && b) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -106,13 +112,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalAnd2_2() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o, boolean b) {\n"
-                    + "        if (b && o instanceof String value) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o, boolean b) {
+                            if (b && o instanceof String value) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -120,13 +128,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalAnd2_3() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o, Object p) {\n"
-                    + "        if (o instanceof String value1 && p instanceof Integer value2) {\n"
-                    + "            System.out.println(value1 + value2);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o, Object p) {
+                            if (o instanceof String value1 && p instanceof Integer value2) {
+                                System.out.println(value1 + value2);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name1 = Navigator.findNameExpression(cu, "value1").get();
             assertEquals("java.lang.String", name1.resolve().getType().describe());
@@ -136,13 +146,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalAnd2_1Negated() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o, boolean b) {\n"
-                    + "        if (!(o instanceof String value) && b) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o, boolean b) {
+                            if (!(o instanceof String value) && b) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -150,13 +162,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalAnd2_2Negated() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o, boolean b) {\n"
-                    + "        if (b && !(o instanceof String value)) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o, boolean b) {
+                            if (b && !(o instanceof String value)) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -164,13 +178,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalAnd2_3Negated() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o, Object p) {\n"
-                    + "        if (!(o instanceof String value1) && !(p instanceof Integer value2)) {\n"
-                    + "            System.out.println(value1 + value2);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o, Object p) {
+                            if (!(o instanceof String value1) && !(p instanceof Integer value2)) {
+                                System.out.println(value1 + value2);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name1 = Navigator.findNameExpression(cu, "value1").get();
             assertThrows(UnsolvedSymbolException.class, () -> name1.resolve());
@@ -180,12 +196,14 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalAnd3() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o, boolean a, boolean b, boolean c, boolean d, boolean e) {\n"
-                    + "        if (((a && ((o instanceof String value && b) && c)) && (d && (value.length() > 5 && e)))) {\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o, boolean a, boolean b, boolean c, boolean d, boolean e) {
+                            if (((a && ((o instanceof String value && b) && c)) && (d && (value.length() > 5 && e)))) {
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -194,11 +212,13 @@ public class PatternVariableIntroductionTest {
         @Test
         @Disabled("Until bug mentioned in https://github.com/javaparser/javaparser/issues/4344 is fixed")
         public void conditionalAnd4() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (o instanceof Boolean value && value) { }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (o instanceof Boolean value && value) { }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.Boolean", name.resolve().getType().describe());
@@ -219,11 +239,13 @@ public class PatternVariableIntroductionTest {
     class ConditionalOr {
         @Test
         public void conditionalOr1() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "        if (!(o instanceof String value) || value.length() > 5) { }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                            if (!(o instanceof String value) || value.length() > 5) { }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -231,11 +253,13 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalOr1Negated() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "        if (o instanceof String value || value.length() > 5) { }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                            if (o instanceof String value || value.length() > 5) { }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -243,13 +267,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalOr2_1() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o, boolean b) {\n"
-                    + "        if (!(!(o instanceof String value) || b)) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o, boolean b) {
+                            if (!(!(o instanceof String value) || b)) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -257,13 +283,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalOr2_2() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o, boolean b) {\n"
-                    + "        if (!(b || !(o instanceof String value))) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o, boolean b) {
+                            if (!(b || !(o instanceof String value))) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -271,13 +299,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalOr2_1Negated() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o, boolean b) {\n"
-                    + "        if (!(o instanceof String value || b)) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o, boolean b) {
+                            if (!(o instanceof String value || b)) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -285,13 +315,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalOr2_2Negated() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o, boolean b) {\n"
-                    + "        if (!(b || o instanceof String value)) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o, boolean b) {
+                            if (!(b || o instanceof String value)) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -299,12 +331,14 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalOr3() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o, boolean a, boolean b, boolean c, boolean d, boolean e) {\n"
-                    + "        if (((a || ((!(o instanceof String value) || b) || c)) || (d || (value.length() > 5 || e)))) {\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}\n");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o, boolean a, boolean b, boolean c, boolean d, boolean e) {
+                            if (((a || ((!(o instanceof String value) || b) || c)) || (d || (value.length() > 5 || e)))) {
+                            }
+                        }
+                    }
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -323,13 +357,15 @@ public class PatternVariableIntroductionTest {
     class LogicalComplementOperator {
         @Test
         public void logicalComplementOperator1() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "        if (!(o instanceof String value)) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                            if (!(o instanceof String value)) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -337,13 +373,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void logicalComplementOperator2() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "        if (!(!(o instanceof String value))) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                            if (!(!(o instanceof String value))) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -363,11 +401,13 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalOperator1() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "      boolean b = o instanceof String value ? value.length() > 0 : false;\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                          boolean b = o instanceof String value ? value.length() > 0 : false;
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -375,11 +415,13 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalOperator1Negated() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "      boolean b = o instanceof String value ? false : value.length() > 5;\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                          boolean b = o instanceof String value ? false : value.length() > 5;
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -387,11 +429,13 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalOperator2() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "      boolean b = !(o instanceof String value) ? false : value.length() > 5;\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                          boolean b = !(o instanceof String value) ? false : value.length() > 5;
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -399,11 +443,13 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void conditionalOperator2Negated() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "      boolean b = !(o instanceof String value) ? value.length() > 0 : false;\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                          boolean b = !(o instanceof String value) ? value.length() > 0 : false;
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -422,13 +468,15 @@ public class PatternVariableIntroductionTest {
     class PatternMatchOperator {
         @Test
         public void patternMatchOperator() {
-            CompilationUnit cu = parse("public class Test {\n"
-                    + "    public void foo(Object o) {\n"
-                    + "        if (o instanceof String value) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    public class Test {
+                        public void foo(Object o) {
+                            if (o instanceof String value) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -454,14 +502,16 @@ public class PatternVariableIntroductionTest {
     class SwitchExpressions {
         @Test
         public void switchExpressions1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public String test(Object o) {\n"
-                    + "        return switch (o) {\n"
-                    + "            case String value -> value + \";\";\n"
-                    + "            default -> \"\";\n"
-                    + "        };\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public String test(Object o) {
+                            return switch (o) {
+                                case String value -> value + ";";
+                                default -> "";
+                            };
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -469,14 +519,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void switchExpressions1Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public String test(Object o) {\n"
-                    + "        return switch (o) {\n"
-                    + "            case String value -> \";\";\n"
-                    + "            default -> value + \"\";\n"
-                    + "        };\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public String test(Object o) {
+                            return switch (o) {
+                                case String value -> ";";
+                                default -> value + "";
+                            };
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -484,16 +536,18 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void switchExpressions2() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        switch (o) {\n"
-                    + "            case String value -> {\n"
-                    + "                String s = value;\n"
-                    + "            }\n"
-                    + "            default -> {}\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            switch (o) {
+                                case String value -> {
+                                    String s = value;
+                                }
+                                default -> {}
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -501,17 +555,19 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void switchExpressions2Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        switch (o) {\n"
-                    + "            case String value -> {\n"
-                    + "            }\n"
-                    + "            default -> {\n"
-                    + "                String s = value;\n"
-                    + "            }\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            switch (o) {
+                                case String value -> {
+                                }
+                                default -> {
+                                    String s = value;
+                                }
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -519,14 +575,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void switchExpressions3() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        switch (o) {\n"
-                    + "            case String value -> throw new RuntimeException(value);\n"
-                    + "            default -> {}\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            switch (o) {
+                                case String value -> throw new RuntimeException(value);
+                                default -> {}
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -534,14 +592,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void switchExpressions3Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        switch (o) {\n"
-                    + "            case String value -> {}\n"
-                    + "            default -> throw new RuntimeException(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            switch (o) {
+                                case String value -> {}
+                                default -> throw new RuntimeException(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -549,15 +609,17 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void switchExpressions4() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        switch (o) {\n"
-                    + "            case String value:\n"
-                    + "                System.out.println(value);\n"
-                    + "            default:\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            switch (o) {
+                                case String value:
+                                    System.out.println(value);
+                                default:
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -565,15 +627,17 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void switchExpressions4Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        switch (o) {\n"
-                    + "            case String value:\n"
-                    + "            default:\n"
-                    + "                System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            switch (o) {
+                                case String value:
+                                default:
+                                    System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -581,17 +645,19 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void switchExpressions5() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        switch (o) {\n"
-                    + "            case Integer value:\n"
-                    + "                System.out.println(value);\n"
-                    + "            case String value:\n"
-                    + "                System.out.println(value);\n"
-                    + "            default:\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            switch (o) {
+                                case Integer value:
+                                    System.out.println(value);
+                                case String value:
+                                    System.out.println(value);
+                                default:
+                            }
+                        }
+                    }\
+                    """);
 
             SwitchStmt switchStmt = cu.getClassByName("Test")
                     .get()
@@ -615,16 +681,18 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void switchExpressions6() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        switch (o) {\n"
-                    + "            case Integer value:\n"
-                    + "            case String otherValue:\n"
-                    + "                System.out.println(value);\n"
-                    + "            default:\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            switch (o) {
+                                case Integer value:
+                                case String otherValue:
+                                    System.out.println(value);
+                                default:
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -643,14 +711,16 @@ public class PatternVariableIntroductionTest {
     class ParenthesizedExpressions {
         @Test
         public void parenthesizedExpressions1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if ((((((((o instanceof String value)))))))) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        } else {\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if ((((((((o instanceof String value)))))))) {
+                                System.out.println(value);
+                            } else {
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -658,14 +728,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void parenthesizedExpressions1Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if ((((((((o instanceof String value)))))))) {\n"
-                    + "        } else {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if ((((((((o instanceof String value)))))))) {
+                            } else {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -673,14 +745,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void parenthesizedExpressions2() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (!(((((((o instanceof String value)))))))) {\n"
-                    + "        } else {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (!(((((((o instanceof String value)))))))) {
+                            } else {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -688,14 +762,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void parenthesizedExpressions2Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (!(((((((o instanceof String value)))))))) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        } else {\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (!(((((((o instanceof String value)))))))) {
+                                System.out.println(value);
+                            } else {
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -724,13 +800,15 @@ public class PatternVariableIntroductionTest {
     class IfStatements {
         @Test
         public void ifStatements1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (o instanceof String value) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (o instanceof String value) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -738,13 +816,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements1Negated1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (!(o instanceof String value)) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (!(o instanceof String value)) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -752,13 +832,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements1Negated2() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o, boolean b) {\n"
-                    + "        if (o instanceof String value || b) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o, boolean b) {
+                            if (o instanceof String value || b) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -766,14 +848,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements2() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (!(o instanceof String value)) {\n"
-                    + "            return;\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (!(o instanceof String value)) {
+                                return;
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -781,14 +865,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements2Negated1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (o instanceof String value) {\n"
-                    + "            return;\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (o instanceof String value) {
+                                return;
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -796,13 +882,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements2Negated2() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (!(o instanceof String value)) {\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (!(o instanceof String value)) {
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -810,14 +898,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements3() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (!(o instanceof String value)) {\n"
-                    + "            throw new RuntimeException();\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (!(o instanceof String value)) {
+                                throw new RuntimeException();
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -825,14 +915,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements4() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (o instanceof String value) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        } else {\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (o instanceof String value) {
+                                System.out.println(value);
+                            } else {
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -840,14 +932,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements4Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (o instanceof String value) {\n"
-                    + "        } else {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (o instanceof String value) {
+                            } else {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -855,14 +949,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements5() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (!(o instanceof String value)) {\n"
-                    + "        } else {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (!(o instanceof String value)) {
+                            } else {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -870,14 +966,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements5Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (!(o instanceof String value)) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        } else {\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (!(o instanceof String value)) {
+                                System.out.println(value);
+                            } else {
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -885,15 +983,17 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements6() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (o instanceof String value) {\n"
-                    + "        } else {\n"
-                    + "            return;\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (o instanceof String value) {
+                            } else {
+                                return;
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -901,14 +1001,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements6Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (o instanceof String value) {\n"
-                    + "        } else {\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (o instanceof String value) {
+                            } else {
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -916,30 +1018,34 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void ifStatements7() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (!(o instanceof String value)) {\n"
-                    + "            return;\n"
-                    + "        } else {\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (!(o instanceof String value)) {
+                                return;
+                            } else {
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
         }
 
         @Test
         public void ifStatements7Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        if (!(o instanceof String value)) {\n"
-                    + "        } else {\n"
-                    + "            return;\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            if (!(o instanceof String value)) {
+                            } else {
+                                return;
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -960,13 +1066,15 @@ public class PatternVariableIntroductionTest {
     class WhileStatements {
         @Test
         public void whileStatements1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        while (o instanceof String value) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            while (o instanceof String value) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -974,13 +1082,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void whileStatements1Negated1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        while (!(o instanceof String value)) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            while (!(o instanceof String value)) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -988,13 +1098,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void whileStatements1Negated2() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o, boolean b) {\n"
-                    + "        while (o instanceof String value || b) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o, boolean b) {
+                            while (o instanceof String value || b) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -1002,13 +1114,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void whileStatements2() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        while (!(o instanceof String value)) {\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            while (!(o instanceof String value)) {
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -1016,14 +1130,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void whileStatements2Negated1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        while (!(o instanceof String value)) {\n"
-                    + "            break;\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            while (!(o instanceof String value)) {
+                                break;
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -1031,17 +1147,19 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void whileStatements3() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        first:\n"
-                    + "        while (true) {\n"
-                    + "            while (!(o instanceof String value)) {\n"
-                    + "                break first;\n"
-                    + "            }\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            first:
+                            while (true) {
+                                while (!(o instanceof String value)) {
+                                    break first;
+                                }
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -1049,15 +1167,17 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void whileStatements4() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        first:\n"
-                    + "        while (!(o instanceof String value)) {\n"
-                    + "            break first;\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            first:
+                            while (!(o instanceof String value)) {
+                                break first;
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -1065,12 +1185,14 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void whileStatements5() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        while (o instanceof String value)\n"
-                    + "            System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            while (o instanceof String value)
+                                System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -1090,13 +1212,15 @@ public class PatternVariableIntroductionTest {
     class DoStatements {
         @Test
         public void doStatements1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        do {\n"
-                    + "        } while (!(o instanceof String value));\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            do {
+                            } while (!(o instanceof String value));
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -1104,14 +1228,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void doStatements1Negated1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        do {\n"
-                    + "            break;"
-                    + "        } while (!(o instanceof String value));\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            do {
+                                break;\
+                            } while (!(o instanceof String value));
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -1137,11 +1263,13 @@ public class PatternVariableIntroductionTest {
     class ForStatements {
         @Test
         public void forStatements1() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        for (int i = 0; o instanceof String value; i += value.length()) { }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            for (int i = 0; o instanceof String value; i += value.length()) { }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -1149,11 +1277,13 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void forStatements1Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        for (int i = 0; o instanceof String value || i < 3; i += value.length()) { }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            for (int i = 0; o instanceof String value || i < 3; i += value.length()) { }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -1161,13 +1291,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void forStatements2() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        for (; o instanceof String value; ) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            for (; o instanceof String value; ) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -1175,13 +1307,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void forStatements2Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        for (; !(o instanceof String value); ) {\n"
-                    + "            System.out.println(value);\n"
-                    + "        }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            for (; !(o instanceof String value); ) {
+                                System.out.println(value);
+                            }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -1189,13 +1323,15 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void forStatements3() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        for (; !(o instanceof String value); ) {\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            for (; !(o instanceof String value); ) {
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -1203,14 +1339,16 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void forStatements3Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        for (; !(o instanceof String value); ) {\n"
-                    + "            break;\n"
-                    + "        }\n"
-                    + "        System.out.println(value);\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            for (; !(o instanceof String value); ) {
+                                break;
+                            }
+                            System.out.println(value);
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
@@ -1218,11 +1356,13 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void forStatements4() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        for (int i = 0; o instanceof String value; value.length()) { }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            for (int i = 0; o instanceof String value; value.length()) { }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
@@ -1230,11 +1370,13 @@ public class PatternVariableIntroductionTest {
 
         @Test
         public void forStatements4Negated() {
-            CompilationUnit cu = parse("class Test {\n"
-                    + "    public void test(Object o) {\n"
-                    + "        for (int i = 0; !(o instanceof String value); value.length()) { }\n"
-                    + "    }\n"
-                    + "}");
+            CompilationUnit cu = parse("""
+                    class Test {
+                        public void test(Object o) {
+                            for (int i = 0; !(o instanceof String value); value.length()) { }
+                        }
+                    }\
+                    """);
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
             assertThrows(UnsolvedSymbolException.class, () -> name.resolve());

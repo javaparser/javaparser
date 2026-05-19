@@ -88,8 +88,7 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
         MemberValue memberValue = defaultAttribute.getDefaultValue();
         Function<MemberValue, ? extends Expression> fn = memberValueAsExressionConverter.get(memberValue.getClass());
         if (fn == null)
-            throw new UnsupportedOperationException(String.format(
-                    "Obtaining the type of the annotation member %s is not supported yet.",
+            throw new UnsupportedOperationException("Obtaining the type of the annotation member %s is not supported yet.".formatted(
                     annotationMember.getName()));
         return fn.apply(memberValue);
     }
@@ -108,8 +107,7 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
             // We don't expect this to happen, but we handle it anyway.
             throw new IllegalStateException("An invalid descriptor was received from JavaAssist.", e);
         }
-        throw new UnsupportedOperationException(String.format(
-                "Obtaining the type of the annotation member %s is not supported yet.",
+        throw new UnsupportedOperationException("Obtaining the type of the annotation member %s is not supported yet.".formatted(
                 annotationMember.getLongName()));
     }
 

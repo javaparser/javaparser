@@ -72,11 +72,14 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
-        String expected = "class X {\n" + "    void method() {\n"
-                + "        int x = 1;\n"
-                + "        int y = 2;\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                class X {
+                    void method() {
+                        int x = 1;
+                        int y = 2;
+                    }
+                }\
+                """;
 
         assertTransformedToString(expected, cu);
     }
@@ -87,12 +90,15 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void l3_processLeftoverUnindentDirective() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        if (true) {\n"
-                + "            int x = 1;\n"
-                + "        }\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        if (true) {
+                            int x = 1;
+                        }
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -101,13 +107,16 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
-        String expected = "class X {\n" + "    void method() {\n"
-                + "        if (true) {\n"
-                + "            int x = 1;\n"
-                + "        }\n"
-                + "        int y = 2;\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                class X {
+                    void method() {
+                        if (true) {
+                            int x = 1;
+                        }
+                        int y = 2;
+                    }
+                }\
+                """;
 
         assertTransformedToString(expected, cu);
     }
@@ -127,12 +136,15 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         body.getStatements().add(StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt());
         body.getStatements().add(StaticJavaParser.parseStatement("int z = 3;").asExpressionStmt());
 
-        String expected = "class X {\n" + "    void method() {\n"
-                + "        int x = 1;\n"
-                + "        int y = 2;\n"
-                + "        int z = 3;\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                class X {
+                    void method() {
+                        int x = 1;
+                        int y = 2;
+                        int z = 3;
+                    }
+                }\
+                """;
 
         assertTransformedToString(expected, cu);
     }
@@ -273,13 +285,16 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
 
     @Test
     void complexLeftoverScenario() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        int x = 1;\n"
-                + "        // comment\n"
-                + "        int y = 2;\n"
-                + "    }\n"
-                + "    // trailing\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        int x = 1;
+                        // comment
+                        int y = 2;
+                    }
+                    // trailing
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();

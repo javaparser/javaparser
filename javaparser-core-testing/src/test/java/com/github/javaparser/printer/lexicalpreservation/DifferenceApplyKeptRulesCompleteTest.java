@@ -281,12 +281,15 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k19_skipIndentDirective() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        if (true) {\n"
-                + "            int x = 1;\n"
-                + "        }\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        if (true) {
+                            int x = 1;
+                        }
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
 
@@ -308,13 +311,16 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void k20_skipUnindentDirective() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        if (true) {\n"
-                + "            int x = 1;\n"
-                + "        }\n"
-                + "        int y = 2;\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        if (true) {
+                            int x = 1;
+                        }
+                        int y = 2;
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
 
@@ -351,11 +357,14 @@ class DifferenceApplyKeptRulesCompleteTest extends AbstractLexicalPreservingTest
 
     @Test
     void keepComplexStructureWithMultipleTypes() {
-        considerCode("class X {\n" + "    private final Map<String, List<Integer>> data;\n"
-                + "    protected String[] names;\n"
-                + "    public int count;\n"
-                + "    boolean flag;\n"
-                + "}");
+        considerCode("""
+                class X {
+                    private final Map<String, List<Integer>> data;
+                    protected String[] names;
+                    public int count;
+                    boolean flag;
+                }\
+                """);
 
         FieldDeclaration countField = cu.findAll(FieldDeclaration.class).stream()
                 .filter(f -> f.getVariable(0).getNameAsString().equals("count"))

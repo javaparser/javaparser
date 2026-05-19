@@ -186,12 +186,15 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
 
         blockStmt.addStatement(statement);
         String s = LexicalPreservingPrinter.print(blockStmt);
-        String expected = "{\n" + "       value1();\n"
-                + "    value2(); // Test\n"
-                + "    if(value != null) {\n"
-                + "        value.value();\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                {
+                       value1();
+                    value2(); // Test
+                    if(value != null) {
+                        value.value();
+                    }
+                }\
+                """;
         assertEqualsStringIgnoringEol(expected, s);
     }
 
@@ -207,12 +210,15 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
 
         blockStmt.addStatement(statement);
         String s = LexicalPreservingPrinter.print(blockStmt);
-        String expected = "{\n" + "       value1();\n"
-                + "    value2(); /* test */\n"
-                + "    if(value != null) {\n"
-                + "        value.value();\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                {
+                       value1();
+                    value2(); /* test */
+                    if(value != null) {
+                        value.value();
+                    }
+                }\
+                """;
         assertEqualsStringIgnoringEol(expected, s);
     }
 
@@ -234,14 +240,17 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
         methodDeclaration.getBody().get().addStatement(statement);
 
         String s = LexicalPreservingPrinter.print(compilationUnit);
-        String expected = "public class Test {\n" + "    public void method() {\n"
-                + "           value1();\n"
-                + "        value2(); // Test\n"
-                + "        if(value != null) {\n"
-                + "            value.value();\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                public class Test {
+                    public void method() {
+                           value1();
+                        value2(); // Test
+                        if(value != null) {
+                            value.value();
+                        }
+                    }
+                }\
+                """;
         assertEqualsStringIgnoringEol(expected, s);
     }
 
@@ -263,14 +272,17 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
         methodDeclaration.getBody().get().addStatement(statement);
 
         String s = LexicalPreservingPrinter.print(compilationUnit);
-        String expected = "public class Test {\n" + "    public void method() {\n"
-                + "           value1();\n"
-                + "        value2();\n"
-                + "        if(value != null) {\n"
-                + "            value.value();\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                public class Test {
+                    public void method() {
+                           value1();
+                        value2();
+                        if(value != null) {
+                            value.value();
+                        }
+                    }
+                }\
+                """;
         assertEqualsStringIgnoringEol(expected, s);
     }
 
@@ -292,14 +304,18 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
         methodDeclaration.getBody().get().addStatement(statement);
 
         String s = LexicalPreservingPrinter.print(compilationUnit);
-        String expected = "public class Test {\n" + "    public void method() {\n"
-                + "           value1();\n"
-                + "        value2();\n"
-                + "        if(value != null) {\n"
-                + "            value.value();\n"
-                + "        }\n\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                public class Test {
+                    public void method() {
+                           value1();
+                        value2();
+                        if(value != null) {
+                            value.value();
+                        }
+                
+                    }
+                }\
+                """;
         assertEqualsStringIgnoringEol(expected, s);
     }
 

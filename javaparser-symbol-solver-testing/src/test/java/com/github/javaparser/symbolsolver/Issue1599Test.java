@@ -41,15 +41,18 @@ class Issue1599Test extends AbstractResolutionTest {
     void test() throws IOException {
         Path rootSourceDir = adaptPath("src/test/resources/issue1599");
 
-        String src = "public class Foo {\n" + "  public void m() {\n"
-                + "    A myVar = new A() {\n"
-                + "      public void bar() {}\n"
-                + "      public void bar2() {}\n"
-                + "    };\n"
-                + "    myVar.bar();\n"
-                + "    myVar.bar2();\n"
-                + "  }\n"
-                + "}";
+        String src = """
+                public class Foo {
+                  public void m() {
+                    A myVar = new A() {
+                      public void bar() {}
+                      public void bar2() {}
+                    };
+                    myVar.bar();
+                    myVar.bar2();
+                  }
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new JavaParserTypeSolver(rootSourceDir.toFile())));

@@ -39,14 +39,17 @@ public class Issue2995Test extends AbstractResolutionTest {
                 new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-        String str = "public class MyClass {\n" + "   class Inner1 {\n"
-                + "       class Inner2 {\n"
-                + "       }\n"
-                + "   }\n"
-                + "   {\n"
-                + "       new Inner1().new Inner2();\n"
-                + "   }\n"
-                + "}\n";
+        String str = """
+                public class MyClass {
+                   class Inner1 {
+                       class Inner2 {
+                       }
+                   }
+                   {
+                       new Inner1().new Inner2();
+                   }
+                }
+                """;
         CompilationUnit cu = StaticJavaParser.parse(str);
         List<ObjectCreationExpr> exprs = cu.findAll(ObjectCreationExpr.class);
         assertEquals("new Inner1().new Inner2()", exprs.get(0).toString());

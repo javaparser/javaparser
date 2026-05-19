@@ -104,8 +104,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
         // Resolution of the scope of the method call expression is delegated to parent
         // context.
-        if (parentNode instanceof MethodCallExpr) {
-            MethodCallExpr parentCall = (MethodCallExpr) parentNode;
+        if (parentNode instanceof MethodCallExpr parentCall) {
             boolean found = parentCall.getArguments().contains(wrappedNode);
             if (found) {
                 Node notMethod = parentNode;
@@ -147,7 +146,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInParentContext(String name) {
         Optional<Context> optionalParentContext = getParent();
-        if (!optionalParentContext.isPresent()) {
+        if (optionalParentContext.isEmpty()) {
             return SymbolReference.unsolved();
         }
 
@@ -203,8 +202,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             } catch (Exception e) {
                 // If the scope corresponds to a type we should treat it differently
-                if (scope instanceof FieldAccessExpr) {
-                    FieldAccessExpr scopeName = (FieldAccessExpr) scope;
+                if (scope instanceof FieldAccessExpr scopeName) {
                     if (this.solveType(scopeName.toString()).isSolved()) {
                         return Collections.emptyList();
                     }
@@ -287,8 +285,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         if (methodSolved.isSolved()) {
             ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
             if (!(methodDeclaration instanceof TypeVariableResolutionCapability)) {
-                throw new UnsupportedOperationException(String.format(
-                        "Resolved method declarations must implement %s.",
+                throw new UnsupportedOperationException("Resolved method declarations must implement %s.".formatted(
                         TypeVariableResolutionCapability.class.getName()));
             }
 
@@ -333,8 +330,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             } else if (patternToCheck.isRecordPatternExpr()) {
                 patternsToCheck.addAll(patternToCheck.asRecordPatternExpr().getPatternList());
             } else if (!patternToCheck.isMatchAllPatternExpr()) {
-                throw new UnsupportedOperationException(String.format(
-                        "Discovering type pattern expressions in %s not supported",
+                throw new UnsupportedOperationException("Discovering type pattern expressions in %s not supported".formatted(
                         patternExpr.getClass().getName()));
             }
         }

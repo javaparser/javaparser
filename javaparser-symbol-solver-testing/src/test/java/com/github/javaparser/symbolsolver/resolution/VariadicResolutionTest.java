@@ -153,11 +153,14 @@ class VariadicResolutionTest extends AbstractResolutionTest {
 
     @Test
     void variadicCallWithNoArgsTest() throws IOException {
-        String code = "import foo.Foo;\n" + "public class Test {\n"
-                + "    void test() {\n"
-                + "        Foo.fooId(Foo.foo());\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                import foo.Foo;
+                public class Test {
+                    void test() {
+                        Foo.fooId(Foo.foo());
+                    }
+                }\
+                """;
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
         typeSolver.add(new JarTypeSolver("src/test/resources/EmptyVarargsCallTest/EmptyVarargsCallTest.jar"));
@@ -175,14 +178,17 @@ class VariadicResolutionTest extends AbstractResolutionTest {
 
     @Test
     void methodRefAsVariadicArgument() throws IOException {
-        String code = "import foo.Foo;\n" + "import java.util.function.Function;\n"
-                + "class Test {\n"
-                + "    static void collectFunctions(Function... functions) {}\n"
-                + "    void test() {\n"
-                + "        Function func1 = () -> {};\n"
-                + "        collectFunctions(func1, Object::hashCode);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                import foo.Foo;
+                import java.util.function.Function;
+                class Test {
+                    static void collectFunctions(Function... functions) {}
+                    void test() {
+                        Function func1 = () -> {};
+                        collectFunctions(func1, Object::hashCode);
+                    }
+                }\
+                """;
 
         CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
         ParserConfiguration configuration =

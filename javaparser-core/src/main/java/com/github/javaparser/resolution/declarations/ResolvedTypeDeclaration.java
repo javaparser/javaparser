@@ -158,46 +158,46 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      * Return this as a ClassDeclaration or throw UnsupportedOperationException.
      */
     default ResolvedClassDeclaration asClass() {
-        throw new UnsupportedOperationException(String.format("%s is not a class", this));
+        throw new UnsupportedOperationException("%s is not a class".formatted(this));
     }
 
     /**
      * Return this as a InterfaceDeclaration or throw UnsupportedOperationException.
      */
     default ResolvedInterfaceDeclaration asInterface() {
-        throw new UnsupportedOperationException(String.format("%s is not an interface", this));
+        throw new UnsupportedOperationException("%s is not an interface".formatted(this));
     }
 
     /**
      * Return this as a EnumDeclaration or throw UnsupportedOperationException.
      */
     default ResolvedEnumDeclaration asEnum() {
-        throw new UnsupportedOperationException(String.format("%s is not an enum", this));
+        throw new UnsupportedOperationException("%s is not an enum".formatted(this));
     }
 
     /**
      * Return this as a RecordDeclaration or throw UnsupportedOperationException.
      */
     default ResolvedRecordDeclaration asRecord() {
-        throw new UnsupportedOperationException(String.format("%s is not a record", this));
+        throw new UnsupportedOperationException("%s is not a record".formatted(this));
     }
 
     /**
      * Return this as a AnnotationDeclaration or throw UnsupportedOperationException.
      */
     default ResolvedAnnotationDeclaration asAnnotation() {
-        throw new UnsupportedOperationException(String.format("%s is not an annotation", this));
+        throw new UnsupportedOperationException("%s is not an annotation".formatted(this));
     }
 
     /**
      * Return this as a TypeParameterDeclaration or throw UnsupportedOperationException.
      */
     default ResolvedTypeParameterDeclaration asTypeParameter() {
-        throw new UnsupportedOperationException(String.format("%s is not a type parameter", this));
+        throw new UnsupportedOperationException("%s is not a type parameter".formatted(this));
     }
 
     default ResolvedReferenceTypeDeclaration asReferenceType() {
-        throw new UnsupportedOperationException(String.format("%s is not a reference type", this));
+        throw new UnsupportedOperationException("%s is not a reference type".formatted(this));
     }
 
     /**
@@ -222,7 +222,7 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
     default String getId() {
         String qname = getQualifiedName();
         if (qname == null) {
-            return String.format("<localClass>:%s", getName());
+            return "<localClass>:%s".formatted(getName());
         }
         return qname;
     }

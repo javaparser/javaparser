@@ -131,9 +131,10 @@ public class PositionUtilsTest {
     }
 
     private String formatRangeCompareResult(Node x, Node annotationA, String containerId, String otherId) {
-        return String.format(
-                "container range in detected as NOT containing other range: " + "\n - container (%s): %s"
-                        + "\n -     other (%s): %s",
+        return """
+                container range in detected as NOT containing other range:\s
+                 - container (%s): %s
+                 -     other (%s): %s""".formatted(
                 containerId,
                 x.getRange().get().toString(),
                 otherId,

@@ -36,20 +36,22 @@ public class Issue3866Test extends AbstractResolutionTest {
     @Test
     void test() {
 
-        String code = "public interface MyActivity {\n"
-                + "  class MyTimestamps {}\n"
-                + "    MyTimestamps getTimestamps();\n"
-                + "  }\n"
-                + "\n"
-                + "  public interface MyRichPresence extends MyActivity { }\n"
-                + "\n"
-                + "  class MyActivityImpl implements MyActivity {\n"
-                + "    MyActivity.MyTimestamps timestamps;\n"
-                + "    @Override\n"
-                + "    public MyActivity.MyTimestamps getTimestamps() {\n"
-                + "      return timestamps;\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                public interface MyActivity {
+                  class MyTimestamps {}
+                    MyTimestamps getTimestamps();
+                  }
+                
+                  public interface MyRichPresence extends MyActivity { }
+                
+                  class MyActivityImpl implements MyActivity {
+                    MyActivity.MyTimestamps timestamps;
+                    @Override
+                    public MyActivity.MyTimestamps getTimestamps() {
+                      return timestamps;
+                  }
+                }\
+                """;
 
         final JavaSymbolSolver solver = new JavaSymbolSolver(new ReflectionTypeSolver(false));
         StaticJavaParser.getParserConfiguration().setSymbolResolver(solver);

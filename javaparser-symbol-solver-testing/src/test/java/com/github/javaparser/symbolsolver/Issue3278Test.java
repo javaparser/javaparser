@@ -32,31 +32,33 @@ public class Issue3278Test extends AbstractResolutionTest {
 
     @Test
     void test() {
-        String code = "public class Foo {\n"
-                + "	    public static void main(String[] args) {\n"
-                + "	        A a = null;\n"
-                + "	        m((a == null ? \"null\" : a.getB()));\n"
-                + "	    }\n"
-                + "	    void m(Comparable<? extends Comparable> obj) {}\n"
-                + "	}\n"
-                + "\n"
-                + "	class A{\n"
-                + "	    private B b;\n"
-                + "	    public A(B b){\n"
-                + "	        this.b = b;\n"
-                + "	    }\n"
-                + "	    public B getB(){\n"
-                + "	        return b;\n"
-                + "	    }\n"
-                + "	}\n"
-                + "\n"
-                + "	class B implements Comparable<B>{\n"
-                + "\n"
-                + "		@Override\n"
-                + "		public int compareTo(B o) {\n"
-                + "			return 0;\n"
-                + "		}\n"
-                + "	}";
+        String code = """
+                public class Foo {
+                	    public static void main(String[] args) {
+                	        A a = null;
+                	        m((a == null ? "null" : a.getB()));
+                	    }
+                	    void m(Comparable<? extends Comparable> obj) {}
+                	}
+                
+                	class A{
+                	    private B b;
+                	    public A(B b){
+                	        this.b = b;
+                	    }
+                	    public B getB(){
+                	        return b;
+                	    }
+                	}
+                
+                	class B implements Comparable<B>{
+                
+                		@Override
+                		public int compareTo(B o) {
+                			return 0;
+                		}
+                	}\
+                """;
 
         JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
 

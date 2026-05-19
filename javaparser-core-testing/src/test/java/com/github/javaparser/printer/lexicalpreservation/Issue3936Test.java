@@ -28,21 +28,23 @@ import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
 import org.junit.jupiter.api.Test;
 
 public class Issue3936Test extends AbstractLexicalPreservingTest {
-    static final String given = "package some.project;\n"
-            + "\n"
-            + "import java.util.Optional;\n"
-            + "\n"
-            + "public class SomeClass {\n"
-            + "\n"
-            + "	String html = \"\" + \"<html>\\n\"\n"
-            + "			+ \"\\t<head>\\n\"\n"
-            + "			+ \"\\t\\t<meta charset=\\\"utf-8\\\">\\n\"\n"
-            + "			+ \"\\t</head>\\n\"\n"
-            + "			+ \"\\t<body class=\\\"default-view\\\" style=\\\"word-wrap: break-word;\\\">\\n\"\n"
-            + "			+ \"\\t\\t<p>Hello, world</p>\\n\"\n"
-            + "			+ \"\\t</body>\\n\"\n"
-            + "			+ \"</html>\\n\";\n"
-            + "}";
+    static final String given = """
+            package some.project;
+            
+            import java.util.Optional;
+            
+            public class SomeClass {
+            
+            	String html = "" + "<html>\\n"
+            			+ "\\t<head>\\n"
+            			+ "\\t\\t<meta charset=\\"utf-8\\">\\n"
+            			+ "\\t</head>\\n"
+            			+ "\\t<body class=\\"default-view\\" style=\\"word-wrap: break-word;\\">\\n"
+            			+ "\\t\\t<p>Hello, world</p>\\n"
+            			+ "\\t</body>\\n"
+            			+ "</html>\\n";
+            }\
+            """;
 
     @Test
     void test() {
@@ -56,17 +58,19 @@ public class Issue3936Test extends AbstractLexicalPreservingTest {
         expr.setInitializer(new TextBlockLiteralExpr(newText));
 
         String actual = LexicalPreservingPrinter.print(cu);
-        String expected = "package some.project;\n"
-                + "\n"
-                + "import java.util.Optional;\n"
-                + "\n"
-                + "public class SomeClass {\n"
-                + "\n"
-                + "	String html = \"\"\"\n"
-                + "\tfirstRow\n"
-                + "\tsecondRow\n"
-                + "\tthirdRow\"\"\";\n"
-                + "}";
+        String expected = """
+                package some.project;
+                
+                import java.util.Optional;
+                
+                public class SomeClass {
+                
+                	String html = ""\"
+                	firstRow
+                	secondRow
+                	thirdRow""\";
+                }\
+                """;
         assertEqualsStringIgnoringEol(expected, actual);
     }
 }

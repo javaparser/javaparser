@@ -865,7 +865,7 @@ public abstract class Expression extends Node {
         Expression scope =
                 (Expression) ((NodeWithOptionalScope) this).getScope().get();
         NodeWithTypeArguments nwta = (NodeWithTypeArguments) this;
-        return scope.elidesTypeArguments() && (!nwta.getTypeArguments().isPresent() || nwta.isUsingDiamondOperator());
+        return scope.elidesTypeArguments() && (nwta.getTypeArguments().isEmpty() || nwta.isUsingDiamondOperator());
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

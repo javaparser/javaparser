@@ -49,22 +49,28 @@ public class Issue2044Test {
     @Test
     public void issue2044_typeVariableExtendsObject() {
 
-        String x = "public class X <K extends Object> {\n" + "    private int getPartition(final K key) {\n"
-                + "        int x = (new Object()).hashCode();\n"
-                + "        return key.hashCode() / getHashes().length;\n"
-                + "    }\n"
-                + "}";
+        String x = """
+                public class X <K extends Object> {
+                    private int getPartition(final K key) {
+                        int x = (new Object()).hashCode();
+                        return key.hashCode() / getHashes().length;
+                    }
+                }\
+                """;
 
         doTestSimple(x);
     }
 
     @Test
     public void issue2044_simpleTypeVariable() {
-        String x = "public class X <K> {\n" + "    private int getPartition(final K key) {\n"
-                + "        int x = (new Object()).hashCode();\n"
-                + "        return key.hashCode() / getHashes().length;\n"
-                + "    }\n"
-                + "}";
+        String x = """
+                public class X <K> {
+                    private int getPartition(final K key) {
+                        int x = (new Object()).hashCode();
+                        return key.hashCode() / getHashes().length;
+                    }
+                }\
+                """;
 
         doTestSimple(x);
     }

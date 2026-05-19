@@ -35,27 +35,33 @@ public class Issue3113Test extends AbstractLexicalPreservingTest {
     public void issue3113() {
         StaticJavaParser.getConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_12);
 
-        String originalSourceCode = "public class HelloWorld {\n" + "  public static void main(String[] args) {\n"
-                + "      final int value = 2;\n"
-                + "      String numericString;\n"
-                + "      switch (value)\n"
-                + "      {\n"
-                + "       case 1 -> numericString = \"one\";\n"
-                + "       default -> numericString = \"N/A\";\n"
-                + "      }\n"
-                + "      System.out.println(\"value:\" + value + \" as string: \" + numericString);\n"
-                + "  }\n"
-                + "}\n";
+        String originalSourceCode = """
+                public class HelloWorld {
+                  public static void main(String[] args) {
+                      final int value = 2;
+                      String numericString;
+                      switch (value)
+                      {
+                       case 1 -> numericString = "one";
+                       default -> numericString = "N/A";
+                      }
+                      System.out.println("value:" + value + " as string: " + numericString);
+                  }
+                }
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(originalSourceCode);
         LexicalPreservingPrinter.setup(cu);
         SwitchStmt expr = cu.findFirst(SwitchStmt.class).get();
         String modifiedSourceCode = LexicalPreservingPrinter.print(expr);
         assertEquals(
-                "switch (value)\n" + "      {\n"
-                        + "       case 1 -> numericString = \"one\";\n"
-                        + "       default -> numericString = \"N/A\";\n"
-                        + "      }",
+                """
+                switch (value)
+                      {
+                       case 1 -> numericString = "one";
+                       default -> numericString = "N/A";
+                      }\
+                """,
                 modifiedSourceCode);
     }
 }

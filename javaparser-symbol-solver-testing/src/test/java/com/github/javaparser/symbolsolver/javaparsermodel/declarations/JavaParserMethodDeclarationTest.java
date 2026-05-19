@@ -59,20 +59,22 @@ class JavaParserMethodDeclarationTest extends AbstractResolutionTest
 
     @Test
     void issue2484() {
-        String code = "public class MyClass {\n"
-                + "    private Ibaz m_something;\n"
-                + "\n"
-                + "    public interface Ibaz {\n"
-                + "    }\n"
-                + "    \n"
-                + "    public void foo(Class<? extends Ibaz> clazz) {\n"
-                + "    }\n"
-                + "    \n"
-                + "    protected void bar() {\n"
-                + "        foo(null); // this works\n"
-                + "        foo(m_something.getClass()); // this doesn't work\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class MyClass {
+                    private Ibaz m_something;
+                
+                    public interface Ibaz {
+                    }
+                   \s
+                    public void foo(Class<? extends Ibaz> clazz) {
+                    }
+                   \s
+                    protected void bar() {
+                        foo(null); // this works
+                        foo(m_something.getClass()); // this doesn't work
+                    }
+                }\
+                """;
 
         JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
         CompilationUnit cu = parser.parse(code);

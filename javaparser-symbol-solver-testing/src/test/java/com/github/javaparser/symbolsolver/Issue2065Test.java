@@ -35,12 +35,15 @@ public class Issue2065Test extends AbstractResolutionTest {
 
     @Test
     void test() {
-        String code = "import java.util.stream.Stream;\n" + "\n"
-                + "public class A {\n"
-                + "    public void test(){\n"
-                + "        Stream.of(1,2).reduce((a, b) -> Math.max(a, b));\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                import java.util.stream.Stream;
+                
+                public class A {
+                    public void test(){
+                        Stream.of(1,2).reduce((a, b) -> Math.max(a, b));
+                    }
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));

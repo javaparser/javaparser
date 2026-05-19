@@ -34,12 +34,15 @@ import org.junit.jupiter.api.Test;
 public class Issue4723Test {
     @Test
     void test() {
-        String code = "public class Test {\n" + "    void test(String s, Object... objects) { }\n"
-                + "    void test(String s, Integer i, Object... objects) { }\n"
-                + "    void foo() {\n"
-                + "        test(\"hello\", 2);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class Test {
+                    void test(String s, Object... objects) { }
+                    void test(String s, Integer i, Object... objects) { }
+                    void foo() {
+                        test("hello", 2);
+                    }
+                }\
+                """;
 
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));

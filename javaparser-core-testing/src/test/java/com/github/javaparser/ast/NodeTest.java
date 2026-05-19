@@ -113,7 +113,14 @@ class NodeTest {
     @Test
     void findCompilationUnitOfCommentNode() {
         CompilationUnit cu = parse(
-                "class X {\n" + "  void x() {\n" + "    // this is a comment\n" + "    foo();\n" + "  }\n" + "}\n");
+                """
+                class X {
+                  void x() {
+                    // this is a comment
+                    foo();
+                  }
+                }
+                """);
 
         Comment comment = cu.getType(0)
                 .getMember(0)
@@ -148,7 +155,7 @@ class NodeTest {
         MethodDeclaration methodDeclaration = cu.getType(0).getMethods().get(0);
         methodDeclaration.getName().removeForced();
         // Name is required, so to remove it the whole method is removed.
-        assertEquals(String.format("class X {%1$s}%1$s", LineSeparator.SYSTEM), cu.toString());
+        assertEquals("class X {%1$s}%1$s".formatted(LineSeparator.SYSTEM), cu.toString());
     }
 
     @Test

@@ -72,16 +72,19 @@ class CommentsInserterTest {
                         + LineSeparator.SYSTEM + "    ANOTHER_CONSTANT"
                         + LineSeparator.SYSTEM + "}");
         assertEqualsStringIgnoringEol(
-                "public enum X {\n" + "\n"
-                        + "    /**\n"
-                        + "     * const1 javadoc\n"
-                        + "     */\n"
-                        + "    BORDER_CONSTANT,\n"
-                        + "    /**\n"
-                        + "     * const2 javadoc\n"
-                        + "     */\n"
-                        + "    ANOTHER_CONSTANT\n"
-                        + "}\n",
+                """
+                public enum X {
+                
+                    /**
+                     * const1 javadoc
+                     */
+                    BORDER_CONSTANT,
+                    /**
+                     * const2 javadoc
+                     */
+                    ANOTHER_CONSTANT
+                }
+                """,
                 cu.toString());
     }
 
@@ -96,7 +99,14 @@ class CommentsInserterTest {
                 + LineSeparator.SYSTEM + "}");
 
         assertEqualsStringIgnoringEol(
-                "@Anno(stuff = {// Just,\n" + "// an,\n" + "// example\n" + "})\n" + "class ABC {\n" + "}\n",
+                """
+                @Anno(stuff = {// Just,
+                // an,
+                // example
+                })
+                class ABC {
+                }
+                """,
                 cu.toString());
     }
 

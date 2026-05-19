@@ -38,22 +38,28 @@ public class Issue2397Test extends AbstractSymbolResolutionTest {
     @Test
     public void testProvided1() {
         String sourceCode =
-                "static final class ConstantFuture<T> implements Future<T> {\n" + "        private final T value;\n"
-                        + "      \n"
-                        + "        @Override\n"
-                        + "        public T get() {\n"
-                        + "            return value;\n"
-                        + "        }\n"
-                        + "}";
+                """
+                static final class ConstantFuture<T> implements Future<T> {
+                        private final T value;
+                     \s
+                        @Override
+                        public T get() {
+                            return value;
+                        }
+                }\
+                """;
         testIssue(sourceCode);
     }
 
     @Test
     public void testProvided2() {
-        String sourceCode = "class A {\n" + "  public static <T> T[] toArray(final T... items) {\n"
-                + "    return items;\n"
-                + "  }\n"
-                + "}";
+        String sourceCode = """
+                class A {
+                  public static <T> T[] toArray(final T... items) {
+                    return items;
+                  }
+                }\
+                """;
         testIssue(sourceCode);
     }
 

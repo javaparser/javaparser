@@ -48,7 +48,7 @@ public class SeparatedItemStringBuilder {
         if (hasItems) {
             builder.append(separator);
         }
-        builder.append(String.format(format.toString(), args));
+        builder.append(format.toString().formatted(args));
         hasItems = true;
         return this;
     }

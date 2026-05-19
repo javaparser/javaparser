@@ -339,13 +339,15 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16);
 
         JavaParser javaParser = new JavaParser(configuration);
-        ParseResult<CompilationUnit> cu = javaParser.parse("import box.GenericBox;\n"
-                + "class Test {\n"
-                + "  public static void main(String[] args) {\n"
-                + "    GenericBox<Integer> box = new GenericBox<>(2);\n"
-                + "    System.out.println(box.value());\n"
-                + "  }\n"
-                + "}");
+        ParseResult<CompilationUnit> cu = javaParser.parse("""
+                import box.GenericBox;
+                class Test {
+                  public static void main(String[] args) {
+                    GenericBox<Integer> box = new GenericBox<>(2);
+                    System.out.println(box.value());
+                  }
+                }\
+                """);
 
         ObjectCreationExpr constructorInvocation =
                 cu.getResult().get().findFirst(ObjectCreationExpr.class).get();

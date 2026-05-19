@@ -347,7 +347,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(NameExpr node, Boolean solveLambdas) {
         Log.trace("getType on name expr %s", () -> node);
         Optional<Value> value = createSolver().solveSymbolAsValue(node.getName().getId(), node);
-        if (!value.isPresent()) {
+        if (value.isEmpty()) {
             throw new UnsolvedSymbolException("Solving " + node, node.getName().getId());
         }
         return value.get().getType();
@@ -411,8 +411,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                             // Some groups may not have yield (e.g., fall-through or throw), so return null
                             return entry.getStatements().stream()
                                     .map(stmt -> findYieldForSwitch(stmt, node))
-                                    .filter(Optional::isPresent)
-                                    .map(Optional::get)
+                                    .flatMap(Optional::stream)
                                     .findFirst()
                                     .map(YieldStmt::getExpression)
                                     .map(expr -> expr.accept(this, solveLambdas))
@@ -541,9 +540,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
         ResolvedTypeDeclaration typeOfNode =
                 facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node));
-        if (typeOfNode instanceof ResolvedClassDeclaration) {
+        if (typeOfNode instanceof ResolvedClassDeclaration declaration) {
             // TODO: Maybe include a presence check? e.g. in the case of `java.lang.Object` there will be no superclass.
-            return ((ResolvedClassDeclaration) typeOfNode)
+            return declaration
                     .getSuperClass()
                     .orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
         }
@@ -581,8 +580,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(LambdaExpr node, Boolean solveLambdas) {
         Node parentNode = demandParentNode(node, IS_NOT_ENCLOSED_EXPR);
-        if (parentNode instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) parentNode;
+        if (parentNode instanceof MethodCallExpr callExpr) {
             int pos = getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
@@ -610,8 +608,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
                     // If it is a static call we should not try to get the type of the scope
                     boolean staticCall = false;
-                    if (scope instanceof NameExpr) {
-                        NameExpr nameExpr = (NameExpr) scope;
+                    if (scope instanceof NameExpr nameExpr) {
                         try {
                             SymbolReference<ResolvedTypeDeclaration> type = JavaParserFactory.getContext(
                                             nameExpr, typeSolver)
@@ -636,8 +633,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             }
             return result;
         }
-        if (parentNode instanceof VariableDeclarator) {
-            VariableDeclarator decExpr = (VariableDeclarator) parentNode;
+        if (parentNode instanceof VariableDeclarator decExpr) {
             ResolvedType result = decExpr.getType().resolve();
 
             if (solveLambdas) {
@@ -645,8 +641,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             }
             return result;
         }
-        if (parentNode instanceof AssignExpr) {
-            AssignExpr assExpr = (AssignExpr) parentNode;
+        if (parentNode instanceof AssignExpr assExpr) {
             ResolvedType result = assExpr.calculateResolvedType();
 
             if (solveLambdas) {
@@ -654,8 +649,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             }
             return result;
         }
-        if (parentNode instanceof ObjectCreationExpr) {
-            ObjectCreationExpr expr = (ObjectCreationExpr) parentNode;
+        if (parentNode instanceof ObjectCreationExpr expr) {
             ResolvedType result = expr.getType().resolve();
 
             if (solveLambdas) {
@@ -749,8 +743,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             return node.getScope().calculateResolvedType();
         }
         Node parentNode = demandParentNode(node);
-        if (parentNode instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) parentNode;
+        if (parentNode instanceof MethodCallExpr callExpr) {
             int pos = getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
             if (!refMethod.isSolved()) {
@@ -830,8 +823,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     private static int getParamPos(Expression node) {
         Node parentNode = demandParentNode(node, IS_NOT_ENCLOSED_EXPR);
-        if (parentNode instanceof MethodCallExpr) {
-            MethodCallExpr call = (MethodCallExpr) parentNode;
+        if (parentNode instanceof MethodCallExpr call) {
             return call.getArgumentPosition(node, EXCLUDE_ENCLOSED_EXPR);
         }
         throw new IllegalArgumentException();

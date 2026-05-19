@@ -33,12 +33,15 @@ public class Issue2290Test extends AbstractLexicalPreservingTest {
     @Test
     public void test() {
 
-        considerCode("public class Clone1 {\n" + "  public static void main(String[] args) {\n"
-                + "    System.out.println(\"I'm a clone10\");\n"
-                + "    System.out.println(\"I'm not a clone!\");\n"
-                + "    System.out.println(\"I'm a clone10\");\n"
-                + "  }\n"
-                + "}");
+        considerCode("""
+                public class Clone1 {
+                  public static void main(String[] args) {
+                    System.out.println("I'm a clone10");
+                    System.out.println("I'm not a clone!");
+                    System.out.println("I'm a clone10");
+                  }
+                }\
+                """);
         List<ExpressionStmt> exprs = cu.findAll(ExpressionStmt.class);
         ExpressionStmt es = exprs.get(exprs.size() - 1);
         es.getParentNode().get().remove(es);

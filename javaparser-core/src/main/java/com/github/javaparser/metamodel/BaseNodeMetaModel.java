@@ -168,7 +168,7 @@ public abstract class BaseNodeMetaModel {
      * @return whether this AST node is the root node, meaning that it is the meta model for "Node": "NodeMetaModel".
      */
     public boolean isRootNode() {
-        return !superNodeMetaModel.isPresent();
+        return superNodeMetaModel.isEmpty();
     }
 
     @Override

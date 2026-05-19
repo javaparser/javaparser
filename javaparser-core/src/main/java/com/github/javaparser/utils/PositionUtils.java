@@ -88,8 +88,8 @@ public final class PositionUtils {
     }
 
     public static AnnotationExpr getLastAnnotation(Node node) {
-        if (node instanceof NodeWithAnnotations) {
-            NodeList<AnnotationExpr> annotations = NodeList.nodeList(((NodeWithAnnotations<?>) node).getAnnotations());
+        if (node instanceof NodeWithAnnotations<?> withAnnotations) {
+            NodeList<AnnotationExpr> annotations = NodeList.nodeList(withAnnotations.getAnnotations());
             if (annotations.isEmpty()) {
                 return null;
             }
@@ -108,9 +108,7 @@ public final class PositionUtils {
     }
 
     private static Node firstNonAnnotationNode(Node node) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            // Modifiers appear before the class name --
-            ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;
+        if (node instanceof ClassOrInterfaceDeclaration casted) {
             Modifier earliestModifier = casted.getModifiers().stream()
                     .filter(modifier -> modifier.hasRange())
                     .min(Comparator.comparing(o -> o.getRange().get().begin))
@@ -120,9 +118,7 @@ public final class PositionUtils {
             }
             return earliestModifier;
         }
-        if (node instanceof MethodDeclaration) {
-            // Modifiers appear before the class name --
-            MethodDeclaration casted = (MethodDeclaration) node;
+        if (node instanceof MethodDeclaration casted) {
             Modifier earliestModifier = casted.getModifiers().stream()
                     .filter(modifier -> modifier.hasRange())
                     .min(Comparator.comparing(o -> o.getRange().get().begin))
@@ -132,9 +128,7 @@ public final class PositionUtils {
             }
             return earliestModifier;
         }
-        if (node instanceof FieldDeclaration) {
-            // Modifiers appear before the class name --
-            FieldDeclaration casted = (FieldDeclaration) node;
+        if (node instanceof FieldDeclaration casted) {
             Modifier earliestModifier = casted.getModifiers().stream()
                     .filter(modifier -> modifier.hasRange())
                     .min(Comparator.comparing(o -> o.getRange().get().begin))

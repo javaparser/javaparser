@@ -55,7 +55,7 @@ public class InstanceOfExprContext extends ExpressionContext<InstanceOfExpr> {
         }
 
         Optional<Context> optionalParentContext = getParent();
-        if (!optionalParentContext.isPresent()) {
+        if (optionalParentContext.isEmpty()) {
             return SymbolReference.unsolved();
         }
 

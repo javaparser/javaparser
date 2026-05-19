@@ -33,25 +33,27 @@ public class Issue3916Test extends AbstractResolutionTest {
     @Test
     void issue3916() {
 
-        String code = "enum MyEnum {\n"
-                + "        One;\n"
-                + "    }\n"
-                + "\n"
-                + "    class Foo {\n"
-                + "        String str;\n"
-                + "\n"
-                + "        public void setStr(String str) {\n"
-                + "            this.str = str;\n"
-                + "        }\n"
-                + "\n"
-                + "        void test(String str) {\n"
-                + "            switch (MyEnum.One.valueOf(\"\")) {\n"
-                + "            case One:\n"
-                + "                setStr(str);\n"
-                + "                break;\n"
-                + "            }\n"
-                + "        }\n"
-                + "    }";
+        String code = """
+                enum MyEnum {
+                        One;
+                    }
+                
+                    class Foo {
+                        String str;
+                
+                        public void setStr(String str) {
+                            this.str = str;
+                        }
+                
+                        void test(String str) {
+                            switch (MyEnum.One.valueOf("")) {
+                            case One:
+                                setStr(str);
+                                break;
+                            }
+                        }
+                    }\
+                """;
 
         CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
                 .parse(code);

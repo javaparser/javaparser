@@ -45,12 +45,15 @@ public class Issue1479Test extends AbstractSymbolResolutionTest {
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
         StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
 
-        String src = "public class Foo {\n" + "  public void m() {\n"
-                + "    doSomething(B.AFIELD);\n"
-                + "  }\n"
-                + "  public void doSomething(String a) {\n"
-                + "  }\n"
-                + "}\n";
+        String src = """
+                public class Foo {
+                  public void m() {
+                    doSomething(B.AFIELD);
+                  }
+                  public void doSomething(String a) {
+                  }
+                }
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(src);
         FieldAccessExpr fae = cu.findFirst(FieldAccessExpr.class).get();

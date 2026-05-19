@@ -83,7 +83,12 @@ public class ReplaceMethodGenerator extends NodeGenerator {
 
     private String attributeCheck(PropertyMetaModel property, String attributeSetterName) {
         return f(
-                "if (node == %s) {" + "    %s((%s) replacementNode);" + "    return true;\n" + "}",
+                """
+                if (node == %s) {\
+                    %s((%s) replacementNode);\
+                    return true;
+                }\
+                """,
                 property.getName(), attributeSetterName, property.getTypeName());
     }
 

@@ -39,14 +39,17 @@ public class Issue3136Test extends AbstractResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-        String s = "public class Program {\n" + "\n"
-                + "    public class InnerClass {\n"
-                + "    }\n"
-                + "\n"
-                + "    {\n"
-                + "        this.new InnerClass();\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                public class Program {
+                
+                    public class InnerClass {
+                    }
+                
+                    {
+                        this.new InnerClass();
+                    }
+                }\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ThisExpr> exprs = cu.findAll(ThisExpr.class);

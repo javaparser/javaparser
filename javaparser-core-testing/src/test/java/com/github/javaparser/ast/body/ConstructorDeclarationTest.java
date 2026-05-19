@@ -48,12 +48,15 @@ class ConstructorDeclarationTest {
 
     @Test
     void explicitConstructorInvocationAfterFirstStatement() {
-        String code = "class Foo {\n" + "    public Foo() {\n"
-                + "        int x = 2;\n"
-                + "        super();\n"
-                + "        x = 3;\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                class Foo {
+                    public Foo() {
+                        int x = 2;
+                        super();
+                        x = 3;
+                    }
+                }\
+                """;
 
         ParserConfiguration configuration =
                 new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);

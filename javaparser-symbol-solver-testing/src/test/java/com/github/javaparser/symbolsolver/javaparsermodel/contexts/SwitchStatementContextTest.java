@@ -50,12 +50,15 @@ class SwitchStatementContextTest {
 
     @Test
     void testSwitchWithoutPattern() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    switch (o) {\n"
-                + "        case 12 -> someCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    switch (o) {
+                        case 12 -> someCall();
+                    }
+                  }
+                }\
+                """);
 
         SwitchEntry switchEntry = Navigator.demandNodeOfGivenClass(cu, SwitchEntry.class);
         SwitchEntryContext entryContext = new SwitchEntryContext(switchEntry, typeSolver);
@@ -68,12 +71,15 @@ class SwitchStatementContextTest {
 
     @Test
     void testSwitchWithTypePattern() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    switch (o) {\n"
-                + "        case Foo f -> someCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    switch (o) {
+                        case Foo f -> someCall();
+                    }
+                  }
+                }\
+                """);
 
         SwitchEntry switchEntry = Navigator.demandNodeOfGivenClass(cu, SwitchEntry.class);
         SwitchEntryContext entryContext = new SwitchEntryContext(switchEntry, typeSolver);
@@ -89,12 +95,15 @@ class SwitchStatementContextTest {
 
     @Test
     void testSwitchWithUnnamedTypePattern() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    switch (o) {\n"
-                + "        case Foo _ -> someCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    switch (o) {
+                        case Foo _ -> someCall();
+                    }
+                  }
+                }\
+                """);
 
         SwitchEntry switchEntry = Navigator.demandNodeOfGivenClass(cu, SwitchEntry.class);
         SwitchEntryContext entryContext = new SwitchEntryContext(switchEntry, typeSolver);
@@ -107,12 +116,15 @@ class SwitchStatementContextTest {
 
     @Test
     void testSwitchWithRecordPattern() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    switch (o) {\n"
-                + "        case Foo(Bar b, Qux(Quux q)) -> someCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    switch (o) {
+                        case Foo(Bar b, Qux(Quux q)) -> someCall();
+                    }
+                  }
+                }\
+                """);
 
         SwitchEntry switchEntry = Navigator.demandNodeOfGivenClass(cu, SwitchEntry.class);
         SwitchEntryContext entryContext = new SwitchEntryContext(switchEntry, typeSolver);
@@ -131,12 +143,15 @@ class SwitchStatementContextTest {
 
     @Test
     void testSwitchWithMatchAllPattern() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    switch (o) {\n"
-                + "        case Foo(Bar b, Qux(Quux _)) -> someCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    switch (o) {
+                        case Foo(Bar b, Qux(Quux _)) -> someCall();
+                    }
+                  }
+                }\
+                """);
 
         SwitchEntry switchEntry = Navigator.demandNodeOfGivenClass(cu, SwitchEntry.class);
         SwitchEntryContext entryContext = new SwitchEntryContext(switchEntry, typeSolver);

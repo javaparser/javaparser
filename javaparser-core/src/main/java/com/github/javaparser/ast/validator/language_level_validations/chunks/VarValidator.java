@@ -55,7 +55,7 @@ public class VarValidator implements TypedValidator<VarType> {
         // All allowed locations are within a VariableDeclaration inside a VariableDeclarationExpr inside something
         // else.
         Optional<VariableDeclarator> variableDeclarator = node.findAncestor(VariableDeclarator.class);
-        if (!variableDeclarator.isPresent()) {
+        if (variableDeclarator.isEmpty()) {
             // Java 11's var in lambda's
             if (varAllowedInLambdaParameters) {
                 boolean valid = node.findAncestor(Parameter.class)
@@ -74,7 +74,7 @@ public class VarValidator implements TypedValidator<VarType> {
                 reporter.report(vd, "\"var\" cannot have extra array brackets.");
             }
             Optional<Node> variableDeclarationExpr = vd.getParentNode();
-            if (!variableDeclarationExpr.isPresent()) {
+            if (variableDeclarationExpr.isEmpty()) {
                 reportIllegalPosition(node, reporter);
                 return;
             }
@@ -88,7 +88,7 @@ public class VarValidator implements TypedValidator<VarType> {
                     reporter.report(vde, "\"var\" only takes a single variable.");
                 }
                 Optional<Node> container = vdeNode.getParentNode();
-                if (!container.isPresent()) {
+                if (container.isEmpty()) {
                     reportIllegalPosition(node, reporter);
                     return;
                 }
@@ -102,7 +102,7 @@ public class VarValidator implements TypedValidator<VarType> {
                     }
                     // A local variable declaration ends up inside an ExpressionStmt.
                     if (c instanceof ExpressionStmt) {
-                        if (!vd.getInitializer().isPresent()) {
+                        if (vd.getInitializer().isEmpty()) {
                             reporter.report(node, "\"var\" needs an initializer.");
                         }
                         vd.getInitializer().ifPresent(initializer -> {

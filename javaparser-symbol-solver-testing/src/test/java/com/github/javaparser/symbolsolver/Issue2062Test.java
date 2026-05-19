@@ -39,16 +39,19 @@ public class Issue2062Test extends AbstractSymbolResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-        String s = "import java.util.Optional;\n" + "public class Base{\n"
-                + "    class Derived extends Base{\n"
-                + "    }\n"
-                + "    \n"
-                + "    public void bar(Optional<Base> o) {\n"
-                + "    }\n"
-                + "    public void foo() {\n"
-                + "        bar(Optional.of(new Derived()));\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                import java.util.Optional;
+                public class Base{
+                    class Derived extends Base{
+                    }
+                   \s
+                    public void bar(Optional<Base> o) {
+                    }
+                    public void foo() {
+                        bar(Optional.of(new Derived()));
+                    }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<MethodCallExpr> mces = cu.findAll(MethodCallExpr.class);
         assertEquals("bar(Optional.of(new Derived()))", mces.get(0).toString());

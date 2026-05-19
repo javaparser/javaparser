@@ -33,17 +33,20 @@ public class Issue4668Test extends AbstractResolutionTest {
 
     @Test
     void test() {
-        String code = "package com.example.test;\n" + "public class ThisExprTester {\n"
-                + "    Test test;\n"
-                + "    void getClasses() {\n"
-                + "        class innerClass {\n"
-                + "            public void test() {\n"
-                + "                ThisExprTester.this.test.test();\n"
-                + "            }\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n"
-                + "class Test { void test() {} }";
+        String code = """
+                package com.example.test;
+                public class ThisExprTester {
+                    Test test;
+                    void getClasses() {
+                        class innerClass {
+                            public void test() {
+                                ThisExprTester.this.test.test();
+                            }
+                        }
+                    }
+                }
+                class Test { void test() {} }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
 

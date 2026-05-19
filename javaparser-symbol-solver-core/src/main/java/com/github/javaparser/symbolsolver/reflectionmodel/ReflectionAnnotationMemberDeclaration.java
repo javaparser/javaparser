@@ -82,12 +82,12 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
     }
 
     private Expression transformDefaultValue(Object value) {
-        if (value instanceof Enum<?>) {
-            final Class<?> declaringClass = ((Enum<?>) value).getDeclaringClass();
-            final String name = ((Enum<?>) value).name();
+        if (value instanceof Enum<?> enum1) {
+            final Class<?> declaringClass = enum1.getDeclaringClass();
+            final String name = enum1.name();
             return new FieldAccessExpr(new NameExpr(declaringClass.getSimpleName()), name);
-        } else if (value instanceof Annotation) {
-            final Class<? extends Annotation> annotationType = ((Annotation) value).annotationType();
+        } else if (value instanceof Annotation annotation) {
+            final Class<? extends Annotation> annotationType = annotation.annotationType();
             final Method[] declaredMethods = annotationType.getDeclaredMethods();
             final NodeList<MemberValuePair> pairs = Arrays.stream(declaredMethods)
                     .map(m -> {
@@ -102,8 +102,7 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
 
         Function<Object, ? extends Expression> fn = valueAsExpressionConverters.get(value.getClass());
         if (fn == null)
-            throw new UnsupportedOperationException(String.format(
-                    "Obtaining the default value of the annotation member %s (of type %s) is not supported yet.",
+            throw new UnsupportedOperationException("Obtaining the default value of the annotation member %s (of type %s) is not supported yet.".formatted(
                     annotationMember.getName(), value.getClass().getSimpleName()));
         return fn.apply(value);
     }
@@ -118,8 +117,7 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
         if (rrtd.isSolved()) {
             return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration());
         }
-        throw new UnsupportedOperationException(String.format(
-                "Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
+        throw new UnsupportedOperationException("Obtaining the type of the annotation member %s is not supported yet.".formatted(annotationMember.getName()));
     }
 
     @Override

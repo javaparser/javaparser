@@ -70,8 +70,7 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
             for (ResolvedValueDeclaration decl : sb.getSymbolDeclarations()) {
                 if (decl.getName().equals(name)) {
                     Node parentNode = demandParentNode(wrappedNode, IS_NOT_ENCLOSED_EXPR);
-                    if (parentNode instanceof MethodCallExpr) {
-                        MethodCallExpr methodCallExpr = (MethodCallExpr) parentNode;
+                    if (parentNode instanceof MethodCallExpr methodCallExpr) {
                         MethodUsage methodUsage =
                                 JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = methodCallExpr.getArgumentPosition(wrappedNode, EXCLUDE_ENCLOSED_EXPR);
@@ -136,8 +135,7 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                         }
                         return Optional.empty();
                     }
-                    if (parentNode instanceof VariableDeclarator) {
-                        VariableDeclarator variableDeclarator = (VariableDeclarator) parentNode;
+                    if (parentNode instanceof VariableDeclarator variableDeclarator) {
                         ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
                         return solveLambdaParameter(t, index)
                                 .map(resolvedLamdbaTypeParametre ->
@@ -145,8 +143,7 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                                 .orElseThrow(() -> new UnsupportedOperationException(
                                         "functional method is not present in variable declarator"));
                     }
-                    if (parentNode instanceof ReturnStmt) {
-                        ReturnStmt returnStmt = (ReturnStmt) parentNode;
+                    if (parentNode instanceof ReturnStmt returnStmt) {
                         Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
                         if (optDeclaration.isPresent()) {
                             ResolvedType t = JavaParserFacade.get(typeSolver)
@@ -161,8 +158,7 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                                             "functional method is not present in return expression"));
                         }
                     }
-                    if (parentNode instanceof CastExpr) {
-                        CastExpr castExpr = (CastExpr) parentNode;
+                    if (parentNode instanceof CastExpr castExpr) {
                         ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(castExpr.getType());
                         return solveLambdaParameter(t, index)
                                 .map(resolvedLamdbaTypeParametre ->
@@ -170,8 +166,7 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                                 .orElseThrow(() -> new UnsupportedOperationException(
                                         "functional method is not present in cast expression"));
                     }
-                    if (parentNode instanceof AssignExpr) {
-                        AssignExpr expr = (AssignExpr) parentNode;
+                    if (parentNode instanceof AssignExpr expr) {
                         ResolvedType t = expr.calculateResolvedType();
                         return solveLambdaParameter(t, index)
                                 .map(resolvedLamdbaTypeParametre ->

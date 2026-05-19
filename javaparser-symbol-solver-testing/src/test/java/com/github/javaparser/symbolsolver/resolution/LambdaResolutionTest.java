@@ -199,12 +199,15 @@ class LambdaResolutionTest extends AbstractResolutionTest {
 
     @Test
     void lambdaAsVararg() {
-        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
-                + "    void acceptConsumers(Consumer<String>... consumers) {}\n"
-                + "    void test(Consumer<String> first) {\n"
-                + "        acceptConsumers(first, s -> System.out.println(s));\n"
-                + "    }\n"
-                + "}";
+        String source = """
+                import java.util.function.Consumer;
+                class Test {
+                    void acceptConsumers(Consumer<String>... consumers) {}
+                    void test(Consumer<String> first) {
+                        acceptConsumers(first, s -> System.out.println(s));
+                    }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(source);
@@ -216,13 +219,16 @@ class LambdaResolutionTest extends AbstractResolutionTest {
 
     @Test
     void lambdaOverloadsWithDifferentParameterCounts1() {
-        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
-                + "    void foo(Consumer<String> consumer) {}\n"
-                + "    void foo(Runnable r) {}\n"
-                + "    void test() {\n"
-                + "        foo(input -> {});\n"
-                + "    }\n"
-                + "}";
+        String source = """
+                import java.util.function.Consumer;
+                class Test {
+                    void foo(Consumer<String> consumer) {}
+                    void foo(Runnable r) {}
+                    void test() {
+                        foo(input -> {});
+                    }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(source);
@@ -235,13 +241,16 @@ class LambdaResolutionTest extends AbstractResolutionTest {
 
     @Test
     void lambdaOverloadsWithDifferentParameterCounts2() {
-        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
-                + "    void foo(Consumer<java.lang.String> consumer) {}\n"
-                + "    void foo(Runnable r) {}\n"
-                + "    void test() {\n"
-                + "        foo(() -> {});\n"
-                + "    }\n"
-                + "}";
+        String source = """
+                import java.util.function.Consumer;
+                class Test {
+                    void foo(Consumer<java.lang.String> consumer) {}
+                    void foo(Runnable r) {}
+                    void test() {
+                        foo(() -> {});
+                    }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(source);
@@ -252,14 +261,17 @@ class LambdaResolutionTest extends AbstractResolutionTest {
 
     @Test
     void lambdaOverloadsWithDifferentReturnTypes1() {
-        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
-                + "class Test {\n"
-                + "    void foo(Consumer<String> consumer) {}\n"
-                + "    void foo(Function<Integer, String> func) {}\n"
-                + "    void test() {\n"
-                + "        foo(input -> {});\n"
-                + "    }\n"
-                + "}";
+        String source = """
+                import java.util.function.Consumer;
+                import java.util.function.Function;
+                class Test {
+                    void foo(Consumer<String> consumer) {}
+                    void foo(Function<Integer, String> func) {}
+                    void test() {
+                        foo(input -> {});
+                    }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(source);
@@ -272,14 +284,17 @@ class LambdaResolutionTest extends AbstractResolutionTest {
 
     @Test
     void lambdaOverloadsWithDifferentReturnTypes2() {
-        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
-                + "class Test {\n"
-                + "    void foo(Consumer<String> consumer) {}\n"
-                + "    void foo(Function<Integer, String> func) {}\n"
-                + "    void test() {\n"
-                + "        foo(input -> { return \"\"; });\n"
-                + "    }\n"
-                + "}";
+        String source = """
+                import java.util.function.Consumer;
+                import java.util.function.Function;
+                class Test {
+                    void foo(Consumer<String> consumer) {}
+                    void foo(Function<Integer, String> func) {}
+                    void test() {
+                        foo(input -> { return ""; });
+                    }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(source);
@@ -292,13 +307,16 @@ class LambdaResolutionTest extends AbstractResolutionTest {
 
     @Test
     void lambdaUsedAsPolymorphicArgument() {
-        String source = "import java.util.function.Consumer;\n" + "import java.util.HashMap;"
-                + "class Test {\n"
-                + "    void test() {\n"
-                + "        HashMap<String, Consumer> map = new HashMap<>();"
-                + "        map.put(\"\", input -> {});\n"
-                + "    }\n"
-                + "}";
+        String source = """
+                import java.util.function.Consumer;
+                import java.util.HashMap;\
+                class Test {
+                    void test() {
+                        HashMap<String, Consumer> map = new HashMap<>();\
+                        map.put("", input -> {});
+                    }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(source);
@@ -310,17 +328,20 @@ class LambdaResolutionTest extends AbstractResolutionTest {
 
     @Test
     void lambdaUsedAsOverloadedArrayAlternativeArgument() {
-        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
-                + "class Foo<S extends Consumer, T> {\n"
-                + "    void foo(Object[] ts) {}\n"
-                + "    void foo(T t) {}\n"
-                + "}\n"
-                + "class Test {\n"
-                + "    void test() {\n"
-                + "        Foo<Consumer<Integer>, Function<Integer, Integer>> foo = new Foo<>();\n"
-                + "        foo.foo(value -> { return 2; });\n"
-                + "    }\n"
-                + "}";
+        String source = """
+                import java.util.function.Consumer;
+                import java.util.function.Function;
+                class Foo<S extends Consumer, T> {
+                    void foo(Object[] ts) {}
+                    void foo(T t) {}
+                }
+                class Test {
+                    void test() {
+                        Foo<Consumer<Integer>, Function<Integer, Integer>> foo = new Foo<>();
+                        foo.foo(value -> { return 2; });
+                    }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(source);
@@ -334,17 +355,20 @@ class LambdaResolutionTest extends AbstractResolutionTest {
     @Test
     void lambdaUsedAsOverloadedPolymorphicArgument1() {
 
-        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
-                + "class Foo<S extends Consumer, T> {\n"
-                + "    void foo(T t) {}\n"
-                + "    void foo(S s) {}\n"
-                + "}\n"
-                + "class Test {\n"
-                + "    void test() {\n"
-                + "        Foo<Consumer<Integer>, Function<Integer, Integer>> foo = new Foo<>();\n"
-                + "        foo.foo(value -> { return 2; });\n"
-                + "    }\n"
-                + "}";
+        String source = """
+                import java.util.function.Consumer;
+                import java.util.function.Function;
+                class Foo<S extends Consumer, T> {
+                    void foo(T t) {}
+                    void foo(S s) {}
+                }
+                class Test {
+                    void test() {
+                        Foo<Consumer<Integer>, Function<Integer, Integer>> foo = new Foo<>();
+                        foo.foo(value -> { return 2; });
+                    }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(source);

@@ -34,17 +34,20 @@ public class Issue3859Test extends AbstractResolutionTest {
 
     @Test
     void test() {
-        String code = "import java.util.function.Consumer;\n" + "\n"
-                + "class Demo {\n"
-                + "    void foo(Consumer<String> arg) {}\n"
-                + "    void print(Object arg) {}\n"
-                + "    public void bar() {\n"
-                + "        foo(s->print(s));\n"
-                + "    }\n"
-                + "    public void baz() {\n"
-                + "        foo((s->print(s)));\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                import java.util.function.Consumer;
+                
+                class Demo {
+                    void foo(Consumer<String> arg) {}
+                    void print(Object arg) {}
+                    public void bar() {
+                        foo(s->print(s));
+                    }
+                    public void baz() {
+                        foo((s->print(s)));
+                    }
+                }
+                """;
         CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
                 .parse(code);
 

@@ -34,13 +34,15 @@ public class Issue4124Test extends AbstractResolutionTest {
     @Test
     void issue4124_withDifferentTypeParameterName() {
 
-        String code = "import java.util.Collections;\n"
-                + "import java.util.List;\n"
-                + "public class Foo<E> {\n"
-                + "    public void test(List<E> ls){\n"
-                + "        Collections.synchronizedList(ls);\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                import java.util.Collections;
+                import java.util.List;
+                public class Foo<E> {
+                    public void test(List<E> ls){
+                        Collections.synchronizedList(ls);
+                    }
+                }
+                """;
 
         CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
                 .parse(code);
@@ -52,13 +54,15 @@ public class Issue4124Test extends AbstractResolutionTest {
 
     @Test
     void issue4124_withSameTypeParameterName() {
-        String code = "import java.util.Collections;\n"
-                + "import java.util.List;\n"
-                + "public class Foo<T> {\n"
-                + "    public void test(List<T> ls){\n"
-                + "        Collections.synchronizedList(ls);\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                import java.util.Collections;
+                import java.util.List;
+                public class Foo<T> {
+                    public void test(List<T> ls){
+                        Collections.synchronizedList(ls);
+                    }
+                }
+                """;
 
         CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
                 .parse(code);

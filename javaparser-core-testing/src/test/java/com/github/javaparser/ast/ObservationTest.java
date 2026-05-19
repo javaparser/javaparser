@@ -44,8 +44,7 @@ public class ObservationTest {
             @Override
             public void propertyChange(
                     Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                changes.add(String.format(
-                        "%s.%s changed from %s to %s",
+                changes.add("%s.%s changed from %s to %s".formatted(
                         observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
             }
         };
@@ -92,8 +91,7 @@ public class ObservationTest {
             @Override
             public void propertyChange(
                     Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                changes.add(String.format(
-                        "%s.%s changed from %s to %s",
+                changes.add("%s.%s changed from %s to %s".formatted(
                         observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
             }
         };
@@ -139,8 +137,7 @@ public class ObservationTest {
             @Override
             public void propertyChange(
                     Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                changes.add(String.format(
-                        "%s.%s changed from %s to %s",
+                changes.add("%s.%s changed from %s to %s".formatted(
                         observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
             }
         };
@@ -202,8 +199,7 @@ public class ObservationTest {
             @Override
             public void propertyChange(
                     Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                changes.add(String.format(
-                        "%s.%s changed from %s to %s",
+                changes.add("%s.%s changed from %s to %s".formatted(
                         observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
             }
         };

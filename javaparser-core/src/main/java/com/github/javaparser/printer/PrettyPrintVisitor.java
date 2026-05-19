@@ -578,7 +578,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (!n.getVariables().isEmpty()) {
             Optional<Type> maximumCommonType = n.getMaximumCommonType();
             maximumCommonType.ifPresent(t -> t.accept(this, arg));
-            if (!maximumCommonType.isPresent()) {
+            if (maximumCommonType.isEmpty()) {
                 printer.print("???");
             }
         }
@@ -919,7 +919,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                 }
                 // check if the parent is a method call and thus we are in an argument list
                 columnAlignFirstMethodChain.set(
-                        !p.filter(MethodCallExpr.class::isInstance).isPresent());
+                        p.filter(MethodCallExpr.class::isInstance).isEmpty());
             }
         }
         // we are at the last method call of a call chain
@@ -1128,7 +1128,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                 }
             }
         }
-        if (!n.getBody().isPresent()) {
+        if (n.getBody().isEmpty()) {
             printer.print(";");
         } else {
             printer.print(" ");
@@ -1767,9 +1767,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
         printer.print(" -> ");
         final Statement body = n.getBody();
-        if (body instanceof ExpressionStmt) {
+        if (body instanceof ExpressionStmt stmt) {
             // Print the expression directly
-            ((ExpressionStmt) body).getExpression().accept(this, arg);
+            stmt.getExpression().accept(this, arg);
         } else {
             body.accept(this, arg);
         }

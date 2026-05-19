@@ -32,10 +32,12 @@ public class Issue4747Test extends AbstractLexicalPreservingTest {
 
     @Test
     void test() {
-        final String code = "public class TestClass {\n"
-                + "    @com.abc.def.TestMarkerAnnotation\n"
-                + "    public void method1() {}\n"
-                + "}";
+        final String code = """
+                public class TestClass {
+                    @com.abc.def.TestMarkerAnnotation
+                    public void method1() {}
+                }\
+                """;
         considerCode(code);
         cu.accept(
                 new ModifierVisitor<Void>() {
@@ -51,7 +53,12 @@ public class Issue4747Test extends AbstractLexicalPreservingTest {
 
         String actual = LexicalPreservingPrinter.print(cu);
         String expected =
-                "public class TestClass {\n" + "    @TestMarkerAnnotation\n" + "    public void method1() {}\n" + "}";
+                """
+                public class TestClass {
+                    @TestMarkerAnnotation
+                    public void method1() {}
+                }\
+                """;
 
         assertEqualsStringIgnoringEol(expected, actual);
     }

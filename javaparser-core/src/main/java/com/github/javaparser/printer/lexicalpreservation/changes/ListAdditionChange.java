@@ -46,8 +46,7 @@ public class ListAdditionChange implements Change {
     public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
             Object currentRawValue = new NoChange().getValue(property, node);
-            if (currentRawValue instanceof Optional) {
-                Optional<?> optional = (Optional<?>) currentRawValue;
+            if (currentRawValue instanceof Optional<?> optional) {
                 currentRawValue = optional.orElse(null);
             }
             if (!(currentRawValue instanceof NodeList)) {

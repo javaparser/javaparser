@@ -59,8 +59,7 @@ class ReflectionClassAdapter {
             return Optional.empty();
         }
         java.lang.reflect.Type superType = clazz.getGenericSuperclass();
-        if (superType instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) superType;
+        if (superType instanceof ParameterizedType parameterizedType) {
             List<ResolvedType> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                     .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                     .collect(Collectors.toList());
@@ -73,14 +72,13 @@ class ReflectionClassAdapter {
     public List<ResolvedReferenceType> getInterfaces() {
         List<ResolvedReferenceType> interfaces = new ArrayList<>();
         for (java.lang.reflect.Type superInterface : clazz.getGenericInterfaces()) {
-            if (superInterface instanceof ParameterizedType) {
-                ParameterizedType parameterizedType = (ParameterizedType) superInterface;
+            if (superInterface instanceof ParameterizedType parameterizedType) {
                 List<ResolvedType> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                         .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                         .collect(Collectors.toList());
                 interfaces.add(new ReferenceTypeImpl(
                         new ReflectionInterfaceDeclaration(
-                                (Class<?>) ((ParameterizedType) superInterface).getRawType(), typeSolver),
+                                (Class<?>) parameterizedType.getRawType(), typeSolver),
                         typeParameters));
             } else {
                 interfaces.add(new ReferenceTypeImpl(
@@ -197,8 +195,7 @@ class ReflectionClassAdapter {
         if (type.describe().equals(typeDeclaration.getQualifiedName())) {
             return true;
         }
-        if (type instanceof ReferenceTypeImpl) {
-            ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
+        if (type instanceof ReferenceTypeImpl otherTypeDeclaration) {
             if (otherTypeDeclaration.getTypeDeclaration().isPresent()) {
                 return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(typeDeclaration);
             }

@@ -114,7 +114,7 @@ public abstract class AbstractMethodLikeDeclarationContext<
             if (localType.getName().getId().equals(name)) {
                 return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(localType));
             }
-            if (name.startsWith(String.format("%s.", localType.getName()))) {
+            if (name.startsWith("%s.".formatted(localType.getName()))) {
                 return JavaParserFactory.getContext(localType, typeSolver)
                         .solveType(name.substring(localType.getName().getId().length() + 1));
             }

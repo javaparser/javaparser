@@ -42,7 +42,7 @@ public interface AssociableToASTTest {
     default <T extends AssociableToAST> T safeCast(AssociableToAST instance, Class<T> clazz) {
         if (clazz.isInstance(instance)) return clazz.cast(instance);
         throw new UnsupportedOperationException(
-                String.format("Unable to cast %s into %s.", instance.getClass().getName(), clazz.getName()));
+                "Unable to cast %s into %s.".formatted(instance.getClass().getName(), clazz.getName()));
     }
 
     /**

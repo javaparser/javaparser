@@ -87,7 +87,12 @@ public class RemoveMethodGenerator extends NodeGenerator {
 
     private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {
         return f(
-                "if (node == %s) {" + "    %s();" + "    return true;\n" + "}",
+                """
+                if (node == %s) {\
+                    %s();\
+                    return true;
+                }\
+                """,
                 property.getName(), removeAttributeMethodName);
     }
 

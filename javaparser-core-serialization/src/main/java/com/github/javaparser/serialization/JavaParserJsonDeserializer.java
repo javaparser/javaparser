@@ -86,7 +86,7 @@ public class JavaParserJsonDeserializer {
                         nodeMetaModel.getAllPropertyMetaModels().stream()
                                 .filter(mm -> mm.getName().equals(name))
                                 .findFirst();
-                if (!optionalPropertyMetaModel.isPresent()) {
+                if (optionalPropertyMetaModel.isEmpty()) {
                     deferredJsonValues.put(name, nodeJson.get(name));
                     continue;
                 }
@@ -192,9 +192,8 @@ public class JavaParserJsonDeserializer {
      * @see com.github.javaparser.ParserConfiguration#ParserConfiguration()
      */
     private void setSymbolResolverIfCompilationUnit(Node node) {
-        if (node instanceof CompilationUnit
+        if (node instanceof CompilationUnit cu
                 && StaticJavaParser.getConfiguration().getSymbolResolver().isPresent()) {
-            CompilationUnit cu = (CompilationUnit) node;
             cu.setData(
                     Node.SYMBOL_RESOLVER_KEY,
                     StaticJavaParser.getConfiguration().getSymbolResolver().get());

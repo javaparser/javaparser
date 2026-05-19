@@ -141,17 +141,17 @@ public class VarType extends Type {
         }
         final VariableDeclarator variableDeclarator = (VariableDeclarator) parent;
         Optional<Expression> initializer = variableDeclarator.getInitializer();
-        if (!initializer.isPresent()) {
+        if (initializer.isEmpty()) {
             // When a `var` type decl has no initializer it may be part of a
             // for-each statement (e.g. `for(var i : expr)`).
             Optional<ForEachStmt> forEachStmt = forEachStmtWithVariableDeclarator(variableDeclarator);
             if (forEachStmt.isPresent()) {
                 Expression iterable = forEachStmt.get().getIterable();
                 ResolvedType iterType = iterable.calculateResolvedType();
-                if (iterType instanceof ResolvedArrayType) {
+                if (iterType instanceof ResolvedArrayType type) {
                     // The type of a variable in a for-each loop with an array
                     // is the component type of the array.
-                    return ((ResolvedArrayType) iterType).getComponentType();
+                    return type.getComponentType();
                 }
                 if (iterType.isReferenceType()) {
                     // The type of a variable in a for-each loop with an
@@ -176,11 +176,11 @@ public class VarType extends Type {
 
     private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(VariableDeclarator variableDeclarator) {
         Optional<Node> node = variableDeclarator.getParentNode();
-        if (!node.isPresent() || !(node.get() instanceof VariableDeclarationExpr)) {
+        if (node.isEmpty() || !(node.get() instanceof VariableDeclarationExpr)) {
             return Optional.empty();
         }
         node = node.get().getParentNode();
-        if (!node.isPresent() || !(node.get() instanceof ForEachStmt)) {
+        if (node.isEmpty() || !(node.get() instanceof ForEachStmt)) {
             return Optional.empty();
         }
         return Optional.of((ForEachStmt) node.get());

@@ -43,15 +43,18 @@ public class Issue1950Test extends AbstractResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         StaticJavaParser.setConfiguration(config);
 
-        String s = "import java.util.concurrent.Callable;\n" + "class Foo { \n"
-                + "  void foo() {\n"
-                + "     method(()->{});\n"
-                + "  }\n"
-                + "  public void method(Runnable lambda) {\n"
-                + "  }\n"
-                + "  public <T> void method(Callable<T> lambda) {\n"
-                + "  }\n"
-                + "}";
+        String s = """
+                import java.util.concurrent.Callable;
+                class Foo {\s
+                  void foo() {
+                     method(()->{});
+                  }
+                  public void method(Runnable lambda) {
+                  }
+                  public <T> void method(Callable<T> lambda) {
+                  }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(s);
         MethodCallExpr mce = cu.findFirst(MethodCallExpr.class).get();
 

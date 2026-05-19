@@ -429,19 +429,22 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void resolveOverloadedMethodReference() {
-        String s = "import java.util.HashSet;\n" + "import java.util.Set;\n"
-                + "import java.util.stream.Collectors;\n"
-                + "\n"
-                + "public class StreamTest {\n"
-                + "    \n"
-                + "    public void streamTest () {\n"
-                + "        Set<Integer> intSet = new HashSet<Integer>() {{\n"
-                + "           add(1);\n"
-                + "           add(2);\n"
-                + "        }};\n"
-                + "        Set <String> strings = intSet.stream().map(String::valueOf).collect(Collectors.toSet());\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                import java.util.HashSet;
+                import java.util.Set;
+                import java.util.stream.Collectors;
+                
+                public class StreamTest {
+                   \s
+                    public void streamTest () {
+                        Set<Integer> intSet = new HashSet<Integer>() {{
+                           add(1);
+                           add(2);
+                        }};
+                        Set <String> strings = intSet.stream().map(String::valueOf).collect(Collectors.toSet());
+                    }
+                }\
+                """;
         TypeSolver typeSolver = new ReflectionTypeSolver();
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(s);
@@ -468,19 +471,22 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void issue2657Test_StringValueOfInStream() {
-        String s = "import java.util.HashSet;\n" + "import java.util.Set;\n"
-                + "import java.util.stream.Collectors;\n"
-                + "\n"
-                + "public class StreamTest {\n"
-                + "    \n"
-                + "    public void streamTest () {\n"
-                + "        Set<Integer> intSet = new HashSet<Integer>() {{\n"
-                + "           add(1);\n"
-                + "           add(2);\n"
-                + "        }};\n"
-                + "        Set <String> strings = intSet.stream().map(String::valueOf).collect(Collectors.toSet());\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                import java.util.HashSet;
+                import java.util.Set;
+                import java.util.stream.Collectors;
+                
+                public class StreamTest {
+                   \s
+                    public void streamTest () {
+                        Set<Integer> intSet = new HashSet<Integer>() {{
+                           add(1);
+                           add(2);
+                        }};
+                        Set <String> strings = intSet.stream().map(String::valueOf).collect(Collectors.toSet());
+                    }
+                }\
+                """;
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
@@ -503,20 +509,23 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
     @Test
     public void instanceMethodReferenceTest() {
         // Cfr. #2666
-        String s = "import java.util.stream.Stream;\n" + "import java.util.List;\n"
-                + "\n"
-                + "public class StreamTest {\n"
-                + "\n"
-                + "    public void streamTest() {\n"
-                + "        String[] arr = {\"1\", \"2\", \"3\", \"\", null};\n"
-                + "List<String> list = null;\n"
-                + "        list.stream().filter(this::isNotEmpty).forEach(s -> System.out.println(s));\n"
-                + "    }\n"
-                + "\n"
-                + "    private boolean isNotEmpty(String s) {\n"
-                + "        return s != null && s.length() > 0;\n"
-                + "    }\n"
-                + "}\n";
+        String s = """
+                import java.util.stream.Stream;
+                import java.util.List;
+                
+                public class StreamTest {
+                
+                    public void streamTest() {
+                        String[] arr = {"1", "2", "3", "", null};
+                List<String> list = null;
+                        list.stream().filter(this::isNotEmpty).forEach(s -> System.out.println(s));
+                    }
+                
+                    private boolean isNotEmpty(String s) {
+                        return s != null && s.length() > 0;
+                    }
+                }
+                """;
         TypeSolver typeSolver = new ReflectionTypeSolver(false);
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(s);
@@ -535,29 +544,32 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
     public void unboundNonStaticMethodsTest() {
         // Example from:
         // https://javaworld.com/article/2946534/java-101-the-essential-java-language-features-tour-part-7.html
-        String s = "import java.util.function.Function;\n" + "\n"
-                + "public class MRDemo\n"
-                + "{\n"
-                + "   public static void main(String[] args)\n"
-                + "   {\n"
-                + "      print(String::toLowerCase, \"STRING TO LOWERCASE\");\n"
-                + "      print(s -> s.toLowerCase(), \"STRING TO LOWERCASE\");\n"
-                + "      print(new Function<String, String>()\n"
-                + "      {\n"
-                + "         @Override\n"
-                + "         public String apply(String s) // receives argument in parameter s;\n"
-                + "         {                             // doesn't need to close over s\n"
-                + "            return s.toLowerCase();\n"
-                + "         }\n"
-                + "      }, \"STRING TO LOWERCASE\");\n"
-                + "   }\n"
-                + "\n"
-                + "   public static void print(Function<String, String> function, String\n"
-                + "s)\n"
-                + "   {\n"
-                + "      System.out.println(function.apply(s));\n"
-                + "   }\n"
-                + "}";
+        String s = """
+                import java.util.function.Function;
+                
+                public class MRDemo
+                {
+                   public static void main(String[] args)
+                   {
+                      print(String::toLowerCase, "STRING TO LOWERCASE");
+                      print(s -> s.toLowerCase(), "STRING TO LOWERCASE");
+                      print(new Function<String, String>()
+                      {
+                         @Override
+                         public String apply(String s) // receives argument in parameter s;
+                         {                             // doesn't need to close over s
+                            return s.toLowerCase();
+                         }
+                      }, "STRING TO LOWERCASE");
+                   }
+                
+                   public static void print(Function<String, String> function, String
+                s)
+                   {
+                      System.out.println(function.apply(s));
+                   }
+                }\
+                """;
 
         TypeSolver typeSolver = new ReflectionTypeSolver(false);
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
@@ -575,20 +587,23 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void testIssue3289() {
-        String code = "import java.util.ArrayList;\n" + "import java.util.List;\n"
-                + "\n"
-                + "public class testHLS2 {\n"
-                + "\n"
-                + "    static class C {\n"
-                + "        void print(String s) { }\n"
-                + "    }\n"
-                + "\n"
-                + "    public static void main(String[] args) {\n"
-                + "        C c = new C();\n"
-                + "        List<String> l = new ArrayList<>();\n"
-                + "        l.forEach(c::print);\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                import java.util.ArrayList;
+                import java.util.List;
+                
+                public class testHLS2 {
+                
+                    static class C {
+                        void print(String s) { }
+                    }
+                
+                    public static void main(String[] args) {
+                        C c = new C();
+                        List<String> l = new ArrayList<>();
+                        l.forEach(c::print);
+                    }
+                }
+                """;
         TypeSolver typeSolver = new ReflectionTypeSolver();
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(code);

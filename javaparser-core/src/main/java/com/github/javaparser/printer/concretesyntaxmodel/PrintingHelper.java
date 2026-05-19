@@ -25,11 +25,11 @@ import com.github.javaparser.printer.Stringable;
 class PrintingHelper {
 
     static String printToString(Object value) {
-        if (value instanceof Stringable) {
-            return ((Stringable) value).asString();
+        if (value instanceof Stringable stringable) {
+            return stringable.asString();
         }
-        if (value instanceof Enum) {
-            return ((Enum) value).name().toLowerCase();
+        if (value instanceof Enum enum1) {
+            return enum1.name().toLowerCase();
         } else {
             if (value != null) {
                 return value.toString();

@@ -277,7 +277,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
-        if (!classOrInterfaceType.getTypeArguments().isPresent()) {
+        if (classOrInterfaceType.getTypeArguments().isEmpty()) {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
         }
         List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get().stream()
@@ -427,7 +427,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         @Override
         public String toDescriptor() {
-            return String.format("()%s", getReturnType().toDescriptor());
+            return "()%s".formatted(getReturnType().toDescriptor());
         }
     }
 
@@ -551,7 +551,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         @Override
         public String toDescriptor() {
-            return String.format("(Ljava/lang/String;)%s", getReturnType().toDescriptor());
+            return "(Ljava/lang/String;)%s".formatted(getReturnType().toDescriptor());
         }
     }
 

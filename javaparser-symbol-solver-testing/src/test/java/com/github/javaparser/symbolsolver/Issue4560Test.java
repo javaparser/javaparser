@@ -35,14 +35,16 @@ public class Issue4560Test extends AbstractResolutionTest {
     @Test
     void test() {
 
-        String code = "public class MyExample {\n"
-                + "\n"
-                + "  public static void main(String[] args) {\n"
-                + "    \"\"\"\n"
-                + "        Hello multiple %s!\n"
-                + "        \"\"\".format(\"world\");\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                public class MyExample {
+                
+                  public static void main(String[] args) {
+                    ""\"
+                        Hello multiple %s!
+                        ""\".format("world");
+                  }
+                }\
+                """;
 
         ParserConfiguration parserConfiguration = new ParserConfiguration()
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_15)

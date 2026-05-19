@@ -38,6 +38,7 @@ import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.utils.SourceRoot;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class NodeMetaModelGenerator extends AbstractGenerator {
@@ -49,14 +50,14 @@ public class NodeMetaModelGenerator extends AbstractGenerator {
                     new InitializeConstructorParametersStatementsGenerator();
 
     public static final String GENERATED_CLASS_COMMENT =
-            "" + "This file, class, and its contents are completely generated based on:"
-                    + "\n<ul>"
-                    + "\n    <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>"
-                    + "\n    <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>"
-                    + "\n</ul>"
-                    + "\n"
-                    + "\nFor this reason, any changes made directly to this file will be overwritten the next time generators are run."
-                    + "";
+            """
+            This file, class, and its contents are completely generated based on:
+            <ul>
+                <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>
+                <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>
+            </ul>
+            
+            For this reason, any changes made directly to this file will be overwritten the next time generators are run.""";
 
     private static final String GENERATED_JAVADOC_COMMENT =
             "Warning: The content of this class is partially or completely generated - manual edits risk being overwritten.";
@@ -184,7 +185,7 @@ public class NodeMetaModelGenerator extends AbstractGenerator {
     }
 
     private boolean fieldShouldBeIgnored(Field reflectionField) {
-        return java.lang.reflect.Modifier.isStatic(reflectionField.getModifiers())
+        return Modifier.isStatic(reflectionField.getModifiers())
                 || reflectionField.isAnnotationPresent(InternalProperty.class);
     }
 }

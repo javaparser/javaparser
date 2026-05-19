@@ -76,8 +76,8 @@ class CommentsInserter {
      */
     void insertComments(Node node, TreeSet<Comment> commentsToAttribute) {
         if (commentsToAttribute.isEmpty()) return;
-        if (node instanceof CompilationUnit) {
-            insertComments((CompilationUnit) node, commentsToAttribute);
+        if (node instanceof CompilationUnit unit) {
+            insertComments(unit, commentsToAttribute);
         }
         /* the comment can...
         1) be inside one of the children, then the comment should be associated to this child
@@ -125,13 +125,13 @@ class CommentsInserter {
         PositionUtils.sortByBeginPosition(
                 childrenAndComments, configuration.isIgnoreAnnotationsWhenAttributingComments());
         for (Node thing : childrenAndComments) {
-            if (thing instanceof Comment) {
-                previousComment = (Comment) thing;
+            if (thing instanceof Comment comment) {
+                previousComment = comment;
                 if (!previousComment.isOrphan()) {
                     previousComment = null;
                 }
             } else {
-                if (previousComment != null && !thing.getComment().isPresent()) {
+                if (previousComment != null && thing.getComment().isEmpty()) {
                     if (!configuration.isDoNotAssignCommentsPrecedingEmptyLines()
                             || !thereAreLinesBetween(previousComment, thing)) {
                         thing.setComment(previousComment);
@@ -177,7 +177,7 @@ class CommentsInserter {
         // The node start and end at the same line as the comment,
         // let's give to it the comment
         if (node.getBegin().get().line == lineComment.getBegin().get().line
-                && !node.getComment().isPresent()) {
+                && node.getComment().isEmpty()) {
             if (!(node instanceof Comment)) {
                 node.setComment(lineComment);
             }

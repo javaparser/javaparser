@@ -317,8 +317,8 @@ public class NodeList<N extends Node>
      */
     @Override
     public boolean remove(Object o) {
-        if (o instanceof Node) {
-            return remove((Node) o);
+        if (o instanceof Node node) {
+            return remove(node);
         }
         return false;
     }

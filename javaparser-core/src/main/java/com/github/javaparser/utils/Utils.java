@@ -176,7 +176,7 @@ public class Utils {
     private static String stringTransformer(
             String s, String operationDescription, Function<String, String> transformation) {
         if (s.isEmpty()) {
-            throw new IllegalArgumentException(String.format("You cannot %s an empty string", operationDescription));
+            throw new IllegalArgumentException("You cannot %s an empty string".formatted(operationDescription));
         }
         return transformation.apply(s.substring(0, 1)) + s.substring(1);
     }
@@ -188,15 +188,15 @@ public class Utils {
         if (value == null) {
             return true;
         }
-        if (value instanceof Optional) {
-            if (((Optional) value).isPresent()) {
-                value = ((Optional) value).get();
+        if (value instanceof Optional optional) {
+            if (optional.isPresent()) {
+                value = optional.get();
             } else {
                 return true;
             }
         }
-        if (value instanceof Collection) {
-            if (((Collection) value).isEmpty()) {
+        if (value instanceof Collection collection) {
+            if (collection.isEmpty()) {
                 return true;
             }
         }
@@ -217,7 +217,7 @@ public class Utils {
         //			return true;
         //		}
         //        return false;
-        return value instanceof Optional ? !((Optional) value).isPresent() : false;
+        return value instanceof Optional o ? o.isEmpty() : false;
     }
 
     /**

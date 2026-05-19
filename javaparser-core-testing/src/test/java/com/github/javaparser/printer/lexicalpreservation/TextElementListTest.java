@@ -727,8 +727,8 @@ class TextElementListTest {
     void anyMatch_withComplexPredicate_worksCorrectly() {
         TextElementList list = TextElementList.of(space(), token("myVariable"), space(), token("otherVar"));
 
-        boolean hasSpecificText = list.anyMatch(el -> el instanceof TokenTextElement
-                && ((TokenTextElement) el).getText().equals("myVariable"));
+        boolean hasSpecificText = list.anyMatch(el -> el instanceof TokenTextElement tte
+                && tte.getText().equals("myVariable"));
 
         assertTrue(hasSpecificText);
     }

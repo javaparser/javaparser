@@ -36,14 +36,17 @@ class Issue3045Test extends AbstractResolutionTest {
 
     @Test
     void createAnonymousClassWithUnsolvableParent() {
-        String sourceCode = "import com.google.common.base.Function;\n" + "public class A {\n"
-                + "    private static final Function<Object, Object> MAP = new Function<Object, Object>() {\n"
-                + "        @Override\n"
-                + "        public Object apply(Object input) {\n"
-                + "            return null;\n"
-                + "        }\n"
-                + "    };\n"
-                + "}";
+        String sourceCode = """
+                import com.google.common.base.Function;
+                public class A {
+                    private static final Function<Object, Object> MAP = new Function<Object, Object>() {
+                        @Override
+                        public Object apply(Object input) {
+                            return null;
+                        }
+                    };
+                }\
+                """;
 
         // Create the parser
         JavaParser parser = createParserWithResolver(defaultTypeSolver());

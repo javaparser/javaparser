@@ -27,7 +27,6 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -35,7 +34,7 @@ import org.junit.jupiter.api.Test;
 class SourceZipTest {
 
     private final Path testDir = CodeGenerationUtils.mavenModuleRoot(SourceZipTest.class)
-            .resolve(Paths.get(
+            .resolve(Path.of(
                     "..",
                     "javaparser-core-testing",
                     "src",

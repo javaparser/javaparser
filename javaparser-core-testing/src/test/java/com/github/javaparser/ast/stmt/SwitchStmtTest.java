@@ -53,10 +53,13 @@ class SwitchStmtTest {
 
     @Test
     void classicSwitch() {
-        SwitchStmt switchStmt = parseStatement("switch (day) {\n" + "    case TUESDAY: System.out.println(7); break;\n"
-                        + "    case FRIDAY: System.out.println(8); break;\n"
-                        + "    default: System.out.println(-1); \n"
-                        + "}")
+        SwitchStmt switchStmt = parseStatement("""
+                        switch (day) {
+                            case TUESDAY: System.out.println(7); break;
+                            case FRIDAY: System.out.println(8); break;
+                            default: System.out.println(-1);\s
+                        }\
+                        """)
                 .asSwitchStmt();
 
         assertEquals(STATEMENT_GROUP, switchStmt.getEntry(0).getType());
@@ -85,7 +88,11 @@ class SwitchStmtTest {
     @Test
     void jep441Example1() {
         SwitchStmt switchStmt = parseStatement(
-                        "switch (day) {\n" + "    case null, default -> System.out.println(-1); \n" + "}")
+                        """
+                        switch (day) {
+                            case null, default -> System.out.println(-1);\s
+                        }\
+                        """)
                 .asSwitchStmt();
 
         assertTrue(switchStmt.getEntry(0).isDefault());
@@ -96,7 +103,11 @@ class SwitchStmtTest {
     @Test
     void issue4455Test() {
         SwitchStmt switchStmt = parseStatement(
-                        "switch (column) {\n" + "  case CustomDeployTableModel.ARTIFACT_NAME:\n" + "}")
+                        """
+                        switch (column) {
+                          case CustomDeployTableModel.ARTIFACT_NAME:
+                        }\
+                        """)
                 .asSwitchStmt();
 
         assertEquals(Node.Parsedness.PARSED, switchStmt.getParsed());

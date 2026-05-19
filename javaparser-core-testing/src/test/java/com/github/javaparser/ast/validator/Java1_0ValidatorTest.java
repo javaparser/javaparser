@@ -142,11 +142,14 @@ class Java1_0ValidatorTest {
 
     @Test
     void explicitConstructorInvocationAsFirstStatementAllowed() {
-        String code = "class Foo {\n" + "    public Foo() {\n"
-                + "        super();\n"
-                + "        int x = 2;\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                class Foo {
+                    public Foo() {
+                        super();
+                        int x = 2;
+                    }
+                }\
+                """;
 
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertNoProblems(result);
@@ -154,11 +157,14 @@ class Java1_0ValidatorTest {
 
     @Test
     void explicitConstructorInvocationAfterFirstStatementNotAllowed() {
-        String code = "class Foo {\n" + "    public Foo() {\n"
-                + "        int x = 2;\n"
-                + "        super();\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                class Foo {
+                    public Foo() {
+                        int x = 2;
+                        super();
+                    }
+                }\
+                """;
 
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertProblems(

@@ -37,13 +37,16 @@ class Issue1793Test extends AbstractLexicalPreservingTest {
 
     @Test
     void importIsAddedOnTheSameLine() {
-        considerCode("public class Test {\n" + "  public void foo(Bar x, Bar y) {\n"
-                + "    x.barf(); // expected to be wrapped\n"
-                + "    x.bark(); // expected to be wrapped\n"
-                + "    y.barf(); // expected to be wrapped\n"
-                + "    y.bark(); // expected to be wrapped\n"
-                + "  }\n"
-                + "}");
+        considerCode("""
+                public class Test {
+                  public void foo(Bar x, Bar y) {
+                    x.barf(); // expected to be wrapped
+                    x.bark(); // expected to be wrapped
+                    y.barf(); // expected to be wrapped
+                    y.bark(); // expected to be wrapped
+                  }
+                }\
+                """);
         assertEquals(LexicalPreservingPrinter.print(cu), LexicalPreservingPrinter.print(cu.clone()));
     }
 }

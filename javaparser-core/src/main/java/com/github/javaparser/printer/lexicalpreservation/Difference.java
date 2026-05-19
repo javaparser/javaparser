@@ -721,7 +721,7 @@ public class Difference {
      */
     private boolean isArrayType(DifferenceElement element) {
         CsmElement csmElem = element.getElement();
-        return csmElem instanceof LexicalDifferenceCalculator.CsmChild
+        return csmElem instanceof LexicalDifferenceCalculator.CsmChild cc
                 && ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType;
     }
 
@@ -796,7 +796,7 @@ public class Difference {
         // number of token to skip
         int step = 0;
         Optional<JavaToken> next = element.getToken().getNextToken();
-        if (!next.isPresent()) return step;
+        if (next.isEmpty()) return step;
         // because there is a token, first we need to increment the number of token to skip
         step++;
         // manage nested diamond operators by incrementing the level on LT token and decrementing on GT
@@ -821,7 +821,7 @@ public class Difference {
         // number of token to skip
         int step = 0;
         Optional<JavaToken> next = element.getToken().getNextToken();
-        if (!next.isPresent()) return step;
+        if (next.isEmpty()) return step;
         // because there is a token, first we need to increment the number of token to skip
         step++;
         // manage array Level by decrementing the level on right bracket token
@@ -897,8 +897,8 @@ public class Difference {
             boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
             for (TextElement e : elements) {
                 if (!nextIsRightBrace
-                        && e instanceof TokenTextElement
-                        && originalElements.get(originalIndex).isToken(((TokenTextElement) e).getTokenKind())) {
+                        && e instanceof TokenTextElement element
+                        && originalElements.get(originalIndex).isToken(element.getTokenKind())) {
                     originalIndex++;
                 } else {
                     nodeText.addElement(originalIndex++, e);

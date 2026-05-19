@@ -177,8 +177,7 @@ class NodeListTest extends AbstractLexicalPreservingTest {
                 @Override
                 public void propertyChange(
                         Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                    propertyChanges.add(String.format(
-                            "%s.%s changed from %s to %s",
+                    propertyChanges.add("%s.%s changed from %s to %s".formatted(
                             observedNode.getClass().getSimpleName(),
                             property.name().toLowerCase(),
                             oldValue,
@@ -187,16 +186,14 @@ class NodeListTest extends AbstractLexicalPreservingTest {
 
                 @Override
                 public void parentChange(Node observedNode, Node previousParent, Node newParent) {
-                    parentChanges.add(String.format(
-                            "%s 's parent changed from %s to %s",
+                    parentChanges.add("%s 's parent changed from %s to %s".formatted(
                             observedNode.getClass().getSimpleName(), previousParent, newParent));
                 }
 
                 @Override
                 public void listChange(
                         NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-                    listChanges.add(String.format(
-                            "%s %s to/from %s at position %d",
+                    listChanges.add("%s %s to/from %s at position %d".formatted(
                             nodeAddedOrRemoved.getClass().getSimpleName(),
                             type.name(),
                             observedNode.getClass().getSimpleName(),
@@ -205,8 +202,7 @@ class NodeListTest extends AbstractLexicalPreservingTest {
 
                 @Override
                 public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
-                    listReplacements.add(String.format(
-                            "%s replaced within %s at position %d",
+                    listReplacements.add("%s replaced within %s at position %d".formatted(
                             newNode.getClass().getSimpleName(),
                             observedNode.getClass().getSimpleName(),
                             index));
@@ -287,12 +283,16 @@ class NodeListTest extends AbstractLexicalPreservingTest {
             @Test
             void usageTest() {
                 final String REFERENCE_TO_BE_DELETED = "bad";
-                considerCode("" + "@MyAnnotation(myElements = {\"good\", \"bad\", \"ugly\"})\n"
-                        + "public final class MyClass {\n"
-                        + "}");
-                String expected = "" + "@MyAnnotation(myElements = {\"good\", \"ugly\"})\n"
-                        + "public final class MyClass {\n"
-                        + "}";
+                considerCode("""
+                        @MyAnnotation(myElements = {"good", "bad", "ugly"})
+                        public final class MyClass {
+                        }\
+                        """);
+                String expected = """
+                        @MyAnnotation(myElements = {"good", "ugly"})
+                        public final class MyClass {
+                        }\
+                        """;
 
                 List<NormalAnnotationExpr> annotations = cu.findAll(NormalAnnotationExpr.class);
 
@@ -300,8 +300,8 @@ class NodeListTest extends AbstractLexicalPreservingTest {
                     // testcase, per https://github.com/javaparser/javaparser/issues/2936#issuecomment-731370505
                     MemberValuePair mvp = annotation.getPairs().get(0);
                     Expression value = mvp.getValue();
-                    if ((value instanceof ArrayInitializerExpr)) {
-                        NodeList<Expression> myElements = ((ArrayInitializerExpr) value).getValues();
+                    if ((value instanceof ArrayInitializerExpr expr)) {
+                        NodeList<Expression> myElements = expr.getValues();
 
                         for (Iterator<Expression> iterator = myElements.iterator(); iterator.hasNext(); ) {
                             Node elt = iterator.next();

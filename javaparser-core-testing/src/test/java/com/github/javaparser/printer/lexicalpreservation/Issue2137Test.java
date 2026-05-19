@@ -33,12 +33,15 @@ public class Issue2137Test extends AbstractLexicalPreservingTest {
     @Test
     void test2137() {
         considerCode("public class Foo {\n" + "  void mymethod1() {}\n" + "  void mymethod2() {}\n" + "}");
-        String expected = "public class Foo {\n" + "  void mymethod1() {}\n"
-                + "  void mymethod3() {\n"
-                + "  }\n"
-                + "  \n"
-                + "  void mymethod2() {}\n"
-                + "}";
+        String expected = """
+                public class Foo {
+                  void mymethod1() {}
+                  void mymethod3() {
+                  }
+                 \s
+                  void mymethod2() {}
+                }\
+                """;
         ClassOrInterfaceDeclaration cid = cu.getClassByName("Foo").get();
         MethodDeclaration methodDeclaration = new MethodDeclaration();
         methodDeclaration.setName("mymethod3");

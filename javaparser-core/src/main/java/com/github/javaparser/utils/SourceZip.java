@@ -30,7 +30,6 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -104,7 +103,7 @@ public class SourceZip {
                     Log.info("Parsing zip entry \"%s\"", () -> entry.getName());
                     final ParseResult<CompilationUnit> result =
                             javaParser.parse(COMPILATION_UNIT, provider(zipFile.getInputStream(entry)));
-                    callback.process(Paths.get(entry.getName()), result);
+                    callback.process(Path.of(entry.getName()), result);
                 }
             }
         }

@@ -361,12 +361,14 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicPrimitiveToPrimitive() {
         // Create a test class with primitive varargs method
-        String code = "public class TestClass {\n"
-                + "    public void print(int... values) {}\n"
-                + "    public void test() {\n"
-                + "        print(1, 2, 3);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class TestClass {
+                    public void print(int... values) {}
+                    public void test() {
+                        print(1, 2, 3);
+                    }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
@@ -385,12 +387,14 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicBoxedToPrimitive() {
         // Create a test class with boxed varargs method
-        String code = "public class TestClass {\n"
-                + "  public void print(Integer... values) {}\n"
-                + "  public void test() {\n"
-                + "    print(1, 2, 3);  // int should be boxed to Integer\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                public class TestClass {
+                  public void print(Integer... values) {}
+                  public void test() {
+                    print(1, 2, 3);  // int should be boxed to Integer
+                  }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
@@ -442,14 +446,16 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicPrimitiveToBoxed() {
         // Create a test class
-        String code = "public class TestClass {\n"
-                + "  public void print(int... values) {}\n"
-                + "  public void test() {\n"
-                + "    Integer a = Integer.valueOf(1);\n"
-                + "    Integer b = Integer.valueOf(2);\n"
-                + "    print(a, b);  // Integer should be unboxed to int\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                public class TestClass {
+                  public void print(int... values) {}
+                  public void test() {
+                    Integer a = Integer.valueOf(1);
+                    Integer b = Integer.valueOf(2);
+                    print(a, b);  // Integer should be unboxed to int
+                  }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
@@ -500,12 +506,14 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testArrayParameterVsVarargs() {
         // Create a test class
-        String code = "public class TestClass {\n"
-                + "  public void print(int... values) {}\n"
-                + "  public void test(int[] arg) {\n"
-                + "    print(arg);\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                public class TestClass {
+                  public void print(int... values) {}
+                  public void test(int[] arg) {
+                    print(arg);
+                  }
+                }\
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
@@ -530,12 +538,14 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicZeroArguments() {
         // Create a test class
-        String code = "public class TestClass {\n"
-                + "  public void print(String... values) {}\n"
-                + "  public void test() {\n"
-                + "    print();  // No argument should be valid\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                public class TestClass {
+                  public void print(String... values) {}
+                  public void test() {
+                    print();  // No argument should be valid
+                  }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
@@ -556,12 +566,14 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVariadicSingleArrayArgument() {
         // Create a test class
-        String code = "public class TestClass {\n"
-                + "  public void print(String... values) {}\n"
-                + "  public void test() {\n"
-                + "    print(new String[]{\"a\", \"b\"});  // Single array should be valid\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                public class TestClass {
+                  public void print(String... values) {}
+                  public void test() {
+                    print(new String[]{"a", "b"});  // Single array should be valid
+                  }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
@@ -636,13 +648,15 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testInheritedVarargs() {
         // Create a test class
-        String code = "interface A { void print(Number... values); }\n"
-                + "class B implements A { void print(Number... values) {} }\n"
-                + "public class TestClass {\n"
-                + "  public void test(B b) {\n"
-                + "    b.print(1,2,3);\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                interface A { void print(Number... values); }
+                class B implements A { void print(Number... values) {} }
+                public class TestClass {
+                  public void test(B b) {
+                    b.print(1,2,3);
+                  }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
@@ -662,13 +676,15 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVarargsWithWildcardBounds() {
         // Create a test class
-        String code = "import java.util.List;\n"
-                + "class TestClass {\n"
-                + "    void print(List<? extends Number>... lists){}\n"
-                + "    void test(List<Integer> values1, List<Long> values2) {\n"
-                + "        print(values1, values2);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                import java.util.List;
+                class TestClass {
+                    void print(List<? extends Number>... lists){}
+                    void test(List<Integer> values1, List<Long> values2) {
+                        print(values1, values2);
+                    }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
@@ -690,12 +706,14 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testPrimitiveWideningVarargs() {
         // Create a test class
-        String code = "class TestClass {\n"
-                + "    void print(double... values){}\n"
-                + "    void test() {\n"
-                + "        print(1, 2, 3);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                class TestClass {
+                    void print(double... values){}
+                    void test() {
+                        print(1, 2, 3);
+                    }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
@@ -716,12 +734,14 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testIncompatibleVarargsTypes() {
         // Create a test class
-        String code = "class TestClass {\n"
-                + "  void print(String... values) {}\n"
-                + "    void test() {\n"
-                + "        print(1, 2, 3);\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                class TestClass {
+                  void print(String... values) {}
+                    void test() {
+                        print(1, 2, 3);
+                  }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
@@ -739,13 +759,15 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVarargsVsExactMatchPriority() {
         // Create a test class
-        String code = "class TestClass {\n"
-                + "    void print(Object value) {}\n"
-                + "    void print(Object... values) {}\n"
-                + "    void test() {\n"
-                + "        print(1);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                class TestClass {
+                    void print(Object value) {}
+                    void print(Object... values) {}
+                    void test() {
+                        print(1);
+                    }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
@@ -767,12 +789,14 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
     @Test
     void testVarargsWithNullArguments() {
         // Create a test class
-        String code = "class TestClass {\n"
-                + "    void print(String... values) {}\n"
-                + "    void test() {\n"
-                + "        print(null, null);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                class TestClass {
+                    void print(String... values) {}
+                    void test() {
+                        print(null, null);
+                    }
+                }\
+                """;
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
@@ -790,12 +814,15 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
      */
     @Test
     void testNumberVarargsWithIntPrimitives() {
-        String code = "import java.util.Arrays;\n" + "public class TestClass {\n"
-                + "    public void print(Number... numbers){}\n"
-                + "    public void test(int a, int b){\n"
-                + "        print(a, b);\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                import java.util.Arrays;
+                public class TestClass {
+                    public void print(Number... numbers){}
+                    public void test(int a, int b){
+                        print(a, b);
+                    }
+                }
+                """;
 
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(code);

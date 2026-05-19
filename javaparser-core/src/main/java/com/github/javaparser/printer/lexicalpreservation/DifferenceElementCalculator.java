@@ -70,9 +70,8 @@ class DifferenceElementCalculator {
 
     static boolean matching(CsmElement a, CsmElement b) {
         if (a instanceof CsmChild) {
-            if (b instanceof CsmChild) {
+            if (b instanceof CsmChild childB) {
                 CsmChild childA = (CsmChild) a;
-                CsmChild childB = (CsmChild) b;
                 return childA.getChild().equals(childB.getChild());
             }
             if (b instanceof CsmToken) {
@@ -88,13 +87,12 @@ class DifferenceElementCalculator {
                     a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
         }
         if (a instanceof CsmToken) {
-            if (b instanceof CsmToken) {
+            if (b instanceof CsmToken childB) {
                 // fix #2382:
                 // Tokens are described by their type AND their content
                 // and TokenContentCalculator. By using .equals(), all
                 // three values are compared.
                 CsmToken childA = (CsmToken) a;
-                CsmToken childB = (CsmToken) b;
                 return childA.equals(childB);
             }
             if (b instanceof CsmChild) {
@@ -136,9 +134,8 @@ class DifferenceElementCalculator {
             return false;
         }
         if (a instanceof CsmChild) {
-            if (b instanceof CsmChild) {
+            if (b instanceof CsmChild childB) {
                 CsmChild childA = (CsmChild) a;
-                CsmChild childB = (CsmChild) b;
                 return childA.getChild().getClass().equals(childB.getChild().getClass());
             }
             if (b instanceof CsmToken) {
@@ -148,9 +145,8 @@ class DifferenceElementCalculator {
                     a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
         }
         if (a instanceof CsmToken) {
-            if (b instanceof CsmToken) {
+            if (b instanceof CsmToken childB) {
                 CsmToken childA = (CsmToken) a;
-                CsmToken childB = (CsmToken) b;
                 return childA.getTokenType() == childB.getTokenType();
             }
             if (b instanceof CsmChild) {
@@ -169,8 +165,8 @@ class DifferenceElementCalculator {
         List<ChildPositionInfo> positions = new ArrayList<>();
         for (int i = 0; i < calculatedSyntaxModel.elements.size(); i++) {
             CsmElement element = calculatedSyntaxModel.elements.get(i);
-            if (element instanceof CsmChild) {
-                positions.add(new ChildPositionInfo(((CsmChild) element).getChild(), i));
+            if (element instanceof CsmChild child) {
+                positions.add(new ChildPositionInfo(child.getChild(), i));
             }
         }
         return positions;
@@ -275,11 +271,9 @@ class DifferenceElementCalculator {
 
     private void considerRemoval(NodeText nodeTextForChild, List<DifferenceElement> elements) {
         for (TextElement el : nodeTextForChild.getElements()) {
-            if (el instanceof ChildTextElement) {
-                ChildTextElement cte = (ChildTextElement) el;
+            if (el instanceof ChildTextElement cte) {
                 considerRemoval(LexicalPreservingPrinter.getOrCreateNodeText(cte.getChild()), elements);
-            } else if (el instanceof TokenTextElement) {
-                TokenTextElement tte = (TokenTextElement) el;
+            } else if (el instanceof TokenTextElement tte) {
                 elements.add(new Removed(new CsmToken(tte.getTokenKind(), tte.getText())));
             } else {
                 throw new UnsupportedOperationException(el.toString());
@@ -289,8 +283,7 @@ class DifferenceElementCalculator {
 
     private int considerRemoval(CsmElement removedElement, int originalIndex, List<DifferenceElement> elements) {
         boolean dealtWith = false;
-        if (removedElement instanceof CsmChild) {
-            CsmChild removedChild = (CsmChild) removedElement;
+        if (removedElement instanceof CsmChild removedChild) {
             if (removedChild.getChild() instanceof Type
                     && removedChild.getChild().getParentNode().isPresent()
                     && removedChild.getChild().getParentNode().get() instanceof VariableDeclarator) {
@@ -341,14 +334,14 @@ class DifferenceElementCalculator {
             } else {
                 CsmElement nextOriginal = original.elements.get(originalIndex);
                 CsmElement nextAfter = after.elements.get(afterIndex);
-                if ((nextOriginal instanceof CsmMix) && (nextAfter instanceof CsmMix)) {
+                if ((nextOriginal instanceof CsmMix mix) && (nextAfter instanceof CsmMix mix1)) {
                     // If sub-elements are identical, mark everything as kept
-                    if (((CsmMix) nextAfter).getElements().equals(((CsmMix) nextOriginal).getElements())) {
+                    if (mix1.getElements().equals(mix.getElements())) {
                         // No reason to deal with a reshuffled, we are just going to keep everything as it is
-                        ((CsmMix) nextAfter).getElements().forEach(el -> elements.add(new Kept(el)));
+                        mix1.getElements().forEach(el -> elements.add(new Kept(el)));
                     } else {
                         // Otherwise, same type but with shuffled/reorganized content
-                        elements.add(new Reshuffled((CsmMix) nextOriginal, (CsmMix) nextAfter));
+                        elements.add(new Reshuffled(mix, mix1));
                     }
                     originalIndex++;
                     afterIndex++;

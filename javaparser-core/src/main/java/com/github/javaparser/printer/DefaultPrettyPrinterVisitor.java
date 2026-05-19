@@ -642,7 +642,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         if (!n.getVariables().isEmpty()) {
             Optional<Type> maximumCommonType = n.getMaximumCommonType();
             maximumCommonType.ifPresent(t -> t.accept(this, arg));
-            if (!maximumCommonType.isPresent()) {
+            if (maximumCommonType.isEmpty()) {
                 printer.print("???");
             }
         }
@@ -1008,7 +1008,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 }
                 // check if the parent is a method call and thus we are in an argument list
                 columnAlignFirstMethodChain.set(
-                        !p.filter(MethodCallExpr.class::isInstance).isPresent());
+                        p.filter(MethodCallExpr.class::isInstance).isEmpty());
             }
         }
         // we are at the last method call of a call chain
@@ -1223,7 +1223,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 }
             }
         }
-        if (!n.getBody().isPresent()) {
+        if (n.getBody().isEmpty()) {
             printer.print(";");
         } else {
             printer.print(" ");
@@ -1797,7 +1797,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final LineComment n, final Void arg) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) {
+        if (getOption(ConfigOption.PRINT_COMMENTS).isEmpty()) {
             return;
         }
         printer.print(n.getHeader())
@@ -1806,7 +1806,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final BlockComment n, final Void arg) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) {
+        if (getOption(ConfigOption.PRINT_COMMENTS).isEmpty()) {
             return;
         }
         final String commentContent = normalizeEolInTextBlock(
@@ -1828,7 +1828,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final MarkdownComment n, final Void arg) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) {
+        if (getOption(ConfigOption.PRINT_COMMENTS).isEmpty()) {
             return;
         }
         final String commentContent = normalizeEolInTextBlock(
@@ -1868,9 +1868,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
         printer.print(" -> ");
         final Statement body = n.getBody();
-        if (body instanceof ExpressionStmt) {
+        if (body instanceof ExpressionStmt stmt) {
             // Print the expression directly
-            ((ExpressionStmt) body).getExpression().accept(this, arg);
+            stmt.getExpression().accept(this, arg);
         } else {
             body.accept(this, arg);
         }
@@ -2022,7 +2022,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
      * Print all orphaned comments coming right before {@code node}.
      */
     protected void printOrphanCommentsBeforeThisChildNode(final Node node) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) return;
+        if (getOption(ConfigOption.PRINT_COMMENTS).isEmpty()) return;
         if (node instanceof Comment) return;
         Node parent = node.getParentNode().orElse(null);
         if (parent == null) return;
@@ -2057,7 +2057,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
      * Print all orphan comments coming at the end of the given {@code node}.
      */
     protected void printOrphanCommentsEnding(final Node node) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) return;
+        if (getOption(ConfigOption.PRINT_COMMENTS).isEmpty()) return;
         List<Node> everything = new ArrayList<>(node.getChildNodes());
         sortByBeginPosition(everything);
         if (everything.isEmpty()) {

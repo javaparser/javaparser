@@ -42,20 +42,23 @@ public class Issue3308Test {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
-        String classStr = "public class JavaParser {\n" + "\n"
-                + "    public void bad (int index) {\n"
-                + "        LastRecovered recovered = new LastRecovered();\n"
-                + "        recovered.perPriority[index].recovered = 10;\n"
-                + "    }\n"
-                + "\n"
-                + "    private class LastRecovered {\n"
-                + "        LastRecoveredEntry[] perPriority = new LastRecoveredEntry[10];\n"
-                + "    }\n"
-                + "\n"
-                + "    private class LastRecoveredEntry {\n"
-                + "        private int recovered = 0;\n"
-                + "    }\n"
-                + "}";
+        String classStr = """
+                public class JavaParser {
+                
+                    public void bad (int index) {
+                        LastRecovered recovered = new LastRecovered();
+                        recovered.perPriority[index].recovered = 10;
+                    }
+                
+                    private class LastRecovered {
+                        LastRecoveredEntry[] perPriority = new LastRecoveredEntry[10];
+                    }
+                
+                    private class LastRecoveredEntry {
+                        private int recovered = 0;
+                    }
+                }\
+                """;
 
         CompilationUnit node = StaticJavaParser.parse(classStr);
         List<FieldAccessExpr> all = node.findAll(FieldAccessExpr.class);
@@ -82,20 +85,23 @@ public class Issue3308Test {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
-        String classStr = "class JavaParser {\n" + "\n"
-                + "    public void bad (int index) {\n"
-                + "        LastRecovered recovered = new LastRecovered();\n"
-                + "        recovered.perPriority[index][0][0][0].recovered = 10;\n"
-                + "    }\n"
-                + "\n"
-                + "    private class LastRecovered {\n"
-                + "        LastRecoveredEntry[][][][] perPriority = new LastRecoveredEntry[10][10][10][10];\n"
-                + "    }\n"
-                + "\n"
-                + "    private class LastRecoveredEntry {\n"
-                + "        private int recovered = 0;\n"
-                + "    }\n"
-                + "}";
+        String classStr = """
+                class JavaParser {
+                
+                    public void bad (int index) {
+                        LastRecovered recovered = new LastRecovered();
+                        recovered.perPriority[index][0][0][0].recovered = 10;
+                    }
+                
+                    private class LastRecovered {
+                        LastRecoveredEntry[][][][] perPriority = new LastRecoveredEntry[10][10][10][10];
+                    }
+                
+                    private class LastRecoveredEntry {
+                        private int recovered = 0;
+                    }
+                }\
+                """;
 
         CompilationUnit node = StaticJavaParser.parse(classStr);
         List<FieldAccessExpr> all = node.findAll(FieldAccessExpr.class);

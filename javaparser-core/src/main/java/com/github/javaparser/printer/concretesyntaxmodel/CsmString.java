@@ -45,6 +45,6 @@ public class CsmString implements CsmElement {
 
     @Override
     public String toString() {
-        return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
+        return "%s(property:%s)".formatted(this.getClass().getSimpleName(), getProperty());
     }
 }

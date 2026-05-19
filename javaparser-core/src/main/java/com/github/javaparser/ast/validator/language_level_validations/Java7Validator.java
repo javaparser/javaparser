@@ -34,7 +34,7 @@ public class Java7Validator extends Java6Validator {
             new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
                 if (n.getCatchClauses().isEmpty()
                         && n.getResources().isEmpty()
-                        && !n.getFinallyBlock().isPresent()) {
+                        && n.getFinallyBlock().isEmpty()) {
                     reporter.report(n, "Try has no finally, no catch, and no resources.");
                 }
                 for (Expression resource : n.getResources()) {

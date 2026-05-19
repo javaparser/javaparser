@@ -49,12 +49,16 @@ class Issue347Test extends AbstractResolutionTest {
 
     @Test
     void resolvingReferenceToEnumDeclarationInSameFile() {
-        String code = "package foo.bar;\nenum Foo {\n" + "    FOO_A, FOO_B\n"
-                + "}\n"
-                + "\n"
-                + "class UsingFoo {\n"
-                + "    Foo myFooField;\n"
-                + "}";
+        String code = """
+                package foo.bar;
+                enum Foo {
+                    FOO_A, FOO_B
+                }
+                
+                class UsingFoo {
+                    Foo myFooField;
+                }\
+                """;
         CompilationUnit cu = parse(code);
         FieldDeclaration fieldDeclaration = Navigator.demandNodeOfGivenClass(cu, FieldDeclaration.class);
         ResolvedType fieldType = javaParserFacade.getType(fieldDeclaration);

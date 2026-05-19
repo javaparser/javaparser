@@ -103,7 +103,7 @@ public class SubtypeOfBound extends Bound {
 
     @Override
     public boolean isADependency() {
-        return !isProperLowerBound().isPresent() && !isProperUpperBound().isPresent();
+        return isProperLowerBound().isEmpty() && isProperUpperBound().isEmpty();
     }
 
     @Override

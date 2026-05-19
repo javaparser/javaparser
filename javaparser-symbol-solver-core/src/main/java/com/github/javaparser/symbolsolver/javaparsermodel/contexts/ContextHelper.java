@@ -45,8 +45,8 @@ public class ContextHelper {
             Context invokationContext,
             List<ResolvedType> typeParameters) {
 
-        if (typeDeclaration instanceof MethodUsageResolutionCapability) {
-            return ((MethodUsageResolutionCapability) typeDeclaration)
+        if (typeDeclaration instanceof MethodUsageResolutionCapability capability) {
+            return capability
                     .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters);
         }
         throw new UnsupportedOperationException(typeDeclaration.toString());

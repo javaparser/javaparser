@@ -97,12 +97,10 @@ public class BoundSet {
             Predicate<Pair<SameAsBound, SameAsBound>> condition) {
         for (int i = 0; i < bounds.size(); i++) {
             Bound bi = bounds.get(i);
-            if (bi instanceof SameAsBound) {
-                SameAsBound si = (SameAsBound) bi;
+            if (bi instanceof SameAsBound si) {
                 for (int j = i + 1; j < bounds.size(); j++) {
                     Bound bj = bounds.get(j);
-                    if (bj instanceof SameAsBound) {
-                        SameAsBound sj = (SameAsBound) bj;
+                    if (bj instanceof SameAsBound sj) {
                         Pair<SameAsBound, SameAsBound> pair = new Pair<SameAsBound, SameAsBound>(si, sj);
                         if (condition.test(pair)) {
                             return Optional.of(pair);
@@ -126,12 +124,10 @@ public class BoundSet {
         T currentValue = initialValue;
         for (int i = 0; i < bounds.size(); i++) {
             Bound bi = bounds.get(i);
-            if (bi instanceof SameAsBound) {
-                SameAsBound si = (SameAsBound) bi;
+            if (bi instanceof SameAsBound si) {
                 for (int j = i + 1; j < bounds.size(); j++) {
                     Bound bj = bounds.get(j);
-                    if (bj instanceof SameAsBound) {
-                        SameAsBound sj = (SameAsBound) bj;
+                    if (bj instanceof SameAsBound sj) {
                         currentValue = processor.process(si, sj, currentValue);
                     }
                 }
@@ -144,12 +140,10 @@ public class BoundSet {
         T currentValue = initialValue;
         for (int i = 0; i < bounds.size(); i++) {
             Bound bi = bounds.get(i);
-            if (bi instanceof SameAsBound) {
-                SameAsBound si = (SameAsBound) bi;
+            if (bi instanceof SameAsBound si) {
                 for (int j = i + 1; j < bounds.size(); j++) {
                     Bound bj = bounds.get(j);
-                    if (bj instanceof SubtypeOfBound) {
-                        SubtypeOfBound sj = (SubtypeOfBound) bj;
+                    if (bj instanceof SubtypeOfBound sj) {
                         currentValue = processor.process(si, sj, currentValue);
                     }
                 }
@@ -162,12 +156,10 @@ public class BoundSet {
         T currentValue = initialValue;
         for (int i = 0; i < bounds.size(); i++) {
             Bound bi = bounds.get(i);
-            if (bi instanceof SubtypeOfBound) {
-                SubtypeOfBound si = (SubtypeOfBound) bi;
+            if (bi instanceof SubtypeOfBound si) {
                 for (int j = i + 1; j < bounds.size(); j++) {
                     Bound bj = bounds.get(j);
-                    if (bj instanceof SubtypeOfBound) {
-                        SubtypeOfBound sj = (SubtypeOfBound) bj;
+                    if (bj instanceof SubtypeOfBound sj) {
                         currentValue = processor.process(si, sj, currentValue);
                     }
                 }
@@ -545,8 +537,7 @@ public class BoundSet {
     private boolean thereIsSomeJSuchThatβequalAlphaJ(Set<InferenceVariable> alphas, InferenceVariable beta) {
         for (InferenceVariable alphaJ : alphas) {
             for (Bound b : bounds) {
-                if (b instanceof SameAsBound) {
-                    SameAsBound sameAsBound = (SameAsBound) b;
+                if (b instanceof SameAsBound sameAsBound) {
                     if (sameAsBound.getS().equals(alphaJ) && sameAsBound.getT().equals(beta)) {
                         return true;
                     }
@@ -873,8 +864,7 @@ public class BoundSet {
 
     private boolean appearInLeftPartOfCapture(InferenceVariable inferenceVariable) {
         for (Bound b : bounds) {
-            if (b instanceof CapturesBound) {
-                CapturesBound capturesBound = (CapturesBound) b;
+            if (b instanceof CapturesBound capturesBound) {
                 if (capturesBound.getInferenceVariables().contains(inferenceVariable)) {
                     return true;
                 }

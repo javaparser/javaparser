@@ -67,7 +67,7 @@ public interface Context {
 
     default Optional<ResolvedType> solveGenericTypeInParentContext(String name) {
         Optional<Context> optionalParentContext = getParent();
-        if (!optionalParentContext.isPresent()) {
+        if (optionalParentContext.isEmpty()) {
             return Optional.empty();
         }
         // Delegate solving to the parent context.
@@ -142,7 +142,7 @@ public interface Context {
     default SymbolReference<ResolvedTypeDeclaration> solveTypeInParentContext(
             String name, @Nullable List<ResolvedType> typeArguments) {
         Optional<Context> optionalParentContext = getParent();
-        if (!optionalParentContext.isPresent()) {
+        if (optionalParentContext.isEmpty()) {
             return SymbolReference.unsolved();
         }
         // Delegate solving to the parent context.
@@ -162,7 +162,7 @@ public interface Context {
 
     default SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInParentContext(String name) {
         Optional<Context> optionalParentContext = getParent();
-        if (!optionalParentContext.isPresent()) {
+        if (optionalParentContext.isEmpty()) {
             return SymbolReference.unsolved();
         }
         // Delegate solving to the parent context.
@@ -262,7 +262,7 @@ public interface Context {
      * associated with the try-with-resources statement.
      */
     default Optional<VariableDeclarator> localVariableDeclarationInScope(String name) {
-        if (!getParent().isPresent()) {
+        if (getParent().isEmpty()) {
             return Optional.empty();
         }
         // First check if the variable is directly declared within this context.
@@ -280,7 +280,7 @@ public interface Context {
     }
 
     default Optional<Parameter> parameterDeclarationInScope(String name) {
-        if (!getParent().isPresent()) {
+        if (getParent().isEmpty()) {
             return Optional.empty();
         }
         // First check if the parameter is directly declared within this context.
@@ -316,7 +316,7 @@ public interface Context {
      * }</pre>
      */
     default Optional<TypePatternExpr> typePatternExprInScope(String name) {
-        if (!getParent().isPresent()) {
+        if (getParent().isEmpty()) {
             return Optional.empty();
         }
         Context parentContext = getParent().get();
@@ -336,7 +336,7 @@ public interface Context {
     }
 
     default Optional<ResolvedFieldDeclaration> fieldDeclarationInScope(String name) {
-        if (!getParent().isPresent()) {
+        if (getParent().isEmpty()) {
             return Optional.empty();
         }
         Context parentContext = getParent().get();
@@ -374,7 +374,7 @@ public interface Context {
     default SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         Optional<Context> optionalParentContext = getParent();
-        if (!optionalParentContext.isPresent()) {
+        if (optionalParentContext.isEmpty()) {
             return SymbolReference.unsolved();
         }
         // Delegate solving to the parent context.

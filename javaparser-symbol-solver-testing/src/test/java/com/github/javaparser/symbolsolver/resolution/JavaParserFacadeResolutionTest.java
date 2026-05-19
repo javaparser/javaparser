@@ -71,19 +71,22 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     // See issue 42
     @Test
     void solvingReferenceToUnsupportedOperationException() {
-        String code = "public class Bla {\n" + "    public void main()\n"
-                + "    {\n"
-                + "        try\n"
-                + "        {\n"
-                + "            int i = 0;\n"
-                + "        }\n"
-                + "        catch (UnsupportedOperationException e)\n"
-                + "        {\n"
-                + "            String s;\n"
-                + "            e.getMessage();\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class Bla {
+                    public void main()
+                    {
+                        try
+                        {
+                            int i = 0;
+                        }
+                        catch (UnsupportedOperationException e)
+                        {
+                            String s;
+                            e.getMessage();
+                        }
+                    }
+                }\
+                """;
         MethodCallExpr methodCallExpr = Navigator.demandNodeOfGivenClass(parse(code), MethodCallExpr.class);
         MethodUsage methodUsage =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(methodCallExpr);
@@ -93,19 +96,22 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     // See issue 46
     @Test
     void solvingReferenceToCatchClauseParam() {
-        String code = "public class Bla {\n" + "    public void main()\n"
-                + "    {\n"
-                + "        try\n"
-                + "        {\n"
-                + "            int i = 0;\n"
-                + "        }\n"
-                + "        catch (UnsupportedOperationException e)\n"
-                + "        {\n"
-                + "            String s;\n"
-                + "            e.getMessage();\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class Bla {
+                    public void main()
+                    {
+                        try
+                        {
+                            int i = 0;
+                        }
+                        catch (UnsupportedOperationException e)
+                        {
+                            String s;
+                            e.getMessage();
+                        }
+                    }
+                }\
+                """;
         MethodCallExpr methodCallExpr = Navigator.demandNodeOfGivenClass(parse(code), MethodCallExpr.class);
         NameExpr nameE = (NameExpr) methodCallExpr.getScope().get();
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference =
@@ -127,15 +133,18 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     // See issue 47
     @Test
     void solvingReferenceToAnAncestorInternalClass() {
-        String code = "public class Foo {\n" + "    public class Base {\n"
-                + "        public class X {\n"
-                + "        }\n"
-                + "    }\n"
-                + "\n"
-                + "    public class Derived extends Base {\n"
-                + "        public X x = null;\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class Foo {
+                    public class Base {
+                        public class X {
+                        }
+                    }
+                
+                    public class Derived extends Base {
+                        public X x = null;
+                    }
+                }\
+                """;
         FieldDeclaration fieldDeclaration = Navigator.demandNodeOfGivenClass(parse(code), FieldDeclaration.class);
         Type jpType = fieldDeclaration.getCommonType();
         ResolvedType jssType = JavaParserFacade.get(new ReflectionTypeSolver()).convertToUsage(jpType);
@@ -145,9 +154,11 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     // See issue 119
     @Test
     void solveTryWithResourceVariable() {
-        String code = "import java.util.Scanner; class A { void foo() { try (Scanner sc = new Scanner(System.in)) {\n"
-                + "    sc.nextLine();\n"
-                + "} } }";
+        String code = """
+                import java.util.Scanner; class A { void foo() { try (Scanner sc = new Scanner(System.in)) {
+                    sc.nextLine();
+                } } }\
+                """;
         CompilationUnit cu = parse(code);
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(cu, "nextLine").get();
         Expression scope = methodCallExpr.getScope().get();
@@ -169,14 +180,17 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveMultiCatchType() {
-        String code = "class A {\n" + "        public void foo() {\n"
-                + "            try {\n"
-                + "                \n"
-                + "            } catch (IllegalStateException | IllegalArgumentException e) {\n"
-                + "                \n"
-                + "            }\n"
-                + "        }\n"
-                + "    }";
+        String code = """
+                class A {
+                        public void foo() {
+                            try {
+                               \s
+                            } catch (IllegalStateException | IllegalArgumentException e) {
+                               \s
+                            }
+                        }
+                    }\
+                """;
         CompilationUnit cu = parseWithTypeSolver(code);
         CatchClause catchClause = Navigator.demandNodeOfGivenClass(cu, CatchClause.class);
         Type jpType = catchClause.getParameter().getType();
@@ -199,15 +213,17 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     // See issue 3725
     @Test
     void resolveVarTypeInForEachLoopFromArrayExpression() {
-        String sourceCode = "" + "import java.util.Arrays;\n"
-                + "\n"
-                + "public class Main {\n"
-                + "    public static void main(String[] args) {\n"
-                + "        for (var s:args) {\n"
-                + "            s.hashCode();\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String sourceCode = """
+                import java.util.Arrays;
+                
+                public class Main {
+                    public static void main(String[] args) {
+                        for (var s:args) {
+                            s.hashCode();
+                        }
+                    }
+                }\
+                """;
 
         Expression toStringCallScope = scopeOfFirstHashCodeCall(sourceCode);
 
@@ -221,15 +237,17 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     // See issue 3725
     @Test
     void resolveVarTypeInForEachLoopFromIterableExpression() {
-        String sourceCode = "" + "import java.util.Arrays;\n"
-                + "\n"
-                + "public class Main {\n"
-                + "    public static void main(String[] args) {\n"
-                + "        for (var s: Arrays.asList(args)) {\n"
-                + "            s.hashCode();\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String sourceCode = """
+                import java.util.Arrays;
+                
+                public class Main {
+                    public static void main(String[] args) {
+                        for (var s: Arrays.asList(args)) {
+                            s.hashCode();
+                        }
+                    }
+                }\
+                """;
 
         Expression toStringCallScope = scopeOfFirstHashCodeCall(sourceCode);
 
@@ -243,13 +261,15 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     // See issue 3911
     @Test
     void resolveTypeParameterFromPrimitiveArrayArgument() {
-        String sourceCode = "" + "import java.util.Arrays;\n"
-                + "\n"
-                + "public class Main {\n"
-                + "    public void main(int[] args) {\n"
-                + "        Arrays.asList(args);\n"
-                + "    }\n"
-                + "}";
+        String sourceCode = """
+                import java.util.Arrays;
+                
+                public class Main {
+                    public void main(int[] args) {
+                        Arrays.asList(args);
+                    }
+                }\
+                """;
 
         JavaParser parser = createParserWithResolver(defaultTypeSolver());
         CompilationUnit cu = parser.parse(sourceCode).getResult().get();
@@ -263,13 +283,15 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     @Test
     void resolveTypeParameterFromReferenceArrayArgument() {
-        String sourceCode = "" + "import java.util.Arrays;\n"
-                + "\n"
-                + "public class Main {\n"
-                + "    public void main(String[] args) {\n"
-                + "        Arrays.asList(args);\n"
-                + "    }\n"
-                + "}";
+        String sourceCode = """
+                import java.util.Arrays;
+                
+                public class Main {
+                    public void main(String[] args) {
+                        Arrays.asList(args);
+                    }
+                }\
+                """;
 
         JavaParser parser = createParserWithResolver(defaultTypeSolver());
         CompilationUnit cu = parser.parse(sourceCode).getResult().get();
@@ -283,14 +305,16 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     @Test
     void resolveTypeParameterFromPrimitiveArrayArgumentOnNonGenericExpectedParameter() {
-        String sourceCode = "" + "import java.util.OptionalDouble;\n"
-                + "import java.util.stream.IntStream;\n"
-                + "\n"
-                + "public class Main {\n"
-                + "	OptionalDouble pre(int[] values) {\n"
-                + "		return IntStream.of(values).map(s -> s).average();\n"
-                + "	}\n"
-                + "}";
+        String sourceCode = """
+                import java.util.OptionalDouble;
+                import java.util.stream.IntStream;
+                
+                public class Main {
+                	OptionalDouble pre(int[] values) {
+                		return IntStream.of(values).map(s -> s).average();
+                	}
+                }\
+                """;
 
         JavaParser parser = createParserWithResolver(defaultTypeSolver());
         CompilationUnit cu = parser.parse(sourceCode).getResult().get();
@@ -304,16 +328,19 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     @Test
     void resolveMethodTypeParametersUsingVariadicArgument() {
-        String sourceCode = "import java.io.BufferedInputStream;\n" + "import java.io.IOException;\n"
-                + "import java.nio.file.Files;\n"
-                + "import java.nio.file.OpenOption;\n"
-                + "import java.nio.file.Path;\n"
-                + "\n"
-                + "public class Test {\n"
-                + "    public void write(final Path path, final OpenOption... options) throws IOException {\n"
-                + "        BufferedInputStream in = new BufferedInputStream(Files.newInputStream(path, options));\n"
-                + "    }\n"
-                + "}";
+        String sourceCode = """
+                import java.io.BufferedInputStream;
+                import java.io.IOException;
+                import java.nio.file.Files;
+                import java.nio.file.OpenOption;
+                import java.nio.file.Path;
+                
+                public class Test {
+                    public void write(final Path path, final OpenOption... options) throws IOException {
+                        BufferedInputStream in = new BufferedInputStream(Files.newInputStream(path, options));
+                    }
+                }\
+                """;
 
         JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
         CompilationUnit cu = parser.parse(sourceCode);
@@ -326,17 +353,19 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     // See issue 3725
     @Test
     void resolveVarTypeInForEachLoopFromIterableExpression2() {
-        String sourceCode = "" + "import java.util.ArrayList;\n"
-                + "import java.util.List;\n"
-                + "\n"
-                + "public class Main {\n"
-                + "    public static void main(String[] args) {\n"
-                + "        List<String> list = new ArrayList<>();"
-                + "        for (var s: list) {\n"
-                + "            s.hashCode();\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String sourceCode = """
+                import java.util.ArrayList;
+                import java.util.List;
+                
+                public class Main {
+                    public static void main(String[] args) {
+                        List<String> list = new ArrayList<>();\
+                        for (var s: list) {
+                            s.hashCode();
+                        }
+                    }
+                }\
+                """;
 
         Expression toStringCallScope = scopeOfFirstHashCodeCall(sourceCode);
 
@@ -350,17 +379,19 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     // See issue 3725
     @Test
     void resolveVarTypeInForEachLoopFromIterableExpression_withRawType() {
-        String sourceCode = "" + "import java.util.ArrayList;\n"
-                + "import java.util.List;\n"
-                + "\n"
-                + "public class Main {\n"
-                + "    public static void main(String[] args) {\n"
-                + "        List list = new ArrayList();"
-                + "        for (var s: list) {\n"
-                + "            s.hashCode();\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String sourceCode = """
+                import java.util.ArrayList;
+                import java.util.List;
+                
+                public class Main {
+                    public static void main(String[] args) {
+                        List list = new ArrayList();\
+                        for (var s: list) {
+                            s.hashCode();
+                        }
+                    }
+                }\
+                """;
 
         Expression toStringCallScope = scopeOfFirstHashCodeCall(sourceCode);
 

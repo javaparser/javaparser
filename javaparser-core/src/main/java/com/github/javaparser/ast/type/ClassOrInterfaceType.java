@@ -265,8 +265,7 @@ public class ClassOrInterfaceType extends ReferenceType
      */
     @Override
     public String toDescriptor() {
-        return String.format(
-                "L%s;", resolve().erasure().asReferenceType().getQualifiedName().replace(".", "/"));
+        return "L%s;".formatted(resolve().erasure().asReferenceType().getQualifiedName().replace(".", "/"));
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")

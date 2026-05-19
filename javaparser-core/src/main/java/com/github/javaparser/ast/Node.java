@@ -342,8 +342,7 @@ public abstract class Node
         Printer printer = getPrinter();
         if (containsData(LINE_SEPARATOR_KEY)) {
             LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-            if (printer instanceof ConfigurablePrinter) {
-                ConfigurablePrinter configurablePrinter = (ConfigurablePrinter) printer;
+            if (printer instanceof ConfigurablePrinter configurablePrinter) {
                 PrinterConfiguration config = configurablePrinter.getConfiguration();
                 if (config != null) {
                     config.addOption(new DefaultConfigurationOption(
@@ -811,8 +810,8 @@ public abstract class Node
      */
     public Optional<CompilationUnit> findCompilationUnit() {
         Node rootNode = findRootNode();
-        if (rootNode instanceof CompilationUnit) {
-            return Optional.of((CompilationUnit) rootNode);
+        if (rootNode instanceof CompilationUnit unit) {
+            return Optional.of(unit);
         }
         return Optional.empty();
     }

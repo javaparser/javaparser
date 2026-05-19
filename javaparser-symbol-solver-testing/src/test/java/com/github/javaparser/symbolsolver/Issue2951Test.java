@@ -75,16 +75,18 @@ public class Issue2951Test {
         config.setSymbolResolver(new JavaSymbolSolver(typeResolver));
         StaticJavaParser.setConfiguration(config);
 
-        String code = "package foo;\n"
-                + "import java.util.List;\n"
-                + "import foo.A;\n"
-                + "public class Test {\n"
-                + "    public void foo() {\n"
-                + "        List<byte[]> keys = new ArrayList<>();\n"
-                + "        A a = new A();\n"
-                + "        a.get(keys);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                package foo;
+                import java.util.List;
+                import foo.A;
+                public class Test {
+                    public void foo() {
+                        List<byte[]> keys = new ArrayList<>();
+                        A a = new A();
+                        a.get(keys);
+                    }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(code);
 
         for (TypeDeclaration<?> type : cu.getTypes()) {

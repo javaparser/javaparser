@@ -40,23 +40,26 @@ public class Issue2406Test extends AbstractSymbolResolutionTest {
                 new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-        String s = "import java.lang.reflect.Array;\n" + "\n"
-                + "public class Main {\n"
-                + "    public static <T, U> T[] copyOf(U[] original, int newLength, Class<? extends T[]> newType) {\n"
-                + "        @SuppressWarnings(\"unchecked\")\n"
-                + "        T[] copy = ((Object) newType == (Object)Object[].class)\n"
-                + "            ? (T[]) new Object[newLength]\n"
-                + "            : (T[]) Array.newInstance(newType.getComponentType(), newLength);\n"
-                + "        System.arraycopy(original, 0, copy, 0, Math.min(original.length, newLength));\n"
-                + "        return copy;\n"
-                + "    }\n"
-                + "\n"
-                + "    public static void main(String[] args) {\n"
-                + "        String[] source = {\"a\", \"b\", \"c\"};\n"
-                + "        String[] target = copyOf(source, 2, source.getClass());\n"
-                + "        for (String e : target) System.out.println(e);\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                import java.lang.reflect.Array;
+                
+                public class Main {
+                    public static <T, U> T[] copyOf(U[] original, int newLength, Class<? extends T[]> newType) {
+                        @SuppressWarnings("unchecked")
+                        T[] copy = ((Object) newType == (Object)Object[].class)
+                            ? (T[]) new Object[newLength]
+                            : (T[]) Array.newInstance(newType.getComponentType(), newLength);
+                        System.arraycopy(original, 0, copy, 0, Math.min(original.length, newLength));
+                        return copy;
+                    }
+                
+                    public static void main(String[] args) {
+                        String[] source = {"a", "b", "c"};
+                        String[] target = copyOf(source, 2, source.getClass());
+                        for (String e : target) System.out.println(e);
+                    }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<MethodCallExpr> mces = cu.findAll(MethodCallExpr.class, new Predicate() {
 

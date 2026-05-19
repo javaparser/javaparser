@@ -41,14 +41,17 @@ public class Issue3112Test {
         config.setSymbolResolver(new JavaSymbolSolver(cts));
         StaticJavaParser.setConfiguration(config);
 
-        String str = "public class MyClass {\n" + "   class Inner1 {\n"
-                + "       class Inner2 {\n"
-                + "       }\n"
-                + "   }\n"
-                + "   {\n"
-                + "       new Inner1(){}.new Inner2();\n"
-                + "   }\n"
-                + "}\n";
+        String str = """
+                public class MyClass {
+                   class Inner1 {
+                       class Inner2 {
+                       }
+                   }
+                   {
+                       new Inner1(){}.new Inner2();
+                   }
+                }
+                """;
         CompilationUnit cu = StaticJavaParser.parse(str);
         List<ObjectCreationExpr> local = cu.findAll(ObjectCreationExpr.class);
         local.forEach(lcl -> assertFalse(lcl.getType()
@@ -67,16 +70,19 @@ public class Issue3112Test {
         config.setSymbolResolver(new JavaSymbolSolver(cts));
         StaticJavaParser.setConfiguration(config);
 
-        String str = "public class MyClass {\n" + "   class Inner1 {\n"
-                + "       class Inner2 {\n"
-                + "           class Inner3 {\n"
-                + "           }\n"
-                + "       }\n"
-                + "   }\n"
-                + "   {\n"
-                + "       new Inner1(){}.new Inner2(){}.new Inner3();\n"
-                + "   }\n"
-                + "}\n";
+        String str = """
+                public class MyClass {
+                   class Inner1 {
+                       class Inner2 {
+                           class Inner3 {
+                           }
+                       }
+                   }
+                   {
+                       new Inner1(){}.new Inner2(){}.new Inner3();
+                   }
+                }
+                """;
         CompilationUnit cu = StaticJavaParser.parse(str);
         List<ObjectCreationExpr> local = cu.findAll(ObjectCreationExpr.class);
         local.forEach(lcl -> assertFalse(lcl.getType()

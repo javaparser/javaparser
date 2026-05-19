@@ -29,7 +29,6 @@ import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.utils.SourceRoot;
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -41,9 +40,9 @@ class NotNullGeneratorTest {
         // Setup the
         String resourcesFolderPath = getClass().getCanonicalName().replace(".", File.separator);
 
-        String basePath = Paths.get("src", "test", "resources").toString();
-        Path originalFile = Paths.get(basePath, resourcesFolderPath, "original");
-        Path expectedFile = Paths.get(basePath, resourcesFolderPath, "expected");
+        String basePath = Path.of("src", "test", "resources").toString();
+        Path originalFile = Path.of(basePath, resourcesFolderPath, "original");
+        Path expectedFile = Path.of(basePath, resourcesFolderPath, "expected");
 
         SourceRoot originalSources = new SourceRoot(originalFile);
         SourceRoot expectedSources = new SourceRoot(expectedFile);

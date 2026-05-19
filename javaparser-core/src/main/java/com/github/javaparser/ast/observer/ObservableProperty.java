@@ -210,8 +210,8 @@ public enum ObservableProperty {
     public Node getValueAsSingleReference(Node node) {
         Object rawValue = getRawValue(node);
         try {
-            if (rawValue instanceof Node) {
-                return (Node) rawValue;
+            if (rawValue instanceof Node node1) {
+                return node1;
             }
             if (rawValue instanceof Optional) {
                 Optional<Node> opt = (Optional<Node>) rawValue;
@@ -220,8 +220,7 @@ public enum ObservableProperty {
                 }
                 return null;
             }
-            throw new RuntimeException(String.format(
-                    "Property %s returned %s (%s)",
+            throw new RuntimeException("Property %s returned %s (%s)".formatted(
                     this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
         } catch (ClassCastException e) {
             throw new RuntimeException(e);
@@ -243,8 +242,8 @@ public enum ObservableProperty {
             if (rawValue == null) {
                 return null;
             }
-            if (rawValue instanceof NodeList) {
-                return (NodeList) rawValue;
+            if (rawValue instanceof NodeList list) {
+                return list;
             }
             Optional<NodeList> opt = (Optional<NodeList>) rawValue;
             if (opt.isPresent()) {

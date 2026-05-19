@@ -31,13 +31,22 @@ public class Issue3441Test extends AbstractLexicalPreservingTest {
 
     @Test
     void test() {
-        considerCode("public class Foo {\n" + "    void bar() {\n"
-                + "        stmt1(); // comment 1\n"
-                + "        stmt2(); // comment 2\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                public class Foo {
+                    void bar() {
+                        stmt1(); // comment 1
+                        stmt2(); // comment 2
+                    }
+                }\
+                """);
         String expected =
-                "public class Foo {\n" + "    void bar() {\n" + "        stmt2(); // comment 2\n" + "    }\n" + "}";
+                """
+                public class Foo {
+                    void bar() {
+                        stmt2(); // comment 2
+                    }
+                }\
+                """;
 
         BlockStmt block = cu.findFirst(BlockStmt.class).get();
         Statement stmt = block.getStatements().get(0);

@@ -66,9 +66,9 @@ class AstResolutionUtils {
     }
 
     static String getClassName(String base, Node container) {
-        if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
+        if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration declaration) {
             String b = getClassName(base, container.getParentNode().orElse(null));
-            String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container)
+            String cn = declaration
                     .getName()
                     .getId();
             if (b.isEmpty()) {
@@ -76,9 +76,9 @@ class AstResolutionUtils {
             }
             return b + "." + cn;
         }
-        if (container instanceof com.github.javaparser.ast.body.EnumDeclaration) {
+        if (container instanceof com.github.javaparser.ast.body.EnumDeclaration declaration1) {
             String b = getClassName(base, container.getParentNode().orElse(null));
-            String cn = ((com.github.javaparser.ast.body.EnumDeclaration) container)
+            String cn = declaration1
                     .getName()
                     .getId();
             if (b.isEmpty()) {
@@ -86,9 +86,9 @@ class AstResolutionUtils {
             }
             return b + "." + cn;
         }
-        if (container instanceof com.github.javaparser.ast.body.RecordDeclaration) {
+        if (container instanceof com.github.javaparser.ast.body.RecordDeclaration declaration2) {
             String b = getClassName(base, container.getParentNode().orElse(null));
-            String cn = ((com.github.javaparser.ast.body.RecordDeclaration) container)
+            String cn = declaration2
                     .getName()
                     .getId();
             if (b.isEmpty()) {
@@ -96,9 +96,9 @@ class AstResolutionUtils {
             }
             return b + "." + cn;
         }
-        if (container instanceof com.github.javaparser.ast.body.AnnotationDeclaration) {
+        if (container instanceof com.github.javaparser.ast.body.AnnotationDeclaration declaration3) {
             String b = getClassName(base, container.getParentNode().orElse(null));
-            String cn = ((com.github.javaparser.ast.body.AnnotationDeclaration) container)
+            String cn = declaration3
                     .getName()
                     .getId();
             if (b.isEmpty()) {

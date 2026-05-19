@@ -64,7 +64,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
 
         private byte[] loadClassData(String name) throws ClassNotFoundException {
             try {
-                Path filePath = adaptPath(String.format("src/test/resources/record_declarations/box/%s.class", name));
+                Path filePath = adaptPath("src/test/resources/record_declarations/box/%s.class".formatted(name));
                 return Files.readAllBytes(filePath);
             } catch (Exception e) {
                 throw new ClassNotFoundException(e.getMessage());
@@ -376,13 +376,15 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16);
 
         JavaParser javaParser = new JavaParser(configuration);
-        ParseResult<CompilationUnit> cu = javaParser.parse("import box.GenericBox;\n"
-                + "class Test {\n"
-                + "  public static void main(String[] args) {\n"
-                + "    GenericBox<Integer> box = new GenericBox<>(2);\n"
-                + "    System.out.println(box.value());\n"
-                + "  }\n"
-                + "}");
+        ParseResult<CompilationUnit> cu = javaParser.parse("""
+                import box.GenericBox;
+                class Test {
+                  public static void main(String[] args) {
+                    GenericBox<Integer> box = new GenericBox<>(2);
+                    System.out.println(box.value());
+                  }
+                }\
+                """);
 
         ObjectCreationExpr constructorInvocation =
                 cu.getResult().get().findFirst(ObjectCreationExpr.class).get();

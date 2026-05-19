@@ -51,11 +51,14 @@ public class Issue3038Test extends AbstractResolutionTest {
     @RepeatedTest(10)
     @Timeout(value = TIME_LIMIT_MS, unit = TimeUnit.MILLISECONDS)
     public void test3038() {
-        run(generate("        new Thread(){\n" + "            @Override\n"
-                + "            public void run() {\n"
-                + "                Foo foo = Foo.getInstance();\n"
-                + "            }\n"
-                + "        }.run();\n"));
+        run(generate("""
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                Foo foo = Foo.getInstance();
+                            }
+                        }.run();
+                """));
     }
 
     @RepeatedTest(10)

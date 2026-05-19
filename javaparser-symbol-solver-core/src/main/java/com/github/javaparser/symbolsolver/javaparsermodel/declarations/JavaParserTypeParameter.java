@@ -90,11 +90,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public String getContainerQualifiedName() {
         ResolvedTypeParametrizable container = getContainer();
-        if (container instanceof ResolvedReferenceTypeDeclaration) {
-            return ((ResolvedReferenceTypeDeclaration) container).getQualifiedName();
+        if (container instanceof ResolvedReferenceTypeDeclaration declaration) {
+            return declaration.getQualifiedName();
         }
-        if (container instanceof JavaParserConstructorDeclaration) {
-            return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
+        if (container instanceof JavaParserConstructorDeclaration declaration1) {
+            return declaration1.getQualifiedSignature();
         }
         return ((JavaParserMethodDeclaration) container).getQualifiedSignature();
     }
@@ -102,11 +102,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public String getContainerId() {
         ResolvedTypeParametrizable container = getContainer();
-        if (container instanceof ResolvedReferenceTypeDeclaration) {
-            return ((ResolvedReferenceTypeDeclaration) container).getId();
+        if (container instanceof ResolvedReferenceTypeDeclaration declaration) {
+            return declaration.getId();
         }
-        if (container instanceof JavaParserConstructorDeclaration) {
-            return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
+        if (container instanceof JavaParserConstructorDeclaration declaration1) {
+            return declaration1.getQualifiedSignature();
         }
         return ((JavaParserMethodDeclaration) container).getQualifiedSignature();
     }
@@ -114,19 +114,13 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public ResolvedTypeParametrizable getContainer() {
         Node parentNode = demandParentNode(wrappedNode);
-        if (parentNode instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
-            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration =
-                    (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) parentNode;
+        if (parentNode instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration) {
             return JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
         }
-        if (parentNode instanceof com.github.javaparser.ast.body.RecordDeclaration) {
-            com.github.javaparser.ast.body.RecordDeclaration jpRecordDeclaration =
-                    (com.github.javaparser.ast.body.RecordDeclaration) parentNode;
+        if (parentNode instanceof com.github.javaparser.ast.body.RecordDeclaration jpRecordDeclaration) {
             return JavaParserFacade.get(typeSolver).getTypeDeclaration(jpRecordDeclaration);
         }
-        if (parentNode instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
-            com.github.javaparser.ast.body.ConstructorDeclaration jpConstructorDeclaration =
-                    (com.github.javaparser.ast.body.ConstructorDeclaration) parentNode;
+        if (parentNode instanceof com.github.javaparser.ast.body.ConstructorDeclaration jpConstructorDeclaration) {
             Optional<ClassOrInterfaceDeclaration> jpTypeDeclaration = jpConstructorDeclaration.findAncestor(
                     com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.class);
             if (jpTypeDeclaration.isPresent()) {
@@ -147,7 +141,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public String getQualifiedName() {
-        return String.format("%s.%s", getContainerQualifiedName(), getName());
+        return "%s.%s".formatted(getContainerQualifiedName(), getName());
     }
 
     @Override
@@ -232,8 +226,8 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         ResolvedTypeParametrizable container = getContainer();
-        if (container instanceof ResolvedReferenceTypeDeclaration) {
-            return Optional.of((ResolvedReferenceTypeDeclaration) container);
+        if (container instanceof ResolvedReferenceTypeDeclaration declaration) {
+            return Optional.of(declaration);
         }
         return Optional.empty();
     }

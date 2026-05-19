@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 import com.github.javaparser.resolution.TypeSolver;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 class TypeSolverBuilderTest {
@@ -139,7 +139,7 @@ class TypeSolverBuilderTest {
 
         // Execute
         TypeSolver createdTypeSolver = typeSolverBuilder
-                .withJAR(Paths.get("src/test/resources/junit-4.8.1.jar"))
+                .withJAR(Path.of("src/test/resources/junit-4.8.1.jar"))
                 .build();
 
         // Assert
@@ -190,7 +190,7 @@ class TypeSolverBuilderTest {
 
         // Execute
         TypeSolver createdTypeSolver = typeSolverBuilder
-                .withAAR(Paths.get("src/test/resources/aars/support-compat-24.2.0.aar"))
+                .withAAR(Path.of("src/test/resources/aars/support-compat-24.2.0.aar"))
                 .build();
 
         // Assert
@@ -241,7 +241,7 @@ class TypeSolverBuilderTest {
 
         // Execute
         TypeSolver createdTypeSolver = typeSolverBuilder
-                .withSourceCode(Paths.get("src/test/test_sourcecode/javaparser_new_src/javaparser-core"))
+                .withSourceCode(Path.of("src/test/test_sourcecode/javaparser_new_src/javaparser-core"))
                 .build();
 
         // Assert
@@ -295,7 +295,7 @@ class TypeSolverBuilderTest {
      * @param className The class to find.
      */
     private static void assertIsSolved(TypeSolver typeSolver, String className) {
-        assertTrue(typeSolver.hasType(className), String.format("Unable to solve type %s", className));
+        assertTrue(typeSolver.hasType(className), "Unable to solve type %s".formatted(className));
     }
 
     /**
@@ -307,6 +307,6 @@ class TypeSolverBuilderTest {
     private static void assertNotSolved(TypeSolver typeSolver, String className) {
         assertFalse(
                 typeSolver.hasType(className),
-                String.format("This type solver should not be able to solve type %s", className));
+                "This type solver should not be able to solve type %s".formatted(className));
     }
 }

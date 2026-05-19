@@ -32,10 +32,10 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     public static JavadocDescriptionElement fromText(String text) {
         if (!text.startsWith("{@")) {
-            throw new IllegalArgumentException(String.format("Expected to start with '{@'. Text '%s'", text));
+            throw new IllegalArgumentException("Expected to start with '{@'. Text '%s'".formatted(text));
         }
         if (!text.endsWith("}")) {
-            throw new IllegalArgumentException(String.format("Expected to end with '}'. Text '%s'", text));
+            throw new IllegalArgumentException("Expected to end with '}'. Text '%s'".formatted(text));
         }
         text = text.substring(2, text.length() - 1);
         String tagName = nextWord(text);

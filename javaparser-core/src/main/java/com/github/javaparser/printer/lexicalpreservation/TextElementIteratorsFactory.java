@@ -165,8 +165,8 @@ class TextElementIteratorsFactory {
 
     private static Iterator<TokenTextElement> reverseIterator(NodeText nodeText, int index) {
         TextElement textElement = nodeText.getTextElement(index);
-        if (textElement instanceof TokenTextElement) {
-            return new SingleElementIterator<TokenTextElement>((TokenTextElement) textElement) {
+        if (textElement instanceof TokenTextElement element) {
+            return new SingleElementIterator<TokenTextElement>(element) {
 
                 @Override
                 public void remove() {
@@ -174,8 +174,7 @@ class TextElementIteratorsFactory {
                 }
             };
         }
-        if (textElement instanceof ChildTextElement) {
-            ChildTextElement childTextElement = (ChildTextElement) textElement;
+        if (textElement instanceof ChildTextElement childTextElement) {
             NodeText textForChild = childTextElement.getNodeTextForWrappedNode();
             return reverseIterator(textForChild);
         }

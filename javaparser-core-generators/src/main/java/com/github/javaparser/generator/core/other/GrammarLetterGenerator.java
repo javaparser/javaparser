@@ -78,6 +78,6 @@ public class GrammarLetterGenerator {
     }
 
     private static String format(int i) {
-        return String.format("\"\\u%04x\"", i);
+        return "\"\\u%04x\"".formatted(i);
     }
 }

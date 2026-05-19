@@ -34,14 +34,16 @@ public class Issue4047Test extends AbstractResolutionTest {
     @Test
     void test() {
 
-        String code = "import static java.lang.String.valueOf;\n"
-                + "public class MyClass { \n"
-                + "  void f() { \n"
-                + "    Long Integer = null; \n"
-                + "    Integer.intValue(); \n"
-                + "    valueOf(Integer); \n"
-                + "  } \n"
-                + "} \n";
+        String code = """
+                import static java.lang.String.valueOf;
+                public class MyClass {\s
+                  void f() {\s
+                    Long Integer = null;\s
+                    Integer.intValue();\s
+                    valueOf(Integer);\s
+                  }\s
+                }\s
+                """;
 
         JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
         CompilationUnit cu = parser.parse(code);

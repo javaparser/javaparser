@@ -99,8 +99,8 @@ public class JavaSymbolSolver implements SymbolResolver {
 
     @Override
     public <T> T resolveDeclaration(Node node, Class<T> resultClass) {
-        if (node instanceof MethodDeclaration) {
-            return resultClass.cast(new JavaParserMethodDeclaration((MethodDeclaration) node, typeSolver));
+        if (node instanceof MethodDeclaration declaration) {
+            return resultClass.cast(new JavaParserMethodDeclaration(declaration, typeSolver));
         }
         if (node instanceof ClassOrInterfaceDeclaration) {
             ResolvedReferenceTypeDeclaration resolved = toTypeDeclaration(node);
@@ -131,8 +131,7 @@ public class JavaSymbolSolver implements SymbolResolver {
                 return resultClass.cast(resolved);
             }
         }
-        if (node instanceof ConstructorDeclaration) {
-            ConstructorDeclaration constructorDeclaration = (ConstructorDeclaration) node;
+        if (node instanceof ConstructorDeclaration constructorDeclaration) {
             TypeDeclaration<?> typeDeclaration =
                     (TypeDeclaration<?>) node.getParentNode().get();
             ResolvedReferenceTypeDeclaration resolvedTypeDeclaration =
@@ -164,8 +163,7 @@ public class JavaSymbolSolver implements SymbolResolver {
                 return resultClass.cast(resolved);
             }
         }
-        if (node instanceof FieldDeclaration) {
-            FieldDeclaration fieldDeclaration = (FieldDeclaration) node;
+        if (node instanceof FieldDeclaration fieldDeclaration) {
             if (fieldDeclaration.getVariables().size() != 1) {
                 throw new RuntimeException(
                         "Cannot resolve a Field Declaration including multiple variable declarators. Resolve the single variable declarators");
@@ -176,13 +174,13 @@ public class JavaSymbolSolver implements SymbolResolver {
                 return resultClass.cast(resolved);
             }
         }
-        if (node instanceof VariableDeclarator) {
+        if (node instanceof VariableDeclarator declarator) {
             ResolvedValueDeclaration resolved;
             if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldDeclaration) {
-                resolved = new JavaParserFieldDeclaration((VariableDeclarator) node, typeSolver);
+                resolved = new JavaParserFieldDeclaration(declarator, typeSolver);
             } else if (node.getParentNode().isPresent()
                     && node.getParentNode().get() instanceof VariableDeclarationExpr) {
-                resolved = new JavaParserVariableDeclaration((VariableDeclarator) node, typeSolver);
+                resolved = new JavaParserVariableDeclaration(declarator, typeSolver);
             } else {
                 throw new UnsupportedOperationException("Parent of VariableDeclarator is: " + node.getParentNode());
             }
@@ -190,9 +188,9 @@ public class JavaSymbolSolver implements SymbolResolver {
                 return resultClass.cast(resolved);
             }
         }
-        if (node instanceof MethodCallExpr) {
+        if (node instanceof MethodCallExpr expr) {
             SymbolReference<ResolvedMethodDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((MethodCallExpr) node);
+                    JavaParserFacade.get(typeSolver).solve(expr);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -202,9 +200,9 @@ public class JavaSymbolSolver implements SymbolResolver {
                         "We are unable to find the method declaration corresponding to " + node);
             }
         }
-        if (node instanceof ObjectCreationExpr) {
+        if (node instanceof ObjectCreationExpr expr1) {
             SymbolReference<ResolvedConstructorDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((ObjectCreationExpr) node);
+                    JavaParserFacade.get(typeSolver).solve(expr1);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -214,9 +212,9 @@ public class JavaSymbolSolver implements SymbolResolver {
                         "We are unable to find the constructor declaration corresponding to " + node);
             }
         }
-        if (node instanceof NameExpr) {
+        if (node instanceof NameExpr expr2) {
             SymbolReference<? extends ResolvedValueDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((NameExpr) node);
+                    JavaParserFacade.get(typeSolver).solve(expr2);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -226,9 +224,9 @@ public class JavaSymbolSolver implements SymbolResolver {
                         "We are unable to find the value declaration corresponding to " + node);
             }
         }
-        if (node instanceof MethodReferenceExpr) {
+        if (node instanceof MethodReferenceExpr expr3) {
             SymbolReference<ResolvedMethodDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((MethodReferenceExpr) node);
+                    JavaParserFacade.get(typeSolver).solve(expr3);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -238,16 +236,16 @@ public class JavaSymbolSolver implements SymbolResolver {
                         "We are unable to find the method declaration corresponding to " + node);
             }
         }
-        if (node instanceof FieldAccessExpr) {
+        if (node instanceof FieldAccessExpr expr4) {
             SymbolReference<? extends ResolvedValueDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((FieldAccessExpr) node);
+                    JavaParserFacade.get(typeSolver).solve(expr4);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
                 }
             } else {
-                if ("length".equals(((FieldAccessExpr) node).getName().getId())) {
-                    ResolvedType scopeType = ((FieldAccessExpr) node).getScope().calculateResolvedType();
+                if ("length".equals(expr4.getName().getId())) {
+                    ResolvedType scopeType = expr4.getScope().calculateResolvedType();
                     if (scopeType.isArray()) {
                         if (resultClass.isInstance(ArrayLengthValueDeclaration.INSTANCE)) {
                             return resultClass.cast(ArrayLengthValueDeclaration.INSTANCE);
@@ -258,9 +256,9 @@ public class JavaSymbolSolver implements SymbolResolver {
                         "We are unable to find the value declaration corresponding to " + node);
             }
         }
-        if (node instanceof ThisExpr) {
+        if (node instanceof ThisExpr expr5) {
             SymbolReference<ResolvedTypeDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((ThisExpr) node);
+                    JavaParserFacade.get(typeSolver).solve(expr5);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -270,9 +268,9 @@ public class JavaSymbolSolver implements SymbolResolver {
                         "We are unable to find the type declaration corresponding to " + node);
             }
         }
-        if (node instanceof ExplicitConstructorInvocationStmt) {
+        if (node instanceof ExplicitConstructorInvocationStmt stmt) {
             SymbolReference<ResolvedConstructorDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((ExplicitConstructorInvocationStmt) node);
+                    JavaParserFacade.get(typeSolver).solve(stmt);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -282,32 +280,31 @@ public class JavaSymbolSolver implements SymbolResolver {
                         "We are unable to find the constructor declaration corresponding to " + node);
             }
         }
-        if (node instanceof Parameter) {
+        if (node instanceof Parameter parameter) {
             if (ResolvedParameterDeclaration.class.equals(resultClass)) {
-                Parameter parameter = (Parameter) node;
                 Optional<Node> parentNode = node.getParentNode();
-                if (!parentNode.isPresent()) {
+                if (parentNode.isEmpty()) {
                     throw new UnsolvedSymbolException(
                             "We are unable to resolve the parameter declaration corresponding to " + node);
                 }
                 Node parent = (Node) parentNode.get();
-                if (parent instanceof ConstructorDeclaration) {
+                if (parent instanceof ConstructorDeclaration declaration3) {
                     Optional<ResolvedParameterDeclaration> resolvedParameterDeclaration =
-                            resolveParameterDeclaration(((ConstructorDeclaration) parent).resolve(), parameter);
+                            resolveParameterDeclaration(declaration3.resolve(), parameter);
                     return resolvedParameterDeclaration
                             .map(rpd -> resultClass.cast(rpd))
                             .orElseThrow(() -> new UnsolvedSymbolException(
                                     "We are unable to resolve the parameter declaration corresponding to " + node));
-                } else if (parent instanceof MethodDeclaration) {
+                } else if (parent instanceof MethodDeclaration declaration2) {
                     Optional<ResolvedParameterDeclaration> resolvedParameterDeclaration =
-                            resolveParameterDeclaration(((MethodDeclaration) parent).resolve(), parameter);
+                            resolveParameterDeclaration(declaration2.resolve(), parameter);
                     return resolvedParameterDeclaration
                             .map(rpd -> resultClass.cast(rpd))
                             .orElseThrow(() -> new UnsolvedSymbolException(
                                     "We are unable to resolve the parameter declaration corresponding to " + node));
-                } else if (parent instanceof RecordDeclaration) {
+                } else if (parent instanceof RecordDeclaration declaration1) {
                     Optional<ResolvedParameterDeclaration> resolvedParameterDeclaration =
-                            resolveParameterDeclaration(((RecordDeclaration) parent).resolve(), parameter);
+                            resolveParameterDeclaration(declaration1.resolve(), parameter);
                     return resolvedParameterDeclaration
                             .map(rpd -> resultClass.cast(rpd))
                             .orElseThrow(() -> new UnsolvedSymbolException(
@@ -332,9 +329,9 @@ public class JavaSymbolSolver implements SymbolResolver {
                 }
             }
         }
-        if (node instanceof AnnotationExpr) {
+        if (node instanceof AnnotationExpr expr6) {
             SymbolReference<ResolvedAnnotationDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((AnnotationExpr) node);
+                    JavaParserFacade.get(typeSolver).solve(expr6);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -344,9 +341,9 @@ public class JavaSymbolSolver implements SymbolResolver {
                         "We are unable to find the annotation declaration corresponding to " + node);
             }
         }
-        if (node instanceof TypePatternExpr) {
+        if (node instanceof TypePatternExpr expr7) {
             SymbolReference<? extends ResolvedValueDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((TypePatternExpr) node);
+                    JavaParserFacade.get(typeSolver).solve(expr7);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -450,26 +447,26 @@ public class JavaSymbolSolver implements SymbolResolver {
 
     @Override
     public ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            if (((ClassOrInterfaceDeclaration) node).isInterface()) {
-                return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
+        if (node instanceof ClassOrInterfaceDeclaration declaration) {
+            if (declaration.isInterface()) {
+                return new JavaParserInterfaceDeclaration(declaration, typeSolver);
             }
-            return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
+            return new JavaParserClassDeclaration(declaration, typeSolver);
         }
-        if (node instanceof TypeParameter) {
-            return new JavaParserTypeParameter((TypeParameter) node, typeSolver);
+        if (node instanceof TypeParameter parameter) {
+            return new JavaParserTypeParameter(parameter, typeSolver);
         }
-        if (node instanceof EnumDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
+        if (node instanceof EnumDeclaration declaration1) {
+            return new JavaParserEnumDeclaration(declaration1, typeSolver);
         }
-        if (node instanceof AnnotationDeclaration) {
-            return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
+        if (node instanceof AnnotationDeclaration declaration2) {
+            return new JavaParserAnnotationDeclaration(declaration2, typeSolver);
         }
         if (node instanceof EnumConstantDeclaration) {
             return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(node), typeSolver);
         }
-        if (node instanceof RecordDeclaration) {
-            return new JavaParserRecordDeclaration((RecordDeclaration) node, typeSolver);
+        if (node instanceof RecordDeclaration declaration3) {
+            return new JavaParserRecordDeclaration(declaration3, typeSolver);
         }
         throw new IllegalArgumentException("Cannot get a reference type declaration from "
                 + node.getClass().getCanonicalName());

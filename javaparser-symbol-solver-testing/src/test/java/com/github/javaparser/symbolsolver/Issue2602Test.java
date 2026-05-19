@@ -52,11 +52,14 @@ public class Issue2602Test extends AbstractSymbolResolutionTest {
         javaParser = new JavaParser(configuration);
 
         // language=JAVA
-        String src = "package java.lang;" + " class Object {}\n"
-                + "\n"
-                + "class A extends Object {}\n"
-                + "\n"
-                + "class B extends Object {}\n";
+        String src = """
+                package java.lang;\
+                 class Object {}
+                
+                class A extends Object {}
+                
+                class B extends Object {}
+                """;
 
         ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(src));
 

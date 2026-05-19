@@ -43,12 +43,15 @@ public class Issue2259Test extends AbstractResolutionTest {
     @Test
     void test() throws IOException {
         // Source code
-        String src = "public class TestClass2 {\n" + "    public static void foo(Object o) {\n"
-                + "    }\n"
-                + "    public static void main(String[] args) {\n"
-                + "        foo(new Object[5]);\n"
-                + "    }\n"
-                + "}";
+        String src = """
+                public class TestClass2 {
+                    public static void foo(Object o) {
+                    }
+                    public static void main(String[] args) {
+                        foo(new Object[5]);
+                    }
+                }\
+                """;
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
 
         // Setup symbol solver

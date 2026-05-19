@@ -27,14 +27,16 @@ import org.junit.jupiter.api.Test;
 public class Issue4996Test {
 
     // Template: case label is on line 4, col 13; first pattern starts at col 18; second at col 28.
-    private static final String SWITCH_TEMPLATE = "public class Main {\n"
-            + "    void m(Object o) {\n"
-            + "        switch (o) {\n"
-            + "            %s\n"
-            + "            default -> {}\n"
-            + "        }\n"
-            + "    }\n"
-            + "}";
+    private static final String SWITCH_TEMPLATE = """
+            public class Main {
+                void m(Object o) {
+                    switch (o) {
+                        %s
+                        default -> {}
+                    }
+                }
+            }\
+            """;
 
     private static final String UPGRADE_SUFFIX =
             " Pay attention that this feature is supported starting from 'JAVA_22' language level."
@@ -46,28 +48,31 @@ public class Issue4996Test {
     }
 
     private static String switchWith(String caseLabel) {
-        return String.format(SWITCH_TEMPLATE, caseLabel);
+        return SWITCH_TEMPLATE.formatted(caseLabel);
     }
 
     @Test
     public void testIssue4996() {
-        String code = "public class Main {\n" + "    public static void main(String[] args) {\n"
-                + "        Object str = \"string\";\n"
-                + "\n"
-                + "        switch (str) {\n"
-                + "            case String _, Integer _ -> f();\n"
-                + "            default -> g();\n"
-                + "        }\n"
-                + "    }\n"
-                + "\n"
-                + "    private static void f() {\n"
-                + "        System.out.println(\"f\");\n"
-                + "    }\n"
-                + "\n"
-                + "    private static void g() {\n"
-                + "        System.out.println(\"g\");\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class Main {
+                    public static void main(String[] args) {
+                        Object str = "string";
+                
+                        switch (str) {
+                            case String _, Integer _ -> f();
+                            default -> g();
+                        }
+                    }
+                
+                    private static void f() {
+                        System.out.println("f");
+                    }
+                
+                    private static void g() {
+                        System.out.println("g");
+                    }
+                }\
+                """;
 
         ParserConfiguration config =
                 new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_22);

@@ -147,18 +147,22 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
 
     @Test
     void matchAllPatternAdded() {
-        String originalCode = "class A {\n"
-                + "		void m(int year) { \n"
-                + "			return switch (year) {\n"
-                + "				case Box(String s) -> new Object();\n"
-                + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
-                + "			};\n"
-                + "		}\n"
-                + "	}";
-        String expectedCode = "switch (year) {\n"
-                + "				case Box(_) -> new Object();\n"
-                + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
-                + "			}";
+        String originalCode = """
+                class A {
+                		void m(int year) {\s
+                			return switch (year) {
+                				case Box(String s) -> new Object();
+                				default -> throw new IllegalStateException("Cant create for year");
+                			};
+                		}
+                	}\
+                """;
+        String expectedCode = """
+                switch (year) {
+                				case Box(_) -> new Object();
+                				default -> throw new IllegalStateException("Cant create for year");
+                			}\
+                """;
         ParserConfiguration config = new ParserConfiguration();
         config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
         StaticJavaParser.setConfiguration(config);
@@ -177,18 +181,22 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
 
     @Test
     void unnamedTypePatternAdded() {
-        String originalCode = "class A {\n"
-                + "		void m(int year) { \n"
-                + "			return switch (year) {\n"
-                + "				case Box(String s) -> new Object();\n"
-                + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
-                + "			};\n"
-                + "		}\n"
-                + "	}";
-        String expectedCode = "switch (year) {\n"
-                + "				case Box(String _) -> new Object();\n"
-                + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
-                + "			}";
+        String originalCode = """
+                class A {
+                		void m(int year) {\s
+                			return switch (year) {
+                				case Box(String s) -> new Object();
+                				default -> throw new IllegalStateException("Cant create for year");
+                			};
+                		}
+                	}\
+                """;
+        String expectedCode = """
+                switch (year) {
+                				case Box(String _) -> new Object();
+                				default -> throw new IllegalStateException("Cant create for year");
+                			}\
+                """;
         ParserConfiguration config = new ParserConfiguration();
         config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
         StaticJavaParser.setConfiguration(config);
@@ -207,19 +215,23 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
 
     @Test
     void issue4646() {
-        String originalCode = "class A {\n"
-                + "		void m(int year) { \n"
-                + "			return switch (year) {\n"
-                + "				case 2023 -> new Object();\n"
-                + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
-                + "			};\n"
-                + "		}\n"
-                + "	}";
-        String expectedCode = "switch (year) {\n"
-                + "				case 2023 -> new Object();\n"
-                + "				case 2024 -> new java.lang.Object();\n"
-                + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
-                + "			}";
+        String originalCode = """
+                class A {
+                		void m(int year) {\s
+                			return switch (year) {
+                				case 2023 -> new Object();
+                				default -> throw new IllegalStateException("Cant create for year");
+                			};
+                		}
+                	}\
+                """;
+        String expectedCode = """
+                switch (year) {
+                				case 2023 -> new Object();
+                				case 2024 -> new java.lang.Object();
+                				default -> throw new IllegalStateException("Cant create for year");
+                			}\
+                """;
         ParserConfiguration config = new ParserConfiguration();
         config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
         StaticJavaParser.setConfiguration(config);

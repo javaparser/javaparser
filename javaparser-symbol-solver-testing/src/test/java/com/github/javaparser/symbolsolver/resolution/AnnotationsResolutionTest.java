@@ -455,6 +455,6 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
                 .filter(a -> memberName.equals(a.getName()))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(
-                        String.format("Could not find annotation member %s in %s", memberName, resolved.getName())));
+                "Could not find annotation member %s in %s".formatted(memberName, resolved.getName())));
     }
 }

@@ -46,11 +46,14 @@ public class Issue1817Test extends AbstractSymbolResolutionTest {
         StaticJavaParser.setConfiguration(
                 new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver)));
 
-        String s = "interface A extends X.A {\n" + "    default void foo() {\n"
-                + "        X.A xa = null;\n"
-                + "        xa.bar();\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                interface A extends X.A {
+                    default void foo() {
+                        X.A xa = null;
+                        xa.bar();
+                    }
+                }\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(s);
 

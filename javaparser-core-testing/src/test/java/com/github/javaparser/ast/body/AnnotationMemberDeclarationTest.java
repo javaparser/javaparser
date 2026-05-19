@@ -70,7 +70,11 @@ class AnnotationMemberDeclarationTest {
     void annotationDeclarationShouldSupportRecordChild() {
         CompilationUnit cu = TestParser.parseCompilationUnit(
                 ParserConfiguration.LanguageLevel.BLEEDING_EDGE,
-                "" + "@interface Foo {\n" + "    record Bar(String s) {}\n" + "}");
+                """
+                @interface Foo {
+                    record Bar(String s) {}
+                }\
+                """);
 
         RecordDeclaration bar =
                 cu.getAnnotationDeclarationByName("Foo").get().getMember(0).asRecordDeclaration();

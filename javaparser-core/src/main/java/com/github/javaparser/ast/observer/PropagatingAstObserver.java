@@ -33,8 +33,8 @@ public abstract class PropagatingAstObserver implements AstObserver {
      * the observer is returned without changes.
      */
     public static PropagatingAstObserver transformInPropagatingObserver(final AstObserver observer) {
-        if (observer instanceof PropagatingAstObserver) {
-            return (PropagatingAstObserver) observer;
+        if (observer instanceof PropagatingAstObserver astObserver) {
+            return astObserver;
         }
         return new PropagatingAstObserver() {
 
@@ -103,18 +103,18 @@ public abstract class PropagatingAstObserver implements AstObserver {
     }
 
     private void considerRemoving(Object element) {
-        if (element instanceof Observable) {
-            if (((Observable) element).isRegistered(this)) {
-                ((Observable) element).unregister(this);
+        if (element instanceof Observable observable) {
+            if (observable.isRegistered(this)) {
+                observable.unregister(this);
             }
         }
     }
 
     private void considerAdding(Object element) {
-        if (element instanceof Node) {
-            ((Node) element).registerForSubtree(this);
-        } else if (element instanceof Observable) {
-            ((Observable) element).register(this);
+        if (element instanceof Node node) {
+            node.registerForSubtree(this);
+        } else if (element instanceof Observable observable) {
+            observable.register(this);
         }
     }
 }

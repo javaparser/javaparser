@@ -152,7 +152,7 @@ public class JavaParserFacade {
         // Constructor invocation must exist within a class (not interface).
         Optional<ClassOrInterfaceDeclaration> optAncestorClassOrInterfaceNode =
                 explicitConstructorInvocationStmt.findAncestor(ClassOrInterfaceDeclaration.class);
-        if (!optAncestorClassOrInterfaceNode.isPresent()) {
+        if (optAncestorClassOrInterfaceNode.isEmpty()) {
             return unsolved();
         }
 
@@ -304,8 +304,7 @@ public class JavaParserFacade {
                 } catch (Exception e) {
                     throw failureHandler.handle(
                             e,
-                            String.format(
-                                    "Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
+                            "Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s".formatted(
                                     node, parameterValue));
                 }
             }
@@ -388,8 +387,7 @@ public class JavaParserFacade {
         try {
             return getType(node, true);
         } catch (UnsolvedSymbolException e) {
-            if (node instanceof NameExpr) {
-                NameExpr nameExpr = (NameExpr) node;
+            if (node instanceof NameExpr nameExpr) {
                 SymbolReference<ResolvedTypeDeclaration> typeDeclaration =
                         JavaParserFactory.getContext(node, typeSolver).solveType(nameExpr.getNameAsString());
                 if (typeDeclaration.isSolved()
@@ -413,8 +411,7 @@ public class JavaParserFacade {
         if (solveLambdas) {
             if (!node.containsData(TYPE_WITH_LAMBDAS_RESOLVED)) {
 
-                if (node instanceof MethodCallExpr) {
-                    MethodCallExpr methodCallExpr = (MethodCallExpr) node;
+                if (node instanceof MethodCallExpr methodCallExpr) {
                     for (Node arg : methodCallExpr.getArguments()) {
                         if (!arg.containsData(TYPE_WITH_LAMBDAS_RESOLVED)) {
                             getType(arg, true);
@@ -690,8 +687,8 @@ public class JavaParserFacade {
         Node parent = node;
         while (true) {
             parent = demandParentNode(parent);
-            if (parent instanceof TypeDeclaration) {
-                return (TypeDeclaration<?>) parent;
+            if (parent instanceof TypeDeclaration<?> declaration) {
+                return declaration;
             }
         }
     }
@@ -751,8 +748,8 @@ public class JavaParserFacade {
         while (true) {
             parent = demandParentNode(parent);
             if (parent instanceof BodyDeclaration) {
-                if (parent instanceof TypeDeclaration
-                        && ((TypeDeclaration<?>) parent)
+                if (parent instanceof TypeDeclaration<?> declaration
+                        && declaration
                                 .getFullyQualifiedName()
                                 .orElse("")
                                 .endsWith(className)) {
@@ -760,8 +757,8 @@ public class JavaParserFacade {
                 }
                 detachFlag = true;
             }
-            if (parent instanceof ObjectCreationExpr
-                    && ((ObjectCreationExpr) parent)
+            if (parent instanceof ObjectCreationExpr expr
+                    && expr
                             .getType()
                             .getName()
                             .asString()
@@ -801,11 +798,11 @@ public class JavaParserFacade {
 
     private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(VariableDeclarator variableDeclarator) {
         Optional<Node> node = variableDeclarator.getParentNode();
-        if (!node.isPresent() || !(node.get() instanceof VariableDeclarationExpr)) {
+        if (node.isEmpty() || !(node.get() instanceof VariableDeclarationExpr)) {
             return Optional.empty();
         }
         node = node.get().getParentNode();
-        if (!node.isPresent() || !(node.get() instanceof ForEachStmt)) {
+        if (node.isEmpty() || !(node.get() instanceof ForEachStmt)) {
             return Optional.empty();
         }
         return Optional.of((ForEachStmt) node.get());
@@ -829,7 +826,7 @@ public class JavaParserFacade {
                 } catch (Exception e) {
                     throw failureHandler.handle(
                             e,
-                            String.format("Error calculating the type of parameter %s of method call %s", param, call));
+                            "Error calculating the type of parameter %s of method call %s".formatted(param, call));
                 }
                 // params.add(getTypeConcrete(param, false));
             }
@@ -837,7 +834,7 @@ public class JavaParserFacade {
         Context context = JavaParserFactory.getContext(call, typeSolver);
         Optional<MethodUsage> methodUsage =
                 context.solveMethodAsUsage(call.getName().getId(), params);
-        if (!methodUsage.isPresent()) {
+        if (methodUsage.isEmpty()) {
             throw new UnsolvedSymbolException("Method '" + call.getName() + "' cannot be resolved in context " + call
                     + " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context
                     + ". Parameter types: " + params);
@@ -846,11 +843,11 @@ public class JavaParserFacade {
     }
 
     public ResolvedReferenceTypeDeclaration getTypeDeclaration(Node node) {
-        if (node instanceof TypeDeclaration) {
-            return getTypeDeclaration((TypeDeclaration) node);
+        if (node instanceof TypeDeclaration declaration) {
+            return getTypeDeclaration(declaration);
         }
-        if (node instanceof ObjectCreationExpr) {
-            return new JavaParserAnonymousClassDeclaration((ObjectCreationExpr) node, typeSolver);
+        if (node instanceof ObjectCreationExpr expr) {
+            return new JavaParserAnonymousClassDeclaration(expr, typeSolver);
         }
         throw new IllegalArgumentException();
     }
@@ -865,21 +862,21 @@ public class JavaParserFacade {
      */
     public ResolvedType getTypeOfThisIn(Node node) {
         // TODO consider static methods
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            return new ReferenceTypeImpl(getTypeDeclaration((ClassOrInterfaceDeclaration) node));
+        if (node instanceof ClassOrInterfaceDeclaration declaration) {
+            return new ReferenceTypeImpl(getTypeDeclaration(declaration));
         }
-        if (node instanceof RecordDeclaration) {
-            return new ReferenceTypeImpl(getTypeDeclaration((RecordDeclaration) node));
+        if (node instanceof RecordDeclaration declaration1) {
+            return new ReferenceTypeImpl(getTypeDeclaration(declaration1));
         }
-        if (node instanceof EnumDeclaration) {
+        if (node instanceof EnumDeclaration declaration2) {
             JavaParserEnumDeclaration enumDeclaration =
-                    new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
+                    new JavaParserEnumDeclaration(declaration2, typeSolver);
             return new ReferenceTypeImpl(enumDeclaration);
         }
-        if (node instanceof ObjectCreationExpr
-                && ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
+        if (node instanceof ObjectCreationExpr expr
+                && expr.getAnonymousClassBody().isPresent()) {
             JavaParserAnonymousClassDeclaration anonymousDeclaration =
-                    new JavaParserAnonymousClassDeclaration((ObjectCreationExpr) node, typeSolver);
+                    new JavaParserAnonymousClassDeclaration(expr, typeSolver);
             return new ReferenceTypeImpl(anonymousDeclaration);
         }
         return getTypeOfThisIn(demandParentNode(node));

@@ -32,21 +32,26 @@ import org.junit.jupiter.api.Test;
 class TextBlockLiteralExprTest {
     @Test
     void htmlExample() {
-        TextBlockLiteralExpr textBlock = parseStatement("String html = \"\"\"\n" + "              <html>\n"
-                        + "                  <body>\n"
-                        + "                      <p>Hello, world</p>\n"
-                        + "                  </body>\n"
-                        + "              </html>\n"
-                        + "              \"\"\";")
+        TextBlockLiteralExpr textBlock = parseStatement("""
+                        String html = ""\"
+                                      <html>
+                                          <body>
+                                              <p>Hello, world</p>
+                                          </body>
+                                      </html>
+                                      ""\";\
+                        """)
                 .findFirst(TextBlockLiteralExpr.class)
                 .get();
 
         assertEquals(
-                "              <html>\n" + "                  <body>\n"
-                        + "                      <p>Hello, world</p>\n"
-                        + "                  </body>\n"
-                        + "              </html>\n"
-                        + "              ",
+                """
+                              <html>
+                                  <body>
+                                      <p>Hello, world</p>
+                                  </body>
+                              </html>
+                              """,
                 textBlock.getValue());
 
         assertEquals(
@@ -54,108 +59,157 @@ class TextBlockLiteralExprTest {
                 textBlock.stripIndentOfLines().collect(toList()));
 
         assertEquals(
-                "<html>\n" + "    <body>\n" + "        <p>Hello, world</p>\n" + "    </body>\n" + "</html>\n",
+                """
+                <html>
+                    <body>
+                        <p>Hello, world</p>
+                    </body>
+                </html>
+                """,
                 textBlock.stripIndent());
 
         assertEquals(
-                "<html>\n" + "    <body>\n" + "        <p>Hello, world</p>\n" + "    </body>\n" + "</html>\n",
+                """
+                <html>
+                    <body>
+                        <p>Hello, world</p>
+                    </body>
+                </html>
+                """,
                 textBlock.translateEscapes());
     }
 
     @Test
     void htmlExampleWithEndAllToTheLeft() {
-        TextBlockLiteralExpr textBlock = parseStatement("String html = \"\"\"\n" + "              <html>\n"
-                        + "                  <body>\n"
-                        + "                      <p>Hello, world</p>\n"
-                        + "                  </body>\n"
-                        + "              </html>\n"
-                        + "\"\"\";")
+        TextBlockLiteralExpr textBlock = parseStatement("""
+                        String html = ""\"
+                                      <html>
+                                          <body>
+                                              <p>Hello, world</p>
+                                          </body>
+                                      </html>
+                        ""\";\
+                        """)
                 .findFirst(TextBlockLiteralExpr.class)
                 .get();
 
         assertEquals(
-                "              <html>\n" + "                  <body>\n"
-                        + "                      <p>Hello, world</p>\n"
-                        + "                  </body>\n"
-                        + "              </html>\n",
+                """
+                              <html>
+                                  <body>
+                                      <p>Hello, world</p>
+                                  </body>
+                              </html>
+                """,
                 textBlock.translateEscapes());
     }
 
     @Test
     void htmlExampleWithEndALittleToTheLeft() {
-        TextBlockLiteralExpr textBlock = parseStatement("String html = \"\"\"\n" + "              <html>\n"
-                        + "                  <body>\n"
-                        + "                      <p>Hello, world</p>\n"
-                        + "                  </body>\n"
-                        + "              </html>\n"
-                        + "        \"\"\";")
+        TextBlockLiteralExpr textBlock = parseStatement("""
+                        String html = ""\"
+                                      <html>
+                                          <body>
+                                              <p>Hello, world</p>
+                                          </body>
+                                      </html>
+                                ""\";\
+                        """)
                 .findFirst(TextBlockLiteralExpr.class)
                 .get();
 
         assertEquals(
-                "      <html>\n" + "          <body>\n"
-                        + "              <p>Hello, world</p>\n"
-                        + "          </body>\n"
-                        + "      </html>\n",
+                """
+                      <html>
+                          <body>
+                              <p>Hello, world</p>
+                          </body>
+                      </html>
+                """,
                 textBlock.translateEscapes());
     }
 
     @Test
     void htmlExampleWithEndALittleToTheRight() {
-        TextBlockLiteralExpr textBlock = parseStatement("String html = \"\"\"\n" + "              <html>\n"
-                        + "                  <body>\n"
-                        + "                      <p>Hello, world</p>\n"
-                        + "                  </body>\n"
-                        + "              </html>\n"
-                        + "                  \"\"\";")
+        TextBlockLiteralExpr textBlock = parseStatement("""
+                        String html = ""\"
+                                      <html>
+                                          <body>
+                                              <p>Hello, world</p>
+                                          </body>
+                                      </html>
+                                          ""\";\
+                        """)
                 .findFirst(TextBlockLiteralExpr.class)
                 .get();
 
         assertEquals(
-                "<html>\n" + "    <body>\n" + "        <p>Hello, world</p>\n" + "    </body>\n" + "</html>\n",
+                """
+                <html>
+                    <body>
+                        <p>Hello, world</p>
+                    </body>
+                </html>
+                """,
                 textBlock.translateEscapes());
     }
 
     @Test
     void itIsLegalToUseDoubleQuoteFreelyInsideATextBlock() {
-        parseStatement("String story = \"\"\"\n" + "    \"When I use a word,\" Humpty Dumpty said,\n"
-                + "    in rather a scornful tone, \"it means just what I\n"
-                + "    choose it to mean - neither more nor less.\"\n"
-                + "    \"The question is,\" said Alice, \"whether you\n"
-                + "    can make words mean so many different things.\"\n"
-                + "    \"The question is,\" said Humpty Dumpty,\n"
-                + "    \"which is to be master - that's all.\"\n"
-                + "    \"\"\";");
+        parseStatement("""
+                String story = ""\"
+                    "When I use a word," Humpty Dumpty said,
+                    in rather a scornful tone, "it means just what I
+                    choose it to mean - neither more nor less."
+                    "The question is," said Alice, "whether you
+                    can make words mean so many different things."
+                    "The question is," said Humpty Dumpty,
+                    "which is to be master - that's all."
+                    ""\";\
+                """);
     }
 
     @Test
     void sequencesOfThreeDoubleQuotesNeedAtLeastOneEscaped() {
-        TextBlockLiteralExpr textBlock = parseStatement("String code = \n" + "    \"\"\"\n"
-                        + "    String text = \\\"\"\"\n"
-                        + "        A text block inside a text block\n"
-                        + "    \\\"\"\";\n"
-                        + "    \"\"\";")
+        TextBlockLiteralExpr textBlock = parseStatement("""
+                        String code =\s
+                            ""\"
+                            String text = \\""\"
+                                A text block inside a text block
+                            \\""\";
+                            ""\";\
+                        """)
                 .findFirst(TextBlockLiteralExpr.class)
                 .get();
 
         assertEquals(
-                "String text = \"\"\"\n" + "    A text block inside a text block\n" + "\"\"\";\n",
+                """
+                String text = ""\"
+                    A text block inside a text block
+                ""\";
+                """,
                 textBlock.translateEscapes());
     }
 
     @Test
     void concatenatingTextBlocks() {
-        parseStatement("String code = \"public void print(Object o) {\" +\n" + "              \"\"\"\n"
-                + "                  System.out.println(Objects.toString(o));\n"
-                + "              }\n"
-                + "              \"\"\";");
+        parseStatement("""
+                String code = "public void print(Object o) {" +
+                              ""\"
+                                  System.out.println(Objects.toString(o));
+                              }
+                              ""\";\
+                """);
     }
 
     @Test
     void forceTrailingWhitespace() {
-        TextBlockLiteralExpr textBlock = parseStatement("String code = \"\"\"\n" + "The quick brown fox\\040\\040\n"
-                        + "jumps over the lazy dog\n"
-                        + "\"\"\";")
+        TextBlockLiteralExpr textBlock = parseStatement("""
+                        String code = ""\"
+                        The quick brown fox\\040\\040
+                        jumps over the lazy dog
+                        ""\";\
+                        """)
                 .findFirst(TextBlockLiteralExpr.class)
                 .get();
 
@@ -164,11 +218,13 @@ class TextBlockLiteralExprTest {
 
     @Test
     void escapeLineTerminator() {
-        TextBlockLiteralExpr textBlock = parseStatement("String text = \"\"\"\n"
-                        + "                Lorem ipsum dolor sit amet, consectetur adipiscing \\\n"
-                        + "                elit, sed do eiusmod tempor incididunt ut labore \\\n"
-                        + "                et dolore magna aliqua.\\\n"
-                        + "                \"\"\";")
+        TextBlockLiteralExpr textBlock = parseStatement("""
+                        String text = ""\"
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing \\
+                                        elit, sed do eiusmod tempor incididunt ut labore \\
+                                        et dolore magna aliqua.\\
+                                        ""\";\
+                        """)
                 .findFirst(TextBlockLiteralExpr.class)
                 .get();
 
@@ -181,10 +237,13 @@ class TextBlockLiteralExprTest {
 
     @Test
     void escapeSpace() {
-        TextBlockLiteralExpr textBlock = parseStatement("String colors = \"\"\"\n" + "    red  \\s\n"
-                        + "    green\\s\n"
-                        + "    blue \\s\n"
-                        + "    \"\"\";")
+        TextBlockLiteralExpr textBlock = parseStatement("""
+                        String colors = ""\"
+                            red  \\s
+                            green\\s
+                            blue \\s
+                            ""\";\
+                        """)
                 .findFirst(TextBlockLiteralExpr.class)
                 .get();
 

@@ -33,14 +33,16 @@ public class Issue4284Test extends AbstractResolutionTest {
     @Test
     void test() {
 
-        String code = "public class SampleCode {\n"
-                + "    public static void main(String... args) {\n"
-                + "        char ch = args[0].charAt(0);\n"
-                + "        int result = switch (ch) {\n"
-                + "            default -> System.out.println(ch);\n"
-                + "        };\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class SampleCode {
+                    public static void main(String... args) {
+                        char ch = args[0].charAt(0);
+                        int result = switch (ch) {
+                            default -> System.out.println(ch);
+                        };
+                    }
+                }\
+                """;
 
         ParserConfiguration parserConfiguration = new ParserConfiguration()
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)

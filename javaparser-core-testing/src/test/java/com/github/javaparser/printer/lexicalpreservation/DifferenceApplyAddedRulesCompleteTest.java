@@ -44,7 +44,14 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
     @Test
     void a1_addIndentDirective() {
         considerCode(
-                "class X {\n" + "    void method() {\n" + "        if (true) {\n" + "        }\n" + "    }\n" + "}");
+                """
+                class X {
+                    void method() {
+                        if (true) {
+                        }
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         IfStmt ifStmt = method.findFirst(IfStmt.class).get();
@@ -53,12 +60,15 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         // Add statement inside if block (triggers indent)
         thenBlock.addStatement("int x = 1;");
 
-        String expected = "class X {\n" + "    void method() {\n"
-                + "        if (true) {\n"
-                + "            int x = 1;\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                class X {
+                    void method() {
+                        if (true) {
+                            int x = 1;
+                        }
+                    }
+                }\
+                """;
 
         assertTransformedToString(expected, cu);
     }
@@ -69,12 +79,15 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
 
     @Test
     void a2_addUnindentDirective() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        if (true) {\n"
-                + "            int x = 1;\n"
-                + "        }\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        if (true) {
+                            int x = 1;
+                        }
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -82,13 +95,16 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         // Add statement after if (triggers unindent then normal indent)
         body.addStatement("int y = 2;");
 
-        String expected = "class X {\n" + "    void method() {\n"
-                + "        if (true) {\n"
-                + "            int x = 1;\n"
-                + "        }\n"
-                + "        int y = 2;\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                class X {
+                    void method() {
+                        if (true) {
+                            int x = 1;
+                        }
+                        int y = 2;
+                    }
+                }\
+                """;
 
         assertTransformedToString(expected, cu);
     }
@@ -99,11 +115,14 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
 
     @Test
     void a5_addElementAfterComment() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        /* comment */\n"
-                + "        int x = 1;\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        /* comment */
+                        int x = 1;
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -125,10 +144,13 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
 
     @Test
     void a6_addElementAfterCommentAndNewline() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        int x = 1; // end of line comment\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        int x = 1; // end of line comment
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -137,11 +159,14 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
-        String expected = "class X {\n" + "    void method() {\n"
-                + "        int x = 1; // end of line comment\n"
-                + "        int y = 2;\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                class X {
+                    void method() {
+                        int x = 1; // end of line comment
+                        int y = 2;
+                    }
+                }\
+                """;
 
         assertTransformedToString(expected, cu);
     }
@@ -183,11 +208,14 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         ExpressionStmt newStmt = StaticJavaParser.parseStatement("int x = 1;").asExpressionStmt();
         body.getStatements().add(0, newStmt);
 
-        String expected = "class X {\n" + "    void method() {\n"
-                + "        int x = 1;\n"
-                + "        int y = 2;\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                class X {
+                    void method() {
+                        int x = 1;
+                        int y = 2;
+                    }
+                }\
+                """;
 
         assertTransformedToString(expected, cu);
     }
@@ -305,7 +333,14 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
     @Test
     void addMultipleLevelsOfNesting() {
         considerCode(
-                "class X {\n" + "    void method() {\n" + "        if (true) {\n" + "        }\n" + "    }\n" + "}");
+                """
+                class X {
+                    void method() {
+                        if (true) {
+                        }
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         IfStmt ifStmt = method.findFirst(IfStmt.class).get();

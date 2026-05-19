@@ -149,9 +149,7 @@ public class LexicalPreservingPrinter {
                 return;
             }
             // Handle node replacements with TokenOwnerDetector
-            if (oldValue instanceof Node && newValue instanceof Node) {
-                Node oldNode = (Node) oldValue;
-                Node newNode = (Node) newValue;
+            if (oldValue instanceof Node oldNode && newValue instanceof Node newNode) {
                 // Find the actual token owner
                 Node tokenOwner = TokenOwnerDetector.findTokenOwner(oldNode);
                 // Check if we need to regenerate the token owner instead of just the parent
@@ -209,20 +207,19 @@ public class LexicalPreservingPrinter {
                     index++;
                     // Restore the indentation for the node that follows
                     for (TextElement indentElement : existingIndent) {
-                        if (indentElement instanceof TokenTextElement) {
-                            TokenTextElement tokenElement = (TokenTextElement) indentElement;
+                        if (indentElement instanceof TokenTextElement tokenElement) {
                             nodeText.addElement(
                                     index++, new TokenTextElement(tokenElement.getTokenKind(), tokenElement.getText()));
                         }
                     }
                 } else if (newValue == null) {
                     // this case corresponds to a deletion of a comment
-                    if (oldValue instanceof Comment) {
-                        if (((Comment) oldValue).isOrphan()) {
+                    if (oldValue instanceof Comment comment) {
+                        if (comment.isOrphan()) {
                             nodeText = getOrCreateNodeText(observedNode);
                         }
                         Pair<Integer, Integer> indexAndCount =
-                                getIndexAndCountOfCommentTokens((Comment) oldValue, nodeText);
+                                getIndexAndCountOfCommentTokens(comment, nodeText);
                         int index = indexAndCount.a;
                         for (int i = 0; i < indexAndCount.b; i++) {
                             nodeText.removeElement(index);
@@ -564,8 +561,7 @@ public class LexicalPreservingPrinter {
             // Apply the computed indentation
             // The indentation elements are inserted at the given index.
             for (TextElement indentElement : existingIndent) {
-                if (indentElement instanceof TokenTextElement) {
-                    TokenTextElement tokenElement = (TokenTextElement) indentElement;
+                if (indentElement instanceof TokenTextElement tokenElement) {
                     nodeText.addElement(
                             index, new TokenTextElement(tokenElement.getTokenKind(), tokenElement.getText()));
                 }
@@ -679,7 +675,7 @@ public class LexicalPreservingPrinter {
     // Iterators
     //
     private static Iterator<TokenTextElement> tokensPreceeding(final Node node) {
-        if (!node.getParentNode().isPresent()) {
+        if (node.getParentNode().isEmpty()) {
             return new TextElementIteratorsFactory.EmptyIterator<>();
         }
         // There is the awfully painful case of the fake types involved in variable declarators and
@@ -726,26 +722,22 @@ public class LexicalPreservingPrinter {
             interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
             return;
         }
-        if (node instanceof TraditionalJavadocComment) {
-            Comment comment = (TraditionalJavadocComment) node;
+        if (node instanceof TraditionalJavadocComment comment) {
             nodeText.addToken(
                     JAVADOC_COMMENT,
-                    comment.getHeader() + ((TraditionalJavadocComment) node).getContent() + comment.getFooter());
+                    comment.getHeader() + comment.getContent() + comment.getFooter());
             return;
         }
-        if (node instanceof BlockComment) {
-            Comment comment = (BlockComment) node;
+        if (node instanceof BlockComment comment) {
             nodeText.addToken(
-                    MULTI_LINE_COMMENT, comment.getHeader() + ((BlockComment) node).getContent() + comment.getFooter());
+                    MULTI_LINE_COMMENT, comment.getHeader() + comment.getContent() + comment.getFooter());
             return;
         }
-        if (node instanceof LineComment) {
-            Comment comment = (LineComment) node;
+        if (node instanceof LineComment comment) {
             nodeText.addToken(SINGLE_LINE_COMMENT, comment.getHeader() + comment.getContent());
             return;
         }
-        if (node instanceof Modifier) {
-            Modifier modifier = (Modifier) node;
+        if (node instanceof Modifier modifier) {
             nodeText.addToken(
                     LexicalDifferenceCalculator.toToken(modifier),
                     modifier.getKeyword().asString());
@@ -783,20 +775,18 @@ public class LexicalPreservingPrinter {
             } else if (element instanceof CsmUnindent) {
                 indentationContext.decrease();
             }
-            if (pendingIndentation && !(element instanceof CsmToken && ((CsmToken) element).isNewLine())) {
+            if (pendingIndentation && !(element instanceof CsmToken token && token.isNewLine())) {
                 indentationContext.getCurrent().forEach(nodeText::addElement);
             }
             pendingIndentation = false;
-            if (element instanceof LexicalDifferenceCalculator.CsmChild) {
-                nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
-            } else if (element instanceof CsmToken) {
-                CsmToken csmToken = (CsmToken) element;
+            if (element instanceof LexicalDifferenceCalculator.CsmChild child) {
+                nodeText.addChild(child.getChild());
+            } else if (element instanceof CsmToken csmToken) {
                 nodeText.addToken(csmToken.getTokenType(), csmToken.getContent());
                 if (csmToken.isNewLine()) {
                     pendingIndentation = true;
                 }
-            } else if (element instanceof CsmMix) {
-                CsmMix csmMix = (CsmMix) element;
+            } else if (element instanceof CsmMix csmMix) {
                 csmMix.getElements().forEach(e -> interpret(node, e, nodeText));
             } else {
                 // Indentation should probably be dealt with before because an indentation has effects also on the
@@ -809,8 +799,7 @@ public class LexicalPreservingPrinter {
         }
         // Array brackets are a pain... we do not have a way to represent them explicitly in the AST
         // so they have to be handled in a special way
-        if (node instanceof VariableDeclarator) {
-            VariableDeclarator variableDeclarator = (VariableDeclarator) node;
+        if (node instanceof VariableDeclarator variableDeclarator) {
             variableDeclarator.getParentNode().ifPresent(parent -> ((NodeWithVariables<?>) parent)
                     .getMaximumCommonType()
                     .ifPresent(mct -> {

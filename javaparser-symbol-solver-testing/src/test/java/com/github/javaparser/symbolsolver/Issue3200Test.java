@@ -42,22 +42,25 @@ public class Issue3200Test {
         config.setSymbolResolver(new JavaSymbolSolver(cts));
         StaticJavaParser.setConfiguration(config);
 
-        String str = "public class Test {\n" + "    private void bad() {\n"
-                + "        Test test = new Test();\n"
-                + "        test.setRunnable(\"\", new Runnable() {\n"
-                + "            @Override\n"
-                + "            public void run() {\n"
-                + "                getContext(Test.this);\n"
-                + "            }\n"
-                + "        });\n"
-                + "    }\n"
-                + "\n"
-                + "    private void getContext(Test test) {\n"
-                + "    }\n"
-                + "\n"
-                + "    private void setRunnable(String str, Runnable runnable) {\n"
-                + "    }\n"
-                + "}";
+        String str = """
+                public class Test {
+                    private void bad() {
+                        Test test = new Test();
+                        test.setRunnable("", new Runnable() {
+                            @Override
+                            public void run() {
+                                getContext(Test.this);
+                            }
+                        });
+                    }
+                
+                    private void getContext(Test test) {
+                    }
+                
+                    private void setRunnable(String str, Runnable runnable) {
+                    }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(str);
         List<MethodCallExpr> mce = cu.findAll(MethodCallExpr.class);
         assertEquals(
@@ -74,16 +77,19 @@ public class Issue3200Test {
         config.setSymbolResolver(new JavaSymbolSolver(cts));
         StaticJavaParser.setConfiguration(config);
 
-        String str = "public class Test {\n" + "    class Inner { }"
-                + "    void getContext(Test test) {  }\n"
-                + "    {\n"
-                + "        new Inner () {\n"
-                + "            {\n"
-                + "                getContext(Test.this);\n"
-                + "            }\n"
-                + "        };\n"
-                + "    }\n"
-                + "}";
+        String str = """
+                public class Test {
+                    class Inner { }\
+                    void getContext(Test test) {  }
+                    {
+                        new Inner () {
+                            {
+                                getContext(Test.this);
+                            }
+                        };
+                    }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(str);
         MethodCallExpr mce = cu.findFirst(MethodCallExpr.class).get();
         ResolvedMethodDeclaration rmd = mce.resolve();

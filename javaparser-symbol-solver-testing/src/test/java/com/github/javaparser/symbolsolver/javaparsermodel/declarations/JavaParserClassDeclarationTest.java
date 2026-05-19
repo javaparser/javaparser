@@ -1290,12 +1290,14 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
     // issue #4133
     @Test
     void testContainerType() {
-        String code = "public class Foo {\n"
-                + "    public static class Bar {\n"
-                + "        public static class Baz {\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                public class Foo {
+                    public static class Bar {
+                        public static class Baz {
+                        }
+                    }
+                }
+                """;
 
         JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
         CompilationUnit cu = parser.parse(code);

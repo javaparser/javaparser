@@ -267,38 +267,41 @@ class DefaultPrettyPrinterTest {
         String printed = getDefaultPrinter(configuration).print(cu);
 
         assertEqualsStringIgnoringEol(
-                "class Foo {\n" + "\n"
-                        + "\tvoid bar() {\n"
-                        + "\t\ta.b.c.d.e;\n"
-                        + "\t\ta.b.c()\n"
-                        + "\t\t   .d()\n"
-                        + "\t\t   .e();\n"
-                        + "\t\ta.b.c().d\n"
-                        + "\t\t   .e();\n"
-                        + "\t\tfoo().bar()\n"
-                        + "\t\t     .baz(boo().baa().bee())\n"
-                        + "\t\t     .bam();\n"
-                        + "\t\tfoo().bar()\n"
-                        + "\t\t     .baz(boo().baa().bee()).bam;\n"
-                        + "\t\tfoo().bar(Long.foo().b.bar(),\n"
-                        + "\t\t          bam)\n"
-                        + "\t\t     .baz();\n"
-                        + "\t\tfoo().bar()\n"
-                        + "\t\t     .baz(foo,\n"
-                        + "\t\t          () -> {\n"
-                        + "\t\t          \tboo().baa()\n"
-                        + "\t\t          \t     .bee();\n"
-                        + "\t\t          })\n"
-                        + "\t\t     .baz(() -> {\n"
-                        + "\t\t     \tboo().baa()\n"
-                        + "\t\t     \t     .bee();\n"
-                        + "\t\t     })\n"
-                        + "\t\t     .bam(() -> {\n"
-                        + "\t\t     \tboo().baa()\n"
-                        + "\t\t     \t     .bee();\n"
-                        + "\t\t     });\n"
-                        + "\t}\n"
-                        + "}\n",
+                """
+                class Foo {
+                
+                	void bar() {
+                		a.b.c.d.e;
+                		a.b.c()
+                		   .d()
+                		   .e();
+                		a.b.c().d
+                		   .e();
+                		foo().bar()
+                		     .baz(boo().baa().bee())
+                		     .bam();
+                		foo().bar()
+                		     .baz(boo().baa().bee()).bam;
+                		foo().bar(Long.foo().b.bar(),
+                		          bam)
+                		     .baz();
+                		foo().bar()
+                		     .baz(foo,
+                		          () -> {
+                		          	boo().baa()
+                		          	     .bee();
+                		          })
+                		     .baz(() -> {
+                		     	boo().baa()
+                		     	     .bee();
+                		     })
+                		     .bam(() -> {
+                		     	boo().baa()
+                		     	     .bee();
+                		     });
+                	}
+                }
+                """,
                 printed);
     }
 
@@ -322,7 +325,12 @@ class DefaultPrettyPrinterTest {
         String printed = getDefaultPrinter(configuration).print(cu);
 
         assertEqualsStringIgnoringEol(
-                "for (int x = 1; x.y().z(); x.z().z()) {\n" + "    boo().baa()\n" + "         .bee();\n" + "}",
+                """
+                for (int x = 1; x.y().z(); x.z().z()) {
+                    boo().baa()
+                         .bee();
+                }\
+                """,
                 printed);
     }
 
@@ -335,7 +343,12 @@ class DefaultPrettyPrinterTest {
         String printed = getDefaultPrinter(configuration).print(cu);
 
         assertEqualsStringIgnoringEol(
-                "while (x.y().z()) {\n" + "    boo().baa()\n" + "         .bee();\n" + "}", printed);
+                """
+                while (x.y().z()) {
+                    boo().baa()
+                         .bee();
+                }\
+                """, printed);
     }
 
     @Test
@@ -353,18 +366,21 @@ class DefaultPrettyPrinterTest {
         String printed = getDefaultPrinter(configuration).print(cu);
 
         assertEqualsStringIgnoringEol(
-                "class Foo {\n" + "\n"
-                        + "\tvoid bar() {\n"
-                        + "\t\tfoo().bar()\n"
-                        + "\t\t\t .baz(() -> {\n"
-                        + "\t\t\t\t boo().baa()\n"
-                        + "\t\t\t\t\t  .bee(a,\n"
-                        + "\t\t\t\t\t\t   b,\n"
-                        + "\t\t\t\t\t\t   c);\n"
-                        + "\t\t\t })\n"
-                        + "\t\t\t .bam();\n"
-                        + "\t}\n"
-                        + "}\n",
+                """
+                class Foo {
+                
+                	void bar() {
+                		foo().bar()
+                			 .baz(() -> {
+                				 boo().baa()
+                					  .bee(a,
+                						   b,
+                						   c);
+                			 })
+                			 .bam();
+                	}
+                }
+                """,
                 printed);
     }
 
@@ -383,21 +399,24 @@ class DefaultPrettyPrinterTest {
         String printed = getDefaultPrinter(configuration).print(cu);
 
         assertEqualsStringIgnoringEol(
-                "class Foo {\n" + "\n"
-                        + "\tvoid bar() {\n"
-                        + "\t\tfoo().bar()\n"
-                        + "\t\t     .baz(() -> {\n"
-                        + "\t\t     \tboo().baa()\n"
-                        + "\t\t     \t     .bee(a,\n"
-                        + "\t\t     \t          b,\n"
-                        + "\t\t     \t          c);\n"
-                        + "\t\t     })\n"
-                        + "\t\t     .baz(() -> {\n"
-                        + "\t\t     \treturn boo().baa();\n"
-                        + "\t\t     })\n"
-                        + "\t\t     .bam();\n"
-                        + "\t}\n"
-                        + "}\n",
+                """
+                class Foo {
+                
+                	void bar() {
+                		foo().bar()
+                		     .baz(() -> {
+                		     	boo().baa()
+                		     	     .bee(a,
+                		     	          b,
+                		     	          c);
+                		     })
+                		     .baz(() -> {
+                		     	return boo().baa();
+                		     })
+                		     .bam();
+                	}
+                }
+                """,
                 printed);
     }
 
@@ -407,61 +426,64 @@ class DefaultPrettyPrinterTest {
         JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
         ParseResult<CompilationUnit> parseResult = javaParser.parse(
                 COMPILATION_UNIT,
-                provider("@Documented\n" + "@Repeatable\n"
-                        + "package com.github.javaparser;\n"
-                        + "\n"
-                        + "import java.lang.annotation.Documented;\n"
-                        + "import java.lang.annotation.Repeatable;\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "@interface Annotation {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    String value();\n"
-                        + "}\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "class Class<@Documented @Repeatable T> {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    byte b;\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    Class(@Documented @Repeatable int i) {\n"
-                        + "        @Documented\n"
-                        + "        @Repeatable\n"
-                        + "        short s;\n"
-                        + "    }\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    void method(@Documented @Repeatable Class this) {\n"
-                        + "        for (@Deprecated int i : arr4[0]) {\n"
-                        + "            x--;\n"
-                        + "        }\n"
-                        + "    }\n"
-                        + "\n"
-                        + "    void method(@Documented @Repeatable Class this, int i) {\n"
-                        + "    }\n"
-                        + "}\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "enum Foo {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    BAR\n"
-                        + "}\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "module foo.bar {\n"
-                        + "}\n"));
+                provider("""
+                        @Documented
+                        @Repeatable
+                        package com.github.javaparser;
+                        
+                        import java.lang.annotation.Documented;
+                        import java.lang.annotation.Repeatable;
+                        
+                        @Documented
+                        @Repeatable
+                        @interface Annotation {
+                        
+                            @Documented
+                            @Repeatable
+                            String value();
+                        }
+                        
+                        @Documented
+                        @Repeatable
+                        class Class<@Documented @Repeatable T> {
+                        
+                            @Documented
+                            @Repeatable
+                            byte b;
+                        
+                            @Documented
+                            @Repeatable
+                            Class(@Documented @Repeatable int i) {
+                                @Documented
+                                @Repeatable
+                                short s;
+                            }
+                        
+                            @Documented
+                            @Repeatable
+                            void method(@Documented @Repeatable Class this) {
+                                for (@Deprecated int i : arr4[0]) {
+                                    x--;
+                                }
+                            }
+                        
+                            void method(@Documented @Repeatable Class this, int i) {
+                            }
+                        }
+                        
+                        @Documented
+                        @Repeatable
+                        enum Foo {
+                        
+                            @Documented
+                            @Repeatable
+                            BAR
+                        }
+                        @Documented
+                        @Repeatable
+                        module foo.bar {
+                        }
+                        """));
         if (!parseResult.isSuccessful()) {
             throw new ParseProblemException(parseResult.getProblems());
         }
@@ -469,61 +491,64 @@ class DefaultPrettyPrinterTest {
         String printed = getDefaultPrinter().print(cu);
 
         assertEqualsStringIgnoringEol(
-                "@Documented\n" + "@Repeatable\n"
-                        + "package com.github.javaparser;\n"
-                        + "\n"
-                        + "import java.lang.annotation.Documented;\n"
-                        + "import java.lang.annotation.Repeatable;\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "@interface Annotation {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    String value();\n"
-                        + "}\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "class Class<@Documented @Repeatable T> {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    byte b;\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    Class(@Documented @Repeatable int i) {\n"
-                        + "        @Documented\n"
-                        + "        @Repeatable\n"
-                        + "        short s;\n"
-                        + "    }\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    void method(@Documented @Repeatable Class this) {\n"
-                        + "        for (@Deprecated int i : arr4[0]) {\n"
-                        + "            x--;\n"
-                        + "        }\n"
-                        + "    }\n"
-                        + "\n"
-                        + "    void method(@Documented @Repeatable Class this, int i) {\n"
-                        + "    }\n"
-                        + "}\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "enum Foo {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    BAR\n"
-                        + "}\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "module foo.bar {\n"
-                        + "}\n",
+                """
+                @Documented
+                @Repeatable
+                package com.github.javaparser;
+                
+                import java.lang.annotation.Documented;
+                import java.lang.annotation.Repeatable;
+                
+                @Documented
+                @Repeatable
+                @interface Annotation {
+                
+                    @Documented
+                    @Repeatable
+                    String value();
+                }
+                
+                @Documented
+                @Repeatable
+                class Class<@Documented @Repeatable T> {
+                
+                    @Documented
+                    @Repeatable
+                    byte b;
+                
+                    @Documented
+                    @Repeatable
+                    Class(@Documented @Repeatable int i) {
+                        @Documented
+                        @Repeatable
+                        short s;
+                    }
+                
+                    @Documented
+                    @Repeatable
+                    void method(@Documented @Repeatable Class this) {
+                        for (@Deprecated int i : arr4[0]) {
+                            x--;
+                        }
+                    }
+                
+                    void method(@Documented @Repeatable Class this, int i) {
+                    }
+                }
+                
+                @Documented
+                @Repeatable
+                enum Foo {
+                
+                    @Documented
+                    @Repeatable
+                    BAR
+                }
+                @Documented
+                @Repeatable
+                module foo.bar {
+                }
+                """,
                 printed);
     }
 
@@ -540,13 +565,16 @@ class DefaultPrettyPrinterTest {
     @Test
     public void testIssue2535() {
 
-        String code = "public class A {\n" + " public static A m() {\n"
-                + "  System.out.println(\"\");\n"
-                + "  // TODO\n"
-                + "  /* TODO */\n"
-                + "  /** TODO */\n"
-                + " }\n"
-                + "}";
+        String code = """
+                public class A {
+                 public static A m() {
+                  System.out.println("");
+                  // TODO
+                  /* TODO */
+                  /** TODO */
+                 }
+                }\
+                """;
 
         StaticJavaParser.setConfiguration(new ParserConfiguration());
 
@@ -590,23 +618,29 @@ class DefaultPrettyPrinterTest {
     @Test
     public void testIssue3317() {
 
-        String code = "public class Test {\n" + "  protected void someMethod() {\n"
-                + "    // Before\n"
-                + "    System.out\n"
-                + "    // Middle Comment\n"
-                + "    .println(\"\");\n"
-                + "    // After\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                public class Test {
+                  protected void someMethod() {
+                    // Before
+                    System.out
+                    // Middle Comment
+                    .println("");
+                    // After
+                  }
+                }\
+                """;
 
-        String expected = "public class Test {\n" + "\n"
-                + "    protected void someMethod() {\n"
-                + "        // Before\n"
-                + "        System.out.// Middle Comment\n"
-                + "        println(\"\");\n"
-                + "        // After\n"
-                + "    }\n"
-                + "}\n";
+        String expected = """
+                public class Test {
+                
+                    protected void someMethod() {
+                        // Before
+                        System.out.// Middle Comment
+                        println("");
+                        // After
+                    }
+                }
+                """;
 
         StaticJavaParser.setConfiguration(new ParserConfiguration());
 
@@ -618,18 +652,21 @@ class DefaultPrettyPrinterTest {
     @Test
     void testPrinterWithIntelliJImportOrdering() {
 
-        String expectedCode = "package com.github.javaparser.printer;\n" + "\n"
-                + "import com.github.javaparser.ast.Node;\n"
-                + "\n"
-                + "import java.util.Optional;\n"
-                + "import java.util.List;\n"
-                + "\n"
-                + "public interface TestClass {\n"
-                + "\n"
-                + "    Node getRoot();\n"
-                + "\n"
-                + "    List<Node> getChildern();\n"
-                + "}\n";
+        String expectedCode = """
+                package com.github.javaparser.printer;
+                
+                import com.github.javaparser.ast.Node;
+                
+                import java.util.Optional;
+                import java.util.List;
+                
+                public interface TestClass {
+                
+                    Node getRoot();
+                
+                    List<Node> getChildern();
+                }
+                """;
 
         IntelliJImportOrderingStrategy strategy = new IntelliJImportOrderingStrategy();
         printerConfiguration.addOption(new DefaultConfigurationOption(ConfigOption.SORT_IMPORTS_STRATEGY, strategy));
@@ -644,18 +681,21 @@ class DefaultPrettyPrinterTest {
     @Test
     void testPrinterWithEclipseImportOrdering() {
 
-        String expectedCode = "package com.github.javaparser.printer;\n" + "\n"
-                + "import java.util.Optional;\n"
-                + "import java.util.List;\n"
-                + "\n"
-                + "import com.github.javaparser.ast.Node;\n"
-                + "\n"
-                + "public interface TestClass {\n"
-                + "\n"
-                + "    Node getRoot();\n"
-                + "\n"
-                + "    List<Node> getChildern();\n"
-                + "}\n";
+        String expectedCode = """
+                package com.github.javaparser.printer;
+                
+                import java.util.Optional;
+                import java.util.List;
+                
+                import com.github.javaparser.ast.Node;
+                
+                public interface TestClass {
+                
+                    Node getRoot();
+                
+                    List<Node> getChildern();
+                }
+                """;
 
         EclipseImportOrderingStrategy strategy = new EclipseImportOrderingStrategy();
         printerConfiguration.addOption(new DefaultConfigurationOption(ConfigOption.SORT_IMPORTS_STRATEGY, strategy));
@@ -669,27 +709,29 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void testArrayOfAnnotationsFormat() {
-        String expectedCode = "import io.swagger.v3.oas.annotations.Operation;\n"
-                + "import io.swagger.v3.oas.annotations.Parameter;\n"
-                + "import io.swagger.v3.oas.annotations.responses.ApiResponse;\n"
-                + "import io.swagger.v3.oas.annotations.responses.ApiResponses;\n"
-                + "import org.springframework.http.HttpStatus;\n"
-                + "import org.springframework.http.ResponseEntity;\n"
-                + "import org.springframework.web.bind.annotation.DeleteMapping;\n"
-                + "\n"
-                + "@Deprecated\n"
-                + "public class UserController2 {\n"
-                + "\n"
-                + "    @Operation(summary = \"Delete a user\")\n"
-                + "    @ApiResponses(value = {\n"
-                + "            @ApiResponse(responseCode = \"204\", description = \"OK\"),\n"
-                + "            @ApiResponse(responseCode = \"404\", description = \"Failed\")\n"
-                + "    })\n"
-                + "    @DeleteMapping(\"/{id}\")\n"
-                + "    public ResponseEntity<Void> deleteUser(@Parameter(description = \"ID of the user\", required = true) int id) {\n"
-                + "        return new ResponseEntity<>(HttpStatus.NOT_FOUND);\n"
-                + "    }\n"
-                + "}\n";
+        String expectedCode = """
+                import io.swagger.v3.oas.annotations.Operation;
+                import io.swagger.v3.oas.annotations.Parameter;
+                import io.swagger.v3.oas.annotations.responses.ApiResponse;
+                import io.swagger.v3.oas.annotations.responses.ApiResponses;
+                import org.springframework.http.HttpStatus;
+                import org.springframework.http.ResponseEntity;
+                import org.springframework.web.bind.annotation.DeleteMapping;
+                
+                @Deprecated
+                public class UserController2 {
+                
+                    @Operation(summary = "Delete a user")
+                    @ApiResponses(value = {
+                            @ApiResponse(responseCode = "204", description = "OK"),
+                            @ApiResponse(responseCode = "404", description = "Failed")
+                    })
+                    @DeleteMapping("/{id}")
+                    public ResponseEntity<Void> deleteUser(@Parameter(description = "ID of the user", required = true) int id) {
+                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    }
+                }
+                """;
 
         printerConfiguration.addOption(
                 new DefaultConfigurationOption(ConfigOption.INDENT_PRINT_ARRAYS_OF_ANNOTATIONS, true));
@@ -702,24 +744,26 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void testArrayOfAnnotationsDisableFormat() {
-        String expectedCode = "import io.swagger.v3.oas.annotations.Operation;\n"
-                + "import io.swagger.v3.oas.annotations.Parameter;\n"
-                + "import io.swagger.v3.oas.annotations.responses.ApiResponse;\n"
-                + "import io.swagger.v3.oas.annotations.responses.ApiResponses;\n"
-                + "import org.springframework.http.HttpStatus;\n"
-                + "import org.springframework.http.ResponseEntity;\n"
-                + "import org.springframework.web.bind.annotation.DeleteMapping;\n"
-                + "\n"
-                + "@Deprecated\n"
-                + "public class UserController2 {\n"
-                + "\n"
-                + "    @Operation(summary = \"Delete a user\")\n"
-                + "    @ApiResponses(value = { @ApiResponse(responseCode = \"204\", description = \"OK\"), @ApiResponse(responseCode = \"404\", description = \"Failed\") })\n"
-                + "    @DeleteMapping(\"/{id}\")\n"
-                + "    public ResponseEntity<Void> deleteUser(@Parameter(description = \"ID of the user\", required = true) int id) {\n"
-                + "        return new ResponseEntity<>(HttpStatus.NOT_FOUND);\n"
-                + "    }\n"
-                + "}\n";
+        String expectedCode = """
+                import io.swagger.v3.oas.annotations.Operation;
+                import io.swagger.v3.oas.annotations.Parameter;
+                import io.swagger.v3.oas.annotations.responses.ApiResponse;
+                import io.swagger.v3.oas.annotations.responses.ApiResponses;
+                import org.springframework.http.HttpStatus;
+                import org.springframework.http.ResponseEntity;
+                import org.springframework.web.bind.annotation.DeleteMapping;
+                
+                @Deprecated
+                public class UserController2 {
+                
+                    @Operation(summary = "Delete a user")
+                    @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "OK"), @ApiResponse(responseCode = "404", description = "Failed") })
+                    @DeleteMapping("/{id}")
+                    public ResponseEntity<Void> deleteUser(@Parameter(description = "ID of the user", required = true) int id) {
+                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    }
+                }
+                """;
 
         CompilationUnit cu = parserAdapter.parse(expectedCode);
         Printer printer = getDefaultPrinter(printerConfiguration);

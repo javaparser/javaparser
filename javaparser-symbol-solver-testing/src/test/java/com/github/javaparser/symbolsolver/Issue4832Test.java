@@ -35,11 +35,13 @@ public class Issue4832Test extends AbstractResolutionTest {
 
     @Test()
     void test() {
-        String code = "public class Stream_NoImports {\n"
-                + "    public java.util.stream.Stream<java.lang.String> simpleToList() {\n"
-                + "       return java.util.stream.Stream.of(\"a\", \"b\", \"c\");\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class Stream_NoImports {
+                    public java.util.stream.Stream<java.lang.String> simpleToList() {
+                       return java.util.stream.Stream.of("a", "b", "c");
+                    }
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));

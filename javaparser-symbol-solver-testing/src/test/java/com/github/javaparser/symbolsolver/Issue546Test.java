@@ -37,11 +37,14 @@ public class Issue546Test {
 
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration()).print(cu);
         assertEqualsStringIgnoringEol(
-                "switch(x) {\n" + "    case 1:\n"
-                        + "        return y;\n"
-                        + "    case 2:\n"
-                        + "        return z;\n"
-                        + "}",
+                """
+                switch(x) {
+                    case 1:
+                        return y;
+                    case 2:
+                        return z;
+                }\
+                """,
                 printed);
     }
 
@@ -51,7 +54,14 @@ public class Issue546Test {
 
         String printed = new PrettyPrinter(new PrettyPrinterConfiguration().setIndentCaseInSwitch(false)).print(cu);
         assertEqualsStringIgnoringEol(
-                "switch(x) {\n" + "case 1:\n" + "    return y;\n" + "case 2:\n" + "    return z;\n" + "}", printed);
+                """
+                switch(x) {
+                case 1:
+                    return y;
+                case 2:
+                    return z;
+                }\
+                """, printed);
     }
 
     public static void assertEqualsStringIgnoringEol(String expected, String actual) {

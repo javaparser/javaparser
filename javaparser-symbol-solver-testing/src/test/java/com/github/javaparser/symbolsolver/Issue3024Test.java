@@ -36,19 +36,22 @@ public class Issue3024Test extends AbstractResolutionTest {
     public void test() {
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
-        CompilationUnit parse = StaticJavaParser.parse("public class Test {\n" + "\n"
-                + "    public static Test getInstance() {\n"
-                + "        return new Test();\n"
-                + "    }\n"
-                + "\n"
-                + "    public void validateBean() {\n"
-                + "        Test.getInstance().new InnerClass();\n"
-                + "    }\n"
-                + "\n"
-                + "    public class InnerClass {\n"
-                + "        private boolean hasErrors;\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit parse = StaticJavaParser.parse("""
+                public class Test {
+                
+                    public static Test getInstance() {
+                        return new Test();
+                    }
+                
+                    public void validateBean() {
+                        Test.getInstance().new InnerClass();
+                    }
+                
+                    public class InnerClass {
+                        private boolean hasErrors;
+                    }
+                }\
+                """);
 
         List<MethodCallExpr> methodCallExprList = parse.findAll(MethodCallExpr.class);
         for (MethodCallExpr methodCallExpr : methodCallExprList) {

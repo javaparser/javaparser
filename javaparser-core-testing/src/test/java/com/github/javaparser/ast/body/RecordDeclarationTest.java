@@ -248,32 +248,34 @@ public class RecordDeclarationTest {
 
     @Test
     void record_permitStaticMethods() {
-        String s = "" + "record ABC(int x, int y) {\n"
-                + "\n"
-                + "    static public int abc() {\n"
-                + "        return x;\n"
-                + "    }\n"
-                + "\n"
-                + "}\n"
-                + "";
+        String s = """
+                record ABC(int x, int y) {
+                
+                    static public int abc() {
+                        return x;
+                    }
+                
+                }
+                """;
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
     @Test
     void record_permitMethods() {
-        String s = "" + "record ABC(int x, int y) {\n"
-                + "\n"
-                + "    public int x() {\n"
-                + "        return x;\n"
-                + "    }\n"
-                + "\n"
-                + "    public String xyz() {\n"
-                + "        return \"10\";\n"
-                + "    }\n"
-                + "\n"
-                + "}\n"
-                + "";
+        String s = """
+                record ABC(int x, int y) {
+                
+                    public int x() {
+                        return x;
+                    }
+                
+                    public String xyz() {
+                        return "10";
+                    }
+                
+                }
+                """;
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
@@ -302,30 +304,34 @@ public class RecordDeclarationTest {
     @Test
     void record_permitPublicStaticFieldInNestedRecord() {
         String s =
-                "public final record RecordTopLevel(Object member) {\n" + "    private static record RecordNested() {\n"
-                        + "        public static final RecordNested EMPTY = new RecordNested();\n"
-                        + "    }\n"
-                        + "}\n";
+                """
+                public final record RecordTopLevel(Object member) {
+                    private static record RecordNested() {
+                        public static final RecordNested EMPTY = new RecordNested();
+                    }
+                }
+                """;
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertTwoRecordDeclarations(cu);
     }
 
     @Test
     void record_permitStaticFields2() {
-        String s = "" + "record ABC(int x, int y) {\n"
-                + "\n"
-                + "    static int z;\n"
-                + "\n"
-                + "    static {\n"
-                + "        int z = 10;\n"
-                + "    }\n"
-                + "\n"
-                + "    public int x() {\n"
-                + "        return x;\n"
-                + "    }\n"
-                + "\n"
-                + "}\n"
-                + "";
+        String s = """
+                record ABC(int x, int y) {
+                
+                    static int z;
+                
+                    static {
+                        int z = 10;
+                    }
+                
+                    public int x() {
+                        return x;
+                    }
+                
+                }
+                """;
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
@@ -377,19 +383,25 @@ public class RecordDeclarationTest {
 
     @Test
     void record_mustNotAllowMismatchedComponentAccessorReturnType() {
-        String s = "record Point(int x, int y) {\n" + "    public String x() {\n"
-                + "        return \"10\";\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                record Point(int x, int y) {
+                    public String x() {
+                        return "10";
+                    }
+                }\
+                """;
         assertCompilationFails(s);
     }
 
     @Test
     void record_allowMethodsWithSameNameAsRecordComponentButNotAnAccessorMethod() {
-        String s = "record Point(int x, int y) {\n" + "    public String x(int a) {\n"
-                + "        return \"10\";\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                record Point(int x, int y) {
+                    public String x(int a) {
+                        return "10";
+                    }
+                }\
+                """;
 
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
@@ -397,10 +409,13 @@ public class RecordDeclarationTest {
 
     @Test
     void record_allowMethodsWithSameNameAsRecordComponentButNotAnAccessorMethod2() {
-        String s = "record Point(int x, int y) {\n" + "    public int x(int a) {\n"
-                + "        return 10;\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                record Point(int x, int y) {
+                    public int x(int a) {
+                        return 10;
+                    }
+                }\
+                """;
 
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
@@ -409,7 +424,13 @@ public class RecordDeclarationTest {
     @Test
     void record_allowComponentAccessorWithMatchingType() {
         String s =
-                "record Point(int x, int y) {\n" + "    public int x() {\n" + "        return 10;\n" + "    }\n" + "}";
+                """
+                record Point(int x, int y) {
+                    public int x() {
+                        return 10;
+                    }
+                }\
+                """;
 
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
@@ -479,12 +500,15 @@ public class RecordDeclarationTest {
      */
     @Test
     void record_allowNestedWithinEnum() {
-        String s = "\n" + "enum ABC {\n"
-                + "    ABC;\n"
-                + "    \n"
-                + "    record Point(int x, int y) {\n"
-                + "    }\n"
-                + "}\n";
+        String s = """
+                
+                enum ABC {
+                    ABC;
+                   \s
+                    record Point(int x, int y) {
+                    }
+                }
+                """;
 
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
@@ -495,12 +519,15 @@ public class RecordDeclarationTest {
      */
     @Test
     void record_allowNestedMultiple() {
-        String s = "\n" + "interface Y {\n"
-                + "    class X {\n"
-                + "        record Point(int x, int y) {\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n";
+        String s = """
+                
+                interface Y {
+                    class X {
+                        record Point(int x, int y) {
+                        }
+                    }
+                }
+                """;
 
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
@@ -511,17 +538,20 @@ public class RecordDeclarationTest {
      */
     @Test
     void record_allowNestedMultiple2() {
-        String s = "\n" + "interface Y {\n"
-                + "    class X {\n"
-                + "        record Point(int x, int y) {\n"
-                + "        }\n"
-                + "        record PointB(int x, int y) {\n"
-                + "        }\n"
-                + "    }\n"
-                + "\n"
-                + "    record PointC(int x, int y) {\n"
-                + "    }\n"
-                + "}\n";
+        String s = """
+                
+                interface Y {
+                    class X {
+                        record Point(int x, int y) {
+                        }
+                        record PointB(int x, int y) {
+                        }
+                    }
+                
+                    record PointC(int x, int y) {
+                    }
+                }
+                """;
 
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
 
@@ -563,15 +593,19 @@ public class RecordDeclarationTest {
 
     @Test
     void record_canBeCreatedUsingKeywordNew() {
-        String s = "\n" + "\n"
-                + "record Point(int x, int y) {\n"
-                + "}\n"
-                + "\n"
-                + "class X {\n"
-                + "    public static void main(String[] args) {\n"
-                + "        new Point(10, 3);\n"
-                + "    }\n"
-                + "}\n\n";
+        String s = """
+                
+                
+                record Point(int x, int y) {
+                }
+                
+                class X {
+                    public static void main(String[] args) {
+                        new Point(10, 3);
+                    }
+                }
+                
+                """;
 
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
@@ -593,13 +627,15 @@ public class RecordDeclarationTest {
      */
     @Test
     void recordDeclarationFromTheJDK8222777() {
-        CompilationUnit cu = TestParser.parseCompilationUnit("" + "public record Range(int lo, int hi) {\n"
-                + "\n"
-                + "  public Range {\n"
-                + "    if (lo > hi)  /* referring here to the implicit constructor parameters */\n"
-                + "      throw new IllegalArgumentException(String.format(\"(%d,%d)\", lo, hi));\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = TestParser.parseCompilationUnit("""
+                public record Range(int lo, int hi) {
+                
+                  public Range {
+                    if (lo > hi)  /* referring here to the implicit constructor parameters */
+                      throw new IllegalArgumentException(String.format("(%d,%d)", lo, hi));
+                  }
+                }\
+                """);
 
         RecordDeclaration recordDeclaration =
                 cu.findFirst(RecordDeclaration.class).get();
@@ -612,16 +648,18 @@ public class RecordDeclarationTest {
 
     @Test
     void recordDeclaration_exampleFromJls_8_10_4_1_normalCanonicalConstructors() {
-        CompilationUnit cu = TestParser.parseCompilationUnit("" + "import java.lang.annotation.Target;\n"
-                + "import java.lang.annotation.ElementType;\n"
-                + "\n"
-                + "@interface Foo {}\n"
-                + "@interface Bar {}\n"
-                + "\n"
-                + "record Person(@Foo String name) {\n"
-                + "    Person(String name2) {\n"
-                + "    }\n"
-                + "}");
+        CompilationUnit cu = TestParser.parseCompilationUnit("""
+                import java.lang.annotation.Target;
+                import java.lang.annotation.ElementType;
+                
+                @interface Foo {}
+                @interface Bar {}
+                
+                record Person(@Foo String name) {
+                    Person(String name2) {
+                    }
+                }\
+                """);
 
         RecordDeclaration recordDeclaration =
                 cu.findFirst(RecordDeclaration.class).get();
@@ -634,18 +672,20 @@ public class RecordDeclarationTest {
 
     @Test
     void compactConstructor_exampleFromJls_8_10_4_2_compactConstructors() {
-        CompilationUnit cu = TestParser.parseCompilationUnit("" + "record Rational(int num, int denom) {\n"
-                + "    private static int gcd(int a, int b) {\n"
-                + "        if (b == 0) return Math.abs(a);\n"
-                + "        else return gcd(b, a % b);\n"
-                + "    }\n"
-                + "   \n"
-                + "    Rational {\n"
-                + "        int gcd = gcd(num, denom);\n"
-                + "        num    /= gcd;\n"
-                + "        denom  /= gcd;\n"
-                + "    }\n"
-                + "}\n");
+        CompilationUnit cu = TestParser.parseCompilationUnit("""
+                record Rational(int num, int denom) {
+                    private static int gcd(int a, int b) {
+                        if (b == 0) return Math.abs(a);
+                        else return gcd(b, a % b);
+                    }
+                  \s
+                    Rational {
+                        int gcd = gcd(num, denom);
+                        num    /= gcd;
+                        denom  /= gcd;
+                    }
+                }
+                """);
 
         RecordDeclaration recordDeclaration =
                 cu.findFirst(RecordDeclaration.class).get();
@@ -658,20 +698,22 @@ public class RecordDeclarationTest {
 
     @Test
     void nonCompactConstructor_exampleFromJls_8_10_4_2_compactConstructors() {
-        CompilationUnit cu = TestParser.parseCompilationUnit("" + "record Rational(int num, int denom) {\n"
-                + "    private static int gcd(int a, int b) {\n"
-                + "        if (b == 0) return Math.abs(a);\n"
-                + "        else return gcd(b, a % b);\n"
-                + "    }\n"
-                + "   \n"
-                + "    Rational(int num, int demon) {\n"
-                + "        int gcd = gcd(num, denom);\n"
-                + "        num    /= gcd;\n"
-                + "        denom  /= gcd;\n"
-                + "        this.num   = num;\n"
-                + "        this.denom = denom;\n"
-                + "    }\n"
-                + "}\n");
+        CompilationUnit cu = TestParser.parseCompilationUnit("""
+                record Rational(int num, int denom) {
+                    private static int gcd(int a, int b) {
+                        if (b == 0) return Math.abs(a);
+                        else return gcd(b, a % b);
+                    }
+                  \s
+                    Rational(int num, int demon) {
+                        int gcd = gcd(num, denom);
+                        num    /= gcd;
+                        denom  /= gcd;
+                        this.num   = num;
+                        this.denom = denom;
+                    }
+                }
+                """);
 
         RecordDeclaration recordDeclaration =
                 cu.findFirst(RecordDeclaration.class).get();
@@ -687,18 +729,20 @@ public class RecordDeclarationTest {
      */
     @Test
     void localRecords() {
-        CompilationUnit cu = TestParser.parseCompilationUnit("" + "class Scratch {\n"
-                + "    List<Merchant> findTopMerchants(List<Merchant> merchants, int month) {\n"
-                + "        // Local record\n"
-                + "        record MerchantSales(Merchant merchant, double sales) {}\n"
-                + "\n"
-                + "        return merchants.stream()\n"
-                + "                .map(merchant -> new MerchantSales(merchant, computeSales(merchant, month)))\n"
-                + "                .sorted((m1, m2) -> Double.compare(m2.sales(), m1.sales()))\n"
-                + "                .map(MerchantSales::merchant)\n"
-                + "                .collect(toList());\n"
-                + "    }\n"
-                + "}\n");
+        CompilationUnit cu = TestParser.parseCompilationUnit("""
+                class Scratch {
+                    List<Merchant> findTopMerchants(List<Merchant> merchants, int month) {
+                        // Local record
+                        record MerchantSales(Merchant merchant, double sales) {}
+                
+                        return merchants.stream()
+                                .map(merchant -> new MerchantSales(merchant, computeSales(merchant, month)))
+                                .sorted((m1, m2) -> Double.compare(m2.sales(), m1.sales()))
+                                .map(MerchantSales::merchant)
+                                .collect(toList());
+                    }
+                }
+                """);
 
         RecordDeclaration recordDeclaration =
                 cu.findFirst(RecordDeclaration.class).get();
@@ -721,11 +765,13 @@ public class RecordDeclarationTest {
      */
     @Test
     void recordWithModuleAsName() {
-        String s = "record module(String s) {\n"
-                + "  void foo() {\n"
-                + "    module m = new module(\"hello\");\n"
-                + "  }\n"
-                + "}\n";
+        String s = """
+                record module(String s) {
+                  void foo() {
+                    module m = new module("hello");
+                  }
+                }
+                """;
 
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);

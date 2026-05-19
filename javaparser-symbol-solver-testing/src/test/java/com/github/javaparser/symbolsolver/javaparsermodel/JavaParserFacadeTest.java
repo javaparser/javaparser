@@ -80,15 +80,17 @@ class JavaParserFacadeTest extends AbstractResolutionTest {
     // issue 3939
     @Test
     public void checksThatTheBehaviourIsConsistentInTheEventOfAnUnsolvedSymbol() {
-        String code = "import java.util.List;\n"
-                + "import java.util.stream.Collectors;\n"
-                + "\n"
-                + "public class Foo {\n"
-                + "\n"
-                + "    void m(List<Class<?>> classNames) {\n"
-                + "        classNames.stream().map(c -> c.asSubclass(IMutator.class));\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                import java.util.List;
+                import java.util.stream.Collectors;
+                
+                public class Foo {
+                
+                    void m(List<Class<?>> classNames) {
+                        classNames.stream().map(c -> c.asSubclass(IMutator.class));
+                    }
+                }\
+                """;
         CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
                 .parse(code);
         MethodCallExpr expr = cu.findFirst(MethodCallExpr.class).get();

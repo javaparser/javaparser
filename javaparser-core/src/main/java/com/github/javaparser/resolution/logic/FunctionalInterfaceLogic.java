@@ -46,7 +46,7 @@ public final class FunctionalInterfaceLogic {
     public static Optional<MethodUsage> getFunctionalMethod(ResolvedType type) {
         Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration =
                 type.asReferenceType().getTypeDeclaration();
-        if (!optionalTypeDeclaration.isPresent()) {
+        if (optionalTypeDeclaration.isEmpty()) {
             return Optional.empty();
         }
         ResolvedReferenceTypeDeclaration typeDeclaration = optionalTypeDeclaration.get();
@@ -104,8 +104,7 @@ public final class FunctionalInterfaceLogic {
     }
 
     private static String getSignature(Method m) {
-        return String.format(
-                "%s(%s)",
+        return "%s(%s)".formatted(
                 m.getName(),
                 String.join(
                         ", ",

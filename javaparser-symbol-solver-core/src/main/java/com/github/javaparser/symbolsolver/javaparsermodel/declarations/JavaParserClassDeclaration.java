@@ -349,7 +349,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         }
 
         Optional<String> qualifiedName = wrappedNode.getFullyQualifiedName();
-        if (!qualifiedName.isPresent()) {
+        if (qualifiedName.isEmpty()) {
             return ancestors;
         }
 
@@ -493,7 +493,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
 
-        if (!classOrInterfaceType.getTypeArguments().isPresent()) {
+        if (classOrInterfaceType.getTypeArguments().isEmpty()) {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
         }
 

@@ -158,7 +158,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(
                 name, parameterTypes, typeSolver, invokationContext, typeParameterValues, this, clazz);
 
-        if (!res.isPresent()) {
+        if (res.isEmpty()) {
             return res;
         }
 
@@ -420,8 +420,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         if (type.describe().equals(getQualifiedName())) {
             return true;
         }
-        if (type instanceof ReferenceTypeImpl) {
-            ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
+        if (type instanceof ReferenceTypeImpl otherTypeDeclaration) {
             if (otherTypeDeclaration.getTypeDeclaration().isPresent()) {
                 return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(this);
             }

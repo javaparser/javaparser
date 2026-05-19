@@ -290,8 +290,7 @@ public class DefaultCacheStats implements CacheStats {
 
     @Override
     public boolean equals(Object object) {
-        if (object instanceof CacheStats) {
-            CacheStats other = (CacheStats) object;
+        if (object instanceof CacheStats other) {
             return hitCount == other.hitCount()
                     && missCount == other.missCount()
                     && loadSuccessCount == other.loadSuccessCount()

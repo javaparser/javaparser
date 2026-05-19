@@ -56,7 +56,7 @@ public class LambdaGenericResolutionTest extends AbstractSymbolResolutionTest {
         try {
             cu = parser.parse(testFile).getResult().get();
         } catch (Exception e) {
-            Assertions.fail(String.format("Failed to parse GenericLambdas.java due to %s", e.getMessage()), e);
+            Assertions.fail("Failed to parse GenericLambdas.java due to %s".formatted(e.getMessage()), e);
         }
 
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericLambdas");

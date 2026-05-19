@@ -326,15 +326,15 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     }
 
     private Type stripAnnotations(Type type) {
-        if (type instanceof NodeWithAnnotations) {
-            ((NodeWithAnnotations) type).setAnnotations(new NodeList<>());
+        if (type instanceof NodeWithAnnotations annotations) {
+            annotations.setAnnotations(new NodeList<>());
         }
         return type;
     }
 
     private Type stripGenerics(Type type) {
-        if (type instanceof NodeWithTypeArguments) {
-            ((NodeWithTypeArguments) type).setTypeArguments((NodeList<Type>) null);
+        if (type instanceof NodeWithTypeArguments arguments) {
+            arguments.setTypeArguments((NodeList<Type>) null);
         }
         return type;
     }

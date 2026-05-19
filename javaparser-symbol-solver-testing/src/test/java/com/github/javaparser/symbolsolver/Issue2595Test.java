@@ -40,108 +40,119 @@ public class Issue2595Test {
 
     @Test
     public void issue2595ImplicitTypeLambdaTest() {
-        String sourceCode = "" + "import java.util.ArrayList;\n"
-                + "import java.util.List;\n"
-                + "import java.util.function.Function;\n"
-                + "\n"
-                + "public class Test {\n"
-                + "\n"
-                + "    ClassMetric<Integer> fdp = c -> {\n"
-                + "        List<String> classFieldNames = getAllClassFieldNames(c);\n"
-                + "        return classFieldNames.size();\n"
-                + "    };\n"
-                + "\n"
-                + "\n"
-                + "    private List<String> getAllClassFieldNames(final String c) {\n"
-                + "        return new ArrayList<>();\n"
-                + "    }\n"
-                + "\n"
-                + "\n"
-                + "    @FunctionalInterface\n"
-                + "    public interface ClassMetric<T> extends Function<String, T> {\n"
-                + "        @Override\n"
-                + "        T apply(String c);\n"
-                + "    }\n"
-                + "\n"
-                + "}\n";
+        String sourceCode = """
+                import java.util.ArrayList;
+                import java.util.List;
+                import java.util.function.Function;
+                
+                public class Test {
+                
+                    ClassMetric<Integer> fdp = c -> {
+                        List<String> classFieldNames = getAllClassFieldNames(c);
+                        return classFieldNames.size();
+                    };
+                
+                
+                    private List<String> getAllClassFieldNames(final String c) {
+                        return new ArrayList<>();
+                    }
+                
+                
+                    @FunctionalInterface
+                    public interface ClassMetric<T> extends Function<String, T> {
+                        @Override
+                        T apply(String c);
+                    }
+                
+                }
+                """;
 
         parse(sourceCode);
     }
 
     @Test
     public void issue2595ExplicitTypeLambdaTest() {
-        String sourceCode = "import java.util.ArrayList;\n" + "import java.util.List;\n"
-                + "import java.util.function.Function;\n"
-                + "\n"
-                + "public class TestIssue2595 {\n"
-                + "    ClassMetric fdp = (String c) -> {\n"
-                + "        List<String> classFieldNames = getAllClassFieldNames(c);\n"
-                + "        return classFieldNames.size();\n"
-                + "    };\n"
-                + "    \n"
-                + "\n"
-                + "    private List<String> getAllClassFieldNames(final String c) {\n"
-                + "        return new ArrayList<>();\n"
-                + "    }\n"
-                + "\n"
-                + "    @FunctionalInterface\n"
-                + "    public interface ClassMetric extends Function<String, Integer> {\n"
-                + "        @Override\n"
-                + "        Integer apply(String c);\n"
-                + "    }\n"
-                + "}";
+        String sourceCode = """
+                import java.util.ArrayList;
+                import java.util.List;
+                import java.util.function.Function;
+                
+                public class TestIssue2595 {
+                    ClassMetric fdp = (String c) -> {
+                        List<String> classFieldNames = getAllClassFieldNames(c);
+                        return classFieldNames.size();
+                    };
+                   \s
+                
+                    private List<String> getAllClassFieldNames(final String c) {
+                        return new ArrayList<>();
+                    }
+                
+                    @FunctionalInterface
+                    public interface ClassMetric extends Function<String, Integer> {
+                        @Override
+                        Integer apply(String c);
+                    }
+                }\
+                """;
 
         parse(sourceCode);
     }
 
     @Test
     public void issue2595NoParameterLambdaTest() {
-        String sourceCode = "import java.util.ArrayList;\n" + "import java.util.List;\n"
-                + "\n"
-                + "public class TestIssue2595 {\n"
-                + "    ClassMetric fdp = () -> {\n"
-                + "        List<String> classFieldNames = getAllClassFieldNames();\n"
-                + "        return classFieldNames.size();\n"
-                + "    };\n"
-                + "\n"
-                + "\n"
-                + "    private List<String> getAllClassFieldNames() {\n"
-                + "        return new ArrayList<>();\n"
-                + "    }\n"
-                + "\n"
-                + "    @FunctionalInterface\n"
-                + "    public interface ClassMetric {\n"
-                + "        Integer apply();\n"
-                + "    }\n"
-                + "}";
+        String sourceCode = """
+                import java.util.ArrayList;
+                import java.util.List;
+                
+                public class TestIssue2595 {
+                    ClassMetric fdp = () -> {
+                        List<String> classFieldNames = getAllClassFieldNames();
+                        return classFieldNames.size();
+                    };
+                
+                
+                    private List<String> getAllClassFieldNames() {
+                        return new ArrayList<>();
+                    }
+                
+                    @FunctionalInterface
+                    public interface ClassMetric {
+                        Integer apply();
+                    }
+                }\
+                """;
 
         parse(sourceCode);
     }
 
     @Test
     public void issue2595AnonymousInnerClassTest() {
-        String sourceCode = "import java.util.ArrayList;\n" + "import java.util.List;\n"
-                + "import java.util.function.Function;\n"
-                + "\n"
-                + "public class TestIssue2595 {\n"
-                + "    ClassMetric fdp = new ClassMetric() {\n"
-                + "        @Override\n"
-                + "        public Integer apply(String c) {\n"
-                + "            List<String> classFieldNames = getAllClassFieldNames(c);\n"
-                + "            return classFieldNames.size();\n"
-                + "        }\n"
-                + "    };\n"
-                + "\n"
-                + "    private List<String> getAllClassFieldNames(final String c) {\n"
-                + "        return new ArrayList<>();\n"
-                + "    }\n"
-                + "\n"
-                + "    @FunctionalInterface\n"
-                + "    public interface ClassMetric extends Function<String, Integer> {\n"
-                + "        @Override\n"
-                + "        Integer apply(String c);\n"
-                + "    }\n"
-                + "}";
+        String sourceCode = """
+                import java.util.ArrayList;
+                import java.util.List;
+                import java.util.function.Function;
+                
+                public class TestIssue2595 {
+                    ClassMetric fdp = new ClassMetric() {
+                        @Override
+                        public Integer apply(String c) {
+                            List<String> classFieldNames = getAllClassFieldNames(c);
+                            return classFieldNames.size();
+                        }
+                    };
+                
+                    private List<String> getAllClassFieldNames(final String c) {
+                        return new ArrayList<>();
+                    }
+                
+                    @FunctionalInterface
+                    public interface ClassMetric extends Function<String, Integer> {
+                        @Override
+                        Integer apply(String c);
+                    }
+                }\
+                """;
 
         parse(sourceCode);
     }

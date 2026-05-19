@@ -39,7 +39,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -143,7 +142,7 @@ public class TestUtils {
     public static String readTextResource(Class<?> relativeClass, String resourceName) {
         final URL resourceAsStream = relativeClass.getResource(resourceName);
         try {
-            byte[] bytes = Files.readAllBytes(Paths.get(resourceAsStream.toURI()));
+            byte[] bytes = Files.readAllBytes(Path.of(resourceAsStream.toURI()));
             return new String(bytes, UTF_8);
         } catch (IOException | URISyntaxException e) {
             fail(e);
@@ -294,11 +293,10 @@ public class TestUtils {
                 expected,
                 actual,
                 message
-                        + String.format(
-                                " -- failed due to line separator differences -- Expected: %s, but actual: %s (system eol: %s)",
-                                LineSeparator.detect(expected).asEscapedString(),
-                                LineSeparator.detect(actual).asEscapedString(),
-                                LineSeparator.SYSTEM.asEscapedString()));
+                        + " -- failed due to line separator differences -- Expected: %s, but actual: %s (system eol: %s)".formatted(
+                        LineSeparator.detect(expected).asEscapedString(),
+                        LineSeparator.detect(actual).asEscapedString(),
+                        LineSeparator.SYSTEM.asEscapedString()));
     }
 
     /**

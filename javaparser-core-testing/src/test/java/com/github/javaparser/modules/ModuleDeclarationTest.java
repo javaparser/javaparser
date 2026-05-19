@@ -229,14 +229,17 @@ class ModuleDeclarationTest {
                 .addModuleName("other.bar"));
 
         assertEqualsStringIgnoringEol(
-                "@SuppressWarnings(\"module\")\n" + "module com.laamella.base {\n"
-                        + "    requires transitive java.desktop;\n"
-                        + "    exports com.laamella.base.entity.channel;\n"
-                        + "    exports com.laamella.base.entity.channel.internal to com.laamella.core;\n"
-                        + "    uses com.laamella.base.util.internal.FactoryDelegate;\n"
-                        + "    exports foo.bar to other.foo, other.bar;\n"
-                        + "    exports foo.bar.x to other.foo, other.bar;\n"
-                        + "}\n",
+                """
+                @SuppressWarnings("module")
+                module com.laamella.base {
+                    requires transitive java.desktop;
+                    exports com.laamella.base.entity.channel;
+                    exports com.laamella.base.entity.channel.internal to com.laamella.core;
+                    uses com.laamella.base.util.internal.FactoryDelegate;
+                    exports foo.bar to other.foo, other.bar;
+                    exports foo.bar.x to other.foo, other.bar;
+                }
+                """,
                 moduleDeclaration.toString());
     }
 

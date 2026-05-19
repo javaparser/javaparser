@@ -141,11 +141,14 @@ class ModifierVisitorTest extends AbstractLexicalPreservingTest {
     @Test
     void issue2124() {
         ModifierVisitor<Void> modifier = new ModifierVisitor<>();
-        considerCode("\n" + "public class ModifierVisitorTest {\n"
-                + "    private void causesException() {\n"
-                + "        String[] listWithExtraCommaAndEqualElements = {\"a\", \"a\",};\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                
+                public class ModifierVisitorTest {
+                    private void causesException() {
+                        String[] listWithExtraCommaAndEqualElements = {"a", "a",};
+                    }
+                }\
+                """);
         cu.accept(modifier, null);
         // there should be no exception
         LexicalPreservingPrinter.print(cu);

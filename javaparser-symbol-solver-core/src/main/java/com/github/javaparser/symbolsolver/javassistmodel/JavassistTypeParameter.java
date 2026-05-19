@@ -84,11 +84,11 @@ public class JavassistTypeParameter implements ResolvedTypeParameterDeclaration 
 
     @Override
     public String getContainerQualifiedName() {
-        if (this.container instanceof ResolvedReferenceTypeDeclaration) {
-            return ((ResolvedReferenceTypeDeclaration) this.container).getQualifiedName();
+        if (this.container instanceof ResolvedReferenceTypeDeclaration declaration) {
+            return declaration.getQualifiedName();
         }
-        if (this.container instanceof ResolvedMethodLikeDeclaration) {
-            return ((ResolvedMethodLikeDeclaration) this.container).getQualifiedName();
+        if (this.container instanceof ResolvedMethodLikeDeclaration declaration1) {
+            return declaration1.getQualifiedName();
         }
         throw new UnsupportedOperationException();
     }
@@ -118,8 +118,8 @@ public class JavassistTypeParameter implements ResolvedTypeParameterDeclaration 
 
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
-        if (container instanceof ResolvedReferenceTypeDeclaration) {
-            return Optional.of((ResolvedReferenceTypeDeclaration) container);
+        if (container instanceof ResolvedReferenceTypeDeclaration declaration) {
+            return Optional.of(declaration);
         }
         return Optional.empty();
     }

@@ -85,24 +85,27 @@ class DotPrinterTest {
         CompilationUnit cu = parse("//q\"q\nclass X{}");
         String output = printer.output(cu);
         assertEqualsStringIgnoringEol(
-                "digraph {\n" + "n0 [label=\"root\"];\n"
-                        + "n1 [label=\"types\"];\n"
-                        + "n0 -> n1;\n"
-                        + "n2 [label=\"type\"];\n"
-                        + "n1 -> n2;\n"
-                        + "n3 [label=\"isCompact='false'\"];\n"
-                        + "n2 -> n3;\n"
-                        + "n4 [label=\"isInterface='false'\"];\n"
-                        + "n2 -> n4;\n"
-                        + "n5 [label=\"name\"];\n"
-                        + "n2 -> n5;\n"
-                        + "n6 [label=\"identifier='X'\"];\n"
-                        + "n5 -> n6;\n"
-                        + "n7 [label=\"comment\"];\n"
-                        + "n2 -> n7;\n"
-                        + "n8 [label=\"content='q\\\"q'\"];\n"
-                        + "n7 -> n8;\n"
-                        + "}",
+                """
+                digraph {
+                n0 [label="root"];
+                n1 [label="types"];
+                n0 -> n1;
+                n2 [label="type"];
+                n1 -> n2;
+                n3 [label="isCompact='false'"];
+                n2 -> n3;
+                n4 [label="isInterface='false'"];
+                n2 -> n4;
+                n5 [label="name"];
+                n2 -> n5;
+                n6 [label="identifier='X'"];
+                n5 -> n6;
+                n7 [label="comment"];
+                n2 -> n7;
+                n8 [label="content='q\\"q'"];
+                n7 -> n8;
+                }\
+                """,
                 output);
     }
 }

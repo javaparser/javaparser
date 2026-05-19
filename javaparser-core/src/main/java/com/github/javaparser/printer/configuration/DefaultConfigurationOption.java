@@ -62,7 +62,7 @@ public class DefaultConfigurationOption implements ConfigurationOption {
         // verify the currentValue's type
         if (!(configOption.type.isAssignableFrom(value.getClass()))) {
             throw new IllegalArgumentException(
-                    String.format("%s is not an instance of %s", value, configOption.type.getName()));
+                    "%s is not an instance of %s".formatted(value, configOption.type.getName()));
         }
         return this;
     }
@@ -106,10 +106,10 @@ public class DefaultConfigurationOption implements ConfigurationOption {
 
     private <T extends Object> T cast() {
         if (!hasValue())
-            throw new IllegalArgumentException(String.format("The option %s has no currentValue", configOption.name()));
+            throw new IllegalArgumentException("The option %s has no currentValue".formatted(configOption.name()));
         if (configOption.type.isAssignableFrom(currentValue.getClass()))
             return (T) configOption.type.cast(currentValue);
         throw new IllegalArgumentException(
-                String.format("%s cannot be cast to %s", currentValue, configOption.type.getName()));
+                "%s cannot be cast to %s".formatted(currentValue, configOption.type.getName()));
     }
 }

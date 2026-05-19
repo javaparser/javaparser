@@ -55,19 +55,22 @@ public class VoidVisitorTest {
         JavaParser javaParser = new JavaParser();
 
         CompilationUnit unit = javaParser
-                .parse("public class Test\n" + "{\n"
-                        + "   public class InnerTest\n"
-                        + "   {\n"
-                        + "       public InnerTest() {}\n"
-                        + "   }\n"
-                        + "    \n"
-                        + "   public Test() {\n"
-                        + "   }\n"
-                        + "\n"
-                        + "   public static void main( String[] args ) { \n"
-                        + "       new Test().new InnerTest();\n"
-                        + "   }\n"
-                        + "}")
+                .parse("""
+                        public class Test
+                        {
+                           public class InnerTest
+                           {
+                               public InnerTest() {}
+                           }
+                           \s
+                           public Test() {
+                           }
+                        
+                           public static void main( String[] args ) {\s
+                               new Test().new InnerTest();
+                           }
+                        }\
+                        """)
                 .getResult()
                 .get();
         return unit;

@@ -43,15 +43,17 @@ public class Issue2823Test extends AbstractSymbolResolutionTest {
                 new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
         StaticJavaParser.setConfiguration(configuration);
 
-        String src = "import java.util.Optional;\n"
-                + "public class TestClass {\n"
-                + "    public Long getValue() {\n"
-                + "        Optional<ClassA> classA = Optional.of(new ClassA());\n"
-                + "        return classA.map(a -> a.obj)\n"
-                + "                .map(b -> b.value)\n"
-                + "                .orElse(null);\n"
-                + "    }\n"
-                + "}";
+        String src = """
+                import java.util.Optional;
+                public class TestClass {
+                    public Long getValue() {
+                        Optional<ClassA> classA = Optional.of(new ClassA());
+                        return classA.map(a -> a.obj)
+                                .map(b -> b.value)
+                                .orElse(null);
+                    }
+                }\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(src);
 

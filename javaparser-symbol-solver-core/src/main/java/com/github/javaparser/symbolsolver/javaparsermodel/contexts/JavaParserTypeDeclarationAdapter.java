@@ -127,8 +127,7 @@ public class JavaParserTypeDeclarationAdapter {
         if (symbolRef.isSolved()) return symbolRef;
 
         // Check if is a type parameter
-        if (wrappedNode instanceof NodeWithTypeParameters) {
-            NodeWithTypeParameters<?> nodeWithTypeParameters = (NodeWithTypeParameters<?>) wrappedNode;
+        if (wrappedNode instanceof NodeWithTypeParameters<?> nodeWithTypeParameters) {
             for (TypeParameter astTpRaw : nodeWithTypeParameters.getTypeParameters()) {
                 if (astTpRaw.getName().getId().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeParameter(astTpRaw, typeSolver));
@@ -137,8 +136,7 @@ public class JavaParserTypeDeclarationAdapter {
         }
 
         // Check if the node implements other types
-        if (wrappedNode instanceof NodeWithImplements) {
-            NodeWithImplements<?> nodeWithImplements = (NodeWithImplements<?>) wrappedNode;
+        if (wrappedNode instanceof NodeWithImplements<?> nodeWithImplements) {
             for (ClassOrInterfaceType implementedType : nodeWithImplements.getImplementedTypes()) {
                 if (implementedType.getName().getId().equals(name)) {
                     return context.getParent()
@@ -149,8 +147,7 @@ public class JavaParserTypeDeclarationAdapter {
         }
 
         // Check if the node extends other types
-        if (wrappedNode instanceof NodeWithExtends) {
-            NodeWithExtends<?> nodeWithExtends = (NodeWithExtends<?>) wrappedNode;
+        if (wrappedNode instanceof NodeWithExtends<?> nodeWithExtends) {
             for (ClassOrInterfaceType extendedType : nodeWithExtends.getExtendedTypes()) {
                 if (extendedType.getName().getId().equals(name) && compareTypeArguments(extendedType, typeArguments)) {
                     return context.getParent()
@@ -204,8 +201,8 @@ public class JavaParserTypeDeclarationAdapter {
 
     private boolean compareTypeParameters(
             TypeDeclaration<?> typeDeclaration, List<ResolvedType> resolvedTypeArguments) {
-        if (typeDeclaration instanceof NodeWithTypeParameters) {
-            return compareTypeParameters((NodeWithTypeParameters<?>) typeDeclaration, resolvedTypeArguments);
+        if (typeDeclaration instanceof NodeWithTypeParameters<?> parameters) {
+            return compareTypeParameters(parameters, resolvedTypeArguments);
         }
         return true;
     }
@@ -229,8 +226,8 @@ public class JavaParserTypeDeclarationAdapter {
                     if (internalTypeDeclaration instanceof ResolvedReferenceTypeDeclaration) {
                         ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration =
                                 internalTypeDeclaration.asReferenceType();
-                        if (resolvedReferenceTypeDeclaration instanceof HasAccessSpecifier) {
-                            visible = ((HasAccessSpecifier) resolvedReferenceTypeDeclaration).accessSpecifier()
+                        if (resolvedReferenceTypeDeclaration instanceof HasAccessSpecifier specifier) {
+                            visible = specifier.accessSpecifier()
                                     != AccessSpecifier.PRIVATE;
                         }
                     }

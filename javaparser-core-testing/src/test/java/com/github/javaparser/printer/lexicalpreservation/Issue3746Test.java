@@ -35,7 +35,14 @@ public class Issue3746Test extends AbstractLexicalPreservingTest {
         considerCode("public class MyClass {\n" + " String s0;\n" + " // Comment\n" + " String s1;\n" + "}");
 
         considerCode(
-                "class A {\n" + "  void foo() {\n" + "    int first = 1;\n" + "    int second = 2;\n" + "  }\n" + "}");
+                """
+                class A {
+                  void foo() {
+                    int first = 1;
+                    int second = 2;
+                  }
+                }\
+                """);
 
         String expected = "class A {\n" + "  void foo() {\n" + "    foo();\n" + "    int second = 2;\n" + "  }\n" + "}";
         BlockStmt block = cu.findAll(BlockStmt.class).get(0);

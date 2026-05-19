@@ -50,14 +50,17 @@ class IfStatementContextTest {
 
     @Test
     void testInstanceOfWithoutPattern() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    if (o instanceof String) {\n"
-                + "        thenCall();\n"
-                + "    } else {\n"
-                + "        elseCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    if (o instanceof String) {
+                        thenCall();
+                    } else {
+                        elseCall();
+                    }
+                  }
+                }\
+                """);
 
         IfStmt ifStmt = Navigator.demandNodeOfGivenClass(cu, IfStmt.class);
         IfStatementContext ifContext = new IfStatementContext(ifStmt, typeSolver);
@@ -75,14 +78,17 @@ class IfStatementContextTest {
 
     @Test
     void testInstanceOfWithTypePatternVariableIntroducedToThen() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    if (o instanceof Foo f) {\n"
-                + "        thenCall();\n"
-                + "    } else {\n"
-                + "        elseCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    if (o instanceof Foo f) {
+                        thenCall();
+                    } else {
+                        elseCall();
+                    }
+                  }
+                }\
+                """);
 
         IfStmt ifStmt = Navigator.demandNodeOfGivenClass(cu, IfStmt.class);
         IfStatementContext ifContext = new IfStatementContext(ifStmt, typeSolver);
@@ -104,14 +110,17 @@ class IfStatementContextTest {
 
     @Test
     void testInstanceOfWithTypePatternVariableIntroducedToElse() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    if (!(o instanceof Foo f)) {\n"
-                + "        thenCall();\n"
-                + "    } else {\n"
-                + "        elseCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    if (!(o instanceof Foo f)) {
+                        thenCall();
+                    } else {
+                        elseCall();
+                    }
+                  }
+                }\
+                """);
 
         IfStmt ifStmt = Navigator.demandNodeOfGivenClass(cu, IfStmt.class);
         IfStatementContext ifContext = new IfStatementContext(ifStmt, typeSolver);
@@ -134,14 +143,17 @@ class IfStatementContextTest {
 
     @Test
     void testInstanceOfWithTypePatternVariableIntroducedByIf() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    if (!(o instanceof Foo f)) {\n"
-                + "        return;\n"
-                + "    } else {\n"
-                + "        elseCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    if (!(o instanceof Foo f)) {
+                        return;
+                    } else {
+                        elseCall();
+                    }
+                  }
+                }\
+                """);
 
         IfStmt ifStmt = Navigator.demandNodeOfGivenClass(cu, IfStmt.class);
         IfStatementContext ifContext = new IfStatementContext(ifStmt, typeSolver);
@@ -167,14 +179,17 @@ class IfStatementContextTest {
 
     @Test
     void testInstanceOfWithRecordPatternVariablesIntroducedToThen() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    if (o instanceof Foo (Bar b, Baz (Qux q))) {\n"
-                + "        thenCall();\n"
-                + "    } else {\n"
-                + "        elseCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    if (o instanceof Foo (Bar b, Baz (Qux q))) {
+                        thenCall();
+                    } else {
+                        elseCall();
+                    }
+                  }
+                }\
+                """);
 
         IfStmt ifStmt = Navigator.demandNodeOfGivenClass(cu, IfStmt.class);
         IfStatementContext ifContext = new IfStatementContext(ifStmt, typeSolver);
@@ -199,14 +214,17 @@ class IfStatementContextTest {
 
     @Test
     void testInstanceOfWithUnnamedTypePatternVariableIntroducedToThen() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    if (o instanceof Foo _) {\n"
-                + "        thenCall();\n"
-                + "    } else {\n"
-                + "        elseCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    if (o instanceof Foo _) {
+                        thenCall();
+                    } else {
+                        elseCall();
+                    }
+                  }
+                }\
+                """);
 
         IfStmt ifStmt = Navigator.demandNodeOfGivenClass(cu, IfStmt.class);
         IfStatementContext ifContext = new IfStatementContext(ifStmt, typeSolver);
@@ -224,14 +242,17 @@ class IfStatementContextTest {
 
     @Test
     void testInstanceOfWithMatchAllPatternVariableIntroducedToThen() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    if (o instanceof Foo(_)) {\n"
-                + "        thenCall();\n"
-                + "    } else {\n"
-                + "        elseCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    if (o instanceof Foo(_)) {
+                        thenCall();
+                    } else {
+                        elseCall();
+                    }
+                  }
+                }\
+                """);
 
         IfStmt ifStmt = Navigator.demandNodeOfGivenClass(cu, IfStmt.class);
         IfStatementContext ifContext = new IfStatementContext(ifStmt, typeSolver);
@@ -249,14 +270,17 @@ class IfStatementContextTest {
 
     @Test
     void testInstanceOfWithNestedUnnamedTypePatternVariableIntroducedToThen() {
-        CompilationUnit cu = parse("class Foo {\n" + "  public void foo(Object o) {\n"
-                + "    if (o instanceof Foo(Bar _, Baz(Qux q, _))) {\n"
-                + "        thenCall();\n"
-                + "    } else {\n"
-                + "        elseCall();\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                class Foo {
+                  public void foo(Object o) {
+                    if (o instanceof Foo(Bar _, Baz(Qux q, _))) {
+                        thenCall();
+                    } else {
+                        elseCall();
+                    }
+                  }
+                }\
+                """);
 
         IfStmt ifStmt = Navigator.demandNodeOfGivenClass(cu, IfStmt.class);
         IfStatementContext ifContext = new IfStatementContext(ifStmt, typeSolver);

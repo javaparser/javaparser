@@ -37,23 +37,25 @@ public class Issue1827Test extends AbstractResolutionTest {
     @Test
     public void solveParametrizedParametersConstructor() {
 
-        String src = "public class ParametrizedParametersConstructor {\n"
-                + "    public void foo() {\n"
-                + "        EClass arg = new EClass();\n"
-                + "        ParametrizedClass<String> pc = new ParametrizedClass<>(arg, arg);\n"
-                + "    }\n"
-                + "\n"
-                + "    class EClass implements BaseType<String> {\n"
-                + "    }\n"
-                + "}\n"
-                + "\n"
-                + "class ParametrizedClass<T> {\n"
-                + "    public ParametrizedClass(BaseType<T> arg1, BaseType<T> arg2) {\n"
-                + "    }\n"
-                + "}\n"
-                + "\n"
-                + "interface BaseType<T> {\n"
-                + "}";
+        String src = """
+                public class ParametrizedParametersConstructor {
+                    public void foo() {
+                        EClass arg = new EClass();
+                        ParametrizedClass<String> pc = new ParametrizedClass<>(arg, arg);
+                    }
+                
+                    class EClass implements BaseType<String> {
+                    }
+                }
+                
+                class ParametrizedClass<T> {
+                    public ParametrizedClass(BaseType<T> arg1, BaseType<T> arg2) {
+                    }
+                }
+                
+                interface BaseType<T> {
+                }\
+                """;
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);

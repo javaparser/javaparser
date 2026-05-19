@@ -57,7 +57,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     @Override
     public Optional<ResolvedType> solveGenericType(String name) {
         Optional<Expression> nodeScope = wrappedNode.getScope();
-        if (!nodeScope.isPresent()) {
+        if (nodeScope.isEmpty()) {
             return Optional.empty();
         }
 
@@ -82,8 +82,8 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         if (wrappedNode.hasScope()) {
             Expression scope = wrappedNode.getScope().get();
             // Consider static method calls
-            if (scope instanceof NameExpr) {
-                String className = ((NameExpr) scope).getName().getId();
+            if (scope instanceof NameExpr expr) {
+                String className = expr.getName().getId();
                 SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
                 if (ref.isSolved()) {
                     SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(
@@ -176,7 +176,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
     private Optional<MethodUsage> solveMethodAsUsage(
             ResolvedReferenceType refType, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
-        if (!refType.getTypeDeclaration().isPresent()) {
+        if (refType.getTypeDeclaration().isEmpty()) {
             return Optional.empty();
         }
 
@@ -289,8 +289,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 }
                 if (!expectedType.isAssignableBy(actualType)) {
                     // ok, then it needs to be wrapped
-                    throw new UnsupportedOperationException(String.format(
-                            "Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                    throw new UnsupportedOperationException("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s".formatted(
                             expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
                 }
                 // match only the varargs type
@@ -313,8 +312,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 }
                 ResolvedType actualType = actualParamTypes.get(actualParamTypes.size() - 1);
                 if (!expectedType.isAssignableBy(actualType)) {
-                    throw new UnsupportedOperationException(String.format(
-                            "Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                    throw new UnsupportedOperationException("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s".formatted(
                             expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
                 }
                 matchTypeParameters(expectedType, actualType, matchedTypeParameters);
@@ -506,17 +504,16 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
     private Optional<MethodUsage> solveMethodAsUsage(
             ResolvedType type, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
-        if (type instanceof ResolvedReferenceType) {
-            return solveMethodAsUsage((ResolvedReferenceType) type, name, argumentsTypes, invokationContext);
+        if (type instanceof ResolvedReferenceType referenceType) {
+            return solveMethodAsUsage(referenceType, name, argumentsTypes, invokationContext);
         }
         if (type instanceof LazyType) {
             return solveMethodAsUsage(type.asReferenceType(), name, argumentsTypes, invokationContext);
         }
-        if (type instanceof ResolvedTypeVariable) {
-            return solveMethodAsUsage((ResolvedTypeVariable) type, name, argumentsTypes, invokationContext);
+        if (type instanceof ResolvedTypeVariable variable) {
+            return solveMethodAsUsage(variable, name, argumentsTypes, invokationContext);
         }
-        if (type instanceof ResolvedWildcard) {
-            ResolvedWildcard wildcardUsage = (ResolvedWildcard) type;
+        if (type instanceof ResolvedWildcard wildcardUsage) {
             if (wildcardUsage.isSuper()) {
                 return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
             }
@@ -529,8 +526,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                     argumentsTypes,
                     invokationContext);
         }
-        if (type instanceof ResolvedLambdaConstraintType) {
-            ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
+        if (type instanceof ResolvedLambdaConstraintType constraintType) {
             return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext);
         }
         if (type instanceof ResolvedArrayType) {

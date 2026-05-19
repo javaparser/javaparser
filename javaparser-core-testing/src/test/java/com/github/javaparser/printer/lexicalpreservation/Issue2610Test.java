@@ -35,11 +35,14 @@ public class Issue2610Test extends AbstractLexicalPreservingTest {
     @Test
     public void test() {
 
-        considerCode("public class Bar {\n" + "    public void foo() {\n"
-                + "          // comment\n"
-                + "          System.out.print(\"error\");\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                public class Bar {
+                    public void foo() {
+                          // comment
+                          System.out.print("error");
+                    }
+                }\
+                """);
         // contruct a statement with a comment
         Expression expr = StaticJavaParser.parseExpression("System.out.println(\"warning\")");
         // Replace the method expression

@@ -112,21 +112,21 @@ public interface ResolvedDeclaration extends AssociableToAST {
      * Return this as a FieldDeclaration or throw an UnsupportedOperationException
      */
     default ResolvedFieldDeclaration asField() {
-        throw new UnsupportedOperationException(String.format("%s is not a FieldDeclaration", this));
+        throw new UnsupportedOperationException("%s is not a FieldDeclaration".formatted(this));
     }
 
     /**
      * Return this as a ParameterDeclaration or throw an UnsupportedOperationException
      */
     default ResolvedParameterDeclaration asParameter() {
-        throw new UnsupportedOperationException(String.format("%s is not a ParameterDeclaration", this));
+        throw new UnsupportedOperationException("%s is not a ParameterDeclaration".formatted(this));
     }
 
     /**
      * Return this as a TypeDeclaration or throw an UnsupportedOperationException
      */
     default ResolvedTypeDeclaration asType() {
-        throw new UnsupportedOperationException(String.format("%s is not a TypeDeclaration", this));
+        throw new UnsupportedOperationException("%s is not a TypeDeclaration".formatted(this));
     }
 
     /**
@@ -134,20 +134,20 @@ public interface ResolvedDeclaration extends AssociableToAST {
      * // FIXME: This is never overridden.
      */
     default ResolvedMethodDeclaration asMethod() {
-        throw new UnsupportedOperationException(String.format("%s is not a MethodDeclaration", this));
+        throw new UnsupportedOperationException("%s is not a MethodDeclaration".formatted(this));
     }
 
     /**
      * Return this as a EnumConstantDeclaration or throw an UnsupportedOperationException
      */
     default ResolvedEnumConstantDeclaration asEnumConstant() {
-        throw new UnsupportedOperationException(String.format("%s is not an EnumConstantDeclaration", this));
+        throw new UnsupportedOperationException("%s is not an EnumConstantDeclaration".formatted(this));
     }
 
     /**
      * Return this as a PatternDeclaration or throw an UnsupportedOperationException
      */
     default ResolvedTypePatternDeclaration asTypePattern() {
-        throw new UnsupportedOperationException(String.format("%s is not a Pattern", this));
+        throw new UnsupportedOperationException("%s is not a Pattern".formatted(this));
     }
 }

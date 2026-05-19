@@ -10,49 +10,51 @@ public class Issue4961Test {
     @Test
     public void testIssue4961() {
 
-        String code = "// Support JEP 513: Flexible Constructor Bodies\n"
-                + "// https://youtrack.jetbrains.com/projects/IDEA/issues/IDEA-372971/Support-JEP-513-Flexible-Constructor-Bodies\n"
-                + "\n"
-                + "void main(String[] args) {\n"
-                + "    Employee e1 = new Employee(30, \"A123\");\n"
-                + "    e1.show();\n"
-                + "\n"
-                + "    // Employee Age: 30, Office ID: null\n"
-                + "    // Employee Age: 30, Office ID: A123\n"
-                + "}\n"
-                + "\n"
-                + "class Person {\n"
-                + "    final int age;\n"
-                + "\n"
-                + "    Person(int age) {\n"
-                + "        this.age = age;\n"
-                + "        show();\n"
-                + "    }\n"
-                + "\n"
-                + "    void show() {\n"
-                + "        System.out.println(\"Age: \" + age);\n"
-                + "    }\n"
-                + "}\n"
-                + "\n"
-                + "class Employee extends Person {\n"
-                + "    final String officeId;\n"
-                + "\n"
-                + "    Employee(int age, String officeId) {\n"
-                + "        super(validateAge(age));\n"
-                + "        this.officeId = officeId;\n"
-                + "    }\n"
-                + "\n"
-                + "    private static int validateAge(int age) {\n"
-                + "        if (age < 18 || age > 67)\n"
-                + "            throw new IllegalArgumentException(\"Invalid age: \" + age);\n"
-                + "        return age;\n"
-                + "    }\n"
-                + "\n"
-                + "    @Override\n"
-                + "    void show() {\n"
-                + "        System.out.println(\"Employee Age: \" + age + \", Office ID: \" + officeId);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                // Support JEP 513: Flexible Constructor Bodies
+                // https://youtrack.jetbrains.com/projects/IDEA/issues/IDEA-372971/Support-JEP-513-Flexible-Constructor-Bodies
+                
+                void main(String[] args) {
+                    Employee e1 = new Employee(30, "A123");
+                    e1.show();
+                
+                    // Employee Age: 30, Office ID: null
+                    // Employee Age: 30, Office ID: A123
+                }
+                
+                class Person {
+                    final int age;
+                
+                    Person(int age) {
+                        this.age = age;
+                        show();
+                    }
+                
+                    void show() {
+                        System.out.println("Age: " + age);
+                    }
+                }
+                
+                class Employee extends Person {
+                    final String officeId;
+                
+                    Employee(int age, String officeId) {
+                        super(validateAge(age));
+                        this.officeId = officeId;
+                    }
+                
+                    private static int validateAge(int age) {
+                        if (age < 18 || age > 67)
+                            throw new IllegalArgumentException("Invalid age: " + age);
+                        return age;
+                    }
+                
+                    @Override
+                    void show() {
+                        System.out.println("Employee Age: " + age + ", Office ID: " + officeId);
+                    }
+                }\
+                """;
 
         JavaParser parser = new JavaParser();
         ParseResult<CompilationUnit> result = parser.parse(code);

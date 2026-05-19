@@ -61,13 +61,15 @@ public class Issue2953Test {
         config.setSymbolResolver(new JavaSymbolSolver(typeResolver));
         StaticJavaParser.setConfiguration(config);
 
-        String code = "package foo;\n"
-                + "import foo.A;\n"
-                + "public class Test {\n"
-                + "    public void foo() {\n"
-                + "        A.X.equalByCode(0);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                package foo;
+                import foo.A;
+                public class Test {
+                    public void foo() {
+                        A.X.equalByCode(0);
+                    }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(code);
 
         for (TypeDeclaration<?> type : cu.getTypes()) {

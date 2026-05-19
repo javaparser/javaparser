@@ -32,7 +32,6 @@ import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Generates all generated visitors in the javaparser-core module.
@@ -51,14 +50,14 @@ public class CoreGenerator {
             throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
         }
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
-        final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
+        final Path root = Path.of(args[0], "..", "javaparser-core", "src", "main", "java");
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration)
                 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
         StaticJavaParser.setConfiguration(parserConfiguration);
 
         final Path generatedJavaCcRoot =
-                Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
+                Path.of(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
         final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration)
                 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;

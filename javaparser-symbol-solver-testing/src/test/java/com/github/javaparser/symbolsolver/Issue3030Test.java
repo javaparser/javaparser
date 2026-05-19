@@ -37,64 +37,67 @@ public class Issue3030Test extends AbstractResolutionTest {
 
     @Test
     public void test3030() {
-        String sourceCode = "package com.example;\n" + "\n"
-                + "import java.util.Comparator;\n"
-                + "import java.util.Spliterator;\n"
-                + "import java.util.function.Consumer;\n"
-                + "import java.util.function.IntConsumer;\n"
-                + "import java.util.function.IntFunction;\n"
-                + "import java.util.stream.IntStream;\n"
-                + "\n"
-                + "public class TestClass {\n"
-                + "\n"
-                + "    static <T> Spliterator<T> indexed(int size, int extraCharacteristics, IntFunction<T> function, Comparator<? super T> comparator) {\n"
-                + "        class WithCharacteristics implements Spliterator<T> {\n"
-                + "\n"
-                + "            private final Spliterator.OfInt delegate;\n"
-                + "\n"
-                + "            WithCharacteristics(Spliterator.OfInt delegate) {\n"
-                + "                this.delegate = delegate;\n"
-                + "            }\n"
-                + "\n"
-                + "            @Override\n"
-                + "            public boolean tryAdvance(Consumer<? super T> action) {\n"
-                + "                return delegate.tryAdvance((IntConsumer) i -> action.accept(function.apply(i)));\n"
-                + "            }\n"
-                + "\n"
-                + "            @Override\n"
-                + "            public void forEachRemaining(Consumer<? super T> action) {\n"
-                + "                delegate.forEachRemaining((IntConsumer) i -> action.accept(function.apply(i)));\n"
-                + "            }\n"
-                + "\n"
-                + "            @Override\n"
-                + "            public Spliterator<T> trySplit() {\n"
-                + "                Spliterator.OfInt split = delegate.trySplit();\n"
-                + "                return (split == null) ? null : new WithCharacteristics(split);\n"
-                + "            }\n"
-                + "\n"
-                + "            @Override\n"
-                + "            public long estimateSize() {\n"
-                + "                return delegate.estimateSize();\n"
-                + "            }\n"
-                + "\n"
-                + "            @Override\n"
-                + "            public int characteristics() {\n"
-                + "                return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED | extraCharacteristics;\n"
-                + "            }\n"
-                + "\n"
-                + "            @Override\n"
-                + "            public Comparator<? super T> getComparator() {\n"
-                + "                if (hasCharacteristics(Spliterator.SORTED)) {\n"
-                + "                    return comparator;\n"
-                + "                } else {\n"
-                + "                    throw new IllegalStateException();\n"
-                + "                }\n"
-                + "            }\n"
-                + "        }\n"
-                + "        return new WithCharacteristics(IntStream.range(0, size).spliterator());\n"
-                + "    }\n"
-                + "\n"
-                + "}\n";
+        String sourceCode = """
+                package com.example;
+                
+                import java.util.Comparator;
+                import java.util.Spliterator;
+                import java.util.function.Consumer;
+                import java.util.function.IntConsumer;
+                import java.util.function.IntFunction;
+                import java.util.stream.IntStream;
+                
+                public class TestClass {
+                
+                    static <T> Spliterator<T> indexed(int size, int extraCharacteristics, IntFunction<T> function, Comparator<? super T> comparator) {
+                        class WithCharacteristics implements Spliterator<T> {
+                
+                            private final Spliterator.OfInt delegate;
+                
+                            WithCharacteristics(Spliterator.OfInt delegate) {
+                                this.delegate = delegate;
+                            }
+                
+                            @Override
+                            public boolean tryAdvance(Consumer<? super T> action) {
+                                return delegate.tryAdvance((IntConsumer) i -> action.accept(function.apply(i)));
+                            }
+                
+                            @Override
+                            public void forEachRemaining(Consumer<? super T> action) {
+                                delegate.forEachRemaining((IntConsumer) i -> action.accept(function.apply(i)));
+                            }
+                
+                            @Override
+                            public Spliterator<T> trySplit() {
+                                Spliterator.OfInt split = delegate.trySplit();
+                                return (split == null) ? null : new WithCharacteristics(split);
+                            }
+                
+                            @Override
+                            public long estimateSize() {
+                                return delegate.estimateSize();
+                            }
+                
+                            @Override
+                            public int characteristics() {
+                                return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED | extraCharacteristics;
+                            }
+                
+                            @Override
+                            public Comparator<? super T> getComparator() {
+                                if (hasCharacteristics(Spliterator.SORTED)) {
+                                    return comparator;
+                                } else {
+                                    throw new IllegalStateException();
+                                }
+                            }
+                        }
+                        return new WithCharacteristics(IntStream.range(0, size).spliterator());
+                    }
+                
+                }
+                """;
 
         ReflectionTypeSolver reflectionSolver = new ReflectionTypeSolver();
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(reflectionSolver);

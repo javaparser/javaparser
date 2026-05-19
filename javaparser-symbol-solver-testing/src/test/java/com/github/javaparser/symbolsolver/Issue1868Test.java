@@ -47,17 +47,20 @@ public class Issue1868Test extends AbstractSymbolResolutionTest {
         StaticJavaParser.setConfiguration(
                 new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver)));
 
-        String s = "class A {\n" + "    public void foo() {\n"
-                + "        toArray(new String[0]);\n"
-                + "    }\n"
-                + "    public void bar() {\n"
-                + "        B b = null;\n"
-                + "        b.toArray(new String[0]);\n"
-                + "    }\n"
-                + "    public <T> T[] toArray(T[] tArray) {\n"
-                + "        // ...\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                class A {
+                    public void foo() {
+                        toArray(new String[0]);
+                    }
+                    public void bar() {
+                        B b = null;
+                        b.toArray(new String[0]);
+                    }
+                    public <T> T[] toArray(T[] tArray) {
+                        // ...
+                    }
+                }\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(s);
 
@@ -65,11 +68,9 @@ public class Issue1868Test extends AbstractSymbolResolutionTest {
 
         assertEquals(
                 "toArray(new String[0]) resolved to A.toArray",
-                String.format(
-                        "%s resolved to %s", mces.get(0), mces.get(0).resolve().getQualifiedName()));
+                "%s resolved to %s".formatted(mces.get(0), mces.get(0).resolve().getQualifiedName()));
         assertEquals(
                 "b.toArray(new String[0]) resolved to B.toArray",
-                String.format(
-                        "%s resolved to %s", mces.get(1), mces.get(1).resolve().getQualifiedName()));
+                "%s resolved to %s".formatted(mces.get(1), mces.get(1).resolve().getQualifiedName()));
     }
 }

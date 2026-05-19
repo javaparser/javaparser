@@ -53,7 +53,7 @@ public class SymbolSolverCollectionStrategy implements CollectionStrategy {
     public SymbolSolverCollectionStrategy(ParserConfiguration parserConfiguration) {
         // Allow the symbol resolver to be set via the given parser configuration
         this.parserConfiguration = parserConfiguration;
-        if (!parserConfiguration.getSymbolResolver().isPresent()) {
+        if (parserConfiguration.getSymbolResolver().isEmpty()) {
             this.parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         }
     }

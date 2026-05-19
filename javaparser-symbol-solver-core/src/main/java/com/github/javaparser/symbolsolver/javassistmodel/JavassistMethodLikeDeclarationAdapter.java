@@ -97,19 +97,18 @@ public class JavassistMethodLikeDeclarationAdapter {
 
     public ResolvedType getSpecifiedException(int index) {
         if (index < 0) {
-            throw new IllegalArgumentException(String.format("index < 0: %d", index));
+            throw new IllegalArgumentException("index < 0: %d".formatted(index));
         }
 
         ExceptionsAttribute exceptionsAttribute = ctBehavior.getMethodInfo().getExceptionsAttribute();
         if (exceptionsAttribute == null) {
             throw new IllegalArgumentException(
-                    String.format("No exception with index %d. Number of exceptions: 0", index));
+                    "No exception with index %d. Number of exceptions: 0".formatted(index));
         }
 
         String[] exceptions = exceptionsAttribute.getExceptions();
         if (exceptions == null || index >= exceptions.length) {
-            throw new IllegalArgumentException(String.format(
-                    "No exception with index %d. Number of exceptions: %d", index, getNumberOfSpecifiedExceptions()));
+            throw new IllegalArgumentException("No exception with index %d. Number of exceptions: %d".formatted(index, getNumberOfSpecifiedExceptions()));
         }
 
         ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(exceptions[index]);

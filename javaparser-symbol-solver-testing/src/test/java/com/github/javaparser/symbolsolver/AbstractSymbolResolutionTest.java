@@ -30,7 +30,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.github.javaparser.utils.CodeGenerationUtils;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 
@@ -148,7 +147,7 @@ public abstract class AbstractSymbolResolutionTest {
     }
 
     protected static Path adaptPath(String path) {
-        return adaptPath(Paths.get(path));
+        return adaptPath(Path.of(path));
     }
 
     protected SymbolResolver symbolResolver(TypeSolver typeSolver) {

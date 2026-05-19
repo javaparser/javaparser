@@ -48,12 +48,12 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
 
     public ReflectionTypeParameter(TypeVariable typeVariable, boolean declaredOnClass, TypeSolver typeSolver) {
         GenericDeclaration genericDeclaration = typeVariable.getGenericDeclaration();
-        if (genericDeclaration instanceof Class) {
-            container = ReflectionFactory.typeDeclarationFor((Class) genericDeclaration, typeSolver);
-        } else if (genericDeclaration instanceof Method) {
-            container = new ReflectionMethodDeclaration((Method) genericDeclaration, typeSolver);
-        } else if (genericDeclaration instanceof Constructor) {
-            container = new ReflectionConstructorDeclaration((Constructor) genericDeclaration, typeSolver);
+        if (genericDeclaration instanceof Class class1) {
+            container = ReflectionFactory.typeDeclarationFor(class1, typeSolver);
+        } else if (genericDeclaration instanceof Method method) {
+            container = new ReflectionMethodDeclaration(method, typeSolver);
+        } else if (genericDeclaration instanceof Constructor constructor) {
+            container = new ReflectionConstructorDeclaration(constructor, typeSolver);
         }
         this.typeVariable = typeVariable;
         this.typeSolver = typeSolver;
@@ -90,16 +90,16 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
 
     @Override
     public String getContainerQualifiedName() {
-        if (container instanceof ResolvedReferenceTypeDeclaration) {
-            return ((ResolvedReferenceTypeDeclaration) container).getQualifiedName();
+        if (container instanceof ResolvedReferenceTypeDeclaration declaration) {
+            return declaration.getQualifiedName();
         }
         return ((ResolvedMethodLikeDeclaration) container).getQualifiedSignature();
     }
 
     @Override
     public String getContainerId() {
-        if (container instanceof ResolvedReferenceTypeDeclaration) {
-            return ((ResolvedReferenceTypeDeclaration) container).getId();
+        if (container instanceof ResolvedReferenceTypeDeclaration declaration) {
+            return declaration.getId();
         }
         return ((ResolvedMethodLikeDeclaration) container).getQualifiedSignature();
     }
@@ -123,8 +123,8 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
 
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
-        if (container instanceof ResolvedReferenceTypeDeclaration) {
-            return Optional.of((ResolvedReferenceTypeDeclaration) container);
+        if (container instanceof ResolvedReferenceTypeDeclaration declaration) {
+            return Optional.of(declaration);
         }
         return Optional.empty();
     }

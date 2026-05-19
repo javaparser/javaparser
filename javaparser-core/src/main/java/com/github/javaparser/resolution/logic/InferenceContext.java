@@ -120,10 +120,10 @@ public class InferenceContext {
                     }
                 }
             }
-        } else if (formalType instanceof InferenceVariableType && !actualType.isPrimitive()) {
-            ((InferenceVariableType) formalType).registerEquivalentType(actualType);
-            if (actualType instanceof InferenceVariableType) {
-                ((InferenceVariableType) actualType).registerEquivalentType(formalType);
+        } else if (formalType instanceof InferenceVariableType type2 && !actualType.isPrimitive()) {
+            type2.registerEquivalentType(actualType);
+            if (actualType instanceof InferenceVariableType type) {
+                type.registerEquivalentType(formalType);
             }
         } else if (actualType.isNull()) {
             // nothing to do
@@ -135,9 +135,9 @@ public class InferenceContext {
                     actualType.asArrayType().getComponentType());
         } else if (formalType.isWildcard()) {
             // nothing to do
-            if ((actualType instanceof InferenceVariableType)
+            if ((actualType instanceof InferenceVariableType type1)
                     && formalType.asWildcard().isBounded()) {
-                ((InferenceVariableType) actualType)
+                type1
                         .registerEquivalentType(formalType.asWildcard().getBoundedType());
                 if (formalType.asWildcard().getBoundedType() instanceof InferenceVariableType) {
                     ((InferenceVariableType) formalType.asWildcard().getBoundedType())
@@ -241,8 +241,7 @@ public class InferenceContext {
     }
 
     public ResolvedType resolve(ResolvedType type) {
-        if (type instanceof InferenceVariableType) {
-            InferenceVariableType inferenceVariableType = (InferenceVariableType) type;
+        if (type instanceof InferenceVariableType inferenceVariableType) {
             return inferenceVariableType.equivalentType();
         }
         if (type.isReferenceType()) {

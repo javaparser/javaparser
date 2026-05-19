@@ -36,7 +36,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -74,7 +73,7 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     private static SourceFileInfoExtractor sourceFileInfoExtractor = getSourceFileInfoExtractor();
 
     private static String readFile(File file) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+        byte[] encoded = Files.readAllBytes(Path.of(file.getAbsolutePath()));
         return new String(encoded, StandardCharsets.UTF_8);
     }
 

@@ -101,8 +101,8 @@ public class JavaParserTypeAdapter<
      */
     @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        if (wrappedNode instanceof NodeWithTypeParameters<?>) {
-            NodeList<TypeParameter> typeParameters = ((NodeWithTypeParameters<?>) wrappedNode).getTypeParameters();
+        if (wrappedNode instanceof NodeWithTypeParameters<?> parameters) {
+            NodeList<TypeParameter> typeParameters = parameters.getTypeParameters();
             for (com.github.javaparser.ast.type.TypeParameter typeParameter : typeParameters) {
                 if (typeParameter.getName().getId().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter, typeSolver));
@@ -112,58 +112,56 @@ public class JavaParserTypeAdapter<
 
         // Member classes & interfaces
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                com.github.javaparser.ast.body.TypeDeclaration<?> internalType =
-                        (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
+            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration<?> internalType) {
                 String prefix = internalType.getName().asString() + ".";
                 if (internalType.getName().getId().equals(name)) {
-                    if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        if (((ClassOrInterfaceDeclaration) internalType).isInterface()) {
+                    if (internalType instanceof ClassOrInterfaceDeclaration declaration) {
+                        if (declaration.isInterface()) {
                             return SymbolReference.solved(new JavaParserInterfaceDeclaration(
-                                    (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType,
+                                    declaration,
                                     typeSolver));
                         }
                         return SymbolReference.solved(new JavaParserClassDeclaration(
-                                (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver));
+                                declaration, typeSolver));
                     }
-                    if (internalType instanceof EnumDeclaration) {
+                    if (internalType instanceof com.github.javaparser.ast.body.EnumDeclaration declaration1) {
                         return SymbolReference.solved(new JavaParserEnumDeclaration(
-                                (com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver));
+                                declaration1, typeSolver));
                     }
-                    if (internalType instanceof AnnotationDeclaration) {
+                    if (internalType instanceof com.github.javaparser.ast.body.AnnotationDeclaration declaration2) {
                         return SymbolReference.solved(new JavaParserAnnotationDeclaration(
-                                (com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
+                                declaration2, typeSolver));
                     }
-                    if (internalType instanceof RecordDeclaration) {
+                    if (internalType instanceof com.github.javaparser.ast.body.RecordDeclaration declaration3) {
                         return SymbolReference.solved(new JavaParserRecordDeclaration(
-                                (com.github.javaparser.ast.body.RecordDeclaration) internalType, typeSolver));
+                                declaration3, typeSolver));
                     }
                     throw new UnsupportedOperationException();
                 }
                 if (name.startsWith(prefix) && name.length() > prefix.length()) {
-                    if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        if (((ClassOrInterfaceDeclaration) internalType).isInterface()) {
+                    if (internalType instanceof ClassOrInterfaceDeclaration declaration4) {
+                        if (declaration4.isInterface()) {
                             return new JavaParserInterfaceDeclaration(
-                                            (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType,
+                                            declaration4,
                                             typeSolver)
                                     .solveType(name.substring(prefix.length()));
                         }
                         return new JavaParserClassDeclaration(
-                                        (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType,
+                                        declaration4,
                                         typeSolver)
                                 .solveType(name.substring(prefix.length()));
                     }
-                    if (internalType instanceof EnumDeclaration) {
+                    if (internalType instanceof com.github.javaparser.ast.body.EnumDeclaration declaration5) {
                         return new SymbolSolver(typeSolver)
                                 .solveTypeInType(
                                         new JavaParserEnumDeclaration(
-                                                (com.github.javaparser.ast.body.EnumDeclaration) internalType,
+                                                declaration5,
                                                 typeSolver),
                                         name.substring(prefix.length()));
                     }
-                    if (internalType instanceof AnnotationDeclaration) {
+                    if (internalType instanceof com.github.javaparser.ast.body.AnnotationDeclaration declaration6) {
                         return SymbolReference.solved(new JavaParserAnnotationDeclaration(
-                                (com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
+                                declaration6, typeSolver));
                     }
                     throw new UnsupportedOperationException();
                 }
@@ -209,8 +207,8 @@ public class JavaParserTypeAdapter<
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         Set<ResolvedMethodDeclaration> methods = new HashSet<>();
         for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
-            if (member instanceof MethodDeclaration) {
-                methods.add(new JavaParserMethodDeclaration((MethodDeclaration) member, typeSolver));
+            if (member instanceof MethodDeclaration declaration) {
+                methods.add(new JavaParserMethodDeclaration(declaration, typeSolver));
             }
         }
         return methods;
@@ -222,8 +220,8 @@ public class JavaParserTypeAdapter<
         // no duplicates in the members list.
         Set<ResolvedReferenceTypeDeclaration> res = Collections.newSetFromMap(new IdentityHashMap<>());
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((TypeDeclaration) member));
+            if (member instanceof TypeDeclaration declaration) {
+                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration(declaration));
             }
         }
         return res;

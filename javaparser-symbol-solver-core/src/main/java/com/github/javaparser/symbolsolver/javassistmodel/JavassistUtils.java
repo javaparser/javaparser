@@ -133,8 +133,7 @@ class JavassistUtils {
             SignatureAttribute.Type signatureType,
             TypeSolver typeSolver,
             ResolvedTypeParametrizable typeParametrizable) {
-        if (signatureType instanceof SignatureAttribute.ClassType) {
-            SignatureAttribute.ClassType classType = (SignatureAttribute.ClassType) signatureType;
+        if (signatureType instanceof SignatureAttribute.ClassType classType) {
             List<ResolvedType> typeArguments = classType.getTypeArguments() == null
                     ? Collections.emptyList()
                     : Arrays.stream(classType.getTypeArguments())
@@ -144,23 +143,20 @@ class JavassistUtils {
                     typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(getTypeName(classType))));
             return new ReferenceTypeImpl(typeDeclaration, typeArguments);
         }
-        if (signatureType instanceof SignatureAttribute.TypeVariable) {
-            SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable) signatureType;
+        if (signatureType instanceof SignatureAttribute.TypeVariable typeVariableSignature) {
             Optional<ResolvedTypeParameterDeclaration> typeParameterDeclarationOpt =
                     typeParametrizable.findTypeParameter(typeVariableSignature.getName());
-            if (!typeParameterDeclarationOpt.isPresent()) {
+            if (typeParameterDeclarationOpt.isEmpty()) {
                 throw new UnsolvedSymbolException("Unable to solve TypeVariable " + typeVariableSignature);
             }
             ResolvedTypeParameterDeclaration typeParameterDeclaration = typeParameterDeclarationOpt.get();
             return new ResolvedTypeVariable(typeParameterDeclaration);
         }
-        if (signatureType instanceof SignatureAttribute.ArrayType) {
-            SignatureAttribute.ArrayType arrayType = (SignatureAttribute.ArrayType) signatureType;
+        if (signatureType instanceof SignatureAttribute.ArrayType arrayType) {
             ResolvedType baseType = signatureTypeToType(arrayType.getComponentType(), typeSolver, typeParametrizable);
             return getArrayType(baseType, arrayType.getDimension());
         }
-        if (signatureType instanceof SignatureAttribute.BaseType) {
-            SignatureAttribute.BaseType baseType = (SignatureAttribute.BaseType) signatureType;
+        if (signatureType instanceof SignatureAttribute.BaseType baseType) {
             if (baseType.toString().equals("void")) {
                 return ResolvedVoidType.INSTANCE;
             }
@@ -199,9 +195,9 @@ class JavassistUtils {
         if (typeArgument instanceof SignatureAttribute.ClassType) {
             return signatureTypeToType(typeArgument, typeSolver, typeParametrizable);
         }
-        if (typeArgument instanceof SignatureAttribute.ArrayType) {
+        if (typeArgument instanceof SignatureAttribute.ArrayType type) {
             return new ResolvedArrayType(signatureTypeToType(
-                    ((SignatureAttribute.ArrayType) typeArgument).getComponentType(), typeSolver, typeParametrizable));
+                    type.getComponentType(), typeSolver, typeParametrizable));
         }
         String typeName = typeArgument.jvmTypeName();
         return getGenericParameterByName(typeName, typeParametrizable, typeSolver);

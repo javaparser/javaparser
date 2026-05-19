@@ -36,19 +36,22 @@ import org.junit.jupiter.api.Test;
 class FindNodeTest {
     @Test
     void testFindFirst() {
-        CompilationUnit cu = parse("class Foo {\n" + "    void foo() {\n"
-                + "        try {\n"
-                + "        } catch (Exception e) {\n"
-                + "        } finally {\n"
-                + "            try {\n"
-                + "            } catch (Exception e) {\n"
-                + "                foo();\n"
-                + "            } finally {\n"
-                + "            }\n"
-                + "        }\n"
-                + "\n"
-                + "    }\n"
-                + "}\n");
+        CompilationUnit cu = parse("""
+                class Foo {
+                    void foo() {
+                        try {
+                        } catch (Exception e) {
+                        } finally {
+                            try {
+                            } catch (Exception e) {
+                                foo();
+                            } finally {
+                            }
+                        }
+                
+                    }
+                }
+                """);
 
         // find the method call expression foo()
         MethodCallExpr actual = cu.findFirst(MethodCallExpr.class).orElse(null);
@@ -77,19 +80,22 @@ class FindNodeTest {
 
     @Test
     void testFindAncestralFinallyBlock() {
-        CompilationUnit cu = parse("class Foo {\n" + "    void foo() {\n"
-                + "        try {\n"
-                + "        } catch (Exception e) {\n"
-                + "        } finally {\n"
-                + "            try {\n"
-                + "            } catch (Exception e) {\n"
-                + "                foo();\n"
-                + "            } finally {\n"
-                + "            }\n"
-                + "        }\n"
-                + "\n"
-                + "    }\n"
-                + "}\n");
+        CompilationUnit cu = parse("""
+                class Foo {
+                    void foo() {
+                        try {
+                        } catch (Exception e) {
+                        } finally {
+                            try {
+                            } catch (Exception e) {
+                                foo();
+                            } finally {
+                            }
+                        }
+                
+                    }
+                }
+                """);
 
         // find the method call expression foo()
         MethodCallExpr methodCallExpr = cu.findFirst(MethodCallExpr.class).orElse(null);

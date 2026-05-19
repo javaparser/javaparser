@@ -47,25 +47,23 @@ public class ListObservationTest {
             @Override
             public void propertyChange(
                     Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                changes.add(String.format(
-                        "change of property %s for %s: from '%s' to '%s'", property, observedNode, oldValue, newValue));
+                changes.add("change of property %s for %s: from '%s' to '%s'".formatted(property, observedNode, oldValue, newValue));
             }
 
             @Override
             public void parentChange(Node observedNode, Node previousParent, Node newParent) {
-                changes.add(String.format(
-                        "setting parent for %s: was %s, now is %s", observedNode, previousParent, newParent));
+                changes.add("setting parent for %s: was %s, now is %s".formatted(observedNode, previousParent, newParent));
             }
 
             @Override
             public void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-                changes.add(String.format("'%s' %s in list at %d", nodeAddedOrRemoved, type, index));
+                changes.add("'%s' %s in list at %d".formatted(nodeAddedOrRemoved, type, index));
             }
 
             @Override
             public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
-                changes.add(String.format("'%s' %s in list at %d", oldNode, ListChangeType.REMOVAL, index));
-                changes.add(String.format("'%s' %s in list at %d", newNode, ListChangeType.ADDITION, index));
+                changes.add("'%s' %s in list at %d".formatted(oldNode, ListChangeType.REMOVAL, index));
+                changes.add("'%s' %s in list at %d".formatted(newNode, ListChangeType.ADDITION, index));
             }
         };
     }

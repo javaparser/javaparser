@@ -397,7 +397,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
-        if (!classOrInterfaceType.getTypeArguments().isPresent()) {
+        if (classOrInterfaceType.getTypeArguments().isEmpty()) {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
         }
         List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get().stream()

@@ -35,12 +35,14 @@ public class Issue3614Test extends AbstractResolutionTest {
 
     @Test
     void test() {
-        String code = "package java./*aaaaa*/util;\n"
-                + "class Foo {\n"
-                + "  public void test() {\n"
-                + "        ArrayList list = new ArrayList();\n"
-                + "    }"
-                + "}";
+        String code = """
+                package java./*aaaaa*/util;
+                class Foo {
+                  public void test() {
+                        ArrayList list = new ArrayList();
+                    }\
+                }\
+                """;
 
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));

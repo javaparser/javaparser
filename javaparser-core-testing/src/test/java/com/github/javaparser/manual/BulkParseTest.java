@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -62,7 +61,7 @@ class BulkParseTest {
 
     private void parseOpenJdkLangToolsRepository() throws IOException {
         Path workdir = mavenModuleRoot(BulkParseTest.class)
-                .resolve(Paths.get(temporaryDirectory(), "javaparser_bulkparsetest"));
+                .resolve(Path.of(temporaryDirectory(), "javaparser_bulkparsetest"));
         workdir.toFile().mkdirs();
         Path openJdkZipPath = workdir.resolve("langtools.zip");
         if (Files.notExists(openJdkZipPath)) {
@@ -81,7 +80,7 @@ class BulkParseTest {
 
     private void parseJdkSrcZip() throws IOException {
         // This is where Ubuntu stores the contents of package openjdk-8-src
-        Path path = Paths.get("/usr/lib/jvm/openjdk-9/src.zip");
+        Path path = Path.of("/usr/lib/jvm/openjdk-9/src.zip");
         bulkTest(
                 new SourceZip(path),
                 "openjdk_src_zip_test_results.txt",
@@ -152,7 +151,7 @@ class BulkParseTest {
         Log.info("Writing results...");
 
         Path testResults = mavenModuleRoot(BulkParseTest.class)
-                .resolve(Paths.get(
+                .resolve(Path.of(
                         "..",
                         "javaparser-core-testing",
                         "src",

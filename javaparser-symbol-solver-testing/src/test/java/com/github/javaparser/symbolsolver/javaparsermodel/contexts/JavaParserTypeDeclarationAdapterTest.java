@@ -50,20 +50,22 @@ class JavaParserTypeDeclarationAdapterTest extends AbstractResolutionTest {
 
     @Test
     void issue3214() {
-        String code = "public interface Foo {\n"
-                + "	    interface Bar {}\n"
-                + "	}\n"
-                + "\n"
-                + "	public interface Bar {\n"
-                + "	    void show();\n"
-                + "	}\n"
-                + "\n"
-                + "	public class Test implements Foo.Bar {\n"
-                + "	    private Bar bar;\n"
-                + "	    private void m() {\n"
-                + "	        bar.show();\n"
-                + "	    }\n"
-                + "	}";
+        String code = """
+                public interface Foo {
+                	    interface Bar {}
+                	}
+                
+                	public interface Bar {
+                	    void show();
+                	}
+                
+                	public class Test implements Foo.Bar {
+                	    private Bar bar;
+                	    private void m() {
+                	        bar.show();
+                	    }
+                	}\
+                """;
 
         JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
         CompilationUnit cu = parser.parse(code);
@@ -76,17 +78,19 @@ class JavaParserTypeDeclarationAdapterTest extends AbstractResolutionTest {
     @Test
     void issue3946() {
 
-        String code = "interface Activity {\n"
-                + "class Timestamps {}\n"
-                + "  Timestamps getTimestamps();\n"
-                + "}\n"
-                + "interface RichPresence extends Activity {}\n"
-                + "  class ActivityImpl implements Activity {\n"
-                + "    RichPresence.Timestamps timestamps;\n"
-                + "    @Override\n"
-                + "	   public RichPresence.Timestamps getTimestamps() { return timestamps; }\n"
-                + "    }\n"
-                + "class RichPresenceImpl extends ActivityImpl implements RichPresence { }";
+        String code = """
+                interface Activity {
+                class Timestamps {}
+                  Timestamps getTimestamps();
+                }
+                interface RichPresence extends Activity {}
+                  class ActivityImpl implements Activity {
+                    RichPresence.Timestamps timestamps;
+                    @Override
+                	   public RichPresence.Timestamps getTimestamps() { return timestamps; }
+                    }
+                class RichPresenceImpl extends ActivityImpl implements RichPresence { }\
+                """;
 
         final JavaSymbolSolver solver = new JavaSymbolSolver(new ReflectionTypeSolver(false));
         StaticJavaParser.getParserConfiguration().setSymbolResolver(solver);

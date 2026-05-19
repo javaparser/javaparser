@@ -37,15 +37,18 @@ public class Issue1757Test extends AbstractResolutionTest {
     @Test()
     void test() throws IOException {
 
-        String src = "import java.util.Comparator;\n" + "public class A {\n"
-                + "    public void m() {\n"
-                + "        Comparator<String> c = new Comparator<String>() {\n"
-                + "            public int compare(String o1, String o2) {\n"
-                + "                return 0;\n"
-                + "            }\n"
-                + "        };\n"
-                + "    }\n"
-                + "}";
+        String src = """
+                import java.util.Comparator;
+                public class A {
+                    public void m() {
+                        Comparator<String> c = new Comparator<String>() {
+                            public int compare(String o1, String o2) {
+                                return 0;
+                            }
+                        };
+                    }
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));

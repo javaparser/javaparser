@@ -157,6 +157,6 @@ public class ResolvedTypeVariable implements ResolvedType {
 
     @Override
     public String toDescriptor() {
-        return String.format("L%s;", qualifiedName());
+        return "L%s;".formatted(qualifiedName());
     }
 }

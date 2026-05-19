@@ -144,13 +144,16 @@ class JavaParserJsonDeserializerTest {
 
     @Test
     void testJavaDocComment() {
-        CompilationUnit cu = parse("public class X{ " + "     /**\n"
-                + "     * Woke text.\n"
-                + "     * @param a blub\n"
-                + "     * @return true \n"
-                + "     */"
-                + "     public boolean test(int a) { return true; }\n"
-                + "}");
+        CompilationUnit cu = parse("""
+                public class X{ \
+                     /**
+                     * Woke text.
+                     * @param a blub
+                     * @return true\s
+                     */\
+                     public boolean test(int a) { return true; }
+                }\
+                """);
         String serialized = serialize(cu, false);
 
         CompilationUnit deserialized =

@@ -58,11 +58,14 @@ public class Issue1769Test extends AbstractResolutionTest {
     void testInstanciateNestedClass() throws IOException {
         Path rootSourceDir = adaptPath("src/test/resources/issue1769");
 
-        String src = "import foo.OtherClass;\n" + "public class MyClass{\n"
-                + "  public InnerClass myTest() {\n"
-                + "    return new OtherClass.InnerClass();\n"
-                + "  }\n"
-                + "}\n";
+        String src = """
+                import foo.OtherClass;
+                public class MyClass{
+                  public InnerClass myTest() {
+                    return new OtherClass.InnerClass();
+                  }
+                }
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new JavaParserTypeSolver(rootSourceDir.toFile())));

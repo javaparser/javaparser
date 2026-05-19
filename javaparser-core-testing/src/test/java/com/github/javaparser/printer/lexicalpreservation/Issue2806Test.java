@@ -36,10 +36,13 @@ class Issue2806Test extends AbstractLexicalPreservingTest {
     @Test
     void importIsAddedOnTheSameLine() {
         considerCode("import java.lang.IllegalArgumentException;\n" + "\n" + "public class A {\n" + "}");
-        String junit5 = "import java.lang.IllegalArgumentException;\n" + "import java.nio.file.Paths;\n"
-                + "\n"
-                + "public class A {\n"
-                + "}";
+        String junit5 = """
+                import java.lang.IllegalArgumentException;
+                import java.nio.file.Paths;
+                
+                public class A {
+                }\
+                """;
         ImportDeclaration importDeclaration = new ImportDeclaration("java.nio.file.Paths", false, false);
         CompilationUnit compilationUnit = cu.addImport(importDeclaration);
         String out = LexicalPreservingPrinter.print(compilationUnit);

@@ -191,9 +191,9 @@ public class MethodResolutionLogic {
         for (int i = 0; i < countOfMethodParametersDeclared; i++) {
             ResolvedType expectedDeclaredType = methodDeclaration.getParam(i).getType();
             ResolvedType actualArgumentType = needleArgumentTypes.get(i);
-            if (actualArgumentType instanceof LambdaArgumentTypePlaceholder
+            if (actualArgumentType instanceof LambdaArgumentTypePlaceholder placeholder
                     && isConflictingLambdaType(
-                            (LambdaArgumentTypePlaceholder) actualArgumentType, expectedDeclaredType)) {
+                            placeholder, expectedDeclaredType)) {
                 return false;
             }
             if ((expectedDeclaredType.isTypeVariable() && !(expectedDeclaredType.isWildcard()))
@@ -1325,8 +1325,8 @@ public class MethodResolutionLogic {
             String name,
             List<ResolvedType> argumentsTypes,
             boolean staticOnly) {
-        if (typeDeclaration instanceof MethodResolutionCapability) {
-            return ((MethodResolutionCapability) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
+        if (typeDeclaration instanceof MethodResolutionCapability capability) {
+            return capability.solveMethod(name, argumentsTypes, staticOnly);
         }
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }

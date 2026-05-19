@@ -32,7 +32,6 @@ import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -93,7 +92,7 @@ class SymbolSolverCollectionStrategyTest {
                 .collect(Collectors.toList());
         // verify each member of the list
         Arrays.stream(relativeRootDir).forEach(rrd -> {
-            Path p = Paths.get(mainDirectory.toString(), rrd);
+            Path p = Path.of(mainDirectory.toString(), rrd);
             assertTrue(roots.contains(p.toString()));
         });
     }

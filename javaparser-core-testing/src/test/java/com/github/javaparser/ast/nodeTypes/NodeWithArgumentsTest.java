@@ -33,12 +33,14 @@ class NodeWithArgumentsTest extends AbstractLexicalPreservingTest {
 
     @Test
     void testGetArgumentPosition() {
-        considerCode("" + "class Foo {\n"
-                + "    Map<Integer,String> map = new HashMap<>();\n"
-                + "    public String bar(int i) {\n"
-                + "        return map.put(((i)),((\"baz\")));\n"
-                + "    } \n"
-                + "}");
+        considerCode("""
+                class Foo {
+                    Map<Integer,String> map = new HashMap<>();
+                    public String bar(int i) {
+                        return map.put(((i)),(("baz")));
+                    }\s
+                }\
+                """);
         MethodCallExpr mce = cu.findFirst(MethodCallExpr.class).get();
         Expression arg0 = mce.getArgument(0);
         Expression arg1 = mce.getArgument(1);

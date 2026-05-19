@@ -38,12 +38,18 @@ public class Issue1467Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void test() {
-        considerCode("public class Bar {\n" + "    public void foo() {\n"
-                + "        System.out.print(\"Hello\");\n"
-                + "    }\n"
-                + "}");
-        String expected = "public void f() {\n"
-                + "        throw new UnsupportedOperationException(\"Not supported yet.\");\n" + "    }";
+        considerCode("""
+                public class Bar {
+                    public void foo() {
+                        System.out.print("Hello");
+                    }
+                }\
+                """);
+        String expected = """
+                public void f() {
+                        throw new UnsupportedOperationException("Not supported yet.");
+                    }\
+                """;
         // add method declaration
         MethodDeclaration decl =
                 cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0).addMethod("f", Keyword.PUBLIC);

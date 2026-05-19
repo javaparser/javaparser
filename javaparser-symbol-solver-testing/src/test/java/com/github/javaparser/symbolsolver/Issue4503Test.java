@@ -35,19 +35,21 @@ public class Issue4503Test extends AbstractResolutionTest {
 
     @Test
     void test() {
-        String code = "import java.util.function.Function;\n"
-                + "import java.math.BigDecimal;\n"
-                + "public class Test {\n"
-                + "    public static <T, R> String logAndCatch(String moduleName, Object filter1, Object filter2, T req, Function<T, R> func) {\n"
-                + "        return null;\n"
-                + "    }\n"
-                + "    public void test(String testModule, String filter1, String filter2) {\n"
-                + "        Test.logAndCatch(testModule, filter1, filter2, \"1.2\", this::getAmount);\n"
-                + "    }\n"
-                + "    public BigDecimal getAmount(String amount) {\n"
-                + "        return new BigDecimal(amount);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                import java.util.function.Function;
+                import java.math.BigDecimal;
+                public class Test {
+                    public static <T, R> String logAndCatch(String moduleName, Object filter1, Object filter2, T req, Function<T, R> func) {
+                        return null;
+                    }
+                    public void test(String testModule, String filter1, String filter2) {
+                        Test.logAndCatch(testModule, filter1, filter2, "1.2", this::getAmount);
+                    }
+                    public BigDecimal getAmount(String amount) {
+                        return new BigDecimal(amount);
+                    }
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_18);

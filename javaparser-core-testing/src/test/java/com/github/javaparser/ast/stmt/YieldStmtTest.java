@@ -90,11 +90,14 @@ class YieldStmtTest {
         CompilationUnit compilationUnit =
                 parseCompilationUnit(JAVA_12, "class yield { yield yield(yield yield){yield();} }");
         assertEqualsStringIgnoringEol(
-                "class yield {\n" + "\n"
-                        + "    yield yield(yield yield) {\n"
-                        + "        yield();\n"
-                        + "    }\n"
-                        + "}\n",
+                """
+                class yield {
+                
+                    yield yield(yield yield) {
+                        yield();
+                    }
+                }
+                """,
                 compilationUnit.toString());
     }
 

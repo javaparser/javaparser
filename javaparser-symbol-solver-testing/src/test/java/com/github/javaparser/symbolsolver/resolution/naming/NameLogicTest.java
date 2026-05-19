@@ -49,10 +49,13 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void requiresModuleName() {
         assertNameInCodeIsSyntactically(
-                "module com.mydeveloperplanet.jpmshello {\n" + "    requires java.base;\n"
-                        + "    requires java.xml;\n"
-                        + "    requires com.mydeveloperplanet.jpmshi;\n"
-                        + "}\n",
+                """
+                module com.mydeveloperplanet.jpmshello {
+                    requires java.base;
+                    requires java.xml;
+                    requires com.mydeveloperplanet.jpmshi;
+                }
+                """,
                 "java.xml",
                 NameCategory.MODULE_NAME,
                 ParseStart.MODULE_DECLARATION);
@@ -61,7 +64,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void exportsModuleName() {
         assertNameInCodeIsSyntactically(
-                "module my.module{\n" + "  exports my.packag to other.module, another.module;\n" + "}",
+                """
+                module my.module{
+                  exports my.packag to other.module, another.module;
+                }\
+                """,
                 "other.module",
                 NameCategory.MODULE_NAME,
                 ParseStart.MODULE_DECLARATION);
@@ -70,9 +77,12 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void opensModuleName() {
         assertNameInCodeIsSyntactically(
-                "module client.modul{\n" + "    opens some.client.packag to framework.modul;\n"
-                        + "    requires framework.modul2;\n"
-                        + "}",
+                """
+                module client.modul{
+                    opens some.client.packag to framework.modul;
+                    requires framework.modul2;
+                }\
+                """,
                 "framework.modul",
                 NameCategory.MODULE_NAME,
                 ParseStart.MODULE_DECLARATION);
@@ -81,7 +91,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void exportsPackageName() {
         assertNameInCodeIsSyntactically(
-                "module common.widget{\n" + "  exports com.logicbig;\n" + "}",
+                """
+                module common.widget{
+                  exports com.logicbig;
+                }\
+                """,
                 "com.logicbig",
                 NameCategory.PACKAGE_NAME,
                 ParseStart.MODULE_DECLARATION);
@@ -90,7 +104,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void opensPackageName() {
         assertNameInCodeIsSyntactically(
-                "module foo {\n" + "    opens com.example.bar;\n" + "}",
+                """
+                module foo {
+                    opens com.example.bar;
+                }\
+                """,
                 "com.example.bar",
                 NameCategory.PACKAGE_NAME,
                 ParseStart.MODULE_DECLARATION);
@@ -99,7 +117,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void packageNameInPackageName() {
         assertNameInCodeIsSyntactically(
-                "module foo {\n" + "    opens com.example.bar;\n" + "}",
+                """
+                module foo {
+                    opens com.example.bar;
+                }\
+                """,
                 "com.example",
                 NameCategory.PACKAGE_NAME,
                 ParseStart.MODULE_DECLARATION);
@@ -108,7 +130,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void usesTypeName() {
         assertNameInCodeIsSyntactically(
-                "module modi.mod {\n" + "    uses modi.api;\n" + "}",
+                """
+                module modi.mod {
+                    uses modi.api;
+                }\
+                """,
                 "modi.api",
                 NameCategory.TYPE_NAME,
                 ParseStart.MODULE_DECLARATION);
@@ -117,7 +143,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void providesTypeName() {
         assertNameInCodeIsSyntactically(
-                "module foo {\n" + "    provides com.modi.api.query.Query with ModuleQuery;\n" + "}",
+                """
+                module foo {
+                    provides com.modi.api.query.Query with ModuleQuery;
+                }\
+                """,
                 "com.modi.api.query.Query",
                 NameCategory.TYPE_NAME,
                 ParseStart.MODULE_DECLARATION);
@@ -265,8 +295,10 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void fieldTypeTypeNameSecondAttempt() {
         assertNameInCodeIsSyntactically(
-                "public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {\n"
-                        + "private TypeSolver typeSolver; }",
+                """
+                public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
+                private TypeSolver typeSolver; }\
+                """,
                 "TypeSolver",
                 NameCategory.TYPE_NAME,
                 ParseStart.COMPILATION_UNIT);
@@ -631,10 +663,13 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void nameAsStringModuleName() {
         ModuleDeclaration md = parse(
-                "module com.mydeveloperplanet.jpmshello {\n" + "    requires java.base;\n"
-                        + "    requires java.xml;\n"
-                        + "    requires com.mydeveloperplanet.jpmshi;\n"
-                        + "}\n",
+                """
+                module com.mydeveloperplanet.jpmshello {
+                    requires java.base;
+                    requires java.xml;
+                    requires com.mydeveloperplanet.jpmshi;
+                }
+                """,
                 ParseStart.MODULE_DECLARATION);
         assertEquals("com.mydeveloperplanet.jpmshello", NameLogic.nameAsString(md.getName()));
     }
@@ -648,10 +683,13 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void qualifiedModuleName() {
         assertIsQualifiedName(
-                "module com.mydeveloperplanet.jpmshello {\n" + "    requires java.base;\n"
-                        + "    requires java.xml;\n"
-                        + "    requires com.mydeveloperplanet.jpmshi;\n"
-                        + "}\n",
+                """
+                module com.mydeveloperplanet.jpmshello {
+                    requires java.base;
+                    requires java.xml;
+                    requires com.mydeveloperplanet.jpmshi;
+                }
+                """,
                 "com.mydeveloperplanet.jpmshello",
                 ParseStart.MODULE_DECLARATION);
     }
@@ -664,10 +702,13 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleModuleName() {
         assertNameInCodeHasRole(
-                "module com.mydeveloperplanet.jpmshello {\n" + "    requires java.base;\n"
-                        + "    requires java.xml;\n"
-                        + "    requires com.mydeveloperplanet.jpmshi;\n"
-                        + "}\n",
+                """
+                module com.mydeveloperplanet.jpmshello {
+                    requires java.base;
+                    requires java.xml;
+                    requires com.mydeveloperplanet.jpmshi;
+                }
+                """,
                 "com.mydeveloperplanet.jpmshello",
                 DECLARATION,
                 ParseStart.MODULE_DECLARATION);
@@ -676,10 +717,13 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleRequiresModuleName() {
         assertNameInCodeHasRole(
-                "module com.mydeveloperplanet.jpmshello {\n" + "    requires java.base;\n"
-                        + "    requires java.xml;\n"
-                        + "    requires com.mydeveloperplanet.jpmshi;\n"
-                        + "}\n",
+                """
+                module com.mydeveloperplanet.jpmshello {
+                    requires java.base;
+                    requires java.xml;
+                    requires com.mydeveloperplanet.jpmshi;
+                }
+                """,
                 "java.xml",
                 REFERENCE,
                 ParseStart.MODULE_DECLARATION);
@@ -688,7 +732,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleExportsModuleName() {
         assertNameInCodeHasRole(
-                "module my.module{\n" + "  exports my.packag to other.module, another.module;\n" + "}",
+                """
+                module my.module{
+                  exports my.packag to other.module, another.module;
+                }\
+                """,
                 "other.module",
                 REFERENCE,
                 ParseStart.MODULE_DECLARATION);
@@ -697,9 +745,12 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleOpensModuleName() {
         assertNameInCodeHasRole(
-                "module client.modul{\n" + "    opens some.client.packag to framework.modul;\n"
-                        + "    requires framework.modul2;\n"
-                        + "}",
+                """
+                module client.modul{
+                    opens some.client.packag to framework.modul;
+                    requires framework.modul2;
+                }\
+                """,
                 "framework.modul",
                 REFERENCE,
                 ParseStart.MODULE_DECLARATION);
@@ -708,7 +759,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleExportsPackageName() {
         assertNameInCodeHasRole(
-                "module common.widget{\n" + "  exports com.logicbig;\n" + "}",
+                """
+                module common.widget{
+                  exports com.logicbig;
+                }\
+                """,
                 "com.logicbig",
                 REFERENCE,
                 ParseStart.MODULE_DECLARATION);
@@ -717,7 +772,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleOpensPackageName() {
         assertNameInCodeHasRole(
-                "module foo {\n" + "    opens com.example.bar;\n" + "}",
+                """
+                module foo {
+                    opens com.example.bar;
+                }\
+                """,
                 "com.example.bar",
                 REFERENCE,
                 ParseStart.MODULE_DECLARATION);
@@ -726,7 +785,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRolePackageNameInPackageName() {
         assertNameInCodeHasRole(
-                "module foo {\n" + "    opens com.example.bar;\n" + "}",
+                """
+                module foo {
+                    opens com.example.bar;
+                }\
+                """,
                 "com.example",
                 REFERENCE,
                 ParseStart.MODULE_DECLARATION);
@@ -735,7 +798,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleUsesTypeName() {
         assertNameInCodeHasRole(
-                "module modi.mod {\n" + "    uses modi.api;\n" + "}",
+                """
+                module modi.mod {
+                    uses modi.api;
+                }\
+                """,
                 "modi.api",
                 REFERENCE,
                 ParseStart.MODULE_DECLARATION);
@@ -744,7 +811,11 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleProvidesTypeName() {
         assertNameInCodeHasRole(
-                "module foo {\n" + "    provides com.modi.api.query.Query with ModuleQuery;\n" + "}",
+                """
+                module foo {
+                    provides com.modi.api.query.Query with ModuleQuery;
+                }\
+                """,
                 "com.modi.api.query.Query",
                 REFERENCE,
                 ParseStart.MODULE_DECLARATION);
@@ -871,8 +942,10 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleFieldTypeTypeNameSecondAttempt() {
         assertNameInCodeHasRole(
-                "public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {\n"
-                        + "private TypeSolver typeSolver; }",
+                """
+                public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
+                private TypeSolver typeSolver; }\
+                """,
                 "TypeSolver",
                 REFERENCE,
                 ParseStart.COMPILATION_UNIT);
@@ -1095,12 +1168,15 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void defaultValueTypeName() {
         assertNameInCodeIsSyntactically(
-                "@RequestForEnhancement(\n" + "    id       = 2868724,\n"
-                        + "    synopsis = \"Provide time-travel functionality\",\n"
-                        + "    engineer = \"Mr. Peabody\",\n"
-                        + "    date     = anExpression"
-                        + ")\n"
-                        + "public static void travelThroughTime(Date destination) {  }",
+                """
+                @RequestForEnhancement(
+                    id       = 2868724,
+                    synopsis = "Provide time-travel functionality",
+                    engineer = "Mr. Peabody",
+                    date     = anExpression\
+                )
+                public static void travelThroughTime(Date destination) {  }\
+                """,
                 "anExpression",
                 NameCategory.AMBIGUOUS_NAME,
                 ParseStart.CLASS_BODY);
@@ -1109,12 +1185,15 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleDefaultValueTypeName() {
         assertNameInCodeHasRole(
-                "@RequestForEnhancement(\n" + "    id       = 2868724,\n"
-                        + "    synopsis = \"Provide time-travel functionality\",\n"
-                        + "    engineer = \"Mr. Peabody\",\n"
-                        + "    date     = anExpression"
-                        + ")\n"
-                        + "public static void travelThroughTime(Date destination) {  }",
+                """
+                @RequestForEnhancement(
+                    id       = 2868724,
+                    synopsis = "Provide time-travel functionality",
+                    engineer = "Mr. Peabody",
+                    date     = anExpression\
+                )
+                public static void travelThroughTime(Date destination) {  }\
+                """,
                 "anExpression",
                 REFERENCE,
                 ParseStart.CLASS_BODY);
@@ -1123,12 +1202,15 @@ class NameLogicTest extends AbstractNameLogicTest {
     @Test
     void classifyRoleDefaultValueDeclaration() {
         assertNameInCodeHasRole(
-                "@RequestForEnhancement(\n" + "    id       = 2868724,\n"
-                        + "    synopsis = \"Provide time-travel functionality\",\n"
-                        + "    engineer = \"Mr. Peabody\",\n"
-                        + "    date     = anExpression"
-                        + ")\n"
-                        + "public static void travelThroughTime(Date destination) {  }",
+                """
+                @RequestForEnhancement(
+                    id       = 2868724,
+                    synopsis = "Provide time-travel functionality",
+                    engineer = "Mr. Peabody",
+                    date     = anExpression\
+                )
+                public static void travelThroughTime(Date destination) {  }\
+                """,
                 "date",
                 DECLARATION,
                 ParseStart.CLASS_BODY);

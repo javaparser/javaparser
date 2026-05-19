@@ -87,7 +87,7 @@ public class SameAsBound extends Bound {
 
     @Override
     public boolean isADependency() {
-        return !isAnInstantiation().isPresent();
+        return isAnInstantiation().isEmpty();
     }
 
     @Override

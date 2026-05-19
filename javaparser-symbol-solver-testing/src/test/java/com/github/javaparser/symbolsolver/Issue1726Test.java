@@ -40,12 +40,15 @@ public class Issue1726Test extends AbstractSymbolResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         StaticJavaParser.setConfiguration(config);
 
-        String s = "import static java.util.concurrent.TimeUnit.SECONDS; \n" + "public class A {\n"
-                + "    public static void main( String[] args )\n"
-                + "    {\n"
-                + "        System.out.println(SECONDS);\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                import static java.util.concurrent.TimeUnit.SECONDS;\s
+                public class A {
+                    public static void main( String[] args )
+                    {
+                        System.out.println(SECONDS);
+                    }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(s);
         MethodCallExpr mce = cu.findFirst(MethodCallExpr.class).get();
         assertEquals("void", (mce.calculateResolvedType().describe()));

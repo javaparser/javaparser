@@ -30,18 +30,22 @@ public class Issue3721Test extends AbstractLexicalPreservingTest {
 
     @Test
     void issue3721() {
-        considerCode("public class Bug {\n"
-                + "    public static void main(String[] args) {\n"
-                + "        Object msg;\n"
-                + "    }\n"
-                + "}\n");
+        considerCode("""
+                public class Bug {
+                    public static void main(String[] args) {
+                        Object msg;
+                    }
+                }
+                """);
 
-        String expected = "public class Bug {\n"
-                + "\n"
-                + "    public static void main(String[] args) {\n"
-                + "        boolean msg;\n"
-                + "    }\n"
-                + "}\n";
+        String expected = """
+                public class Bug {
+                
+                    public static void main(String[] args) {
+                        boolean msg;
+                    }
+                }
+                """;
 
         VariableDeclarator var = cu.findFirst(VariableDeclarator.class).get();
         var.setType("boolean");

@@ -120,7 +120,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
         }
 
         Optional<SymbolReference<ResolvedTypeDeclaration>> recursiveMatch = typeDeclarations.stream()
-                .filter(internalType -> name.startsWith(String.format("%s.", internalType.getName())))
+                .filter(internalType -> name.startsWith("%s.".formatted(internalType.getName())))
                 .findFirst()
                 .map(internalType -> JavaParserFactory.getContext(internalType, typeSolver)
                         .solveType(name.substring(internalType.getName().getId().length() + 1)));

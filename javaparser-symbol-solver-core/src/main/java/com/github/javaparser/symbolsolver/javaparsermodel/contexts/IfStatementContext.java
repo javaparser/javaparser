@@ -92,7 +92,7 @@ public class IfStatementContext extends StatementContext<IfStmt> {
         NormalCompletionVisitor completionVisitor = new NormalCompletionVisitor();
         boolean thenCanCompleteNormally = wrappedNode.getThenStmt().accept(completionVisitor, null);
         // If there is no else block, then we can treat it as an empty block which can complete normally by definition
-        boolean elseCanCompleteNormally = !wrappedNode.getElseStmt().isPresent()
+        boolean elseCanCompleteNormally = wrappedNode.getElseStmt().isEmpty()
                 || wrappedNode.getElseStmt().get().accept(completionVisitor, null);
 
         if (thenCanCompleteNormally && !elseCanCompleteNormally) {
@@ -120,7 +120,7 @@ public class IfStatementContext extends StatementContext<IfStmt> {
      * @return true, If this is an if inside of an if...
      */
     public boolean nodeContextIsChainedIfElseIf(Context parentContext) {
-        return parentContext instanceof AbstractJavaParserContext
+        return parentContext instanceof AbstractJavaParserContext<?> ajpc
                 && ((AbstractJavaParserContext<?>) this).getWrappedNode() instanceof IfStmt
                 && ((AbstractJavaParserContext<?>) parentContext).getWrappedNode() instanceof IfStmt;
     }
@@ -150,8 +150,7 @@ public class IfStatementContext extends StatementContext<IfStmt> {
         Node wrappedNode = abstractContext.getWrappedNode();
         Node wrappedParentNode = abstractParentContext.getWrappedNode();
 
-        if (wrappedParentNode instanceof IfStmt) {
-            IfStmt parentIfStmt = (IfStmt) wrappedParentNode;
+        if (wrappedParentNode instanceof IfStmt parentIfStmt) {
             if (parentIfStmt.getElseStmt().isPresent()) {
                 boolean currentNodeIsAnElseBlock = parentIfStmt.getElseStmt().get() == wrappedNode;
                 if (currentNodeIsAnElseBlock) {
@@ -188,8 +187,7 @@ public class IfStatementContext extends StatementContext<IfStmt> {
         Node wrappedNode = abstractContext.getWrappedNode();
         Node wrappedParentNode = abstractParentContext.getWrappedNode();
 
-        if (wrappedParentNode instanceof IfStmt) {
-            IfStmt parentIfStmt = (IfStmt) wrappedParentNode;
+        if (wrappedParentNode instanceof IfStmt parentIfStmt) {
             boolean currentNodeIsAnElseBlock = parentIfStmt.getThenStmt() == wrappedNode;
             if (currentNodeIsAnElseBlock) {
                 return true;
@@ -213,8 +211,7 @@ public class IfStatementContext extends StatementContext<IfStmt> {
         Node wrappedNode = abstractContext.getWrappedNode();
         Node wrappedParentNode = abstractParentContext.getWrappedNode();
 
-        if (wrappedParentNode instanceof IfStmt) {
-            IfStmt parentIfStmt = (IfStmt) wrappedParentNode;
+        if (wrappedParentNode instanceof IfStmt parentIfStmt) {
             boolean currentNodeIsCondition = parentIfStmt.getCondition() == wrappedNode;
             if (currentNodeIsCondition) {
                 return true;

@@ -25,7 +25,6 @@ import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.steps.SharedSteps.getMemberByTypeAndPosition;
 import static com.github.javaparser.steps.SharedSteps.getMethodByPositionAndClassPosition;
-import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -377,7 +376,7 @@ public class ParsingSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         List<? extends Node> nodes = compilationUnit.findAll(nodeType);
         if (nodes.size() != 1) {
-            throw new RuntimeException(format("Exactly one %s expected", nodeType.getSimpleName()));
+            throw new RuntimeException("Exactly one %s expected".formatted(nodeType.getSimpleName()));
         }
         state.put("selectedNode", nodes.get(0));
     }

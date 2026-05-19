@@ -34,22 +34,25 @@ public class Issue2740Test extends AbstractResolutionTest {
 
     @Test()
     void test() {
-        String code = "import java.util.function.Consumer;\n" + "import java.util.ArrayList;\n"
-                + "\n"
-                + "public class A {\n"
-                + "    \n"
-                + "    void m() {\n"
-                + "        new Consumer<String>() {\n"
-                + "            private ArrayList<Integer> t = new ArrayList<>();\n"
-                + "            @Override\n"
-                + "            public void accept(String s) {\n"
-                + "                t.add(s);\n"
-                + "            }\n"
-                + "            \n"
-                + "        };"
-                + "    }\n"
-                + "\n"
-                + "}";
+        String code = """
+                import java.util.function.Consumer;
+                import java.util.ArrayList;
+                
+                public class A {
+                   \s
+                    void m() {
+                        new Consumer<String>() {
+                            private ArrayList<Integer> t = new ArrayList<>();
+                            @Override
+                            public void accept(String s) {
+                                t.add(s);
+                            }
+                           \s
+                        };\
+                    }
+                
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));

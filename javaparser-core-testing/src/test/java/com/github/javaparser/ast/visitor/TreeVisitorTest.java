@@ -139,9 +139,19 @@ class TreeVisitorTest {
         assertEquals("x = 1", visitor.next().toString());
         assertEquals("int x = 1;", visitor.next().toString());
         assertEqualsStringIgnoringEol(
-                "class X {\n" + "\n" + "    int x = 1;\n" + "}", visitor.next().toString());
+                """
+                class X {
+                
+                    int x = 1;
+                }\
+                """, visitor.next().toString());
         assertEqualsStringIgnoringEol(
-                "class X {\n" + "\n" + "    int x = 1;\n" + "}\n",
+                """
+                class X {
+                
+                    int x = 1;
+                }
+                """,
                 visitor.next().toString());
         assertFalse(visitor.hasNext());
     }

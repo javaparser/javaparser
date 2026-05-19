@@ -41,29 +41,32 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class Issue1945Test extends AbstractResolutionTest {
 
     private static final String code =
-            "import issue1945.implementations.Sheep;\n" + "import issue1945.interfaces.HairType;\n"
-                    + "import issue1945.interfaces.HairTypeRenderer;\n"
-                    + "import issue1945.interfaces.HairyAnimal;\n"
-                    + "\n"
-                    + "public class MainIssue1945 {\n"
-                    + "    \n"
-                    + "    private final HairyAnimal sheep = new Sheep();\n"
-                    + "    \n"
-                    + "    public void chokes3() {\n"
-                    + "        HairType<?> hairType = sheep.getHairType();\n"
-                    + "        hairType.getRenderer().renderHair(sheep.getHairType(), sheep);\n"
-                    + "        hairType.getRenderer();\n"
-                    + "    }\n"
-                    + "    \n"
-                    + "    public void chokes() {\n"
-                    + "        sheep.getHairType().getRenderer().renderHair(sheep.getHairType(), sheep);\n"
-                    + "    }\n"
-                    + "    \n"
-                    + "    public void chokes2() {\n"
-                    + "        HairType<?> hairType = sheep.getHairType();\n"
-                    + "        hairType.getRenderer().renderHair(hairType, sheep);\n"
-                    + "    }\n"
-                    + "}";
+            """
+            import issue1945.implementations.Sheep;
+            import issue1945.interfaces.HairType;
+            import issue1945.interfaces.HairTypeRenderer;
+            import issue1945.interfaces.HairyAnimal;
+            
+            public class MainIssue1945 {
+               \s
+                private final HairyAnimal sheep = new Sheep();
+               \s
+                public void chokes3() {
+                    HairType<?> hairType = sheep.getHairType();
+                    hairType.getRenderer().renderHair(sheep.getHairType(), sheep);
+                    hairType.getRenderer();
+                }
+               \s
+                public void chokes() {
+                    sheep.getHairType().getRenderer().renderHair(sheep.getHairType(), sheep);
+                }
+               \s
+                public void chokes2() {
+                    HairType<?> hairType = sheep.getHairType();
+                    hairType.getRenderer().renderHair(hairType, sheep);
+                }
+            }\
+            """;
 
     // Expected Result MethodCallExpr in parsed code
     private static final Map<String, String> resultsQualifiedName = new HashMap<>();

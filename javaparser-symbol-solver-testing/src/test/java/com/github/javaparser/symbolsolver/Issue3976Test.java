@@ -36,12 +36,14 @@ public class Issue3976Test extends AbstractResolutionTest {
     @Test
     @EnabledForJreRange(min = JRE.JAVA_9)
     void test() {
-        String testCase = "import java.util.Map;\n"
-                + "public class Foo {\n"
-                + "		public Object m() {\n"
-                + "			return Map.of(\"k0\", 0, \"k1\", 1D);\n"
-                + "		}\n"
-                + "}";
+        String testCase = """
+                import java.util.Map;
+                public class Foo {
+                		public Object m() {
+                			return Map.of("k0", 0, "k1", 1D);
+                		}
+                }\
+                """;
 
         CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
                 .parse(testCase);

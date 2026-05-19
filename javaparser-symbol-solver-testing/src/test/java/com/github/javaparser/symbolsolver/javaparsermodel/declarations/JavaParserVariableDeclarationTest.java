@@ -74,20 +74,21 @@ class JavaParserVariableDeclarationTest extends AbstractResolutionTest implement
 
     @Test
     void test3631() {
-        String code = ""
-                + "class InnerScope {\n"
-                + "    int x = 0;\n"
-                + "    void method() {\n"
-                + "        {\n"
-                + "            var x = 1;\n"
-                + "            System.out.println(x);   // prints 1\n"
-                + "        }\n"
-                + "        System.out.println(x);       // prints 0\n"
-                + "    }\n"
-                + "    public static void main(String[] args) {\n"
-                + "        new InnerScope().method();\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                class InnerScope {
+                    int x = 0;
+                    void method() {
+                        {
+                            var x = 1;
+                            System.out.println(x);   // prints 1
+                        }
+                        System.out.println(x);       // prints 0
+                    }
+                    public static void main(String[] args) {
+                        new InnerScope().method();
+                    }
+                }\
+                """;
 
         CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
                 .parse(code);
@@ -103,12 +104,15 @@ class JavaParserVariableDeclarationTest extends AbstractResolutionTest implement
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_9)
     void testJavaBaseModuleImport() {
-        String code = "import module java.base;\n" + "\n"
-                + "public class Test {\n"
-                + "  void foo() {\n"
-                + "    List<String> l = new ArrayList<>();\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                import module java.base;
+                
+                public class Test {
+                  void foo() {
+                    List<String> l = new ArrayList<>();
+                  }
+                }\
+                """;
 
         JavaParserAdapter adapter = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
         adapter.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
@@ -123,12 +127,15 @@ class JavaParserVariableDeclarationTest extends AbstractResolutionTest implement
 
     @Test
     void testJavaModuleImportFromSource() {
-        String code = "import module com.github.javaparser.testmodule;\n" + "\n"
-                + "public class Test {\n"
-                + "  void foo() {\n"
-                + "    TestClass t = new TestClass();\n"
-                + "  }\n"
-                + "}";
+        String code = """
+                import module com.github.javaparser.testmodule;
+                
+                public class Test {
+                  void foo() {
+                    TestClass t = new TestClass();
+                  }
+                }\
+                """;
 
         Path moduleCode = adaptPath("src/test/resources/modules/src/main/java/com.github.javaparser.testmodule");
 

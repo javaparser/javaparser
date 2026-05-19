@@ -37,7 +37,14 @@ public class Issue3159Test extends AbstractResolutionTest {
     @Test
     public void test() throws IOException {
         String code =
-                "class Test {\n" + "  void f() {\n" + "    int a = 0;\n" + "    while (a < 10) {}\n" + "  }\n" + "}";
+                """
+                class Test {
+                  void f() {
+                    int a = 0;
+                    while (a < 10) {}
+                  }
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));

@@ -38,13 +38,15 @@ public class Issue3277Test extends AbstractResolutionTest {
 
     @Test
     void test() throws IOException {
-        String code = "public class StackOverflowTestCase {\n"
-                + "	private C c = new C();\n"
-                + "\n"
-                + "	public void method1() {\n"
-                + "		String localVariable = ConstantA.b.new innerClassInB(c.d.str1, c.d.str2).toString();\n"
-                + "	}\n"
-                + "}";
+        String code = """
+                public class StackOverflowTestCase {
+                	private C c = new C();
+                
+                	public void method1() {
+                		String localVariable = ConstantA.b.new innerClassInB(c.d.str1, c.d.str2).toString();
+                	}
+                }\
+                """;
         Path pathToSourceFile = adaptPath("src/test/resources/issue3277");
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(

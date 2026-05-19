@@ -39,7 +39,7 @@ public class Java8Validator extends Java7Validator {
             new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class, (n, reporter) -> {
                 if (n.isInterface()) {
                     n.getMethods().forEach(m -> {
-                        if (m.isDefault() && !m.getBody().isPresent()) {
+                        if (m.isDefault() && m.getBody().isEmpty()) {
                             reporter.report(m, "'default' methods must have a body.");
                         }
                     });

@@ -58,8 +58,7 @@ public class ReshuffledDiffElementExtractor {
         IndexTrackingIterator<DifferenceElement> iterator = new IndexTrackingIterator<>(diffElements);
         while (iterator.hasNext()) {
             DifferenceElement diffElement = iterator.next();
-            if (diffElement instanceof Reshuffled) {
-                Reshuffled reshuffled = (Reshuffled) diffElement;
+            if (diffElement instanceof Reshuffled reshuffled) {
                 // First, let's see how many tokens we need to attribute to the previous version of the of the CsmMix
                 CsmMix elementsFromPreviousOrder = reshuffled.getPreviousOrder();
                 CsmMix elementsFromNextOrder = reshuffled.getNextOrder();
@@ -252,6 +251,6 @@ public class ReshuffledDiffElementExtractor {
         if (csmElement.isCorrespondingElement(textElement)) {
             return false;
         }
-        return textElement.isWhiteSpace() && csmElement instanceof CsmToken && ((CsmToken) csmElement).isWhiteSpace();
+        return textElement.isWhiteSpace() && csmElement instanceof CsmToken ct && ct.isWhiteSpace();
     }
 }

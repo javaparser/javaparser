@@ -272,15 +272,15 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
      */
     @Override
     public ResolvedType convertToUsage(Context context) {
-        if (getExtendedType().isPresent() && !getSuperType().isPresent()) {
+        if (getExtendedType().isPresent() && getSuperType().isEmpty()) {
             // removed (ReferenceTypeImpl)
             return ResolvedWildcard.extendsBound(getExtendedType().get().convertToUsage(context));
         }
-        if (!getExtendedType().isPresent() && getSuperType().isPresent()) {
+        if (getExtendedType().isEmpty() && getSuperType().isPresent()) {
             // removed (ReferenceTypeImpl)
             return ResolvedWildcard.superBound(getSuperType().get().convertToUsage(context));
         }
-        if (!getExtendedType().isPresent() && !getSuperType().isPresent()) {
+        if (getExtendedType().isEmpty() && getSuperType().isEmpty()) {
             return ResolvedWildcard.UNBOUNDED;
         }
         throw new UnsupportedOperationException(toString());

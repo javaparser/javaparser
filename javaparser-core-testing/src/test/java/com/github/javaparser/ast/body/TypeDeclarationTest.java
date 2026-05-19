@@ -89,13 +89,15 @@ class TypeDeclarationTest {
      */
     @Test
     void enumWithModuleAsName() {
-        String s = "enum module {\n"
-                + "  FOO;\n"
-                + "\n"
-                + "  module foo() {\n"
-                + "    return module.FOO;\n"
-                + "  }\n"
-                + "}\n";
+        String s = """
+                enum module {
+                  FOO;
+                
+                  module foo() {
+                    return module.FOO;
+                  }
+                }
+                """;
 
         CompilationUnit cu = parseCompilationUnit(s);
 

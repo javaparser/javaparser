@@ -173,8 +173,7 @@ class TokenOwnerDetector {
             return false;
         }
         // WORKAROUND: Multiple variable declarations share same type
-        if (tokenOwner instanceof FieldDeclaration) {
-            FieldDeclaration field = (FieldDeclaration) tokenOwner;
+        if (tokenOwner instanceof FieldDeclaration field) {
             if (field.getVariables().size() > 1) {
                 // Let LPP handle it normally
                 return false;

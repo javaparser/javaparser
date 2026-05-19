@@ -60,7 +60,7 @@ public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDe
             methods.add(methodUsage);
             String signature = methodUsage.getSignature();
             String returnType = methodUsage.getDeclaration().getReturnType().describe();
-            String enhancedSignature = String.format("%s %s", returnType, signature);
+            String enhancedSignature = "%s %s".formatted(returnType, signature);
             methodsSignatures.add(enhancedSignature);
         }
 
@@ -75,7 +75,7 @@ public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDe
                 }
                 String signature = methodUsage.getSignature();
                 String returnType = methodUsage.getDeclaration().getReturnType().describe();
-                String enhancedSignature = String.format("%s %s", returnType, signature);
+                String enhancedSignature = "%s %s".formatted(returnType, signature);
                 if (!methodsSignatures.contains(enhancedSignature)) {
                     methodsSignatures.add(enhancedSignature);
                     methods.add(mu);

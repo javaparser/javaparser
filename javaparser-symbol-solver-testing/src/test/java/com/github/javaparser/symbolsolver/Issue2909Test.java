@@ -42,18 +42,21 @@ public class Issue2909Test extends AbstractResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-        String s = "public class Program {\n" + "\n"
-                + "    public class OuterClass {\n"
-                + "        int field = 0;\n"
-                + "\n"
-                + "        public class InnerClass {\n"
-                + "            InnerClass() {\n"
-                + "               OuterClass outer = Program.OuterClass.this;\n"
-                + "               Program.OuterClass.this.field = 1;\n"
-                + "            }\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                public class Program {
+                
+                    public class OuterClass {
+                        int field = 0;
+                
+                        public class InnerClass {
+                            InnerClass() {
+                               OuterClass outer = Program.OuterClass.this;
+                               Program.OuterClass.this.field = 1;
+                            }
+                        }
+                    }
+                }\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ThisExpr> exprs = cu.findAll(ThisExpr.class);
@@ -68,18 +71,21 @@ public class Issue2909Test extends AbstractResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-        String s = "public class Program {\n" + "\n"
-                + "    public class OuterClass {\n"
-                + "        int field = 0;\n"
-                + "\n"
-                + "        public class InnerClass {\n"
-                + "            InnerClass() {\n"
-                + "               OuterClass outer = OuterClass.this;\n"
-                + "               OuterClass.this.field = 1;\n"
-                + "            }\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
+        String s = """
+                public class Program {
+                
+                    public class OuterClass {
+                        int field = 0;
+                
+                        public class InnerClass {
+                            InnerClass() {
+                               OuterClass outer = OuterClass.this;
+                               OuterClass.this.field = 1;
+                            }
+                        }
+                    }
+                }\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ThisExpr> exprs = cu.findAll(ThisExpr.class);

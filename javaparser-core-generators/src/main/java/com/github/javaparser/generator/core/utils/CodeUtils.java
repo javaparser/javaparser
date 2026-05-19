@@ -50,6 +50,6 @@ public final class CodeUtils {
         String requiredTypeName = requiredType.asString();
 
         if (requiredTypeName.equals(valueType)) return value;
-        return String.format("(%s) %s", requiredTypeName, value);
+        return "(%s) %s".formatted(requiredTypeName, value);
     }
 }

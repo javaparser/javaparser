@@ -59,8 +59,7 @@ public class BlockStmtContext extends StatementContext<BlockStmt> {
     }
 
     private List<VariableDeclarator> localVariablesDeclaredIn(Statement statement) {
-        if (statement instanceof ExpressionStmt) {
-            ExpressionStmt expressionStmt = (ExpressionStmt) statement;
+        if (statement instanceof ExpressionStmt expressionStmt) {
             if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr variableDeclarationExpr =
                         (VariableDeclarationExpr) expressionStmt.getExpression();
@@ -100,7 +99,7 @@ public class BlockStmtContext extends StatementContext<BlockStmt> {
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         Optional<Context> optionalParent = getParent();
-        if (!optionalParent.isPresent()) {
+        if (optionalParent.isEmpty()) {
             return SymbolReference.unsolved();
         }
 

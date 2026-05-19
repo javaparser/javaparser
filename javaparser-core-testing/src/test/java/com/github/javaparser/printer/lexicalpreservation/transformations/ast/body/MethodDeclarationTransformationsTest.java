@@ -96,16 +96,19 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         // Assert
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "public class MyClass {\n" + "\n"
-                        + "  /**\n"
-                        + "   * Comment A\n"
-                        + "   */\n"
-                        + "  public void oneMethod() {\n"
-                        + "  }\n"
-                        + "\n"
-                        + "  public void anotherMethod() {\n"
-                        + "  }\n"
-                        + "}\n",
+                """
+                public class MyClass {
+                
+                  /**
+                   * Comment A
+                   */
+                  public void oneMethod() {
+                  }
+                
+                  public void anotherMethod() {
+                  }
+                }
+                """,
                 result);
     }
 
@@ -138,19 +141,22 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         // Assert
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "public class MyClass {\n" + "\n"
-                        + "  /**\n"
-                        + "   * Comment A\n"
-                        + "   */\n"
-                        + "  public void oneMethod() {\n"
-                        + "  }\n"
-                        + "\n"
-                        + "  /**\n"
-                        + "   * Change Javadoc\n"
-                        + "   */\n"
-                        + "  public void anotherMethod() {\n"
-                        + "  }\n"
-                        + "}\n",
+                """
+                public class MyClass {
+                
+                  /**
+                   * Comment A
+                   */
+                  public void oneMethod() {
+                  }
+                
+                  /**
+                   * Change Javadoc
+                   */
+                  public void anotherMethod() {
+                  }
+                }
+                """,
                 result);
     }
 
@@ -181,19 +187,22 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         // Assert
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "public class MyClass {\n" + "\n"
-                        + "  ///\n"
-                        + "  /// Comment A\n"
-                        + "  ///\n"
-                        + "  public void oneMethod() {\n"
-                        + "  }\n"
-                        + "\n"
-                        + "  ///\n"
-                        + "  /// Change Markdown\n"
-                        + "  ///\n"
-                        + "  public void anotherMethod() {\n"
-                        + "  }\n"
-                        + "}\n",
+                """
+                public class MyClass {
+                
+                  ///
+                  /// Comment A
+                  ///
+                  public void oneMethod() {
+                  }
+                
+                  ///
+                  /// Change Markdown
+                  ///
+                  public void anotherMethod() {
+                  }
+                }
+                """,
                 result);
     }
 
@@ -217,7 +226,13 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         // Assert
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "public class MyClass {\n" + "\n" + "  public void oneMethod() {\n" + "  }\n" + "}\n", result);
+                """
+                public class MyClass {
+                
+                  public void oneMethod() {
+                  }
+                }
+                """, result);
     }
 
     @Test
@@ -238,13 +253,15 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         // Assert
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "public class MyClass {\n"
-                        + "  ///\n"
-                        + "  /// Comment A\n"
-                        + "  ///\n"
-                        + "  public void oneMethod() {\n"
-                        + "  }\n"
-                        + "}\n",
+                """
+                public class MyClass {
+                  ///
+                  /// Comment A
+                  ///
+                  public void oneMethod() {
+                  }
+                }
+                """,
                 result);
     }
 
@@ -277,16 +294,19 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         // Assert
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "public class MyClass {\n" + "\n"
-                        + "  /*\n"
-                        + "   * Comment A\n"
-                        + "   */\n"
-                        + "  public void oneMethod() {\n"
-                        + "  }\n"
-                        + "\n"
-                        + "  public void anotherMethod() {\n"
-                        + "  }\n"
-                        + "}\n",
+                """
+                public class MyClass {
+                
+                  /*
+                   * Comment A
+                   */
+                  public void oneMethod() {
+                  }
+                
+                  public void anotherMethod() {
+                  }
+                }
+                """,
                 result);
     }
 
@@ -374,7 +394,13 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "class X {\n" + "  @Test\n" + "  protected void testCase() {\n" + "  }\n" + "}\n", result);
+                """
+                class X {
+                  @Test
+                  protected void testCase() {
+                  }
+                }
+                """, result);
     }
 
     // Parameters
@@ -434,11 +460,14 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "class X {\n" + "  @Test\n"
-                        + "  @org.junit.Ignore(\"flaky test\")\n"
-                        + "  public void testCase() {\n"
-                        + "  }\n"
-                        + "}\n",
+                """
+                class X {
+                  @Test
+                  @org.junit.Ignore("flaky test")
+                  public void testCase() {
+                  }
+                }
+                """,
                 result);
     }
 
@@ -454,7 +483,14 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "class X {\n" + "  @Test\n" + "  @Override\n" + "  void testCase() {\n" + "  }\n" + "}\n", result);
+                """
+                class X {
+                  @Test
+                  @Override
+                  void testCase() {
+                  }
+                }
+                """, result);
     }
 
     @Test
@@ -469,7 +505,13 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "class X {\n" + "  @Test\n" + "  public void testCase() {\n" + "  }\n" + "}\n", result);
+                """
+                class X {
+                  @Test
+                  public void testCase() {
+                  }
+                }
+                """, result);
     }
 
     @Test
@@ -536,7 +578,13 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-                "class X {\n" + "  @Test\n" + "  final public void testCase() {\n" + "  }\n" + "}\n", result);
+                """
+                class X {
+                  @Test
+                  final public void testCase() {
+                  }
+                }
+                """, result);
     }
 
     @Test

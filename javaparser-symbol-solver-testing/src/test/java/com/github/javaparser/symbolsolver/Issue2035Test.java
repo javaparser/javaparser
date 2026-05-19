@@ -54,24 +54,25 @@ class Issue2035Test {
 
     @Test
     void test() {
-        String x = "" + "class X {\n"
-                + "    \n"
-                + "    private void a(int a){ }\n"
-                + "    private void b(Integer a){ }\n"
-                + "    \n"
-                + "    private void c(){\n"
-                + "        int x=0;\n"
-                + "        Integer y=0;\n"
-                + "        \n"
-                + "        a(x);\n"
-                + "        a(y);\n"
-                + "        \n"
-                + "        b(x);\n"
-                + "        b(y);\n"
-                + "        \n"
-                + "    }\n"
-                + "}"
-                + "";
+        String x = """
+                class X {
+                   \s
+                    private void a(int a){ }
+                    private void b(Integer a){ }
+                   \s
+                    private void c(){
+                        int x=0;
+                        Integer y=0;
+                       \s
+                        a(x);
+                        a(y);
+                       \s
+                        b(x);
+                        b(y);
+                       \s
+                    }
+                }\
+                """;
 
         ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x));
 
@@ -92,17 +93,18 @@ class Issue2035Test {
 
     @Test
     void test_int() {
-        String x_int = "" + "import java.util.*;\n"
-                + "\n"
-                + "class X {\n"
-                + "    \n"
-                + "    private void a(){\n"
-                + "        ArrayList<String> abc = new ArrayList<>();\n"
-                + "        int x = 0; \n"
-                + "        abc.get(x);\n"
-                + "    }\n"
-                + "}"
-                + "";
+        String x_int = """
+                import java.util.*;
+                
+                class X {
+                   \s
+                    private void a(){
+                        ArrayList<String> abc = new ArrayList<>();
+                        int x = 0;\s
+                        abc.get(x);
+                    }
+                }\
+                """;
 
         ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x_int));
 
@@ -125,17 +127,18 @@ class Issue2035Test {
 
     @Test
     void test_Integer() {
-        String x_Integer = "" + "import java.util.*;\n"
-                + "\n"
-                + "class X {\n"
-                + "    \n"
-                + "    private void a(){\n"
-                + "        ArrayList<String> abc = new ArrayList<>();\n"
-                + "        Integer x = 0; \n"
-                + "        abc.get(x);\n"
-                + "    }\n"
-                + "}"
-                + "";
+        String x_Integer = """
+                import java.util.*;
+                
+                class X {
+                   \s
+                    private void a(){
+                        ArrayList<String> abc = new ArrayList<>();
+                        Integer x = 0;\s
+                        abc.get(x);
+                    }
+                }\
+                """;
 
         ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x_Integer));
 

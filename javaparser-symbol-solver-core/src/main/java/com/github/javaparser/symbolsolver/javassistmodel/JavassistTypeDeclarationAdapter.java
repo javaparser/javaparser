@@ -255,8 +255,7 @@ public class JavassistTypeDeclarationAdapter {
         if (type.describe().equals(typeDeclaration.getQualifiedName())) {
             return true;
         }
-        if (type instanceof ReferenceTypeImpl) {
-            ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
+        if (type instanceof ReferenceTypeImpl otherTypeDeclaration) {
             if (otherTypeDeclaration.getTypeDeclaration().isPresent()) {
                 return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(typeDeclaration);
             }

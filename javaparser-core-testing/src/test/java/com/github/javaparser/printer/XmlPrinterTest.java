@@ -142,13 +142,12 @@ class XmlPrinterTest {
 
         if (!expectedDocument.isEqualNode(actualDocument)) {
             try {
-                fail(String.format("-- expected:\n%s-- actual:\n%s", getXML(expectedDocument), getXML(actualDocument)));
+                fail("-- expected:\n%s-- actual:\n%s".formatted(getXML(expectedDocument), getXML(actualDocument)));
             } catch (TransformerException ex) {
                 fail(
-                        String.format(
-                                ""
-                                        + "expected: <%s>, but it was <%s>\n"
-                                        + "Additionally, a TransformerException was raised when trying to report XML document contents",
+                        """
+                                expected: <%s>, but it was <%s>
+                                Additionally, a TransformerException was raised when trying to report XML document contents""".formatted(
                                 expected, actual),
                         ex);
             }

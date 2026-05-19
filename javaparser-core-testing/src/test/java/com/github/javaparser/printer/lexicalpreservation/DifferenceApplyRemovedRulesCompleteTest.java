@@ -72,11 +72,14 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r4_removeElementEnforcesIndentation() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        int x = 1;\n"
-                + "        int y = 2; int z = 3;\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        int x = 1;
+                        int y = 2; int z = 3;
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -97,11 +100,14 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r5_modifyElementShouldNotCleansDoubleWhitespace() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        int x =  1;\n"
-                + "        int y = 2;\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        int x =  1;
+                        int y = 2;
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -127,11 +133,14 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r7_removeCompleteLineRemovesIndentation() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        int x = 1;\n"
-                + "        int y = 2;\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        int x = 1;
+                        int y = 2;
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -150,10 +159,13 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r8_removeFirstNonInlineElementRemovesParentIndentation() {
-        considerCode("class X {\n" + "    @Deprecated\n"
-                + "    @SuppressWarnings(\"all\")\n"
-                + "    void method() {}\n"
-                + "}");
+        considerCode("""
+                class X {
+                    @Deprecated
+                    @SuppressWarnings("all")
+                    void method() {}
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
 
@@ -172,11 +184,14 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
     @Test
     @Disabled("Bug: Removing a commented expression should also delete the associated comment")
     void r10_removeCommentInsteadOfExpectedChild() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        /* comment */\n"
-                + "        int x = 1;\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        /* comment */
+                        int x = 1;
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -229,12 +244,15 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void r14_removeIndentUnindentDirective() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        if (true) {\n"
-                + "            int x = 1;\n"
-                + "        }\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        if (true) {
+                            int x = 1;
+                        }
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
 
@@ -349,12 +367,15 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
 
     @Test
     void postRemoved_cleanLeftoverSpacesAfterCompleteLineRemoval() {
-        considerCode("class X {\n" + "    void method() {\n"
-                + "        int x = 1;\n"
-                + "        int y = 2;\n"
-                + "        int z = 3;\n"
-                + "    }\n"
-                + "}");
+        considerCode("""
+                class X {
+                    void method() {
+                        int x = 1;
+                        int y = 2;
+                        int z = 3;
+                    }
+                }\
+                """);
 
         MethodDeclaration method = cu.findFirst(MethodDeclaration.class).get();
         BlockStmt body = method.getBody().get();
@@ -362,11 +383,14 @@ class DifferenceApplyRemovedRulesCompleteTest extends AbstractLexicalPreservingT
         // Remove middle statement (complete line)
         body.getStatements().remove(1);
 
-        String expected = "class X {\n" + "    void method() {\n"
-                + "        int x = 1;\n"
-                + "        int z = 3;\n"
-                + "    }\n"
-                + "}";
+        String expected = """
+                class X {
+                    void method() {
+                        int x = 1;
+                        int z = 3;
+                    }
+                }\
+                """;
 
         assertTransformedToString(expected, cu);
 

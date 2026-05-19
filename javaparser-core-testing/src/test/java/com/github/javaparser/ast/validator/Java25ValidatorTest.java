@@ -51,11 +51,14 @@ class Java25ValidatorTest {
 
     @Test
     void explicitConstructorInvocationAfterFirstStatementAllowed() {
-        String code = "class Foo {\n" + "    public Foo() {\n"
-                + "        int x = 2;\n"
-                + "        super();\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                class Foo {
+                    public Foo() {
+                        int x = 2;
+                        super();
+                    }
+                }\
+                """;
 
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(code));
         assertNoProblems(result);

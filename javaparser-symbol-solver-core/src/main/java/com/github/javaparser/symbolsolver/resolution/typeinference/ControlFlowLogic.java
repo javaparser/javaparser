@@ -77,7 +77,7 @@ public class ControlFlowLogic {
         Statement breakTarget = breakTarget(breakStmt);
         for (TryStmt tryStmt : containedTryStmts(breakTarget)) {
             if (contains(tryStmt.getTryBlock(), breakStmt)) {
-                if (!tryStmt.getFinallyBlock().isPresent()
+                if (tryStmt.getFinallyBlock().isEmpty()
                         && !canCompleteNormally(tryStmt.getFinallyBlock().get())) {
                     return false;
                 }
@@ -89,7 +89,7 @@ public class ControlFlowLogic {
     public boolean continueADoStatement(ContinueStmt continueStmt, DoStmt doStmt) {
         for (TryStmt tryStmt : containedTryStmts(continueStmt)) {
             if (contains(tryStmt.getTryBlock(), continueStmt)) {
-                if (!tryStmt.getFinallyBlock().isPresent()
+                if (tryStmt.getFinallyBlock().isEmpty()
                         && !canCompleteNormally(tryStmt.getFinallyBlock().get())) {
                     return false;
                 }

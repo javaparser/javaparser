@@ -38,14 +38,17 @@ public class Issue2781Test extends AbstractResolutionTest {
     @Test()
     void test() throws FileNotFoundException {
 
-        String code = "public class A implements AnInterface {\n" + "        private AnInterface field;\n"
-                + "\n"
-                + "        protected AnInterface getContainer() {\n"
-                + "            return this.field;\n"
-                + "        }\n"
-                + "        protected static class AnInterface {\n"
-                + "        }\n"
-                + "}";
+        String code = """
+                public class A implements AnInterface {
+                        private AnInterface field;
+                
+                        protected AnInterface getContainer() {
+                            return this.field;
+                        }
+                        protected static class AnInterface {
+                        }
+                }\
+                """;
 
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());

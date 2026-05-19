@@ -34,14 +34,16 @@ public class Issue4104Test extends AbstractLexicalPreservingTest {
 
     @Test
     void test() {
-        considerCode("class Foo {\n"
-                + "  void foo() {\n"
-                + "    switch(bar) {\n"
-                + "      default:\n"
-                + "        break;\n"
-                + "    }\n"
-                + "  }\n"
-                + "}");
+        considerCode("""
+                class Foo {
+                  void foo() {
+                    switch(bar) {
+                      default:
+                        break;
+                    }
+                  }
+                }\
+                """);
         // should be this
         //		String expected =
         //				"class Foo {\n"
@@ -55,16 +57,18 @@ public class Issue4104Test extends AbstractLexicalPreservingTest {
         //				+ "  }\n"
         //				+ "}";
 
-        String expected = "class Foo {\n"
-                + "  void foo() {\n"
-                + "    switch(bar) {\n"
-                + "      default:\n"
-                + "        break;\n"
-                + "      case 0:\n"
-                + "          break;\n"
-                + "      }\n"
-                + "  }\n"
-                + "}";
+        String expected = """
+                class Foo {
+                  void foo() {
+                    switch(bar) {
+                      default:
+                        break;
+                      case 0:
+                          break;
+                      }
+                  }
+                }\
+                """;
 
         SwitchStmt switchStmt =
                 cu.findAll(SwitchStmt.class).stream().findFirst().get();

@@ -30,18 +30,20 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import org.junit.jupiter.api.Test;
 
 public class Issue3937Test extends AbstractLexicalPreservingTest {
-    static final String given = "package custom.project;\n" + "\n"
-            + "import java.util.stream.Stream;\n"
-            + "\n"
-            + "class TestFileSystemCodeProvider {\n"
-            + "	void testInMemoryFileSystem() {\n"
-            + "\n"
-            + "		Stream.of(\"\").listFilesForContent(file -> {\n"
-            + "			System.out.println(s);\n"
-            + "		});\n"
-            + "	}\n"
-            + "}\n"
-            + "";
+    static final String given = """
+            package custom.project;
+            
+            import java.util.stream.Stream;
+            
+            class TestFileSystemCodeProvider {
+            	void testInMemoryFileSystem() {
+            
+            		Stream.of("").listFilesForContent(file -> {
+            			System.out.println(s);
+            		});
+            	}
+            }
+            """;
 
     @Test
     void test() {
@@ -53,17 +55,18 @@ public class Issue3937Test extends AbstractLexicalPreservingTest {
         lambdaExpr.setBody(new ExpressionStmt(new MethodCallExpr(new NameExpr("SomeClass"), "someMethod")));
 
         String actual = LexicalPreservingPrinter.print(cu);
-        String expected = "package custom.project;\n"
-                + "\n"
-                + "import java.util.stream.Stream;\n"
-                + "\n"
-                + "class TestFileSystemCodeProvider {\n"
-                + "	void testInMemoryFileSystem() {\n"
-                + "\n"
-                + "		Stream.of(\"\").listFilesForContent(file -> SomeClass.someMethod());\n"
-                + "	}\n"
-                + "}\n"
-                + "";
+        String expected = """
+                package custom.project;
+                
+                import java.util.stream.Stream;
+                
+                class TestFileSystemCodeProvider {
+                	void testInMemoryFileSystem() {
+                
+                		Stream.of("").listFilesForContent(file -> SomeClass.someMethod());
+                	}
+                }
+                """;
         assertEqualsStringIgnoringEol(expected, actual);
     }
 }

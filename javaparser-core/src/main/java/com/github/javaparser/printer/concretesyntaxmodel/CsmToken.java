@@ -77,7 +77,7 @@ public class CsmToken implements CsmElement {
 
     @Override
     public String toString() {
-        return String.format("%s(property:%s)", this.getClass().getSimpleName(), content);
+        return "%s(property:%s)".formatted(this.getClass().getSimpleName(), content);
     }
 
     @Override
@@ -114,8 +114,8 @@ public class CsmToken implements CsmElement {
      */
     @Override
     public boolean isCorrespondingElement(TextElement textElement) {
-        return (textElement instanceof TokenTextElement)
-                && ((TokenTextElement) textElement).getTokenKind() == getTokenType()
-                && ((TokenTextElement) textElement).getText().equals(getContent());
+        return (textElement instanceof TokenTextElement tte)
+                && tte.getTokenKind() == getTokenType()
+                && tte.getText().equals(getContent());
     }
 }

@@ -36,15 +36,17 @@ import org.junit.jupiter.api.Test;
 public class Issue3710Test {
     @Test
     void resolve_method_used_as_scope_for_inner_class_object_creation() {
-        String sourceCode = "class Example {\n"
-                + "  void test() {\n"
-                + "    Outer.make().new Inner();\n"
-                + "  }\n"
-                + "}\n"
-                + "class Outer {\n"
-                + "  class Inner {}\n"
-                + "  static Outer make() { return new Outer(); }\n"
-                + "}";
+        String sourceCode = """
+                class Example {
+                  void test() {
+                    Outer.make().new Inner();
+                  }
+                }
+                class Outer {
+                  class Inner {}
+                  static Outer make() { return new Outer(); }
+                }\
+                """;
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver(false));
         SymbolResolver resolver = new JavaSymbolSolver(combinedTypeSolver);
@@ -60,15 +62,17 @@ public class Issue3710Test {
 
     @Test
     void resolve_chained_inner_class_object_creation() {
-        String sourceCode = "class Example {\n"
-                + "  void test() {\n"
-                + "    Outer.make().new Middle().new Inner();\n"
-                + "  }\n"
-                + "}\n"
-                + "class Outer {\n"
-                + "  class Middle { class Inner {} }\n"
-                + "  static Outer make() { return new Outer(); }\n"
-                + "}";
+        String sourceCode = """
+                class Example {
+                  void test() {
+                    Outer.make().new Middle().new Inner();
+                  }
+                }
+                class Outer {
+                  class Middle { class Inner {} }
+                  static Outer make() { return new Outer(); }
+                }\
+                """;
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver(false));
         SymbolResolver resolver = new JavaSymbolSolver(combinedTypeSolver);
@@ -90,14 +94,16 @@ public class Issue3710Test {
 
     @Test
     void resolve_inner_class_object_creation_starting_with_constructor() {
-        String sourceCode = "class Example {\n"
-                + "  void test() {\n"
-                + "    new Outer().new Middle().new Inner();\n"
-                + "  }\n"
-                + "}\n"
-                + "class Outer {\n"
-                + "  class Middle { class Inner {} }\n"
-                + "}";
+        String sourceCode = """
+                class Example {
+                  void test() {
+                    new Outer().new Middle().new Inner();
+                  }
+                }
+                class Outer {
+                  class Middle { class Inner {} }
+                }\
+                """;
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver(false));
         SymbolResolver resolver = new JavaSymbolSolver(combinedTypeSolver);

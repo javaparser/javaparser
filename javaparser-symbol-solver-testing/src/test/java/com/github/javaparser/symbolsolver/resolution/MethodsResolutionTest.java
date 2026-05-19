@@ -127,16 +127,17 @@ class MethodsResolutionTest extends AbstractResolutionTest {
     void testSuperMethodCallAnonymousClass() {
         JavaParser parser = new JavaParser();
         parser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-        CompilationUnit cu = parser.parse("" + "public class X { \n"
-                        + "    java.util.List x() { \n"
-                        + "        return new java.util.ArrayList() { \n"
-                        + "            public int size() { \n"
-                        + "                return super.size(); \n"
-                        + "            } \n"
-                        + "        }; \n"
-                        + "    } \n"
-                        + "}"
-                        + "")
+        CompilationUnit cu = parser.parse("""
+                        public class X {\s
+                            java.util.List x() {\s
+                                return new java.util.ArrayList() {\s
+                                    public int size() {\s
+                                        return super.size();\s
+                                    }\s
+                                };\s
+                            }\s
+                        }\
+                        """)
                 .getResult()
                 .get();
 
@@ -150,17 +151,18 @@ class MethodsResolutionTest extends AbstractResolutionTest {
     void testSuperMethodCallDefaultMethod() {
         JavaParser parser = new JavaParser();
         parser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-        CompilationUnit cu = parser.parse("" + "public class X { \n"
-                        + "    public interface Y { \n"
-                        + "        default void foo() {} \n"
-                        + "    } \n"
-                        + "    public class Z implements Y { \n"
-                        + "        public void foo() { \n"
-                        + "            Y.super.foo(); \n"
-                        + "        } \n"
-                        + "    } \n"
-                        + "}"
-                        + "")
+        CompilationUnit cu = parser.parse("""
+                        public class X {\s
+                            public interface Y {\s
+                                default void foo() {}\s
+                            }\s
+                            public class Z implements Y {\s
+                                public void foo() {\s
+                                    Y.super.foo();\s
+                                }\s
+                            }\s
+                        }\
+                        """)
                 .getResult()
                 .get();
 
@@ -934,19 +936,22 @@ class MethodsResolutionTest extends AbstractResolutionTest {
     @Test
     void methodRefWithMultipleLambdasInScope() {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-        CompilationUnit compilationUnit = parse("import java.util.function.Function;\n" + "@FunctionalInterface\n"
-                + "interface ReturnStringFunction<T> extends Function<T, String> {\n"
-                + "  String apply(T t);\n"
-                + "}\n"
-                + "class Foo {\n"
-                + "  static <T> String foo(T t) { return null; }\n"
-                + "}\n"
-                + "public class Test {\n"
-                + "  <T> String acceptsFunction(ReturnStringFunction<T> consumer) { return null; }\n"
-                + "  void test() {\n"
-                + "    acceptsFunction(Foo::foo);\n"
-                + "  }\n"
-                + "}");
+        CompilationUnit compilationUnit = parse("""
+                import java.util.function.Function;
+                @FunctionalInterface
+                interface ReturnStringFunction<T> extends Function<T, String> {
+                  String apply(T t);
+                }
+                class Foo {
+                  static <T> String foo(T t) { return null; }
+                }
+                public class Test {
+                  <T> String acceptsFunction(ReturnStringFunction<T> consumer) { return null; }
+                  void test() {
+                    acceptsFunction(Foo::foo);
+                  }
+                }\
+                """);
 
         MethodCallExpr callExpr =
                 compilationUnit.findFirst(MethodCallExpr.class).get();

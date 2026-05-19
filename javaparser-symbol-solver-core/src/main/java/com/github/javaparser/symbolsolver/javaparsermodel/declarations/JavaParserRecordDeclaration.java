@@ -413,7 +413,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
         }
 
         Optional<String> qualifiedName = wrappedNode.getFullyQualifiedName();
-        if (!qualifiedName.isPresent()) {
+        if (qualifiedName.isEmpty()) {
             return ancestors;
         }
 
@@ -476,8 +476,8 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         Set<ResolvedMethodDeclaration> methods = new HashSet<>();
         for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
-            if (member instanceof MethodDeclaration) {
-                methods.add(new JavaParserMethodDeclaration((MethodDeclaration) member, typeSolver));
+            if (member instanceof MethodDeclaration declaration) {
+                methods.add(new JavaParserMethodDeclaration(declaration, typeSolver));
             }
         }
         for (Parameter parameter : wrappedNode.getParameters()) {
@@ -566,7 +566,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
 
-        if (!classOrInterfaceType.getTypeArguments().isPresent()) {
+        if (classOrInterfaceType.getTypeArguments().isEmpty()) {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
         }
 
@@ -622,7 +622,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
 
         @Override
         public String toDescriptor() {
-            return String.format("()%s", getReturnType().toDescriptor());
+            return "()%s".formatted(getReturnType().toDescriptor());
         }
 
         @Override

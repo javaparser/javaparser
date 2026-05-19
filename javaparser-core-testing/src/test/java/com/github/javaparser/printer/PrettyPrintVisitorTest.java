@@ -247,15 +247,13 @@ class PrettyPrintVisitorTest extends TestParser {
 
     @Test
     void printClassWithoutJavaDocButWithComment() {
-        String code = String.format(
-                "/** javadoc */ public class A { %s// stuff%s}", LineSeparator.SYSTEM, LineSeparator.SYSTEM);
+        String code = "/** javadoc */ public class A { %s// stuff%s}".formatted(LineSeparator.SYSTEM, LineSeparator.SYSTEM);
         CompilationUnit cu = parse(code);
         PrinterConfiguration ignoreJavaDoc = new DefaultPrinterConfiguration()
                 .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC));
         String content = cu.toString(ignoreJavaDoc);
         assertEquals(
-                String.format(
-                        "public class A {%s    // stuff%s}%s",
+                "public class A {%s    // stuff%s}%s".formatted(
                         LineSeparator.SYSTEM, LineSeparator.SYSTEM, LineSeparator.SYSTEM),
                 content);
     }
@@ -266,7 +264,14 @@ class PrettyPrintVisitorTest extends TestParser {
         CompilationUnit cu = parse(code);
         String content = cu.toString();
         assertEqualsStringIgnoringEol(
-                "import x.y.z;\n" + "import a.b.c;\n" + "import static b.c.d;\n" + "\n" + "class c {\n" + "}\n",
+                """
+                import x.y.z;
+                import a.b.c;
+                import static b.c.d;
+                
+                class c {
+                }
+                """,
                 content);
     }
 
@@ -278,7 +283,14 @@ class PrettyPrintVisitorTest extends TestParser {
                 new DefaultPrinterConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.ORDER_IMPORTS));
         String content = cu.toString(orderImports);
         assertEqualsStringIgnoringEol(
-                "import static b.c.d;\n" + "import a.b.c;\n" + "import x.y.z;\n" + "\n" + "class c {\n" + "}\n",
+                """
+                import static b.c.d;
+                import a.b.c;
+                import x.y.z;
+                
+                class c {
+                }
+                """,
                 content);
     }
 
@@ -288,15 +300,18 @@ class PrettyPrintVisitorTest extends TestParser {
         cu.addClass("X").addMethod("abc").setJavadocComment("line1\n   line2 *\n * line3");
 
         assertEqualsStringIgnoringEol(
-                "public class X {\n" + "\n"
-                        + "    /**\n"
-                        + "     * line1\n"
-                        + "     *    line2 *\n"
-                        + "     *  line3\n"
-                        + "     */\n"
-                        + "    void abc() {\n"
-                        + "    }\n"
-                        + "}\n",
+                """
+                public class X {
+                
+                    /**
+                     * line1
+                     *    line2 *
+                     *  line3
+                     */
+                    void abc() {
+                    }
+                }
+                """,
                 cu.toString());
     }
 
@@ -306,7 +321,15 @@ class PrettyPrintVisitorTest extends TestParser {
         cu.addClass("X").addMethod("abc").setJavadocComment("");
 
         assertEqualsStringIgnoringEol(
-                "public class X {\n" + "\n" + "    /**\n" + "     */\n" + "    void abc() {\n" + "    }\n" + "}\n",
+                """
+                public class X {
+                
+                    /**
+                     */
+                    void abc() {
+                    }
+                }
+                """,
                 cu.toString());
     }
 
@@ -316,15 +339,18 @@ class PrettyPrintVisitorTest extends TestParser {
         cu.addClass("X").addMethod("abc").setJavadocComment("\n\n\n ab\n\n\n cd\n\n\n");
 
         assertEqualsStringIgnoringEol(
-                "public class X {\n" + "\n"
-                        + "    /**\n"
-                        + "     * ab\n"
-                        + "     *\n"
-                        + "     * cd\n"
-                        + "     */\n"
-                        + "    void abc() {\n"
-                        + "    }\n"
-                        + "}\n",
+                """
+                public class X {
+                
+                    /**
+                     * ab
+                     *
+                     * cd
+                     */
+                    void abc() {
+                    }
+                }
+                """,
                 cu.toString());
     }
 
@@ -334,13 +360,16 @@ class PrettyPrintVisitorTest extends TestParser {
         cu.addClass("X").addMethod("abc").setJavadocComment("line1");
 
         assertEqualsStringIgnoringEol(
-                "public class X {\n" + "\n"
-                        + "    /**\n"
-                        + "     * line1\n"
-                        + "     */\n"
-                        + "    void abc() {\n"
-                        + "    }\n"
-                        + "}\n",
+                """
+                public class X {
+                
+                    /**
+                     * line1
+                     */
+                    void abc() {
+                    }
+                }
+                """,
                 cu.toString());
     }
 
@@ -350,14 +379,17 @@ class PrettyPrintVisitorTest extends TestParser {
         cu.addClass("X").addMethod("abc").setJavadocComment("line1\nline2");
 
         assertEqualsStringIgnoringEol(
-                "public class X {\n" + "\n"
-                        + "    /**\n"
-                        + "     * line1\n"
-                        + "     * line2\n"
-                        + "     */\n"
-                        + "    void abc() {\n"
-                        + "    }\n"
-                        + "}\n",
+                """
+                public class X {
+                
+                    /**
+                     * line1
+                     * line2
+                     */
+                    void abc() {
+                    }
+                }
+                """,
                 cu.toString());
     }
 
@@ -367,15 +399,18 @@ class PrettyPrintVisitorTest extends TestParser {
         cu.addClass("X").addMethod("abc").setJavadocComment("line1\n" + "line2\n" + "    3");
 
         assertEqualsStringIgnoringEol(
-                "public class X {\n" + "\n"
-                        + "    /**\n"
-                        + "     * line1\n"
-                        + "     * line2\n"
-                        + "     *     3\n"
-                        + "     */\n"
-                        + "    void abc() {\n"
-                        + "    }\n"
-                        + "}\n",
+                """
+                public class X {
+                
+                    /**
+                     * line1
+                     * line2
+                     *     3
+                     */
+                    void abc() {
+                    }
+                }
+                """,
                 cu.toString());
     }
 
@@ -385,56 +420,75 @@ class PrettyPrintVisitorTest extends TestParser {
         cu.addClass("X").addMethod("abc").setComment(new LineComment("   line1  \n "));
 
         assertEqualsStringIgnoringEol(
-                "public class X {\n" + "\n" + "    //   line1\n" + "    void abc() {\n" + "    }\n" + "}\n",
+                """
+                public class X {
+                
+                    //   line1
+                    void abc() {
+                    }
+                }
+                """,
                 cu.toString());
     }
 
     @Test
     void blockcommentGetsNoFormatting() {
-        CompilationUnit cu = parse("class A {\n" + "    public void helloWorld(String greeting, String name) {\n"
-                + "        //sdfsdfsdf\n"
-                + "            //sdfds\n"
-                + "        /*\n"
-                + "                            dgfdgfdgfdgfdgfd\n"
-                + "         */\n"
-                + "    }\n"
-                + "}\n");
+        CompilationUnit cu = parse("""
+                class A {
+                    public void helloWorld(String greeting, String name) {
+                        //sdfsdfsdf
+                            //sdfds
+                        /*
+                                            dgfdgfdgfdgfdgfd
+                         */
+                    }
+                }
+                """);
 
         assertEqualsStringIgnoringEol(
-                "class A {\n" + "\n"
-                        + "    public void helloWorld(String greeting, String name) {\n"
-                        + "        //sdfsdfsdf\n"
-                        + "        //sdfds\n"
-                        + "        /*\n"
-                        + "                            dgfdgfdgfdgfdgfd\n"
-                        + "         */\n"
-                        + "    }\n"
-                        + "}\n",
+                """
+                class A {
+                
+                    public void helloWorld(String greeting, String name) {
+                        //sdfsdfsdf
+                        //sdfds
+                        /*
+                                            dgfdgfdgfdgfdgfd
+                         */
+                    }
+                }
+                """,
                 cu.toString());
     }
 
-    private String expected = "public class SomeClass {\n" + "\n"
-            + "    /**\n"
-            + "     * tester line\n"
-            + "     * multi line comment\n"
-            + "     *   multi line comment\n"
-            + "     * multi line comment\n"
-            + "     *    multi line comment\n"
-            + "     */\n"
-            + "    public void add(int x, int y) {\n"
-            + "    }\n"
-            + "}\n";
+    private String expected = """
+            public class SomeClass {
+            
+                /**
+                 * tester line
+                 * multi line comment
+                 *   multi line comment
+                 * multi line comment
+                 *    multi line comment
+                 */
+                public void add(int x, int y) {
+                }
+            }
+            """;
 
     @Test
     void javadocIssue1907_allLeadingSpaces() {
-        String input_allLeadingSpaces = "public class SomeClass{" + "/**\n"
-                + " * tester line\n"
-                + " * multi line comment\n"
-                + " *   multi line comment\n"
-                + "   * multi line comment\n"
-                + "    multi line comment\n"
-                + " */\n"
-                + "public void add(int x, int y){}}";
+        String input_allLeadingSpaces = """
+                public class SomeClass{\
+                /**
+                 * tester line
+                 * multi line comment
+                 *   multi line comment
+                   * multi line comment
+                    multi line comment
+                 */
+                public void add(int x, int y){}}\
+                """;
 
         CompilationUnit cu_allLeadingSpaces = parse(input_allLeadingSpaces);
         assertEqualsStringIgnoringEol(expected, cu_allLeadingSpaces.toString());
@@ -442,14 +496,17 @@ class PrettyPrintVisitorTest extends TestParser {
 
     @Test
     void javadocIssue1907_singleMissingLeadingSpace() {
-        String input_singleMissingLeadingSpace = "public class SomeClass{" + "/**\n"
-                + "* tester line\n"
-                + " * multi line comment\n"
-                + " *   multi line comment\n"
-                + "   * multi line comment\n"
-                + "    multi line comment\n"
-                + " */\n"
-                + "public void add(int x, int y){}}";
+        String input_singleMissingLeadingSpace = """
+                public class SomeClass{\
+                /**
+                * tester line
+                 * multi line comment
+                 *   multi line comment
+                   * multi line comment
+                    multi line comment
+                 */
+                public void add(int x, int y){}}\
+                """;
 
         CompilationUnit cu_singleMissingLeadingSpace = parse(input_singleMissingLeadingSpace);
         assertEqualsStringIgnoringEol(expected, cu_singleMissingLeadingSpace.toString());
@@ -457,14 +514,17 @@ class PrettyPrintVisitorTest extends TestParser {
 
     @Test
     void javadocIssue1907_leadingTab() {
-        String input_leadingTab = "public class SomeClass{" + "/**\n"
-                + "\t * tester line\n"
-                + " * multi line comment\n"
-                + " *   multi line comment\n"
-                + "   * multi line comment\n"
-                + "    multi line comment\n"
-                + " */\n"
-                + "public void add(int x, int y){}}";
+        String input_leadingTab = """
+                public class SomeClass{\
+                /**
+                	 * tester line
+                 * multi line comment
+                 *   multi line comment
+                   * multi line comment
+                    multi line comment
+                 */
+                public void add(int x, int y){}}\
+                """;
 
         CompilationUnit cu_leadingTab = parseCompilationUnit(input_leadingTab);
         assertEqualsStringIgnoringEol(expected, cu_leadingTab.toString());
@@ -480,20 +540,26 @@ class PrettyPrintVisitorTest extends TestParser {
     void printTextBlock() {
         CompilationUnit cu = parseCompilationUnit(
                 ParserConfiguration.LanguageLevel.JAVA_13_PREVIEW,
-                "class X{String html = \"\"\"\n" + "              <html>\n"
-                        + "                  <body>\n"
-                        + "                      <p>Hello, world</p>\n"
-                        + "                  </body>\n"
-                        + "              </html>\n"
-                        + "              \"\"\";}");
+                """
+                class X{String html = ""\"
+                              <html>
+                                  <body>
+                                      <p>Hello, world</p>
+                                  </body>
+                              </html>
+                              ""\";}\
+                """);
 
         assertEqualsStringIgnoringEol(
-                "String html = \"\"\"\n" + "    <html>\n"
-                        + "        <body>\n"
-                        + "            <p>Hello, world</p>\n"
-                        + "        </body>\n"
-                        + "    </html>\n"
-                        + "    \"\"\";",
+                """
+                String html = ""\"
+                    <html>
+                        <body>
+                            <p>Hello, world</p>
+                        </body>
+                    </html>
+                    ""\";\
+                """,
                 cu.getClassByName("X").get().getFieldByName("html").get().toString());
     }
 
@@ -501,20 +567,33 @@ class PrettyPrintVisitorTest extends TestParser {
     void printTextBlock2() {
         CompilationUnit cu = parseCompilationUnit(
                 ParserConfiguration.LanguageLevel.JAVA_13_PREVIEW,
-                "class X{String html = \"\"\"\n" + "              <html>\n" + "              </html>\"\"\";}");
+                """
+                class X{String html = ""\"
+                              <html>
+                              </html>""\";}\
+                """);
 
         assertEqualsStringIgnoringEol(
-                "String html = \"\"\"\n" + "    <html>\n" + "    </html>\"\"\";",
+                """
+                String html = ""\"
+                    <html>
+                    </html>""\";\
+                """,
                 cu.getClassByName("X").get().getFieldByName("html").get().toString());
     }
 
     @Test
     void innerClassWithConstructorReceiverParameterTest() {
-        String innerClassWithConstructorReceiverParam = "public class A {\n\n" + "    class InnerA {\n\n"
-                + "        InnerA(A A.this) {\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n";
+        String innerClassWithConstructorReceiverParam = """
+                public class A {
+                
+                    class InnerA {
+                
+                        InnerA(A A.this) {
+                        }
+                    }
+                }
+                """;
         CompilationUnit cu = parseCompilationUnit(innerClassWithConstructorReceiverParam);
         assertEqualsStringIgnoringEol(innerClassWithConstructorReceiverParam, print(cu));
     }
@@ -530,12 +609,15 @@ class PrettyPrintVisitorTest extends TestParser {
 
     @Test
     public void testMarkdownComment() {
-        String code = "class Foo {\n" + "\n"
-                + "    /// This is a markdown comment\n"
-                + "    /// for the foo method\n"
-                + "    void foo(Integer arg) {\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                class Foo {
+                
+                    /// This is a markdown comment
+                    /// for the foo method
+                    void foo(Integer arg) {
+                    }
+                }
+                """;
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
@@ -551,12 +633,15 @@ class PrettyPrintVisitorTest extends TestParser {
 
     @Test
     void printFlexibleConstructorBody() {
-        String code = "public class A {\n" + "\n"
-                + "    public A() {\n"
-                + "        int x;\n"
-                + "        super();\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                public class A {
+                
+                    public A() {
+                        int x;
+                        super();
+                    }
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
@@ -584,33 +669,37 @@ class PrettyPrintVisitorTest extends TestParser {
 
     @Test
     void printCompactClassWithStaticAndInstanceMembers() {
-        String code = "static final String GREETING = \"Hello\";\n"
-                + "\n"
-                + "String name = \"World\";\n"
-                + "\n"
-                + "static String formatMessage(String msg) {\n"
-                + "    return msg.toUpperCase();\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "}\n";
+        String code = """
+                static final String GREETING = "Hello";
+                
+                String name = "World";
+                
+                static String formatMessage(String msg) {
+                    return msg.toUpperCase();
+                }
+                
+                void main() {
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
     @Test
     void printCompactClassWithNestedClass() {
-        String code = "class Inner {\n"
-                + "\n"
-                + "    void greet() {\n"
-                + "        System.out.println(\"Hello from Inner\");\n"
-                + "    }\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    Inner inner = new Inner();\n"
-                + "    inner.greet();\n"
-                + "}\n";
+        String code = """
+                class Inner {
+                
+                    void greet() {
+                        System.out.println("Hello from Inner");
+                    }
+                }
+                
+                void main() {
+                    Inner inner = new Inner();
+                    inner.greet();
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
@@ -618,159 +707,183 @@ class PrettyPrintVisitorTest extends TestParser {
     @Test
     void printCompactClassWithArrayField() {
         String code =
-                "int[] numbers = { 1, 2, 3, 4, 5 };\n" + "\n" + "void main() {\n" + "    printNumbers();\n" + "}\n";
+                """
+                int[] numbers = { 1, 2, 3, 4, 5 };
+                
+                void main() {
+                    printNumbers();
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
     @Test
     void printCompactClassWithGenericMethod() {
-        String code = "<T> void printValue(T value) {\n"
-                + "    System.out.println(\"Value: \" + value);\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    printValue(\"String\");\n"
-                + "    printValue(42);\n"
-                + "    printValue(3.14);\n"
-                + "}\n";
+        String code = """
+                <T> void printValue(T value) {
+                    System.out.println("Value: " + value);
+                }
+                
+                void main() {
+                    printValue("String");
+                    printValue(42);
+                    printValue(3.14);
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
     @Test
     void printCompactClassWithRecord() {
-        String code = "record Person(String name, int age) {\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    Person p = new Person(\"Alice\", 30);\n"
-                + "    System.out.println(p.name() + \" is \" + p.age() + \" years old\");\n"
-                + "}\n";
+        String code = """
+                record Person(String name, int age) {
+                }
+                
+                void main() {
+                    Person p = new Person("Alice", 30);
+                    System.out.println(p.name() + " is " + p.age() + " years old");
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
     @Test
     void printCompactClassWithEnum() {
-        String code = "enum Color {\n"
-                + "\n"
-                + "    RED, GREEN, BLUE\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    for (Color c : Color.values()) {\n"
-                + "        System.out.println(c);\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                enum Color {
+                
+                    RED, GREEN, BLUE
+                }
+                
+                void main() {
+                    for (Color c : Color.values()) {
+                        System.out.println(c);
+                    }
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
     @Test
     void printCompactClassWithInterface() {
-        String code = "interface Printer {\n"
-                + "\n"
-                + "    void print();\n"
-                + "}\n"
-                + "\n"
-                + "class ConsolePrinter implements Printer {\n"
-                + "\n"
-                + "    public void print() {\n"
-                + "        System.out.println(\"Printing...\");\n"
-                + "    }\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    Printer p = new ConsolePrinter();\n"
-                + "    p.print();\n"
-                + "}\n";
+        String code = """
+                interface Printer {
+                
+                    void print();
+                }
+                
+                class ConsolePrinter implements Printer {
+                
+                    public void print() {
+                        System.out.println("Printing...");
+                    }
+                }
+                
+                void main() {
+                    Printer p = new ConsolePrinter();
+                    p.print();
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
     @Test
     void printCompactClassWithVarargs() {
-        String code = "int sum(int... numbers) {\n"
-                + "    int total = 0;\n"
-                + "    for (int n : numbers) {\n"
-                + "        total += n;\n"
-                + "    }\n"
-                + "    return total;\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    System.out.println(sum(1, 2, 3, 4, 5));\n"
-                + "}\n";
+        String code = """
+                int sum(int... numbers) {
+                    int total = 0;
+                    for (int n : numbers) {
+                        total += n;
+                    }
+                    return total;
+                }
+                
+                void main() {
+                    System.out.println(sum(1, 2, 3, 4, 5));
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
     @Test
     void printCompactClassWithExceptionHandling() {
-        String code = "void riskyOperation() throws Exception {\n"
-                + "    throw new Exception(\"Something went wrong\");\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    try {\n"
-                + "        riskyOperation();\n"
-                + "    } catch (Exception e) {\n"
-                + "        System.out.println(\"Caught: \" + e.getMessage());\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                void riskyOperation() throws Exception {
+                    throw new Exception("Something went wrong");
+                }
+                
+                void main() {
+                    try {
+                        riskyOperation();
+                    } catch (Exception e) {
+                        System.out.println("Caught: " + e.getMessage());
+                    }
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
     @Test
     void printCompactClassWithAnnotationDeclaration() {
-        String code = "@interface MyAnnotation {\n"
-                + "\n"
-                + "    String value() default \"\";\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    System.out.println(\"Annotation declared\");\n"
-                + "}\n";
+        String code = """
+                @interface MyAnnotation {
+                
+                    String value() default "";
+                }
+                
+                void main() {
+                    System.out.println("Annotation declared");
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
     @Test
     void printCompactClassWithAnnotatedMethods() {
-        String code = "@Deprecated\n"
-                + "void oldMethod() {\n"
-                + "    System.out.println(\"This is deprecated\");\n"
-                + "}\n"
-                + "\n"
-                + "@Override\n"
-                + "public String toString() {\n"
-                + "    return \"AnnotatedMethod\";\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "    oldMethod();\n"
-                + "    System.out.println(toString());\n"
-                + "}\n";
+        String code = """
+                @Deprecated
+                void oldMethod() {
+                    System.out.println("This is deprecated");
+                }
+                
+                @Override
+                public String toString() {
+                    return "AnnotatedMethod";
+                }
+                
+                void main() {
+                    oldMethod();
+                    System.out.println(toString());
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
     @Test
     void printCompactClassWithCustomAnnotationAndAnnotatedMethods() {
-        String code = "@interface Author {\n"
-                + "\n"
-                + "    String name();\n"
-                + "}\n"
-                + "\n"
-                + "@Override\n"
-                + "int calculate(int x) {\n"
-                + "    return x * 2;\n"
-                + "}\n"
-                + "\n"
-                + "void main() {\n"
-                + "}\n";
+        String code = """
+                @interface Author {
+                
+                    String name();
+                }
+                
+                @Override
+                int calculate(int x) {
+                    return x * 2;
+                }
+                
+                void main() {
+                }
+                """;
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
     }

@@ -43,14 +43,17 @@ public class Issue3918Test extends AbstractResolutionTest {
         //   public static class Iterator {}
         // }
 
-        String code = "import java.util.ArrayList;\n"
-                + "import java.util.List;\n" + "\n"
-                + "public class Descendant extends Ancestor {\n"
-                + "    public void doAThing() {\n"
-                + "        List<Object> list = new ArrayList<>();\n"
-                + "        java.util.Iterator<Object> iterator = list.iterator();\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                import java.util.ArrayList;
+                import java.util.List;
+                
+                public class Descendant extends Ancestor {
+                    public void doAThing() {
+                        List<Object> list = new ArrayList<>();
+                        java.util.Iterator<Object> iterator = list.iterator();
+                    }
+                }\
+                """;
 
         Path testFile = adaptPath("src/test/resources");
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();

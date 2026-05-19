@@ -44,24 +44,27 @@ import org.junit.jupiter.api.Test;
 
 class MethodDescriptorTest extends AbstractResolutionTest {
 
-    private static String code = "public class A {\n" + "  A(int i, double d, Thread t) {}\n"
-            + "  public enum TestEnum {\n"
-            + "    TEST_ENUM(\"test\");"
-            + "    private String a;\n"
-            + "    private TestEnum(String a) {\n"
-            + "      this.a = a;\n"
-            + "    }\n"
-            + "  }\n"
-            + "  Object m(int i, double d, Thread t) {return new Object();}\n"
-            + "  void m(int i, double d, Thread t) {}\n"
-            + "  int[] m(int i, double d, Thread t) {return new int[] {};}\n"
-            + "  long[][] m(int i, double d, Thread t) {return new long[][] {};}\n"
-            + "  void m() {\n"
-            + "    System.out.println(\"a\");\n"
-            + "    TestEnum.valueOf(\"TEST_ENUM\");\n"
-            + "    TestEnum.values();\n"
-            + "  }\n"
-            + "}";
+    private static String code = """
+            public class A {
+              A(int i, double d, Thread t) {}
+              public enum TestEnum {
+                TEST_ENUM("test");\
+                private String a;
+                private TestEnum(String a) {
+                  this.a = a;
+                }
+              }
+              Object m(int i, double d, Thread t) {return new Object();}
+              void m(int i, double d, Thread t) {}
+              int[] m(int i, double d, Thread t) {return new int[] {};}
+              long[][] m(int i, double d, Thread t) {return new long[][] {};}
+              void m() {
+                System.out.println("a");
+                TestEnum.valueOf("TEST_ENUM");
+                TestEnum.values();
+              }
+            }\
+            """;
 
     private static TypeSolver typeSolver;
     private static CompilationUnit cu;

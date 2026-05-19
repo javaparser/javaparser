@@ -158,7 +158,7 @@ public class NormalCompletionVisitor extends GenericVisitorWithDefaults<Boolean,
      */
     @Override
     public Boolean visit(IfStmt ifStmt, Void unused) {
-        if (!ifStmt.getElseStmt().isPresent()) {
+        if (ifStmt.getElseStmt().isEmpty()) {
             return true;
         }
 
@@ -348,12 +348,12 @@ public class NormalCompletionVisitor extends GenericVisitorWithDefaults<Boolean,
      */
     public static boolean containsCorrespondingBreak(Statement statement) {
         List<BreakStmt> breakStatements = statement.findAll(
-                BreakStmt.class, breakStmt -> !breakStmt.getLabel().isPresent());
+                BreakStmt.class, breakStmt -> breakStmt.getLabel().isEmpty());
 
         for (BreakStmt breakStmt : breakStatements) {
             Optional<Node> maybeParentNode = breakStmt.getParentNode();
             while (true) {
-                if (!maybeParentNode.isPresent()) {
+                if (maybeParentNode.isEmpty()) {
                     throw new IllegalStateException("Found AST node without a parent in subtree of Statement");
                 }
 

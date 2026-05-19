@@ -46,14 +46,16 @@ class BlockStmtContextResolutionTest extends AbstractResolutionTest {
     // issue #3526
     @Test
     void must_be_resolved_from_previous_declaration() {
-        String src = "public class Example {\n"
-                + "    int a = 3;\n"
-                + "    public void bla() {\n"
-                + "        a = 7; // 'a' must be resolved as int not String\n"
-                + "        String a = \"\";\n"
-                + "        a = \"test\";\n"
-                + "    }\n"
-                + "}";
+        String src = """
+                public class Example {
+                    int a = 3;
+                    public void bla() {
+                        a = 7; // 'a' must be resolved as int not String
+                        String a = "";
+                        a = "test";
+                    }
+                }\
+                """;
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
         StaticJavaParser.setConfiguration(configuration);
@@ -65,14 +67,16 @@ class BlockStmtContextResolutionTest extends AbstractResolutionTest {
 
     @Test
     void must_be_resolved_from_previous_declaration_second_declaration_of_the_same_field_name() {
-        String src = "public class Example {\n"
-                + "    int a = 3;\n"
-                + "    public void bla() {\n"
-                + "        a = 7; // 'a' must be resolved as int not String\n"
-                + "        String a = \"\";\n"
-                + "        a = \"test\";\n"
-                + "    }\n"
-                + "}";
+        String src = """
+                public class Example {
+                    int a = 3;
+                    public void bla() {
+                        a = 7; // 'a' must be resolved as int not String
+                        String a = "";
+                        a = "test";
+                    }
+                }\
+                """;
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
         StaticJavaParser.setConfiguration(configuration);

@@ -162,9 +162,10 @@ class JavadocTest {
                 + LineSeparator.SYSTEM;
         Javadoc javadoc = parseJavadoc(comment, true);
         assertEqualsStringIgnoringEol(
-                "The type of the Object to be mapped.\n"
-                        + "This interface maps the given Objects to existing ones in the database and\n"
-                        + "saves them.",
+                """
+                The type of the Object to be mapped.
+                This interface maps the given Objects to existing ones in the database and
+                saves them.""",
                 javadoc.getDescription().toText());
         assertEquals(2, javadoc.getBlockTags().size());
         assertEquals("@author censored", javadoc.getBlockTags().get(0).toText());

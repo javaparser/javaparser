@@ -80,16 +80,18 @@ class FieldDeclarationTest {
 
     @Test
     void interfaceFieldTest() {
-        CompilationUnit compilationUnit = parse("" + "interface A {\n"
-                + "    int a = 1;\n"
-                + "    static int a_s = 1;\n"
-                + "    final int a_f = 1;\n"
-                + "    static final int a_s_f = 1;\n"
-                + "    String b = \"b\";\n"
-                + "    static String b_s = \"b\";\n"
-                + "    final String b_f = \"b\";\n"
-                + "    static final String b_s_f = \"b\";\n"
-                + "}\n");
+        CompilationUnit compilationUnit = parse("""
+                interface A {
+                    int a = 1;
+                    static int a_s = 1;
+                    final int a_f = 1;
+                    static final int a_s_f = 1;
+                    String b = "b";
+                    static String b_s = "b";
+                    final String b_f = "b";
+                    static final String b_s_f = "b";
+                }
+                """);
         for (int i = 0; i < 8; ++i) {
             BodyDeclaration<?> declaration =
                     compilationUnit.getType(0).getMembers().get(i);
@@ -104,18 +106,21 @@ class FieldDeclarationTest {
      */
     @Test
     void testEnumWithPrivateFieldInsideInterface() {
-        String source = "interface Outer {\n" + "  enum Numbers {\n"
-                + "    ONE(1),\n"
-                + "    TWO(2),\n"
-                + "    THREE(3);\n"
-                + "\n"
-                + "    Numbers(int i) {\n"
-                + "      this.i = i;\n"
-                + "    }\n"
-                + "\n"
-                + "    private int i;\n"
-                + "  }\n"
-                + "}";
+        String source = """
+                interface Outer {
+                  enum Numbers {
+                    ONE(1),
+                    TWO(2),
+                    THREE(3);
+                
+                    Numbers(int i) {
+                      this.i = i;
+                    }
+                
+                    private int i;
+                  }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(source);
         FieldDeclaration i = cu.getTypes()
                 .get(0)

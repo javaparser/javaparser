@@ -75,8 +75,7 @@ public abstract class ResolvedReferenceType
         }
         if (typeArguments.size() > 0
                 && typeArguments.size() != typeDeclaration.getTypeParameters().size()) {
-            throw new IllegalArgumentException(String.format(
-                    "expected either zero type arguments or has many as defined in the declaration (%d). Found %d",
+            throw new IllegalArgumentException("expected either zero type arguments or has many as defined in the declaration (%d). Found %d".formatted(
                     typeDeclaration.getTypeParameters().size(), typeArguments.size()));
         }
         ResolvedTypeParametersMap.Builder typeParametersMapBuilder = new ResolvedTypeParametersMap.Builder();
@@ -95,8 +94,7 @@ public abstract class ResolvedReferenceType
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        if (o instanceof LazyType) {
-            final LazyType lazyType = (LazyType) o;
+        if (o instanceof LazyType lazyType) {
             if (!lazyType.isReferenceType()) return false;
             return this.equals(lazyType.asReferenceType());
         }
@@ -386,7 +384,7 @@ public abstract class ResolvedReferenceType
         if (typeParameterDeclaration.declaredOnMethod()) {
             throw new IllegalArgumentException();
         }
-        if (!this.getTypeDeclaration().isPresent()) {
+        if (this.getTypeDeclaration().isEmpty()) {
             // TODO: Consider IllegalStateException or similar
             return Optional.empty();
         }
@@ -413,7 +411,7 @@ public abstract class ResolvedReferenceType
      * that have been overwritten.
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
-        if (!this.getTypeDeclaration().isPresent()) {
+        if (this.getTypeDeclaration().isEmpty()) {
             // empty list -- consider IllegalStateException or similar
             return new ArrayList<>();
         }
@@ -484,8 +482,7 @@ public abstract class ResolvedReferenceType
                 ResolvedType thisParam = typeParametersValues.get(i);
                 ResolvedType otherParam = other.typeParametersValues().get(i);
                 if (!thisParam.equals(otherParam)) {
-                    if (thisParam instanceof ResolvedWildcard) {
-                        ResolvedWildcard thisParamAsWildcard = (ResolvedWildcard) thisParam;
+                    if (thisParam instanceof ResolvedWildcard thisParamAsWildcard) {
                         if (thisParamAsWildcard.isSuper()
                                 && otherParam.isAssignableBy(thisParamAsWildcard.getBoundedType())) {
                             // ok
@@ -516,14 +513,14 @@ public abstract class ResolvedReferenceType
                             return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
                         }
                         if (!(thisParam instanceof ResolvedTypeVariable)
-                                && otherParam instanceof ResolvedTypeVariable) {
+                                && otherParam instanceof ResolvedTypeVariable variable) {
                             return compareConsideringVariableTypeParameters(
-                                    thisParam, (ResolvedTypeVariable) otherParam);
+                                    thisParam, variable);
                         }
-                        if (thisParam instanceof ResolvedTypeVariable
+                        if (thisParam instanceof ResolvedTypeVariable variable1
                                 && !(otherParam instanceof ResolvedTypeVariable)) {
                             return compareConsideringVariableTypeParameters(
-                                    otherParam, (ResolvedTypeVariable) thisParam);
+                                    otherParam, variable1);
                         }
                         return false;
                     }
@@ -647,6 +644,6 @@ public abstract class ResolvedReferenceType
 
     @Override
     public String toDescriptor() {
-        return String.format("L%s;", getQualifiedName().replace(".", "/"));
+        return "L%s;".formatted(getQualifiedName().replace(".", "/"));
     }
 }

@@ -54,7 +54,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -167,8 +166,8 @@ public class CompilationUnit extends Node {
     @Override
     protected Printer getPrinter(PrinterConfiguration config) {
         Printer printer = getPrinter();
-        if (printer instanceof ConfigurablePrinter) {
-            ((ConfigurablePrinter) printer).setConfiguration(config);
+        if (printer instanceof ConfigurablePrinter configurablePrinter) {
+            configurablePrinter.setConfiguration(config);
         }
         printer(printer);
         return printer;
@@ -559,8 +558,8 @@ public class CompilationUnit extends Node {
     public Optional<ClassOrInterfaceDeclaration> getClassByName(String className) {
         return getTypes().stream()
                 .filter(type -> type.getNameAsString().equals(className)
-                        && type instanceof ClassOrInterfaceDeclaration
-                        && !((ClassOrInterfaceDeclaration) type).isInterface())
+                        && type instanceof ClassOrInterfaceDeclaration coid
+                        && !coid.isInterface())
                 .findFirst()
                 .map(t -> (ClassOrInterfaceDeclaration) t);
     }
@@ -584,8 +583,8 @@ public class CompilationUnit extends Node {
     public Optional<ClassOrInterfaceDeclaration> getInterfaceByName(String interfaceName) {
         return getTypes().stream()
                 .filter(type -> type.getNameAsString().equals(interfaceName)
-                        && type instanceof ClassOrInterfaceDeclaration
-                        && ((ClassOrInterfaceDeclaration) type).isInterface())
+                        && type instanceof ClassOrInterfaceDeclaration coid
+                        && coid.isInterface())
                 .findFirst()
                 .map(t -> (ClassOrInterfaceDeclaration) t);
     }
@@ -741,7 +740,7 @@ public class CompilationUnit extends Node {
      * This is useful when you have manually inserted or deleted tokens and still want to use the ranges.
      */
     public void recalculatePositions() {
-        if (!getTokenRange().isPresent()) {
+        if (getTokenRange().isEmpty()) {
             throw new IllegalStateException("Can't recalculate positions without tokens.");
         }
         Position cursor = Position.HOME;
@@ -809,7 +808,7 @@ public class CompilationUnit extends Node {
             final Optional<String> pkgAsString =
                     compilationUnit.getPackageDeclaration().map(NodeWithName::getNameAsString);
             return pkgAsString
-                    .map(p -> Paths.get(CodeGenerationUtils.packageToPath(p)))
+                    .map(p -> Path.of(CodeGenerationUtils.packageToPath(p)))
                     .map(pkg -> subtractPaths(getDirectory(), pkg))
                     .orElseGet(() -> getDirectory());
         }

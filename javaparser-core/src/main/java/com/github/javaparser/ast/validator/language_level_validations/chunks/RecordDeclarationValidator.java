@@ -84,8 +84,7 @@ public class RecordDeclarationValidator implements TypedValidator<RecordDeclarat
                         if (!methodDeclaration.getType().equals(parameter.getType())) {
                             reporter.report(
                                     n,
-                                    String.format(
-                                            "Incorrect component accessor return type. Expected: '%s', found: '%s'.",
+                                    "Incorrect component accessor return type. Expected: '%s', found: '%s'.".formatted(
                                             parameter.getTypeAsString(), methodDeclaration.getTypeAsString()));
                         }
                     });

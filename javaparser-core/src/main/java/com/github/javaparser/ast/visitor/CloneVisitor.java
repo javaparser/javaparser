@@ -1139,7 +1139,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @SuppressWarnings("unchecked")
     protected <T extends Node> T cloneNode(Optional<T> node, Object arg) {
-        if (!node.isPresent()) {
+        if (node.isEmpty()) {
             return null;
         }
         Node r = (Node) node.get().accept(this, arg);

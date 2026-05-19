@@ -262,38 +262,41 @@ class PrettyPrinterTest {
         String printed = new DefaultPrettyPrinter(config).print(cu);
 
         assertEqualsStringIgnoringEol(
-                "class Foo {\n" + "\n"
-                        + "\tvoid bar() {\n"
-                        + "\t\ta.b.c.d.e;\n"
-                        + "\t\ta.b.c()\n"
-                        + "\t\t   .d()\n"
-                        + "\t\t   .e();\n"
-                        + "\t\ta.b.c().d\n"
-                        + "\t\t   .e();\n"
-                        + "\t\tfoo().bar()\n"
-                        + "\t\t     .baz(boo().baa().bee())\n"
-                        + "\t\t     .bam();\n"
-                        + "\t\tfoo().bar()\n"
-                        + "\t\t     .baz(boo().baa().bee()).bam;\n"
-                        + "\t\tfoo().bar(Long.foo().b.bar(),\n"
-                        + "\t\t          bam)\n"
-                        + "\t\t     .baz();\n"
-                        + "\t\tfoo().bar()\n"
-                        + "\t\t     .baz(foo,\n"
-                        + "\t\t          () -> {\n"
-                        + "\t\t          \tboo().baa()\n"
-                        + "\t\t          \t     .bee();\n"
-                        + "\t\t          })\n"
-                        + "\t\t     .baz(() -> {\n"
-                        + "\t\t     \tboo().baa()\n"
-                        + "\t\t     \t     .bee();\n"
-                        + "\t\t     })\n"
-                        + "\t\t     .bam(() -> {\n"
-                        + "\t\t     \tboo().baa()\n"
-                        + "\t\t     \t     .bee();\n"
-                        + "\t\t     });\n"
-                        + "\t}\n"
-                        + "}\n",
+                """
+                class Foo {
+                
+                	void bar() {
+                		a.b.c.d.e;
+                		a.b.c()
+                		   .d()
+                		   .e();
+                		a.b.c().d
+                		   .e();
+                		foo().bar()
+                		     .baz(boo().baa().bee())
+                		     .bam();
+                		foo().bar()
+                		     .baz(boo().baa().bee()).bam;
+                		foo().bar(Long.foo().b.bar(),
+                		          bam)
+                		     .baz();
+                		foo().bar()
+                		     .baz(foo,
+                		          () -> {
+                		          	boo().baa()
+                		          	     .bee();
+                		          })
+                		     .baz(() -> {
+                		     	boo().baa()
+                		     	     .bee();
+                		     })
+                		     .bam(() -> {
+                		     	boo().baa()
+                		     	     .bee();
+                		     });
+                	}
+                }
+                """,
                 printed);
     }
 
@@ -317,7 +320,12 @@ class PrettyPrinterTest {
                 .print(cu);
 
         assertEqualsStringIgnoringEol(
-                "for (int x = 1; x.y().z(); x.z().z()) {\n" + "    boo().baa()\n" + "         .bee();\n" + "}",
+                """
+                for (int x = 1; x.y().z(); x.z().z()) {
+                    boo().baa()
+                         .bee();
+                }\
+                """,
                 printed);
     }
 
@@ -330,7 +338,12 @@ class PrettyPrinterTest {
                 .print(cu);
 
         assertEqualsStringIgnoringEol(
-                "while (x.y().z()) {\n" + "    boo().baa()\n" + "         .bee();\n" + "}", printed);
+                """
+                while (x.y().z()) {
+                    boo().baa()
+                         .bee();
+                }\
+                """, printed);
     }
 
     @Test
@@ -346,18 +359,21 @@ class PrettyPrinterTest {
                 .print(cu);
 
         assertEqualsStringIgnoringEol(
-                "class Foo {\n" + "\n"
-                        + "\tvoid bar() {\n"
-                        + "\t\tfoo().bar()\n"
-                        + "\t\t\t .baz(() -> {\n"
-                        + "\t\t\t\t boo().baa()\n"
-                        + "\t\t\t\t\t  .bee(a,\n"
-                        + "\t\t\t\t\t\t   b,\n"
-                        + "\t\t\t\t\t\t   c);\n"
-                        + "\t\t\t })\n"
-                        + "\t\t\t .bam();\n"
-                        + "\t}\n"
-                        + "}\n",
+                """
+                class Foo {
+                
+                	void bar() {
+                		foo().bar()
+                			 .baz(() -> {
+                				 boo().baa()
+                					  .bee(a,
+                						   b,
+                						   c);
+                			 })
+                			 .bam();
+                	}
+                }
+                """,
                 printed);
     }
 
@@ -388,21 +404,24 @@ class PrettyPrinterTest {
                 .print(cu);
 
         assertEqualsStringIgnoringEol(
-                "class Foo {\n" + "\n"
-                        + "\tvoid bar() {\n"
-                        + "\t\tfoo().bar()\n"
-                        + "\t\t     .baz(() -> {\n"
-                        + "\t\t     \tboo().baa()\n"
-                        + "\t\t     \t     .bee(a,\n"
-                        + "\t\t     \t          b,\n"
-                        + "\t\t     \t          c);\n"
-                        + "\t\t     })\n"
-                        + "\t\t     .baz(() -> {\n"
-                        + "\t\t     \treturn boo().baa();\n"
-                        + "\t\t     })\n"
-                        + "\t\t     .bam();\n"
-                        + "\t}\n"
-                        + "}\n",
+                """
+                class Foo {
+                
+                	void bar() {
+                		foo().bar()
+                		     .baz(() -> {
+                		     	boo().baa()
+                		     	     .bee(a,
+                		     	          b,
+                		     	          c);
+                		     })
+                		     .baz(() -> {
+                		     	return boo().baa();
+                		     })
+                		     .bam();
+                	}
+                }
+                """,
                 printed);
     }
 
@@ -412,61 +431,64 @@ class PrettyPrinterTest {
         JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
         ParseResult<CompilationUnit> parseResult = javaParser.parse(
                 COMPILATION_UNIT,
-                provider("@Documented\n" + "@Repeatable\n"
-                        + "package com.github.javaparser;\n"
-                        + "\n"
-                        + "import java.lang.annotation.Documented;\n"
-                        + "import java.lang.annotation.Repeatable;\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "@interface Annotation {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    String value();\n"
-                        + "}\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "class Class<@Documented @Repeatable T> {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    byte b;\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    Class(@Documented @Repeatable int i) {\n"
-                        + "        @Documented\n"
-                        + "        @Repeatable\n"
-                        + "        short s;\n"
-                        + "    }\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    void method(@Documented @Repeatable Class this) {\n"
-                        + "        for (@Deprecated int i : arr4[0]) {\n"
-                        + "            x--;\n"
-                        + "        }\n"
-                        + "    }\n"
-                        + "\n"
-                        + "    void method(@Documented @Repeatable Class this, int i) {\n"
-                        + "    }\n"
-                        + "}\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "enum Foo {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    BAR\n"
-                        + "}\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "module foo.bar {\n"
-                        + "}\n"));
+                provider("""
+                        @Documented
+                        @Repeatable
+                        package com.github.javaparser;
+                        
+                        import java.lang.annotation.Documented;
+                        import java.lang.annotation.Repeatable;
+                        
+                        @Documented
+                        @Repeatable
+                        @interface Annotation {
+                        
+                            @Documented
+                            @Repeatable
+                            String value();
+                        }
+                        
+                        @Documented
+                        @Repeatable
+                        class Class<@Documented @Repeatable T> {
+                        
+                            @Documented
+                            @Repeatable
+                            byte b;
+                        
+                            @Documented
+                            @Repeatable
+                            Class(@Documented @Repeatable int i) {
+                                @Documented
+                                @Repeatable
+                                short s;
+                            }
+                        
+                            @Documented
+                            @Repeatable
+                            void method(@Documented @Repeatable Class this) {
+                                for (@Deprecated int i : arr4[0]) {
+                                    x--;
+                                }
+                            }
+                        
+                            void method(@Documented @Repeatable Class this, int i) {
+                            }
+                        }
+                        
+                        @Documented
+                        @Repeatable
+                        enum Foo {
+                        
+                            @Documented
+                            @Repeatable
+                            BAR
+                        }
+                        @Documented
+                        @Repeatable
+                        module foo.bar {
+                        }
+                        """));
         if (!parseResult.isSuccessful()) {
             throw new ParseProblemException(parseResult.getProblems());
         }
@@ -474,61 +496,64 @@ class PrettyPrinterTest {
         String printed = new DefaultPrettyPrinter().print(cu);
 
         assertEqualsStringIgnoringEol(
-                "@Documented\n" + "@Repeatable\n"
-                        + "package com.github.javaparser;\n"
-                        + "\n"
-                        + "import java.lang.annotation.Documented;\n"
-                        + "import java.lang.annotation.Repeatable;\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "@interface Annotation {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    String value();\n"
-                        + "}\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "class Class<@Documented @Repeatable T> {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    byte b;\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    Class(@Documented @Repeatable int i) {\n"
-                        + "        @Documented\n"
-                        + "        @Repeatable\n"
-                        + "        short s;\n"
-                        + "    }\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    void method(@Documented @Repeatable Class this) {\n"
-                        + "        for (@Deprecated int i : arr4[0]) {\n"
-                        + "            x--;\n"
-                        + "        }\n"
-                        + "    }\n"
-                        + "\n"
-                        + "    void method(@Documented @Repeatable Class this, int i) {\n"
-                        + "    }\n"
-                        + "}\n"
-                        + "\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "enum Foo {\n"
-                        + "\n"
-                        + "    @Documented\n"
-                        + "    @Repeatable\n"
-                        + "    BAR\n"
-                        + "}\n"
-                        + "@Documented\n"
-                        + "@Repeatable\n"
-                        + "module foo.bar {\n"
-                        + "}\n",
+                """
+                @Documented
+                @Repeatable
+                package com.github.javaparser;
+                
+                import java.lang.annotation.Documented;
+                import java.lang.annotation.Repeatable;
+                
+                @Documented
+                @Repeatable
+                @interface Annotation {
+                
+                    @Documented
+                    @Repeatable
+                    String value();
+                }
+                
+                @Documented
+                @Repeatable
+                class Class<@Documented @Repeatable T> {
+                
+                    @Documented
+                    @Repeatable
+                    byte b;
+                
+                    @Documented
+                    @Repeatable
+                    Class(@Documented @Repeatable int i) {
+                        @Documented
+                        @Repeatable
+                        short s;
+                    }
+                
+                    @Documented
+                    @Repeatable
+                    void method(@Documented @Repeatable Class this) {
+                        for (@Deprecated int i : arr4[0]) {
+                            x--;
+                        }
+                    }
+                
+                    void method(@Documented @Repeatable Class this, int i) {
+                    }
+                }
+                
+                @Documented
+                @Repeatable
+                enum Foo {
+                
+                    @Documented
+                    @Repeatable
+                    BAR
+                }
+                @Documented
+                @Repeatable
+                module foo.bar {
+                }
+                """,
                 printed);
     }
 
@@ -545,13 +570,16 @@ class PrettyPrinterTest {
     @Test
     public void testIssue2535() {
 
-        String code = "public class A {\n" + " public static A m() {\n"
-                + "  System.out.println(\"\");\n"
-                + "  // TODO\n"
-                + "  /* TODO */\n"
-                + "  /** TODO */\n"
-                + " }\n"
-                + "}";
+        String code = """
+                public class A {
+                 public static A m() {
+                  System.out.println("");
+                  // TODO
+                  /* TODO */
+                  /** TODO */
+                 }
+                }\
+                """;
 
         StaticJavaParser.setConfiguration(new ParserConfiguration());
 
@@ -594,14 +622,17 @@ class PrettyPrinterTest {
 
     @Test
     public void testSwitchDefault() {
-        String code = "class Foo {\n" + "\n"
-                + "    void foo(Integer arg) {\n"
-                + "        switch(foo) {\n"
-                + "            default ->\n"
-                + "                System.out.println(-1);\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                class Foo {
+                
+                    void foo(Integer arg) {
+                        switch(foo) {
+                            default ->
+                                System.out.println(-1);
+                        }
+                    }
+                }
+                """;
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
@@ -609,14 +640,17 @@ class PrettyPrinterTest {
 
     @Test
     public void testSwitchNullDefault() {
-        String code = "class Foo {\n" + "\n"
-                + "    void foo(Integer arg) {\n"
-                + "        switch(foo) {\n"
-                + "            case null, default ->\n"
-                + "                System.out.println(-1);\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                class Foo {
+                
+                    void foo(Integer arg) {
+                        switch(foo) {
+                            case null, default ->
+                                System.out.println(-1);
+                        }
+                    }
+                }
+                """;
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
@@ -624,14 +658,17 @@ class PrettyPrinterTest {
 
     @Test
     public void testSwitchPattern() {
-        String code = "class Foo {\n" + "\n"
-                + "    void foo(Integer arg) {\n"
-                + "        switch(foo) {\n"
-                + "            case String s ->\n"
-                + "                System.out.println(s);\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                class Foo {
+                
+                    void foo(Integer arg) {
+                        switch(foo) {
+                            case String s ->
+                                System.out.println(s);
+                        }
+                    }
+                }
+                """;
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
@@ -639,14 +676,17 @@ class PrettyPrinterTest {
 
     @Test
     public void testSwitchUnnamedPattern() {
-        String code = "class Foo {\n" + "\n"
-                + "    void foo(Integer arg) {\n"
-                + "        switch(foo) {\n"
-                + "            case String _ ->\n"
-                + "                System.out.println(42);\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                class Foo {
+                
+                    void foo(Integer arg) {
+                        switch(foo) {
+                            case String _ ->
+                                System.out.println(42);
+                        }
+                    }
+                }
+                """;
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
@@ -654,14 +694,17 @@ class PrettyPrinterTest {
 
     @Test
     public void testSwitchPatternWithGuard() {
-        String code = "class Foo {\n" + "\n"
-                + "    void foo(Integer arg) {\n"
-                + "        switch(foo) {\n"
-                + "            case String s when s.length() > 5 ->\n"
-                + "                System.out.println(s);\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                class Foo {
+                
+                    void foo(Integer arg) {
+                        switch(foo) {
+                            case String s when s.length() > 5 ->
+                                System.out.println(s);
+                        }
+                    }
+                }
+                """;
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
@@ -669,14 +712,17 @@ class PrettyPrinterTest {
 
     @Test
     public void testNestedRecordPattern() {
-        String code = "class Foo {\n" + "\n"
-                + "    void foo(Integer arg) {\n"
-                + "        switch(foo) {\n"
-                + "            case TwoBox(String s, Box(Integer i)) ->\n"
-                + "                System.out.println(s);\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                class Foo {
+                
+                    void foo(Integer arg) {
+                        switch(foo) {
+                            case TwoBox(String s, Box(Integer i)) ->
+                                System.out.println(s);
+                        }
+                    }
+                }
+                """;
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
@@ -684,14 +730,17 @@ class PrettyPrinterTest {
 
     @Test
     public void testUnnamedPattern() {
-        String code = "class Foo {\n" + "\n"
-                + "    void foo(Integer arg) {\n"
-                + "        switch(foo) {\n"
-                + "            case TwoBox(String s, Box(_)) ->\n"
-                + "                System.out.println(s);\n"
-                + "        }\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                class Foo {
+                
+                    void foo(Integer arg) {
+                        switch(foo) {
+                            case TwoBox(String s, Box(_)) ->
+                                System.out.println(s);
+                        }
+                    }
+                }
+                """;
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
@@ -699,12 +748,15 @@ class PrettyPrinterTest {
 
     @Test
     public void testMarkdownComment() {
-        String code = "class Foo {\n" + "\n"
-                + "    /// This is a markdown comment\n"
-                + "    /// for the foo method\n"
-                + "    void foo(Integer arg) {\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                class Foo {
+                
+                    /// This is a markdown comment
+                    /// for the foo method
+                    void foo(Integer arg) {
+                    }
+                }
+                """;
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
@@ -712,11 +764,14 @@ class PrettyPrinterTest {
 
     @Test
     public void testSingleLineComment() {
-        String code = "class Foo {\n" + "\n"
-                + "    // This is a single line comment for the foo method\n"
-                + "    void foo(Integer arg) {\n"
-                + "    }\n"
-                + "}\n";
+        String code = """
+                class Foo {
+                
+                    // This is a single line comment for the foo method
+                    void foo(Integer arg) {
+                    }
+                }
+                """;
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));

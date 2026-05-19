@@ -41,8 +41,8 @@ class AstTypeAnalysis {
     Class<?> innerType;
 
     AstTypeAnalysis(Type type) {
-        if (type instanceof Class<?>) {
-            TypeVariable<? extends Class<?>>[] typeParameters = ((Class<?>) type).getTypeParameters();
+        if (type instanceof Class<?> class1) {
+            TypeVariable<? extends Class<?>>[] typeParameters = class1.getTypeParameters();
             if (typeParameters.length > 0) {
                 isSelfType = true;
             }

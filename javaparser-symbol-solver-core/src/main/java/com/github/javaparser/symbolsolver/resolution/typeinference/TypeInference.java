@@ -125,23 +125,23 @@ public class TypeInference {
 
         //   - To test for applicability by strict invocation:
 
-        if (!C.isPresent()) {
+        if (C.isEmpty()) {
             C = testForApplicabilityByStrictInvocation(Fs, es, theta);
         }
 
         //   - To test for applicability by loose invocation:
 
-        if (!C.isPresent()) {
+        if (C.isEmpty()) {
             C = testForApplicabilityByLooseInvocation(Fs, es, theta);
         }
 
         //   - To test for applicability by variable arity invocation:
 
-        if (!C.isPresent()) {
+        if (C.isEmpty()) {
             C = testForApplicabilityByVariableArityInvocation(Fs, es, theta);
         }
 
-        if (!C.isPresent()) {
+        if (C.isEmpty()) {
             return Optional.empty();
         }
 
@@ -171,7 +171,7 @@ public class TypeInference {
             throw new IllegalArgumentException();
         }
         Optional<InstantiationSet> partial = instantiationInference(methodCallExpr, methodDeclaration);
-        if (!partial.isPresent()) {
+        if (partial.isEmpty()) {
             return false;
         }
         int nActualParams = methodCallExpr.getArguments().size();

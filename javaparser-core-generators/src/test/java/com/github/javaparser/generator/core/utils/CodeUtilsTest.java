@@ -47,7 +47,7 @@ class CodeUtilsTest {
         Type valueType = StaticJavaParser.parseType("Object");
 
         assertEquals(
-                String.format("(%s) %s", returnType, RETURN_VALUE),
+                "(%s) %s".formatted(returnType, RETURN_VALUE),
                 castValue(RETURN_VALUE, returnType, valueType.asString()));
     }
 }

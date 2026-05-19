@@ -46,12 +46,15 @@ public class Issue2489Test extends AbstractSymbolResolutionTest {
                 new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
         StaticJavaParser.setConfiguration(configuration);
 
-        String src = "public class B {\n" + "  public void m() {\n"
-                + "    ComponentBase otm4e = new ComponentBase();\n"
-                + "    otm4e.set(\"OTM4E_EFFLEVEL\", \"IE1 / STD\", true);\n"
-                + "  }\n"
-                + "\n"
-                + "}";
+        String src = """
+                public class B {
+                  public void m() {
+                    ComponentBase otm4e = new ComponentBase();
+                    otm4e.set("OTM4E_EFFLEVEL", "IE1 / STD", true);
+                  }
+                
+                }\
+                """;
 
         CompilationUnit cu = StaticJavaParser.parse(src);
 

@@ -84,11 +84,11 @@ public class Added implements DifferenceElement {
     }
 
     public TextElement toTextElement() {
-        if (element instanceof LexicalDifferenceCalculator.CsmChild) {
-            return new ChildTextElement(((LexicalDifferenceCalculator.CsmChild) element).getChild());
+        if (element instanceof LexicalDifferenceCalculator.CsmChild child) {
+            return new ChildTextElement(child.getChild());
         }
-        if (element instanceof CsmToken) {
-            return new TokenTextElement(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent());
+        if (element instanceof CsmToken token) {
+            return new TokenTextElement(token.getTokenType(), token.getContent());
         }
         throw new UnsupportedOperationException(
                 "Unsupported element type: " + element.getClass().getSimpleName());

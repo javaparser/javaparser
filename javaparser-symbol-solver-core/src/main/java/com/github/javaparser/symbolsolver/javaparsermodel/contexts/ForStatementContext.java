@@ -101,8 +101,7 @@ public class ForStatementContext extends StatementContext<ForStmt> {
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         for (Expression expression : wrappedNode.getInitialization()) {
-            if (expression instanceof VariableDeclarationExpr) {
-                VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) expression;
+            if (expression instanceof VariableDeclarationExpr variableDeclarationExpr) {
                 for (VariableDeclarator variableDeclarator : variableDeclarationExpr.getVariables()) {
                     if (variableDeclarator.getName().getId().equals(name)) {
                         return SymbolReference.solved(
@@ -133,8 +132,7 @@ public class ForStatementContext extends StatementContext<ForStmt> {
     public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
         List<VariableDeclarator> res = new LinkedList<>();
         for (Expression expression : wrappedNode.getInitialization()) {
-            if (expression instanceof VariableDeclarationExpr) {
-                VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) expression;
+            if (expression instanceof VariableDeclarationExpr variableDeclarationExpr) {
                 res.addAll(variableDeclarationExpr.getVariables());
             }
         }

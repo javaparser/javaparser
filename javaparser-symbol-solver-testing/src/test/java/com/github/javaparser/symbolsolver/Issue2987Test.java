@@ -34,11 +34,14 @@ public class Issue2987Test extends AbstractResolutionTest {
 
     @Test
     void test() {
-        String code = "class ClassA {\n" + "    void f() {\n"
-                + "        String s = \"\";\n"
-                + "        String t = (s.length() == 0 ? \"*\" : s) + \"\" ;\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                class ClassA {
+                    void f() {
+                        String s = "";
+                        String t = (s.length() == 0 ? "*" : s) + "" ;
+                    }
+                }\
+                """;
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));

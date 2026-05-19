@@ -38,12 +38,15 @@ public class Issue4488Test {
         StaticJavaParser.setConfiguration(parserConfiguration);
 
         CompilationUnit cu =
-                StaticJavaParser.parse("class Test {\n" + "	private Map<String, String> dummyMap = new HashMap<>();\n"
-                        + "	public String dummyFunction(String name) {\n"
-                        + "		return dummyMap.computeIfAbsent(name,\n"
-                        + "			(Function<String, String>) s -> SomeFunction.withAMethodHere(\"test\").build());\n"
-                        + "	}\n"
-                        + "}");
+                StaticJavaParser.parse("""
+                        class Test {
+                        	private Map<String, String> dummyMap = new HashMap<>();
+                        	public String dummyFunction(String name) {
+                        		return dummyMap.computeIfAbsent(name,
+                        			(Function<String, String>) s -> SomeFunction.withAMethodHere("test").build());
+                        	}
+                        }\
+                        """);
 
         cu.accept(
                 new ModifierVisitor() {
@@ -58,12 +61,15 @@ public class Issue4488Test {
                 null);
 
         assertEquals(
-                "class Test {\n" + "	private Map<String, String> dummyMap = new HashMap<>();\n"
-                        + "	public String dummyFunction(String name) {\n"
-                        + "		return dummyMap.computeIfAbsent(name,\n"
-                        + "			(Function<String, String>) s -> SomeFunction.replacedMethodHere(\"test\").build());\n"
-                        + "	}\n"
-                        + "}",
+                """
+                class Test {
+                	private Map<String, String> dummyMap = new HashMap<>();
+                	public String dummyFunction(String name) {
+                		return dummyMap.computeIfAbsent(name,
+                			(Function<String, String>) s -> SomeFunction.replacedMethodHere("test").build());
+                	}
+                }\
+                """,
                 LexicalPreservingPrinter.print(cu));
     }
 }

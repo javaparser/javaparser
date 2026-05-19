@@ -55,8 +55,8 @@ public class Java1_0Validator extends Validators {
                             "'assert' keyword is not supported.", ParserConfiguration.LanguageLevel.JAVA_1_4)));
 
     final Validator noAssertIdentifer = new TreeVisitorValidator((node, reporter) -> {
-        if (node instanceof NodeWithIdentifier
-                && ((NodeWithIdentifier) node).getIdentifier().equals("assert")) {
+        if (node instanceof NodeWithIdentifier identifier
+                && identifier.getIdentifier().equals("assert")) {
             reporter.report(
                     node,
                     new UpgradeJavaMessage(
@@ -108,7 +108,7 @@ public class Java1_0Validator extends Validators {
 
     final SingleNodeTypeValidator<TryStmt> tryWithoutResources =
             new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
-                if (n.getCatchClauses().isEmpty() && !n.getFinallyBlock().isPresent()) {
+                if (n.getCatchClauses().isEmpty() && n.getFinallyBlock().isEmpty()) {
                     reporter.report(
                             n,
                             new UpgradeJavaMessage(
@@ -289,7 +289,7 @@ public class Java1_0Validator extends Validators {
     });
 
     final Validator noModuleImports = new TreeVisitorValidator((node, reporter) -> {
-        if (node instanceof ImportDeclaration && ((ImportDeclaration) node).isModule()) {
+        if (node instanceof ImportDeclaration declaration && declaration.isModule()) {
             reporter.report(
                     node,
                     new UpgradeJavaMessage(
@@ -307,8 +307,8 @@ public class Java1_0Validator extends Validators {
                 if (node instanceof ExplicitConstructorInvocationStmt
                         && node.getParentNode().isPresent()) {
                     Node parent = node.getParentNode().get();
-                    if (parent instanceof BlockStmt
-                            && ((BlockStmt) parent).getStatements().indexOf(node) > 0) {
+                    if (parent instanceof BlockStmt stmt
+                            && stmt.getStatements().indexOf(node) > 0) {
                         reporter.report(
                                 node,
                                 new UpgradeJavaMessage(

@@ -39,28 +39,31 @@ public class Issue4568Test extends AbstractResolutionTest {
     @Test
     void test() {
 
-        String code = "public class Board {\n" + "\n"
-                + "    class Field {\n"
-                + "        private final Board board;\n"
-                + "        private final int x;\n"
-                + "        private final int y;\n"
-                + "\n"
-                + "        public Field(Board board, int x, int y) {\n"
-                + "            this.board = board;\n"
-                + "            this.x = x;\n"
-                + "            this.y = y;\n"
-                + "        }\n"
-                + "    }\n"
-                + "\n"
-                + "    public static final int SIZE = 9;\n"
-                + "    private final Field[] board;\n"
-                + "\n"
-                + "    public Board() {\n"
-                + "        for (int x = 0; x < SIZE; x++)\n"
-                + "            for (int y = 0; y < SIZE; y++)\n"
-                + "                board[SIZE * y + x] = new Field(this, x, y);\n"
-                + "    }\n"
-                + "}";
+        String code = """
+                public class Board {
+                
+                    class Field {
+                        private final Board board;
+                        private final int x;
+                        private final int y;
+                
+                        public Field(Board board, int x, int y) {
+                            this.board = board;
+                            this.x = x;
+                            this.y = y;
+                        }
+                    }
+                
+                    public static final int SIZE = 9;
+                    private final Field[] board;
+                
+                    public Board() {
+                        for (int x = 0; x < SIZE; x++)
+                            for (int y = 0; y < SIZE; y++)
+                                board[SIZE * y + x] = new Field(this, x, y);
+                    }
+                }\
+                """;
         ParserConfiguration parserConfiguration =
                 new ParserConfiguration().setSymbolResolver(symbolResolver(defaultTypeSolver()));
 

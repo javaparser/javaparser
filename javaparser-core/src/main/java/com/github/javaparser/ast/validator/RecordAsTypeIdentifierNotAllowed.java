@@ -54,7 +54,7 @@ public class RecordAsTypeIdentifierNotAllowed extends VisitorValidator {
     }
 
     private boolean validUsage(Node node) {
-        if (!node.getParentNode().isPresent()) {
+        if (node.getParentNode().isEmpty()) {
             return true;
         }
         Node parent = node.getParentNode().get();

@@ -121,8 +121,8 @@ public class SourceFileInfoExtractor {
     }
 
     private void solve(Node node) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            solveTypeDecl((ClassOrInterfaceDeclaration) node);
+        if (node instanceof ClassOrInterfaceDeclaration declaration) {
+            solveTypeDecl(declaration);
         } else if (node instanceof Expression) {
             Node parentNode = demandParentNode(node);
             if (parentNode instanceof ImportDeclaration
@@ -153,8 +153,8 @@ public class SourceFileInfoExtractor {
     }
 
     private void solveMethodCalls(Node node) {
-        if (node instanceof MethodCallExpr) {
-            out.println("  Line " + lineNr(node) + ") " + node + " ==> " + toString((MethodCallExpr) node));
+        if (node instanceof MethodCallExpr expr) {
+            out.println("  Line " + lineNr(node) + ") " + node + " ==> " + toString(expr));
         }
         for (Node child : node.getChildNodes()) {
             solveMethodCalls(child);

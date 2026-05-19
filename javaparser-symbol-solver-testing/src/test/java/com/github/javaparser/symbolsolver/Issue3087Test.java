@@ -37,16 +37,19 @@ public class Issue3087Test extends AbstractResolutionTest {
         // Setup symbol solver
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         // Setup source code
-        String sourceCode = "class A {\n" + "\n"
-                + "    class EntrySetImpl implements EntrySet<Object, Object> {}\n"
-                + "\n"
-                + "    class Bar {\n"
-                + "        private class EntrySet {}\n"
-                + "    }\n"
-                + "\n"
-                + "    interface EntrySet<K, V> {}\n"
-                + "\n"
-                + "}\n";
+        String sourceCode = """
+                class A {
+                
+                    class EntrySetImpl implements EntrySet<Object, Object> {}
+                
+                    class Bar {
+                        private class EntrySet {}
+                    }
+                
+                    interface EntrySet<K, V> {}
+                
+                }
+                """;
         CompilationUnit cu = StaticJavaParser.parse(sourceCode);
 
         // Resolve the EntrySetImpl class and try to get its ancestors

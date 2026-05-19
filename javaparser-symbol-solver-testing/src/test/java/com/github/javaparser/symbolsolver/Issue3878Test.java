@@ -40,13 +40,16 @@ public class Issue3878Test {
 
     @Test
     void resolve_method_reference_in_ObjectCreationExpr() {
-        String code = "package test;\n" + "import java.util.function.Consumer;\n"
-                + "\n"
-                + "class A {\n"
-                + "A(Consumer<Integer> f) {}\n"
-                + "void bar(int i) {}\n"
-                + "void foo() { new A(this::bar); }\n"
-                + "}";
+        String code = """
+                package test;
+                import java.util.function.Consumer;
+                
+                class A {
+                A(Consumer<Integer> f) {}
+                void bar(int i) {}
+                void foo() { new A(this::bar); }
+                }\
+                """;
         CompilationUnit cu = StaticJavaParser.parse(code);
         MethodReferenceExpr expr = cu.findFirst(MethodReferenceExpr.class).get();
 

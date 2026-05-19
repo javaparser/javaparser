@@ -63,7 +63,7 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
     public ResolvedParameterDeclaration getParam(int i) {
         if (i < 0 || i >= getNumberOfParams()) {
             throw new IllegalArgumentException(
-                    String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
+                    "No param with index %d. Number of params: %d".formatted(i, getNumberOfParams()));
         }
         boolean variadic = false;
         if (constructor.isVarArgs()) {
