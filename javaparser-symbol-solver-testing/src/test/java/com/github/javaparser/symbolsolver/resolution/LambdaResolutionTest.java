@@ -353,4 +353,75 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         assertDoesNotThrow(() -> call.calculateResolvedType().describe());
         assertEquals("Foo.foo(java.util.function.Function)", call.resolve().getQualifiedSignature());
     }
+
+    @Test
+    void lambdaInCollectionsSortWithFullyQualifiedClassName() {
+        String source = "import java.util.ArrayList;\n"
+                + "class Test {\n"
+                + "    void test() {\n"
+                + "        java.util.Collections.sort(new ArrayList<String>(), (s1, s2) -> s1.compareTo(s2));\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("compareTo")).findFirst().get();
+
+        assertDoesNotThrow(() -> compareToCall.resolve());
+    }
+
+    @Test
+    void lambdaParameterTypeInferredFromSubtypeArgument() {
+        String source = "import java.util.LinkedList;\n"
+                + "class Test {\n" + "    void test() {\n"
+                + "        java.util.Collections.sort(new LinkedList<Integer>(), (a, b) -> a.compareTo(b));\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("compareTo")).findFirst().get();
+
+        assertDoesNotThrow(() -> compareToCall.resolve());
+    }
+
+    @Test
+    void lambdaInCollectionsSortWithImportedClassName() {
+        String source = "import java.util.ArrayList;\n"
+                + "import java.util.Collections;\n" + "class Test {\n"
+                + "    void test() {\n"
+                + "        Collections.sort(new ArrayList<String>(), (s1, s2) -> s1.compareTo(s2));\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("compareTo")).findFirst().get();
+
+        assertDoesNotThrow(() -> compareToCall.resolve());
+    }
+
+    @Test
+    void lambdaParameterTypeIsResolvedToStringNotTypeVariable() {
+        String source = "import java.util.ArrayList;\n"
+                + "class Test {\n"
+                + "    void test() {\n"
+                + "        java.util.Collections.sort(new ArrayList<String>(), (s1, s2) -> s1.compareTo(s2));\n"
+                + "    }\n"
+                + "}";
+
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+
+        MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("compareTo")).findFirst().get();
+        Expression s1Expr = compareToCall.getScope().get();
+
+        ResolvedType s1Type = JavaParserFacade.get(typeSolver).getType(s1Expr);
+        assertEquals("? super java.lang.String", s1Type.describe());
+    }
 }

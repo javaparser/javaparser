@@ -151,14 +151,6 @@
         <argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'</argLine>
         <build.timestamp>2026-05-04T00:00:00Z</build.timestamp>
         <jacoco.javaagent/>
-
-        <!--
-            OSGi export pattern. Defaults to all packages under the group id; bnd's `*` wildcard
-            includes both the parent package and any subpackages, so this exports everything below
-            `com.github.javaparser`. New packages are exported automatically — override per-module
-            via <osgi.export> if you ever add internal packages that should not leak.
-        -->
-        <osgi.export>${project.groupId}.*</osgi.export>
     </properties>
 
     <scm>
@@ -203,41 +195,6 @@
         </plugins>
         <pluginManagement>
             <plugins>
-                <!--
-                    Generates an OSGi manifest for modules that opt in by declaring this plugin
-                    in their own <build><plugins> section. Test and generator modules do not
-                    opt in, so they skip OSGi processing.
-                -->
-                <plugin>
-                    <groupId>biz.aQute.bnd</groupId>
-                    <artifactId>bnd-maven-plugin</artifactId>
-                    <version>6.4.0</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>bnd-process</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <!--
-                            Bundle-SymbolicName is derived from groupId + artifactId. OSGi permits
-                            dashes here, so this preserves names like
-                            `com.github.javaparser.javaparser-core` for OSGi consumers.
-
-                            Automatic-Module-Name uses ${jpms.moduleName} because JPMS module names
-                            disallow dashes — each module sets this property to a dot-separated,
-                            dash-free identifier.
-                        -->
-                        <bnd><![CDATA[
-                            Bundle-SymbolicName: ${project.groupId}.${project.artifactId}
-                            Automatic-Module-Name: ${jpms.moduleName}
-                            -exportcontents: ${osgi.export}
-                            -nodefaultversion: true
-                            Bundle-DocURL: https://javaparser.org
-                        ]]></bnd>
-                    </configuration>
-                </plugin>
                 <plugin>
                     <groupId>com.helger.maven</groupId>
                     <artifactId>ph-javacc-maven-plugin</artifactId>
@@ -386,6 +343,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.21.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>biz.aQute.bnd</groupId>
+                    <artifactId>bnd-maven-plugin</artifactId>
+                    <version>6.4.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
