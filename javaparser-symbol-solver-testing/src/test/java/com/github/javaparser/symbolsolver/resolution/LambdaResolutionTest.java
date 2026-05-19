@@ -366,7 +366,9 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(source);
         MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
-                .filter(m -> m.getNameAsString().equals("compareTo")).findFirst().get();
+                .filter(m -> m.getNameAsString().equals("compareTo"))
+                .findFirst()
+                .get();
 
         assertDoesNotThrow(() -> compareToCall.resolve());
     }
@@ -382,7 +384,9 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(source);
         MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
-                .filter(m -> m.getNameAsString().equals("compareTo")).findFirst().get();
+                .filter(m -> m.getNameAsString().equals("compareTo"))
+                .findFirst()
+                .get();
 
         assertDoesNotThrow(() -> compareToCall.resolve());
     }
@@ -399,7 +403,9 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         CompilationUnit cu = StaticJavaParser.parse(source);
         MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
-                .filter(m -> m.getNameAsString().equals("compareTo")).findFirst().get();
+                .filter(m -> m.getNameAsString().equals("compareTo"))
+                .findFirst()
+                .get();
 
         assertDoesNotThrow(() -> compareToCall.resolve());
     }
@@ -418,7 +424,9 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = StaticJavaParser.parse(source);
 
         MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
-                .filter(m -> m.getNameAsString().equals("compareTo")).findFirst().get();
+                .filter(m -> m.getNameAsString().equals("compareTo"))
+                .findFirst()
+                .get();
         Expression s1Expr = compareToCall.getScope().get();
 
         ResolvedType s1Type = JavaParserFacade.get(typeSolver).getType(s1Expr);
