@@ -63,6 +63,7 @@ public interface HasParentNode<T> extends Observable {
      * Walks the parents of this node and returns the first node of type {@code type}, or {@code empty()} if none is
      * found. The given type may also be an interface type, such as one of the {@code NodeWith...} interface types.
      */
+    @SafeVarargs
     default <N> Optional<N> findAncestor(Class<N>... types) {
         return findAncestor(x -> true, types);
     }
@@ -86,6 +87,7 @@ public interface HasParentNode<T> extends Observable {
      * {@code NodeWith...} interface types.
      * @param <N>
      */
+    @SafeVarargs
     default <N> Optional<N> findAncestor(Predicate<N> predicate, Class<N>... types) {
         if (!hasParentNode()) return Optional.empty();
         Node parent = getParentNode().get();
