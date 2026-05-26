@@ -81,7 +81,8 @@ class BlockStmtContextResolutionTest extends AbstractResolutionTest {
         StaticJavaParser.setConfiguration(configuration);
         CompilationUnit cu = StaticJavaParser.parse(src);
 
-        // 'int value = attribute' — the NameExpr 'attribute' must resolve to the field (int), not the local var (double)
+        // 'int value = attribute' — the NameExpr 'attribute' must resolve to the field (int), not the local var
+        // (double)
         VariableDeclarationExpr valueDecl = cu.findAll(VariableDeclarationExpr.class).stream()
                 .filter(v -> v.getVariable(0).getNameAsString().equals("value"))
                 .findFirst()
