@@ -656,8 +656,29 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         }
         if (parentNode instanceof ObjectCreationExpr) {
             ObjectCreationExpr expr = (ObjectCreationExpr) parentNode;
-            ResolvedType result = expr.getType().resolve();
-
+            // Determine the position of this lambda in the constructor's argument list.
+            // We need the *constructor parameter type* at that position (e.g. Runnable for
+            // Thread(Runnable target)), NOT the type of the object being constructed (e.g.
+            // Thread). The previous implementation incorrectly called expr.getType().resolve(),
+            // which returned the constructed type itself. When that type is not a functional
+            // interface, resolveLambda() fails to find a functional method and returns a wrong
+            // result. See: https://github.com/javaparser/javaparser/issues/3626
+            int pos = expr.getArgumentPosition(node, EXCLUDE_ENCLOSED_EXPR);
+            SymbolReference<ResolvedConstructorDeclaration> refConstructor = facade.solve(expr);
+            if (!refConstructor.isSolved()) {
+                throw new UnsolvedSymbolException(
+                        parentNode.toString(), expr.getType().getName().getId());
+            }
+            // ResolvedConstructorDeclaration extends ResolvedMethodLikeDeclaration, so
+            // getMethodsExplicitAndVariadicParameterType works uniformly for both methods
+            // and constructors.
+            ResolvedType result = MethodResolutionLogic.getMethodsExplicitAndVariadicParameterType(
+                    refConstructor.getCorrespondingDeclaration(), pos);
+            // A lambda may be passed as a vararg argument; in that case the resolved type is
+            // an array — unwrap it to obtain the component (functional interface) type.
+            if (result.isArray()) {
+                result = result.asArrayType().getComponentType();
+            }
             if (solveLambdas) {
                 result = resolveLambda(node, result);
             }

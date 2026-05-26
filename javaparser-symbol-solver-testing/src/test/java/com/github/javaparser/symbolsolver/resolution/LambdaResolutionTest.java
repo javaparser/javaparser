@@ -432,4 +432,62 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         ResolvedType s1Type = JavaParserFacade.get(typeSolver).getType(s1Expr);
         assertEquals("? super java.lang.String", s1Type.describe());
     }
+
+    // --- Tests for issue #3626 ---
+    // When a lambda is passed as a constructor argument, TypeExtractor must resolve the type
+    // of the *constructor parameter* (e.g. Runnable), not the type of the constructed object
+    // (e.g. Thread). The two tests below cover a built-in JDK class and a user-defined class.
+
+    /**
+     * A lambda passed to {@code new Thread(Runnable)} must resolve to {@code java.lang.Runnable},
+     * not to {@code java.lang.Thread}.
+     *
+     * <p>Before the fix, {@code TypeExtractor} called {@code expr.getType().resolve()} on the
+     * {@code ObjectCreationExpr}, which returned the constructed type ({@code Thread}) instead of
+     * the functional-interface parameter type ({@code Runnable}).
+     *
+     * @see <a href="https://github.com/javaparser/javaparser/issues/3626">issue #3626</a>
+     */
+    @Test
+    void lambdaTypeInObjectCreationExpr_builtinConstructor() {
+        String source = "class Test {\n"
+                + "    void example() {\n"
+                + "        new Thread(() -> System.out.println(\"hello\"));\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+
+        // The lambda is the Runnable argument of Thread(Runnable), so its resolved type
+        // must be Runnable — NOT Thread (the bug would return Thread).
+        assertEquals("java.lang.Runnable", lambda.calculateResolvedType().describe());
+    }
+
+    /**
+     * A lambda passed to a user-defined constructor that accepts a custom
+     * {@code @FunctionalInterface} must resolve to that functional-interface type, not to the
+     * enclosing class.
+     *
+     * @see <a href="https://github.com/javaparser/javaparser/issues/3626">issue #3626</a>
+     */
+    @Test
+    void lambdaTypeInObjectCreationExpr_customFunctionalInterface() {
+        String source = "class MyTask {\n"
+                + "    interface Task { int compute(); }\n"
+                + "    MyTask(Task t) {}\n"
+                + "    static void test() {\n"
+                + "        new MyTask(() -> 42);\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+
+        // The lambda is the Task argument of MyTask(Task), so its resolved type must be
+        // MyTask.Task — NOT MyTask (the bug would return MyTask).
+        assertEquals("MyTask.Task", lambda.calculateResolvedType().describe());
+    }
 }
