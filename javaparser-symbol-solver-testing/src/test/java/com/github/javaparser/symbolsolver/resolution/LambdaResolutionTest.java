@@ -490,4 +490,69 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         // MyTask.Task — NOT MyTask (the bug would return MyTask).
         assertEquals("MyTask.Task", lambda.calculateResolvedType().describe());
     }
+
+    @Test
+    // see https://github.com/javaparser/javaparser/issues/2716
+    void issue2716_resolveMethodCallsInStreamWithComparatorComparingOnUserDefinedClass() {
+        // Regression test: resolving method calls inside lambdas used with
+        // Comparator.comparing() on a Stream whose element type is user-defined
+        // previously threw UnsupportedOperationException.
+        //
+        // Root cause: Comparator.comparing is a static generic method, so the
+        // scope-based substitution path (which works for instance methods like map())
+        // is never taken, leaving its type parameter T unresolved.  Without the outer-
+        // context inference fix the symbol solver could not determine the type of the
+        // lambda parameter and crashed when trying to look up a.getName() / a.getId().
+        String source = "import java.util.Comparator;\n"
+                + "import java.util.List;\n"
+                + "import java.util.stream.Collectors;\n"
+                + "public class Test {\n"
+                + "    static class Item {\n"
+                + "        public int getId() { return 0; }\n"
+                + "        public String getName() { return \"\"; }\n"
+                + "    }\n"
+                + "    void test(List<Item> items) {\n"
+                + "        items.stream()\n"
+                + "             .sorted(Comparator.comparing(a -> a.getName()))\n"
+                + "             .map(a -> a.getId())\n"
+                + "             .collect(Collectors.toList());\n"
+                + "    }\n"
+                + "}";
+        StaticJavaParser.getParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        // All method calls in the chain — including a.getName() and a.getId() inside
+        // the lambdas — must resolve without throwing.
+        assertDoesNotThrow(() -> cu.findAll(MethodCallExpr.class).forEach(MethodCallExpr::resolve));
+    }
+
+    @Test
+    // see https://github.com/javaparser/javaparser/issues/2716
+    void issue2716_resolveMethodCallInsideLambdaInComparatorComparingWithJdkTypes() {
+        // When the stream element type is a JDK type (String), a method call inside
+        // Comparator.comparing(s -> s.toLowerCase()) must resolve to the correct
+        // overload.  This exercises the same outer-context inference path as the
+        // user-defined-class variant above, but with types fully visible to the
+        // ReflectionTypeSolver, allowing a precise signature assertion.
+        String source = "import java.util.Arrays;\n"
+                + "import java.util.Comparator;\n"
+                + "import java.util.List;\n"
+                + "public class Test {\n"
+                + "    void test() {\n"
+                + "        List<String> list = Arrays.asList(\"b\", \"a\");\n"
+                + "        list.stream().sorted(Comparator.comparing(s -> s.toLowerCase()));\n"
+                + "    }\n"
+                + "}";
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        MethodCallExpr toLowerCaseCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(mce -> mce.getNameAsString().equals("toLowerCase"))
+                .findFirst()
+                .get();
+        // s is inferred as String (from ? super String), so toLowerCase() must
+        // resolve to the no-argument overload on java.lang.String.
+        assertEquals(
+                "java.lang.String.toLowerCase()",
+                assertDoesNotThrow(toLowerCaseCall::resolve).getQualifiedSignature());
+    }
 }
