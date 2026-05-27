@@ -518,8 +518,8 @@ class LambdaResolutionTest extends AbstractResolutionTest {
                 + "             .collect(Collectors.toList());\n"
                 + "    }\n"
                 + "}";
-        StaticJavaParser.getParserConfiguration().setSymbolResolver(
-                new JavaSymbolSolver(new ReflectionTypeSolver(false)));
+        StaticJavaParser.getParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         final CompilationUnit cu = StaticJavaParser.parse(source);
         // All method calls in the chain — including a.getName() and a.getId() inside
         // the lambdas — must resolve without throwing.
@@ -543,8 +543,7 @@ class LambdaResolutionTest extends AbstractResolutionTest {
                 + "        list.stream().sorted(Comparator.comparing(s -> s.toLowerCase()));\n"
                 + "    }\n"
                 + "}";
-        StaticJavaParser.getParserConfiguration().setSymbolResolver(
-                new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         final CompilationUnit cu = StaticJavaParser.parse(source);
         MethodCallExpr toLowerCaseCall = cu.findAll(MethodCallExpr.class).stream()
                 .filter(mce -> mce.getNameAsString().equals("toLowerCase"))

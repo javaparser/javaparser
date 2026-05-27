@@ -154,7 +154,8 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                                                 .getType(outerCall.getScope().get());
                                         if (outerScopeType.isReferenceType()) {
                                             String outerMethodName = outerCall.getNameAsString();
-                                            int outerArgCount = outerCall.getArguments().size();
+                                            int outerArgCount =
+                                                    outerCall.getArguments().size();
                                             final int fOuterArgPos = outerArgPos;
                                             final ResolvedType fOuterScopeType = outerScopeType;
                                             // getTypeDeclaration().getAllMethods() returns MethodUsage objects
@@ -163,7 +164,8 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                                             // with the concrete arguments (e.g. Stream<A>). We apply
                                             // useThisTypeParametersOnTheGivenType() below to perform that
                                             // substitution using the outer scope's concrete type arguments.
-                                            outerScopeType.asReferenceType()
+                                            outerScopeType
+                                                    .asReferenceType()
                                                     .getTypeDeclaration()
                                                     .ifPresent(outerDecl -> {
                                                         for (MethodUsage mu : outerDecl.getAllMethods()) {
@@ -178,18 +180,16 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                                                                 // Substitute the outer scope's concrete type
                                                                 // arguments (e.g. T_stream → A for Stream<A>),
                                                                 // yielding the expected type `Comparator<? super A>`.
-                                                                ResolvedType expectedType =
-                                                                        fOuterScopeType.asReferenceType()
-                                                                                .useThisTypeParametersOnTheGivenType(
-                                                                                        rawType);
+                                                                ResolvedType expectedType = fOuterScopeType
+                                                                        .asReferenceType()
+                                                                        .useThisTypeParametersOnTheGivenType(rawType);
                                                                 // Register the pair in the inference context:
                                                                 //   comparing's return type `Comparator<T>`
                                                                 //   ↔ expected type `Comparator<? super A>`
                                                                 // This lets the engine resolve T → `? super A`,
                                                                 // whose bound (A) is the concrete element type.
                                                                 inferenceContext.addPair(
-                                                                        methodUsage.returnType(),
-                                                                        expectedType);
+                                                                        methodUsage.returnType(), expectedType);
                                                                 break;
                                                             }
                                                         }

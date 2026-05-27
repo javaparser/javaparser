@@ -260,7 +260,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                     // if the variable is unconstrained (declared as plain `T`), we fall back
                     // to Object, which is Java's implicit upper bound for all type parameters.
                     Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
-                    for (ResolvedTypeParameterDeclaration.Bound bound : type.asTypeParameter().getBounds()) {
+                    for (ResolvedTypeParameterDeclaration.Bound bound :
+                            type.asTypeParameter().getBounds()) {
                         result.add(bound.getType()
                                 .asReferenceType()
                                 .getTypeDeclaration()
@@ -299,8 +300,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                             result.add(bound.getType()
                                     .asReferenceType()
                                     .getTypeDeclaration()
-                                    .orElseThrow(
-                                            () -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                                    .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
                         }
                         if (result.isEmpty()) {
                             result.add(typeSolver.getSolvedJavaLangObject());
