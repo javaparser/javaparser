@@ -30,6 +30,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
@@ -893,6 +894,22 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (parentNode instanceof AssignExpr) {
             AssignExpr assExpr = (AssignExpr) parentNode;
             return assExpr.calculateResolvedType();
+        }
+        // A method/constructor reference in a return statement satisfies the return type of the
+        // nearest enclosing method declaration.  If a LambdaExpr is encountered first, the context
+        // is lambda-local and is not handled here (lambda return types are themselves context-
+        // dependent and resolved separately).
+        if (parentNode instanceof ReturnStmt) {
+            Node current = parentNode;
+            while (current.getParentNode().isPresent()) {
+                current = current.getParentNode().get();
+                if (current instanceof LambdaExpr) {
+                    break;
+                }
+                if (current instanceof MethodDeclaration) {
+                    return ((MethodDeclaration) current).getType().resolve();
+                }
+            }
         }
         throw new UnsupportedOperationException(
                 "The type of a method reference expr depends on the position and its return value");
