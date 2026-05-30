@@ -60,7 +60,9 @@ class Issue2367Test extends AbstractSymbolResolutionTest {
         NameExpr nameExpr = unit.findFirst(
                         NameExpr.class, m -> m.getName().getIdentifier().equals("privateField"))
                 .get();
-        ResolvedValueDeclaration resolvedValueDeclaration = nameExpr.resolve();
+        // resolve() now returns ResolvedDeclaration (breaking change: was ResolvedValueDeclaration).
+        // "privateField" is a value name, so the result is a ResolvedValueDeclaration at runtime.
+        ResolvedValueDeclaration resolvedValueDeclaration = (ResolvedValueDeclaration) nameExpr.resolve();
         assertEquals("double", resolvedValueDeclaration.getType().describe());
     }
 }

@@ -364,7 +364,8 @@ public class InstanceOfTest {
                 assertEquals(1, nameExprs.size());
 
                 NameExpr nameExpr = nameExprs.get(0);
-                ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
+                // resolve() now returns ResolvedDeclaration; cast since the name is a value.
+                ResolvedValueDeclaration resolvedNameExpr = (ResolvedValueDeclaration) nameExpr.resolve();
             }
 
             /**
@@ -528,7 +529,8 @@ public class InstanceOfTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -543,7 +545,8 @@ public class InstanceOfTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -572,7 +575,8 @@ public class InstanceOfTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -588,7 +592,8 @@ public class InstanceOfTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -606,7 +611,8 @@ public class InstanceOfTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -640,7 +646,8 @@ public class InstanceOfTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -657,7 +664,8 @@ public class InstanceOfTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -676,7 +684,8 @@ public class InstanceOfTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -711,7 +720,8 @@ public class InstanceOfTest {
             assertEquals(2, nameExprs.size());
 
             NameExpr nameExpr = nameExprs.get(0);
-            ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
+            // resolve() now returns ResolvedDeclaration; cast since the name is a value.
+            ResolvedValueDeclaration resolvedNameExpr = (ResolvedValueDeclaration) nameExpr.resolve();
             ResolvedType resolvedNameExprType = nameExpr.calculateResolvedType();
         }
     }

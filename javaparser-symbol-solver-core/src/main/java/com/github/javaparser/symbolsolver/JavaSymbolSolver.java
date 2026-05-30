@@ -215,13 +215,41 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof NameExpr) {
+            NameExpr nameExpr = (NameExpr) node;
             SymbolReference<? extends ResolvedValueDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((NameExpr) node);
+                    JavaParserFacade.get(typeSolver).solve(nameExpr);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
                 }
             } else {
+                // Per JLS §6.5, a simple name is contextually ambiguous: it may denote a type
+                // rather than a value (e.g., "System" in "System.out.println()").
+                // solveSymbol only searches value declarations (variables, fields, parameters)
+                // and never checks implicitly imported packages such as java.lang.
+                // We therefore attempt a fallback resolution as a type declaration before giving up.
+                // This fallback is intentionally reachable only when the caller asks for
+                // ResolvedDeclaration or ResolvedTypeDeclaration — callers expecting a
+                // ResolvedValueDeclaration (i.e. via NameExpr#resolve()) receive a clear exception
+                // pointing them to the purpose-built NameExpr#resolveToDeclaration() instead.
+                SymbolReference<ResolvedTypeDeclaration> typeResult =
+                        JavaParserFactory.getContext(node, typeSolver).solveType(nameExpr.getNameAsString());
+                if (typeResult.isSolved()) {
+                    ResolvedTypeDeclaration typeDeclaration = typeResult.getCorrespondingDeclaration();
+                    if (resultClass.isInstance(typeDeclaration)) {
+                        // The caller requested ResolvedTypeDeclaration or ResolvedDeclaration,
+                        // which this type satisfies directly — return it without any wrapping.
+                        return resultClass.cast(typeDeclaration);
+                    }
+                    // The name resolves to a type, but the caller explicitly requested a
+                    // ResolvedValueDeclaration (or a subtype of it). Since NameExpr#resolve()
+                    // now passes ResolvedDeclaration.class, this branch is only reachable when
+                    // resolveDeclaration() is called directly with a narrower resultClass.
+                    throw new UnsolvedSymbolException(
+                            "\"" + nameExpr.getNameAsString() + "\" is a type name, not a value. "
+                                    + "Use resolveDeclaration(node, ResolvedDeclaration.class) or "
+                                    + "NameExpr#resolve() to handle both value and type names.");
+                }
                 throw new UnsolvedSymbolException(
                         "We are unable to find the value declaration corresponding to " + node);
             }
