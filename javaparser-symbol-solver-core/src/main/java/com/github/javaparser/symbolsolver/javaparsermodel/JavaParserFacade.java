@@ -447,7 +447,7 @@ public class JavaParserFacade {
         });
     }
 
-    protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
+    public MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
         // JLS §15.13.1: "A method reference expression consists of a ReferenceType or Primary,
         // followed by :: and a method name."
         // We need to evaluate the scope to determine what we're referencing.

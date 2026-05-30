@@ -266,9 +266,9 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
     /**
      * Verifies the original case from issue #3751: resolving
      * {@code stream.collect(Collectors.groupingBy(String::new, Collectors.counting()))} must not
-     * throw and must produce a {@code Map<?, Long>} return type.
+     * throw and must produce a fully resolved {@code Map<String, Long>} return type.
      *
-     * <p>Two fixes cooperate here:
+     * <p>Three fixes cooperate here:
      * <ol>
      *   <li>The wildcard fix in {@code matchTypeParameters} – prevents
      *       {@code UnsupportedOperationException} when matching the formal type variable {@code A}
@@ -277,14 +277,11 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
      *       resolves to the functional interface type expected at its call-site position
      *       ({@code Function<? super T, ? extends K>}) so that the correct {@code groupingBy}
      *       overload can be found instead of throwing {@code UnsolvedSymbolException}.</li>
+     *   <li>Phase-2 poly-expression inference in {@code MethodCallExprContext} – after the initial
+     *       type-variable inference pass, the return type of {@code String::new} ({@code String})
+     *       is matched against the SAM's formal return type ({@code ? extends K}) to derive
+     *       {@code K = String}, fully resolving the map key type (JLS §15.12.2.7).</li>
      * </ol>
-     *
-     * <p><b>Note on partial resolution:</b> the key type variable {@code K} (the grouping key)
-     * resolves to {@code String} in a real Java compiler through two-phase poly-expression
-     * inference (JLS §15.12.2.7).  JavaParser's symbol solver does not yet implement that
-     * multi-pass inference, so {@code K} may appear as an unresolved inference variable in the
-     * output.  The assertions below therefore check the outer container type ({@code Map}) and
-     * the value type ({@code Long}) without pinning the exact key type.
      */
     @Test
     void resolveStreamCollectGroupingByWithConstructorReference() {
@@ -303,14 +300,10 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("No 'collect' call found in groupAndCount()"));
 
-        // Must not throw UnsupportedOperationException or UnsolvedSymbolException (issue #3751).
+        // Must resolve to Map<String, Long> — K is now fully inferred via Phase-2
+        // poly-expression inference (JLS §15.12.2.7).
         ResolvedType resolvedType = collectCall.calculateResolvedType();
-        assertTrue(resolvedType.isReferenceType(), "Expected a reference type (Map)");
-        // The outer container is Map and the value type is Long; the key type variable K may
-        // remain partially unresolved until poly-expression inference is fully implemented.
-        String described = resolvedType.describe();
-        assertTrue(described.startsWith("java.util.Map<"), "Expected Map return type, was: " + described);
-        assertTrue(described.endsWith(", java.lang.Long>"), "Expected Long value type, was: " + described);
+        assertEquals("java.util.Map<java.lang.String, java.lang.Long>", resolvedType.describe());
     }
 
     /**
