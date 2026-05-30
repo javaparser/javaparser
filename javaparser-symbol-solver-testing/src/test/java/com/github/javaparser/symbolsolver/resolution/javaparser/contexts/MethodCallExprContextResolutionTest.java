@@ -263,6 +263,86 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
         assertEquals("java.util.List<java.lang.String>", resolvedType.describe());
     }
 
+    /**
+     * Verifies the original case from issue #3751: resolving
+     * {@code stream.collect(Collectors.groupingBy(String::new, Collectors.counting()))} must not
+     * throw and must produce a {@code Map<?, Long>} return type.
+     *
+     * <p>Two fixes cooperate here:
+     * <ol>
+     *   <li>The wildcard fix in {@code matchTypeParameters} – prevents
+     *       {@code UnsupportedOperationException} when matching the formal type variable {@code A}
+     *       against the wildcard {@code ?} in {@code Collector<T, ?, R>}.</li>
+     *   <li>The constructor-reference fix in {@code TypeExtractor} – {@code String::new} now
+     *       resolves to the functional interface type expected at its call-site position
+     *       ({@code Function<? super T, ? extends K>}) so that the correct {@code groupingBy}
+     *       overload can be found instead of throwing {@code UnsolvedSymbolException}.</li>
+     * </ol>
+     *
+     * <p><b>Note on partial resolution:</b> the key type variable {@code K} (the grouping key)
+     * resolves to {@code String} in a real Java compiler through two-phase poly-expression
+     * inference (JLS §15.12.2.7).  JavaParser's symbol solver does not yet implement that
+     * multi-pass inference, so {@code K} may appear as an unresolved inference variable in the
+     * output.  The assertions below therefore check the outer container type ({@code Map}) and
+     * the value type ({@code Long}) without pinning the exact key type.
+     */
+    @Test
+    void resolveStreamCollectGroupingByWithConstructorReference() {
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = parseSample("Issue3751");
+        List<MethodCallExpr> expressions = cu.getChildNodesByType(MethodCallExpr.class);
+
+        // The sample contains two collect() calls; pick the one inside groupAndCount().
+        MethodCallExpr collectCall = expressions.stream()
+                .filter(e -> e.getNameAsString().equals("collect"))
+                .filter(e -> e.findAncestor(com.github.javaparser.ast.body.MethodDeclaration.class)
+                        .map(m -> m.getNameAsString().equals("groupAndCount"))
+                        .orElse(false))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("No 'collect' call found in groupAndCount()"));
+
+        // Must not throw UnsupportedOperationException or UnsolvedSymbolException (issue #3751).
+        ResolvedType resolvedType = collectCall.calculateResolvedType();
+        assertTrue(resolvedType.isReferenceType(), "Expected a reference type (Map)");
+        // The outer container is Map and the value type is Long; the key type variable K may
+        // remain partially unresolved until poly-expression inference is fully implemented.
+        String described = resolvedType.describe();
+        assertTrue(described.startsWith("java.util.Map<"), "Expected Map return type, was: " + described);
+        assertTrue(described.endsWith(", java.lang.Long>"), "Expected Long value type, was: " + described);
+    }
+
+    /**
+     * Verifies that a constructor reference ({@code ::new}) used as a variable initializer
+     * resolves to the declared functional interface type of the variable, not to the constructed
+     * type.
+     *
+     * <p>Before the fix, {@code TypeExtractor.visit(MethodReferenceExpr)} short-circuited all
+     * {@code ::new} expressions by returning {@code scope.calculateResolvedType()} — i.e. the
+     * type being constructed (e.g. {@code String}).  This is incorrect per JLS §15.13: a
+     * constructor reference is a poly expression whose type is the target functional interface.
+     */
+    @Test
+    void resolveConstructorReferenceTypeInVariableDeclarator() {
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = parseSample("ConstructorReference");
+
+        List<com.github.javaparser.ast.expr.MethodReferenceExpr> refs =
+                cu.getChildNodesByType(com.github.javaparser.ast.expr.MethodReferenceExpr.class);
+        assertEquals(2, refs.size(), "Expected 2 constructor references in the sample");
+
+        // Function<String, String> copyConstructor = String::new  →  Function<String, String>
+        ResolvedType copyType = refs.get(0).calculateResolvedType();
+        assertEquals("java.util.function.Function<java.lang.String, java.lang.String>", copyType.describe());
+
+        // Supplier<String> noArgConstructor = String::new  →  Supplier<String>
+        ResolvedType supplierType = refs.get(1).calculateResolvedType();
+        assertEquals("java.util.function.Supplier<java.lang.String>", supplierType.describe());
+    }
+
     // Related to issue #3195
     @Test
     void solveVariadicStaticGenericMethodCallCanInferFromArguments2() {
