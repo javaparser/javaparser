@@ -764,11 +764,51 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         return result;
     }
 
+    /**
+     * Returns the resolved type of a method or constructor reference expression.
+     *
+     * <p>Per JLS §15.13, a method/constructor reference is a <em>poly expression</em>: its type
+     * is the functional interface it satisfies in context, not a standalone type.  The result
+     * therefore depends on where the reference appears:
+     *
+     * <ul>
+     *   <li><b>Argument to a method call</b> – the formal parameter type of the enclosing call at
+     *       the reference's position (e.g. {@code Function<String,String>} for {@code String::new}
+     *       passed where a {@code Function} is expected).  When {@code solveLambdas=true}, the type
+     *       is further refined via {@link InferenceContext} using the functional method's return
+     *       type.</li>
+     *   <li><b>Variable initializer</b> – the declared type of the variable.</li>
+     *   <li><b>Assignment target</b> – the type of the left-hand side expression.</li>
+     * </ul>
+     *
+     * <h3>Constructor references ({@code ::new})</h3>
+     * <p>Constructor references were previously short-circuited to return the constructed type
+     * directly (e.g. {@code String} for {@code String::new}).  This was wrong: the constructed
+     * type is the <em>return type</em> of the referenced constructor, not the type of the
+     * reference expression itself.  Constructor references now fall through to the same
+     * context-based logic used for ordinary method references.
+     *
+     * <p>One special case remains: when {@code solveLambdas=true}, the inference step that calls
+     * {@link JavaParserFacade#toMethodUsage} to obtain the actual return type of the referenced
+     * callable is <em>skipped</em> for {@code ::new}.  {@code toMethodUsage} looks up methods by
+     * name via {@code getAllMethods()}, which never contains constructors.  Skipping is safe
+     * because a constructor always returns the constructed type, which equals the functional
+     * interface's return type — so the inference pair {@code (formal, actual)} would carry no new
+     * information.
+     *
+     * @param node        the method/constructor reference expression to type-check
+     * @param solveLambdas when {@code true}, perform full inference; when {@code false}, return
+     *                     the raw formal parameter type from the enclosing declaration
+     * @return the resolved type of the reference expression in its context
+     * @throws UnsolvedSymbolException      if the enclosing method call cannot be resolved
+     * @throws UnsupportedOperationException if the reference appears in an unsupported context
+     */
     @Override
     public ResolvedType visit(MethodReferenceExpr node, Boolean solveLambdas) {
-        if ("new".equals(node.getIdentifier())) {
-            return node.getScope().calculateResolvedType();
-        }
+        // Constructor references (::new) previously returned the constructed type here, which is
+        // wrong — a reference expression's type is the functional interface it satisfies in
+        // context (JLS §15.13), not the type being constructed.  They now fall through to the
+        // same parent-context logic used for ordinary method references.
         Node parentNode = demandParentNode(node);
         if (parentNode instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) parentNode;
@@ -816,13 +856,19 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                         }
                     }
 
-                    ResolvedType actualType = facade.toMethodUsage(node, functionalMethod.getParamTypes())
-                            .returnType();
-                    ResolvedType formalType = functionalMethod.returnType();
+                    // Constructor references (::new) cannot be resolved via toMethodUsage() because
+                    // constructors are not returned by getAllMethods(). Skipping is safe: a constructor
+                    // always returns the constructed type, which equals the functional interface's
+                    // return type — the inference pair (formal, actual) would carry no new information.
+                    if (!"new".equals(node.getIdentifier())) {
+                        ResolvedType actualType = facade.toMethodUsage(node, functionalMethod.getParamTypes())
+                                .returnType();
+                        ResolvedType formalType = functionalMethod.returnType();
 
-                    InferenceContext inferenceContext = new InferenceContext(typeSolver);
-                    inferenceContext.addPair(formalType, actualType);
-                    result = inferenceContext.resolve(inferenceContext.addSingle(result));
+                        InferenceContext inferenceContext = new InferenceContext(typeSolver);
+                        inferenceContext.addPair(formalType, actualType);
+                        result = inferenceContext.resolve(inferenceContext.addSingle(result));
+                    }
                 }
 
                 return result;
@@ -835,6 +881,18 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 return rmd.getLastParam().getType().asArrayType().getComponentType();
             }
             return rmd.getParam(pos).getType();
+        }
+        // A method/constructor reference used as a variable initializer has the declared type of
+        // that variable as its target functional interface type.
+        if (parentNode instanceof VariableDeclarator) {
+            VariableDeclarator decExpr = (VariableDeclarator) parentNode;
+            return decExpr.getType().resolve();
+        }
+        // A method/constructor reference on the right-hand side of an assignment satisfies the
+        // functional interface type of the left-hand side.
+        if (parentNode instanceof AssignExpr) {
+            AssignExpr assExpr = (AssignExpr) parentNode;
+            return assExpr.calculateResolvedType();
         }
         throw new UnsupportedOperationException(
                 "The type of a method reference expr depends on the position and its return value");

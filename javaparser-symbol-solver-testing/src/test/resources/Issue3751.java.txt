@@ -1,15 +1,24 @@
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Issue3751 {
 
-    // Reproduces issue #3751: calculateResolvedType() on stream.collect() threw
+    // Reproduces issue #3751 (wildcard fix): calculateResolvedType() on stream.collect() threw
     // UnsupportedOperationException when the Collector argument contained a wildcard
     // intermediate-accumulation type (the '?' in Collector<T, ?, R>).
     // Collectors.toList() returns Collector<T, ?, List<T>>, where the accumulator '?'
     // must be matched against the type variable 'A' in Stream.collect(Collector<? super T, A, R>).
     List<String> toList(Stream<String> stream) {
         return stream.collect(Collectors.toList());
+    }
+
+    // Reproduces issue #3751 (constructor reference fix): the original case from the issue.
+    // Requires both fixes: the wildcard fix in matchTypeParameters and the constructor
+    // reference fix in TypeExtractor so that String::new resolves to the functional
+    // interface type Function<? super T, ? extends K> rather than String.
+    Map<String, Long> groupAndCount(Stream<String> stream) {
+        return stream.collect(Collectors.groupingBy(String::new, Collectors.counting()));
     }
 }
