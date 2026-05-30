@@ -422,6 +422,32 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         return LeastUpperBoundLogic.of().lub(resolvedTypes);
     }
 
+    /**
+     * Attempts to match the formal type parameter {@code expectedType} against the actual argument
+     * type {@code actualType}, recording any resolved type-variable bindings in
+     * {@code matchedTypeParameters}.
+     *
+     * <p>Supported cases for {@code expectedType}:
+     * <ul>
+     *   <li><b>Type variable</b> – binds the actual type to the variable after boxing primitives and
+     *       replacing {@code null} with {@code Object}.
+     *       When {@code actualType} is a wildcard (e.g. the intermediate accumulation type {@code ?}
+     *       in {@code Collector<T, ?, R>}), capture-conversion rules apply: a bounded wildcard
+     *       ({@code ? extends Foo} or {@code ? super Foo}) contributes its declared bound as the
+     *       inferred type; an unbounded wildcard {@code ?} carries no type information and is
+     *       skipped.</li>
+     *   <li><b>Array</b> – recurses on the component type (null actual types pass through as-is,
+     *       see issue #2258).</li>
+     *   <li><b>Reference type</b> – recurses on each type argument when the actual type also
+     *       carries type arguments.</li>
+     *   <li><b>Primitive or wildcard</b> – no binding needed; returns immediately.</li>
+     * </ul>
+     *
+     * @param expectedType          formal parameter type, possibly containing type variables
+     * @param actualType            actual argument type at the call site
+     * @param matchedTypeParameters accumulator map from type-variable declarations to inferred types
+     * @throws UnsupportedOperationException if an unrecognised type combination is encountered
+     */
     private void matchTypeParameters(
             ResolvedType expectedType,
             ResolvedType actualType,
@@ -441,6 +467,16 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             if (type.isNull()) {
                 ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.getSolvedJavaLangObject();
                 type = new ReferenceTypeImpl(resolvedTypedeclaration);
+            }
+            // When the actual type is a wildcard (e.g. '?' in Collector<T, ?, R>), apply capture
+            // conversion: use the declared bound for bounded wildcards, and skip unbounded ones
+            // since no concrete type can be inferred from '?' alone (issue #3751).
+            if (type.isWildcard()) {
+                ResolvedWildcard wildcard = type.asWildcard();
+                if (wildcard.isBounded()) {
+                    matchedTypeParameters.put(expectedType.asTypeParameter(), wildcard.getBoundedType());
+                }
+                return;
             }
             if (!type.isTypeVariable() && !type.isReferenceType() && !type.isArray()) {
                 throw new UnsupportedOperationException(type.getClass().getCanonicalName());

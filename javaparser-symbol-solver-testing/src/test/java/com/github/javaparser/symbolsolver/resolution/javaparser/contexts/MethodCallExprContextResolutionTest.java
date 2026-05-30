@@ -203,6 +203,66 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
         assertEquals("java.lang.String", resolvedType.describe());
     }
 
+    // Related to issue #3751
+    /**
+     * Verifies that {@code calculateResolvedType()} resolves the return type of
+     * {@code stream.collect(Collectors.toList())} without throwing an exception (issue #3751).
+     *
+     * <p>{@code Collectors.toList()} returns {@code Collector<T, ?, List<T>>}: the intermediate
+     * accumulation type is the unbounded wildcard {@code ?}.  {@code Stream.collect} is declared as
+     * {@code <R, A> R collect(Collector<? super T, A, R>)}, so resolving the return type requires
+     * matching the formal type variable {@code A} against the wildcard {@code ?}.
+     *
+     * <p>Before the fix, {@code matchTypeParameters} threw {@code UnsupportedOperationException}
+     * in this situation because it only accepted type variables, reference types, and arrays as
+     * candidates for type-variable bindings — wildcards were not handled.  The fix applies
+     * capture-conversion rules: bounded wildcards contribute their declared bound, and unbounded
+     * wildcards are skipped (no type information can be inferred from {@code ?} alone).  This
+     * leaves {@code A} unresolved while still allowing {@code R = List<String>} to be inferred
+     * correctly from the remaining type arguments.
+     */
+    @Test
+    void resolveStreamCollectWithWildcardAccumulatorType() {
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = parseSample("Issue3751");
+        List<MethodCallExpr> expressions = cu.getChildNodesByType(MethodCallExpr.class);
+
+        MethodCallExpr collectCall = expressions.stream()
+                .filter(e -> e.getNameAsString().equals("collect"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("No 'collect' call found in Issue3751 sample"));
+
+        // Must not throw UnsupportedOperationException (issue #3751)
+        ResolvedType resolvedType = collectCall.calculateResolvedType();
+        assertEquals("java.util.List<java.lang.String>", resolvedType.describe());
+    }
+
+    /**
+     * Verifies that the wildcard fix does not regress the common case where all type arguments are
+     * concrete (no wildcards involved).  {@code Stream.collect(Collectors.toList())} returns
+     * {@code List<String>} which must still resolve correctly.
+     */
+    @Test
+    void resolveStreamCollectWithConcreteCollector() {
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+
+        String code = "import java.util.*; import java.util.stream.*;"
+                + "class T { List<String> f(Stream<String> s) { return s.collect(Collectors.toList()); } }";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        MethodCallExpr collectCall = cu.getChildNodesByType(MethodCallExpr.class).stream()
+                .filter(e -> e.getNameAsString().equals("collect"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("No 'collect' call found"));
+
+        ResolvedType resolvedType = collectCall.calculateResolvedType();
+        assertEquals("java.util.List<java.lang.String>", resolvedType.describe());
+    }
+
     // Related to issue #3195
     @Test
     void solveVariadicStaticGenericMethodCallCanInferFromArguments2() {
