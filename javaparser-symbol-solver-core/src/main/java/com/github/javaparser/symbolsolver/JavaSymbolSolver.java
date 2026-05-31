@@ -228,10 +228,10 @@ public class JavaSymbolSolver implements SymbolResolver {
                 // solveSymbol only searches value declarations (variables, fields, parameters)
                 // and never checks implicitly imported packages such as java.lang.
                 // We therefore attempt a fallback resolution as a type declaration before giving up.
-                // This fallback is intentionally reachable only when the caller asks for
-                // ResolvedDeclaration or ResolvedTypeDeclaration — callers expecting a
-                // ResolvedValueDeclaration (i.e. via NameExpr#resolve()) receive a clear exception
-                // pointing them to the purpose-built NameExpr#resolveToDeclaration() instead.
+                // This fallback is reached when the caller requests ResolvedDeclaration (the normal
+                // path via NameExpr#resolve()) or ResolvedTypeDeclaration (direct API call).
+                // Callers that still pass a narrower resultClass such as ResolvedValueDeclaration
+                // will hit the exception below with a clear migration message.
                 SymbolReference<ResolvedTypeDeclaration> typeResult =
                         JavaParserFactory.getContext(node, typeSolver).solveType(nameExpr.getNameAsString());
                 if (typeResult.isSolved()) {
