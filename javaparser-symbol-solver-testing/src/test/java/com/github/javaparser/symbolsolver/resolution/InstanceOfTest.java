@@ -530,7 +530,9 @@ public class InstanceOfTest {
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
             // resolve() now returns ResolvedDeclaration; cast since this name is a value.
-            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -546,7 +548,9 @@ public class InstanceOfTest {
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
             // resolve() now returns ResolvedDeclaration; cast since this name is a value.
-            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -576,7 +580,9 @@ public class InstanceOfTest {
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
             // resolve() now returns ResolvedDeclaration; cast since this name is a value.
-            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -593,7 +599,9 @@ public class InstanceOfTest {
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
             // resolve() now returns ResolvedDeclaration; cast since this name is a value.
-            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -612,7 +620,9 @@ public class InstanceOfTest {
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
             // resolve() now returns ResolvedDeclaration; cast since this name is a value.
-            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -647,7 +657,9 @@ public class InstanceOfTest {
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
             // resolve() now returns ResolvedDeclaration; cast since this name is a value.
-            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -665,7 +677,9 @@ public class InstanceOfTest {
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
             // resolve() now returns ResolvedDeclaration; cast since this name is a value.
-            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -685,7 +699,9 @@ public class InstanceOfTest {
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
             // resolve() now returns ResolvedDeclaration; cast since this name is a value.
-            assertEquals("java.lang.String", ((ResolvedValueDeclaration) name.resolve()).getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test

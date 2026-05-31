@@ -82,8 +82,7 @@ class Issue2684Test {
      */
     @Test
     void resolve_onJavaLangTypeQualifier_returnsTypeDeclaration() {
-        CompilationUnit cu = StaticJavaParser.parse(
-                "class Test { void m() { System.out.println(\"hello\"); } }");
+        CompilationUnit cu = StaticJavaParser.parse("class Test { void m() { System.out.println(\"hello\"); } }");
 
         NameExpr systemExpr = findNameExpr(cu, "System");
 
@@ -91,8 +90,7 @@ class Issue2684Test {
         ResolvedDeclaration decl = assertDoesNotThrow(systemExpr::resolve);
 
         // The result must be flagged as a type so callers can distinguish it from a value.
-        assertTrue(decl.isType(),
-                "Expected isType() == true for a type-qualifier NameExpr, but got: " + decl);
+        assertTrue(decl.isType(), "Expected isType() == true for a type-qualifier NameExpr, but got: " + decl);
         assertEquals("java.lang.System", decl.asType().getQualifiedName());
     }
 
@@ -106,8 +104,7 @@ class Issue2684Test {
      */
     @Test
     void resolve_onJavaLangStringQualifier_returnsTypeDeclaration() {
-        CompilationUnit cu = StaticJavaParser.parse(
-                "class Test { void m() { String.valueOf(42); } }");
+        CompilationUnit cu = StaticJavaParser.parse("class Test { void m() { String.valueOf(42); } }");
 
         NameExpr stringExpr = findNameExpr(cu, "String");
         ResolvedDeclaration decl = assertDoesNotThrow(stringExpr::resolve);
@@ -123,8 +120,7 @@ class Issue2684Test {
     @Test
     void resolve_onUserDefinedClassQualifier_returnsTypeDeclaration() {
         CompilationUnit cu = StaticJavaParser.parse(
-                "class Foo { static int VALUE = 42; }"
-                        + "class Test { void m() { int x = Foo.VALUE; } }");
+                "class Foo { static int VALUE = 42; }" + "class Test { void m() { int x = Foo.VALUE; } }");
 
         NameExpr fooExpr = findNameExpr(cu, "Foo");
         ResolvedDeclaration decl = assertDoesNotThrow(fooExpr::resolve);
@@ -144,14 +140,12 @@ class Issue2684Test {
      */
     @Test
     void resolve_onLocalVariable_returnsValueDeclaration() {
-        CompilationUnit cu = StaticJavaParser.parse(
-                "class Test { void m() { int count = 0; int x = count + 1; } }");
+        CompilationUnit cu = StaticJavaParser.parse("class Test { void m() { int count = 0; int x = count + 1; } }");
 
         NameExpr countExpr = findNameExpr(cu, "count");
         ResolvedDeclaration decl = assertDoesNotThrow(countExpr::resolve);
 
-        assertFalse(decl.isType(),
-                "Expected isType() == false for a value-denoting NameExpr");
+        assertFalse(decl.isType(), "Expected isType() == false for a value-denoting NameExpr");
         assertInstanceOf(ResolvedValueDeclaration.class, decl);
         assertEquals("int", ((ResolvedValueDeclaration) decl).getType().describe());
     }
@@ -161,8 +155,7 @@ class Issue2684Test {
      */
     @Test
     void resolve_onMethodParameter_returnsValueDeclaration() {
-        CompilationUnit cu = StaticJavaParser.parse(
-                "class Test { void m(String name) { System.out.println(name); } }");
+        CompilationUnit cu = StaticJavaParser.parse("class Test { void m(String name) { System.out.println(name); } }");
 
         NameExpr nameExpr = findNameExpr(cu, "name");
         ResolvedDeclaration decl = assertDoesNotThrow(nameExpr::resolve);
@@ -185,15 +178,12 @@ class Issue2684Test {
      */
     @Test
     void resolveDeclaration_asTypeDeclaration_resolvesJavaLangSystem() {
-        CompilationUnit cu = StaticJavaParser.parse(
-                "class Test { void m() { System.out.println(\"hello\"); } }");
+        CompilationUnit cu = StaticJavaParser.parse("class Test { void m() { System.out.println(\"hello\"); } }");
 
         NameExpr systemExpr = findNameExpr(cu, "System");
-        JavaSymbolSolver solver =
-                (JavaSymbolSolver) cu.getData(com.github.javaparser.ast.Node.SYMBOL_RESOLVER_KEY);
+        JavaSymbolSolver solver = (JavaSymbolSolver) cu.getData(com.github.javaparser.ast.Node.SYMBOL_RESOLVER_KEY);
 
-        ResolvedTypeDeclaration typeDecl =
-                solver.resolveDeclaration(systemExpr, ResolvedTypeDeclaration.class);
+        ResolvedTypeDeclaration typeDecl = solver.resolveDeclaration(systemExpr, ResolvedTypeDeclaration.class);
 
         assertEquals("java.lang.System", typeDecl.getQualifiedName());
     }
@@ -208,8 +198,7 @@ class Issue2684Test {
      */
     @Test
     void resolve_onUnknownSymbol_throwsUnsolvedSymbolException() {
-        CompilationUnit cu = StaticJavaParser.parse(
-                "class Test { void m() { unknownSymbol; } }");
+        CompilationUnit cu = StaticJavaParser.parse("class Test { void m() { unknownSymbol; } }");
 
         NameExpr unknown = findNameExpr(cu, "unknownSymbol");
 
@@ -226,16 +215,15 @@ class Issue2684Test {
      */
     @Test
     void calculateResolvedType_andResolve_agreeOnTypeName() {
-        CompilationUnit cu = StaticJavaParser.parse(
-                "class Test { void m() { System.out.println(\"hello\"); } }");
+        CompilationUnit cu = StaticJavaParser.parse("class Test { void m() { System.out.println(\"hello\"); } }");
 
         NameExpr systemExpr = findNameExpr(cu, "System");
 
         String viaCalculate = systemExpr.calculateResolvedType().describe();
-        String viaResolve   = systemExpr.resolve().asType().getQualifiedName();
+        String viaResolve = systemExpr.resolve().asType().getQualifiedName();
 
-        assertEquals(viaCalculate, viaResolve,
-                "calculateResolvedType() and resolve().asType() must agree on the type name");
+        assertEquals(
+                viaCalculate, viaResolve, "calculateResolvedType() and resolve().asType() must agree on the type name");
     }
 
     // -------------------------------------------------------------------------
