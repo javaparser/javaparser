@@ -31,6 +31,7 @@ import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Disabled;
@@ -75,7 +76,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -101,7 +104,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -115,7 +120,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -129,9 +136,13 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name1 = Navigator.findNameExpression(cu, "value1").get();
-            assertEquals("java.lang.String", name1.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name1.resolve()).getType().describe());
             NameExpr name2 = Navigator.findNameExpression(cu, "value2").get();
-            assertEquals("java.lang.Integer", name2.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.Integer",
+                    ((ResolvedValueDeclaration) name2.resolve()).getType().describe());
         }
 
         @Test
@@ -188,7 +199,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -201,7 +214,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.Boolean", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.Boolean",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
     }
 
@@ -226,7 +241,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -252,7 +269,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -266,7 +285,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -307,7 +328,9 @@ public class PatternVariableIntroductionTest {
                     + "}\n");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
     }
 
@@ -346,7 +369,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
     }
 
@@ -370,7 +395,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -394,7 +421,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -431,7 +460,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
     }
 
@@ -464,7 +495,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -496,7 +529,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -529,7 +564,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -560,7 +597,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -606,11 +645,15 @@ public class PatternVariableIntroductionTest {
             NameExpr firstValue = Navigator.findNameExpression(
                             switchStmt.getEntries().get(0), "value")
                     .get();
-            assertEquals("java.lang.Integer", firstValue.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.Integer",
+                    ((ResolvedValueDeclaration) firstValue.resolve()).getType().describe());
             NameExpr secondValue = Navigator.findNameExpression(
                             switchStmt.getEntries().get(1), "value")
                     .get();
-            assertEquals("java.lang.String", secondValue.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) secondValue.resolve()).getType().describe());
         }
 
         @Test
@@ -653,7 +696,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -683,7 +728,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -733,7 +780,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -776,7 +825,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -820,7 +871,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -835,7 +888,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -865,7 +920,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -896,7 +953,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -926,7 +985,9 @@ public class PatternVariableIntroductionTest {
                     + "    }\n"
                     + "}");
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -969,7 +1030,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -1011,7 +1074,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -1044,7 +1109,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -1073,7 +1140,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
     }
 
@@ -1099,7 +1168,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -1144,7 +1215,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -1170,7 +1243,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -1198,7 +1273,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
@@ -1225,7 +1302,9 @@ public class PatternVariableIntroductionTest {
                     + "}");
 
             NameExpr name = Navigator.findNameExpression(cu, "value").get();
-            assertEquals("java.lang.String", name.resolve().getType().describe());
+            assertEquals(
+                    "java.lang.String",
+                    ((ResolvedValueDeclaration) name.resolve()).getType().describe());
         }
 
         @Test
