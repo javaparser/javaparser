@@ -435,7 +435,7 @@
 			<dependency>
 				<groupId>org.checkerframework</groupId>
 				<artifactId>checker-qual</artifactId>
-				<version>3.55.1</version>
+				<version>4.2.0</version>
 			</dependency>
             <dependency>
                 <groupId>org.hamcrest</groupId>
