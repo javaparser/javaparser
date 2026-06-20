@@ -123,7 +123,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             argumentsTypes.set(i, updatedArgumentType);
         }
 
-        return solveMethodAsUsage(typeOfScope, name, argumentsTypes, this);
+        return solveMethodAsUsage(typeOfScope, name, argumentsTypes, this, invocationContext);
     }
 
     private MethodUsage resolveMethodTypeParametersFromExplicitList(TypeSolver typeSolver, MethodUsage methodUsage) {
@@ -482,7 +482,8 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(
-            ResolvedTypeVariable tp, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
+            ResolvedTypeVariable tp, String name, List<ResolvedType> argumentsTypes, Context invokationContext,
+            ResolvedReferenceTypeDeclaration callContext) {
         List<ResolvedTypeParameterDeclaration.Bound> bounds =
                 tp.asTypeParameter().getBounds();
 
@@ -498,7 +499,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
         for (ResolvedTypeParameterDeclaration.Bound bound : bounds) {
             Optional<MethodUsage> methodUsage =
-                    solveMethodAsUsage(bound.getType(), name, argumentsTypes, invokationContext);
+                    solveMethodAsUsage(bound.getType(), name, argumentsTypes, invokationContext, callContext);
             if (methodUsage.isPresent()) {
                 return methodUsage;
             }
@@ -508,33 +509,40 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(
-            ResolvedType type, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
+            ResolvedType type, String name, List<ResolvedType> argumentsTypes, Context invokationContext,
+            ResolvedReferenceTypeDeclaration callContext) {
         if (type instanceof ResolvedReferenceType) {
-            return solveMethodAsUsage((ResolvedReferenceType) type, name, argumentsTypes, invokationContext);
+            return solveMethodAsUsage((ResolvedReferenceType) type, name, argumentsTypes, invokationContext,
+                    callContext);
         }
         if (type instanceof LazyType) {
-            return solveMethodAsUsage(type.asReferenceType(), name, argumentsTypes, invokationContext);
+            return solveMethodAsUsage(type.asReferenceType(), name, argumentsTypes, invokationContext, callContext);
         }
         if (type instanceof ResolvedTypeVariable) {
-            return solveMethodAsUsage((ResolvedTypeVariable) type, name, argumentsTypes, invokationContext);
+            return solveMethodAsUsage((ResolvedTypeVariable) type, name, argumentsTypes, invokationContext,
+                    callContext);
         }
         if (type instanceof ResolvedWildcard) {
             ResolvedWildcard wildcardUsage = (ResolvedWildcard) type;
             if (wildcardUsage.isSuper()) {
-                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
+                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext,
+                        callContext);
             }
             if (wildcardUsage.isExtends()) {
-                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
+                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext,
+                        callContext);
             }
             return solveMethodAsUsage(
                     new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()),
                     name,
                     argumentsTypes,
-                    invokationContext);
+                    invokationContext,
+                    callContext);
         }
         if (type instanceof ResolvedLambdaConstraintType) {
             ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
-            return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext);
+            return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext,
+                    callContext);
         }
         if (type instanceof ResolvedArrayType) {
             // An array inherits methods from Object not from it's component type
@@ -542,12 +550,13 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                     new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()),
                     name,
                     argumentsTypes,
-                    invokationContext);
+                    invokationContext,
+                    callContext);
         }
         if (type instanceof ResolvedUnionType) {
             Optional<ResolvedReferenceType> commonAncestor = type.asUnionType().getCommonAncestor();
             if (commonAncestor.isPresent()) {
-                return solveMethodAsUsage(commonAncestor.get(), name, argumentsTypes, invokationContext);
+                return solveMethodAsUsage(commonAncestor.get(), name, argumentsTypes, invokationContext, callContext);
             }
             throw new UnsupportedOperationException("no common ancestor available for " + type.describe());
         }
