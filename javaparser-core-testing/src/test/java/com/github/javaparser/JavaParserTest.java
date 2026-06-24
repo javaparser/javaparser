@@ -39,6 +39,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
@@ -114,6 +115,19 @@ class JavaParserTest {
         assertEquals(
                 new Range(new Position(1, 17), new Position(1, 31)),
                 memberDeclaration.getRange().get());
+    }
+
+    @Test
+    void annotationMemberDeclarationWithArrayDimsAfterParentheses() {
+        // https://github.com/javaparser/javaparser/issues/3649
+        String code = "public @interface Foo { int value()[]; }";
+        CompilationUnit cu = parse(code);
+        AnnotationMemberDeclaration memberDeclaration =
+                cu.getAnnotationDeclarationByName("Foo").get().getMember(0).asAnnotationMemberDeclaration();
+        assertTrue(memberDeclaration.getType().isArrayType());
+        ArrayType arrayType = memberDeclaration.getType().asArrayType();
+        assertEquals(ArrayType.Origin.NAME, arrayType.getOrigin());
+        assertEquals("int", arrayType.getComponentType().asString());
     }
 
     @Test
