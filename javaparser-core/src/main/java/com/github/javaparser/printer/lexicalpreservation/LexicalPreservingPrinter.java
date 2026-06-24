@@ -721,8 +721,15 @@ public class LexicalPreservingPrinter {
     //
     // Methods to handle transformations
     //
+    // INVARIANT: this method must never call node.toString() on any node that may be LPP-registered.
+    // getOrCreateNodeText() pre-stores an empty NodeText before invoking this method. If toString()
+    // on an LPP-registered node is called here, LPP re-enters getOrCreateNodeText(), receives the
+    // empty NodeText, prints nothing, and the empty string ends up as the token content (issue #4781).
+    // Use node.get<Property>().asString() or ConcreteSyntaxModel.forClass() + interpret() instead.
     private static void prettyPrintingTextNode(Node node, NodeText nodeText) {
         if (node instanceof PrimitiveType) {
+            // Uses interpret() → ConcreteSyntaxModel → CsmAttribute → Primitive.asString()
+            // to avoid calling PrimitiveType.toString() (see invariant above and issue #4781).
             interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
             return;
         }
@@ -827,6 +834,18 @@ public class LexicalPreservingPrinter {
     // Visible for testing
     static NodeText getOrCreateNodeText(Node node) {
         if (!node.containsData(NODE_TEXT_DATA)) {
+            // Pre-store an empty NodeText BEFORE calling prettyPrintingTextNode.
+            // This is intentional: tokensPreceeding() → partialReverseIterator() may call
+            // getOrCreateNodeText() again for the same node (to find preceding indentation
+            // tokens). Returning the empty NodeText in that case is safe — the iterator
+            // simply finds nothing and the indentation calculation continues without looping.
+            //
+            // IMPORTANT INVARIANT: prettyPrintingTextNode() MUST NOT call node.toString() on
+            // any LPP-registered node. When LPP is configured as the default printer
+            // (issue #1821), toString() re-invokes LexicalPreservingPrinter.print(), which calls
+            // getOrCreateNodeText() again. At that point the pre-stored NodeText is still empty,
+            // so toString() returns "", producing incorrect output (issue #4781).
+            // Always use node.get<Property>().asString() or ConcreteSyntaxModel-based generation.
             NodeText nodeText = new NodeText();
             node.setData(NODE_TEXT_DATA, nodeText);
             prettyPrintingTextNode(node, nodeText);
