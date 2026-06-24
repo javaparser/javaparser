@@ -253,17 +253,23 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
      */
     private SymbolReference<ResolvedTypeDeclaration> solveTypeFromOuterMostRef(String name) {
         SymbolReference<ResolvedTypeDeclaration> ref = null;
+        String remaining = name.substring(name.indexOf(".") + 1);
         SymbolReference<ResolvedTypeDeclaration> outerMostRef = solveType(name.substring(0, name.indexOf(".")));
+        // Use context-based resolution (.getContext().solveType) instead of declaration-based
+        // resolution (.solveType) so that inherited nested types are found via ancestor checking.
+        // This is consistent with how solveExternalTypeFromOuterMostRef already works.
         if (outerMostRef != null
                 && outerMostRef.isSolved()
                 && outerMostRef.getCorrespondingDeclaration() instanceof JavaParserClassDeclaration) {
             ref = ((JavaParserClassDeclaration) outerMostRef.getCorrespondingDeclaration())
-                    .solveType(name.substring(name.indexOf(".") + 1));
+                    .getContext()
+                    .solveType(remaining);
         } else if (outerMostRef != null
                 && outerMostRef.isSolved()
                 && outerMostRef.getCorrespondingDeclaration() instanceof JavaParserInterfaceDeclaration) {
             ref = ((JavaParserInterfaceDeclaration) outerMostRef.getCorrespondingDeclaration())
-                    .solveType(name.substring(name.indexOf(".") + 1));
+                    .getContext()
+                    .solveType(remaining);
         }
         return ref;
     }
