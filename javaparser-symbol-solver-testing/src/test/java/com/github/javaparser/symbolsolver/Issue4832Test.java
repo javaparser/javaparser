@@ -53,4 +53,16 @@ public class Issue4832Test extends AbstractResolutionTest {
             assertEquals("java.util.stream.Stream<java.lang.String>", resolvedType.describe());
         });
     }
+
+    @Test
+    void test2() {
+        String code = "public @interface Foo {\n" + "    int value()[];\n" + "}";
+
+        ParserConfiguration config = new ParserConfiguration();
+        config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        System.out.println(cu);
+    }
 }
