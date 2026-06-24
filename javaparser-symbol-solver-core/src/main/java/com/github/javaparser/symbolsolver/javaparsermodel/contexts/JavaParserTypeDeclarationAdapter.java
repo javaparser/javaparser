@@ -44,6 +44,8 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import java.util.List;
 import java.util.Optional;
@@ -160,11 +162,28 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
-        // Looking at extended classes and implemented interfaces
-        String typeName = isCompositeName(name) ? innerMostPartOfName(name) : name;
-        ResolvedTypeDeclaration type = checkAncestorsForType(typeName, this.typeDeclaration);
-        if (type != null) {
-            return SymbolReference.solved(type);
+        // Looking at extended classes and implemented interfaces.
+        // For a composite name like "Sub.Test" where "Sub" is itself an inherited nested type,
+        // resolve iteratively: find "Sub" in ancestors, then resolve "Test" within it (#3550).
+        if (isCompositeName(name)) {
+            int firstDot = name.indexOf('.');
+            String outerName = name.substring(0, firstDot);
+            String remainingName = name.substring(firstDot + 1);
+            ResolvedTypeDeclaration outerType = checkAncestorsForType(outerName, this.typeDeclaration);
+            if (outerType instanceof JavaParserClassDeclaration) {
+                SymbolReference<ResolvedTypeDeclaration> innerRef =
+                        ((JavaParserClassDeclaration) outerType).solveType(remainingName);
+                if (innerRef.isSolved()) return innerRef;
+            } else if (outerType instanceof JavaParserInterfaceDeclaration) {
+                SymbolReference<ResolvedTypeDeclaration> innerRef =
+                        ((JavaParserInterfaceDeclaration) outerType).solveType(remainingName);
+                if (innerRef.isSolved()) return innerRef;
+            }
+        } else {
+            ResolvedTypeDeclaration type = checkAncestorsForType(name, this.typeDeclaration);
+            if (type != null) {
+                return SymbolReference.solved(type);
+            }
         }
 
         return SymbolReference.unsolved();
