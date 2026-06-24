@@ -834,11 +834,15 @@ public class LexicalPreservingPrinter {
     // Visible for testing
     static NodeText getOrCreateNodeText(Node node) {
         if (!node.containsData(NODE_TEXT_DATA)) {
-            // Pre-store an empty NodeText BEFORE calling prettyPrintingTextNode.
-            // This is intentional: tokensPreceeding() → partialReverseIterator() may call
-            // getOrCreateNodeText() again for the same node (to find preceding indentation
-            // tokens). Returning the empty NodeText in that case is safe — the iterator
-            // simply finds nothing and the indentation calculation continues without looping.
+            // The NodeText is created empty and stored BEFORE prettyPrintingTextNode() fills it.
+            // Reason: interpret() calls findIndentation() → tokensPreceeding() →
+            // partialReverseIterator(), which traverses the parent's NodeText backwards and may
+            // encounter a ChildTextElement pointing to this very node. At that point,
+            // getOrCreateNodeText() is called again for the same node. Because the empty NodeText
+            // is already registered, containsData(NODE_TEXT_DATA) is true and this second call
+            // returns immediately, breaking the recursion. The empty NodeText acts as a sentinel:
+            // the reverse iterator produces no tokens for this node, which is the correct
+            // answer ("no preceding content yet") and lets the indentation calculation proceed.
             //
             // IMPORTANT INVARIANT: prettyPrintingTextNode() MUST NOT call node.toString() on
             // any LPP-registered node. When LPP is configured as the default printer
