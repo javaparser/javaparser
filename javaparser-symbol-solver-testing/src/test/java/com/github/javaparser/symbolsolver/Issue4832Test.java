@@ -56,9 +56,7 @@ public class Issue4832Test extends AbstractResolutionTest {
 
     @Test
     void test2() {
-        String code = "public @interface Foo {\n"
-                + "    int value()[];\n"
-                + "}";
+        String code = "public @interface Foo {\n" + "    int value()[];\n" + "}";
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
