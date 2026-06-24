@@ -5865,18 +5865,20 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modif
 {
     Type type;
     SimpleName name;
+    ArrayBracketPair arrayBracketPair;
+    List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
     Expression defaultVal = null;
 }
 {
-    // TODO/FIXME: Consider missing `[Dims] (present in the JLS, but not the JavaParser grammar)
-    // TODO/FIXME: {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
     type = Type(emptyNodeList())
     name = SimpleName()
     "(" ")"
+    ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     [ defaultVal = DefaultValue() ]
     ";"
 
     {
+        type = juggleArrayType(type, arrayBracketPairs);
         JavaToken begin = orIfInvalid(modifier.begin, type);
         return new AnnotationMemberDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, type, name, defaultVal);
     }
