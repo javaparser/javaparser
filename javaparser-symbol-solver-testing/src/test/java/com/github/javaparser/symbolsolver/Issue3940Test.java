@@ -34,19 +34,18 @@ public class Issue3940Test extends AbstractResolutionTest {
     void selfReferentialGenericTypeShouldNotCauseStackOverflow() {
         JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
 
-        CompilationUnit cu = parser.parse(
-                "package org.apache.logging.log4j.core.async;\n"
-                        + "\n"
-                        + "public class AsyncLoggerConfig {\n"
-                        + "    public static class RootLogger {\n"
-                        + "        public static class Builder<B extends Builder<B>> extends RootLogger.Builder<B> {\n"
-                        + "            @Override\n"
-                        + "            public AsyncLoggerConfig build() {\n"
-                        + "                return new AsyncLoggerConfig();\n"
-                        + "            }\n"
-                        + "        }\n"
-                        + "    }\n"
-                        + "}");
+        CompilationUnit cu = parser.parse("package org.apache.logging.log4j.core.async;\n"
+                + "\n"
+                + "public class AsyncLoggerConfig {\n"
+                + "    public static class RootLogger {\n"
+                + "        public static class Builder<B extends Builder<B>> extends RootLogger.Builder<B> {\n"
+                + "            @Override\n"
+                + "            public AsyncLoggerConfig build() {\n"
+                + "                return new AsyncLoggerConfig();\n"
+                + "            }\n"
+                + "        }\n"
+                + "    }\n"
+                + "}");
 
         for (MethodCallExpr methodCallExpr : cu.findAll(MethodCallExpr.class)) {
             assertDoesNotThrow(() -> methodCallExpr.resolve());
