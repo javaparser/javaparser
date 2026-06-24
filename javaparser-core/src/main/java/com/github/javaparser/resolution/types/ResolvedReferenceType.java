@@ -413,15 +413,21 @@ public abstract class ResolvedReferenceType
      * that have been overwritten.
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
+        return getAllMethods(new HashSet<>());
+    }
+
+    // Guard against infinite recursion caused by self-referential generic types (e.g. Builder<B extends Builder<B>>)
+    private List<ResolvedMethodDeclaration> getAllMethods(Set<String> visitedTypeIds) {
         if (!this.getTypeDeclaration().isPresent()) {
-            // empty list -- consider IllegalStateException or similar
             return new ArrayList<>();
         }
-        // Get the methods declared directly on this.
+        // If this type has already been visited, stop recursion to avoid StackOverflowError
+        if (!visitedTypeIds.add(this.getId())) {
+            return new ArrayList<>();
+        }
         List<ResolvedMethodDeclaration> allMethods =
                 new LinkedList<>(this.getTypeDeclaration().get().getDeclaredMethods());
-        // Also get methods inherited from ancestors.
-        getDirectAncestors().forEach(a -> allMethods.addAll(a.getAllMethods()));
+        getDirectAncestors().forEach(a -> allMethods.addAll(a.getAllMethods(visitedTypeIds)));
         return allMethods;
     }
 
@@ -430,10 +436,19 @@ public abstract class ResolvedReferenceType
      * type plus all declared fields which are not private.
      */
     public List<ResolvedFieldDeclaration> getAllFieldsVisibleToInheritors() {
+        return getAllFieldsVisibleToInheritors(new HashSet<>());
+    }
+
+    // Guard against infinite recursion caused by self-referential generic types (e.g. Builder<B extends Builder<B>>)
+    private List<ResolvedFieldDeclaration> getAllFieldsVisibleToInheritors(Set<String> visitedTypeIds) {
+        // If this type has already been visited, stop recursion to avoid StackOverflowError
+        if (!visitedTypeIds.add(this.getId())) {
+            return new ArrayList<>();
+        }
         List<ResolvedFieldDeclaration> res = new LinkedList<>(this.getDeclaredFields().stream()
                 .filter(f -> f.accessSpecifier() != AccessSpecifier.PRIVATE)
                 .collect(Collectors.toList()));
-        getDirectAncestors().forEach(a -> res.addAll(a.getAllFieldsVisibleToInheritors()));
+        getDirectAncestors().forEach(a -> res.addAll(a.getAllFieldsVisibleToInheritors(visitedTypeIds)));
         return res;
     }
 
