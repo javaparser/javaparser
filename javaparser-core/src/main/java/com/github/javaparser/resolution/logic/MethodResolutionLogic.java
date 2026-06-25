@@ -571,6 +571,18 @@ public class MethodResolutionLogic {
         // parameter types
         for (int i = 0; i < needleParameterCount; i++) {
             ResolvedType actualArgumentType = needleParameterTypes.get(i);
+            // Check lambda parameter count compatibility with the expected functional interface.
+            // This mirrors the same check in isApplicable(ResolvedMethodDeclaration, ...) and is
+            // needed to disambiguate overloaded methods accepting different functional interfaces
+            // (e.g. File.listFiles(FileFilter) vs File.listFiles(FilenameFilter)).
+            if (actualArgumentType instanceof LambdaArgumentTypePlaceholder) {
+                ResolvedType expectedType = i < countOfMethodUsageArgumentsPassed
+                        ? methodUsage.getParamType(i)
+                        : methodUsage.getParamType(lastMethodUsageArgumentIndex);
+                if (isConflictingLambdaType((LambdaArgumentTypePlaceholder) actualArgumentType, expectedType)) {
+                    return false;
+                }
+            }
             ResolvedType expectedArgumentType;
             boolean reachedVariadicParam = methodIsDeclaredWithVariadicParameter && i >= lastMethodUsageArgumentIndex;
             if (!reachedVariadicParam) {
