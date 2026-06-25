@@ -1073,18 +1073,15 @@ public class MethodResolutionLogic {
                 applicableMethods, argumentsTypes, MethodUsage::getDeclaration, MethodUsage::declaringType);
     }
 
-    private static boolean areOverride(MethodUsage winningCandidate, MethodUsage other) {
-        if (!winningCandidate.getName().equals(other.getName())) {
+    private static boolean areOverride(ResolvedMethodDeclaration a, ResolvedMethodDeclaration b) {
+        if (!a.getName().equals(b.getName())) {
             return false;
         }
-        if (winningCandidate.getNoParams() != other.getNoParams()) {
+        if (a.getNumberOfParams() != b.getNumberOfParams()) {
             return false;
         }
-        for (int i = 0; i < winningCandidate.getNoParams(); i++) {
-            if (!winningCandidate
-                    .getParamTypes()
-                    .get(i)
-                    .equals(other.getParamTypes().get(i))) {
+        for (int i = 0; i < a.getNumberOfParams(); i++) {
+            if (!a.getParam(i).getType().equals(b.getParam(i).getType())) {
                 return false;
             }
         }
@@ -1151,7 +1148,9 @@ public class MethodResolutionLogic {
         if (possibleAmbiguity) {
             ResolvedMethodDeclaration winningDecl = toDeclaration.apply(winningCandidate);
             ResolvedMethodDeclaration otherDecl = toDeclaration.apply(other);
-            if (!isExactMatch(winningDecl, argumentsTypes)) {
+            if (areOverride(winningDecl, otherDecl)) {
+                // Same method inherited via multiple paths — not a real ambiguity
+            } else if (!isExactMatch(winningDecl, argumentsTypes)) {
                 if (isExactMatch(otherDecl, argumentsTypes)) {
                     winningCandidate = other;
                 } else {
