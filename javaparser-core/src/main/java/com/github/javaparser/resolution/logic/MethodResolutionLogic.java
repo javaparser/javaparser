@@ -1031,100 +1031,17 @@ public class MethodResolutionLogic {
             List<ResolvedType> argumentsTypes,
             TypeSolver typeSolver,
             boolean wildcardTolerance) {
-        // Only consider methods with a matching name
-        // Filters out duplicate ResolvedMethodDeclaration by their signature.
-        // Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
         List<ResolvedMethodDeclaration> applicableMethods = methods.stream()
                 .filter(m -> m.getName().equals(name))
                 .filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature))
                 .filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
                 .collect(Collectors.toList());
-        // If no applicable methods found, return as unsolved.
-        if (applicableMethods.isEmpty()) {
-            return SymbolReference.unsolved();
-        }
-        // If there are multiple possible methods found, null arguments can help to eliminate some matches.
-        if (applicableMethods.size() > 1) {
-            List<Integer> nullParamIndexes = new ArrayList<>();
-            for (int i = 0; i < argumentsTypes.size(); i++) {
-                if (argumentsTypes.get(i).isNull()) {
-                    nullParamIndexes.add(i);
-                }
-            }
-            // If some null arguments have been provided, use this to eliminate some opitons.
-            if (!nullParamIndexes.isEmpty()) {
-                // filter method with array param if a non array exists and arg is null
-                // For example, if we define 2 methods
-                // {@code void get(String str0, Object ... objects)}
-                // {@code void get(String str0, String str1, Object ... objects)}
-                // and want to determine the most specific method invoked by this expression
-                // {@code foo.get("", null , new Object());}
-                Set<ResolvedMethodDeclaration> removeCandidates = new HashSet<>();
-                for (Integer nullParamIndex : nullParamIndexes) {
-                    for (ResolvedMethodDeclaration methDecl : applicableMethods) {
-                        //                        if (nullParamIndex < methDecl.getNumberOfParams() &&
-                        // methDecl.getParam(nullParamIndex).getType().isArray()) {
-                        if (methDecl.getParam(nullParamIndex).getType().isArray()) {
-                            removeCandidates.add(methDecl);
-                        }
-                    }
-                }
-                // Where candidiates for removal are found, remove them.
-                if (!removeCandidates.isEmpty() && removeCandidates.size() < applicableMethods.size()) {
-                    applicableMethods.removeAll(removeCandidates);
-                }
-            }
-        }
-        // If only one applicable method found, short-circuit and return it here.
-        if (applicableMethods.size() == 1) {
-            return SymbolReference.solved(applicableMethods.get(0));
-        }
-        // Examine the applicable methods found, and evaluate each to determine the "best" one
-        ResolvedMethodDeclaration winningCandidate = applicableMethods.get(0);
-        ResolvedMethodDeclaration other = null;
-        boolean possibleAmbiguity = false;
-        for (int i = 1; i < applicableMethods.size(); i++) {
-            other = applicableMethods.get(i);
-            if (isMoreSpecific(winningCandidate, other, argumentsTypes)) {
-                possibleAmbiguity = false;
-            } else if (isMoreSpecific(other, winningCandidate, argumentsTypes)) {
-                possibleAmbiguity = false;
-                winningCandidate = other;
-            } else {
-                // 15.12.2.5. Choosing the Most Specific Method
-                // One applicable method m1 is more specific than another applicable method m2, for an invocation with
-                // argument
-                // expressions e1, ..., ek, if any of the following are true:
-                // m2 is generic, and m1 is inferred to be more specific than m2 for argument expressions e1, ..., ek by
-                // §18.5.4.
-                // 18.5.4. More Specific Method Inference should be verified
-                // ...
-                if (winningCandidate.isGeneric() && !other.isGeneric()) {
-                    winningCandidate = other;
-                } else if (!winningCandidate.isGeneric() && other.isGeneric()) {
-                    // nothing to do at this stage winningCandidate is the winner
-                } else if (winningCandidate
-                        .declaringType()
-                        .getQualifiedName()
-                        .equals(other.declaringType().getQualifiedName())) {
-                    possibleAmbiguity = true;
-                } else {
-                    // we expect the methods to be ordered such that inherited methods are later in the list
-                }
-            }
-        }
-        if (possibleAmbiguity) {
-            // pick the first exact match if it exists
-            if (!isExactMatch(winningCandidate, argumentsTypes)) {
-                if (isExactMatch(other, argumentsTypes)) {
-                    winningCandidate = other;
-                } else {
-                    throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: "
-                            + winningCandidate + ", " + other);
-                }
-            }
-        }
-        return SymbolReference.solved(winningCandidate);
+        Optional<ResolvedMethodDeclaration> result = selectMostApplicable(
+                applicableMethods,
+                argumentsTypes,
+                Function.identity(),
+                ResolvedMethodDeclaration::declaringType);
+        return result.map(SymbolReference::solved).orElseGet(SymbolReference::unsolved);
     }
 
     protected static boolean isExactMatch(ResolvedMethodLikeDeclaration method, List<ResolvedType> argumentsTypes) {
@@ -1292,37 +1209,8 @@ public class MethodResolutionLogic {
         List<MethodUsage> applicableMethods = methods.stream()
                 .filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver))
                 .collect(Collectors.toList());
-        if (applicableMethods.isEmpty()) {
-            return Optional.empty();
-        }
-        if (applicableMethods.size() == 1) {
-            return Optional.of(applicableMethods.get(0));
-        }
-        MethodUsage winningCandidate = applicableMethods.get(0);
-        for (int i = 1; i < applicableMethods.size(); i++) {
-            MethodUsage other = applicableMethods.get(i);
-            if (isMoreSpecific(winningCandidate, other, argumentsTypes)) {
-                // nothing to do
-            } else if (isMoreSpecific(other, winningCandidate, argumentsTypes)) {
-                winningCandidate = other;
-            } else {
-                if (winningCandidate
-                        .declaringType()
-                        .getQualifiedName()
-                        .equals(other.declaringType().getQualifiedName())) {
-                    if (!areOverride(winningCandidate, other)) {
-                        throw new MethodAmbiguityException(
-                                "Ambiguous method call: cannot find a most applicable method: " + winningCandidate
-                                        + ", " + other + ". First declared in "
-                                        + winningCandidate.declaringType().getQualifiedName());
-                    }
-                } else {
-                    // we expect the methods to be ordered such that inherited methods are later in the list
-                    // throw new UnsupportedOperationException();
-                }
-            }
-        }
-        return Optional.of(winningCandidate);
+        return selectMostApplicable(
+                applicableMethods, argumentsTypes, MethodUsage::getDeclaration, MethodUsage::declaringType);
     }
 
     private static boolean areOverride(MethodUsage winningCandidate, MethodUsage other) {
@@ -1341,6 +1229,115 @@ public class MethodResolutionLogic {
             }
         }
         return true;
+    }
+
+    /**
+     * Selects the most applicable candidate from a list of already-filtered applicable methods.
+     * This is the shared selection logic used by both {@link #findMostApplicable} and
+     * {@link #findMostApplicableUsage}.
+     *
+     * @param <T>               the candidate type (ResolvedMethodDeclaration or MethodUsage)
+     * @param applicableMethods the list of candidates that have already passed applicability checks
+     * @param argumentsTypes    the argument types at the call site
+     * @param toDeclaration     extracts the ResolvedMethodDeclaration from a candidate
+     * @param toDeclaringType   extracts the declaring type from a candidate
+     * @return the most applicable candidate, or empty if the list is empty
+     */
+    private static <T> Optional<T> selectMostApplicable(
+            List<T> applicableMethods,
+            List<ResolvedType> argumentsTypes,
+            Function<T, ResolvedMethodDeclaration> toDeclaration,
+            Function<T, ResolvedReferenceTypeDeclaration> toDeclaringType) {
+        if (applicableMethods.isEmpty()) {
+            return Optional.empty();
+        }
+        if (applicableMethods.size() == 1) {
+            return Optional.of(applicableMethods.get(0));
+        }
+        // Filter out candidates with array parameters when null arguments are present,
+        // since non-array overloads are preferred for null values.
+        applicableMethods = filterByNullArgs(applicableMethods, argumentsTypes, toDeclaration);
+        if (applicableMethods.size() == 1) {
+            return Optional.of(applicableMethods.get(0));
+        }
+        T winningCandidate = applicableMethods.get(0);
+        T other = null;
+        boolean possibleAmbiguity = false;
+        for (int i = 1; i < applicableMethods.size(); i++) {
+            other = applicableMethods.get(i);
+            if (isMoreSpecific(toDeclaration.apply(winningCandidate), toDeclaration.apply(other), argumentsTypes)) {
+                possibleAmbiguity = false;
+            } else if (isMoreSpecific(
+                    toDeclaration.apply(other), toDeclaration.apply(winningCandidate), argumentsTypes)) {
+                possibleAmbiguity = false;
+                winningCandidate = other;
+            } else {
+                ResolvedMethodDeclaration winningDecl = toDeclaration.apply(winningCandidate);
+                ResolvedMethodDeclaration otherDecl = toDeclaration.apply(other);
+                if (winningDecl.isGeneric() && !otherDecl.isGeneric()) {
+                    winningCandidate = other;
+                } else if (!winningDecl.isGeneric() && otherDecl.isGeneric()) {
+                    // winningCandidate stays
+                } else if (toDeclaringType
+                        .apply(winningCandidate)
+                        .getQualifiedName()
+                        .equals(toDeclaringType.apply(other).getQualifiedName())) {
+                    possibleAmbiguity = true;
+                } else {
+                    // we expect the methods to be ordered such that inherited methods are later in the list
+                }
+            }
+        }
+        if (possibleAmbiguity) {
+            ResolvedMethodDeclaration winningDecl = toDeclaration.apply(winningCandidate);
+            ResolvedMethodDeclaration otherDecl = toDeclaration.apply(other);
+            if (!isExactMatch(winningDecl, argumentsTypes)) {
+                if (isExactMatch(otherDecl, argumentsTypes)) {
+                    winningCandidate = other;
+                } else {
+                    throw new MethodAmbiguityException(
+                            "Ambiguous method call: cannot find a most applicable method: " + winningCandidate
+                                    + ", " + other + ". First declared in "
+                                    + toDeclaringType
+                                            .apply(winningCandidate)
+                                            .getQualifiedName());
+                }
+            }
+        }
+        return Optional.of(winningCandidate);
+    }
+
+    /**
+     * When null arguments are present, filter out candidates that have array parameters
+     * at those positions, since non-array overloads are preferred for null values.
+     */
+    private static <T> List<T> filterByNullArgs(
+            List<T> applicableMethods,
+            List<ResolvedType> argumentsTypes,
+            Function<T, ResolvedMethodDeclaration> toDeclaration) {
+        List<Integer> nullParamIndexes = new ArrayList<>();
+        for (int i = 0; i < argumentsTypes.size(); i++) {
+            if (argumentsTypes.get(i).isNull()) {
+                nullParamIndexes.add(i);
+            }
+        }
+        if (nullParamIndexes.isEmpty()) {
+            return applicableMethods;
+        }
+        Set<T> removeCandidates = new HashSet<>();
+        for (Integer nullParamIndex : nullParamIndexes) {
+            for (T candidate : applicableMethods) {
+                if (toDeclaration.apply(candidate).getParam(nullParamIndex).getType().isArray()) {
+                    removeCandidates.add(candidate);
+                }
+            }
+        }
+        if (!removeCandidates.isEmpty() && removeCandidates.size() < applicableMethods.size()) {
+            List<T> filtered = new ArrayList<>(applicableMethods);
+            filtered.removeAll(removeCandidates);
+            return filtered;
+        }
+        return applicableMethods;
     }
 
     public static SymbolReference<ResolvedMethodDeclaration> solveMethodInType(
