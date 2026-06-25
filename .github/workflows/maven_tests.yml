@@ -57,7 +57,7 @@ jobs:
     steps:
       ## Checkout the current version of the code from the repo.
       - name: Checkout latest code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: "0"
 
@@ -76,7 +76,7 @@ jobs:
       ## Use a cache to reduce the build/test times (avoids having to download dependencies on EVERY run).
       ### https://help.github.com/en/actions/language-and-framework-guides/building-and-testing-java-with-maven#caching-dependencies
       - name: Cache Maven packages
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -96,7 +96,7 @@ jobs:
 
 
       - name: CodeCov - JavaParser Core
-        uses: codecov/codecov-action@v5.5.2
+        uses: codecov/codecov-action@v7
         timeout-minutes: 10
         with:
           files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
@@ -106,7 +106,7 @@ jobs:
           env_vars: OS,JDK
 
       - name: CodeCov - JavaParser Symbol Solver
-        uses: codecov/codecov-action@v5.5.2
+        uses: codecov/codecov-action@v7
         timeout-minutes: 10
         with:
           file: javaparser-symbol-solver-testing/target/site/jacoco/jacoco.xml

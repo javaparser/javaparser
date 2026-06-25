@@ -198,7 +198,11 @@ public class ParserConfiguration {
         /**
          * Java 25
          */
-        JAVA_25(new Java25Validator(), new Java25PostProcessor());
+        JAVA_25(new Java25Validator(), new Java25PostProcessor()),
+        /**
+         * Java 26
+         */
+        JAVA_26(new Java26Validator(), new Java26PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
@@ -215,12 +219,12 @@ public class ParserConfiguration {
         /**
          * The latest Java version that is available.
          */
-        public static LanguageLevel CURRENT = JAVA_25;
+        public static LanguageLevel CURRENT = JAVA_26;
 
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_25;
+        public static LanguageLevel BLEEDING_EDGE = JAVA_26;
 
         final Validator validator;
 
@@ -244,7 +248,8 @@ public class ParserConfiguration {
             JAVA_22,
             JAVA_23,
             JAVA_24,
-            JAVA_25
+            JAVA_25,
+            JAVA_26
         };
 
         LanguageLevel(Validator validator, PostProcessors postProcessor) {

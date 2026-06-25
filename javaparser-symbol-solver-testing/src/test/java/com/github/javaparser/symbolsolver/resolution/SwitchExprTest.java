@@ -32,6 +32,7 @@ import com.github.javaparser.ast.expr.SwitchExpr;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -58,7 +59,10 @@ public class SwitchExprTest {
                 + "}");
 
         NameExpr name = Navigator.findNameExpression(cu, "s").get();
-        assertEquals("java.lang.String", name.resolve().getType().describe());
+        // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+        assertEquals(
+                "java.lang.String",
+                ((ResolvedValueDeclaration) name.resolve()).getType().describe());
     }
 
     @Test
@@ -74,8 +78,12 @@ public class SwitchExprTest {
         cu.findAll(NameExpr.class).stream()
                 .filter(nameExpr -> nameExpr.getNameAsString().equals("s"))
                 .forEach(nameExpr -> {
+                    // resolve() now returns ResolvedDeclaration; "s" is a value (parameter).
                     assertEquals(
-                            "java.lang.String", nameExpr.resolve().getType().describe());
+                            "java.lang.String",
+                            ((ResolvedValueDeclaration) nameExpr.resolve())
+                                    .getType()
+                                    .describe());
                 });
     }
 
@@ -121,7 +129,10 @@ public class SwitchExprTest {
                 + "}");
 
         NameExpr name = Navigator.findNameExpression(cu, "s").get();
-        assertEquals("java.lang.String", name.resolve().getType().describe());
+        // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+        assertEquals(
+                "java.lang.String",
+                ((ResolvedValueDeclaration) name.resolve()).getType().describe());
     }
 
     /**

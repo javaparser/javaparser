@@ -193,6 +193,24 @@ public class PatternExprTest {
     }
 
     @Test
+    public void emptyRecordPatternListShouldWork() {
+        // JLS 14.30: RecordPattern = ReferenceType ( [ComponentPatternList] )
+        // The component list is optional — "Point()" is valid.
+        Expression expr = parseExpression("x instanceof Point()");
+
+        assertTrue(expr.isInstanceOfExpr());
+        InstanceOfExpr instanceOfExpr = expr.asInstanceOfExpr();
+        assertTrue(instanceOfExpr.getPattern().isPresent());
+
+        ComponentPatternExpr pattern = instanceOfExpr.getPattern().get();
+        assertTrue(pattern.isRecordPatternExpr());
+
+        RecordPatternExpr recordPattern = pattern.asRecordPatternExpr();
+        assertEquals("Point", recordPattern.getTypeAsString());
+        assertTrue(recordPattern.getPatternList().isEmpty());
+    }
+
+    @Test
     public void anUnnamedTypePatternShouldWork() {
         Expression expr = parseExpression("x instanceof Foo _");
 

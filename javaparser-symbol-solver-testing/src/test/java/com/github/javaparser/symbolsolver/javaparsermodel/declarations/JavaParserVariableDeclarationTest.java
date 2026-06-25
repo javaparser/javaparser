@@ -93,7 +93,8 @@ class JavaParserVariableDeclarationTest extends AbstractResolutionTest implement
                 .parse(code);
 
         List<NameExpr> names = cu.findAll(NameExpr.class);
-        ResolvedValueDeclaration rvd = names.get(3).resolve();
+        // resolve() now returns ResolvedDeclaration; the name at index 3 is a field (a value).
+        ResolvedValueDeclaration rvd = (ResolvedValueDeclaration) names.get(3).resolve();
 
         String decl = rvd.asField().toAst().get().toString();
 

@@ -203,6 +203,139 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
         assertEquals("java.lang.String", resolvedType.describe());
     }
 
+    // Related to issue #3751
+    /**
+     * Verifies that {@code calculateResolvedType()} resolves the return type of
+     * {@code stream.collect(Collectors.toList())} without throwing an exception (issue #3751).
+     *
+     * <p>{@code Collectors.toList()} returns {@code Collector<T, ?, List<T>>}: the intermediate
+     * accumulation type is the unbounded wildcard {@code ?}.  {@code Stream.collect} is declared as
+     * {@code <R, A> R collect(Collector<? super T, A, R>)}, so resolving the return type requires
+     * matching the formal type variable {@code A} against the wildcard {@code ?}.
+     *
+     * <p>Before the fix, {@code matchTypeParameters} threw {@code UnsupportedOperationException}
+     * in this situation because it only accepted type variables, reference types, and arrays as
+     * candidates for type-variable bindings — wildcards were not handled.  The fix applies
+     * capture-conversion rules: bounded wildcards contribute their declared bound, and unbounded
+     * wildcards are skipped (no type information can be inferred from {@code ?} alone).  This
+     * leaves {@code A} unresolved while still allowing {@code R = List<String>} to be inferred
+     * correctly from the remaining type arguments.
+     */
+    @Test
+    void resolveStreamCollectWithWildcardAccumulatorType() {
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = parseSample("Issue3751");
+        List<MethodCallExpr> expressions = cu.getChildNodesByType(MethodCallExpr.class);
+
+        MethodCallExpr collectCall = expressions.stream()
+                .filter(e -> e.getNameAsString().equals("collect"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("No 'collect' call found in Issue3751 sample"));
+
+        // Must not throw UnsupportedOperationException (issue #3751)
+        ResolvedType resolvedType = collectCall.calculateResolvedType();
+        assertEquals("java.util.List<java.lang.String>", resolvedType.describe());
+    }
+
+    /**
+     * Verifies that the wildcard fix does not regress the common case where all type arguments are
+     * concrete (no wildcards involved).  {@code Stream.collect(Collectors.toList())} returns
+     * {@code List<String>} which must still resolve correctly.
+     */
+    @Test
+    void resolveStreamCollectWithConcreteCollector() {
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+
+        String code = "import java.util.*; import java.util.stream.*;"
+                + "class T { List<String> f(Stream<String> s) { return s.collect(Collectors.toList()); } }";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        MethodCallExpr collectCall = cu.getChildNodesByType(MethodCallExpr.class).stream()
+                .filter(e -> e.getNameAsString().equals("collect"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("No 'collect' call found"));
+
+        ResolvedType resolvedType = collectCall.calculateResolvedType();
+        assertEquals("java.util.List<java.lang.String>", resolvedType.describe());
+    }
+
+    /**
+     * Verifies the original case from issue #3751: resolving
+     * {@code stream.collect(Collectors.groupingBy(String::new, Collectors.counting()))} must not
+     * throw and must produce a fully resolved {@code Map<String, Long>} return type.
+     *
+     * <p>Three fixes cooperate here:
+     * <ol>
+     *   <li>The wildcard fix in {@code matchTypeParameters} – prevents
+     *       {@code UnsupportedOperationException} when matching the formal type variable {@code A}
+     *       against the wildcard {@code ?} in {@code Collector<T, ?, R>}.</li>
+     *   <li>The constructor-reference fix in {@code TypeExtractor} – {@code String::new} now
+     *       resolves to the functional interface type expected at its call-site position
+     *       ({@code Function<? super T, ? extends K>}) so that the correct {@code groupingBy}
+     *       overload can be found instead of throwing {@code UnsolvedSymbolException}.</li>
+     *   <li>Phase-2 poly-expression inference in {@code MethodCallExprContext} – after the initial
+     *       type-variable inference pass, the return type of {@code String::new} ({@code String})
+     *       is matched against the SAM's formal return type ({@code ? extends K}) to derive
+     *       {@code K = String}, fully resolving the map key type (JLS §15.12.2.7).</li>
+     * </ol>
+     */
+    @Test
+    void resolveStreamCollectGroupingByWithConstructorReference() {
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = parseSample("Issue3751");
+        List<MethodCallExpr> expressions = cu.getChildNodesByType(MethodCallExpr.class);
+
+        // The sample contains two collect() calls; pick the one inside groupAndCount().
+        MethodCallExpr collectCall = expressions.stream()
+                .filter(e -> e.getNameAsString().equals("collect"))
+                .filter(e -> e.findAncestor(com.github.javaparser.ast.body.MethodDeclaration.class)
+                        .map(m -> m.getNameAsString().equals("groupAndCount"))
+                        .orElse(false))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("No 'collect' call found in groupAndCount()"));
+
+        // Must resolve to Map<String, Long> — K is now fully inferred via Phase-2
+        // poly-expression inference (JLS §15.12.2.7).
+        ResolvedType resolvedType = collectCall.calculateResolvedType();
+        assertEquals("java.util.Map<java.lang.String, java.lang.Long>", resolvedType.describe());
+    }
+
+    /**
+     * Verifies that a constructor reference ({@code ::new}) used as a variable initializer
+     * resolves to the declared functional interface type of the variable, not to the constructed
+     * type.
+     *
+     * <p>Before the fix, {@code TypeExtractor.visit(MethodReferenceExpr)} short-circuited all
+     * {@code ::new} expressions by returning {@code scope.calculateResolvedType()} — i.e. the
+     * type being constructed (e.g. {@code String}).  This is incorrect per JLS §15.13: a
+     * constructor reference is a poly expression whose type is the target functional interface.
+     */
+    @Test
+    void resolveConstructorReferenceTypeInVariableDeclarator() {
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = parseSample("ConstructorReference");
+
+        List<com.github.javaparser.ast.expr.MethodReferenceExpr> refs =
+                cu.getChildNodesByType(com.github.javaparser.ast.expr.MethodReferenceExpr.class);
+        assertEquals(2, refs.size(), "Expected 2 constructor references in the sample");
+
+        // Function<String, String> copyConstructor = String::new  →  Function<String, String>
+        ResolvedType copyType = refs.get(0).calculateResolvedType();
+        assertEquals("java.util.function.Function<java.lang.String, java.lang.String>", copyType.describe());
+
+        // Supplier<String> noArgConstructor = String::new  →  Supplier<String>
+        ResolvedType supplierType = refs.get(1).calculateResolvedType();
+        assertEquals("java.util.function.Supplier<java.lang.String>", supplierType.describe());
+    }
+
     // Related to issue #3195
     @Test
     void solveVariadicStaticGenericMethodCallCanInferFromArguments2() {

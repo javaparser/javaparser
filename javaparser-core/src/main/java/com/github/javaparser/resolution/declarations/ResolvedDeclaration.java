@@ -90,6 +90,25 @@ public interface ResolvedDeclaration extends AssociableToAST {
     }
 
     /**
+     * Does this declaration represent the array length pseudo-field?
+     *
+     * array.length is the only synthetic pseudo-field defined by the JLS (§10.7).
+     * It is a singleton with a fixed name and a fixed type (int), so a dedicated interface would carry no meaningful contract beyond the flag itself.
+     * The existing codebase already follows this lighter approach: isVariable() in ResolvedDeclaration has no companion ResolvedVariableDeclaration interface.
+     * Introducing an empty marker interface just to be symmetric with isField() / isEnumConstant() would be over-engineering for a one-off case.
+     *
+     * The fix is therefore:
+     * Add default boolean isArrayLength() { return false; } to ResolvedDeclaration
+     * Override it to return true inside ArrayLengthValueDeclaration
+     *
+     * If more extensibility were needed in the future — for instance, to expose getArrayType() to retrieve the component type of the backing array — the right move would be to introduce a ResolvedArrayLengthDeclaration interface at that point.
+     * Because all new methods on ResolvedDeclaration are default, and because ArrayLengthValueDeclaration already implements ResolvedValueDeclaration, that refactor could be done without any breaking change.
+     */
+    default boolean isArrayLength() {
+        return false;
+    }
+
+    /**
      * Return this as a FieldDeclaration or throw an UnsupportedOperationException
      */
     default ResolvedFieldDeclaration asField() {

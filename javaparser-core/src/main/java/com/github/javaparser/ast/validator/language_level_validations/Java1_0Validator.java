@@ -266,6 +266,19 @@ public class Java1_0Validator extends Validators {
         }
     });
 
+    final Validator noMultiPatternCaseLabels = new SingleNodeTypeValidator<>(SwitchEntry.class, (n, reporter) -> {
+        long patternCount = n.getLabels().stream()
+                .filter(Expression::isComponentPatternExpr)
+                .count();
+        if (patternCount > 1) {
+            reporter.report(
+                    n,
+                    new UpgradeJavaMessage(
+                            "Multiple patterns in case labels not supported.",
+                            ParserConfiguration.LanguageLevel.JAVA_22));
+        }
+    });
+
     final Validator noRecordPatterns = new TreeVisitorValidator((node, reporter) -> {
         if (node instanceof RecordPatternExpr) {
             reporter.report(
@@ -333,6 +346,7 @@ public class Java1_0Validator extends Validators {
         add(noPermitsListInClasses);
         add(noSwitchNullDefault);
         add(noSwitchPatterns);
+        add(noMultiPatternCaseLabels);
         add(noRecordPatterns);
         add(noModuleImports);
         add(explicitConstructorInvocationMustBeFirstStatement);

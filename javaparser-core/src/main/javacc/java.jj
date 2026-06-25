@@ -840,8 +840,13 @@ TOKEN :
 MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
 <IN_TEXT_BLOCK> TOKEN : { <TEXT_BLOCK_LITERAL: "\"\"\"" >: DEFAULT }
 // Need to recognize an escaped " to prevent it from parsing as "backslash doublequote" -
-// which might match that doublequote with following doublequotes.
-<IN_TEXT_BLOCK> MORE :{ <TEXT_BLOCK_CONTENT:  ( "\\" "\"" | ~[] ) > }
+// which might match that doublequote with following doublequotes. The ~[] is needed so the
+// backslash escape ("\\" followed by any character) atomically so
+// the escape's trailing character (most importantly, the " in \")
+// cannot be re-used as part of the closing """ delimiter. The first alternative
+// wins by JavaCC's longest-match rule whenever the current char is a backslash;
+// the second alternative is the fallback for ordinary text-block characters.
+<IN_TEXT_BLOCK> MORE :{ <TEXT_BLOCK_CONTENT:  ( "\\" ~[] | ~[] ) > }
 
 
 /* IDENTIFIERS */
@@ -3536,13 +3541,15 @@ NodeList<ComponentPatternExpr> PatternList():
 	NodeList<ComponentPatternExpr> ret = new NodeList<>();
 }
 {
-	"("
-    pattern = ComponentPatternExpression() { ret.add(pattern); }
-    (
-        ","
+    "("
+      [
         pattern = ComponentPatternExpression() { ret.add(pattern); }
-    )*
-	")"
+        (
+            ","
+            pattern = ComponentPatternExpression() { ret.add(pattern); }
+        )*
+      ]
+    ")"
     { return ret; }
 }
 
@@ -4857,6 +4864,11 @@ SwitchEntry SwitchEntry():
             */
             LOOKAHEAD(PatternExpression())
             label = PatternExpression() { labels = add(labels, label); }
+            (
+                LOOKAHEAD("," PatternExpression())
+                ","
+                label = PatternExpression() { labels = add(labels, label); }
+            )*
             [
               "when"
               guard = ConditionalExpression()
@@ -5853,18 +5865,20 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modif
 {
     Type type;
     SimpleName name;
+    ArrayBracketPair arrayBracketPair;
+    List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
     Expression defaultVal = null;
 }
 {
-    // TODO/FIXME: Consider missing `[Dims] (present in the JLS, but not the JavaParser grammar)
-    // TODO/FIXME: {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
     type = Type(emptyNodeList())
     name = SimpleName()
     "(" ")"
+    ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     [ defaultVal = DefaultValue() ]
     ";"
 
     {
+        type = juggleArrayType(type, arrayBracketPairs);
         JavaToken begin = orIfInvalid(modifier.begin, type);
         return new AnnotationMemberDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, type, name, defaultVal);
     }

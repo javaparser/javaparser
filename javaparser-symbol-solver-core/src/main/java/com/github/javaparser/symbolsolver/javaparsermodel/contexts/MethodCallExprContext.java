@@ -21,15 +21,20 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.EnclosedExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
+import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -92,6 +97,9 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                         MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
                         methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
                         methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
+                        // Phase 2 (JLS §15.12.2.7): infer remaining type variables from poly
+                        // expression arguments (method/constructor references).
+                        methodUsage = inferTypeVariablesFromPolyExpressionArguments(methodUsage, argumentsTypes);
                         return Optional.of(methodUsage);
                     }
                     throw new UnsolvedSymbolException(
@@ -228,6 +236,16 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 methodUsage = methodUsage.replaceTypeParameter(entry.getKey(), entry.getValue());
             }
 
+            // Phase 2 (JLS §15.12.2.7): infer remaining type variables from poly-expression
+            // arguments (method/constructor references).  After Phase 1 some type variables may
+            // still be unresolved (e.g. K in groupingBy(Function<? super T, ? extends K>, ...)).
+            // For each argument that was a method/constructor reference, we derive the actual
+            // return type of the referenced callable and match it against the SAM's formal return
+            // type to produce additional bindings.  Lambdas are skipped — their return type is
+            // itself context-dependent and cannot be resolved here without full poly-expression
+            // inference.
+            methodUsage = inferTypeVariablesFromPolyExpressionArguments(methodUsage, argumentsTypes);
+
             ResolvedType returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
             // we don't want to replace the return type in case of UNBOUNDED type (<?>)
             if (returnType != methodUsage.returnType() && !(returnType == ResolvedWildcard.UNBOUNDED)) {
@@ -241,6 +259,146 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             return Optional.of(methodUsage);
         }
         return ref;
+    }
+
+    /**
+     * Phase 2 of JLS §15.12.2.7 poly-expression type inference.
+     *
+     * <p>After Phase 1 has inferred type variables from concrete (non-poly) arguments, some
+     * variables may still be unresolved — for example {@code K} in
+     * {@code groupingBy(Function<? super T, ? extends K> classifier, ...)} when {@code classifier}
+     * is a constructor or method reference.  This method performs a supplementary inference pass
+     * over every argument position that was a method or constructor reference:
+     *
+     * <ol>
+     *   <li>Determine the formal parameter type at that position in {@code methodUsage} (which
+     *       already reflects Phase-1 substitutions, e.g. {@code Function<? super String, ? extends K>}).
+     *   <li>Obtain the SAM of that functional interface type via
+     *       {@link FunctionalInterfaceLogic#getFunctionalMethod}.</li>
+     *   <li>Compute the <em>actual</em> return type of the referenced callable:
+     *       <ul>
+     *         <li>Constructor reference ({@code X::new}): the constructed type {@code X}.</li>
+     *         <li>Method reference ({@code Foo::bar}): the declared return type of the matched
+     *             method obtained via {@link JavaParserFacade#toMethodUsage}.</li>
+     *       </ul>
+     *   </li>
+     *   <li>Match the SAM's formal return type (stripping any {@code ? extends} / {@code ? super}
+     *       wrapper) against the actual return type to derive additional type-variable bindings.</li>
+     * </ol>
+     *
+     * <p>Lambdas are <strong>not</strong> handled: their return type is itself context-dependent
+     * and cannot be inferred without full poly-expression inference.
+     *
+     * @param methodUsage   the partially-resolved method usage (after Phase 1)
+     * @param argumentsTypes the argument types as seen during method resolution; poly arguments
+     *                       are represented by {@link LambdaArgumentTypePlaceholder}
+     * @return a (possibly further refined) {@link MethodUsage} with additional type variables
+     *         replaced by their inferred types
+     */
+    private MethodUsage inferTypeVariablesFromPolyExpressionArguments(
+            MethodUsage methodUsage, List<ResolvedType> argumentsTypes) {
+        NodeList<Expression> callArgs = wrappedNode.getArguments();
+        if (callArgs == null || callArgs.isEmpty()) {
+            return methodUsage;
+        }
+
+        // Determine how many positional (non-vararg) parameters to iterate over
+        int paramCount = methodUsage.getDeclaration().hasVariadicParameter()
+                ? methodUsage.getDeclaration().getNumberOfParams() - 1
+                : methodUsage.getDeclaration().getNumberOfParams();
+
+        Map<ResolvedTypeParameterDeclaration, ResolvedType> polyDerivedValues = new HashMap<>();
+
+        for (int i = 0; i < Math.min(paramCount, Math.min(argumentsTypes.size(), callArgs.size())); i++) {
+            // Identify poly-expression arguments directly from the AST: in solveMethodAsUsage,
+            // method/constructor references are already resolved to their formal parameter type
+            // (via getType(param, false)), so they do NOT appear as LambdaArgumentTypePlaceholder.
+            // We therefore check the original AST node instead.
+            Expression rawArg = callArgs.get(i);
+            while (rawArg instanceof EnclosedExpr) {
+                rawArg = ((EnclosedExpr) rawArg).getInner();
+            }
+            if (!rawArg.isMethodReferenceExpr()) {
+                continue;
+            }
+
+            // Obtain the formal functional interface type with Phase-1 substitutions applied
+            ResolvedType formalParamType = methodUsage.getParamType(i);
+            Optional<MethodUsage> samOpt = FunctionalInterfaceLogic.getFunctionalMethod(formalParamType);
+            if (!samOpt.isPresent()) {
+                continue;
+            }
+
+            // getFunctionalMethod returns the SAM of the raw type declaration; substitute the
+            // type arguments from formalParamType so that the SAM's return type reflects the
+            // actual type arguments (e.g. "? extends K", not the raw "R").
+            MethodUsage sam = samOpt.get();
+            if (formalParamType.isReferenceType()) {
+                for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> typeParamEntry :
+                        formalParamType.asReferenceType().getTypeParametersMap()) {
+                    sam = sam.replaceTypeParameter(typeParamEntry.a, typeParamEntry.b);
+                }
+            }
+
+            ResolvedType samReturnType = sam.returnType();
+            if (samReturnType.isVoid()) {
+                continue;
+            }
+
+            // Unwrap a bounded wildcard on the SAM return type so that matchTypeParameters can
+            // bind the inner type variable.  E.g. "? extends K" → "K", "? super K" → "K".
+            ResolvedType samReturnEffective = samReturnType;
+            if (samReturnType.isWildcard() && samReturnType.asWildcard().isBounded()) {
+                samReturnEffective = samReturnType.asWildcard().getBoundedType();
+            }
+
+            MethodReferenceExpr ref = rawArg.asMethodReferenceExpr();
+            ResolvedType actualReturnType = null;
+
+            if ("new".equals(ref.getIdentifier())) {
+                // Constructor reference X::new always returns the constructed type X
+                try {
+                    actualReturnType = ref.getScope().calculateResolvedType();
+                } catch (Exception e) {
+                    // Unable to resolve the constructed type — skip this argument
+                }
+            } else {
+                // Method reference: resolve the actual method and use its declared return type.
+                // Replace wildcard param types with their bounds before calling toMethodUsage so
+                // that the method lookup can match the correct overload.
+                try {
+                    List<ResolvedType> samParamTypes = new ArrayList<>();
+                    for (int j = 0; j < sam.getNoParams(); j++) {
+                        ResolvedType pt = sam.getParamType(j);
+                        if (pt.isWildcard() && pt.asWildcard().isBounded()) {
+                            pt = pt.asWildcard().getBoundedType();
+                        }
+                        samParamTypes.add(pt);
+                    }
+                    actualReturnType = JavaParserFacade.get(typeSolver)
+                            .toMethodUsage(ref, samParamTypes)
+                            .returnType();
+                } catch (Exception e) {
+                    // Unable to resolve — skip this argument
+                }
+            }
+
+            if (actualReturnType == null) {
+                continue;
+            }
+
+            // Match the effective SAM return type against the actual return type to derive bindings
+            try {
+                matchTypeParameters(samReturnEffective, actualReturnType, polyDerivedValues);
+            } catch (Exception e) {
+                // Mismatch or unsupported combination — skip this argument
+            }
+        }
+
+        for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> entry : polyDerivedValues.entrySet()) {
+            methodUsage = methodUsage.replaceTypeParameter(entry.getKey(), entry.getValue());
+        }
+        return methodUsage;
     }
 
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<ResolvedType> actualParamTypes) {
@@ -422,6 +580,32 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         return LeastUpperBoundLogic.of().lub(resolvedTypes);
     }
 
+    /**
+     * Attempts to match the formal type parameter {@code expectedType} against the actual argument
+     * type {@code actualType}, recording any resolved type-variable bindings in
+     * {@code matchedTypeParameters}.
+     *
+     * <p>Supported cases for {@code expectedType}:
+     * <ul>
+     *   <li><b>Type variable</b> – binds the actual type to the variable after boxing primitives and
+     *       replacing {@code null} with {@code Object}.
+     *       When {@code actualType} is a wildcard (e.g. the intermediate accumulation type {@code ?}
+     *       in {@code Collector<T, ?, R>}), capture-conversion rules apply: a bounded wildcard
+     *       ({@code ? extends Foo} or {@code ? super Foo}) contributes its declared bound as the
+     *       inferred type; an unbounded wildcard {@code ?} carries no type information and is
+     *       skipped.</li>
+     *   <li><b>Array</b> – recurses on the component type (null actual types pass through as-is,
+     *       see issue #2258).</li>
+     *   <li><b>Reference type</b> – recurses on each type argument when the actual type also
+     *       carries type arguments.</li>
+     *   <li><b>Primitive or wildcard</b> – no binding needed; returns immediately.</li>
+     * </ul>
+     *
+     * @param expectedType          formal parameter type, possibly containing type variables
+     * @param actualType            actual argument type at the call site
+     * @param matchedTypeParameters accumulator map from type-variable declarations to inferred types
+     * @throws UnsupportedOperationException if an unrecognised type combination is encountered
+     */
     private void matchTypeParameters(
             ResolvedType expectedType,
             ResolvedType actualType,
@@ -441,6 +625,16 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             if (type.isNull()) {
                 ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.getSolvedJavaLangObject();
                 type = new ReferenceTypeImpl(resolvedTypedeclaration);
+            }
+            // When the actual type is a wildcard (e.g. '?' in Collector<T, ?, R>), apply capture
+            // conversion: use the declared bound for bounded wildcards, and skip unbounded ones
+            // since no concrete type can be inferred from '?' alone (issue #3751).
+            if (type.isWildcard()) {
+                ResolvedWildcard wildcard = type.asWildcard();
+                if (wildcard.isBounded()) {
+                    matchedTypeParameters.put(expectedType.asTypeParameter(), wildcard.getBoundedType());
+                }
+                return;
             }
             if (!type.isTypeVariable() && !type.isReferenceType() && !type.isArray()) {
                 throw new UnsupportedOperationException(type.getClass().getCanonicalName());

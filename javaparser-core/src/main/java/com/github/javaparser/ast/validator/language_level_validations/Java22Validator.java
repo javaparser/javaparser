@@ -25,10 +25,13 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.resolution.Navigator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This validator validates according to Java 22 syntax rules.
@@ -85,6 +88,29 @@ public class Java22Validator extends Java21Validator {
                 }
             });
 
+    final Validator noNamedVarsInMultiPatternCase = new SingleNodeTypeValidator<>(SwitchEntry.class, (n, reporter) -> {
+        List<Expression> patternLabels = n.getLabels().stream()
+                .filter(Expression::isComponentPatternExpr)
+                .collect(Collectors.toList());
+        if (patternLabels.size() > 1) {
+            patternLabels.stream()
+                    .filter(Java22Validator::declaresNamedPatternVar)
+                    .forEach(label -> reporter.report(
+                            label, "Multiple patterns in case labels may not declare any pattern variables."));
+        }
+    });
+
+    private static boolean declaresNamedPatternVar(Expression expr) {
+        if (expr instanceof TypePatternExpr) {
+            return !((TypePatternExpr) expr).getName().getIdentifier().equals("_");
+        }
+        if (expr instanceof RecordPatternExpr) {
+            return ((RecordPatternExpr) expr)
+                    .getPatternList().stream().anyMatch(Java22Validator::declaresNamedPatternVar);
+        }
+        return false;
+    }
+
     private boolean reportNoParent(Node node, ProblemReporter reporter) {
         if (node.getParentNode().isPresent()) {
             return false;
@@ -97,7 +123,9 @@ public class Java22Validator extends Java21Validator {
     public Java22Validator() {
         super();
         remove(underscoreKeywordValidator);
+        remove(noMultiPatternCaseLabels);
         add(unnamedVarOnlyWhereAllowedByJep456);
         add(matchAllPatternNotTopLevel);
+        add(noNamedVarsInMultiPatternCase);
     }
 }
