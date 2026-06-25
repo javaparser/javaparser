@@ -133,18 +133,11 @@ public class MethodResolutionLogic {
         // The index of the final argument passed (on the method usage).
         int countOfNeedleArgumentsPassed = needleArgumentTypes.size();
         boolean methodIsDeclaredWithVariadicParameter = methodDeclaration.hasVariadicParameter();
-        if (!methodIsDeclaredWithVariadicParameter
-                && (countOfNeedleArgumentsPassed != countOfMethodParametersDeclared)) {
-            // If it is not variadic, and the number of parameters/arguments are unequal -- this is not a match.
+        if (!isArityCompatible(countOfMethodParametersDeclared, countOfNeedleArgumentsPassed,
+                methodIsDeclaredWithVariadicParameter)) {
             return false;
         }
         if (methodIsDeclaredWithVariadicParameter) {
-            if (countOfNeedleArgumentsPassed <= (countOfMethodParametersDeclared - 2)) {
-                // If it is variadic, and the number of arguments are short by **two or more** -- this is not a match.
-                // Note that omitting the variadic parameter is treated as an empty array
-                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
-                return false;
-            }
             // If the method declaration we're considering has a variadic parameter,
             // attempt to convert the given list of arguments to fit this pattern
             // e.g. foo(String s, String... s2) {} --- consider the first argument, then group the remainder as an array
@@ -280,6 +273,81 @@ public class MethodResolutionLogic {
 
     private static ResolvedArrayType convertToVariadicParameter(ResolvedType type) {
         return type.isArray() ? type.asArrayType() : new ResolvedArrayType(type);
+    }
+
+    /**
+     * Checks whether the number of arguments passed is compatible with the number of
+     * parameters declared on a method, taking variadic parameters into account.
+     *
+     * @param declaredCount the number of parameters declared on the method
+     * @param passedCount   the number of arguments passed at the call site
+     * @param isVariadic    whether the method has a variadic (varargs) last parameter
+     * @return true if the arity is compatible, false otherwise
+     */
+    private static boolean isArityCompatible(int declaredCount, int passedCount, boolean isVariadic) {
+        if (!isVariadic) {
+            return passedCount == declaredCount;
+        }
+        // Variadic methods allow omitting the vararg (treated as empty array),
+        // so being short by one is fine, but short by two or more is not.
+        return passedCount >= declaredCount - 1;
+    }
+
+    /**
+     * Replaces type variables in the given type using wildcard bounds derived from
+     * the type parameter declarations. Unbounded type parameters are replaced with
+     * {@code ? extends Object}, bounded ones with their declared bound direction.
+     */
+    private static ResolvedType replaceTypeVariablesWithWildcards(
+            ResolvedType type,
+            List<ResolvedTypeParameterDeclaration> typeParameters,
+            TypeSolver typeSolver) {
+        for (ResolvedTypeParameterDeclaration tp : typeParameters) {
+            if (tp.getBounds().isEmpty()) {
+                type = type.replaceTypeVariables(
+                        tp,
+                        ResolvedWildcard.extendsBound(
+                                new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT))));
+            } else if (tp.getBounds().size() == 1) {
+                ResolvedTypeParameterDeclaration.Bound bound = tp.getBounds().get(0);
+                if (bound.isExtends()) {
+                    type = type.replaceTypeVariables(tp, ResolvedWildcard.extendsBound(bound.getType()));
+                } else {
+                    type = type.replaceTypeVariables(tp, ResolvedWildcard.superBound(bound.getType()));
+                }
+            } else {
+                throw new UnsupportedOperationException();
+            }
+        }
+        return type;
+    }
+
+    /**
+     * Replaces type variables in the given type using concrete bound types derived
+     * from the type parameter declarations. Unbounded type parameters are replaced
+     * with {@code Object}, bounded ones with their declared bound type directly.
+     */
+    private static ResolvedType replaceTypeVariablesWithBounds(
+            ResolvedType type,
+            List<ResolvedTypeParameterDeclaration> typeParameters,
+            TypeSolver typeSolver) {
+        for (ResolvedTypeParameterDeclaration tp : typeParameters) {
+            if (tp.getBounds().isEmpty()) {
+                type = type.replaceTypeVariables(
+                        tp, new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT)));
+            } else if (tp.getBounds().size() == 1) {
+                ResolvedTypeParameterDeclaration.Bound bound = tp.getBounds().get(0);
+                if (bound.isExtends()) {
+                    type = type.replaceTypeVariables(tp, bound.getType());
+                } else {
+                    type = type.replaceTypeVariables(
+                            tp, new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT)));
+                }
+            } else {
+                throw new UnsupportedOperationException();
+            }
+        }
+        return type;
     }
 
     /**
@@ -555,16 +623,8 @@ public class MethodResolutionLogic {
         // TODO: Does the method usage have a declaration at this point..?
         boolean methodIsDeclaredWithVariadicParameter =
                 methodUsage.getDeclaration().hasVariadicParameter();
-        // If the counts do not match and the method is not variadic, this is not a match.
-        if (!methodIsDeclaredWithVariadicParameter && !(needleParameterCount == countOfMethodUsageArgumentsPassed)) {
-            return false;
-        }
-        // If the counts do not match and we have provided too few arguments, this is not a match. Note that variadic
-        // parameters
-        // allow you to omit the vararg, which would allow a difference of one, but a difference in count of 2 or more
-        // is not a match.
-        if (!(needleParameterCount == countOfMethodUsageArgumentsPassed)
-                && needleParameterCount < lastMethodUsageArgumentIndex) {
+        if (!isArityCompatible(countOfMethodUsageArgumentsPassed, needleParameterCount,
+                methodIsDeclaredWithVariadicParameter)) {
             return false;
         }
         // Iterate over the arguments given to the method, and compare their types against the given method's declared
@@ -631,53 +691,10 @@ public class MethodResolutionLogic {
                 ResolvedTypeParameterDeclaration tp = entry.getKey();
                 expectedTypeWithInference = expectedTypeWithInference.replaceTypeVariables(tp, entry.getValue());
             }
-            // Consider cases where type variables can be replaced (e.g. add(E element) vs add(String element))
-            for (ResolvedTypeParameterDeclaration tp : typeParameters) {
-                if (tp.getBounds().isEmpty()) {
-                    // expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(), new
-                    // ReferenceTypeUsageImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver));
-                    expectedArgumentType = expectedArgumentType.replaceTypeVariables(
-                            tp,
-                            ResolvedWildcard.extendsBound(
-                                    new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT))));
-                } else if (tp.getBounds().size() == 1) {
-                    ResolvedTypeParameterDeclaration.Bound bound =
-                            tp.getBounds().get(0);
-                    if (bound.isExtends()) {
-                        // expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(),
-                        // bound.getType());
-                        expectedArgumentType = expectedArgumentType.replaceTypeVariables(
-                                tp, ResolvedWildcard.extendsBound(bound.getType()));
-                    } else {
-                        // expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(), new
-                        // ReferenceTypeUsageImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver));
-                        expectedArgumentType = expectedArgumentType.replaceTypeVariables(
-                                tp, ResolvedWildcard.superBound(bound.getType()));
-                    }
-                } else {
-                    throw new UnsupportedOperationException();
-                }
-            }
-            // Consider cases where type variables involve bounds e.g. super/extends
-            ResolvedType expectedTypeWithSubstitutions = expectedTypeWithoutSubstitutions;
-            for (ResolvedTypeParameterDeclaration tp : typeParameters) {
-                if (tp.getBounds().isEmpty()) {
-                    expectedTypeWithSubstitutions = expectedTypeWithSubstitutions.replaceTypeVariables(
-                            tp, new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT)));
-                } else if (tp.getBounds().size() == 1) {
-                    ResolvedTypeParameterDeclaration.Bound bound =
-                            tp.getBounds().get(0);
-                    if (bound.isExtends()) {
-                        expectedTypeWithSubstitutions =
-                                expectedTypeWithSubstitutions.replaceTypeVariables(tp, bound.getType());
-                    } else {
-                        expectedTypeWithSubstitutions = expectedTypeWithSubstitutions.replaceTypeVariables(
-                                tp, new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT)));
-                    }
-                } else {
-                    throw new UnsupportedOperationException();
-                }
-            }
+            expectedArgumentType = replaceTypeVariablesWithWildcards(
+                    expectedArgumentType, typeParameters, typeSolver);
+            ResolvedType expectedTypeWithSubstitutions = replaceTypeVariablesWithBounds(
+                    expectedTypeWithoutSubstitutions, typeParameters, typeSolver);
             // If the given argument still isn't applicable even after considering type arguments/generics, this is not
             // a match.
             // Check if the given argument is applicable, considering:
