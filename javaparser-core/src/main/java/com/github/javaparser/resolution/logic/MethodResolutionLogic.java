@@ -1144,10 +1144,9 @@ public class MethodResolutionLogic {
                 if (isExactMatch(otherDecl, argumentsTypes)) {
                     winningCandidate = other;
                 } else {
-                    throw new MethodAmbiguityException(
-                            "Ambiguous method call: cannot find a most applicable method: " + winningCandidate
-                                    + ", " + other + ". First declared in "
-                                    + toDeclaringType.apply(winningCandidate).getQualifiedName());
+                    throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: "
+                            + winningCandidate + ", " + other + ". First declared in "
+                            + toDeclaringType.apply(winningCandidate).getQualifiedName());
                 }
             }
         }
