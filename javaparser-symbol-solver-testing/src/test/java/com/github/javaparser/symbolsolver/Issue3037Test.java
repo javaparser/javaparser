@@ -26,10 +26,10 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import java.util.List;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class Issue3037Test extends AbstractResolutionTest {
@@ -102,10 +102,12 @@ public class Issue3037Test extends AbstractResolutionTest {
         List<MethodCallExpr> calls = cu.findAll(MethodCallExpr.class);
         MethodCallExpr equalsCall = calls.stream()
                 .filter(m -> m.getNameAsString().equals("equals"))
-                .findFirst().get();
+                .findFirst()
+                .get();
         ResolvedMethodDeclaration resolved = equalsCall.resolve();
         assertEquals("equals", resolved.getName());
-        assertEquals("java.lang.Object",
+        assertEquals(
+                "java.lang.Object",
                 resolved.getParam(0).getType().asReferenceType().getQualifiedName());
     }
 }

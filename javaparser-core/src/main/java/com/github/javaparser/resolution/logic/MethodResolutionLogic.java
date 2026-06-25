@@ -133,8 +133,8 @@ public class MethodResolutionLogic {
         // The index of the final argument passed (on the method usage).
         int countOfNeedleArgumentsPassed = needleArgumentTypes.size();
         boolean methodIsDeclaredWithVariadicParameter = methodDeclaration.hasVariadicParameter();
-        if (!isArityCompatible(countOfMethodParametersDeclared, countOfNeedleArgumentsPassed,
-                methodIsDeclaredWithVariadicParameter)) {
+        if (!isArityCompatible(
+                countOfMethodParametersDeclared, countOfNeedleArgumentsPassed, methodIsDeclaredWithVariadicParameter)) {
             return false;
         }
         if (methodIsDeclaredWithVariadicParameter) {
@@ -299,15 +299,12 @@ public class MethodResolutionLogic {
      * {@code ? extends Object}, bounded ones with their declared bound direction.
      */
     private static ResolvedType replaceTypeVariablesWithWildcards(
-            ResolvedType type,
-            List<ResolvedTypeParameterDeclaration> typeParameters,
-            TypeSolver typeSolver) {
+            ResolvedType type, List<ResolvedTypeParameterDeclaration> typeParameters, TypeSolver typeSolver) {
         for (ResolvedTypeParameterDeclaration tp : typeParameters) {
             if (tp.getBounds().isEmpty()) {
                 type = type.replaceTypeVariables(
                         tp,
-                        ResolvedWildcard.extendsBound(
-                                new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT))));
+                        ResolvedWildcard.extendsBound(new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT))));
             } else if (tp.getBounds().size() == 1) {
                 ResolvedTypeParameterDeclaration.Bound bound = tp.getBounds().get(0);
                 if (bound.isExtends()) {
@@ -328,20 +325,16 @@ public class MethodResolutionLogic {
      * with {@code Object}, bounded ones with their declared bound type directly.
      */
     private static ResolvedType replaceTypeVariablesWithBounds(
-            ResolvedType type,
-            List<ResolvedTypeParameterDeclaration> typeParameters,
-            TypeSolver typeSolver) {
+            ResolvedType type, List<ResolvedTypeParameterDeclaration> typeParameters, TypeSolver typeSolver) {
         for (ResolvedTypeParameterDeclaration tp : typeParameters) {
             if (tp.getBounds().isEmpty()) {
-                type = type.replaceTypeVariables(
-                        tp, new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT)));
+                type = type.replaceTypeVariables(tp, new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT)));
             } else if (tp.getBounds().size() == 1) {
                 ResolvedTypeParameterDeclaration.Bound bound = tp.getBounds().get(0);
                 if (bound.isExtends()) {
                     type = type.replaceTypeVariables(tp, bound.getType());
                 } else {
-                    type = type.replaceTypeVariables(
-                            tp, new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT)));
+                    type = type.replaceTypeVariables(tp, new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT)));
                 }
             } else {
                 throw new UnsupportedOperationException();
@@ -897,10 +890,7 @@ public class MethodResolutionLogic {
                 .filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance))
                 .collect(Collectors.toList());
         Optional<ResolvedMethodDeclaration> result = selectMostApplicable(
-                applicableMethods,
-                argumentsTypes,
-                Function.identity(),
-                ResolvedMethodDeclaration::declaringType);
+                applicableMethods, argumentsTypes, Function.identity(), ResolvedMethodDeclaration::declaringType);
         return result.map(SymbolReference::solved).orElseGet(SymbolReference::unsolved);
     }
 
@@ -1157,9 +1147,7 @@ public class MethodResolutionLogic {
                     throw new MethodAmbiguityException(
                             "Ambiguous method call: cannot find a most applicable method: " + winningCandidate
                                     + ", " + other + ". First declared in "
-                                    + toDeclaringType
-                                            .apply(winningCandidate)
-                                            .getQualifiedName());
+                                    + toDeclaringType.apply(winningCandidate).getQualifiedName());
                 }
             }
         }
@@ -1186,7 +1174,11 @@ public class MethodResolutionLogic {
         Set<T> removeCandidates = new HashSet<>();
         for (Integer nullParamIndex : nullParamIndexes) {
             for (T candidate : applicableMethods) {
-                if (toDeclaration.apply(candidate).getParam(nullParamIndex).getType().isArray()) {
+                if (toDeclaration
+                        .apply(candidate)
+                        .getParam(nullParamIndex)
+                        .getType()
+                        .isArray()) {
                     removeCandidates.add(candidate);
                 }
             }
