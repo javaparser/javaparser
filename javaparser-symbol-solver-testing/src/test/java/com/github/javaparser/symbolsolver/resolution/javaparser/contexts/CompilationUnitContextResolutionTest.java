@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.when;
 
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -39,6 +41,7 @@ import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -285,20 +288,6 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
                         .getQualifiedName());
     }
 
-    /**
-     * Verifies that resolving the symbol "Lion" in ElephantBuilder's compilation unit does
-     * <b>not</b> cause a {@link StackOverflowError} when cyclic static imports are present.
-     * <p>
-     * ElephantBuilder has {@code import static ...ZooTestConstants.*;} and uses
-     * {@code Lion.OBJCODE}. Resolving "Lion" enters
-     * {@link CompilationUnitContext#solveSymbol(String)}, which tries each static-import type;
-     * those types (ZooTestConstants, ElephantTestConstants, etc.) form a cycle via their
-     * own static imports. Without the "member in type only" fix, re-entry into CUC via the type's
-     * parent context causes unbounded recursion and StackOverflowError.
-     * <p>
-     * This test triggers that path directly with {@code CUC.solveSymbol("Lion")}. With the
-     * fix, resolution succeeds (Lion from zoo-sdk-stub) or returns unsolved; without it, the test fails with StackOverflowError.
-     */
     @Test
     void resolveMethodCallsInDocumentBuilderWithCyclicStaticImportsWithoutStackOverflow()
             throws IOException, URISyntaxException {
@@ -315,13 +304,9 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSampleWithStandardExtension(
                 "static_import_cycle_fixture/app/src/test/java/junit4/zoo/builders/ElephantBuilder", typeSolver);
 
-        try {
-            new CompilationUnitContext(cu, typeSolver).solveSymbol("Lion");
-        } catch (StackOverflowError e) {
-            throw new AssertionError(
-                    "Cyclic static imports must not cause StackOverflow (fix: resolvingMemberInTypeOnly in CompilationUnitContext)",
-                    e);
-        }
-        // With the fix, "Lion" resolves from zoo-sdk-stub; the cycle is traversed without StackOverflow.
+        NameExpr lionExpr = cu.findFirst(
+                        NameExpr.class, n -> n.getNameAsString().equals("Lion"))
+                .get();
+        assertDoesNotThrow(() -> JavaParserFacade.get(typeSolver).solve(lionExpr));
     }
 }
