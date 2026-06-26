@@ -57,7 +57,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     /**
      * The printer configuration.
      */
-    protected final PrinterConfiguration configuration;
+    protected PrinterConfiguration configuration;
 
     /**
      * Object for outputting source code.
