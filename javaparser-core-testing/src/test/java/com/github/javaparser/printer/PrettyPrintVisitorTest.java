@@ -24,11 +24,15 @@ package com.github.javaparser.printer;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.CastExpr;
@@ -41,6 +45,7 @@ import com.github.javaparser.printer.configuration.ConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.TestParser;
@@ -773,5 +778,80 @@ class PrettyPrintVisitorTest extends TestParser {
                 + "}\n";
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    // ----------------------------------------------------------------------------------------------
+    // Tests guarding the refactor of the deprecated PrettyPrintVisitor to reuse
+    // DefaultPrettyPrinterVisitor (see issue #4914). Since PrettyPrintVisitor now extends the
+    // maintained visitor, these assert that the deprecated path keeps producing the same output for
+    // the common case, while still preserving the few node types whose output deliberately differs.
+    // ----------------------------------------------------------------------------------------------
+
+    /** Prints {@code node} through the deprecated {@link PrettyPrintVisitor} (via {@link PrettyPrinter}). */
+    private String printDeprecated(Node node, PrettyPrinterConfiguration config) {
+        return new PrettyPrinter(config).print(node);
+    }
+
+    /** Prints {@code node} through the maintained {@link DefaultPrettyPrinterVisitor}. */
+    private String printDefault(Node node, PrinterConfiguration config) {
+        return new DefaultPrettyPrinter(config).print(node);
+    }
+
+    @Test
+    void deprecatedVisitorMatchesDefaultForTypicalSource() {
+        String code = "package com.example;\n\n" + "import java.util.List;\n\n"
+                + "/**\n * Javadoc.\n */\n"
+                + "public class Foo<T> {\n"
+                + "    // a field\n"
+                + "    private int[] values = {1, 2, 3};\n\n"
+                + "    public Foo(int x) throws Exception {\n"
+                + "        this.values = new int[]{x};\n"
+                + "    }\n\n"
+                + "    <R> R apply(T t) {\n"
+                + "        return null;\n"
+                + "    }\n\n"
+                + "    enum E { A, B, C }\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        // Same config object fed to both, so any difference comes from the visitors themselves.
+        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
+        assertEquals(printDefault(cu, config), printDeprecated(cu, config));
+    }
+
+    @Test
+    void deprecatedVisitorMatchesDefaultWhenCommentsAndJavadocToggled() {
+        String code = "/** Javadoc. */\n" + "public class Foo {\n"
+                + "    // line comment\n"
+                + "    /* block comment */\n"
+                + "    void m() {}\n"
+                + "}\n";
+        CompilationUnit cu = parse(code);
+        for (boolean printComments : new boolean[] {true, false}) {
+            for (boolean printJavadoc : new boolean[] {true, false}) {
+                PrettyPrinterConfiguration config = new PrettyPrinterConfiguration()
+                        .setPrintComments(printComments)
+                        .setPrintJavadoc(printJavadoc);
+                assertEquals(
+                        printDefault(cu, config),
+                        printDeprecated(cu, config),
+                        "mismatch for printComments=" + printComments + ", printJavadoc=" + printJavadoc);
+            }
+        }
+    }
+
+    @Test
+    void deprecatedVisitorPreservesLegacyReceiverParameterBehaviour() {
+        // The maintained visitor prints constructor receiver parameters; the deprecated visitor
+        // historically did not. The refactor must preserve that legacy behaviour.
+        CompilationUnit cu = parse("class Foo {\n    Foo(Foo Foo.this, int x) {}\n}\n");
+        ConstructorDeclaration ctor = cu.findFirst(ConstructorDeclaration.class).get();
+        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
+
+        String deprecated = printDeprecated(ctor, config);
+        String maintained = printDefault(ctor, config);
+
+        assertFalse(deprecated.contains("Foo.this"), "deprecated visitor should omit the receiver parameter");
+        assertTrue(maintained.contains("Foo.this"), "maintained visitor should print the receiver parameter");
+        assertNotEquals(maintained, deprecated);
     }
 }
