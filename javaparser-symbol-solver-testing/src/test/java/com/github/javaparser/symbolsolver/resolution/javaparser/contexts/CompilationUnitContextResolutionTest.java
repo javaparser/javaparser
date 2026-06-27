@@ -68,11 +68,11 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
     /** Fixture root for static import cycle (works from repo root or module dir). */
     private static Path fixtureRootForStaticImportCycle() throws URISyntaxException {
         try {
-            return adaptPath("src/test/resources/static_import_cycle_fixture/app");
+            return adaptPath("src/test/resources/static_import_cycle_fixture");
         } catch (IllegalArgumentException e) {
             return Paths.get(CompilationUnitContextResolutionTest.class
                     .getClassLoader()
-                    .getResource("static_import_cycle_fixture/app")
+                    .getResource("static_import_cycle_fixture")
                     .toURI());
         }
     }
@@ -289,20 +289,15 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    void resolveMethodCallsInDocumentBuilderWithCyclicStaticImportsWithoutStackOverflow()
+    void resolveMethodCallsInElephantBuilderWithCyclicStaticImportsWithoutStackOverflow()
             throws IOException, URISyntaxException {
         Path fixtureRoot = fixtureRootForStaticImportCycle();
-        Path testJava = fixtureRoot.resolve("src/test/java");
-        Path mainJava = fixtureRoot.resolve("src/main/java");
-        Path zooSdkStub = fixtureRoot.getParent().resolve("zoo-sdk-stub/src/main/java");
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
         typeSolver.add(new ReflectionTypeSolver());
-        typeSolver.add(new JavaParserTypeSolver(testJava));
-        typeSolver.add(new JavaParserTypeSolver(mainJava));
-        typeSolver.add(new JavaParserTypeSolver(zooSdkStub));
+        typeSolver.add(new JavaParserTypeSolver(fixtureRoot));
 
-        CompilationUnit cu = parseSampleWithStandardExtension(
-                "static_import_cycle_fixture/app/src/test/java/junit4/zoo/builders/ElephantBuilder", typeSolver);
+        CompilationUnit cu =
+                parseSampleWithStandardExtension("static_import_cycle_fixture/ElephantBuilder", typeSolver);
 
         NameExpr lionExpr = cu.findFirst(
                         NameExpr.class, n -> n.getNameAsString().equals("Lion"))
