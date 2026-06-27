@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,8 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
@@ -929,5 +929,29 @@ class MethodsResolutionTest extends AbstractResolutionTest {
 
         assertEquals(
                 "OverloadedMethods.complexOverloading4(long, int)", resolvedMethodDeclaration.getQualifiedSignature());
+    }
+
+    @Test
+    void methodRefWithMultipleLambdasInScope() {
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit compilationUnit = parse("import java.util.function.Function;\n" + "@FunctionalInterface\n"
+                + "interface ReturnStringFunction<T> extends Function<T, String> {\n"
+                + "  String apply(T t);\n"
+                + "}\n"
+                + "class Foo {\n"
+                + "  static <T> String foo(T t) { return null; }\n"
+                + "}\n"
+                + "public class Test {\n"
+                + "  <T> String acceptsFunction(ReturnStringFunction<T> consumer) { return null; }\n"
+                + "  void test() {\n"
+                + "    acceptsFunction(Foo::foo);\n"
+                + "  }\n"
+                + "}");
+
+        MethodCallExpr callExpr =
+                compilationUnit.findFirst(MethodCallExpr.class).get();
+
+        assertDoesNotThrow(callExpr::calculateResolvedType);
+        assertEquals("java.lang.String", callExpr.calculateResolvedType().describe());
     }
 }

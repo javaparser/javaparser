@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -30,14 +30,10 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 public class BlockStmtContext extends StatementContext<BlockStmt> {
 
@@ -95,53 +91,5 @@ public class BlockStmtContext extends StatementContext<BlockStmt> {
             patternExprs.addAll(introducedPatterns);
         }
         return patternExprs;
-    }
-
-    @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        Optional<Context> optionalParent = getParent();
-        if (!optionalParent.isPresent()) {
-            return SymbolReference.unsolved();
-        }
-
-        if (wrappedNode.getStatements().size() > 0) {
-            // tries to resolve a declaration from local variables defined in child statements
-            // or from parent node context
-            // for example resolve declaration for the MethodCallExpr a.method() in
-            // A a = this;
-            // {
-            //   a.method();
-            // }
-
-            List<VariableDeclarator> variableDeclarators = new LinkedList<>();
-            // find all variable declarators exposed to child
-            // given that we don't know the statement we are trying to resolve, we look for all variable declarations
-            // defined in the context of the wrapped node whether it is located before or after the statement that
-            // interests us
-            // because a variable cannot be (re)defined after having been used
-            wrappedNode
-                    .getStatements()
-                    .getLast()
-                    .ifPresent(stmt -> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
-            if (!variableDeclarators.isEmpty()) {
-                // FIXME: Work backwards from the current statement, to only consider declarations prior to this
-                // statement.
-                for (VariableDeclarator vd : variableDeclarators) {
-                    if (vd.getNameAsString().equals(name)) {
-                        return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(vd, typeSolver));
-                    }
-                }
-            }
-
-            SymbolReference<? extends ResolvedValueDeclaration> resolvedFromPattern =
-                    findExposedPatternInParentContext(optionalParent.get().getWrappedNode(), name);
-
-            if (resolvedFromPattern.isSolved()) {
-                return resolvedFromPattern;
-            }
-        }
-
-        // Otherwise continue as normal...
-        return solveSymbolInParentContext(name);
     }
 }

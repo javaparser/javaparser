@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -71,6 +71,18 @@ public interface TypeSolver {
             return ref.getCorrespondingDeclaration();
         }
         throw new UnsolvedSymbolException(name, this.toString());
+    }
+
+    SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName);
+
+    default ResolvedReferenceTypeDeclaration solveTypeInModule(String qualifiedModuleName, String simpleTypeName) {
+        SymbolReference<ResolvedReferenceTypeDeclaration> ref =
+                tryToSolveTypeInModule(qualifiedModuleName, simpleTypeName);
+        if (ref.isSolved()) {
+            return ref.getCorrespondingDeclaration();
+        }
+        throw new UnsolvedSymbolException(simpleTypeName, "module=" + qualifiedModuleName + " in " + this);
     }
 
     /**

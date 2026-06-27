@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -59,7 +59,7 @@ class ParseResultTest {
         Problem problem = result.getProblem(0);
         assertThat(problem.getMessage())
                 .isEqualTo(
-                        "Parse error. Found \"{\", expected one of  \"enum\" \"exports\" \"module\" \"open\" \"opens\" \"permits\" \"provides\" \"record\" \"requires\" \"sealed\" \"strictfp\" \"to\" \"transitive\" \"uses\" \"when\" \"with\" \"yield\" <IDENTIFIER>");
+                        "Parse error. Found \"{\", expected one of  \"_\" \"assert\" \"enum\" \"exports\" \"module\" \"open\" \"opens\" \"permits\" \"provides\" \"record\" \"requires\" \"sealed\" \"strictfp\" \"to\" \"transitive\" \"uses\" \"when\" \"with\" \"yield\" <IDENTIFIER>");
 
         assertThat(result.toString())
                 .startsWith("Parsing failed:" + LineSeparator.SYSTEM + "(line 1,col 1) Parse error.");

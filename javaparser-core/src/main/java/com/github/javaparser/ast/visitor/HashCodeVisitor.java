@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,8 +23,9 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -159,6 +160,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final ClassOrInterfaceDeclaration n, final Void arg) {
         return (n.getExtendedTypes().accept(this, arg)) * 31
                 + (n.getImplementedTypes().accept(this, arg)) * 31
+                + (n.isCompact() ? 1 : 0) * 31
                 + (n.isInterface() ? 1 : 0) * 31
                 + (n.getPermittedTypes().accept(this, arg)) * 31
                 + (n.getTypeParameters().accept(this, arg)) * 31
@@ -304,6 +306,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     public Integer visit(final ImportDeclaration n, final Void arg) {
         return (n.isAsterisk() ? 1 : 0) * 31
+                + (n.isModule() ? 1 : 0) * 31
                 + (n.isStatic() ? 1 : 0) * 31
                 + (n.getName().accept(this, arg)) * 31
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
@@ -334,7 +337,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
-    public Integer visit(final JavadocComment n, final Void arg) {
+    public Integer visit(final TraditionalJavadocComment n, final Void arg) {
         return (n.getContent().hashCode()) * 31
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
@@ -727,6 +730,18 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
         return (n.getModifiers().accept(this, arg)) * 31
                 + (n.getPatternList().accept(this, arg)) * 31
                 + (n.getType().accept(this, arg)) * 31
+                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final MatchAllPatternExpr n, final Void arg) {
+        return (n.getModifiers().accept(this, arg)) * 31
+                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final MarkdownComment n, final Void arg) {
+        return (n.getContent().hashCode()) * 31
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 }

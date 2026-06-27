@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -118,7 +118,7 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
 
     @Override
     public String toString() {
-        return "ReflectionTypeParameter{" + "typeVariable=" + typeVariable + '}';
+        return getClass().getSimpleName() + "{" + "typeVariable=" + typeVariable + '}';
     }
 
     @Override

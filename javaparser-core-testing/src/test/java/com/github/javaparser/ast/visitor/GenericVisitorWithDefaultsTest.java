@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -29,8 +29,8 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -364,7 +364,7 @@ class GenericVisitorWithDefaultsTest {
 
     @Test
     void testThatVisitWithJavadocCommentAsParameterCallDefaultAction() {
-        Node node = visitor.visit(mock(JavadocComment.class), argument);
+        Node node = visitor.visit(mock(TraditionalJavadocComment.class), argument);
         assertNodeVisitDefaultAction(node);
     }
 

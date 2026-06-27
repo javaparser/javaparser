@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,8 +21,10 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
@@ -31,8 +33,10 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class LambdaResolutionTest extends AbstractResolutionTest {
@@ -191,5 +195,364 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         ResolvedType type = javaParserFacade.getType(lambdaExpr);
         assertEquals("java.util.function.Consumer<? super java.lang.String>", type.describe());
+    }
+
+    @Test
+    void lambdaAsVararg() {
+        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
+                + "    void acceptConsumers(Consumer<String>... consumers) {}\n"
+                + "    void test(Consumer<String> first) {\n"
+                + "        acceptConsumers(first, s -> System.out.println(s));\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+        assertEquals(
+                "java.util.function.Consumer<java.lang.String>",
+                lambda.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentParameterCounts1() {
+        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
+                + "    void foo(Consumer<String> consumer) {}\n"
+                + "    void foo(Runnable r) {}\n"
+                + "    void test() {\n"
+                + "        foo(input -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals(
+                "Test.foo(java.util.function.Consumer<java.lang.String>)",
+                call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentParameterCounts2() {
+        String source = "import java.util.function.Consumer;\n" + "class Test {\n"
+                + "    void foo(Consumer<java.lang.String> consumer) {}\n"
+                + "    void foo(Runnable r) {}\n"
+                + "    void test() {\n"
+                + "        foo(() -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals("Test.foo(java.lang.Runnable)", call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentReturnTypes1() {
+        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
+                + "class Test {\n"
+                + "    void foo(Consumer<String> consumer) {}\n"
+                + "    void foo(Function<Integer, String> func) {}\n"
+                + "    void test() {\n"
+                + "        foo(input -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals(
+                "Test.foo(java.util.function.Consumer<java.lang.String>)",
+                call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaOverloadsWithDifferentReturnTypes2() {
+        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
+                + "class Test {\n"
+                + "    void foo(Consumer<String> consumer) {}\n"
+                + "    void foo(Function<Integer, String> func) {}\n"
+                + "    void test() {\n"
+                + "        foo(input -> { return \"\"; });\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertEquals(
+                "Test.foo(java.util.function.Function<java.lang.Integer, java.lang.String>)",
+                call.resolve().getQualifiedSignature());
+        assertEquals("void", call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaUsedAsPolymorphicArgument() {
+        String source = "import java.util.function.Consumer;\n" + "import java.util.HashMap;"
+                + "class Test {\n"
+                + "    void test() {\n"
+                + "        HashMap<String, Consumer> map = new HashMap<>();"
+                + "        map.put(\"\", input -> {});\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertDoesNotThrow(() -> call.resolve().getQualifiedSignature());
+        assertDoesNotThrow(() -> call.calculateResolvedType().describe());
+        assertEquals("java.util.HashMap.put(K, V)", call.resolve().getQualifiedSignature());
+    }
+
+    @Test
+    void lambdaUsedAsOverloadedArrayAlternativeArgument() {
+        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
+                + "class Foo<S extends Consumer, T> {\n"
+                + "    void foo(Object[] ts) {}\n"
+                + "    void foo(T t) {}\n"
+                + "}\n"
+                + "class Test {\n"
+                + "    void test() {\n"
+                + "        Foo<Consumer<Integer>, Function<Integer, Integer>> foo = new Foo<>();\n"
+                + "        foo.foo(value -> { return 2; });\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertDoesNotThrow(() -> call.resolve().getQualifiedSignature());
+        assertDoesNotThrow(() -> call.calculateResolvedType().describe());
+        assertEquals("Foo.foo(T)", call.resolve().getQualifiedSignature());
+    }
+
+    @Disabled("Disambiguation for lambdas used as polymorphic is not supported yet.")
+    @Test
+    void lambdaUsedAsOverloadedPolymorphicArgument1() {
+
+        String source = "import java.util.function.Consumer;\n" + "import java.util.function.Function;\n"
+                + "class Foo<S extends Consumer, T> {\n"
+                + "    void foo(T t) {}\n"
+                + "    void foo(S s) {}\n"
+                + "}\n"
+                + "class Test {\n"
+                + "    void test() {\n"
+                + "        Foo<Consumer<Integer>, Function<Integer, Integer>> foo = new Foo<>();\n"
+                + "        foo.foo(value -> { return 2; });\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        final MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
+        assertDoesNotThrow(() -> call.resolve().getQualifiedSignature());
+        assertDoesNotThrow(() -> call.calculateResolvedType().describe());
+        assertEquals("Foo.foo(java.util.function.Function)", call.resolve().getQualifiedSignature());
+    }
+
+    @Test
+    void lambdaInCollectionsSortWithFullyQualifiedClassName() {
+        String source = "import java.util.ArrayList;\n"
+                + "class Test {\n"
+                + "    void test() {\n"
+                + "        java.util.Collections.sort(new ArrayList<String>(), (s1, s2) -> s1.compareTo(s2));\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("compareTo"))
+                .findFirst()
+                .get();
+
+        assertDoesNotThrow(() -> compareToCall.resolve());
+    }
+
+    @Test
+    void lambdaParameterTypeInferredFromSubtypeArgument() {
+        String source = "import java.util.LinkedList;\n"
+                + "class Test {\n" + "    void test() {\n"
+                + "        java.util.Collections.sort(new LinkedList<Integer>(), (a, b) -> a.compareTo(b));\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("compareTo"))
+                .findFirst()
+                .get();
+
+        assertDoesNotThrow(() -> compareToCall.resolve());
+    }
+
+    @Test
+    void lambdaInCollectionsSortWithImportedClassName() {
+        String source = "import java.util.ArrayList;\n"
+                + "import java.util.Collections;\n" + "class Test {\n"
+                + "    void test() {\n"
+                + "        Collections.sort(new ArrayList<String>(), (s1, s2) -> s1.compareTo(s2));\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("compareTo"))
+                .findFirst()
+                .get();
+
+        assertDoesNotThrow(() -> compareToCall.resolve());
+    }
+
+    @Test
+    void lambdaParameterTypeIsResolvedToStringNotTypeVariable() {
+        String source = "import java.util.ArrayList;\n"
+                + "class Test {\n"
+                + "    void test() {\n"
+                + "        java.util.Collections.sort(new ArrayList<String>(), (s1, s2) -> s1.compareTo(s2));\n"
+                + "    }\n"
+                + "}";
+
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+
+        MethodCallExpr compareToCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("compareTo"))
+                .findFirst()
+                .get();
+        Expression s1Expr = compareToCall.getScope().get();
+
+        ResolvedType s1Type = JavaParserFacade.get(typeSolver).getType(s1Expr);
+        assertEquals("? super java.lang.String", s1Type.describe());
+    }
+
+    // --- Tests for issue #3626 ---
+    // When a lambda is passed as a constructor argument, TypeExtractor must resolve the type
+    // of the *constructor parameter* (e.g. Runnable), not the type of the constructed object
+    // (e.g. Thread). The two tests below cover a built-in JDK class and a user-defined class.
+
+    /**
+     * A lambda passed to {@code new Thread(Runnable)} must resolve to {@code java.lang.Runnable},
+     * not to {@code java.lang.Thread}.
+     *
+     * <p>Before the fix, {@code TypeExtractor} called {@code expr.getType().resolve()} on the
+     * {@code ObjectCreationExpr}, which returned the constructed type ({@code Thread}) instead of
+     * the functional-interface parameter type ({@code Runnable}).
+     *
+     * @see <a href="https://github.com/javaparser/javaparser/issues/3626">issue #3626</a>
+     */
+    @Test
+    void lambdaTypeInObjectCreationExpr_builtinConstructor() {
+        String source = "class Test {\n"
+                + "    void example() {\n"
+                + "        new Thread(() -> System.out.println(\"hello\"));\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+
+        // The lambda is the Runnable argument of Thread(Runnable), so its resolved type
+        // must be Runnable — NOT Thread (the bug would return Thread).
+        assertEquals("java.lang.Runnable", lambda.calculateResolvedType().describe());
+    }
+
+    /**
+     * A lambda passed to a user-defined constructor that accepts a custom
+     * {@code @FunctionalInterface} must resolve to that functional-interface type, not to the
+     * enclosing class.
+     *
+     * @see <a href="https://github.com/javaparser/javaparser/issues/3626">issue #3626</a>
+     */
+    @Test
+    void lambdaTypeInObjectCreationExpr_customFunctionalInterface() {
+        String source = "class MyTask {\n"
+                + "    interface Task { int compute(); }\n"
+                + "    MyTask(Task t) {}\n"
+                + "    static void test() {\n"
+                + "        new MyTask(() -> 42);\n"
+                + "    }\n"
+                + "}";
+
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+
+        // The lambda is the Task argument of MyTask(Task), so its resolved type must be
+        // MyTask.Task — NOT MyTask (the bug would return MyTask).
+        assertEquals("MyTask.Task", lambda.calculateResolvedType().describe());
+    }
+
+    @Test
+    // see https://github.com/javaparser/javaparser/issues/2716
+    void issue2716_resolveMethodCallsInStreamWithComparatorComparingOnUserDefinedClass() {
+        // Regression test: resolving method calls inside lambdas used with
+        // Comparator.comparing() on a Stream whose element type is user-defined
+        // previously threw UnsupportedOperationException.
+        //
+        // Root cause: Comparator.comparing is a static generic method, so the
+        // scope-based substitution path (which works for instance methods like map())
+        // is never taken, leaving its type parameter T unresolved.  Without the outer-
+        // context inference fix the symbol solver could not determine the type of the
+        // lambda parameter and crashed when trying to look up a.getName() / a.getId().
+        String source = "import java.util.Comparator;\n"
+                + "import java.util.List;\n"
+                + "import java.util.stream.Collectors;\n"
+                + "public class Test {\n"
+                + "    static class Item {\n"
+                + "        public int getId() { return 0; }\n"
+                + "        public String getName() { return \"\"; }\n"
+                + "    }\n"
+                + "    void test(List<Item> items) {\n"
+                + "        items.stream()\n"
+                + "             .sorted(Comparator.comparing(a -> a.getName()))\n"
+                + "             .map(a -> a.getId())\n"
+                + "             .collect(Collectors.toList());\n"
+                + "    }\n"
+                + "}";
+        StaticJavaParser.getParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        // All method calls in the chain — including a.getName() and a.getId() inside
+        // the lambdas — must resolve without throwing.
+        assertDoesNotThrow(() -> cu.findAll(MethodCallExpr.class).forEach(MethodCallExpr::resolve));
+    }
+
+    @Test
+    // see https://github.com/javaparser/javaparser/issues/2716
+    void issue2716_resolveMethodCallInsideLambdaInComparatorComparingWithJdkTypes() {
+        // When the stream element type is a JDK type (String), a method call inside
+        // Comparator.comparing(s -> s.toLowerCase()) must resolve to the correct
+        // overload.  This exercises the same outer-context inference path as the
+        // user-defined-class variant above, but with types fully visible to the
+        // ReflectionTypeSolver, allowing a precise signature assertion.
+        String source = "import java.util.Arrays;\n"
+                + "import java.util.Comparator;\n"
+                + "import java.util.List;\n"
+                + "public class Test {\n"
+                + "    void test() {\n"
+                + "        List<String> list = Arrays.asList(\"b\", \"a\");\n"
+                + "        list.stream().sorted(Comparator.comparing(s -> s.toLowerCase()));\n"
+                + "    }\n"
+                + "}";
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        final CompilationUnit cu = StaticJavaParser.parse(source);
+        MethodCallExpr toLowerCaseCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(mce -> mce.getNameAsString().equals("toLowerCase"))
+                .findFirst()
+                .get();
+        // s is inferred as String (from ? super String), so toLowerCase() must
+        // resolve to the no-argument overload on java.lang.String.
+        assertEquals(
+                "java.lang.String.toLowerCase()",
+                assertDoesNotThrow(toLowerCaseCall::resolve).getQualifiedSignature());
     }
 }

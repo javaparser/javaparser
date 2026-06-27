@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -42,6 +42,7 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -74,7 +75,17 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                         MethodUsage methodUsage =
                                 JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = methodCallExpr.getArgumentPosition(wrappedNode, EXCLUDE_ENCLOSED_EXPR);
-                        ResolvedType lambdaType = methodUsage.getParamTypes().get(i);
+                        ResolvedType lambdaOrVarargsType =
+                                MethodResolutionLogic.getMethodUsageExplicitAndVariadicParameterType(methodUsage, i);
+                        ResolvedType lambdaType;
+                        // It's possible that the lambda may be used as a vararg, in which case the resolved type will
+                        // be an array type. In this case, the component type should be used instead when finding the
+                        // functional method below.
+                        if (lambdaOrVarargsType.isArray()) {
+                            lambdaType = lambdaOrVarargsType.asArrayType().getComponentType();
+                        } else {
+                            lambdaType = lambdaOrVarargsType;
+                        }
 
                         // Get the functional method in order for us to resolve it's type arguments properly
                         Optional<MethodUsage> functionalMethodOpt =
@@ -88,6 +99,106 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                             lambdaType.asReferenceType().getTypeDeclaration().ifPresent(typeDeclaration -> {
                                 inferenceContext.addPair(lambdaType, new ReferenceTypeImpl(typeDeclaration));
                             });
+
+                            // --- Outer-context type parameter inference for static generic methods ---
+                            //
+                            // For instance method calls (e.g. stream.map(lambda)), JavaParser can
+                            // substitute the scope's concrete type arguments (e.g. A from Stream<A>)
+                            // into the functional interface type, giving the lambda parameter a
+                            // concrete type directly.
+                            //
+                            // For static generic method calls (e.g. Comparator.comparing(lambda)),
+                            // there is no receiver instance, so the method's own type parameters
+                            // (e.g. T in `comparing`) are left as unresolved type variables.
+                            // The only way to determine T is from the context in which the result
+                            // is consumed — i.e., the outer call that receives the static method's
+                            // return value.
+                            //
+                            // Example:
+                            //   stream.sorted(Comparator.comparing(a -> a.getName()))
+                            //
+                            // Here `methodCallExpr` is `Comparator.comparing(lambda)` and
+                            // `outerCall` is `stream.sorted(...)`. The outer method `sorted`
+                            // declares its parameter as `Comparator<? super T_stream>`, where
+                            // T_stream is the stream element type. After substituting the scope
+                            // type (Stream<A>), the expected parameter type becomes
+                            // `Comparator<? super A>`. Registering the pair
+                            //   (comparing's return type `Comparator<T>`) ↔ (`Comparator<? super A>`)
+                            // into the inference context lets the engine infer T → `? super A`,
+                            // which is sufficient to look up methods on A (getName(), getId(), …).
+                            //
+                            // We wrap this in try/catch so that any failure here (e.g. the outer
+                            // call cannot be resolved, or there are multiple overloads) is silently
+                            // ignored — the existing inference based on the functional interface
+                            // alone will still run, and will produce T → Object (usable as a
+                            // fallback) instead of crashing.
+                            try {
+                                Node outerNode = demandParentNode(methodCallExpr, IS_NOT_ENCLOSED_EXPR);
+                                if (outerNode instanceof MethodCallExpr) {
+                                    MethodCallExpr outerCall = (MethodCallExpr) outerNode;
+                                    // Find the position of methodCallExpr in the outer call's arguments
+                                    // so we can retrieve the corresponding formal parameter type.
+                                    int outerArgPos = -1;
+                                    for (int k = 0; k < outerCall.getArguments().size(); k++) {
+                                        if (outerCall.getArguments().get(k) == methodCallExpr) {
+                                            outerArgPos = k;
+                                            break;
+                                        }
+                                    }
+                                    // We only attempt inference when the outer call has an explicit
+                                    // receiver scope (e.g. `stream.sorted(...)`). Without a scope we
+                                    // cannot obtain the concrete type arguments that would let us
+                                    // substitute the outer method's type parameters.
+                                    if (outerArgPos >= 0 && outerCall.hasScope()) {
+                                        ResolvedType outerScopeType = JavaParserFacade.get(typeSolver)
+                                                .getType(outerCall.getScope().get());
+                                        if (outerScopeType.isReferenceType()) {
+                                            String outerMethodName = outerCall.getNameAsString();
+                                            int outerArgCount =
+                                                    outerCall.getArguments().size();
+                                            final int fOuterArgPos = outerArgPos;
+                                            final ResolvedType fOuterScopeType = outerScopeType;
+                                            // getTypeDeclaration().getAllMethods() returns MethodUsage objects
+                                            // whose parameter types still carry the type declaration's own
+                                            // type parameters (e.g. Stream<T_stream>), not yet substituted
+                                            // with the concrete arguments (e.g. Stream<A>). We apply
+                                            // useThisTypeParametersOnTheGivenType() below to perform that
+                                            // substitution using the outer scope's concrete type arguments.
+                                            outerScopeType
+                                                    .asReferenceType()
+                                                    .getTypeDeclaration()
+                                                    .ifPresent(outerDecl -> {
+                                                        for (MethodUsage mu : outerDecl.getAllMethods()) {
+                                                            if (mu.getName().equals(outerMethodName)
+                                                                    && mu.getNoParams() == outerArgCount) {
+                                                                // Raw parameter type from the type declaration,
+                                                                // e.g. `Comparator<? super T_stream>` for sorted.
+                                                                ResolvedType rawType =
+                                                                        MethodResolutionLogic
+                                                                                .getMethodUsageExplicitAndVariadicParameterType(
+                                                                                        mu, fOuterArgPos);
+                                                                // Substitute the outer scope's concrete type
+                                                                // arguments (e.g. T_stream → A for Stream<A>),
+                                                                // yielding the expected type `Comparator<? super A>`.
+                                                                ResolvedType expectedType = fOuterScopeType
+                                                                        .asReferenceType()
+                                                                        .useThisTypeParametersOnTheGivenType(rawType);
+                                                                // Register the pair in the inference context:
+                                                                //   comparing's return type `Comparator<T>`
+                                                                //   ↔ expected type `Comparator<? super A>`
+                                                                // This lets the engine resolve T → `? super A`,
+                                                                // whose bound (A) is the concrete element type.
+                                                                inferenceContext.addPair(
+                                                                        methodUsage.returnType(), expectedType);
+                                                                break;
+                                                            }
+                                                        }
+                                                    });
+                                        }
+                                    }
+                                }
+                            } catch (Exception ignored) {
+                            }
 
                             // Find the position of this lambda argument
                             boolean found = false;

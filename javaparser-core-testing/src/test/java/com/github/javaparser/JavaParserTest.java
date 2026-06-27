@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -39,6 +39,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
@@ -117,6 +118,19 @@ class JavaParserTest {
     }
 
     @Test
+    void annotationMemberDeclarationWithArrayDimsAfterParentheses() {
+        // https://github.com/javaparser/javaparser/issues/3649
+        String code = "public @interface Foo { int value()[]; }";
+        CompilationUnit cu = parse(code);
+        AnnotationMemberDeclaration memberDeclaration =
+                cu.getAnnotationDeclarationByName("Foo").get().getMember(0).asAnnotationMemberDeclaration();
+        assertTrue(memberDeclaration.getType().isArrayType());
+        ArrayType arrayType = memberDeclaration.getType().asArrayType();
+        assertEquals(ArrayType.Origin.NAME, arrayType.getOrigin());
+        assertEquals("int", arrayType.getComponentType().asString());
+    }
+
+    @Test
     void rangeOfArrayCreationLevelWithExpressionIsCorrect() {
         String code = "new int[123][456]";
         ArrayCreationExpr expression = parseExpression(code);
@@ -153,7 +167,7 @@ class JavaParserTest {
         Problem problem = result.getProblem(0);
         assertEquals(range(1, 9, 1, 17), problem.getLocation().get().toRange().get());
         assertEquals(
-                "Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"abstract\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"non-sealed\" \"open\" \"opens\" \"permits\" \"private\" \"protected\" \"provides\" \"public\" \"record\" \"requires\" \"sealed\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"when\" \"with\" \"yield\" \"{\" \"}\" <IDENTIFIER>",
+                "Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"_\" \"abstract\" \"assert\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"non-sealed\" \"open\" \"opens\" \"permits\" \"private\" \"protected\" \"provides\" \"public\" \"record\" \"requires\" \"sealed\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"when\" \"with\" \"yield\" \"{\" \"}\" <IDENTIFIER>",
                 problem.getMessage());
         assertInstanceOf(ParseException.class, problem.getCause().get());
     }

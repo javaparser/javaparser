@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -95,7 +95,7 @@ class InstanceOfExprTest {
         assertEquals("String", expr.getType().asString());
         assertTrue(expr.getPattern().isPresent());
 
-        PatternExpr patternExpr = expr.getPattern().get();
+        ComponentPatternExpr patternExpr = expr.getPattern().get();
         assertInstanceOf(TypePatternExpr.class, patternExpr);
         TypePatternExpr typePatternExpr = patternExpr.asTypePatternExpr();
         assertEquals("String", typePatternExpr.getType().asString());
@@ -137,7 +137,7 @@ class InstanceOfExprTest {
         assertEquals("String", expr.getType().asString());
         assertTrue(expr.getPattern().isPresent());
 
-        PatternExpr patternExpr = expr.getPattern().get();
+        ComponentPatternExpr patternExpr = expr.getPattern().get();
         assertInstanceOf(TypePatternExpr.class, patternExpr);
         TypePatternExpr typePatternExpr = patternExpr.asTypePatternExpr();
         assertEquals("String", typePatternExpr.getType().asString());

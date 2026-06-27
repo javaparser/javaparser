@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,7 +20,6 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
 /**
  * Printer interface defines the API for a printer.
@@ -29,8 +28,4 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 public interface Printer {
 
     String print(Node node);
-
-    Printer setConfiguration(PrinterConfiguration configuration);
-
-    PrinterConfiguration getConfiguration();
 }

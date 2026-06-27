@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.ast.expr.MatchAllPatternExpr.UNNAMED_PLACEHOLDER;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static java.util.Collections.singletonList;
 
@@ -117,8 +118,15 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         Node notMethodNode = parentNode;
         // To avoid loops JP must ensure that the scope of the parent context
         // is not the same as the current node.
+        // For most part, this can be achieved that the scope of the nodes is different,
+        // but in some cases, we may have loops of length > 1. This is the case for expressions
+        // that have something like a "receiver" - field accesses, method calls and the
+        // non-static inner class variant of constructor calls. We handle these by just
+        // skipping all method calls, field accesses, and all constructor calls that have
+        // a receiver (i.e., outer.new Inner()), as identified by hasScope.
         while (notMethodNode instanceof MethodCallExpr
                 || notMethodNode instanceof FieldAccessExpr
+                || (notMethodNode instanceof ObjectCreationExpr && notMethodNode.hasScope())
                 || (notMethodNode != null
                         && notMethodNode.hasScope()
                         && getScope(notMethodNode).equals(wrappedNode))) {
@@ -233,12 +241,72 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 return result;
             }
             if (typeOfScope.isConstraint()) {
+                // A ResolvedLambdaConstraintType wraps the inferred bound of an implicit lambda
+                // parameter, e.g. when resolving `a` in `Comparator.comparing(a -> a.getName())`.
+                // We need the type declaration of the bound so that method lookups (like getName())
+                // can proceed.
                 // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
                 ResolvedType type = typeOfScope.asConstraintType().getBound();
                 if (type.isReferenceType()) {
+                    // Common case: the bound is a fully-resolved reference type, e.g. `A`.
                     return singletonList(type.asReferenceType()
                             .getTypeDeclaration()
                             .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                }
+                if (type.isTypeVariable()) {
+                    // The bound is still an unresolved type variable (e.g. `T` in
+                    // `Comparator.comparing` when no outer context inference was possible).
+                    // The best we can do is use the type variable's explicit upper bounds;
+                    // if the variable is unconstrained (declared as plain `T`), we fall back
+                    // to Object, which is Java's implicit upper bound for all type parameters.
+                    Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
+                    for (ResolvedTypeParameterDeclaration.Bound bound :
+                            type.asTypeParameter().getBounds()) {
+                        result.add(bound.getType()
+                                .asReferenceType()
+                                .getTypeDeclaration()
+                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                    }
+                    if (result.isEmpty()) {
+                        result.add(typeSolver.getSolvedJavaLangObject());
+                    }
+                    return result;
+                }
+                if (type.isWildcard() && type.asWildcard().isSuper()) {
+                    // The bound is a `? super X` wildcard. This shape arises when
+                    // LambdaExprContext infers the type of a lambda parameter by matching
+                    // the outer call's expected parameter type against the inner static
+                    // method's return type. For example:
+                    //   stream.sorted(Comparator.comparing(a -> a.getName()))
+                    // The inference learns that comparing's Comparator<T> must be a
+                    // Comparator<? super A> (sorted's formal type), so T is registered as
+                    // `? super A`. The constraint bound here is therefore `? super A`, and
+                    // we need A's type declaration to look up `getName()`.
+                    ResolvedType bounded = type.asWildcard().getBoundedType();
+                    if (bounded.isReferenceType()) {
+                        // Normal case: `? super A` where A is a concrete reference type.
+                        return singletonList(bounded.asReferenceType()
+                                .getTypeDeclaration()
+                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                    }
+                    if (bounded.isTypeVariable()) {
+                        // Edge case: `? super T` where T is itself still an unresolved type
+                        // variable (outer context inference did not fully concretize T).
+                        // Apply the same upper-bound / Object fallback as the plain
+                        // type-variable case above.
+                        Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
+                        for (ResolvedTypeParameterDeclaration.Bound bound :
+                                bounded.asTypeParameter().getBounds()) {
+                            result.add(bound.getType()
+                                    .asReferenceType()
+                                    .getTypeDeclaration()
+                                    .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                        }
+                        if (result.isEmpty()) {
+                            result.add(typeSolver.getSolvedJavaLangObject());
+                        }
+                        return result;
+                    }
                 }
                 throw new UnsupportedOperationException(
                         "The type declaration cannot be found on constraint " + type.describe());
@@ -310,19 +378,21 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
      * @param patternExpr the root of the pattern tree to traverse
      * @return all type pattern expressions discovered in the tree
      */
-    public List<TypePatternExpr> typePatternExprsDiscoveredInPattern(PatternExpr patternExpr) {
+    public List<TypePatternExpr> typePatternExprsDiscoveredInPattern(ComponentPatternExpr patternExpr) {
         List<TypePatternExpr> discoveredTypePatterns = new ArrayList<>();
-        Queue<PatternExpr> patternsToCheck = new ArrayDeque<>();
+        Queue<ComponentPatternExpr> patternsToCheck = new ArrayDeque<>();
         patternsToCheck.add(patternExpr);
 
         while (!patternsToCheck.isEmpty()) {
-            PatternExpr patternToCheck = patternsToCheck.remove();
+            ComponentPatternExpr patternToCheck = patternsToCheck.remove();
 
             if (patternToCheck.isTypePatternExpr()) {
-                discoveredTypePatterns.add(patternToCheck.asTypePatternExpr());
+                if (!patternToCheck.asTypePatternExpr().getNameAsString().equals(UNNAMED_PLACEHOLDER)) {
+                    discoveredTypePatterns.add(patternToCheck.asTypePatternExpr());
+                }
             } else if (patternToCheck.isRecordPatternExpr()) {
                 patternsToCheck.addAll(patternToCheck.asRecordPatternExpr().getPatternList());
-            } else {
+            } else if (!patternToCheck.isMatchAllPatternExpr()) {
                 throw new UnsupportedOperationException(String.format(
                         "Discovering type pattern expressions in %s not supported",
                         patternExpr.getClass().getName()));

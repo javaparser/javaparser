@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -42,6 +42,14 @@ class Java1_4ValidatorTest {
     void yesAssert() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("assert a;"));
         assertNoProblems(result);
+    }
+
+    @Test
+    void assertIsNotValideIdentifierSinceJAVA_1_4() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("String assert;"));
+        assertProblems(
+                result,
+                "(line 1,col 8) 'assert' identifier is not supported. Pay attention that this feature is no longer supported since 'JAVA_1_4' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test

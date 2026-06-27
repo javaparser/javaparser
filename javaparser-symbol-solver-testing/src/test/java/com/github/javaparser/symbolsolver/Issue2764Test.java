@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -54,7 +54,8 @@ public class Issue2764Test {
 
         CompilationUnit cu = parseResult.getResult().get();
         NameExpr name = (NameExpr) cu.findFirst(UnaryExpr.class).get().getExpression();
-        ResolvedValueDeclaration resolve = name.resolve();
+        // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+        ResolvedValueDeclaration resolve = (ResolvedValueDeclaration) name.resolve();
 
         assertTrue("int".contentEquals(resolve.getType().describe()));
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -29,6 +29,7 @@ import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.ast.validator.language_level_validations.*;
 import com.github.javaparser.ast.validator.postprocessors.*;
+import com.github.javaparser.printer.lexicalpreservation.DefaultLexicalPreservingPrinter;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
@@ -181,10 +182,32 @@ public class ParserConfiguration {
         /**
          * Java 21
          */
-        JAVA_21(new Java21Validator(), new Java21PostProcessor());
+        JAVA_21(new Java21Validator(), new Java21PostProcessor()),
+        /**
+         * Java 22
+         */
+        JAVA_22(new Java22Validator(), new Java22PostProcessor()),
+        /**
+         * Java 23
+         */
+        JAVA_23(new Java23Validator(), new Java23PostProcessor()),
+        /**
+         * Java 24
+         */
+        JAVA_24(new Java24Validator(), new Java24PostProcessor()),
+        /**
+         * Java 25
+         */
+        JAVA_25(new Java25Validator(), new Java25PostProcessor()),
+        /**
+         * Java 26
+         */
+        JAVA_26(new Java26Validator(), new Java26PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
+         * Using the RAW language level can lead to parsing errors for features introduced in a specific version of Java
+         * (see issue https://github.com/javaparser/javaparser/issues/4813).
          */
         public static LanguageLevel RAW = null;
 
@@ -196,12 +219,12 @@ public class ParserConfiguration {
         /**
          * The latest Java version that is available.
          */
-        public static LanguageLevel CURRENT = JAVA_18;
+        public static LanguageLevel CURRENT = JAVA_26;
 
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_21;
+        public static LanguageLevel BLEEDING_EDGE = JAVA_26;
 
         final Validator validator;
 
@@ -221,7 +244,12 @@ public class ParserConfiguration {
             JAVA_18,
             JAVA_19,
             JAVA_20,
-            JAVA_21
+            JAVA_21,
+            JAVA_22,
+            JAVA_23,
+            JAVA_24,
+            JAVA_25,
+            JAVA_26
         };
 
         LanguageLevel(Validator validator, PostProcessors postProcessor) {
@@ -362,7 +390,10 @@ public class ParserConfiguration {
             @Override
             public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
                 if (configuration.isLexicalPreservationEnabled()) {
-                    result.ifSuccessful(LexicalPreservingPrinter::setup);
+                    result.ifSuccessful(resultNode -> {
+                        LexicalPreservingPrinter.setup(resultNode);
+                        resultNode.setData(Node.PRINTER_KEY, new DefaultLexicalPreservingPrinter());
+                    });
                 }
             }
         });

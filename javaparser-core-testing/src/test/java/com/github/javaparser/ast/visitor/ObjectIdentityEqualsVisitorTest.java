@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,8 +23,8 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -180,8 +180,8 @@ class ObjectIdentityEqualsVisitorTest {
 
     @Test
     void equals_GivenJavadocComment() {
-        Node nodeA = new JavadocComment();
-        Node nodeB = new JavadocComment();
+        Node nodeA = new TraditionalJavadocComment();
+        Node nodeB = new TraditionalJavadocComment();
 
         Assertions.assertTrue(ObjectIdentityEqualsVisitor.equals(nodeA, nodeA));
         Assertions.assertFalse(ObjectIdentityEqualsVisitor.equals(nodeA, nodeB));

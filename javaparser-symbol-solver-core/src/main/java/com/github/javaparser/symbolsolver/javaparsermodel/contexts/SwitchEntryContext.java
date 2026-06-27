@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -108,8 +108,8 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
     @Override
     public List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
         return wrappedNode.getLabels().stream()
-                .filter(label -> label.isPatternExpr())
-                .flatMap(label -> typePatternExprsDiscoveredInPattern(label.asPatternExpr()).stream())
+                .filter(label -> label.isComponentPatternExpr())
+                .flatMap(label -> typePatternExprsDiscoveredInPattern(label.asComponentPatternExpr()).stream())
                 .collect(Collectors.toList());
     }
 }

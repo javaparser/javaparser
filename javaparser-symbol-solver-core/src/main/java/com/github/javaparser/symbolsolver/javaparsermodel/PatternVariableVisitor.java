@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -19,6 +19,8 @@
  * GNU Lesser General Public License for more details.
  */
 package com.github.javaparser.symbolsolver.javaparsermodel;
+
+import static com.github.javaparser.ast.expr.MatchAllPatternExpr.UNNAMED_PLACEHOLDER;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
@@ -124,16 +126,18 @@ public class PatternVariableVisitor extends GenericVisitorWithDefaults<PatternVa
         LinkedList<TypePatternExpr> variablesIntroducedIfFalse = new LinkedList<>();
 
         instanceOfExpr.getPattern().ifPresent(patternExpr -> {
-            Queue<PatternExpr> patternQueue = new ArrayDeque<>();
+            Queue<ComponentPatternExpr> patternQueue = new ArrayDeque<>();
             patternQueue.add(patternExpr);
 
             while (!patternQueue.isEmpty()) {
-                PatternExpr toCheck = patternQueue.remove();
+                ComponentPatternExpr toCheck = patternQueue.remove();
                 if (toCheck.isTypePatternExpr()) {
-                    variablesIntroducedIfTrue.add(toCheck.asTypePatternExpr());
+                    if (!toCheck.asTypePatternExpr().getNameAsString().equals(UNNAMED_PLACEHOLDER)) {
+                        variablesIntroducedIfTrue.add(toCheck.asTypePatternExpr());
+                    }
                 } else if (toCheck.isRecordPatternExpr()) {
                     patternQueue.addAll(toCheck.asRecordPatternExpr().getPatternList());
-                } else {
+                } else if (!toCheck.isMatchAllPatternExpr()) {
                     throw new IllegalStateException("Found illegal pattern type in InstanceOf"
                             + toCheck.getClass().getCanonicalName());
                 }

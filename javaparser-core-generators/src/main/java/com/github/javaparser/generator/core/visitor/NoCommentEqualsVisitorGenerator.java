@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -48,7 +48,7 @@ public class NoCommentEqualsVisitorGenerator extends VisitorGenerator {
 
         if (!(node.equals(JavaParserMetaModel.lineCommentMetaModel)
                 || node.equals(JavaParserMetaModel.blockCommentMetaModel)
-                || node.equals(JavaParserMetaModel.javadocCommentMetaModel))) {
+                || node.equals(JavaParserMetaModel.traditionalJavadocCommentMetaModel))) {
 
             body.addStatement(f("final %s n2 = (%s) arg;", node.getTypeName(), node.getTypeName()));
 

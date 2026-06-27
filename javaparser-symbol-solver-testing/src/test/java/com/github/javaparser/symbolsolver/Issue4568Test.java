@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -72,7 +72,8 @@ public class Issue4568Test extends AbstractResolutionTest {
         for (Expression e : oce.getArguments()) {
             if (e.isNameExpr()) {
                 NameExpr ne = e.asNameExpr();
-                final ResolvedValueDeclaration rvd = ne.resolve();
+                // resolve() now returns ResolvedDeclaration; cast since the argument is a value.
+                final ResolvedValueDeclaration rvd = (ResolvedValueDeclaration) ne.resolve();
                 assertEquals("int", rvd.getType().describe());
             }
         }

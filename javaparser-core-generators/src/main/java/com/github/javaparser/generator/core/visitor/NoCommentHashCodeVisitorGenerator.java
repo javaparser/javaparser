@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -52,7 +52,7 @@ public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
         final List<PropertyMetaModel> propertyMetaModels = node.getAllPropertyMetaModels();
         if (node.equals(JavaParserMetaModel.lineCommentMetaModel)
                 || node.equals(JavaParserMetaModel.blockCommentMetaModel)
-                || node.equals(JavaParserMetaModel.javadocCommentMetaModel)
+                || node.equals(JavaParserMetaModel.traditionalJavadocCommentMetaModel)
                 || propertyMetaModels.isEmpty()) {
             builder.append("0");
         } else {

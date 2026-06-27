@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -28,8 +28,8 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -1133,7 +1133,7 @@ class GenericListVisitorAdapterTest {
     void visit_GivenJavadocComment() {
         // Given
         Object argument = mock(Object.class);
-        JavadocComment node = mock(JavadocComment.class);
+        TraditionalJavadocComment node = mock(TraditionalJavadocComment.class);
 
         // When
         Mockito.when(node.getComment()).thenReturn(Optional.of(mock(Comment.class)));
@@ -2575,5 +2575,12 @@ class GenericListVisitorAdapterTest {
         order.verify(node).getAnnotations();
         order.verify(node, times(2)).getComment();
         order.verifyNoMoreInteractions();
+    }
+
+    @SuppressWarnings("unchecked")
+    // Non type-safe mock method to avoid unchecked warnings
+    // Its use is trivial and systematic enough to not be a problem
+    private <T> T mock(Class<?> classToMock) {
+        return (T) Mockito.mock(classToMock);
     }
 }

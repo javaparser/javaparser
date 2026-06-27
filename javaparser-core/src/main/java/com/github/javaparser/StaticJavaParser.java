@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -393,9 +393,9 @@ public final class StaticJavaParser {
      * @return Javadoc representing the content of the comment
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static Javadoc parseJavadoc(@NotNull String content) {
+    public static Javadoc parseJavadoc(@NotNull String content, boolean isMarkdownComment) {
         Preconditions.checkNotNull(content, "Parameter content can't be null.");
-        return JavadocParser.parse(content);
+        return JavadocParser.parse(content, isMarkdownComment);
     }
 
     /**

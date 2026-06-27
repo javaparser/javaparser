@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,8 +23,9 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -181,6 +182,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final ClassOrInterfaceDeclaration n2 = (ClassOrInterfaceDeclaration) arg;
         if (!nodesEquals(n.getExtendedTypes(), n2.getExtendedTypes())) return false;
         if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes())) return false;
+        if (!objEquals(n.isCompact(), n2.isCompact())) return false;
         if (!objEquals(n.isInterface(), n2.isInterface())) return false;
         if (!nodesEquals(n.getPermittedTypes(), n2.getPermittedTypes())) return false;
         if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters())) return false;
@@ -314,8 +316,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final JavadocComment n, final Visitable arg) {
-        final JavadocComment n2 = (JavadocComment) arg;
+    public Boolean visit(final TraditionalJavadocComment n, final Visitable arg) {
+        final TraditionalJavadocComment n2 = (TraditionalJavadocComment) arg;
         if (!objEquals(n.getContent(), n2.getContent())) return false;
         if (!nodeEquals(n.getComment(), n2.getComment())) return false;
         return true;
@@ -910,6 +912,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final ImportDeclaration n, final Visitable arg) {
         final ImportDeclaration n2 = (ImportDeclaration) arg;
         if (!objEquals(n.isAsterisk(), n2.isAsterisk())) return false;
+        if (!objEquals(n.isModule(), n2.isModule())) return false;
         if (!objEquals(n.isStatic(), n2.isStatic())) return false;
         if (!nodeEquals(n.getName(), n2.getName())) return false;
         if (!nodeEquals(n.getComment(), n2.getComment())) return false;
@@ -1078,6 +1081,22 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodesEquals(n.getModifiers(), n2.getModifiers())) return false;
         if (!nodesEquals(n.getPatternList(), n2.getPatternList())) return false;
         if (!nodeEquals(n.getType(), n2.getType())) return false;
+        if (!nodeEquals(n.getComment(), n2.getComment())) return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final MatchAllPatternExpr n, final Visitable arg) {
+        final MatchAllPatternExpr n2 = (MatchAllPatternExpr) arg;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers())) return false;
+        if (!nodeEquals(n.getComment(), n2.getComment())) return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final MarkdownComment n, final Visitable arg) {
+        final MarkdownComment n2 = (MarkdownComment) arg;
+        if (!objEquals(n.getContent(), n2.getContent())) return false;
         if (!nodeEquals(n.getComment(), n2.getComment())) return false;
         return true;
     }

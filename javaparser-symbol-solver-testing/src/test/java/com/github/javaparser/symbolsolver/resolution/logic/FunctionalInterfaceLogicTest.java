@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -31,6 +31,8 @@ import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -283,6 +285,38 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
                 new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertTrue(methodUsage.isPresent());
+    }
+
+    /*
+     * Regression tests for https://github.com/javaparser/javaparser/issues/3625
+     *
+     * Before the fix, getFunctionalMethod(ResolvedType) called asReferenceType() without first
+     * checking whether the type actually was a reference type. Passing a primitive or an array
+     * caused an UnsupportedOperationException to be thrown instead of returning Optional.empty().
+     *
+     * Since a functional interface must be an interface (JLS §9.8), which is always a reference
+     * type, returning empty() for these types is semantically correct, not just a safe fallback.
+     */
+
+    /**
+     * A primitive type (e.g. int) is not a reference type and therefore can never be a functional
+     * interface. The method must return empty() instead of throwing UnsupportedOperationException.
+     */
+    @Test
+    void getFunctionalMethodReturnEmptyForPrimitiveType() {
+        Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(ResolvedPrimitiveType.INT);
+        assertFalse(methodUsage.isPresent());
+    }
+
+    /**
+     * An array type (e.g. int[]) is not a reference type and therefore can never be a functional
+     * interface. The method must return empty() instead of throwing UnsupportedOperationException.
+     */
+    @Test
+    void getFunctionalMethodReturnEmptyForArrayType() {
+        Optional<MethodUsage> methodUsage =
+                FunctionalInterfaceLogic.getFunctionalMethod(new ResolvedArrayType(ResolvedPrimitiveType.INT));
+        assertFalse(methodUsage.isPresent());
     }
 
     @Test

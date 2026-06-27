@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -75,6 +75,7 @@ class YamlPrinterTest {
         YamlPrinter yamlPrinter = new YamlPrinter(true);
         CompilationUnit computationUnit = parse(code);
         String output = yamlPrinter.output(computationUnit);
-        assertEqualsStringIgnoringEol(read("yamlParsingJavadocWithQuoteAndNewline.yaml"), output);
+        assertEqualsStringIgnoringEol(
+                read("yamlParsingJavadocWithQuoteAndNewline.yaml").trim(), output);
     }
 }

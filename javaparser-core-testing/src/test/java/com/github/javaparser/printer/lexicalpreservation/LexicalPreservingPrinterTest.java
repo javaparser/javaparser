@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -25,10 +25,7 @@ import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaParser;
@@ -39,6 +36,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
@@ -1862,5 +1860,65 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         String modifiedContent = LexicalPreservingPrinter.print(cu);
         System.out.println(modifiedContent);
         assertEquals(expected, LexicalPreservingPrinter.print(cu));
+    }
+
+    // issue 1821 Switch toString to LexicalPreservingPrinter when configured
+    @Test
+    void checkLPPIsDefaultPrinter() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        StaticJavaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        assertEquals(code, cu.toString());
+    }
+
+    @Test
+    void checkLegacyLPPExecution() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        StaticJavaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        assertEquals(cu.toString(), LexicalPreservingPrinter.print(cu));
+    }
+
+    @Test
+    void checkLPPIsNotDefaultPrinter() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        assertNotEquals(code, cu.toString());
+    }
+
+    // issue 4781: PrimitiveType keyword omitted when adding a field programmatically with LPP active.
+    // Before the fix, addField(PrimitiveType.intType(), "foo") produced "foo;" instead of "int foo;":
+    // prettyPrintingTextNode() called node.toString() which re-entered LPP and returned the
+    // still-empty pre-stored NodeText, making toString() return "" (empty string) as token content.
+    @Test
+    void issue4781_addIntFieldPreservesTypeKeyword() {
+        considerCode("class Foo {}");
+        cu.getClassByName("Foo").get().addField(PrimitiveType.intType(), "foo");
+        String printed = LexicalPreservingPrinter.print(cu);
+        assertTrue(printed.contains("int foo"), "Type keyword 'int' missing — got: " + printed);
+    }
+
+    @Test
+    void issue4781_addFieldPreservesKeywordForAllPrimitiveTypes() {
+        for (PrimitiveType.Primitive primitive : PrimitiveType.Primitive.values()) {
+            considerCode("class Foo {}");
+            cu.getClassByName("Foo").get().addField(new PrimitiveType(primitive), "field");
+            String printed = LexicalPreservingPrinter.print(cu);
+            assertTrue(
+                    printed.contains(primitive.asString() + " field"),
+                    "Type keyword '" + primitive.asString() + "' missing — got: " + printed);
+        }
+    }
+
+    // Variant: LPP configured as default printer via ParserConfiguration (the path from issue #1821
+    // that, combined with issue #4781, caused toString() to re-enter LPP during PrimitiveType init)
+    @Test
+    void issue4781_addIntFieldWithLPPAsDefaultPrinterPreservesTypeKeyword() {
+        StaticJavaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
+        CompilationUnit cu = StaticJavaParser.parse("class Foo {}");
+        cu.getClassByName("Foo").get().addField(PrimitiveType.intType(), "foo");
+        String printed = LexicalPreservingPrinter.print(cu);
+        assertTrue(printed.contains("int foo"), "Type keyword 'int' missing — got: " + printed);
     }
 }

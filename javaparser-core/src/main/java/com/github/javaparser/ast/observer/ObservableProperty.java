@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -44,6 +44,7 @@ public enum ObservableProperty {
     CLASS_BODY(Type.MULTIPLE_REFERENCE),
     CLASS_DECLARATION(Type.SINGLE_REFERENCE),
     COMMENT(Type.SINGLE_REFERENCE),
+    COMPACT(Type.SINGLE_ATTRIBUTE),
     COMPARE(Type.SINGLE_REFERENCE),
     COMPONENT_TYPE(Type.SINGLE_REFERENCE),
     CONDITION(Type.SINGLE_REFERENCE),
@@ -81,7 +82,7 @@ public enum ObservableProperty {
     MEMBER_VALUE(Type.SINGLE_REFERENCE),
     MESSAGE(Type.SINGLE_REFERENCE),
     MODIFIERS(Type.MULTIPLE_REFERENCE),
-    MODULE(Type.SINGLE_REFERENCE),
+    MODULE(Type.SINGLE_ATTRIBUTE),
     MODULE_NAMES(Type.MULTIPLE_REFERENCE),
     NAME(Type.SINGLE_REFERENCE),
     OPEN(Type.SINGLE_ATTRIBUTE),

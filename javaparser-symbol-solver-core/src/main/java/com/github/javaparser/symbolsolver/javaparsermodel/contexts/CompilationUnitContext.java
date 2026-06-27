@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -218,6 +218,17 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
 
+        // look into module imports on demand
+        for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+            if (importDecl.isModule()) {
+                SymbolReference<ResolvedReferenceTypeDeclaration> ref =
+                        typeSolver.tryToSolveTypeInModule(importDecl.getNameAsString(), name);
+                if (ref != null && ref.isSolved()) {
+                    return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
+                }
+            }
+        }
+
         // Look in the java.lang package
         SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(DEFAULT_PACKAGE + "." + name);
         if (ref != null && ref.isSolved()) {
@@ -242,17 +253,23 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
      */
     private SymbolReference<ResolvedTypeDeclaration> solveTypeFromOuterMostRef(String name) {
         SymbolReference<ResolvedTypeDeclaration> ref = null;
+        String remaining = name.substring(name.indexOf(".") + 1);
         SymbolReference<ResolvedTypeDeclaration> outerMostRef = solveType(name.substring(0, name.indexOf(".")));
+        // Use context-based resolution (.getContext().solveType) instead of declaration-based
+        // resolution (.solveType) so that inherited nested types are found via ancestor checking.
+        // This is consistent with how solveExternalTypeFromOuterMostRef already works.
         if (outerMostRef != null
                 && outerMostRef.isSolved()
                 && outerMostRef.getCorrespondingDeclaration() instanceof JavaParserClassDeclaration) {
             ref = ((JavaParserClassDeclaration) outerMostRef.getCorrespondingDeclaration())
-                    .solveType(name.substring(name.indexOf(".") + 1));
+                    .getContext()
+                    .solveType(remaining);
         } else if (outerMostRef != null
                 && outerMostRef.isSolved()
                 && outerMostRef.getCorrespondingDeclaration() instanceof JavaParserInterfaceDeclaration) {
             ref = ((JavaParserInterfaceDeclaration) outerMostRef.getCorrespondingDeclaration())
-                    .solveType(name.substring(name.indexOf(".") + 1));
+                    .getContext()
+                    .solveType(remaining);
         }
         return ref;
     }

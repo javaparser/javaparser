@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -26,7 +26,6 @@ import static com.google.common.math.LongMath.saturatedSubtract;
 import com.github.javaparser.resolution.cache.Cache;
 import com.github.javaparser.resolution.cache.CacheStats;
 import java.util.Arrays;
-import javax.annotation.CheckForNull;
 
 /**
  * Statistics about the performance of a {@link Cache}. Instances of this class are immutable.
@@ -290,7 +289,7 @@ public class DefaultCacheStats implements CacheStats {
     }
 
     @Override
-    public boolean equals(@CheckForNull Object object) {
+    public boolean equals(Object object) {
         if (object instanceof CacheStats) {
             CacheStats other = (CacheStats) object;
             return hitCount == other.hitCount()

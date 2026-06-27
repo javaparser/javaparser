@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -71,6 +72,35 @@ class JavaParserTypeDeclarationAdapterTest extends AbstractResolutionTest {
         MethodCallExpr mce = cu.findAll(MethodCallExpr.class).get(0);
 
         assertEquals("Bar.show()", mce.resolve().getQualifiedSignature());
+    }
+
+    @Test
+    void issue3550() {
+        // A class implementing an interface should be able to reference that interface's nested
+        // types by relative name (e.g. "Sub.Test" instead of the fully-qualified "Base.Sub.Test").
+        // Previously, the symbol solver only searched for the innermost part of the name ("Test")
+        // in ancestors, ignoring intermediate segments, which caused an UnsolvedSymbolException.
+        String code = "interface Base {\n"
+                + "    interface Sub {\n"
+                + "        class Test {}\n"
+                + "    }\n"
+                + "}\n"
+                + "class Default implements Base {\n"
+                + "    Base.Sub.Test x1;\n" // fully-qualified path — always worked
+                + "    Sub.Test x2;\n" // relative path — was throwing UnsolvedSymbolException
+                + "}";
+
+        final JavaSymbolSolver solver = new JavaSymbolSolver(new ReflectionTypeSolver(false));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(solver);
+        final CompilationUnit compilationUnit = StaticJavaParser.parse(code);
+
+        // Both fields must resolve to the same qualified type name.
+        final List<String> fieldTypes = compilationUnit.findAll(FieldDeclaration.class).stream()
+                .map(fd -> fd.getVariable(0).getType().resolve().describe())
+                .collect(Collectors.toList());
+
+        assertEquals(2, fieldTypes.size());
+        fieldTypes.forEach(type -> assertEquals("Base.Sub.Test", type));
     }
 
     @Test

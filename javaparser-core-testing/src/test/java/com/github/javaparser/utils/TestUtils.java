@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -172,6 +172,9 @@ public class TestUtils {
 
             while (ze != null) {
                 final Path newFile = outputFolder.resolve(ze.getName());
+                if (!newFile.normalize().startsWith(outputFolder.normalize())) {
+                    throw new IOException("Bad zip entry");
+                }
 
                 if (ze.isDirectory()) {
                     Log.trace("mkdir %s", newFile::toAbsolutePath);

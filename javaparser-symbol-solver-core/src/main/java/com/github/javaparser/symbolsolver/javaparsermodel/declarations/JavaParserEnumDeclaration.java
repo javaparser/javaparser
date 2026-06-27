@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,9 +23,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -60,6 +58,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 SymbolResolutionCapability {
 
     private static final String VALUES = "values";
+    private static final String VALUE_OF = "valueOf";
 
     private TypeSolver typeSolver;
     private EnumDeclaration wrappedNode;
@@ -79,14 +78,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        Set<ResolvedMethodDeclaration> methods = new HashSet<>();
-        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-                methods.add(new JavaParserMethodDeclaration(
-                        (com.github.javaparser.ast.body.MethodDeclaration) member, typeSolver));
-            }
-        }
-        return methods;
+        return javaParserTypeAdapter.getDeclaredMethods();
     }
 
     public Context getContext() {
@@ -202,6 +194,13 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (VALUES.equals(name) && argumentTypes.isEmpty()) {
             return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver)));
         }
+        if (VALUE_OF.equals(name) && argumentTypes.size() == 1) {
+            ResolvedType argument = argumentTypes.get(0);
+            if (argument.isReferenceType()
+                    && "java.lang.String".equals(argument.asReferenceType().getQualifiedName())) {
+                return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver)));
+            }
+        }
         return getContext().solveMethodAsUsage(name, argumentTypes);
     }
 
@@ -211,7 +210,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (VALUES.equals(name) && argumentsTypes.isEmpty()) {
             return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver));
         }
-        if ("valueOf".equals(name) && argumentsTypes.size() == 1) {
+        if (VALUE_OF.equals(name) && argumentsTypes.size() == 1) {
             ResolvedType argument = argumentsTypes.get(0);
             if (argument.isReferenceType()
                     && "java.lang.String".equals(argument.asReferenceType().getQualifiedName())) {
@@ -231,13 +230,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         List<ResolvedFieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
 
         this.getAncestors().forEach(a -> fields.addAll(a.getAllFieldsVisibleToInheritors()));
-
-        this.wrappedNode.getMembers().stream()
-                .filter(m -> m instanceof FieldDeclaration)
-                .forEach(m -> {
-                    FieldDeclaration fd = (FieldDeclaration) m;
-                    fd.getVariables().forEach(v -> fields.add(new JavaParserFieldDeclaration(v, typeSolver)));
-                });
 
         return fields;
     }

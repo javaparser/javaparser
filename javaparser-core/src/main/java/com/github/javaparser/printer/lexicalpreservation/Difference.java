@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,7 +22,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.LBRACE;
 import static com.github.javaparser.GeneratedJavaParserConstants.RBRACE;
-import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
@@ -40,8 +39,6 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
@@ -50,8 +47,6 @@ import java.util.stream.IntStream;
  * I should later be able to apply such difference to a nodeText.
  */
 public class Difference {
-
-    public static final int STANDARD_INDENTATION_SIZE = 4;
 
     private final NodeText nodeText;
 
@@ -84,38 +79,14 @@ public class Difference {
      * Returns the indentation used after the last line break
      */
     List<TextElement> processIndentation(List<TextElement> indentation, List<TextElement> prevElements) {
-        int eolIndex = lastIndexOfEol(prevElements);
+        TextElementList list = new TextElementList(prevElements);
+        int eolIndex = list.findLast(TextElement::isNewline);
         // Return "indentation" as is if no EOL element was found
         if (eolIndex < 0) return indentation;
         // Find consecutive space characters after the EOL element
         indentation =
-                takeWhile(prevElements.subList(eolIndex + 1, prevElements.size()), element -> element.isWhiteSpace());
+                TextElementList.of(list.subList(eolIndex + 1, list.size())).takeWhile(TextElement::isWhiteSpace);
         return indentation;
-    }
-
-    /*
-     * returns only the elements that match the given predicate.
-     * takeWhile takes elements from the initial stream while the predicate holds true.
-     * Meaning that when an element is encountered that does not match the predicate, the rest of the list is discarded.
-     */
-    List<TextElement> takeWhile(List<TextElement> prevElements, Predicate<TextElement> predicate) {
-        List<TextElement> spaces = new ArrayList<>();
-        for (TextElement element : prevElements) {
-            if (predicate.test(element)) {
-                spaces.add(element);
-                continue;
-            }
-            break;
-        }
-        return spaces;
-    }
-
-    int lastIndexOfEol(List<TextElement> source) {
-        return IntStream.range(0, source.size())
-                .map(i -> source.size() - i - 1)
-                .filter(i -> source.get(i).isNewline())
-                .findFirst()
-                .orElse(-1);
     }
 
     /*
@@ -123,16 +94,16 @@ public class Difference {
      * or -1 if it's not a comment.
      */
     private int posOfNextComment(int fromIndex, List<TextElement> elements) {
-        if (!isValidIndex(fromIndex, elements)) return -1;
-        ArrayIterator<TextElement> iterator = new ArrayIterator<>(elements, fromIndex);
-        // search for the next consecutive space characters
+        TextElementList list = new TextElementList(elements);
+        if (!list.isValidIndex(fromIndex)) return -1;
+        TextElementIterator iterator = list.iterator(fromIndex);
         while (iterator.hasNext()) {
             TextElement element = iterator.next();
             if (element.isSpaceOrTab()) {
                 continue;
             }
             if (element.isComment()) {
-                return iterator.index();
+                return iterator.currentIndex();
             }
             break;
         }
@@ -150,44 +121,16 @@ public class Difference {
      * Removes all elements in the list starting from @{code fromIndex}) ending to @{code toIndex})
      */
     private void removeElements(int fromIndex, int toIndex, List<TextElement> elements) {
-        if (!(isValidIndex(fromIndex, elements) && isValidIndex(toIndex, elements) && fromIndex <= toIndex)) return;
-        ListIterator<TextElement> iterator = elements.listIterator(fromIndex);
-        // removing elements
-        int count = fromIndex;
-        while (iterator.hasNext() && count <= toIndex) {
+        TextElementList list = new TextElementList(elements);
+        TextElementIterator iterator = list.iterator(fromIndex);
+        for (int i = fromIndex; i <= toIndex && iterator.hasNext(); i++) {
             iterator.next();
             iterator.remove();
-            count++;
         }
-    }
-
-    private boolean isValidIndex(int index, List<?> elements) {
-        return index >= 0 && index <= elements.size();
-    }
-
-    /*
-     * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement
-     */
-    int lastIndexOfEolWithoutGPT(List<TextElement> source) {
-        ListIterator<TextElement> listIterator = source.listIterator(source.size());
-        int lastIndex = source.size() - 1;
-        while (listIterator.hasPrevious()) {
-            TextElement elem = listIterator.previous();
-            if (elem.isNewline()) {
-                return lastIndex;
-            }
-            lastIndex--;
-        }
-        return -1;
     }
 
     private List<TextElement> indentationBlock() {
-        List<TextElement> res = new LinkedList<>();
-        res.add(new TokenTextElement(SPACE));
-        res.add(new TokenTextElement(SPACE));
-        res.add(new TokenTextElement(SPACE));
-        res.add(new TokenTextElement(SPACE));
-        return res;
+        return IndentationCalculator.createIndentationBlock();
     }
 
     private boolean isAfterLBrace(NodeText nodeText, int nodeTextIndex) {
@@ -308,36 +251,9 @@ public class Difference {
      * The number of consecutive whitespace (or tab) characters
      */
     private EnforcingIndentationContext defineEnforcingIndentationContext(NodeText nodeText, int startIndex) {
-        EnforcingIndentationContext ctx = new EnforcingIndentationContext(startIndex);
-        // compute space before startIndex value
-        if (startIndex < nodeText.numberOfElements() && startIndex > 0) {
-            // at this stage startIndex points to the first element before the deleted one
-            for (int i = startIndex - 1; i >= 0 && i < nodeText.numberOfElements(); i--) {
-                if (nodeText.getTextElement(i).isNewline()) {
-                    break;
-                }
-                if (!isSpaceOrTabElement(nodeText, i)) {
-                    ctx = new EnforcingIndentationContext(startIndex);
-                    break;
-                }
-                ctx.start = i;
-                ctx.extraCharacters++;
-            }
-        }
-        // compute space after the deleted element
-        if (startIndex < nodeText.numberOfElements() && isSpaceOrTabElement(nodeText, startIndex)) {
-            //			int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
-            for (int i = startIndex; i >= 0 && i < nodeText.numberOfElements(); i++) {
-                if (nodeText.getTextElement(i).isNewline()) {
-                    break;
-                }
-                if (!isSpaceOrTabElement(nodeText, i)) {
-                    break;
-                }
-                ctx.extraCharacters++;
-            }
-        }
-        return ctx;
+        IndentationCalculator.EnforcingContext ctx =
+                IndentationCalculator.analyzeEnforcingContext(nodeText, startIndex);
+        return new EnforcingIndentationContext(ctx.getStartIndex(), ctx.getExtraCharacters());
     }
 
     /*
@@ -429,8 +345,14 @@ public class Difference {
                 diffIndex++;
             } else if (diffElement.isAdded()) {
                 Added addedElement = (Added) diffElement;
-                nodeText.addElement(originalIndex, addedElement.toTextElement());
-                originalIndex++;
+                if (addedElement.isIndent()) {
+                    addIndent();
+                } else if (addedElement.isUnindent()) {
+                    removeIndent();
+                } else {
+                    nodeText.addElement(originalIndex, addedElement.toTextElement());
+                    originalIndex++;
+                }
                 diffIndex++;
             } else {
                 // let's forget this element
@@ -591,11 +513,11 @@ public class Difference {
             }
         } else if (removed.isToken()
                 && originalElementIsToken
-                && (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind()
-                        || // handle EOLs separately as their token kind might not be equal. This is because the
-                        // 'removed'
-                        // element always has the current operating system's EOL as type
-                        (((TokenTextElement) originalElement)
+                && ( // handle EOLs separately as their token kind might not be equal. This is because the
+                // 'removed'
+                // element always has the current operating system's EOL as type
+                removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind()
+                        || (((TokenTextElement) originalElement)
                                         .getToken()
                                         .getCategory()
                                         .isEndOfLine()
@@ -632,6 +554,15 @@ public class Difference {
             originalIndex++;
         } else if (removed.isChild()) {
             // see issue #3721 this case is linked for example to a change of type of variable declarator
+            nodeText.removeElement(originalIndex);
+            diffIndex++;
+        } else if (originalElement.isChild() && removed.isToken()) {
+            // see issue #4747 this case is linked for example to a change of the annotation name
+            // This happens because changing a name results in the creation of a token when the syntax of the modified
+            // node is evaluated, whereas parsing an annotation results in a representation containing a child node
+            // (representing the annotation name). When the annotation name is modified, the element to be deleted (the
+            // child node) is compared with the token containing the character string representing the new annotation
+            // name.
             nodeText.removeElement(originalIndex);
             diffIndex++;
         } else {
@@ -931,19 +862,27 @@ public class Difference {
         return false;
     }
 
+    private void addIndent() {
+        for (int i = 0; i < IndentationConstants.STANDARD_INDENTATION_SIZE; i++) {
+            indentation.add(new TokenTextElement(GeneratedJavaParserConstants.SPACE));
+        }
+    }
+
+    private void removeIndent() {
+        for (int i = 0; i < IndentationConstants.STANDARD_INDENTATION_SIZE && !indentation.isEmpty(); i++) {
+            indentation.remove(indentation.size() - 1);
+        }
+    }
+
     private void applyAddedDiffElement(Added added) {
         if (added.isIndent()) {
-            for (int i = 0; i < STANDARD_INDENTATION_SIZE; i++) {
-                indentation.add(new TokenTextElement(GeneratedJavaParserConstants.SPACE));
-            }
+            addIndent();
             addedIndentation = true;
             diffIndex++;
             return;
         }
         if (added.isUnindent()) {
-            for (int i = 0; i < STANDARD_INDENTATION_SIZE && !indentation.isEmpty(); i++) {
-                indentation.remove(indentation.size() - 1);
-            }
+            removeIndent();
             addedIndentation = false;
             diffIndex++;
             return;
@@ -1068,76 +1007,6 @@ public class Difference {
     }
 
     /*
-     * A list iterator which provides a method to know the current positioning
-     */
-    public static class ArrayIterator<T> implements ListIterator<T> {
-
-        ListIterator<T> iterator;
-
-        public ArrayIterator(List<T> elements) {
-            this(elements, 0);
-        }
-
-        public ArrayIterator(List<T> elements, int index) {
-            this.iterator = elements.listIterator(index);
-        }
-
-        @Override
-        public boolean hasNext() {
-            return iterator.hasNext();
-        }
-
-        @Override
-        public T next() {
-            return iterator.next();
-        }
-
-        @Override
-        public boolean hasPrevious() {
-            return iterator.hasPrevious();
-        }
-
-        @Override
-        public T previous() {
-            return iterator.previous();
-        }
-
-        @Override
-        public int nextIndex() {
-            return iterator.nextIndex();
-        }
-
-        @Override
-        public int previousIndex() {
-            return iterator.previousIndex();
-        }
-
-        /*
-         * Returns the current index in the underlying list
-         */
-        public int index() {
-            return iterator.nextIndex() - 1;
-        }
-
-        @Override
-        public void remove() {
-            iterator.remove();
-            ;
-        }
-
-        @Override
-        public void set(T e) {
-            iterator.set(e);
-        }
-
-        @Override
-        public void add(T e) {
-            iterator.add(e);
-            ;
-        }
-    }
-
-    /*
      * Returns true if the next element in the list is an added element of type CsmUnindent
      */
     private boolean isFollowedByUnindent(List<DifferenceElement> diffElements, int diffIndex) {
@@ -1154,9 +1023,12 @@ public class Difference {
         if (nodeTextIndex < nodeText.numberOfElements()
                 && nodeText.getTextElement(nodeTextIndex).isToken(RBRACE)) {
             indentationAdj = indentationAdj.subList(
-                    0, indentationAdj.size() - Math.min(STANDARD_INDENTATION_SIZE, indentationAdj.size()));
+                    0,
+                    indentationAdj.size()
+                            - Math.min(IndentationConstants.STANDARD_INDENTATION_SIZE, indentationAdj.size()));
         } else if (followedByUnindent) {
-            indentationAdj = indentationAdj.subList(0, Math.max(0, indentationAdj.size() - STANDARD_INDENTATION_SIZE));
+            indentationAdj = indentationAdj.subList(
+                    0, Math.max(0, indentationAdj.size() - IndentationConstants.STANDARD_INDENTATION_SIZE));
         }
         for (TextElement e : indentationAdj) {
             if ((nodeTextIndex < nodeText.numberOfElements())

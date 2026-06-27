@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,6 +24,7 @@ package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -141,6 +142,41 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         Optional<Value> ref = context.solveSymbolAsValue("p");
         assertTrue(ref.isPresent());
         assertEquals("java.lang.String", ref.get().getType().describe());
+    }
+
+    @Test
+    // see https://github.com/javaparser/javaparser/issues/2716
+    void solveParameterOfLambdaInStaticGenericMethodWithOuterContextInference() {
+        // When Comparator.comparing(lambda) is passed to stream.sorted(), the lambda
+        // parameter type cannot be inferred from comparing's scope alone: comparing is
+        // a static method, so there is no receiver instance whose type arguments could
+        // substitute its type parameter T.
+        //
+        // The outer call provides the missing context: sorted() on Stream<String>
+        // expects Comparator<? super String>, so the inference engine matches
+        // comparing's return type Comparator<T> against Comparator<? super String>
+        // and concludes T = ? super String.  The lambda parameter therefore has
+        // type "? super java.lang.String".
+        String source = "import java.util.Arrays;\n"
+                + "import java.util.Comparator;\n"
+                + "import java.util.List;\n"
+                + "public class Test {\n"
+                + "    void test() {\n"
+                + "        List<String> list = Arrays.asList(\"b\", \"a\");\n"
+                + "        list.stream().sorted(Comparator.comparing(s -> s.toLowerCase()));\n"
+                + "    }\n"
+                + "}";
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        MethodCallExpr comparingCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(mce -> mce.getNameAsString().equals("comparing"))
+                .findFirst()
+                .get();
+        LambdaExpr lambdaExpr = (LambdaExpr) comparingCall.getArguments().get(0);
+
+        Context context = new LambdaExprContext(lambdaExpr, typeSolver);
+        Optional<Value> ref = context.solveSymbolAsValue("s");
+        assertTrue(ref.isPresent());
+        assertEquals("? super java.lang.String", ref.get().getType().describe());
     }
 
     @Test

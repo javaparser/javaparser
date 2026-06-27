@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,7 +24,6 @@ import static com.github.javaparser.JavaToken.Kind.EOF;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
-import static com.github.javaparser.StaticJavaParser.parseImport;
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
@@ -33,7 +32,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
@@ -45,6 +44,7 @@ import com.github.javaparser.metamodel.CompilationUnitMetaModel;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.printer.ConfigurablePrinter;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ClassUtils;
@@ -166,7 +166,10 @@ public class CompilationUnit extends Node {
      */
     @Override
     protected Printer getPrinter(PrinterConfiguration config) {
-        Printer printer = getPrinter().setConfiguration(config);
+        Printer printer = getPrinter();
+        if (printer instanceof ConfigurablePrinter) {
+            ((ConfigurablePrinter) printer).setConfiguration(config);
+        }
         printer(printer);
         return printer;
     }
@@ -190,7 +193,7 @@ public class CompilationUnit extends Node {
      * If there is no comment, an empty list is returned.
      *
      * @return list with all comments of this compilation unit.
-     * @see JavadocComment
+     * @see TraditionalJavadocComment
      * @see com.github.javaparser.ast.comments.LineComment
      * @see com.github.javaparser.ast.comments.BlockComment
      */
@@ -392,13 +395,13 @@ public class CompilationUnit extends Node {
 
     /**
      * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
-     * shorthand for {@link #addImport(String, boolean, boolean)} with name,false,false
+     * shorthand for {@link #addImport(String, boolean, boolean, boolean)} with name,false,false,false
      *
      * @param name the import name
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name) {
-        return addImport(name, false, false);
+        return addImport(name, false, false, false);
     }
 
     /**
@@ -422,7 +425,7 @@ public class CompilationUnit extends Node {
     }
 
     /**
-     * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
+     * Add a non-module import to the list of {@link ImportDeclaration} of this compilation unit<br>
      * <b>This method check if no import with the same name is already in the list</b>
      *
      * @param name the import name
@@ -434,16 +437,24 @@ public class CompilationUnit extends Node {
         if (name == null) {
             return this;
         }
-        final StringBuilder i = new StringBuilder("import ");
-        if (isStatic) {
-            i.append("static ");
+        return addImport(new ImportDeclaration(name, isStatic, isAsterisk, false));
+    }
+
+    /**
+     * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
+     * <b>This method check if no import with the same name is already in the list</b>
+     *
+     * @param name the import name
+     * @param isStatic is it an "import static"
+     * @param isAsterisk does the import end with ".*"
+     * @param isModule is it an "import module"
+     * @return this, the {@link CompilationUnit}
+     */
+    public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        if (name == null) {
+            return this;
         }
-        i.append(name);
-        if (isAsterisk) {
-            i.append(".*");
-        }
-        i.append(";");
-        return addImport(parseImport(i.toString()));
+        return addImport(new ImportDeclaration(name, isStatic, isAsterisk, isModule));
     }
 
     /**

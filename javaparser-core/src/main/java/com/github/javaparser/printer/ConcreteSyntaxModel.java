@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -136,45 +136,49 @@ public class ConcreteSyntaxModel {
                         semicolon()));
         concreteSyntaxModelByClass.put(
                 ClassOrInterfaceDeclaration.class,
-                sequence(
-                        comment(),
-                        memberAnnotations(),
-                        modifiers(),
-                        conditional(
-                                ObservableProperty.INTERFACE,
-                                FLAG,
-                                token(GeneratedJavaParserConstants.INTERFACE),
-                                token(GeneratedJavaParserConstants.CLASS)),
-                        space(),
-                        child(ObservableProperty.NAME),
-                        list(
-                                TYPE_PARAMETERS,
-                                sequence(comma(), space()),
-                                string(GeneratedJavaParserConstants.LT),
-                                string(GeneratedJavaParserConstants.GT)),
-                        list(
-                                ObservableProperty.EXTENDED_TYPES,
-                                sequence(string(GeneratedJavaParserConstants.COMMA), space()),
-                                sequence(space(), token(GeneratedJavaParserConstants.EXTENDS), space()),
-                                none()),
-                        list(
-                                ObservableProperty.IMPLEMENTED_TYPES,
-                                sequence(string(GeneratedJavaParserConstants.COMMA), space()),
-                                sequence(space(), token(GeneratedJavaParserConstants.IMPLEMENTS), space()),
-                                none()),
-                        space(),
-                        list(
-                                ObservableProperty.PERMITTED_TYPES,
-                                sequence(string(GeneratedJavaParserConstants.COMMA), space()),
-                                sequence(space(), token(GeneratedJavaParserConstants.PERMITS), space()),
-                                none()),
-                        block(sequence(
-                                newline(),
+                sequence(conditional(
+                        ObservableProperty.COMPACT,
+                        FLAG,
+                        list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), none()),
+                        sequence(
+                                comment(),
+                                memberAnnotations(),
+                                modifiers(),
+                                conditional(
+                                        ObservableProperty.INTERFACE,
+                                        FLAG,
+                                        token(GeneratedJavaParserConstants.INTERFACE),
+                                        token(GeneratedJavaParserConstants.CLASS)),
+                                space(),
+                                child(ObservableProperty.NAME),
                                 list(
-                                        ObservableProperty.MEMBERS,
-                                        sequence(newline(), newline()),
+                                        TYPE_PARAMETERS,
+                                        sequence(comma(), space()),
+                                        string(GeneratedJavaParserConstants.LT),
+                                        string(GeneratedJavaParserConstants.GT)),
+                                list(
+                                        ObservableProperty.EXTENDED_TYPES,
+                                        sequence(string(GeneratedJavaParserConstants.COMMA), space()),
+                                        sequence(space(), token(GeneratedJavaParserConstants.EXTENDS), space()),
+                                        none()),
+                                list(
+                                        ObservableProperty.IMPLEMENTED_TYPES,
+                                        sequence(string(GeneratedJavaParserConstants.COMMA), space()),
+                                        sequence(space(), token(GeneratedJavaParserConstants.IMPLEMENTS), space()),
+                                        none()),
+                                space(),
+                                list(
+                                        ObservableProperty.PERMITTED_TYPES,
+                                        sequence(string(GeneratedJavaParserConstants.COMMA), space()),
+                                        sequence(space(), token(GeneratedJavaParserConstants.PERMITS), space()),
+                                        none()),
+                                block(sequence(
                                         newline(),
-                                        newline())))));
+                                        list(
+                                                ObservableProperty.MEMBERS,
+                                                sequence(newline(), newline()),
+                                                newline(),
+                                                newline())))))));
         concreteSyntaxModelByClass.put(
                 ConstructorDeclaration.class,
                 sequence(
@@ -510,6 +514,9 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(
                 MarkerAnnotationExpr.class,
                 sequence(comment(), token(GeneratedJavaParserConstants.AT), attribute(ObservableProperty.NAME)));
+        concreteSyntaxModelByClass.put(
+                MatchAllPatternExpr.class,
+                sequence(comment(), token(GeneratedJavaParserConstants.UNNAMED_PLACEHOLDER)));
         concreteSyntaxModelByClass.put(
                 MemberValuePair.class,
                 sequence(
@@ -1111,6 +1118,10 @@ public class ConcreteSyntaxModel {
                                 ObservableProperty.STATIC,
                                 FLAG,
                                 sequence(token(GeneratedJavaParserConstants.STATIC), space())),
+                        conditional(
+                                ObservableProperty.MODULE,
+                                FLAG,
+                                sequence(token(GeneratedJavaParserConstants.MODULE), space())),
                         child(ObservableProperty.NAME),
                         conditional(
                                 ASTERISK,

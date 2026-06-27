@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -192,6 +192,7 @@ public class TokenTypes {
             case TRUE:
             case FALSE:
             case NULL:
+            case UNNAMED_PLACEHOLDER:
                 return JavaToken.Category.LITERAL;
             case IDENTIFIER:
                 return JavaToken.Category.IDENTIFIER;
@@ -252,7 +253,7 @@ public class TokenTypes {
             case ENTER_MULTILINE_COMMENT:
             case COMMENT_CONTENT:
             case HEX_DIGITS:
-            case LETTER:
+            case NON_UNDERSCORE_LETTER:
             case UNICODE_ESCAPE:
             case PART_LETTER:
             case TEXT_BLOCK_CONTENT:

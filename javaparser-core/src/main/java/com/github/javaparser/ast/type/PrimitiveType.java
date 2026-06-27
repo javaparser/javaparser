@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -35,6 +35,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
+import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -84,7 +85,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return new PrimitiveType(Primitive.DOUBLE);
     }
 
-    public enum Primitive {
+    public enum Primitive implements Stringable {
         BOOLEAN("Boolean", "Z"),
         CHAR("Character", "C"),
         BYTE("Byte", "B"),

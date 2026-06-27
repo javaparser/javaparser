@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -42,15 +42,36 @@ public final class FunctionalInterfaceLogic {
 
     /**
      * Get the functional method defined by the type, if any.
+     *
+     * <p>Per JLS §9.8, a functional interface is always an <em>interface</em>, which is a reference
+     * type. Primitive types, array types, and void can therefore never be functional interfaces.
+     * Passing such a type returns {@link Optional#empty()} immediately without throwing an exception.
+     *
+     * <p>Note: bounded type variables ({@code <T extends Runnable>}) and intersection types
+     * ({@code Runnable & Serializable}) are not handled here and also return {@link Optional#empty()}.
+     * Supporting those cases is a separate, more complex enhancement (see JLS §15.27.3).
+     *
+     * @param type the resolved type to inspect — may be any {@link ResolvedType} subclass
+     * @return the single abstract method of the functional interface, or empty if the type is not
+     *     a functional interface or is not a reference type at all
+     * @see <a href="https://github.com/javaparser/javaparser/issues/3625">Issue #3625</a>
      */
     public static Optional<MethodUsage> getFunctionalMethod(ResolvedType type) {
+        // Guard added to fix issue #3625:
+        // asReferenceType() throws UnsupportedOperationException on non-reference types
+        // (e.g. ResolvedArrayType, ResolvedPrimitiveType). Since a functional interface is by
+        // definition an interface — a reference type — returning empty() here is both safe
+        // and semantically correct.
+        if (!type.isReferenceType()) {
+            return Optional.empty();
+        }
         Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration =
                 type.asReferenceType().getTypeDeclaration();
         if (!optionalTypeDeclaration.isPresent()) {
             return Optional.empty();
         }
         ResolvedReferenceTypeDeclaration typeDeclaration = optionalTypeDeclaration.get();
-        if (type.isReferenceType() && typeDeclaration.isInterface()) {
+        if (typeDeclaration.isInterface()) {
             return getFunctionalMethod(typeDeclaration);
         }
         return Optional.empty();
@@ -61,12 +82,13 @@ public final class FunctionalInterfaceLogic {
      */
     public static Optional<MethodUsage> getFunctionalMethod(ResolvedReferenceTypeDeclaration typeDeclaration) {
         // We need to find all abstract methods
-        Set<MethodUsage> methods = typeDeclaration.getAllMethods().stream()
-                .filter(m -> m.getDeclaration().isAbstract())
-                . // Remove methods inherited by Object:
+        // Remove methods inherited by Object:
+        Set<MethodUsage> // Remove methods inherited by Object:
                 // Consider the case of Comparator which define equals. It would be considered a functional method.
-                filter(m -> !isPublicMemberOfObject(m))
-                .collect(Collectors.toSet());
+                methods = typeDeclaration.getAllMethods().stream()
+                        .filter(m -> m.getDeclaration().isAbstract())
+                        .filter(m -> !isPublicMemberOfObject(m))
+                        .collect(Collectors.toSet());
         // TODO a functional interface can have multiple subsignature method with a return-type-substitutable
         // see https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8
         if (methods.size() == 0) {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,8 +23,9 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -75,7 +76,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(InitializerDeclaration n, A arg);
 
-    R visit(JavadocComment n, A arg);
+    R visit(TraditionalJavadocComment n, A arg);
 
     // - Type ----------------------------------------------
     R visit(ClassOrInterfaceType n, A arg);
@@ -243,4 +244,8 @@ public interface GenericVisitor<R, A> {
     R visit(TypePatternExpr n, A arg);
 
     R visit(RecordPatternExpr n, A arg);
+
+    R visit(MatchAllPatternExpr n, A arg);
+
+    R visit(MarkdownComment n, A arg);
 }

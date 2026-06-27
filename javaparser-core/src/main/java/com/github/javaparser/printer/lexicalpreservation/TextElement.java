@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -85,10 +85,9 @@ public abstract class TextElement implements TextElementMatcher, PrintableTextEl
      * @return TextElementMatcher that matches any TextElement with the same Range
      */
     TextElementMatcher matchByRange() {
-        return (TextElement textElement) -> getRange()
-                .flatMap(r1 -> textElement.getRange().map(r1::equals))
-                . // We're missing range information. This may happen when a node is manually instantiated. Don't be too
+        return ( // We're missing range information. This may happen when a node is manually instantiated. Don't be too
                 // harsh on that:
-                orElse(true);
+                TextElement textElement) ->
+                getRange().flatMap(r1 -> textElement.getRange().map(r1::equals)).orElse(true);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -205,7 +205,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
 
     @Override
     public String toString() {
-        return "ReflectionClassDeclaration{" + "clazz=" + getId() + '}';
+        return getClass().getSimpleName() + "{" + "clazz=" + getId() + '}';
     }
 
     public ResolvedType getUsage(Node node) {

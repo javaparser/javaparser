@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -645,8 +645,10 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
         ResolvedType resolvedType = methodReferenceExpr.calculateResolvedType();
 
-        // check that the expected revolved type equals the resolved type
-        assertEquals("SuperClass", resolvedType.describe());
+        // Per JLS §15.13 a constructor reference is a poly expression whose type is the
+        // functional interface declared by the enclosing context (here: the method return type
+        // Supplier<SuperClass>), not the constructed type (SuperClass).
+        assertEquals("Supplier<SuperClass>", resolvedType.describe());
     }
 
     @Test
@@ -658,15 +660,16 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodReferences");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz =
                 Navigator.demandClass(cu, "MethodReferences");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "zeroArgumentConstructor");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "singleArgumentConstructor");
         ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
         MethodReferenceExpr methodReferenceExpr =
                 (MethodReferenceExpr) returnStmt.getExpression().get();
 
         ResolvedType resolvedType = methodReferenceExpr.calculateResolvedType();
 
-        // check that the expected revolved type equals the resolved type
-        System.out.println(resolvedType.describe());
-        assertEquals("SuperClass", resolvedType.describe());
+        // Per JLS §15.13 a constructor reference is a poly expression whose type is the
+        // functional interface declared by the enclosing context (here: the method return type
+        // Function<String, SuperClass>), not the constructed type (SuperClass).
+        assertEquals("Function<java.lang.String, SuperClass>", resolvedType.describe());
     }
 }

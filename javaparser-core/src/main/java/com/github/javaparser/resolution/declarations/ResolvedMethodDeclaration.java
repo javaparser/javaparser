@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -88,6 +88,12 @@ public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration
         // d1 does not have the same signature as d2 (§8.4.2), and R1 = |R2|.
         if (returnType.describe().equals(otherResolvedType.erasure().describe())) {
             return true;
+        }
+        // At this point, R2 is not a type variable and R1 cannot be converted to a
+        // subtype of R2 by unchecked conversion, so if R1 is a type variable,
+        // then it cannot be assumed that it is return type substitutable.
+        if (returnType.isTypeVariable()) {
+            return false;
         }
         throw new UnsupportedOperationException("Return-Type-Substituable must be implemented on reference type.");
     }

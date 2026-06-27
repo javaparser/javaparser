@@ -1,0 +1,11 @@
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+public class ConstructorReference {
+
+    // Constructor reference as a variable initializer: the type of String::new is the
+    // declared functional interface type of the variable, not the constructed type.
+    Function<String, String> copyConstructor = String::new;
+
+    Supplier<String> noArgConstructor = String::new;
+}

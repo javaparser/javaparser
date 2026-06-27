@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2024 The JavaParser Team.
+ * Copyright (C) 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -46,7 +46,8 @@ public class Issue3159Test extends AbstractResolutionTest {
         CompilationUnit cu = StaticJavaParser.parse(code);
         NameExpr mce = cu.findFirst(NameExpr.class).get();
 
-        ResolvedValueDeclaration v = mce.resolve();
+        // resolve() now returns ResolvedDeclaration; cast since this name is a value.
+        ResolvedValueDeclaration v = (ResolvedValueDeclaration) mce.resolve();
         // verify that the symbol declaration represents a variable
         assertTrue(v.isVariable());
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,8 +23,9 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -910,7 +911,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final JavadocComment n, final A arg) {
+    public List<R> visit(final TraditionalJavadocComment n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2017,6 +2018,32 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             tmp = n.getType().accept(this, arg);
             if (tmp != null) result.addAll(tmp);
         }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final MatchAllPatternExpr n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getModifiers().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null) result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final MarkdownComment n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
         if (n.getComment().isPresent()) {
             tmp = n.getComment().get().accept(this, arg);
             if (tmp != null) result.addAll(tmp);

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -71,7 +71,7 @@ class PrettyPrinterTest {
 
     @BeforeEach
     public void setLanguageLevel() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
     }
 
     @AfterEach
@@ -367,7 +367,7 @@ class PrettyPrinterTest {
         PrinterConfiguration config = new DefaultPrinterConfiguration()
                 .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
-        Printer printer = new DefaultPrettyPrinter(config);
+        ConfigurablePrinter printer = new DefaultPrettyPrinter(config);
         assertFalse(printer.getConfiguration()
                 .get(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS))
                 .isPresent());
@@ -638,6 +638,21 @@ class PrettyPrinterTest {
     }
 
     @Test
+    public void testSwitchUnnamedPattern() {
+        String code = "class Foo {\n" + "\n"
+                + "    void foo(Integer arg) {\n"
+                + "        switch(foo) {\n"
+                + "            case String _ ->\n"
+                + "                System.out.println(42);\n"
+                + "        }\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
     public void testSwitchPatternWithGuard() {
         String code = "class Foo {\n" + "\n"
                 + "    void foo(Integer arg) {\n"
@@ -662,6 +677,54 @@ class PrettyPrinterTest {
                 + "        }\n"
                 + "    }\n"
                 + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void testUnnamedPattern() {
+        String code = "class Foo {\n" + "\n"
+                + "    void foo(Integer arg) {\n"
+                + "        switch(foo) {\n"
+                + "            case TwoBox(String s, Box(_)) ->\n"
+                + "                System.out.println(s);\n"
+                + "        }\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void testMarkdownComment() {
+        String code = "class Foo {\n" + "\n"
+                + "    /// This is a markdown comment\n"
+                + "    /// for the foo method\n"
+                + "    void foo(Integer arg) {\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void testSingleLineComment() {
+        String code = "class Foo {\n" + "\n"
+                + "    // This is a single line comment for the foo method\n"
+                + "    void foo(Integer arg) {\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void testModuleImport() {
+        String code = "import module java.base;\n\n" + "class Foo {\n" + "}\n";
 
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));

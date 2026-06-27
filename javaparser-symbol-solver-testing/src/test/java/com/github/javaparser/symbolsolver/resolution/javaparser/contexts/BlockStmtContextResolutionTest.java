@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -27,6 +27,8 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
@@ -61,6 +63,40 @@ class BlockStmtContextResolutionTest extends AbstractResolutionTest {
         AssignExpr expr = cu.findFirst(AssignExpr.class).get();
         ResolvedType rt = expr.calculateResolvedType();
         assertEquals("int", rt.describe());
+    }
+
+    // issue #3674
+    @Test
+    void field_reference_before_local_variable_with_same_name_must_resolve_to_field() {
+        String src = "class Class {\n"
+                + "    int attribute;\n"
+                + "    private int method() {\n"
+                + "        int value = attribute;\n"
+                + "        double attribute = 0.0;\n"
+                + "        return (int) (attribute + 1);\n"
+                + "    }\n"
+                + "}";
+        ParserConfiguration configuration = new ParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
+        StaticJavaParser.setConfiguration(configuration);
+        CompilationUnit cu = StaticJavaParser.parse(src);
+
+        // 'int value = attribute' — the NameExpr 'attribute' must resolve to the field (int), not the local var
+        // (double)
+        VariableDeclarationExpr valueDecl = cu.findAll(VariableDeclarationExpr.class).stream()
+                .filter(v -> v.getVariable(0).getNameAsString().equals("value"))
+                .findFirst()
+                .get();
+        NameExpr attributeInInitializer = valueDecl.findFirst(NameExpr.class).get();
+        ResolvedType resolvedType = attributeInInitializer.calculateResolvedType();
+        assertEquals("int", resolvedType.describe());
+
+        // 'double attribute = 0.0' — the local variable 'attribute' must resolve to double
+        VariableDeclarationExpr localAttributeDecl = cu.findAll(VariableDeclarationExpr.class).stream()
+                .filter(v -> v.getVariable(0).getNameAsString().equals("attribute"))
+                .findFirst()
+                .get();
+        assertEquals("double", localAttributeDecl.calculateResolvedType().describe());
     }
 
     @Test

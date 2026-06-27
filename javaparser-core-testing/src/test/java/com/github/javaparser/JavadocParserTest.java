@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -167,21 +167,21 @@ class JavadocParserTest {
 
     @Test
     void startsWithAsteriskEmpty() {
-        assertEquals(-1, JavadocParser.startsWithAsterisk(""));
+        assertEquals(-1, JavadocParser.startsWithAsteriskOrMdSlash(""));
     }
 
     @Test
     void startsWithAsteriskNoAsterisk() {
-        assertEquals(-1, JavadocParser.startsWithAsterisk(" ciao"));
+        assertEquals(-1, JavadocParser.startsWithAsteriskOrMdSlash(" ciao"));
     }
 
     @Test
     void startsWithAsteriskAtTheBeginning() {
-        assertEquals(0, JavadocParser.startsWithAsterisk("* ciao"));
+        assertEquals(0, JavadocParser.startsWithAsteriskOrMdSlash("* ciao"));
     }
 
     @Test
     void startsWithAsteriskAfterSpaces() {
-        assertEquals(3, JavadocParser.startsWithAsterisk("   * ciao"));
+        assertEquals(3, JavadocParser.startsWithAsteriskOrMdSlash("   * ciao"));
     }
 }

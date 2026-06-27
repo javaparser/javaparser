@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -73,5 +73,11 @@ public class AarTypeSolver implements TypeSolver {
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         return delegate.tryToSolveType(name);
+    }
+
+    @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
+            String qualifiedModuleName, String simpleTypeName) {
+        return delegate.tryToSolveTypeInModule(qualifiedModuleName, simpleTypeName);
     }
 }
