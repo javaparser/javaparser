@@ -23,55 +23,62 @@ package com.github.javaparser.ast.visitor.equals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.comments.LineComment;
 import org.junit.jupiter.api.Test;
 
-public class EqualsVisitorFieldTest extends EqualsVisitorTest {
-    private static final String FIELD = "class X { private static @anno int a=15*15; }";
+public class EqualsVisitorImportTest extends EqualsVisitorTest {
+    private static final String IMPORT = "import static java.util.Collections.*;";
 
     @Test
-    void equals_sameField_true() {
-        parseAndClone(FIELD);
+    void equals_sameImport_true() {
+        parseAndClone(IMPORT);
         boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(true));
     }
 
     @Test
-    void equals_differentMember_false() {
-        parseAndClone(FIELD);
-        FieldDeclaration field = getRightField();
-        field.getModifiers().clear();
-        boolean result = equalsNodes(nodeLeft, nodeRight);
-        assertThat(result, is(false));
-    }
-
-    FieldDeclaration getRightField() {
-        return nodeRight.getType(0).getMember(0).asFieldDeclaration();
-    }
-
-    @Test
-    void equals_differentVariable_false() {
-        parseAndClone(FIELD);
-        FieldDeclaration field = getRightField();
-        field.getVariables().clear();
+    void equals_differentName_false() {
+        parseAndClone(IMPORT);
+        ImportDeclaration imp = nodeRight.getImport(0);
+        imp.setName("java.util.List");
         boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentAnnotation_false() {
-        parseAndClone(FIELD);
-        FieldDeclaration field = getRightField();
-        field.getAnnotations().clear();
+    void equals_differentIsAsterisk_false() {
+        parseAndClone(IMPORT);
+        ImportDeclaration imp = nodeRight.getImport(0);
+        imp.setAsterisk(false);
         boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentFieldComment_false() {
-        parseAndClone(FIELD);
+    void equals_differentIsStatic_false() {
+        parseAndClone(IMPORT);
+        ImportDeclaration imp = nodeRight.getImport(0);
+        imp.setStatic(false);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentIsModule_false() {
+        parseAndClone(IMPORT);
+        ImportDeclaration imp = nodeRight.getImport(0);
+        imp.setModule(true);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentComment_false() {
+        parseAndClone(IMPORT);
         org.junit.jupiter.api.Assumptions.assumeTrue(commentsAffectEquality());
-        getRightField().setComment(new com.github.javaparser.ast.comments.LineComment("diff"));
+        ImportDeclaration imp = nodeRight.getImport(0);
+        imp.setComment(new LineComment("different"));
         boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }

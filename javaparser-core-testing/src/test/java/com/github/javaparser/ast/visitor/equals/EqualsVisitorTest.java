@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,30 +23,35 @@ package com.github.javaparser.ast.visitor.equals;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.EqualsVisitor;
 
-
-public abstract class EqualsVisitorTest
-{
+public abstract class EqualsVisitorTest {
     protected CompilationUnit nodeLeft;
     protected CompilationUnit nodeRight;
 
-    private CompilationUnit parse(String code)
-    {
+    private CompilationUnit parse(String code) {
         ParserConfiguration configuration = new ParserConfiguration();
         configuration.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
         StaticJavaParser.setConfiguration(configuration);
         return StaticJavaParser.parse(code);
     }
 
-    private CompilationUnit cloneNode(CompilationUnit node)
-    {
+    private CompilationUnit cloneNode(CompilationUnit node) {
         return (CompilationUnit) new CloneVisitor().visit(node, null);
     }
 
-    protected void parseAndClone(String code)
-    {
+    protected void parseAndClone(String code) {
         nodeLeft = parse(code);
         nodeRight = cloneNode(nodeLeft);
+    }
+
+    protected boolean equalsNodes(Node n, Node n2) {
+        return EqualsVisitor.equals(n, n2);
+    }
+
+    protected boolean commentsAffectEquality() {
+        return true;
     }
 }

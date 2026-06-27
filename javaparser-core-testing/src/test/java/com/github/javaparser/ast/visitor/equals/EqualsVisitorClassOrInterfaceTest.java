@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,110 +20,115 @@
  */
 package com.github.javaparser.ast.visitor.equals;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-class EqualsVisitorClassOrInterfaceTest extends EqualsVisitorTest
-{
-    private static final String CLASS = "@anno public sealed class a <T> extends b implements c permits d{" + "void e(){}" + "}";
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.expr.SimpleName;
+import org.junit.jupiter.api.Test;
+
+public class EqualsVisitorClassOrInterfaceTest extends EqualsVisitorTest {
+    private static final String CLASS =
+            "@anno public sealed class a <T> extends b implements c permits d{" + "void e(){}" + "}";
 
     @Test
-    void equals_sameClass_true()
-    {
+    void equals_sameClass_true() {
         parseAndClone(CLASS);
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(true));
     }
 
     @Test
-    void equals_differentClass_false()
-    {
+    void equals_differentClass_false() {
         parseAndClone(CLASS);
         SimpleName className = getRightClass().getName();
         className.setIdentifier(className.getIdentifier() + ".differentName");
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
-    ClassOrInterfaceDeclaration getRightClass()
-    {
+    ClassOrInterfaceDeclaration getRightClass() {
         return nodeRight.getType(0).asClassOrInterfaceDeclaration();
     }
 
     @Test
-    void equals_differentClassAnnotation_false()
-    {
+    void equals_differentClassAnnotation_false() {
         parseAndClone(CLASS);
         getRightClass().getAnnotations().remove(0);
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_leftIsClassRightIsInterface_false()
-    {
+    void equals_leftIsClassRightIsInterface_false() {
         parseAndClone(CLASS);
         getRightClass().setInterface(true);
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentExtends_false()
-    {
+    void equals_differentExtends_false() {
         parseAndClone(CLASS);
         getRightClass().getExtendedTypes(0).remove();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentImplements_false()
-    {
+    void equals_differentImplements_false() {
         parseAndClone(CLASS);
         getRightClass().getImplementedTypes(0).remove();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentPermittedTypes_false()
-    {
+    void equals_differentPermittedTypes_false() {
         parseAndClone(CLASS);
         getRightClass().getPermittedTypes().get(0).remove();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentTypeParameters_false()
-    {
+    void equals_differentTypeParameters_false() {
         parseAndClone(CLASS);
         getRightClass().getTypeParameters().get(0).remove();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentMembers_false()
-    {
+    void equals_differentMembers_false() {
         parseAndClone(CLASS);
         getRightClass().getMembers().remove(0);
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentModifiers_false()
-    {
+    void equals_differentModifiers_false() {
         parseAndClone(CLASS);
         getRightClass().getModifiers().remove(0);
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentCompact_false() {
+        parseAndClone(CLASS);
+        getRightClass().setCompact(!getRightClass().isCompact());
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentClassComment_false() {
+        parseAndClone(CLASS);
+        org.junit.jupiter.api.Assumptions.assumeTrue(commentsAffectEquality());
+        getRightClass().setComment(new com.github.javaparser.ast.comments.LineComment("diff"));
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 }

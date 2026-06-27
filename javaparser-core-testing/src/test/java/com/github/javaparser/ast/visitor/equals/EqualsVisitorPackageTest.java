@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,41 +20,45 @@
  */
 package com.github.javaparser.ast.visitor.equals;
 
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-class EqualsVisitorPackageTest extends EqualsVisitorTest
-{
+import com.github.javaparser.ast.expr.Name;
+import org.junit.jupiter.api.Test;
+
+public class EqualsVisitorPackageTest extends EqualsVisitorTest {
     private static final String PACKAGE = "@anno package com.github.javaparser.ast.visitor.equals;";
 
     @Test
-    void equals_samePackage_true()
-    {
+    void equals_samePackage_true() {
         parseAndClone(PACKAGE);
-        boolean result = EqualsVisitor.equals(nodeLeft,nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(true));
     }
 
     @Test
-    void equals_differentPackage_false()
-    {
+    void equals_differentPackage_false() {
         parseAndClone(PACKAGE);
         Name packageName = nodeRight.getPackageDeclaration().get().getName();
-        packageName.setIdentifier(packageName.getIdentifier()+".differentName");
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        packageName.setIdentifier(packageName.getIdentifier() + ".differentName");
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentPackageAnnotation_false()
-    {
+    void equals_differentPackageAnnotation_false() {
         parseAndClone(PACKAGE);
         nodeRight.getPackageDeclaration().get().getAnnotations().remove(0);
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentPackageComment_false() {
+        parseAndClone(PACKAGE);
+        org.junit.jupiter.api.Assumptions.assumeTrue(commentsAffectEquality());
+        nodeRight.getPackageDeclaration().get().setComment(new com.github.javaparser.ast.comments.LineComment("diff"));
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 }
