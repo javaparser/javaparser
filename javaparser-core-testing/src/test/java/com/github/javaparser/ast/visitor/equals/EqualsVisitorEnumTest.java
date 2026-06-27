@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,128 +20,132 @@
  */
 package com.github.javaparser.ast.visitor.equals;
 
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-class EqualsVisitorEnumTest extends EqualsVisitorTest
-{
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import org.junit.jupiter.api.Test;
+
+public class EqualsVisitorEnumTest extends EqualsVisitorTest {
     private static final String ENUM = "public @anno enum a implements c{@anno B(1){long f;}; int d;}";
 
     @Test
-    void equals_sameEnum_true()
-    {
+    void equals_sameEnum_true() {
         parseAndClone(ENUM);
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(true));
     }
 
     @Test
-    void equals_differentEntries_false()
-    {
+    void equals_differentEntries_false() {
         parseAndClone(ENUM);
         EnumDeclaration enumType = getRightEnum();
         enumType.getEntries().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
-    EnumDeclaration getRightEnum()
-    {
+    EnumDeclaration getRightEnum() {
         return nodeRight.getType(0).asEnumDeclaration();
     }
 
     @Test
-    void equals_differentImplemented_false()
-    {
+    void equals_differentImplemented_false() {
         parseAndClone(ENUM);
         EnumDeclaration enumType = getRightEnum();
         enumType.getImplementedTypes().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentMember_false()
-    {
+    void equals_differentMember_false() {
         parseAndClone(ENUM);
         EnumDeclaration enumType = getRightEnum();
         enumType.getMembers().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentModifier_false()
-    {
+    void equals_differentModifier_false() {
         parseAndClone(ENUM);
         EnumDeclaration enumType = getRightEnum();
         enumType.getModifiers().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentName_false()
-    {
+    void equals_differentName_false() {
         parseAndClone(ENUM);
         EnumDeclaration enumType = getRightEnum();
-        enumType.setName(enumType.getName()+"differentName");
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        enumType.setName(enumType.getName() + "differentName");
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentAnnotation_false()
-    {
+    void equals_differentAnnotation_false() {
         parseAndClone(ENUM);
         EnumDeclaration enumType = getRightEnum();
         enumType.getAnnotations().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentEnumConstantArgument_false()
-    {
+    void equals_differentEnumConstantArgument_false() {
         parseAndClone(ENUM);
         EnumConstantDeclaration enumConstant = getRightEnum().getEntry(0);
         enumConstant.getArguments().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentEnumConstantBody_false()
-    {
+    void equals_differentEnumConstantBody_false() {
         parseAndClone(ENUM);
         EnumConstantDeclaration enumConstant = getRightEnum().getEntry(0);
         enumConstant.getClassBody().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentEnumConstantName_false()
-    {
+    void equals_differentEnumConstantName_false() {
         parseAndClone(ENUM);
         EnumConstantDeclaration enumConstant = getRightEnum().getEntry(0);
-        enumConstant.setName(enumConstant.getName()+"differentName");
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        enumConstant.setName(enumConstant.getName() + "differentName");
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentEnumConstantAnnotation_false()
-    {
+    void equals_differentEnumConstantAnnotation_false() {
         parseAndClone(ENUM);
         EnumConstantDeclaration enumConstant = getRightEnum().getEntry(0);
         enumConstant.getAnnotations().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentEnumComment_false() {
+        parseAndClone(ENUM);
+        org.junit.jupiter.api.Assumptions.assumeTrue(commentsAffectEquality());
+        getRightEnum().setComment(new com.github.javaparser.ast.comments.LineComment("diff"));
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentEnumConstantComment_false() {
+        parseAndClone(ENUM);
+        org.junit.jupiter.api.Assumptions.assumeTrue(commentsAffectEquality());
+        getRightEnum().getEntry(0).setComment(new com.github.javaparser.ast.comments.LineComment("diff"));
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,57 +20,59 @@
  */
 package com.github.javaparser.ast.visitor.equals;
 
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-class EqualsVisitorVariableTest extends EqualsVisitorTest
-{
+import com.github.javaparser.ast.body.VariableDeclarator;
+import org.junit.jupiter.api.Test;
+
+public class EqualsVisitorVariableTest extends EqualsVisitorTest {
     private static final String VARIABLE = "class a{ void b(){int a=15;}} ";
 
     @Test
-    void equals_sameVariable_true()
-    {
+    void equals_sameVariable_true() {
         parseAndClone(VARIABLE);
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(true));
     }
 
-    VariableDeclarator getRightVariable()
-    {
+    VariableDeclarator getRightVariable() {
         return nodeRight.findFirst(VariableDeclarator.class).get();
     }
 
     @Test
-    void equals_differentInitializer_false()
-    {
+    void equals_differentInitializer_false() {
         parseAndClone(VARIABLE);
         VariableDeclarator variable = getRightVariable();
         variable.setInitializer("16");
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentName_false()
-    {
+    void equals_differentName_false() {
         parseAndClone(VARIABLE);
         VariableDeclarator variable = getRightVariable();
-        variable.setName(variable.getName()+"differentName");
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        variable.setName(variable.getName() + "differentName");
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
     @Test
-    void equals_differentType_false()
-    {
+    void equals_differentType_false() {
         parseAndClone(VARIABLE);
         VariableDeclarator variable = getRightVariable();
         variable.setType("long");
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentVariableComment_false() {
+        parseAndClone(VARIABLE);
+        org.junit.jupiter.api.Assumptions.assumeTrue(commentsAffectEquality());
+        getRightVariable().setComment(new com.github.javaparser.ast.comments.LineComment("diff"));
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 }

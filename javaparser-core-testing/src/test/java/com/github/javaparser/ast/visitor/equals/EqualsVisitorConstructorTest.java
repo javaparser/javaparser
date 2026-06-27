@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2024 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,66 +20,95 @@
  */
 package com.github.javaparser.ast.visitor.equals;
 
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-class EqualsVisitorConstructorTest extends EqualsVisitorTest
-{
-    private static final String CONSTRUCTOR = "class X { private X(int a) {int i; } }";
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import org.junit.jupiter.api.Test;
+
+public class EqualsVisitorConstructorTest extends EqualsVisitorTest {
+    private static final String CONSTRUCTOR = "class X { @anno private <T> X(int a) throws Exception {int i; } }";
 
     @Test
-    void equals_sameConstructor_true()
-    {
+    void equals_sameConstructor_true() {
         parseAndClone(CONSTRUCTOR);
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(true));
     }
 
-    ConstructorDeclaration getRightConstructor()
-    {
+    ConstructorDeclaration getRightConstructor() {
         return nodeRight.getType(0).getConstructors().get(0);
     }
 
     @Test
-    void equals_differentBody_false()
-    {
+    void equals_differentBody_false() {
         parseAndClone(CONSTRUCTOR);
         ConstructorDeclaration constructor = getRightConstructor();
         constructor.getBody().getStatements().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
-        assertThat(result, is(false));
-    }
-    @Test
-    void equals_differentModifier_false()
-    {
-        parseAndClone(CONSTRUCTOR);
-        ConstructorDeclaration constructor = getRightConstructor();
-        constructor.getModifiers().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
-        assertThat(result, is(false));
-    }
-    @Test
-    void equals_differentName_false()
-    {
-        parseAndClone(CONSTRUCTOR);
-        ConstructorDeclaration constructor = getRightConstructor();
-        constructor.setName(constructor.getName()+"differentName");
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
-        assertThat(result, is(false));
-    }
-    @Test
-    void equals_differentParameters_false()
-    {
-        parseAndClone(CONSTRUCTOR);
-        ConstructorDeclaration constructor = getRightConstructor();
-        constructor.getParameters().clear();
-        boolean result = EqualsVisitor.equals(nodeLeft, nodeRight);
+        boolean result = equalsNodes(nodeLeft, nodeRight);
         assertThat(result, is(false));
     }
 
+    @Test
+    void equals_differentModifier_false() {
+        parseAndClone(CONSTRUCTOR);
+        ConstructorDeclaration constructor = getRightConstructor();
+        constructor.getModifiers().clear();
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentName_false() {
+        parseAndClone(CONSTRUCTOR);
+        ConstructorDeclaration constructor = getRightConstructor();
+        constructor.setName(constructor.getName() + "differentName");
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentParameters_false() {
+        parseAndClone(CONSTRUCTOR);
+        ConstructorDeclaration constructor = getRightConstructor();
+        constructor.getParameters().clear();
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentThrownExceptions_false() {
+        parseAndClone(CONSTRUCTOR);
+        ConstructorDeclaration constructor = getRightConstructor();
+        constructor.getThrownExceptions().clear();
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentTypeParameters_false() {
+        parseAndClone(CONSTRUCTOR);
+        ConstructorDeclaration constructor = getRightConstructor();
+        constructor.getTypeParameters().clear();
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentAnnotations_false() {
+        parseAndClone(CONSTRUCTOR);
+        ConstructorDeclaration constructor = getRightConstructor();
+        constructor.getAnnotations().clear();
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void equals_differentConstructorComment_false() {
+        parseAndClone(CONSTRUCTOR);
+        org.junit.jupiter.api.Assumptions.assumeTrue(commentsAffectEquality());
+        getRightConstructor().setComment(new com.github.javaparser.ast.comments.LineComment("diff"));
+        boolean result = equalsNodes(nodeLeft, nodeRight);
+        assertThat(result, is(false));
+    }
 }
