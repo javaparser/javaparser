@@ -70,4 +70,5 @@ configure<CheckstyleExtension> {
 
 tasks.checkstyleMain {
     source("src/main/java")
+    exclude("**/build/generated-src/**")
 }

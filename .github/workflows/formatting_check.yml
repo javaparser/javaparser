@@ -46,7 +46,7 @@ jobs:
         run: ./gradlew checkstyleMain
 
   spotless_check_on_merge:
-    name: Spotless check
+    name: Spotless check (after merge)
     runs-on: ubuntu-latest
     steps:
       - *checkout
@@ -59,8 +59,9 @@ jobs:
           ./gradlew spotlessCheck
           git diff --exit-code
 
+
   spotless_check_on_branch:
-    name: Spotless check
+    name: Spotless check (on this branch only)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout latest code

@@ -15,7 +15,8 @@ import org.junit.jupiter.api.Test;
  * @version 1 (01.01.25)
  */
 public class RangeExpressionTest {
-    @Test @Disabled
+    @Test
+    @Disabled
     void test1() {
         var input = "5..6";
         var jp = new JavaParser();
