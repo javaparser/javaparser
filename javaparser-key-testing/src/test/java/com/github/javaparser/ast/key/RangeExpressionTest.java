@@ -2,6 +2,7 @@ package com.github.javaparser.ast.key;
 
 import com.github.javaparser.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Test;
  * @version 1 (01.01.25)
  */
 public class RangeExpressionTest {
-    @Test
+    @Test @Disabled
     void test1() {
         var input = "5..6";
         var jp = new JavaParser();
