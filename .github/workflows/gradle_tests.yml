@@ -1,7 +1,5 @@
 name: Tests
 
-#on: [push, pull_request]
-#on: [pull_request]
 on:
   # Trigger the workflow on push to master (ignoring .md only changes)
   push:
@@ -15,6 +13,8 @@ on:
   pull_request:
     paths-ignore:
       - '**.md'
+      - doc
+      - dev-files
 
   # Enable manual triggering (important for contributors to enable a check on their fork)
   workflow_dispatch:
@@ -26,17 +26,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  maven_test:
+  gradle_test_on_merge:
     strategy:
       ## Optionally cancel all other combinations if one fails
       fail-fast: false
       matrix:
-        ## Different OSs have different default line-endings -- test on all combinations.
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-        ## Different JDK versions have different implementations etc. -- test on all combinations (ideally 8 to latest).
-        ### exclude pre-8 (min development version jdk8)
-        jdk: [ 21, 25 ]
-
+        os: [ ubuntu-latest ] #, macos-latest, windows-latest ]
+        jdk: [ 21 ]
 
     env:
       OS: ${{ matrix.os }}
@@ -46,13 +42,15 @@ jobs:
 
     steps:
       ## Checkout the current version of the code from the repo.
-      - name: Checkout latest code
-        uses: actions/checkout@v6.0.2
+      - &checkout
+        name: Checkout latest code
+        uses: actions/checkout@v7
         with:
           fetch-depth: "0"
 
       ## Setup the specified version of Java (includes maven/gradle).
-      - name: Set up JDK ${{ matrix.jdk }}
+      - &setupjava
+        name: Set up JDK ${{ matrix.jdk }}
         uses: actions/setup-java@v5
         with:
           distribution: 'zulu'              # v2 requires explicitly stating the distribution - `zulu` and `adopt` supported at time of writing
@@ -60,36 +58,55 @@ jobs:
           java-package: jdk                 # optional (jdk or jre) - defaults to jdk
           cache: 'gradle'
 
-      ## Given that the build matrix only specifies the major version (configurable), output the precise version used.
-      - name: Echo exact java version being used
+      - &checkjava
+        name: Echo exact java version being used
         run: java -version
-
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v5
+      - &sonarcache
+        name: Cache SonarCloud packages
+        uses: actions/cache@v6
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-
-
-      ## Actually perform the tests. Unsuccessful tests will indicate a failed build.
-      ### -e, --errors : show traces where any errors occur
-      ### -B,--batch-mode : Run in non-interactive (batch) mode (disables output color)
-      ### clean : run the maven lifecycle stage `clean`
-      ### test : run the maven lifecycle stage `test`
-      ### -P,--activate-profiles : Comma-delimited list of profiles to activate
-      ### AlsoSlowTests : by default, only quick tests are run - the profile `AlsoSlowTests` runs the full test suite
-      - name: Test with Gradle (incl. slow tests)
+      - &gradletest
+        name: Test with Gradle
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           ./gradlew --continue --parallel test
 
-      - name: Test reporting
-        uses: dorny/test-reporter@v2
+      - &report
+        name: Test reporting
+        uses: dorny/test-reporter@v3
         if: success() || failure()
         with:
           name: Test Report
-          path: "**/build/reports/tests/test/**/*.xml"
+          path: "**/build/test-results/tests/test/**/*.xml"
           reporter: java-junit
+
+  gradle_test_on_branch:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ] #, macos-latest, windows-latest ]
+        jdk: [ 21 ]
+
+    env:
+      OS: ${{ matrix.os }}
+      JDK: ${{ matrix.jdk }}
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - &checkout
+        name: Checkout latest code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: "0"
+          ref: ${{github.event.pull_request.head.sha}}
+      - *setupjava
+      - *checkjava
+      - *sonarcache
+      - *gradletest
+      - *report

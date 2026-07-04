@@ -30,11 +30,13 @@ jobs:
     name: Validate checkstyle
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout latest code
+      - &checkout
+        name: Checkout latest code
         uses: actions/checkout@v7
         with:
           fetch-depth: "0"
-      - name: Set up JDK 21
+      - &setupjava
+        name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
           java-version: '21'
@@ -43,7 +45,21 @@ jobs:
       - name: Validate Project Checkstyle
         run: ./gradlew checkstyleMain
 
-  spotless_check:
+  spotless_check_on_merge:
+    name: Spotless check
+    runs-on: ubuntu-latest
+    steps:
+      - *checkout
+      - *setupjava
+      - &codegen
+        name: Generate code and format
+        run: |
+          ./gradlew :jmlparser-core-metamodel-generator:run
+          ./gradlew :jmlparser-core-generators:run
+          ./gradlew spotlessCheck
+          git diff --exit-code
+
+  spotless_check_on_branch:
     name: Spotless check
     runs-on: ubuntu-latest
     steps:
@@ -51,15 +67,6 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: "0"
-      - name: Set up JDK 21
-        uses: actions/setup-java@v5
-        with:
-          java-version: '21'
-          distribution: 'zulu'
-          cache: 'gradle'
-      - name: Generate code and format
-        run: |
-          ./gradlew :jmlparser-core-metamodel-generator:run
-          ./gradlew :jmlparser-core-generators:run
-          ./gradlew spotlessCheck
-          git diff --exit-code
+          ref: ${{github.event.pull_request.head.sha}}
+      - *setupjava
+      - *codegen
