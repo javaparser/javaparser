@@ -35,4 +35,14 @@ public class RangeExpressionTest {
         Assertions.assertEquals(GeneratedJavaParserConstants.INTEGER_LITERAL, tok3.kind);
         Assertions.assertEquals(GeneratedJavaParserConstants.EOF, tok4.kind);
     }
+
+    @Test
+    void test2() {
+        var expr = StaticJavaParser.parseExpression("2..a");
+    }
+    
+    @Test
+    void testFPLiteral() {
+        var expr = StaticJavaParser.parseExpression("2./a");
+    }
 }
