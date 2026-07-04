@@ -1254,6 +1254,11 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(KeyStatementSV.class, attribute(TEXT));
         concreteSyntaxModelByClass.put(KeyTransactionStatement.class, sequence());
         concreteSyntaxModelByClass.put(KeyTypeSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(JmlDoc.class, sequence());
+        concreteSyntaxModelByClass.put(JmlDocsBodyDeclaration.class, sequence());
+        concreteSyntaxModelByClass.put(JmlDocsStatements.class, sequence());
+        concreteSyntaxModelByClass.put(JmlDocsTypeDeclaration.class, sequence());
+        concreteSyntaxModelByClass.put(KeYMarkerStatement.class, sequence());
         List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter(c -> !c.isAbstract()
                         && !Comment.class.isAssignableFrom(c.getType())
