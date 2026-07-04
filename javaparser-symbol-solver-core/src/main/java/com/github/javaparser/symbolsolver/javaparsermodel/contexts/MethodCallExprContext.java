@@ -488,7 +488,10 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(
-            ResolvedTypeVariable tp, String name, List<ResolvedType> argumentsTypes, Context invokationContext,
+            ResolvedTypeVariable tp,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            Context invokationContext,
             ResolvedReferenceTypeDeclaration callContext) {
         List<ResolvedTypeParameterDeclaration.Bound> bounds =
                 tp.asTypeParameter().getBounds();
@@ -515,28 +518,31 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(
-            ResolvedType type, String name, List<ResolvedType> argumentsTypes, Context invokationContext,
+            ResolvedType type,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            Context invokationContext,
             ResolvedReferenceTypeDeclaration callContext) {
         if (type instanceof ResolvedReferenceType) {
-            return solveMethodAsUsage((ResolvedReferenceType) type, name, argumentsTypes, invokationContext,
-                    callContext);
+            return solveMethodAsUsage(
+                    (ResolvedReferenceType) type, name, argumentsTypes, invokationContext, callContext);
         }
         if (type instanceof LazyType) {
             return solveMethodAsUsage(type.asReferenceType(), name, argumentsTypes, invokationContext, callContext);
         }
         if (type instanceof ResolvedTypeVariable) {
-            return solveMethodAsUsage((ResolvedTypeVariable) type, name, argumentsTypes, invokationContext,
-                    callContext);
+            return solveMethodAsUsage(
+                    (ResolvedTypeVariable) type, name, argumentsTypes, invokationContext, callContext);
         }
         if (type instanceof ResolvedWildcard) {
             ResolvedWildcard wildcardUsage = (ResolvedWildcard) type;
             if (wildcardUsage.isSuper()) {
-                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext,
-                        callContext);
+                return solveMethodAsUsage(
+                        wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext, callContext);
             }
             if (wildcardUsage.isExtends()) {
-                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext,
-                        callContext);
+                return solveMethodAsUsage(
+                        wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext, callContext);
             }
             return solveMethodAsUsage(
                     new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()),
@@ -547,8 +553,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         }
         if (type instanceof ResolvedLambdaConstraintType) {
             ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
-            return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext,
-                    callContext);
+            return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext, callContext);
         }
         if (type instanceof ResolvedArrayType) {
             // An array inherits methods from Object not from it's component type
