@@ -62,7 +62,7 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
 }
 
 configure<CheckstyleExtension> {
-    toolVersion = libs.findVersion("checkstyleVersion").get().strictVersion
+    toolVersion = libs.findVersion("checkstyleVersion").get().toString()
     configFile = file("$rootDir/dev-files/JavaParser-CheckStyle.xml")
     isShowViolations = true
 }
