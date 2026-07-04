@@ -192,6 +192,7 @@ public class JmlMethodSignature extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlMethodSignatureMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlMethodSignatureMetaModel;
     }

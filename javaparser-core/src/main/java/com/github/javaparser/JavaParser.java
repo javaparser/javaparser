@@ -595,8 +595,8 @@ public final class JavaParser {
     public ParseResult<JmlClause> parseJmlClause(Provider content) {
         return parse(enableJml(GeneratedJavaParser::JmlContractClause), content);
     }
-    // endregion
 
+    // endregion
     /**
      * TODO weigl
      *

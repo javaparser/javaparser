@@ -1013,7 +1013,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlSimpleExprClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        printClause(n.getKind(), n.getHeaps().orElse(new NodeList<>()), n.getExpression());
+        printClause(n.getKind(), n.getHeaps(), n.getExpression());
     }
 
     @Override

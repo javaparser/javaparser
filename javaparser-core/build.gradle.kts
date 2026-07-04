@@ -23,8 +23,10 @@ val javaBuildFile by tasks.registering(Copy::class) {
         "version" to project.version,
     )
 }
+
 tasks.compileJava { dependsOn(javaBuildFile) }
 tasks.sourcesJar { dependsOn(javaBuildFile) }
+tasks.spotlessJava { dependsOn(javaBuildFile); dependsOn(tasks.named("compileJavacc")) }
 
 val javaccOutput =
     layout.buildDirectory

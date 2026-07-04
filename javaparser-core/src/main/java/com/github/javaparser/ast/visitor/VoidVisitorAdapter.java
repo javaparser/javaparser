@@ -894,7 +894,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlSimpleExprClause n, final A arg) {
         n.getExpression().accept(this, arg);
-        n.getHeaps().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
+        n.getHeaps().forEach(p -> p.accept(this, arg));
         n.getName().ifPresent(l -> l.accept(this, arg));
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));

@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.jml.clauses.JmlForallClause;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.jml.expr.JmlExpression;
 import java.util.Optional;
 
 /**
@@ -34,18 +35,27 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class JmlForallClauseMetaModel extends JmlClauseMetaModel {
+public class JmlExpressionMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    JmlForallClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+    JmlExpressionMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(
                 superBaseNodeMetaModel,
-                JmlForallClause.class,
-                "JmlForallClause",
-                "com.github.javaparser.ast.jml.clauses",
-                false,
+                JmlExpression.class,
+                "JmlExpression",
+                "com.github.javaparser.ast.jml.expr",
+                true,
                 false);
     }
 
-    public PropertyMetaModel boundedVariablesPropertyMetaModel;
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    protected JmlExpressionMetaModel(
+            Optional<BaseNodeMetaModel> superNodeMetaModel,
+            Class<? extends Node> type,
+            String name,
+            String packageName,
+            boolean isAbstract,
+            boolean hasWildcard) {
+        super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
+    }
 }

@@ -20,7 +20,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 /**
  * @author Alexander Weigl
@@ -64,12 +63,10 @@ public class JmlSimpleExprClause extends JmlClause {
         if (node == null) {
             return false;
         }
-        if (heaps != null) {
-            for (int i = 0; i < heaps.size(); i++) {
-                if (heaps.get(i) == node) {
-                    heaps.remove(i);
-                    return true;
-                }
+        for (int i = 0; i < heaps.size(); i++) {
+            if (heaps.get(i) == node) {
+                heaps.remove(i);
+                return true;
             }
         }
         return super.remove(node);
@@ -85,12 +82,10 @@ public class JmlSimpleExprClause extends JmlClause {
             setExpression((Expression) replacementNode);
             return true;
         }
-        if (heaps != null) {
-            for (int i = 0; i < heaps.size(); i++) {
-                if (heaps.get(i) == node) {
-                    heaps.set(i, (SimpleName) replacementNode);
-                    return true;
-                }
+        for (int i = 0; i < heaps.size(); i++) {
+            if (heaps.get(i) == node) {
+                heaps.set(i, (SimpleName) replacementNode);
+                return true;
             }
         }
         return super.replace(node, replacementNode);
@@ -138,12 +133,13 @@ public class JmlSimpleExprClause extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<NodeList<SimpleName>> getHeaps() {
-        return Optional.ofNullable(heaps);
+    public NodeList<SimpleName> getHeaps() {
+        return heaps;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlSimpleExprClause setHeaps(final @Nullable() NodeList<SimpleName> heaps) {
+    public JmlSimpleExprClause setHeaps(final @NonNull() NodeList<SimpleName> heaps) {
+        assertNotNull(heaps);
         if (heaps == this.heaps) {
             return this;
         }
@@ -239,8 +235,8 @@ public class JmlSimpleExprClause extends JmlClause {
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public @Nullable() NodeList<SimpleName> heaps() {
-        return heaps;
+    public @NonNull() NodeList<SimpleName> heaps() {
+        return Objects.requireNonNull(heaps);
     }
 
     @com.github.javaparser.ast.key.IgnoreLexPrinting()

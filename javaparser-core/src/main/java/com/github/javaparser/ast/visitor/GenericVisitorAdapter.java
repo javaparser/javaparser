@@ -2394,8 +2394,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             result = n.getExpression().accept(this, arg);
             if (result != null) return result;
         }
-        if (n.getHeaps().isPresent()) {
-            result = n.getHeaps().get().accept(this, arg);
+        {
+            result = n.getHeaps().accept(this, arg);
             if (result != null) return result;
         }
         if (n.getName().isPresent()) {

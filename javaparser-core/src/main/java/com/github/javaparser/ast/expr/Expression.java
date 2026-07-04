@@ -1340,4 +1340,19 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlSetComprehensionExpr(Consumer<JmlSetComprehensionExpr> action) {}
+
+    public boolean isJmlExpression() {
+        return false;
+    }
+
+    public JmlExpression asJmlExpression() {
+        throw new IllegalStateException(
+                f("%s is not JmlExpression, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlExpression> toJmlExpression() {
+        return Optional.empty();
+    }
+
+    public void ifJmlExpression(Consumer<JmlExpression> action) {}
 }

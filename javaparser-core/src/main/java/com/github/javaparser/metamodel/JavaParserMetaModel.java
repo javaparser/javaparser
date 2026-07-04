@@ -878,6 +878,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(jmlDocStmtMetaModel);
         nodeMetaModels.add(jmlDocTypeMetaModel);
         nodeMetaModels.add(jmlEndStmtMetaModel);
+        nodeMetaModels.add(jmlExpressionMetaModel);
         nodeMetaModels.add(jmlExpressionStmtMetaModel);
         nodeMetaModels.add(jmlFieldDeclarationMetaModel);
         nodeMetaModels.add(jmlForallClauseMetaModel);
@@ -3866,7 +3867,7 @@ public final class JavaParserMetaModel {
                 "heaps",
                 com.github.javaparser.ast.expr.SimpleName.class,
                 Optional.of(simpleNameMetaModel),
-                true,
+                false,
                 false,
                 true,
                 false);
@@ -5419,32 +5420,36 @@ public final class JavaParserMetaModel {
             new JmlDocTypeMetaModel(Optional.of(typeDeclarationMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final JmlExpressionMetaModel jmlExpressionMetaModel =
+            new JmlExpressionMetaModel(Optional.of(expressionMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlQuantifiedExprMetaModel jmlQuantifiedExprMetaModel =
-            new JmlQuantifiedExprMetaModel(Optional.of(expressionMetaModel));
+            new JmlQuantifiedExprMetaModel(Optional.of(jmlExpressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlTypeExprMetaModel jmlTypeExprMetaModel =
-            new JmlTypeExprMetaModel(Optional.of(expressionMetaModel));
+            new JmlTypeExprMetaModel(Optional.of(jmlExpressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlBinaryInfixExprMetaModel jmlBinaryInfixExprMetaModel =
-            new JmlBinaryInfixExprMetaModel(Optional.of(expressionMetaModel));
+            new JmlBinaryInfixExprMetaModel(Optional.of(jmlExpressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlLetExprMetaModel jmlLetExprMetaModel =
-            new JmlLetExprMetaModel(Optional.of(expressionMetaModel));
+            new JmlLetExprMetaModel(Optional.of(jmlExpressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlMultiCompareExprMetaModel jmlMultiCompareExprMetaModel =
-            new JmlMultiCompareExprMetaModel(Optional.of(expressionMetaModel));
+            new JmlMultiCompareExprMetaModel(Optional.of(jmlExpressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlLabelExprMetaModel jmlLabelExprMetaModel =
-            new JmlLabelExprMetaModel(Optional.of(expressionMetaModel));
+            new JmlLabelExprMetaModel(Optional.of(jmlExpressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlSetComprehensionExprMetaModel jmlSetComprehensionExprMetaModel =
-            new JmlSetComprehensionExprMetaModel(Optional.of(expressionMetaModel));
+            new JmlSetComprehensionExprMetaModel(Optional.of(jmlExpressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlStatementMetaModel jmlStatementMetaModel =

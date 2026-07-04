@@ -73,8 +73,9 @@ public class ModifierValidator extends VisitorValidator {
         // JML
         // JML
         // JML
+        // JML
         PUBLIC, // JML
-        PROTECTED, // JML
+        PROTECTED,
         ABSTRACT,
         STATIC,
         FINAL,
@@ -102,9 +103,10 @@ public class ModifierValidator extends VisitorValidator {
                 // JML
                 // JML
                 // JML
+                // JML
                 PUBLIC, // JML
                 PROTECTED, // JML
-                PRIVATE, // JML
+                PRIVATE,
                 ABSTRACT,
                 STATIC,
                 FINAL,
@@ -156,8 +158,9 @@ public class ModifierValidator extends VisitorValidator {
             // JML
             // JML
             // JML
+            // JML
             validateModifiers( // JML
-                    n, // JML
+                    n,
                     reporter,
                     PUBLIC,
                     ABSTRACT,
@@ -183,11 +186,12 @@ public class ModifierValidator extends VisitorValidator {
             // JML
             // JML
             // JML
+            // JML
             validateModifiers( // JML
                     n, // JML
                     reporter, // JML
                     PUBLIC, // JML
-                    PROTECTED, // JML
+                    PROTECTED,
                     PRIVATE,
                     ABSTRACT,
                     STATIC,
@@ -213,7 +217,8 @@ public class ModifierValidator extends VisitorValidator {
             // JML
             // JML
             // JML
-            validateModifiers( // JML
+            // JML
+            validateModifiers(
                     n,
                     reporter,
                     ABSTRACT,
@@ -380,11 +385,12 @@ public class ModifierValidator extends VisitorValidator {
                     // JML
                     // JML
                     // JML
+                    // JML
                     validateModifiers( // JML
                             n, // JML
                             reporter, // JML
                             PUBLIC, // JML
-                            PROTECTED, // JML
+                            PROTECTED,
                             PRIVATE,
                             ABSTRACT,
                             STATIC,

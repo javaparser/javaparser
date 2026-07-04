@@ -1006,7 +1006,6 @@ public class MethodResolutionLogic {
             TypeSolver typeSolver,
             boolean wildcardTolerance,
             ResolvedReferenceTypeDeclaration invocationContext) {
-
         if (invocationContext != null) {
             List<ResolvedMethodDeclaration> resolvedMethods = new ArrayList<>(methods);
             for (ResolvedMethodDeclaration method : resolvedMethods) {
@@ -1033,7 +1032,6 @@ public class MethodResolutionLogic {
                 }
             }
         }
-
         // Only consider methods with a matching name
         // Filters out duplicate ResolvedMethodDeclaration by their signature.
         // Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.

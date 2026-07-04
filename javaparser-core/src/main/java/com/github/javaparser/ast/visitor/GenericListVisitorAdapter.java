@@ -2500,8 +2500,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             tmp = n.getExpression().accept(this, arg);
             if (tmp != null) result.addAll(tmp);
         }
-        if (n.getHeaps().isPresent()) {
-            tmp = n.getHeaps().get().accept(this, arg);
+        {
+            tmp = n.getHeaps().accept(this, arg);
             if (tmp != null) result.addAll(tmp);
         }
         if (n.getName().isPresent()) {

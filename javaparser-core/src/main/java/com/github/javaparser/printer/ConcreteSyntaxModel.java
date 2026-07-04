@@ -1368,7 +1368,6 @@ public class ConcreteSyntaxModel {
                         semicolon(),
                         newline()));
         // endregion
-
         // region KEY
         // TODO weigl maybe one day someone will complete this, but currently we do not need
         // the support of concrete syntax model.
