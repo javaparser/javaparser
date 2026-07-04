@@ -30,7 +30,6 @@ import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -86,7 +85,7 @@ public class MethodResolutionLogic {
             // method, the lambda cannot implement that interface.
             if (lambdaPlaceholder.getParameterCount().isPresent()
                     && functionalInterface.getNoParams()
-                    != lambdaPlaceholder.getParameterCount().get()) {
+                            != lambdaPlaceholder.getParameterCount().get()) {
                 return true;
             }
             // If the lambda method has a block body then:
@@ -161,8 +160,8 @@ public class MethodResolutionLogic {
                 // Confirm all of these grouped "trailing" arguments have the required type -- if not, this is not a
                 // valid type. (Maybe this is also done later..?)
                 for (int variadicArgumentIndex = countOfMethodParametersDeclared;
-                     variadicArgumentIndex < countOfNeedleArgumentsPassed;
-                     variadicArgumentIndex++) {
+                        variadicArgumentIndex < countOfNeedleArgumentsPassed;
+                        variadicArgumentIndex++) {
                     ResolvedType currentArgumentType = needleArgumentTypes.get(variadicArgumentIndex);
                     ResolvedType variadicComponentType =
                             expectedVariadicParameterType.asArrayType().getComponentType();
@@ -195,7 +194,7 @@ public class MethodResolutionLogic {
             ResolvedType actualArgumentType = needleArgumentTypes.get(i);
             if (actualArgumentType instanceof LambdaArgumentTypePlaceholder
                     && isConflictingLambdaType(
-                    (LambdaArgumentTypePlaceholder) actualArgumentType, expectedDeclaredType)) {
+                            (LambdaArgumentTypePlaceholder) actualArgumentType, expectedDeclaredType)) {
                 return false;
             }
             if ((expectedDeclaredType.isTypeVariable() && !(expectedDeclaredType.isWildcard()))
@@ -217,7 +216,7 @@ public class MethodResolutionLogic {
             }
             boolean isAssignableWithoutSubstitution = expectedDeclaredType.isAssignableBy(actualArgumentType)
                     || (methodDeclaration.getParam(i).isVariadic()
-                    && convertToVariadicParameter(expectedDeclaredType).isAssignableBy(actualArgumentType));
+                            && convertToVariadicParameter(expectedDeclaredType).isAssignableBy(actualArgumentType));
             if (!isAssignableWithoutSubstitution
                     && expectedDeclaredType.isReferenceType()
                     && actualArgumentType.isReferenceType()) {
@@ -252,13 +251,13 @@ public class MethodResolutionLogic {
                     if (actualArgumentType.isConstraint()
                             && withWildcardTolerance
                             && (actualArgumentType.asConstraintType().getBound().isTypeVariable()
-                            || (!actualArgumentType
-                            .asConstraintType()
-                            .getBound()
-                            .isTypeVariable()
-                            && expectedDeclaredType.isAssignableBy(actualArgumentType
-                            .asConstraintType()
-                            .getBound())))) {
+                                    || (!actualArgumentType
+                                                    .asConstraintType()
+                                                    .getBound()
+                                                    .isTypeVariable()
+                                            && expectedDeclaredType.isAssignableBy(actualArgumentType
+                                                    .asConstraintType()
+                                                    .getBound())))) {
                         needForWildCardTolerance = true;
                         continue;
                     }
@@ -326,7 +325,7 @@ public class MethodResolutionLogic {
             ResolvedType actualArgumentType = needleArgumentTypes.get(lastNeedleArgumentIndex);
             boolean finalArgumentIsArray = actualArgumentType.isArray()
                     && expectedVariadicParameterType.isAssignableBy(
-                    actualArgumentType.asArrayType().getComponentType());
+                            actualArgumentType.asArrayType().getComponentType());
             if (finalArgumentIsArray) {
                 // Treat as an array of values -- in which case the expected parameter type is the common type of this
                 // array.
@@ -695,10 +694,10 @@ public class MethodResolutionLogic {
                 // Check boxing/unboxing compatibility with all type variations
                 isApplicable = isBoxingCompatibleWithTypeSolver(expectedArgumentType, actualArgumentType, typeSolver)
                         || isBoxingCompatibleWithTypeSolver(
-                        expectedTypeWithSubstitutions, actualArgumentType, typeSolver)
+                                expectedTypeWithSubstitutions, actualArgumentType, typeSolver)
                         || isBoxingCompatibleWithTypeSolver(expectedTypeWithInference, actualArgumentType, typeSolver)
                         || isBoxingCompatibleWithTypeSolver(
-                        expectedTypeWithoutSubstitutions, actualArgumentType, typeSolver);
+                                expectedTypeWithoutSubstitutions, actualArgumentType, typeSolver);
             }
             if (!isApplicable) {
                 return false;
@@ -1009,19 +1008,22 @@ public class MethodResolutionLogic {
         if (invocationContext != null) {
             List<ResolvedMethodDeclaration> resolvedMethods = new ArrayList<>(methods);
             for (ResolvedMethodDeclaration method : resolvedMethods) {
-                final CallableDeclaration<?> declaration = (CallableDeclaration<?>) method.toAst().orElseThrow();
+                final CallableDeclaration<?> declaration =
+                        (CallableDeclaration<?>) method.toAst().orElseThrow();
                 final ResolvedReferenceTypeDeclaration containerType = method.declaringType();
-                if (containerType.internalTypes().stream().anyMatch(internalType ->
-                        internalType.getQualifiedName().equals(invocationContext.getQualifiedName()))) {
+                if (containerType.internalTypes().stream()
+                        .anyMatch(internalType ->
+                                internalType.getQualifiedName().equals(invocationContext.getQualifiedName()))) {
                     // inner classes can see anything in their surrounding class
                     continue;
-                } else if (declaration.isPrivate() &&
-                        !(invocationContext.getQualifiedName().equals(containerType.getQualifiedName()))) {
+                } else if (declaration.isPrivate()
+                        && !(invocationContext.getQualifiedName().equals(containerType.getQualifiedName()))) {
                     methods.remove(method);
                 } else {
-                    final boolean samePackage = containerType.getPackageName().equals(invocationContext.getPackageName());
-                    if (declaration.isProtected() &&
-                            !(containerType.isAssignableBy(invocationContext) || samePackage)) {
+                    final boolean samePackage =
+                            containerType.getPackageName().equals(invocationContext.getPackageName());
+                    if (declaration.isProtected()
+                            && !(containerType.isAssignableBy(invocationContext) || samePackage)) {
                         methods.remove(method);
                     } else if (declaration.getAccessSpecifier() == AccessSpecifier.NONE && !samePackage) {
                         methods.remove(method);
@@ -1343,7 +1345,10 @@ public class MethodResolutionLogic {
     }
 
     public static SymbolReference<ResolvedMethodDeclaration> solveMethodInType(
-            ResolvedTypeDeclaration typeDeclaration, String name, List<ResolvedType> argumentsTypes, ResolvedReferenceTypeDeclaration invocationContext) {
+            ResolvedTypeDeclaration typeDeclaration,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         return solveMethodInType(typeDeclaration, name, argumentsTypes, false, invocationContext);
     }
 
@@ -1352,9 +1357,11 @@ public class MethodResolutionLogic {
             ResolvedTypeDeclaration typeDeclaration,
             String name,
             List<ResolvedType> argumentsTypes,
-            boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         if (typeDeclaration instanceof MethodResolutionCapability) {
-            return ((MethodResolutionCapability) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly, invocationContext);
+            return ((MethodResolutionCapability) typeDeclaration)
+                    .solveMethod(name, argumentsTypes, staticOnly, invocationContext);
         }
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }

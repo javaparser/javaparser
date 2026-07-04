@@ -33,5 +33,6 @@ public interface MethodUsageResolutionCapability {
             String name,
             List<ResolvedType> argumentTypes,
             Context invocationContext,
-            List<ResolvedType> typeParameters, ResolvedReferenceTypeDeclaration callContext);
+            List<ResolvedType> typeParameters,
+            ResolvedReferenceTypeDeclaration callContext);
 }

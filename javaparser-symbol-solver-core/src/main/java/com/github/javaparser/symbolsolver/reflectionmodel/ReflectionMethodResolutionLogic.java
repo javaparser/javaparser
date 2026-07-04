@@ -123,8 +123,8 @@ class ReflectionMethodResolutionLogic {
             if (ancestor.getTypeDeclaration().isPresent()) {
                 ResolvedReferenceTypeDeclaration ancestorTypeDeclaration =
                         ancestor.getTypeDeclaration().get();
-                SymbolReference<ResolvedMethodDeclaration> ref =
-                        MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration, name, argumentsTypes, null); //XXX
+                SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(
+                        ancestorTypeDeclaration, name, argumentsTypes, null); // XXX
                 if (ref.isSolved()) {
                     ResolvedMethodDeclaration correspondingDeclaration = ref.getCorrespondingDeclaration();
                     MethodUsage methodUsage =
@@ -139,8 +139,8 @@ class ReflectionMethodResolutionLogic {
                             new ReflectionClassDeclaration(Object.class, typeSolver))
                     .getTypeDeclaration();
             if (optionalObjectClass.isPresent()) {
-                SymbolReference<ResolvedMethodDeclaration> ref =
-                        MethodResolutionLogic.solveMethodInType(optionalObjectClass.get(), name, argumentsTypes, null);//XXX
+                SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(
+                        optionalObjectClass.get(), name, argumentsTypes, null); // XXX
                 if (ref.isSolved()) {
                     MethodUsage usage = replaceParams(
                             typeParameterValues, optionalObjectClass.get(), ref.getCorrespondingDeclaration());

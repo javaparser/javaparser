@@ -155,8 +155,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     /// Public methods
     ///
 
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes,
-                                                                  ResolvedReferenceTypeDeclaration invocationContext) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> parameterTypes, ResolvedReferenceTypeDeclaration invocationContext) {
         Context ctx = getContext();
         return ctx.solveMethod(name, parameterTypes, false, invocationContext);
     }
@@ -166,7 +166,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             String name,
             List<ResolvedType> argumentTypes,
             Context invocationContext,
-            List<ResolvedType> typeParameters, ResolvedReferenceTypeDeclaration callContext) {
+            List<ResolvedType> typeParameters,
+            ResolvedReferenceTypeDeclaration callContext) {
         return getContext().solveMethodAsUsage(name, argumentTypes, callContext);
     }
 
@@ -331,7 +332,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
             ResolvedReferenceTypeDeclaration invocationContext) {
         return getContext().solveMethod(name, argumentsTypes, staticOnly, invocationContext);
     }

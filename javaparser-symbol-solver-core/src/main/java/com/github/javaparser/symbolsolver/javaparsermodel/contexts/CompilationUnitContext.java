@@ -320,7 +320,9 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
             ResolvedReferenceTypeDeclaration invocationContext) {
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
             if (importDecl.isStatic()) {
@@ -353,8 +355,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     if (qName.equals(name) || qName.endsWith("." + name)) {
                         String typeName = getType(qName);
                         ResolvedTypeDeclaration ref = typeSolver.solveType(typeName);
-                        SymbolReference<ResolvedMethodDeclaration> method =
-                                MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true, invocationContext);
+                        SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(
+                                ref, name, argumentsTypes, true, invocationContext);
                         if (method.isSolved()) {
                             return method;
                         }

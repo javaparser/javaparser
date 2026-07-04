@@ -1159,7 +1159,8 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
 
         res = constructorDeclaration.solveMethod(
                 "isThrows",
-                ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolverNewCode)), null);
+                ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolverNewCode)),
+                null);
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());

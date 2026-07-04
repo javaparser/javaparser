@@ -256,7 +256,9 @@ public class JavaParserTypeDeclarationAdapter {
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
             ResolvedReferenceTypeDeclaration invocationContext) {
 
         // Begin by locating methods declared "here"
@@ -314,7 +316,8 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
-        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver, invocationContext);
+        return MethodResolutionLogic.findMostApplicable(
+                candidateMethods, name, argumentsTypes, typeSolver, invocationContext);
     }
 
     public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes) {

@@ -44,9 +44,17 @@ public interface Solver {
 
     SymbolReference<? extends ResolvedTypeDeclaration> solveType(String name, Node node);
 
-    MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Context context, ResolvedReferenceTypeDeclaration invocationContext);
+    MethodUsage solveMethod(
+            String methodName,
+            List<ResolvedType> argumentsTypes,
+            Context context,
+            ResolvedReferenceTypeDeclaration invocationContext);
 
-    MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Node node, ResolvedReferenceTypeDeclaration invocationContext);
+    MethodUsage solveMethod(
+            String methodName,
+            List<ResolvedType> argumentsTypes,
+            Node node,
+            ResolvedReferenceTypeDeclaration invocationContext);
 
     ResolvedTypeDeclaration solveType(Type type);
 

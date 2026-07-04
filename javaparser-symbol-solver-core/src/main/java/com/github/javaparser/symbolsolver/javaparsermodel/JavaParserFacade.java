@@ -135,8 +135,7 @@ public class JavaParserFacade {
 
     public static ResolvedReferenceTypeDeclaration find(Expression methodCallExpr) {
         Optional<Node> parent = methodCallExpr.getParentNode();
-        while (parent.isPresent() &&
-                !(parent.get() instanceof ClassOrInterfaceType)) {
+        while (parent.isPresent() && !(parent.get() instanceof ClassOrInterfaceType)) {
             parent = parent.get().getParentNode();
         }
         if (parent.isPresent() && parent.get() instanceof ClassOrInterfaceType typeDecl) {
@@ -332,8 +331,8 @@ public class JavaParserFacade {
     /**
      * Given a method call find out to which method declaration it corresponds.
      */
-    public SymbolReference<ResolvedMethodDeclaration> solve(MethodCallExpr methodCallExpr, boolean solveLambdas,
-                                                            ResolvedReferenceTypeDeclaration invocationContext) {
+    public SymbolReference<ResolvedMethodDeclaration> solve(
+            MethodCallExpr methodCallExpr, boolean solveLambdas, ResolvedReferenceTypeDeclaration invocationContext) {
         List<ResolvedType> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
 

@@ -248,8 +248,8 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        SymbolReference<ResolvedMethodDeclaration> ref =
-                context.solveMethod("assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), false, null);
+        SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod(
+                "assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), false, null);
         assertEquals(true, ref.isSolved());
         assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
         assertEquals(2, ref.getCorrespondingDeclaration().getNumberOfParams());

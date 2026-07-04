@@ -82,7 +82,12 @@ class JavassistUtils {
             ancestor.getTypeDeclaration()
                     .flatMap(superClassTypeDeclaration -> ancestor.getTypeDeclaration())
                     .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(
-                            interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues, null))//XXX
+                            interfaceTypeDeclaration,
+                            name,
+                            argumentsTypes,
+                            invokationContext,
+                            typeParameterValues,
+                            null)) // XXX
                     .ifPresent(methods::add);
         }
 
@@ -127,7 +132,8 @@ class JavassistUtils {
             }
         }
 
-        return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver, invocationContext);
+        return MethodResolutionLogic.findMostApplicable(
+                candidates, name, argumentsTypes, typeSolver, invocationContext);
     }
 
     static ResolvedType signatureTypeToType(

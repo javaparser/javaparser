@@ -148,7 +148,9 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
     @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
             ResolvedReferenceTypeDeclaration invocationContext) {
         Predicate<Method> staticFilter = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
 
@@ -201,7 +203,8 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
         if (candidateSolvedMethods.isEmpty()) {
             return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
         }
-        return MethodResolutionLogic.findMostApplicable(candidateSolvedMethods, name, argumentsTypes, typeSolver, invocationContext);
+        return MethodResolutionLogic.findMostApplicable(
+                candidateSolvedMethods, name, argumentsTypes, typeSolver, invocationContext);
     }
 
     @Override
@@ -218,7 +221,8 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
             String name,
             List<ResolvedType> argumentsTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameterValues, ResolvedReferenceTypeDeclaration callContext) {
+            List<ResolvedType> typeParameterValues,
+            ResolvedReferenceTypeDeclaration callContext) {
         List<MethodUsage> methodUsages = new ArrayList<>();
 
         List<Method> allMethods = Arrays.stream(clazz.getDeclaredMethods())
@@ -249,7 +253,12 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
         getSuperClass().ifPresent(superClass -> {
             superClass.getTypeDeclaration().ifPresent(superClassTypeDeclaration -> {
                 ContextHelper.solveMethodAsUsage(
-                                superClassTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues, callContext)
+                                superClassTypeDeclaration,
+                                name,
+                                argumentsTypes,
+                                invokationContext,
+                                typeParameterValues,
+                                callContext)
                         .ifPresent(methodUsages::add);
             });
         });
@@ -259,7 +268,12 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
                     .getTypeDeclaration()
                     .flatMap(superClassTypeDeclaration -> interfaceDeclaration.getTypeDeclaration())
                     .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(
-                            interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues, callContext))
+                            interfaceTypeDeclaration,
+                            name,
+                            argumentsTypes,
+                            invokationContext,
+                            typeParameterValues,
+                            callContext))
                     .ifPresent(methodUsages::add);
         }
         Optional<MethodUsage> ref =

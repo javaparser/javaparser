@@ -77,7 +77,8 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     }
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, ResolvedReferenceTypeDeclaration invocationContext) {
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name, List<ResolvedType> argumentsTypes, ResolvedReferenceTypeDeclaration invocationContext) {
         ResolvedType typeOfScope;
         if (wrappedNode.hasScope()) {
             Expression scope = wrappedNode.getScope().get();
@@ -148,7 +149,9 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
             ResolvedReferenceTypeDeclaration invocationContext) {
         Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
 
@@ -176,8 +179,10 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     ///
 
     private Optional<MethodUsage> solveMethodAsUsage(
-            ResolvedReferenceType refType, String name,
-            List<ResolvedType> argumentsTypes, Context invokationContext,
+            ResolvedReferenceType refType,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            Context invokationContext,
             ResolvedReferenceTypeDeclaration callContext) {
         if (!refType.getTypeDeclaration().isPresent()) {
             return Optional.empty();
@@ -188,7 +193,8 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 name,
                 argumentsTypes,
                 invokationContext,
-                refType.typeParametersValues(), callContext);
+                refType.typeParametersValues(),
+                callContext);
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
 

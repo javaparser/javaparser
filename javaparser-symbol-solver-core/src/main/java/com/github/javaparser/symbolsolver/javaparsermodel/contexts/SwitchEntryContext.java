@@ -100,7 +100,10 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false, invocationContext);
     }

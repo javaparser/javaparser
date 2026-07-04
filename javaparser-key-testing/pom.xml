@@ -5,12 +5,13 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>org.key-project.proofjava</groupId>
-        <version>3.28.0-K13.4</version>
+        <version>3.28.0-K13.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javaparser-key-testing</artifactId>
-
+	<name>${project.groupId}:${project.artifactId}</name>
+    
     <properties>
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
     </properties>

@@ -60,7 +60,9 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
             ResolvedReferenceTypeDeclaration invocationContext) {
         List<ResolvedMethodDeclaration> candidateMethods = myDeclaration.getDeclaredMethods().stream()
                 .filter(m -> m.getName().equals(name) && (!staticOnly || m.isStatic()))
@@ -97,13 +99,18 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
         if (candidateMethods.isEmpty()
                 && myDeclaration.getSuperTypeDeclaration().isInterface()) {
             SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
-                    new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, false, invocationContext);
+                    new ReflectionClassDeclaration(Object.class, typeSolver),
+                    name,
+                    argumentsTypes,
+                    false,
+                    invocationContext);
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
         }
 
-        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver, invocationContext);
+        return MethodResolutionLogic.findMostApplicable(
+                candidateMethods, name, argumentsTypes, typeSolver, invocationContext);
     }
 
     @Override

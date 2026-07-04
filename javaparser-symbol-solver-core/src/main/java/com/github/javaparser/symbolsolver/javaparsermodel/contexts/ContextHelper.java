@@ -44,7 +44,8 @@ public class ContextHelper {
             String name,
             List<ResolvedType> argumentsTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameters, ResolvedReferenceTypeDeclaration callContext) {
+            List<ResolvedType> typeParameters,
+            ResolvedReferenceTypeDeclaration callContext) {
 
         if (typeDeclaration instanceof MethodUsageResolutionCapability) {
             return ((MethodUsageResolutionCapability) typeDeclaration)

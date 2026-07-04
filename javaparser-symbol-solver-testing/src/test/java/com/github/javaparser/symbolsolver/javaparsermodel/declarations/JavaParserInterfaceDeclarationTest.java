@@ -1089,7 +1089,8 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
 
         res = constructorDeclaration.solveMethod(
                 "isThrows",
-                ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolver)), null);
+                ImmutableList.of(ReflectionFactory.typeUsageFor(RuntimeException.class.getClass(), typeSolver)),
+                null);
         assertEquals(
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 res.getCorrespondingDeclaration().getQualifiedSignature());

@@ -17,7 +17,6 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -49,16 +48,16 @@ public class KeyMethodCallStatementContext extends AbstractJavaParserContext<Key
 
         selfType = sourceSpecification.context().convertToUsage(context);
 
-        selfName = sourceSpecification.getInstance()
+        selfName = sourceSpecification
+                .getInstance()
                 .flatMap(Expression::toNameExpr)
                 .map(NodeWithSimpleName::getNameAsString)
                 .orElse(null);
     }
 
-
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
-                                                    ResolvedReferenceTypeDeclaration invocationContext) {
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name, List<ResolvedType> argumentsTypes, ResolvedReferenceTypeDeclaration invocationContext) {
         return context.solveMethodAsUsage(name, argumentsTypes, invocationContext);
     }
 
@@ -108,12 +107,20 @@ public class KeyMethodCallStatementContext extends AbstractJavaParserContext<Key
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         return context.solveMethodInParentContext(name, argumentsTypes, staticOnly, invocationContext);
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, ResolvedReferenceTypeDeclaration invocationContext) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         return context.solveMethod(name, argumentsTypes, staticOnly, invocationContext);
     }
 
