@@ -23,21 +23,50 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.Solver;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.lang.ref.WeakReference;
 import org.junit.jupiter.api.Test;
 
 class JavaParserFacadeTest extends AbstractResolutionTest {
 
     private final Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+
+    /**
+     * Regression test for the per-{@link TypeSolver} facade cache leak: {@code instances} is a
+     * {@link java.util.WeakHashMap} whose value (the facade) stores its own key (the type solver) in
+     * final fields. If the value were held strongly, the weak key could never be collected, pinning
+     * the type solver — and, for callers such as KeY, everything reachable from it — for the lifetime
+     * of the JVM. The value is therefore held via a {@link WeakReference}; here we assert that once
+     * the caller drops its strong reference, the cached type solver becomes collectable.
+     */
+    @Test
+    void facadeCacheDoesNotPinItsTypeSolver() throws InterruptedException {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        // Populate the cache entry for this solver; deliberately keep no reference to the facade.
+        JavaParserFacade.get(typeSolver);
+        WeakReference<TypeSolver> ref = new WeakReference<>(typeSolver);
+
+        typeSolver = null; // drop the only strong reference held by this test
+
+        boolean collected = false;
+        for (int i = 0; i < 50 && !collected; i++) {
+            System.gc();
+            Thread.sleep(20);
+            collected = ref.get() == null;
+        }
+        assertTrue(collected, "JavaParserFacade cache must not strongly pin its key TypeSolver");
+    }
 
     @Test
     void classToResolvedType_givenPrimitiveShouldBeAReflectionPrimitiveDeclaration() {
