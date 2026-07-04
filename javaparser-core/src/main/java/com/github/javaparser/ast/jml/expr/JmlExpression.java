@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.jml.expr;
 
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.expr.Expression;
 
@@ -10,6 +11,7 @@ import com.github.javaparser.ast.expr.Expression;
  * @version 1 (4/6/26)
  */
 public abstract class JmlExpression extends Expression implements Jmlish {
+    @AllFieldsConstructor
     public JmlExpression() {
         super();
     }

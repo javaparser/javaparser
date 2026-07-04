@@ -209,6 +209,7 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(JmlDocStmt.class);
             add(JmlDocType.class);
 
+            add(JmlExpression.class);
             add(JmlQuantifiedExpr.class);
             add(JmlTypeExpr.class);
             add(JmlBinaryInfixExpr.class);
