@@ -48,7 +48,7 @@ jobs:
 
       # Store test artifacts for reporting
       - store_artifacts:
-          path: "**/build/reports/tests/*"
+          path: "**/build/reports/tests/test"
           destination: test-report
 
 # Orchestrate jobs using workflows
