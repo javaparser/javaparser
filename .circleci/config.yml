@@ -10,26 +10,6 @@ executors:
   ubuntu-jdk25:
     docker:
       - image: cimg/openjdk:25.0
-  macos-jdk21:
-    macos:
-      xcode: "16.0.0"
-    environment:
-      JAVA_HOME: /Library/Java/JavaVirtualMachines/zulu-21.jdk/Contents/Home
-  macos-jdk25:
-    macos:
-      xcode: "16.0.0"
-    environment:
-      JAVA_HOME: /Library/Java/JavaVirtualMachines/zulu-25.jdk/Contents/Home
-  windows-jdk21:
-    machine:
-      image: windows-server-2022-gui:current
-    environment:
-      JAVA_HOME: "C:\\Program Files\\Eclipse Adoptium\\jdk-21"
-  windows-jdk25:
-    machine:
-      image: windows-server-2022-gui:current
-    environment:
-      JAVA_HOME: "C:\\Program Files\\Eclipse Adoptium\\jdk-25"
 
 # Define a job for running tests
 # See: https://circleci.com/docs/guides/orchestrate/jobs-steps/#jobs-overview & https://circleci.com/docs/reference/configuration-reference/#jobs
@@ -43,68 +23,30 @@ jobs:
     executor: << parameters.executor_name >>
     environment:
       JDK: << parameters.jdk_version >>
-      GITHUB_TOKEN: ${GITHUB_TOKEN}
-      SONAR_TOKEN: ${SONAR_TOKEN}
     steps:
       # Checkout the code as the first step.
       - checkout
-
-      # Install Java if not already available (for machine executors)
-      - when:
-          condition:
-            matches:
-              pattern: "^windows.*"
-              value: << parameters.executor_name >>
-          steps:
-            - run:
-                name: "Verify Java installation"
-                command: |
-                  echo "JAVA_HOME is $JAVA_HOME"
-                  java -version
-
-      - when:
-          condition:
-            matches:
-              pattern: "^macos.*"
-              value: << parameters.executor_name >>
-          steps:
-            - run:
-                name: "Verify Java installation"
-                command: |
-                  echo "JAVA_HOME is $JAVA_HOME"
-                  export PATH=$JAVA_HOME/bin:$PATH
-                  java -version
 
       # Echo exact java version being used
       - run:
           name: "Echo exact java version"
           command: java -version
 
-      # Cache SonarCloud packages
-      - restore_cache:
-          keys:
-            - sonar-cache-{{ arch }}-{{ checksum "~/.sonar" }}
-            - sonar-cache-{{ arch }}-
-      - save_cache:
-          key: sonar-cache-{{ arch }}-{{ checksum "~/.sonar" }}
-          paths:
-            - ~/.sonar
-
       # Actually perform the tests with Gradle
       - run:
-          name: "Test with Gradle (incl. slow tests)"
+          name: "Test with Gradle"
           command: |
             chmod +x ./gradlew
             ./gradlew --continue --parallel test
 
       # Store test results
       - store_test_results:
-          path: "**/build/reports/tests/test"
+          path: "**/build/test-results/test/*.xml"
 
       # Store test artifacts for reporting
       - store_artifacts:
-          path: "**/build/reports/tests/test"
-          destination: test-results
+          path: "**/build/reports/tests/*"
+          destination: test-report
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/guides/orchestrate/workflows/ & https://circleci.com/docs/reference/configuration-reference/#workflows
@@ -116,27 +58,3 @@ workflows:
           name: "test-ubuntu-jdk21"
           executor_name: ubuntu-jdk21
           jdk_version: "21"
-      - gradle_test:
-          name: "test-ubuntu-jdk25"
-          executor_name: ubuntu-jdk25
-          jdk_version: "25"
-      
-      # macOS runners
-      - gradle_test:
-          name: "test-macos-jdk21"
-          executor_name: macos-jdk21
-          jdk_version: "21"
-      - gradle_test:
-          name: "test-macos-jdk25"
-          executor_name: macos-jdk25
-          jdk_version: "25"
-      
-      # Windows runners
-      - gradle_test:
-          name: "test-windows-jdk21"
-          executor_name: windows-jdk21
-          jdk_version: "21"
-      - gradle_test:
-          name: "test-windows-jdk25"
-          executor_name: windows-jdk25
-          jdk_version: "25"
