@@ -143,7 +143,10 @@ class DefaultPackageTest {
 
         @Override
         public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-                String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+                String name,
+                List<ResolvedType> argumentsTypes,
+                boolean staticOnly,
+                ResolvedReferenceTypeDeclaration invocationContext) {
             throw new UnsupportedOperationException();
         }
 

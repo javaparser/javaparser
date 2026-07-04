@@ -54,7 +54,7 @@ public class JavaParserFactory {
         }
 
         if (node instanceof KeyMethodCallStmt kcr) {
-            return new KeyMethodCallStatementContext(kcr, typeSolver);
+            return new KeyMethodCallStmtContext(kcr, typeSolver);
         }
 
         if (node instanceof ArrayAccessExpr) {

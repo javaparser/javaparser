@@ -54,6 +54,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
+import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -69,7 +70,18 @@ public class JavaParserFacade {
     private static final DataKey<ResolvedType> TYPE_WITH_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {};
     private static final DataKey<ResolvedType> TYPE_WITHOUT_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {};
 
-    private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
+    /**
+     * Cache of facades, keyed by the root {@link TypeSolver}.
+     *
+     * <p>The keys are held weakly. The values <strong>must</strong> be held weakly as well: a
+     * {@link JavaParserFacade} stores its own {@code typeSolver} (the map key) in several final
+     * fields, so a strongly-held value would keep its own weak key permanently reachable. That
+     * self-cycle prevents the {@link WeakHashMap} from ever expiring the entry, pinning the type
+     * solver (and everything reachable from it) for the lifetime of the JVM. Wrapping the value in a
+     * {@link WeakReference} breaks the cycle: once no caller strongly references the facade it can be
+     * collected, the key then becomes weakly reachable, and the entry is evicted.</p>
+     */
+    private static final Map<TypeSolver, WeakReference<JavaParserFacade>> instances = new WeakHashMap<>();
 
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
 
@@ -84,7 +96,17 @@ public class JavaParserFacade {
      * @see <a href="https://github.com/javaparser/javaparser/issues/2671">https://github.com/javaparser/javaparser/issues/2671</a>
      */
     public static synchronized JavaParserFacade get(TypeSolver typeSolver) {
-        return instances.computeIfAbsent(typeSolver.getRoot(), JavaParserFacade::new);
+        TypeSolver root = typeSolver.getRoot();
+        WeakReference<JavaParserFacade> ref = instances.get(root);
+        JavaParserFacade facade = ref == null ? null : ref.get();
+        if (facade == null) {
+            // Either no entry yet, or the previously cached facade has been collected (its value is
+            // held only weakly, see #instances). Rebuild it; resolution results are recomputed on
+            // demand, so a fresh facade is functionally equivalent.
+            facade = new JavaParserFacade(root);
+            instances.put(root, new WeakReference<>(facade));
+        }
+        return facade;
     }
 
     /**
@@ -146,7 +168,7 @@ public class JavaParserFacade {
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solve(MethodCallExpr methodCallExpr) {
-        return solve(methodCallExpr, true);
+        return solve(methodCallExpr, true, find(methodCallExpr));
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solve(MethodReferenceExpr methodReferenceExpr) {
@@ -331,14 +353,15 @@ public class JavaParserFacade {
     /**
      * Given a method call find out to which method declaration it corresponds.
      */
-    public SymbolReference<ResolvedMethodDeclaration> solve(MethodCallExpr methodCallExpr, boolean solveLambdas) {
+    public SymbolReference<ResolvedMethodDeclaration> solve(
+            MethodCallExpr methodCallExpr, boolean solveLambdas, ResolvedReferenceTypeDeclaration invocationContext) {
         List<ResolvedType> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
 
         solveArguments(methodCallExpr, methodCallExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
 
         SymbolReference<ResolvedMethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver)
-                .solveMethod(methodCallExpr.getName().getId(), argumentTypes, false);
+                .solveMethod(methodCallExpr.getName().getId(), argumentTypes, false, invocationContext);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
@@ -353,7 +376,7 @@ public class JavaParserFacade {
         // pass empty argument list to be populated
         List<ResolvedType> argumentTypes = new LinkedList<>();
         return JavaParserFactory.getContext(methodReferenceExpr, typeSolver)
-                .solveMethod(methodReferenceExpr.getIdentifier(), argumentTypes, false);
+                .solveMethod(methodReferenceExpr.getIdentifier(), argumentTypes, false, find(methodReferenceExpr));
     }
 
     public SymbolReference<ResolvedAnnotationDeclaration> solve(AnnotationExpr annotationExpr) {
@@ -855,7 +878,7 @@ public class JavaParserFacade {
         }
         Context context = JavaParserFactory.getContext(call, typeSolver);
         Optional<MethodUsage> methodUsage =
-                context.solveMethodAsUsage(call.getName().getId(), params);
+                context.solveMethodAsUsage(call.getName().getId(), params, null);
         if (!methodUsage.isPresent()) {
             throw new UnsolvedSymbolException("Method '" + call.getName() + "' cannot be resolved in context " + call
                     + " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context

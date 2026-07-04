@@ -7,6 +7,7 @@ import com.github.javaparser.ast.key.KeyCcatchReturn;
 import com.github.javaparser.resolution.SymbolDeclarator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
@@ -55,10 +56,13 @@ public class KeyCcatchReturnContext extends AbstractJavaParserContext<KeyCcatchR
     }
 
     @Override
-    public final SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         // TODO: Document why staticOnly is forced to be false.
-        return solveMethodInParentContext(name, argumentsTypes, false);
+        return solveMethodInParentContext(name, argumentsTypes, false, invocationContext);
     }
 
     @Override

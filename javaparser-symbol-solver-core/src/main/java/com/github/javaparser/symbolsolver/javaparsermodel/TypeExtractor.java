@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import static com.github.javaparser.ast.expr.Expression.EXCLUDE_ENCLOSED_EXPR;
 import static com.github.javaparser.ast.expr.Expression.IS_NOT_ENCLOSED_EXPR;
-import static com.github.javaparser.ast.stmt.SwitchEntry.Type.THROWS_STATEMENT;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -33,11 +32,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.SwitchEntry;
-import com.github.javaparser.ast.stmt.YieldStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.*;
 import com.github.javaparser.resolution.declarations.*;
@@ -752,7 +747,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (parentNode instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) parentNode;
             int pos = getParamPos(node);
-            SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
+            SymbolReference<ResolvedMethodDeclaration> refMethod =
+                    facade.solve(callExpr, false, JavaParserFacade.find(callExpr));
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(
                         parentNode.toString(), callExpr.getName().getId());

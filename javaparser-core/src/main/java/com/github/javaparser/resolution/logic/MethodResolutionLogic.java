@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.resolution.logic;
 
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -987,13 +989,14 @@ public class MethodResolutionLogic {
             List<ResolvedMethodDeclaration> methods,
             String name,
             List<ResolvedType> argumentsTypes,
-            TypeSolver typeSolver) {
+            TypeSolver typeSolver,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         SymbolReference<ResolvedMethodDeclaration> res =
-                findMostApplicable(methods, name, argumentsTypes, typeSolver, false);
+                findMostApplicable(methods, name, argumentsTypes, typeSolver, false, invocationContext);
         if (res.isSolved()) {
             return res;
         }
-        return findMostApplicable(methods, name, argumentsTypes, typeSolver, true);
+        return findMostApplicable(methods, name, argumentsTypes, typeSolver, true, invocationContext);
     }
 
     public static SymbolReference<ResolvedMethodDeclaration> findMostApplicable(
@@ -1001,7 +1004,36 @@ public class MethodResolutionLogic {
             String name,
             List<ResolvedType> argumentsTypes,
             TypeSolver typeSolver,
-            boolean wildcardTolerance) {
+            boolean wildcardTolerance,
+            ResolvedReferenceTypeDeclaration invocationContext) {
+
+        if (invocationContext != null) {
+            List<ResolvedMethodDeclaration> resolvedMethods = new ArrayList<>(methods);
+            for (ResolvedMethodDeclaration method : resolvedMethods) {
+                final CallableDeclaration<?> declaration =
+                        (CallableDeclaration<?>) method.toAst().orElseThrow();
+                final ResolvedReferenceTypeDeclaration containerType = method.declaringType();
+                if (containerType.internalTypes().stream()
+                        .anyMatch(internalType ->
+                                internalType.getQualifiedName().equals(invocationContext.getQualifiedName()))) {
+                    // inner classes can see anything in their surrounding class
+                    continue;
+                } else if (declaration.isPrivate()
+                        && !(invocationContext.getQualifiedName().equals(containerType.getQualifiedName()))) {
+                    methods.remove(method);
+                } else {
+                    final boolean samePackage =
+                            containerType.getPackageName().equals(invocationContext.getPackageName());
+                    if (declaration.isProtected()
+                            && !(containerType.isAssignableBy(invocationContext) || samePackage)) {
+                        methods.remove(method);
+                    } else if (declaration.getAccessSpecifier() == AccessSpecifier.NONE && !samePackage) {
+                        methods.remove(method);
+                    }
+                }
+            }
+        }
+
         // Only consider methods with a matching name
         // Filters out duplicate ResolvedMethodDeclaration by their signature.
         // Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
@@ -1314,9 +1346,13 @@ public class MethodResolutionLogic {
         return true;
     }
 
+    // TODO: Replace TypeDeclaration.solveMethod
     public static SymbolReference<ResolvedMethodDeclaration> solveMethodInType(
-            ResolvedTypeDeclaration typeDeclaration, String name, List<ResolvedType> argumentsTypes) {
-        return solveMethodInType(typeDeclaration, name, argumentsTypes, false);
+            ResolvedTypeDeclaration typeDeclaration,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            ResolvedReferenceTypeDeclaration invocationContext) {
+        return solveMethodInType(typeDeclaration, name, argumentsTypes, false, invocationContext);
     }
 
     // TODO: Replace TypeDeclaration.solveMethod
@@ -1324,9 +1360,11 @@ public class MethodResolutionLogic {
             ResolvedTypeDeclaration typeDeclaration,
             String name,
             List<ResolvedType> argumentsTypes,
-            boolean staticOnly) {
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         if (typeDeclaration instanceof MethodResolutionCapability) {
-            return ((MethodResolutionCapability) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
+            return ((MethodResolutionCapability) typeDeclaration)
+                    .solveMethod(name, argumentsTypes, staticOnly, invocationContext);
         }
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }

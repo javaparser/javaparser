@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2026 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -82,7 +82,12 @@ class JavassistUtils {
             ancestor.getTypeDeclaration()
                     .flatMap(superClassTypeDeclaration -> ancestor.getTypeDeclaration())
                     .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(
-                            interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues))
+                            interfaceTypeDeclaration,
+                            name,
+                            argumentsTypes,
+                            invokationContext,
+                            typeParameterValues,
+                            null)) // XXX
                     .ifPresent(methods::add);
         }
 
@@ -95,7 +100,8 @@ class JavassistUtils {
             boolean staticOnly,
             TypeSolver typeSolver,
             ResolvedReferenceTypeDeclaration scopeType,
-            CtClass ctClass) {
+            CtClass ctClass,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
         Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || java.lang.reflect.Modifier.isStatic(m.getModifiers());
         for (CtMethod method : ctClass.getDeclaredMethods()) {
@@ -117,7 +123,7 @@ class JavassistUtils {
             Optional<ResolvedReferenceTypeDeclaration> ancestorTypeDeclOpt = ancestorRefType.getTypeDeclaration();
             if (ancestorTypeDeclOpt.isPresent()) {
                 SymbolReference<ResolvedMethodDeclaration> ancestorMethodRef = MethodResolutionLogic.solveMethodInType(
-                        ancestorTypeDeclOpt.get(), name, argumentsTypes, staticOnly);
+                        ancestorTypeDeclOpt.get(), name, argumentsTypes, staticOnly, invocationContext);
                 if (ancestorMethodRef.isSolved()) {
                     candidates.add(ancestorMethodRef.getCorrespondingDeclaration());
                 }
@@ -126,7 +132,8 @@ class JavassistUtils {
             }
         }
 
-        return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicable(
+                candidates, name, argumentsTypes, typeSolver, invocationContext);
     }
 
     static ResolvedType signatureTypeToType(

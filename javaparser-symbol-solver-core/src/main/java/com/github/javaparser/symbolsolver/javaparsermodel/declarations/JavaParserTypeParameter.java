@@ -56,8 +56,9 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         return Collections.emptySet();
     }
 
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes) {
-        return getContext().solveMethod(name, parameterTypes, false);
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> parameterTypes, ResolvedReferenceTypeDeclaration invocationContext) {
+        return getContext().solveMethod(name, parameterTypes, false, invocationContext);
     }
 
     @Override

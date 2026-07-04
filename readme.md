@@ -34,14 +34,14 @@ Just add the following to your maven configuration or tailor to your own depende
 <dependency>
     <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-symbol-solver-core</artifactId>
-    <version>3.28.0-J8.0-K13.4</version>
+    <version>3.28.0-J8.0-K13.5</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.28.0-J8.0-K13.4'
+implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.28.0-J8.0-K13.5'
 ```
 
 Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver.
@@ -56,15 +56,39 @@ Using the dependency above will add both JavaParser and JavaSymbolSolver to your
 <dependency>
     <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.28.0-J8.0-K13.4</version>
+    <version>3.28.0-J8.0-K13.5</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-implementation 'com.github.javaparser:javaparser-core:3.28.0-J8.0-K13.4'
+implementation 'com.github.javaparser:javaparser-core:3.28.0-J8.0-K13.5'
 ```
+
+
+## FAQ
+
+### What does the strange version means?
+
+```
+Version: 3.28.1-J8.0-K13.6-SNAPSHOT 
+```
+
+* `3.28.1` represents the version of the [JavaParser](https://github.com/javaparser/javaparser) project, which was merged into this branch
+* `J8.0` determines the version counter for Java Modeling Language versions
+* `K13.6` is the version for the KeY extensions.  
+
+### How does this JmlParser diverged from JavaParser? 
+
+* **New:**
+  * New `groupId` and `artefactId`
+  * Switch to Gradle as the build
+  * Conservative extensions towards the AST hierarchies (noticeable by prefix `Jml` or `Key`).
+  * Fix for [JavaParser#4969](https://github.com/javaparser/javaparser/issues/4969)
+* **Preserved:**
+  * Folder structure
+  * Most part of the AST hierarchy and parser
 
 ## How To Compile Sources
 
@@ -128,11 +152,6 @@ Make sure that `javaparser-core` at least compiles before you run these.
     * no_state
     * two_state
 * A lot of new tokens
-
-
-## More information
-
-#### [JavaParser.org](https://javaparser.org) is the main information site.
 
 ## License
 

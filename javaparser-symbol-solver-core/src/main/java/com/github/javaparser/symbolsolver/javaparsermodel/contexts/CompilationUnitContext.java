@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2026 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -320,7 +320,10 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
             if (importDecl.isStatic()) {
                 if (importDecl.isAsterisk()) {
@@ -342,7 +345,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
                     ResolvedTypeDeclaration ref = typeSolver.solveType(importString);
                     SymbolReference<ResolvedMethodDeclaration> method =
-                            MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true);
+                            MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true, invocationContext);
                     if (method.isSolved()) {
                         return method;
                     }
@@ -352,8 +355,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     if (qName.equals(name) || qName.endsWith("." + name)) {
                         String typeName = getType(qName);
                         ResolvedTypeDeclaration ref = typeSolver.solveType(typeName);
-                        SymbolReference<ResolvedMethodDeclaration> method =
-                                MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true);
+                        SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(
+                                ref, name, argumentsTypes, true, invocationContext);
                         if (method.isSolved()) {
                             return method;
                         }

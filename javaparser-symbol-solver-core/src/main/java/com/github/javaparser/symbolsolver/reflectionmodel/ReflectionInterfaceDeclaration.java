@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2026 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -108,8 +108,12 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
-        return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly, typeSolver, this, clazz);
+            String name,
+            List<ResolvedType> parameterTypes,
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
+        return ReflectionMethodResolutionLogic.solveMethod(
+                name, parameterTypes, staticOnly, typeSolver, this, clazz, invocationContext);
     }
 
     @Override
@@ -143,17 +147,19 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
      * This method first resolves the basic method signature, then performs generic type inference
      * based on the actual parameter types provided at the call site.
      *
-     * @param name the method name to resolve
-     * @param parameterTypes the actual parameter types at the call site
-     * @param invokationContext the context where the method is invoked
+     * @param name                the method name to resolve
+     * @param parameterTypes      the actual parameter types at the call site
+     * @param invokationContext   the context where the method is invoked
      * @param typeParameterValues explicit type parameter values (if any)
+     * @param callContext
      * @return an Optional containing the resolved MethodUsage with inferred types, or empty if resolution fails
      */
     public Optional<MethodUsage> solveMethodAsUsage(
             String name,
             List<ResolvedType> parameterTypes,
             Context invokationContext,
-            List<ResolvedType> typeParameterValues) {
+            List<ResolvedType> typeParameterValues,
+            ResolvedReferenceTypeDeclaration callContext) {
 
         Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(
                 name, parameterTypes, typeSolver, invokationContext, typeParameterValues, this, clazz);

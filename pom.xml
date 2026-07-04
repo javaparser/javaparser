@@ -20,7 +20,7 @@
 	<groupId>io.github.jmltoolkit</groupId>
 	<artifactId>jmlparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.28.1-J8.0-K13.4</version>
+	<version>3.28.1-J8.0-K13.6-SNAPSHOT</version>
 
 	<url>https://github.com/wadoon/jmlparser</url>
 	<inceptionYear>2021</inceptionYear>
@@ -191,24 +191,6 @@
 		<url>https://github.com/wadoon/jmlparser/issues</url>
 	</issueManagement>
 
-	<distributionManagement>
-		<!-- According to the documentation https://central.sonatype.org/publish/publish-portal-maven/, it is no longer necessary to configure a repository -->
-		<repository>
-			<id>gitlab-maven</id>
-			<url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
-		</repository>
-
-		<snapshotRepository>
-			<id>gitlab-maven</id>
-			<url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
-		</snapshotRepository>
-
-		<site>
-			<id>${project.build.directory}-site</id>
-			<url>file://${project.build.outputDirectory}/s</url>
-		</site>
-	</distributionManagement>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -219,27 +201,38 @@
 					<useIncrementalCompilation>false</useIncrementalCompilation>
 				</configuration>
 			</plugin>
+
+			<!-- NEW: Plugin for publishing to Maven Central -->
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.6.2</version>
-				<executions>
-					<execution>
-						<id>enforce-maven</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireMavenVersion>
-									<version>3.6.3</version>
-								</requireMavenVersion>
-							</rules>
-						</configuration>
-					</execution>
-				</executions>
+			  <groupId>org.sonatype.central</groupId>
+			  <artifactId>central-publishing-maven-plugin</artifactId>
+			  <version>0.10.0</version>
+			  <extensions>true</extensions>
+			  <configuration>
+				<publishingServerId>central-portal</publishingServerId>
+				<excludeArtifacts>
+				  <excludeArtifact>javaparser-core-testing</excludeArtifact>
+				  <excludeArtifact>javaparser-core-testing-bdd</excludeArtifact>
+				  <excludeArtifact>javaparser-symbol-solver-testing</excludeArtifact>
+				  <excludeArtifact>javaparser-core-metamodel-generator</excludeArtifact>
+                  <excludeArtifact>javaparser-core-generators</excludeArtifact>
+                  <excludeArtifact>javaparser-key-testing</excludeArtifact>
+				</excludeArtifacts>
+
+                <publishingServerId>central-portal</publishingServerId>
+                <autoPublish>false</autoPublish>
+				<waitUntil>published</waitUntil>
+				<deploymentName>${project.artifactId}-${project.version}</deploymentName>
+
+			  </configuration>
 			</plugin>
+
+
+
+
 		</plugins>
+
+
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -301,21 +294,28 @@
 						<goals>deploy</goals>
 					</configuration>
 				</plugin>
-				<!-- NEW: Disable the old maven-deploy-plugin -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>3.1.4</version>
-					<executions>
-						<execution>
-							<id>default-deploy</id>
-							<phase>deploy</phase>
-							<goals>
-								<goal>deploy</goal>
-							</goals>
-						</execution>
-					</executions>
+
+                <plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-deploy-plugin</artifactId>
+				  <version>3.1.4</version>
+				  <executions>
+					<execution>
+					  <id>default-deploy</id>
+					  <phase>deploy</phase>
+					  <goals>
+						<goal>deploy</goal>
+					  </goals>
+					  <configuration>
+						<skip>true</skip>
+					  </configuration>
+					</execution>
+				  </executions>
+				  <configuration>
+					<skip>true</skip>
+				  </configuration>
 				</plugin>
+
 
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -621,6 +621,52 @@
 			</activation>
 			<!-- FIXME: Can this be removed? It appears to be a no-op, with be no action to be done when activated (e.g. set a parameter, configure a plugin, etc.) -->
 		</profile>
+
+        <profile>
+          <id>localrepo</id>
+          <distributionManagement>
+		    <repository>
+			  <id>gitlab-maven</id>
+			  <url>./local-repo</url>
+		    </repository>
+	      </distributionManagement>
+        </profile>
+
+        <profile>
+          <id>gitlab</id>
+          <distributionManagement>
+		    <repository>
+			  <id>gitlab-maven</id>
+			  <url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
+		    </repository>
+
+		    <snapshotRepository>
+			  <id>gitlab-maven</id>
+			  <url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
+		    </snapshotRepository>
+	      </distributionManagement>
+
+
+          <!-- <build> -->
+          <!--   <plugins> -->
+		  <!--     <plugin> -->
+		  <!--       <groupId>org.apache.maven.plugins</groupId> -->
+		  <!--       <artifactId>maven-deploy-plugin</artifactId> -->
+		  <!--       <version>3.1.4</version> -->
+		  <!--       <executions> -->
+		  <!--   	  <execution> -->
+		  <!--   	    <id>default-deploy</id> -->
+		  <!--   	    <phase>deploy</phase> -->
+		  <!--   	    <goals> -->
+		  <!--   		  <goal>deploy</goal> -->
+		  <!--   	    </goals> -->
+		  <!--   	  </execution> -->
+		  <!--       </executions> -->
+		  <!--     </plugin> -->
+          <!--   </plugins> -->
+          <!-- </build>           -->
+        </profile>
+
 		<profile>
 			<!-- This profile is intended for use when preparing and deploying a release. -->
 			<id>run-release</id>
@@ -715,7 +761,7 @@
 										<arg>--pinentry-mode</arg>
 										<arg>loopback</arg>
 									</gpgArguments>
-									<keyname>8864964484D22F29</keyname>
+									<keyname>0DB557D9253539E9D63F9F40FFD16124DA897262</keyname>
 								</configuration>
 							</execution>
 						</executions>

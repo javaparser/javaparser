@@ -26,12 +26,12 @@ import java.util.Optional;
  * @author Alexander Weigl
  * @version 1 (3/14/26)
  */
-public class KeyMethodCallStatementContext extends AbstractJavaParserContext<KeyMethodCallStmt> {
+public class KeyMethodCallStmtContext extends AbstractJavaParserContext<KeyMethodCallStmt> {
     private final Context context;
     private final String selfName;
     private final ResolvedType selfType;
 
-    public KeyMethodCallStatementContext(KeyMethodCallStmt kcr, TypeSolver typeSolver) {
+    public KeyMethodCallStmtContext(KeyMethodCallStmt kcr, TypeSolver typeSolver) {
         super(kcr, typeSolver);
 
         KeyExecutionContext sourceSpecification = (KeyExecutionContext) kcr.getContext();
@@ -56,9 +56,9 @@ public class KeyMethodCallStatementContext extends AbstractJavaParserContext<Key
     }
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
-        // ResolvedReferenceTypeDeclaration invocationContext) {
-        return context.solveMethodAsUsage(name, argumentsTypes);
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name, List<ResolvedType> argumentsTypes, ResolvedReferenceTypeDeclaration invocationContext) {
+        return context.solveMethodAsUsage(name, argumentsTypes, invocationContext);
     }
 
     @Override
@@ -108,14 +108,20 @@ public class KeyMethodCallStatementContext extends AbstractJavaParserContext<Key
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return context.solveMethodInParentContext(name, argumentsTypes, staticOnly);
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
+        return context.solveMethodInParentContext(name, argumentsTypes, staticOnly, invocationContext);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return context.solveMethod(name, argumentsTypes, staticOnly);
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            ResolvedReferenceTypeDeclaration invocationContext) {
+        return context.solveMethod(name, argumentsTypes, staticOnly, invocationContext);
     }
 
     @Override
