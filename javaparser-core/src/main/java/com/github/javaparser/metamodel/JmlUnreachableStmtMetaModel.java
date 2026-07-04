@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.jml.stmt.JmlUnreachableStmt;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.jml.stmt.JmlUnreachableStmt;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class JmlUnreachableStmtMetaModel extends JmlStatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlUnreachableStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlUnreachableStmt.class, "JmlUnreachableStmt", "com.github.javaparser.ast.jml.stmt", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlUnreachableStmt.class,
+                "JmlUnreachableStmt",
+                "com.github.javaparser.ast.jml.stmt",
+                false,
+                false);
     }
 
     public PropertyMetaModel jmlTagsPropertyMetaModel;

@@ -36,8 +36,7 @@ public abstract class KeyAbstractExecutionContext extends Node {
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-    }
+    public <A> void accept(VoidVisitor<A> v, A arg) {}
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")

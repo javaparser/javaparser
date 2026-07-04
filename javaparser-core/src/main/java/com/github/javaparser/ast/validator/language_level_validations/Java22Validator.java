@@ -37,47 +37,53 @@ import com.github.javaparser.resolution.Navigator;
  */
 public class Java22Validator extends Java21Validator {
 
-    final Validator unnamedVarOnlyWhereAllowedByJep456 = new SingleNodeTypeValidator<>(SimpleName.class, (name, reporter) -> {
-        if (!name.getIdentifier().equals("_")) {
-            return;
-        }
-        if (reportNoParent(name, reporter)) {
-            return;
-        }
-        Node parentNode = name.getParentNode().get();
-        if (parentNode instanceof VariableDeclarator || parentNode instanceof TypePatternExpr) {
-            return;
-        }
-        if (parentNode instanceof Parameter) {
-            Parameter parameter = (Parameter) parentNode;
-            if (reportNoParent(parameter, reporter)) {
-                return;
-            }
-            Node grandParent = parameter.getParentNode().get();
-            if (grandParent instanceof CatchClause || grandParent instanceof LambdaExpr) {
-                return;
-            }
-        }
-        try {
-            ForStmt enclosingFor = (ForStmt) Navigator.demandParentNode(name, ancestor -> ancestor instanceof ForStmt);
-            if (enclosingFor.getCompare().isPresent() && enclosingFor.getCompare().get().containsWithinRange(name)) {
-                // In a for compare, so now check that it's the LHS of an assignment
-                AssignExpr enclosingAssign = (AssignExpr) Navigator.demandParentNode(name, ancestor -> ancestor instanceof AssignExpr);
-                if (enclosingAssign.getTarget().containsWithinRange(name)) {
+    final Validator unnamedVarOnlyWhereAllowedByJep456 =
+            new SingleNodeTypeValidator<>(SimpleName.class, (name, reporter) -> {
+                if (!name.getIdentifier().equals("_")) {
                     return;
                 }
-            }
-        } catch (IllegalStateException e) {
-            // Didn't find a ForStmt ancestor, so the "_" identifier should not be allowed here.
-        }
-        reporter.report(name, "Unnamed variables only supported in cases described by JEP456");
-    });
+                if (reportNoParent(name, reporter)) {
+                    return;
+                }
+                Node parentNode = name.getParentNode().get();
+                if (parentNode instanceof VariableDeclarator || parentNode instanceof TypePatternExpr) {
+                    return;
+                }
+                if (parentNode instanceof Parameter) {
+                    Parameter parameter = (Parameter) parentNode;
+                    if (reportNoParent(parameter, reporter)) {
+                        return;
+                    }
+                    Node grandParent = parameter.getParentNode().get();
+                    if (grandParent instanceof CatchClause || grandParent instanceof LambdaExpr) {
+                        return;
+                    }
+                }
+                try {
+                    ForStmt enclosingFor =
+                            (ForStmt) Navigator.demandParentNode(name, ancestor -> ancestor instanceof ForStmt);
+                    if (enclosingFor.getCompare().isPresent()
+                            && enclosingFor.getCompare().get().containsWithinRange(name)) {
+                        // In a for compare, so now check that it's the LHS of an assignment
+                        AssignExpr enclosingAssign = (AssignExpr)
+                                Navigator.demandParentNode(name, ancestor -> ancestor instanceof AssignExpr);
+                        if (enclosingAssign.getTarget().containsWithinRange(name)) {
+                            return;
+                        }
+                    }
+                } catch (IllegalStateException e) {
+                    // Didn't find a ForStmt ancestor, so the "_" identifier should not be allowed here.
+                }
+                reporter.report(name, "Unnamed variables only supported in cases described by JEP456");
+            });
 
-    final Validator matchAllPatternNotTopLevel = new SingleNodeTypeValidator<>(MatchAllPatternExpr.class, (patternExpr, reporter) -> {
-        if (!patternExpr.getParentNode().isPresent() || !(patternExpr.getParentNode().get() instanceof PatternExpr)) {
-            reporter.report(patternExpr, "MatchAllPatternExpr cannot be used as a top-level pattern");
-        }
-    });
+    final Validator matchAllPatternNotTopLevel =
+            new SingleNodeTypeValidator<>(MatchAllPatternExpr.class, (patternExpr, reporter) -> {
+                if (!patternExpr.getParentNode().isPresent()
+                        || !(patternExpr.getParentNode().get() instanceof PatternExpr)) {
+                    reporter.report(patternExpr, "MatchAllPatternExpr cannot be used as a top-level pattern");
+                }
+            });
 
     private boolean reportNoParent(Node node, ProblemReporter reporter) {
         if (node.getParentNode().isPresent()) {

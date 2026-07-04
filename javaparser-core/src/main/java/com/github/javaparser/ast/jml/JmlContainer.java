@@ -29,8 +29,7 @@ public interface JmlContainer<R extends Node, T extends Node> extends Jmlish {
     R setSingleLine(boolean singleLine);
 
     default void setTagsFromStart(JavaToken token) {
-        if (token.getText().trim().length() <= 3)
-            return;
+        if (token.getText().trim().length() <= 3) return;
         String tags = token.getText().trim().substring(2);
         Range range = token.getRange().get();
         tags = tags.substring(0, tags.length() - 1);

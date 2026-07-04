@@ -30,15 +30,13 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
+import com.google.common.truth.Truth;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
-import com.google.common.truth.Truth;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -80,13 +78,12 @@ class SymbolSolverCollectionStrategyTest {
     @Disabled("weigl: There are runtime issues (heap space) with this approach.")
     void resolveMultiSourceRoots() {
         var relativeRootDir = List.of(
-            "src/main/java-templates",
-            "src/main/java",
-            "src/main/javacc-support",
-            "target/generated-sources/javacc",
-            "target/generated-sources/java-templates",
-            "src/main/java-templates"
-        );
+                "src/main/java-templates",
+                "src/main/java",
+                "src/main/javacc-support",
+                "target/generated-sources/javacc",
+                "target/generated-sources/java-templates",
+                "src/main/java-templates");
         Path mainDirectory = classLoaderRoot(SymbolSolverCollectionStrategyTest.class)
                 .resolve("../../../../../javaparser-core")
                 .normalize();

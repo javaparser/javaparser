@@ -22,6 +22,7 @@ package com.github.javaparser.javadoc;
 
 import static com.github.javaparser.utils.Utils.nextWord;
 import static com.github.javaparser.utils.Utils.screamingToCamelCase;
+
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import java.util.Optional;
 
@@ -42,7 +43,6 @@ public class JavadocBlockTag {
      * an unknown tag.
      */
     public enum Type {
-
         AUTHOR,
         DEPRECATED,
         EXCEPTION,
@@ -134,15 +134,11 @@ public class JavadocBlockTag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         JavadocBlockTag that = (JavadocBlockTag) o;
-        if (type != that.type)
-            return false;
-        if (!content.equals(that.content))
-            return false;
+        if (type != that.type) return false;
+        if (!content.equals(that.content)) return false;
         return name.equals(that.name);
     }
 

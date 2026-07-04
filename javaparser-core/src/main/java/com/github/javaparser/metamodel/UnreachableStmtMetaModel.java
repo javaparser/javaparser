@@ -38,6 +38,12 @@ public class UnreachableStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     UnreachableStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlUnreachableStmt.class, "UnreachableStmt", "com.github.javaparser.ast.stmt", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlUnreachableStmt.class,
+                "UnreachableStmt",
+                "com.github.javaparser.ast.stmt",
+                false,
+                false);
     }
 }

@@ -38,7 +38,13 @@ public class JmlGhostStatementsMetaModel extends JmlStatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlGhostStatementsMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlGhostStmt.class, "JmlGhostStatements", "com.github.javaparser.ast.jml.stmt", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlGhostStmt.class,
+                "JmlGhostStatements",
+                "com.github.javaparser.ast.jml.stmt",
+                false,
+                false);
     }
 
     public PropertyMetaModel statementsPropertyMetaModel;

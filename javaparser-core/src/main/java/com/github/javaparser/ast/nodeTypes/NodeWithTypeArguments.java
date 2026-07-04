@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;

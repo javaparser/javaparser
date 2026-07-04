@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.*;
 
 /**
@@ -53,7 +52,8 @@ class FragmentTest {
 
     @Test
     void test() throws FileNotFoundException {
-        testClassLevel(new File("/home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fragments/decl_1153518565.txt"));
+        testClassLevel(new File(
+                "/home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fragments/decl_1153518565.txt"));
     }
 
     private boolean ignorableMessages(String message) {

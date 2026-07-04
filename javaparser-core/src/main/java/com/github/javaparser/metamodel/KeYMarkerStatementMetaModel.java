@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.key.KeYMarkerStatement;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.key.KeYMarkerStatement;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class KeYMarkerStatementMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeYMarkerStatementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeYMarkerStatement.class, "KeYMarkerStatement", "com.github.javaparser.ast.key", false, false);
+        super(
+                superBaseNodeMetaModel,
+                KeYMarkerStatement.class,
+                "KeYMarkerStatement",
+                "com.github.javaparser.ast.key",
+                false,
+                false);
     }
 
     public PropertyMetaModel kindPropertyMetaModel;

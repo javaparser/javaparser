@@ -22,6 +22,7 @@ package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static java.util.stream.Collectors.toList;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
@@ -105,7 +106,9 @@ public interface NodeWithParameters<N extends Node> {
      * @return null if not found, the param found otherwise
      */
     default Optional<Parameter> getParameterByName(String name) {
-        return getParameters().stream().filter(p -> p.getNameAsString().equals(name)).findFirst();
+        return getParameters().stream()
+                .filter(p -> p.getNameAsString().equals(name))
+                .findFirst();
     }
 
     /**
@@ -115,7 +118,9 @@ public interface NodeWithParameters<N extends Node> {
      * @return null if not found, the param found otherwise
      */
     default Optional<Parameter> getParameterByType(String type) {
-        return getParameters().stream().filter(p -> p.getType().toString().equals(type)).findFirst();
+        return getParameters().stream()
+                .filter(p -> p.getType().toString().equals(type))
+                .findFirst();
     }
 
     /**
@@ -125,7 +130,9 @@ public interface NodeWithParameters<N extends Node> {
      * @return null if not found, the param found otherwise
      */
     default Optional<Parameter> getParameterByType(Class<?> type) {
-        return getParameters().stream().filter(p -> p.getType().toString().equals(type.getSimpleName())).findFirst();
+        return getParameters().stream()
+                .filter(p -> p.getType().toString().equals(type.getSimpleName()))
+                .findFirst();
     }
 
     /**
@@ -144,7 +151,10 @@ public interface NodeWithParameters<N extends Node> {
      * @return {@code true} if all parameters match one by one, in the given order.
      */
     default boolean hasParametersOfType(String... paramTypes) {
-        return getParameters().stream().map(p -> p.getType().asString()).collect(toList()).equals(Arrays.asList(paramTypes));
+        return getParameters().stream()
+                .map(p -> p.getType().asString())
+                .collect(toList())
+                .equals(Arrays.asList(paramTypes));
     }
 
     /**
@@ -163,6 +173,12 @@ public interface NodeWithParameters<N extends Node> {
         return // if p.getType() is a class or interface type, we want to consider its erasure, i.e., if the
         // parameter
         // is "List<String>", we want to consider it as "List", so we need to call getName()
-        getParameters().stream().map(p -> p.getType().toClassOrInterfaceType().map(NodeWithSimpleName::getNameAsString).orElseGet(() -> p.getType().asString())).collect(toList()).equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toList()));
+        getParameters().stream()
+                .map(p -> p.getType()
+                        .toClassOrInterfaceType()
+                        .map(NodeWithSimpleName::getNameAsString)
+                        .orElseGet(() -> p.getType().asString()))
+                .collect(toList())
+                .equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toList()));
     }
 }

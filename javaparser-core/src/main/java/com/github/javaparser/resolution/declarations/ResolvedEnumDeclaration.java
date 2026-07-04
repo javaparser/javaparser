@@ -46,6 +46,9 @@ public interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaratio
     }
 
     default ResolvedEnumConstantDeclaration getEnumConstant(final String name) {
-        return getEnumConstants().stream().filter(c -> c.getName().equals(name)).findFirst().orElseThrow(() -> new IllegalArgumentException("No constant named " + name));
+        return getEnumConstants().stream()
+                .filter(c -> c.getName().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No constant named " + name));
     }
 }

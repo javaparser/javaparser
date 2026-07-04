@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.key.KeyMethodSignature;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.key.KeyMethodSignature;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class KeyMethodSignatureMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyMethodSignatureMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeyMethodSignature.class, "KeyMethodSignature", "com.github.javaparser.ast.key", false, false);
+        super(
+                superBaseNodeMetaModel,
+                KeyMethodSignature.class,
+                "KeyMethodSignature",
+                "com.github.javaparser.ast.key",
+                false,
+                false);
     }
 
     public PropertyMetaModel namePropertyMetaModel;

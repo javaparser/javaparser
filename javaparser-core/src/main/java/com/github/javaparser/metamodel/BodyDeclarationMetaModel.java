@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -39,11 +39,23 @@ public class BodyDeclarationMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     BodyDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, BodyDeclaration.class, "BodyDeclaration", "com.github.javaparser.ast.body", true, true);
+        super(
+                superBaseNodeMetaModel,
+                BodyDeclaration.class,
+                "BodyDeclaration",
+                "com.github.javaparser.ast.body",
+                true,
+                true);
     }
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    protected BodyDeclarationMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
+    protected BodyDeclarationMetaModel(
+            Optional<BaseNodeMetaModel> superNodeMetaModel,
+            Class<? extends Node> type,
+            String name,
+            String packageName,
+            boolean isAbstract,
+            boolean hasWildcard) {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 

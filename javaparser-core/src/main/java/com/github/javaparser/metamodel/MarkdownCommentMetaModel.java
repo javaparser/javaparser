@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.comments.MarkdownComment;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.comments.MarkdownComment;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,6 +38,12 @@ public class MarkdownCommentMetaModel extends JavadocCommentMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     MarkdownCommentMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, MarkdownComment.class, "MarkdownComment", "com.github.javaparser.ast.comments", false, false);
+        super(
+                superBaseNodeMetaModel,
+                MarkdownComment.class,
+                "MarkdownComment",
+                "com.github.javaparser.ast.comments",
+                false,
+                false);
     }
 }

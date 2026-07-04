@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.jml.doc.JmlDocStmt;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class JmlDocStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlDocStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlDocStmt.class, "JmlDocStmt", "com.github.javaparser.ast.jml.doc", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlDocStmt.class,
+                "JmlDocStmt",
+                "com.github.javaparser.ast.jml.doc",
+                false,
+                false);
     }
 
     public PropertyMetaModel jmlCommentsPropertyMetaModel;

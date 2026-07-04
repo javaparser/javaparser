@@ -38,7 +38,8 @@ import java.util.stream.Collectors;
  */
 public class ConstructorResolutionLogic {
 
-    private static List<ResolvedType> groupVariadicParamValues(List<ResolvedType> argumentsTypes, int startVariadic, ResolvedType variadicType) {
+    private static List<ResolvedType> groupVariadicParamValues(
+            List<ResolvedType> argumentsTypes, int startVariadic, ResolvedType variadicType) {
         List<ResolvedType> res = new ArrayList<>(argumentsTypes.subList(0, startVariadic));
         List<ResolvedType> variadicValues = argumentsTypes.subList(startVariadic, argumentsTypes.size());
         if (variadicValues.isEmpty()) {
@@ -59,11 +60,16 @@ public class ConstructorResolutionLogic {
         return variadicValues.get(0);
     }
 
-    public static boolean isApplicable(ResolvedConstructorDeclaration constructor, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
+    public static boolean isApplicable(
+            ResolvedConstructorDeclaration constructor, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
         return isApplicable(constructor, argumentsTypes, typeSolver, false);
     }
 
-    private static boolean isApplicable(ResolvedConstructorDeclaration constructor, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean withWildcardTolerance) {
+    private static boolean isApplicable(
+            ResolvedConstructorDeclaration constructor,
+            List<ResolvedType> argumentsTypes,
+            TypeSolver typeSolver,
+            boolean withWildcardTolerance) {
         if (constructor.hasVariadicParameter()) {
             int pos = constructor.getNumberOfParams() - 1;
             if (constructor.getNumberOfParams() == argumentsTypes.size()) {
@@ -75,10 +81,15 @@ public class ConstructorResolutionLogic {
                         expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
                     }
                     if (!expectedType.isAssignableBy(actualType)) {
-                        if (actualType.isArray() && expectedType.isAssignableBy(actualType.asArrayType().getComponentType())) {
+                        if (actualType.isArray()
+                                && expectedType.isAssignableBy(
+                                        actualType.asArrayType().getComponentType())) {
                             argumentsTypes.set(pos, actualType.asArrayType().getComponentType());
                         } else {
-                            argumentsTypes = groupVariadicParamValues(argumentsTypes, pos, constructor.getLastParam().getType());
+                            argumentsTypes = groupVariadicParamValues(
+                                    argumentsTypes,
+                                    pos,
+                                    constructor.getLastParam().getType());
                         }
                     }
                 }
@@ -87,7 +98,8 @@ public class ConstructorResolutionLogic {
                 if (pos > argumentsTypes.size()) {
                     return false;
                 }
-                argumentsTypes = groupVariadicParamValues(argumentsTypes, pos, constructor.getLastParam().getType());
+                argumentsTypes = groupVariadicParamValues(
+                        argumentsTypes, pos, constructor.getLastParam().getType());
             }
         }
         if (constructor.getNumberOfParams() != argumentsTypes.size()) {
@@ -98,19 +110,24 @@ public class ConstructorResolutionLogic {
         for (int i = 0; i < constructor.getNumberOfParams(); i++) {
             ResolvedType expectedType = constructor.getParam(i).getType();
             ResolvedType actualType = argumentsTypes.get(i);
-            if ((expectedType.isTypeVariable() && !(expectedType.isWildcard())) && expectedType.asTypeParameter().declaredOnMethod()) {
+            if ((expectedType.isTypeVariable() && !(expectedType.isWildcard()))
+                    && expectedType.asTypeParameter().declaredOnMethod()) {
                 matchedParameters.put(expectedType.asTypeParameter().getName(), actualType);
                 continue;
             }
-            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType) || (constructor.getParam(i).isVariadic() && new ResolvedArrayType(expectedType).isAssignableBy(actualType));
+            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType)
+                    || (constructor.getParam(i).isVariadic()
+                            && new ResolvedArrayType(expectedType).isAssignableBy(actualType));
             if (!isAssignableWithoutSubstitution && expectedType.isReferenceType() && actualType.isReferenceType()) {
-                isAssignableWithoutSubstitution = MethodResolutionLogic.isAssignableMatchTypeParameters(expectedType.asReferenceType(), actualType.asReferenceType(), matchedParameters);
+                isAssignableWithoutSubstitution = MethodResolutionLogic.isAssignableMatchTypeParameters(
+                        expectedType.asReferenceType(), actualType.asReferenceType(), matchedParameters);
             }
             if (!isAssignableWithoutSubstitution) {
                 for (ResolvedTypeParameterDeclaration tp : constructor.getTypeParameters()) {
                     expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
                 }
-                for (ResolvedTypeParameterDeclaration tp : constructor.declaringType().getTypeParameters()) {
+                for (ResolvedTypeParameterDeclaration tp :
+                        constructor.declaringType().getTypeParameters()) {
                     expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
                 }
                 if (!expectedType.isAssignableBy(actualType)) {
@@ -136,16 +153,26 @@ public class ConstructorResolutionLogic {
      * @param typeSolver
      * @return
      */
-    public static SymbolReference<ResolvedConstructorDeclaration> findMostApplicable(List<ResolvedConstructorDeclaration> constructors, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
-        SymbolReference<ResolvedConstructorDeclaration> res = findMostApplicable(constructors, argumentsTypes, typeSolver, false);
+    public static SymbolReference<ResolvedConstructorDeclaration> findMostApplicable(
+            List<ResolvedConstructorDeclaration> constructors,
+            List<ResolvedType> argumentsTypes,
+            TypeSolver typeSolver) {
+        SymbolReference<ResolvedConstructorDeclaration> res =
+                findMostApplicable(constructors, argumentsTypes, typeSolver, false);
         if (res.isSolved()) {
             return res;
         }
         return findMostApplicable(constructors, argumentsTypes, typeSolver, true);
     }
 
-    public static SymbolReference<ResolvedConstructorDeclaration> findMostApplicable(List<ResolvedConstructorDeclaration> constructors, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
-        List<ResolvedConstructorDeclaration> applicableConstructors = constructors.stream().filter((m) -> isApplicable(m, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
+    public static SymbolReference<ResolvedConstructorDeclaration> findMostApplicable(
+            List<ResolvedConstructorDeclaration> constructors,
+            List<ResolvedType> argumentsTypes,
+            TypeSolver typeSolver,
+            boolean wildcardTolerance) {
+        List<ResolvedConstructorDeclaration> applicableConstructors = constructors.stream()
+                .filter((m) -> isApplicable(m, argumentsTypes, typeSolver, wildcardTolerance))
+                .collect(Collectors.toList());
         if (applicableConstructors.isEmpty()) {
             return SymbolReference.unsolved();
         }
@@ -163,7 +190,10 @@ public class ConstructorResolutionLogic {
                 possibleAmbiguity = false;
                 winningCandidate = other;
             } else {
-                if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
+                if (winningCandidate
+                        .declaringType()
+                        .getQualifiedName()
+                        .equals(other.declaringType().getQualifiedName())) {
                     possibleAmbiguity = true;
                 } else {
                     // we expect the methods to be ordered such that inherited methods are later in the list
@@ -175,7 +205,9 @@ public class ConstructorResolutionLogic {
                     if (MethodResolutionLogic.isExactMatch(other, argumentsTypes)) {
                         winningCandidate = other;
                     } else {
-                        throw new MethodAmbiguityException("Ambiguous constructor call: cannot find a most applicable constructor: " + winningCandidate + ", " + other);
+                        throw new MethodAmbiguityException(
+                                "Ambiguous constructor call: cannot find a most applicable constructor: "
+                                        + winningCandidate + ", " + other);
                     }
                 }
             }

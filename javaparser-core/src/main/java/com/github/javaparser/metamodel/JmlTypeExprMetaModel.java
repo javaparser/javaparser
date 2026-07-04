@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.jml.expr.JmlTypeExpr;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.jml.expr.JmlTypeExpr;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class JmlTypeExprMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlTypeExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlTypeExpr.class, "JmlTypeExpr", "com.github.javaparser.ast.jml.expr", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlTypeExpr.class,
+                "JmlTypeExpr",
+                "com.github.javaparser.ast.jml.expr",
+                false,
+                false);
     }
 
     public PropertyMetaModel typePropertyMetaModel;

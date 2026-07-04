@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.key;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -74,8 +75,7 @@ public class KeyMethodBodyStatement extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-        if (this.expr != null)
-            this.expr.setParentNode(null);
+        if (this.expr != null) this.expr.setParentNode(null);
         this.expr = expr;
         setAsParentNodeOf(expr);
         return this;
@@ -92,8 +92,7 @@ public class KeyMethodBodyStatement extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -111,8 +110,7 @@ public class KeyMethodBodyStatement extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.SOURCE, this.source, source);
-        if (this.source != null)
-            this.source.setParentNode(null);
+        if (this.source != null) this.source.setParentNode(null);
         this.source = source;
         setAsParentNodeOf(source);
         return this;

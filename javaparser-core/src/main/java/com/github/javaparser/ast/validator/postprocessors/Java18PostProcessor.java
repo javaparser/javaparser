@@ -22,5 +22,4 @@ package com.github.javaparser.ast.validator.postprocessors;
 /**
  * Processes the generic AST into a Java 18 AST and validates it.
  */
-public class Java18PostProcessor extends Java17PostProcessor {
-}
+public class Java18PostProcessor extends Java17PostProcessor {}

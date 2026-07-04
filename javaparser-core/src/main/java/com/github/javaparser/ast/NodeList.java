@@ -44,7 +44,8 @@ import java.util.stream.Stream;
  *
  * @param <N> the type of nodes contained.
  */
-public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable, Observable {
+public class NodeList<N extends Node>
+        implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable, Observable {
 
     @InternalProperty
     private final List<N> innerList = new ArrayList<>(0);
@@ -139,7 +140,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     @Override
     public N set(int index, N element) {
         if (index < 0 || index >= innerList.size()) {
-            throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size() + " excluded. It is instead " + index);
+            throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size()
+                    + " excluded. It is instead " + index);
         }
         if (element == innerList.get(index)) {
             return element;
@@ -154,8 +156,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     public N remove(int index) {
         notifyElementRemoved(index, innerList.get(index));
         N remove = innerList.remove(index);
-        if (remove != null)
-            remove.setParentNode(null);
+        if (remove != null) remove.setParentNode(null);
         return remove;
     }
 
@@ -533,8 +534,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     public void ifNonEmpty(Consumer<? super NodeList<N>> consumer) {
-        if (isNonEmpty())
-            consumer.accept(this);
+        if (isNonEmpty()) consumer.accept(this);
     }
 
     public static <T extends Node> Collector<T, NodeList<T>, NodeList<T>> toNodeList() {
@@ -624,7 +624,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         public void set(N n) {
             int index = innerList.indexOf(current);
             if (index < 0 || index >= innerList.size()) {
-                throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size() + " excluded. It is instead " + index);
+                throw new IllegalArgumentException("Illegal index. The index should be between 0 and "
+                        + innerList.size() + " excluded. It is instead " + index);
             }
             if (n != innerList.get(index)) {
                 notifyElementReplaced(index, n);

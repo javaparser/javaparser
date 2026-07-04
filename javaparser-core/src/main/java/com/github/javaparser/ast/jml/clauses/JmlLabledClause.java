@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.jml.clauses;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -15,14 +16,13 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.JmlClauseLabelMetaModel;
+import com.github.javaparser.metamodel.JmlLabledClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import com.github.javaparser.metamodel.JmlLabledClauseMetaModel;
 
 /**
  * @author Alexander Weigl
@@ -139,8 +139,7 @@ public class JmlLabledClause extends JmlClause implements NodeWithExpression<Jml
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPR, this.expression, expression);
-        if (this.expression != null)
-            this.expression.setParentNode(null);
+        if (this.expression != null) this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
@@ -157,8 +156,7 @@ public class JmlLabledClause extends JmlClause implements NodeWithExpression<Jml
             return this;
         }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null)
-            this.label.setParentNode(null);
+        if (this.label != null) this.label.setParentNode(null);
         this.label = label;
         setAsParentNodeOf(label);
         return this;
@@ -241,8 +239,7 @@ public class JmlLabledClause extends JmlClause implements NodeWithExpression<Jml
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null)
-            this.expression.setParentNode(null);
+        if (this.expression != null) this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;

@@ -50,17 +50,12 @@ public class ResolvedTypeVariable implements ResolvedType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         ResolvedTypeVariable that = (ResolvedTypeVariable) o;
-        if (!typeParameter.getName().equals(that.typeParameter.getName()))
-            return false;
-        if (typeParameter.declaredOnType() != that.typeParameter.declaredOnType())
-            return false;
-        if (typeParameter.declaredOnMethod() != that.typeParameter.declaredOnMethod())
-            return false;
+        if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
+        if (typeParameter.declaredOnType() != that.typeParameter.declaredOnType()) return false;
+        if (typeParameter.declaredOnMethod() != that.typeParameter.declaredOnMethod()) return false;
         return true;
     }
 
@@ -75,7 +70,10 @@ public class ResolvedTypeVariable implements ResolvedType {
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToBeReplaced, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(
+            ResolvedTypeParameterDeclaration tpToBeReplaced,
+            ResolvedType replaced,
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (tpToBeReplaced.getName().equals(this.typeParameter.getName())) {
             inferredTypes.put(this.asTypeParameter(), replaced);
             return replaced;
@@ -113,8 +111,17 @@ public class ResolvedTypeVariable implements ResolvedType {
         if (other.isTypeVariable()) {
             // if we want to compare something like @{code C extends Comparable<C>} with @{code K extends Comparable<K>}
             // we have to compare the type of the bound. For the moment we are focusing solely on the first type.
-            if (typeParameter.hasBound() && other.asTypeVariable().asTypeParameter().hasBound()) {
-                return typeParameter.getBounds().get(0).getType().isAssignableBy(other.asTypeVariable().asTypeParameter().getBounds().get(0).getType());
+            if (typeParameter.hasBound()
+                    && other.asTypeVariable().asTypeParameter().hasBound()) {
+                return typeParameter
+                        .getBounds()
+                        .get(0)
+                        .getType()
+                        .isAssignableBy(other.asTypeVariable()
+                                .asTypeParameter()
+                                .getBounds()
+                                .get(0)
+                                .getType());
             }
             return describe().equals(other.describe());
         }

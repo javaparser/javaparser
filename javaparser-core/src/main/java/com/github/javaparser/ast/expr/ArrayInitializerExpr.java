@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -92,8 +93,7 @@ public class ArrayInitializerExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.VALUES, this.values, values);
-        if (this.values != null)
-            this.values.setParentNode(null);
+        if (this.values != null) this.values.setParentNode(null);
         this.values = values;
         setAsParentNodeOf(values);
         return this;

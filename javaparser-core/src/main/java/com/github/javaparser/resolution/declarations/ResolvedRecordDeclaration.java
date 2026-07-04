@@ -33,7 +33,8 @@ import java.util.Optional;
  * @author Federico Tomassetti
  * @author Johannes Coetzee
  */
-public interface ResolvedRecordDeclaration extends ResolvedReferenceTypeDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier {
+public interface ResolvedRecordDeclaration
+        extends ResolvedReferenceTypeDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier {
 
     @Override
     default boolean isRecord() {

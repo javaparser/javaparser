@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.PackageDeclaration;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class PackageDeclarationMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     PackageDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, PackageDeclaration.class, "PackageDeclaration", "com.github.javaparser.ast", false, false);
+        super(
+                superBaseNodeMetaModel,
+                PackageDeclaration.class,
+                "PackageDeclaration",
+                "com.github.javaparser.ast",
+                false,
+                false);
     }
 
     public PropertyMetaModel annotationsPropertyMetaModel;

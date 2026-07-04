@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
@@ -75,8 +76,7 @@ public interface NodeWithArguments<N extends Node> {
         for (int i = 0; i < getArguments().size(); i++) {
             Expression expression = getArguments().get(i);
             expression = converter.apply(expression);
-            if (expression == argument)
-                return i;
+            if (expression == argument) return i;
         }
         throw new IllegalStateException();
     }

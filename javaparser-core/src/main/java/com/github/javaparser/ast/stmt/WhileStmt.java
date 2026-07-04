@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.stmt;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -49,7 +50,8 @@ import org.jspecify.annotations.NonNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, NodeWithCondition<WhileStmt>, NodeWithContracts<WhileStmt> {
+public class WhileStmt extends Statement
+        implements NodeWithBody<WhileStmt>, NodeWithCondition<WhileStmt>, NodeWithContracts<WhileStmt> {
 
     private NodeList<JmlContract> contracts;
 
@@ -115,8 +117,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
+        if (this.body != null) this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
@@ -129,8 +130,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        if (this.condition != null)
-            this.condition.setParentNode(null);
+        if (this.condition != null) this.condition.setParentNode(null);
         this.condition = condition;
         setAsParentNodeOf(condition);
         return this;
@@ -222,8 +222,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONTRACTS, this.contracts, contracts);
-        if (this.contracts != null)
-            this.contracts.setParentNode(null);
+        if (this.contracts != null) this.contracts.setParentNode(null);
         this.contracts = contracts;
         setAsParentNodeOf(contracts);
         return this;

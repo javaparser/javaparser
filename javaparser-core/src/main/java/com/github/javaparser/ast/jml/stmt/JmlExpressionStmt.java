@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.jml.stmt;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -30,7 +31,6 @@ import org.jspecify.annotations.NonNull;
 public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<JmlExpressionStmt> {
 
     public enum JmlStmtKind implements JmlKeyword {
-
         ASSERT(GeneratedJavaParserConstants.JML_ASSERT),
         ASSERT_REDUNDANTLY(GeneratedJavaParserConstants.ASSERT_REDUNDANTLY),
         ASSUME(GeneratedJavaParserConstants.ASSUME),
@@ -65,7 +65,9 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
     public JmlExpressionStmt(TokenRange range, NodeList<SimpleName> jmlTags, final Expression expression) {
         this(range, jmlTags, JmlStmtKind.ASSERT, expression);
         int tt = range.getBegin().getKind();
-        Optional<JmlStmtKind> k = Arrays.stream(JmlStmtKind.values()).filter(i -> i.tokenType == tt).findFirst();
+        Optional<JmlStmtKind> k = Arrays.stream(JmlStmtKind.values())
+                .filter(i -> i.tokenType == tt)
+                .findFirst();
         k.ifPresent(this::setKind);
         if (!k.isPresent()) {
             throw new IllegalArgumentException("wrong token type");
@@ -136,8 +138,7 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null)
-            this.expression.setParentNode(null);
+        if (this.expression != null) this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
@@ -147,7 +148,8 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlExpressionStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags, JmlStmtKind kind, Expression expression) {
+    public JmlExpressionStmt(
+            TokenRange tokenRange, NodeList<SimpleName> jmlTags, JmlStmtKind kind, Expression expression) {
         super(tokenRange);
         setJmlTags(jmlTags);
         setKind(kind);
@@ -183,8 +185,7 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
             return this;
         }
         notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
-        if (this.jmlTags != null)
-            this.jmlTags.setParentNode(null);
+        if (this.jmlTags != null) this.jmlTags.setParentNode(null);
         this.jmlTags = jmlTags;
         setAsParentNodeOf(jmlTags);
         return this;

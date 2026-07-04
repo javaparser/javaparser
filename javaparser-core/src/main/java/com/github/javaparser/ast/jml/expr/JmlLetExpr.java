@@ -1,10 +1,10 @@
 package com.github.javaparser.ast.jml.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -87,8 +87,7 @@ public class JmlLetExpr extends JmlExpression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
+        if (this.body != null) this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
@@ -106,8 +105,7 @@ public class JmlLetExpr extends JmlExpression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
-        if (this.variables != null)
-            this.variables.setParentNode(null);
+        if (this.variables != null) this.variables.setParentNode(null);
         this.variables = variables;
         setAsParentNodeOf(variables);
         return this;

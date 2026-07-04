@@ -32,7 +32,9 @@ public abstract class TextElement implements TextElementMatcher, PrintableTextEl
     abstract boolean isToken(int tokenKind);
 
     final boolean isCommentToken() {
-        return isToken(GeneratedJavaParserConstants.JAVADOC_COMMENT) || isToken(GeneratedJavaParserConstants.SINGLE_LINE_COMMENT) || isToken(GeneratedJavaParserConstants.MULTI_LINE_COMMENT);
+        return isToken(GeneratedJavaParserConstants.JAVADOC_COMMENT)
+                || isToken(GeneratedJavaParserConstants.SINGLE_LINE_COMMENT)
+                || isToken(GeneratedJavaParserConstants.MULTI_LINE_COMMENT);
     }
 
     @Override
@@ -83,8 +85,9 @@ public abstract class TextElement implements TextElementMatcher, PrintableTextEl
      * @return TextElementMatcher that matches any TextElement with the same Range
      */
     TextElementMatcher matchByRange() {
-        return (// We're missing range information. This may happen when a node is manually instantiated. Don't be too
-        // harsh on that:
-        TextElement textElement) -> getRange().flatMap(r1 -> textElement.getRange().map(r1::equals)).orElse(true);
+        return ( // We're missing range information. This may happen when a node is manually instantiated. Don't be too
+                // harsh on that:
+                TextElement textElement) ->
+                getRange().flatMap(r1 -> textElement.getRange().map(r1::equals)).orElse(true);
     }
 }

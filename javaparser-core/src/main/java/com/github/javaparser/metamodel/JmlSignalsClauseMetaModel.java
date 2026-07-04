@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.jml.clauses.JmlSignalsClause;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.jml.clauses.JmlSignalsClause;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class JmlSignalsClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlSignalsClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlSignalsClause.class, "JmlSignalsClause", "com.github.javaparser.ast.jml.clauses", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlSignalsClause.class,
+                "JmlSignalsClause",
+                "com.github.javaparser.ast.jml.clauses",
+                false,
+                false);
     }
 
     public PropertyMetaModel expressionPropertyMetaModel;

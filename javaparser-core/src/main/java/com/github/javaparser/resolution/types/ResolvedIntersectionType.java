@@ -35,17 +35,16 @@ public class ResolvedIntersectionType implements ResolvedType {
 
     public ResolvedIntersectionType(Collection<ResolvedType> elements) {
         if (elements.size() < 2) {
-            throw new IllegalArgumentException("An intersection type should have at least two elements. This has " + elements.size());
+            throw new IllegalArgumentException(
+                    "An intersection type should have at least two elements. This has " + elements.size());
         }
         this.elements = new LinkedList<>(elements);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         ResolvedIntersectionType that = (ResolvedIntersectionType) o;
         return new HashSet<>(elements).equals(new HashSet<>(that.elements));
     }
@@ -66,8 +65,13 @@ public class ResolvedIntersectionType implements ResolvedType {
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
-        List<ResolvedType> elementsReplaced = elements.stream().map(e -> e.replaceTypeVariables(tp, replaced, inferredTypes)).collect(Collectors.toList());
+    public ResolvedType replaceTypeVariables(
+            ResolvedTypeParameterDeclaration tp,
+            ResolvedType replaced,
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+        List<ResolvedType> elementsReplaced = elements.stream()
+                .map(e -> e.replaceTypeVariables(tp, replaced, inferredTypes))
+                .collect(Collectors.toList());
         if (elementsReplaced.equals(elements)) {
             return this;
         }

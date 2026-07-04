@@ -21,6 +21,7 @@
 package com.github.javaparser;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import java.util.Objects;
 
 /**
@@ -189,10 +190,8 @@ public class Position implements Comparable<Position> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Position otherPosition = (Position) o;
         return Objects.equals(line, otherPosition.line) && Objects.equals(column, otherPosition.column);
     }

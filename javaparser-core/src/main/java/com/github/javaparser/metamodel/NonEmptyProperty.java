@@ -23,6 +23,7 @@ package com.github.javaparser.metamodel;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -32,6 +33,5 @@ import java.lang.annotation.Target;
  * (Used during generation of the meta model.)
  */
 @Retention(RUNTIME)
-@Target({ FIELD, METHOD })
-public @interface NonEmptyProperty {
-}
+@Target({FIELD, METHOD})
+public @interface NonEmptyProperty {}

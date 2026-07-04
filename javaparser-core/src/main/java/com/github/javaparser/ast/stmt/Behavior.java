@@ -8,7 +8,6 @@ import com.github.javaparser.ast.jml.JmlKeyword;
  * @version 1 (3/14/21)
  */
 public enum Behavior implements Jmlish, JmlKeyword {
-
     NONE(""),
     BEHAVIOR("behavior"),
     NORMAL("normal_behavior"),

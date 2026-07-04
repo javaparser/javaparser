@@ -11,17 +11,16 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClassLevelDeclarationMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.Node;
 
 /**
  * @author Alexander Weigl
  * @version 1 (3/17/21)
  */
-public abstract class JmlClassLevelDeclaration<T extends BodyDeclaration<?>> extends BodyDeclaration<T> implements Jmlish, NodeWithJmlTags<T> {
+public abstract class JmlClassLevelDeclaration<T extends BodyDeclaration<?>> extends BodyDeclaration<T>
+        implements Jmlish, NodeWithJmlTags<T> {
 
     @AllFieldsConstructor
-    public JmlClassLevelDeclaration() {
-    }
+    public JmlClassLevelDeclaration() {}
 
     /**
      * This constructor is used by the parser and is considered private.

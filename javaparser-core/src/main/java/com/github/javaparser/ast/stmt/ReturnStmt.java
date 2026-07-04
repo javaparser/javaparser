@@ -36,7 +36,6 @@ import com.github.javaparser.metamodel.ReturnStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.Nullable;
-import java.util.Objects;
 
 /**
  * The return statement, with an optional expression to return.
@@ -103,8 +102,7 @@ public class ReturnStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null)
-            this.expression.setParentNode(null);
+        if (this.expression != null) this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;

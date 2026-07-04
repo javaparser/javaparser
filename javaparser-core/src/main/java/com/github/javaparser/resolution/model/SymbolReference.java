@@ -72,7 +72,8 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      * @param <I> The Symbol Reference before adapting.
      * @param <O> The Symbol Reference after adapting.
      */
-    public static <I extends ResolvedDeclaration, O extends ResolvedDeclaration> SymbolReference<O> adapt(SymbolReference<I> ref, Class<O> clazz) {
+    public static <I extends ResolvedDeclaration, O extends ResolvedDeclaration> SymbolReference<O> adapt(
+            SymbolReference<I> ref, Class<O> clazz) {
         Optional<I> declaration = ref.getDeclaration();
         if (declaration.isPresent()) {
             I symbol = declaration.get();
@@ -102,7 +103,9 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      * The corresponding declaration. If not solve this throws UnsupportedOperationException.
      */
     public S getCorrespondingDeclaration() {
-        return getDeclaration().orElseThrow(() -> new UnsolvedSymbolException("Corresponding declaration not available for unsolved symbol."));
+        return getDeclaration()
+                .orElseThrow(() ->
+                        new UnsolvedSymbolException("Corresponding declaration not available for unsolved symbol."));
     }
 
     /**

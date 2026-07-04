@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.key.sv;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -69,8 +70,7 @@ public class KeyMetaConstructExpression extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CHILD, this.child, child);
-        if (this.child != null)
-            this.child.setParentNode(null);
+        if (this.child != null) this.child.setParentNode(null);
         this.child = child;
         setAsParentNodeOf(child);
         return this;

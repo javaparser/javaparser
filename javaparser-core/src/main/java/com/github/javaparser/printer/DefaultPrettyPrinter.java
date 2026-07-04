@@ -68,7 +68,8 @@ public class DefaultPrettyPrinter implements ConfigurablePrinter {
      * @param visitorFactory
      * @param configuration  Configuration to apply
      */
-    public DefaultPrettyPrinter(Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory, PrinterConfiguration configuration) {
+    public DefaultPrettyPrinter(
+            Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory, PrinterConfiguration configuration) {
         this.configuration = configuration;
         this.visitorFactory = visitorFactory;
     }

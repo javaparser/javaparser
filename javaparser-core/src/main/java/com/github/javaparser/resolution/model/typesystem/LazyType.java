@@ -123,7 +123,10 @@ public class LazyType implements ResolvedType {
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(
+            ResolvedTypeParameterDeclaration tp,
+            ResolvedType replaced,
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         return getType().replaceTypeVariables(tp, replaced, inferredTypes);
     }
 

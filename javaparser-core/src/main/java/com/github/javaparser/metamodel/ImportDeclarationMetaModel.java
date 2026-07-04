@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.ImportDeclaration;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class ImportDeclarationMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ImportDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, ImportDeclaration.class, "ImportDeclaration", "com.github.javaparser.ast", false, false);
+        super(
+                superBaseNodeMetaModel,
+                ImportDeclaration.class,
+                "ImportDeclaration",
+                "com.github.javaparser.ast",
+                false,
+                false);
     }
 
     public PropertyMetaModel isAsteriskPropertyMetaModel;

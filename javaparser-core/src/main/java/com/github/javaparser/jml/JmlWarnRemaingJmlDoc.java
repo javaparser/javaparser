@@ -32,7 +32,8 @@ public class JmlWarnRemaingJmlDoc extends Processor {
 
     public static class JmlWarnRemainingJmlDocVisitor extends GenericVisitorAdapter<Void, Void> {
 
-        private static final String FOUND_JML_DOCUMENTATION_COMMENT = "JML annotation comment was not removed properly ";
+        private static final String FOUND_JML_DOCUMENTATION_COMMENT =
+                "JML annotation comment was not removed properly ";
 
         private final ProblemReporter problems;
 
@@ -42,33 +43,38 @@ public class JmlWarnRemaingJmlDoc extends Processor {
 
         @Override
         public Void visit(JmlDocDeclaration n, Void arg) {
-            problems.report(n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
+            problems.report(
+                    n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
             return null;
         }
 
         @Override
         public Void visit(JmlDocStmt n, Void arg) {
-            problems.report(n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
+            problems.report(
+                    n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
             return null;
         }
 
         @Override
         public Void visit(JmlDoc n, Void arg) {
-            problems.report(n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
+            problems.report(
+                    n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
             return null;
         }
 
         @Override
         public Void visit(Modifier n, Void arg) {
             if (n.getKeyword() instanceof JmlDocModifier) {
-                problems.report(n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
+                problems.report(
+                        n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
             }
             return null;
         }
 
         @Override
         public Void visit(JmlDocType n, Void arg) {
-            problems.report(n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
+            problems.report(
+                    n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
             return null;
         }
     }

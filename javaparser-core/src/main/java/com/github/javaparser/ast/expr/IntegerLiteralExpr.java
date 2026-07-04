@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -32,7 +33,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.Node;
 
 /**
  * All ways to specify an int literal.

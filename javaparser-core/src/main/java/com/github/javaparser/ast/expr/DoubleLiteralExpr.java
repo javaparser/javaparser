@@ -30,7 +30,6 @@ import com.github.javaparser.metamodel.DoubleLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.Node;
 
 /**
  * A float or a double constant. This value is stored exactly as found in the source.

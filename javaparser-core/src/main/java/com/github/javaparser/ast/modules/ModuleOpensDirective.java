@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.modules;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -107,8 +108,7 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -126,8 +126,7 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);
-        if (this.moduleNames != null)
-            this.moduleNames.setParentNode(null);
+        if (this.moduleNames != null) this.moduleNames.setParentNode(null);
         this.moduleNames = moduleNames;
         setAsParentNodeOf(moduleNames);
         return this;

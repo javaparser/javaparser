@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum JmlClauseKind implements JmlKeyword {
-
     ENSURES(GeneratedJavaParserConstants.ENSURES),
     ENSURES_FREE(GeneratedJavaParserConstants.ENSURES_FREE),
     ENSURES_REDUNDANTLY(GeneratedJavaParserConstants.ENSURES_REDUNDANTLY),
@@ -59,7 +58,7 @@ public enum JmlClauseKind implements JmlKeyword {
     DIVERGES_REDUNDANTLY(GeneratedJavaParserConstants.DIVERGES_REDUNDANTLY),
     DURATION(GeneratedJavaParserConstants.DURATION),
     DURATION_REDUNDANTLY(GeneratedJavaParserConstants.DURATION_REDUNDANTLY),
-    //Information Flow
+    // Information Flow
     DETERMINES(GeneratedJavaParserConstants.DURATION_REDUNDANTLY),
     LOOP_DETERMINES(GeneratedJavaParserConstants.DURATION_REDUNDANTLY),
     SEPARATES(GeneratedJavaParserConstants.DURATION_REDUNDANTLY),
@@ -90,7 +89,9 @@ public enum JmlClauseKind implements JmlKeyword {
     }
 
     public static JmlClauseKind getKindByToken(JavaToken token) {
-        Optional<JmlClauseKind> k = Arrays.stream(JmlClauseKind.values()).filter(it -> it.jmlSymbol.equals(token.getText())).findFirst();
+        Optional<JmlClauseKind> k = Arrays.stream(JmlClauseKind.values())
+                .filter(it -> it.jmlSymbol.equals(token.getText()))
+                .findFirst();
         if (k.isPresent()) {
             return k.get();
         } else {

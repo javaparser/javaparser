@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.key.sv;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -41,7 +42,8 @@ public class KeyMetaConstructType extends Type {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyMetaConstructType(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, String kind, Expression expr) {
+    public KeyMetaConstructType(
+            TokenRange tokenRange, NodeList<AnnotationExpr> annotations, String kind, Expression expr) {
         super(tokenRange, annotations);
         setKind(kind);
         setExpr(expr);
@@ -82,8 +84,7 @@ public class KeyMetaConstructType extends Type {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-        if (this.expr != null)
-            this.expr.setParentNode(null);
+        if (this.expr != null) this.expr.setParentNode(null);
         this.expr = expr;
         setAsParentNodeOf(expr);
         return this;

@@ -43,7 +43,10 @@ public class Java5Validator extends Java1_4Validator {
         if (node instanceof NodeWithTypeArguments) {
             Optional<NodeList<Type>> typeArguments = ((NodeWithTypeArguments<? extends Node>) node).getTypeArguments();
             if (typeArguments.isPresent() && typeArguments.get().isEmpty()) {
-                reporter.report(node, new UpgradeJavaMessage("The diamond operator is not supported.", ParserConfiguration.LanguageLevel.JAVA_7));
+                reporter.report(
+                        node,
+                        new UpgradeJavaMessage(
+                                "The diamond operator is not supported.", ParserConfiguration.LanguageLevel.JAVA_7));
             }
         }
     });
@@ -65,7 +68,10 @@ public class Java5Validator extends Java1_4Validator {
         VariableDeclarationExpr declaration = node.getVariable();
         // assert that the variable declaration expression has exactly one variable declarator
         if (declaration.getVariables().size() != 1) {
-            reporter.report(node, "A foreach statement's variable declaration must have exactly one variable " + "declarator. Given: " + declaration.getVariables().size() + ".");
+            reporter.report(
+                    node,
+                    "A foreach statement's variable declaration must have exactly one variable " + "declarator. Given: "
+                            + declaration.getVariables().size() + ".");
         }
     });
 

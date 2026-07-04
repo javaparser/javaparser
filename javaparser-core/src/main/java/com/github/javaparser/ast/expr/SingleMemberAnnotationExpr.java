@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -88,8 +89,7 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
             return this;
         }
         notifyPropertyChange(ObservableProperty.MEMBER_VALUE, this.memberValue, memberValue);
-        if (this.memberValue != null)
-            this.memberValue.setParentNode(null);
+        if (this.memberValue != null) this.memberValue.setParentNode(null);
         this.memberValue = memberValue;
         setAsParentNodeOf(memberValue);
         return this;

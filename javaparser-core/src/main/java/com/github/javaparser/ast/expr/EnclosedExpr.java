@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -95,8 +96,7 @@ public class EnclosedExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.INNER, this.inner, inner);
-        if (this.inner != null)
-            this.inner.setParentNode(null);
+        if (this.inner != null) this.inner.setParentNode(null);
         this.inner = inner;
         setAsParentNodeOf(inner);
         return this;

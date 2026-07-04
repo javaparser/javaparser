@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.key.sv;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -13,7 +14,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.KeyCcatchSVMetaModel;
 import java.util.Objects;
 import org.jspecify.annotations.NonNull;
-import com.github.javaparser.ast.Node;
 
 /**
  * @author Alexander Weigl

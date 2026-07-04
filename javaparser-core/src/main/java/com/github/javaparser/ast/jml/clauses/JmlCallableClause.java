@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.jml.clauses;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -105,8 +106,7 @@ public class JmlCallableClause extends JmlClause {
             return this;
         }
         notifyPropertyChange(ObservableProperty.METHOD_SIGNATURES, this.methodSignatures, methodSignatures);
-        if (this.methodSignatures != null)
-            this.methodSignatures.setParentNode(null);
+        if (this.methodSignatures != null) this.methodSignatures.setParentNode(null);
         this.methodSignatures = methodSignatures;
         setAsParentNodeOf(methodSignatures);
         return this;

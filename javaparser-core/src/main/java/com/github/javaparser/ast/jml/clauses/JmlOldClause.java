@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.jml.clauses;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -69,8 +70,7 @@ public class JmlOldClause extends JmlClause {
             return this;
         }
         notifyPropertyChange(ObservableProperty.DECLARATIONS, this.declarations, declarations);
-        if (this.declarations != null)
-            this.declarations.setParentNode(null);
+        if (this.declarations != null) this.declarations.setParentNode(null);
         this.declarations = declarations;
         setAsParentNodeOf(declarations);
         return this;

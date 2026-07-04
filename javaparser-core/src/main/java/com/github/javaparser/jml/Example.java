@@ -39,7 +39,8 @@ public class Example {
         IntStream timings = IntStream.rangeClosed(0, 0).map(i -> {
             long start = System.currentTimeMillis();
             try {
-                ParseResult<CompilationUnit> result = jpb.parse(new File("/home/weigl/work/javaparser/JmlExample.java"));
+                ParseResult<CompilationUnit> result =
+                        jpb.parse(new File("/home/weigl/work/javaparser/JmlExample.java"));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

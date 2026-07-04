@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.jml.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
@@ -49,14 +50,12 @@ import org.jspecify.annotations.NonNull;
  */
 public class JmlQuantifiedExpr extends JmlExpression implements NodeWithParameters<JmlQuantifiedExpr> {
 
-    public interface JmlBinder extends JmlKeyword {
-    }
+    public interface JmlBinder extends JmlKeyword {}
 
     /**
      * 12.4.24.2 Generalized Quantifiers
      */
     public enum JmlDefaultBinder implements JmlBinder {
-
         FORALL("\\forall"),
         EXISTS("\\exists"),
         NUM_OF("\\num_of"),
@@ -76,9 +75,10 @@ public class JmlQuantifiedExpr extends JmlExpression implements NodeWithParamete
         }
 
         public static JmlBinder valueOf(JavaToken binder) {
-            Optional<JmlDefaultBinder> b = Arrays.stream(values()).filter(it -> binder.getText().equals(it.symbol)).findFirst();
-            if (b.isPresent())
-                return b.get();
+            Optional<JmlDefaultBinder> b = Arrays.stream(values())
+                    .filter(it -> binder.getText().equals(it.symbol))
+                    .findFirst();
+            if (b.isPresent()) return b.get();
             else {
                 return binder::getText;
                 // throw new IllegalArgumentException(String.format("Unknown binder %s", binder.getText()));
@@ -108,11 +108,13 @@ public class JmlQuantifiedExpr extends JmlExpression implements NodeWithParamete
     }
 
     @AllFieldsConstructor
-    public JmlQuantifiedExpr(final JmlBinder binder, final NodeList<Parameter> variables, final Expression expressions) {
+    public JmlQuantifiedExpr(
+            final JmlBinder binder, final NodeList<Parameter> variables, final Expression expressions) {
         this(null, binder, variables, new NodeList<>(expressions));
     }
 
-    public JmlQuantifiedExpr(TokenRange tokenRange, JavaToken binder, NodeList<Parameter> variables, NodeList<Expression> expressions) {
+    public JmlQuantifiedExpr(
+            TokenRange tokenRange, JavaToken binder, NodeList<Parameter> variables, NodeList<Expression> expressions) {
         this(tokenRange, JmlDefaultBinder.valueOf(binder), variables, new NodeList<>(expressions));
     }
 
@@ -120,7 +122,8 @@ public class JmlQuantifiedExpr extends JmlExpression implements NodeWithParamete
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlQuantifiedExpr(TokenRange tokenRange, JmlBinder binder, NodeList<Parameter> variables, NodeList<Expression> expressions) {
+    public JmlQuantifiedExpr(
+            TokenRange tokenRange, JmlBinder binder, NodeList<Parameter> variables, NodeList<Expression> expressions) {
         super(tokenRange);
         setBinder(binder);
         setVariables(variables);
@@ -176,8 +179,7 @@ public class JmlQuantifiedExpr extends JmlExpression implements NodeWithParamete
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSIONS, this.expressions, expressions);
-        if (this.expressions != null)
-            this.expressions.setParentNode(null);
+        if (this.expressions != null) this.expressions.setParentNode(null);
         this.expressions = expressions;
         setAsParentNodeOf(expressions);
         return this;
@@ -195,8 +197,7 @@ public class JmlQuantifiedExpr extends JmlExpression implements NodeWithParamete
             return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
-        if (this.variables != null)
-            this.variables.setParentNode(null);
+        if (this.variables != null) this.variables.setParentNode(null);
         this.variables = variables;
         setAsParentNodeOf(variables);
         return this;
@@ -313,7 +314,6 @@ public class JmlQuantifiedExpr extends JmlExpression implements NodeWithParamete
     public @NonNull() NodeList<Parameter> variables() {
         return Objects.requireNonNull(variables);
     }
-
 
     @Override
     public NodeList<Parameter> getParameters() {

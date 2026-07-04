@@ -38,7 +38,13 @@ public class JmlClauseLabelMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlClauseLabelMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlLabledClause.class, "JmlClauseLabel", "com.github.javaparser.ast.jml.clauses", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlLabledClause.class,
+                "JmlClauseLabel",
+                "com.github.javaparser.ast.jml.clauses",
+                false,
+                false);
     }
 
     public PropertyMetaModel expressionPropertyMetaModel;

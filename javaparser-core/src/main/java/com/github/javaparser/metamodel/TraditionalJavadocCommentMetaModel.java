@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.comments.TraditionalJavadocComment;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,6 +38,12 @@ public class TraditionalJavadocCommentMetaModel extends JavadocCommentMetaModel 
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     TraditionalJavadocCommentMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, TraditionalJavadocComment.class, "TraditionalJavadocComment", "com.github.javaparser.ast.comments", false, false);
+        super(
+                superBaseNodeMetaModel,
+                TraditionalJavadocComment.class,
+                "TraditionalJavadocComment",
+                "com.github.javaparser.ast.comments",
+                false,
+                false);
     }
 }

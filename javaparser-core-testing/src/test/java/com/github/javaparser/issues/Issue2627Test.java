@@ -20,8 +20,6 @@
 
 package com.github.javaparser.issues;
 
-import static com.github.javaparser.Providers.UTF8;
-import static com.github.javaparser.Providers.resourceProvider;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.*;
@@ -30,7 +28,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import java.io.IOException;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -52,9 +49,7 @@ public class Issue2627Test {
 
     private static Stream<Arguments> arguments_minimal() {
         return Stream.of(
-                Arguments.of("methodA", 238, 240),
-                Arguments.of("methodB", 163, 164),
-                Arguments.of("methodC", 3, 4));
+                Arguments.of("methodA", 238, 240), Arguments.of("methodB", 163, 164), Arguments.of("methodC", 3, 4));
     }
 
     private static Stream<Arguments> arguments_original() {

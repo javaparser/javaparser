@@ -68,7 +68,12 @@ public class CsmList implements CsmElement {
         this(property, new CsmNone(), new CsmNone(), new CsmNone(), new CsmNone());
     }
 
-    public CsmList(ObservableProperty property, CsmElement separatorPre, CsmElement separatorPost, CsmElement preceeding, CsmElement following) {
+    public CsmList(
+            ObservableProperty property,
+            CsmElement separatorPre,
+            CsmElement separatorPost,
+            CsmElement preceeding,
+            CsmElement following) {
         this.property = property;
         this.separatorPre = separatorPre;
         this.separatorPost = separatorPost;

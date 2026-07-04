@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.jml.doc;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -32,7 +33,12 @@ public class JmlDocType extends TypeDeclaration<JmlDocType> implements JmlDocCon
     }
 
     @AllFieldsConstructor
-    public JmlDocType(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members, NodeList<JmlDoc> jmlComments) {
+    public JmlDocType(
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            SimpleName name,
+            NodeList<BodyDeclaration<?>> members,
+            NodeList<JmlDoc> jmlComments) {
         super(modifiers, annotations, name, members);
         this.jmlComments = jmlComments;
     }
@@ -75,8 +81,7 @@ public class JmlDocType extends TypeDeclaration<JmlDocType> implements JmlDocCon
             return this;
         }
         notifyPropertyChange(ObservableProperty.JML_COMMENTS, this.jmlComments, jmlComments);
-        if (this.jmlComments != null)
-            this.jmlComments.setParentNode(null);
+        if (this.jmlComments != null) this.jmlComments.setParentNode(null);
         this.jmlComments = jmlComments;
         setAsParentNodeOf(jmlComments);
         return this;
@@ -128,7 +133,13 @@ public class JmlDocType extends TypeDeclaration<JmlDocType> implements JmlDocCon
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlDocType(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members, NodeList<JmlDoc> jmlComments) {
+    public JmlDocType(
+            TokenRange tokenRange,
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            SimpleName name,
+            NodeList<BodyDeclaration<?>> members,
+            NodeList<JmlDoc> jmlComments) {
         super(tokenRange, modifiers, annotations, name, members);
         setJmlComments(jmlComments);
         customInitialization();

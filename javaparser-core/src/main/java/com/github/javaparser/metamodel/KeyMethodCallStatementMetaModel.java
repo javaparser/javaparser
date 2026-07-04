@@ -38,7 +38,13 @@ public class KeyMethodCallStatementMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyMethodCallStatementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeyMethodCallStmt.class, "KeyMethodCallStatement", "com.github.javaparser.ast.key", false, false);
+        super(
+                superBaseNodeMetaModel,
+                KeyMethodCallStmt.class,
+                "KeyMethodCallStatement",
+                "com.github.javaparser.ast.key",
+                false,
+                false);
     }
 
     public PropertyMetaModel blockPropertyMetaModel;

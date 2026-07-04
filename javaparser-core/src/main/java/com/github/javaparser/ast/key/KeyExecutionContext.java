@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.key;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -77,8 +78,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONTEXT, this.context, context);
-        if (this.context != null)
-            this.context.setParentNode(null);
+        if (this.context != null) this.context.setParentNode(null);
         this.context = context;
         setAsParentNodeOf(context);
         return this;
@@ -95,8 +95,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
             return this;
         }
         notifyPropertyChange(ObservableProperty.INSTANCE, this.instance, instance);
-        if (this.instance != null)
-            this.instance.setParentNode(null);
+        if (this.instance != null) this.instance.setParentNode(null);
         this.instance = instance;
         setAsParentNodeOf(instance);
         return this;
@@ -114,8 +113,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
             return this;
         }
         notifyPropertyChange(ObservableProperty.SIGNATURE, this.signature, signature);
-        if (this.signature != null)
-            this.signature.setParentNode(null);
+        if (this.signature != null) this.signature.setParentNode(null);
         this.signature = signature;
         setAsParentNodeOf(signature);
         return this;

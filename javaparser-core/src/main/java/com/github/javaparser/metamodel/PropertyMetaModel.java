@@ -22,6 +22,7 @@ package com.github.javaparser.metamodel;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.getterName;
 import static com.github.javaparser.utils.CodeGenerationUtils.setterName;
+
 import com.github.javaparser.ast.Node;
 import java.lang.reflect.Field;
 import java.util.Optional;
@@ -47,7 +48,15 @@ public class PropertyMetaModel {
 
     private final boolean hasWildcard;
 
-    public PropertyMetaModel(BaseNodeMetaModel containingNodeMetaModel, String name, Class<?> type, Optional<BaseNodeMetaModel> nodeReference, boolean isOptional, boolean isNonEmpty, boolean isNodeList, boolean hasWildcard) {
+    public PropertyMetaModel(
+            BaseNodeMetaModel containingNodeMetaModel,
+            String name,
+            Class<?> type,
+            Optional<BaseNodeMetaModel> nodeReference,
+            boolean isOptional,
+            boolean isNonEmpty,
+            boolean isNodeList,
+            boolean hasWildcard) {
         this.containingNodeMetaModel = containingNodeMetaModel;
         this.name = name;
         this.type = type;
@@ -163,15 +172,11 @@ public class PropertyMetaModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         PropertyMetaModel that = (PropertyMetaModel) o;
-        if (!name.equals(that.name))
-            return false;
-        if (!type.equals(that.type))
-            return false;
+        if (!name.equals(that.name)) return false;
+        if (!type.equals(that.type)) return false;
         return true;
     }
 

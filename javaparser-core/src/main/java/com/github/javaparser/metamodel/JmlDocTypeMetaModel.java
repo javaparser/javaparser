@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class JmlDocTypeMetaModel extends TypeDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlDocTypeMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlDocType.class, "JmlDocType", "com.github.javaparser.ast.jml.doc", false, false);
+        super(
+                superBaseNodeMetaModel,
+                JmlDocType.class,
+                "JmlDocType",
+                "com.github.javaparser.ast.jml.doc",
+                false,
+                false);
     }
 
     public PropertyMetaModel jmlCommentsPropertyMetaModel;

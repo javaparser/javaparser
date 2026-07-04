@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.key;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -89,8 +90,7 @@ public class KeyCatchAllStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BLOCK, this.block, block);
-        if (this.block != null)
-            this.block.setParentNode(null);
+        if (this.block != null) this.block.setParentNode(null);
         this.block = block;
         setAsParentNodeOf(block);
         return this;
@@ -108,8 +108,7 @@ public class KeyCatchAllStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null)
-            this.label.setParentNode(null);
+        if (this.label != null) this.label.setParentNode(null);
         this.label = label;
         setAsParentNodeOf(label);
         return this;

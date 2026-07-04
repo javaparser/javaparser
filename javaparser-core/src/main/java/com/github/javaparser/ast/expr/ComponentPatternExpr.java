@@ -28,7 +28,6 @@ import com.github.javaparser.metamodel.ComponentPatternExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.Node;
 
 /**
  * <h1>Pattern Matching in Java</h1>
@@ -75,8 +74,7 @@ import com.github.javaparser.ast.Node;
 public abstract class ComponentPatternExpr extends Expression {
 
     @AllFieldsConstructor
-    public ComponentPatternExpr() {
-    }
+    public ComponentPatternExpr() {}
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

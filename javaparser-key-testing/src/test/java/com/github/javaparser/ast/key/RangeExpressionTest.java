@@ -40,7 +40,7 @@ public class RangeExpressionTest {
     void test2() {
         var expr = StaticJavaParser.parseExpression("2..a");
     }
-    
+
     @Test
     void testFPLiteral() {
         var expr = StaticJavaParser.parseExpression("2./a");

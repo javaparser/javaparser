@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.key.sv;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -41,8 +42,7 @@ public class KeyMetaConstruct extends Statement {
         this.kind = kind;
         this.child = child;
         for (Node schema : schemas) {
-            if (schema != null)
-                this.schemas.add(schema);
+            if (schema != null) this.schemas.add(schema);
         }
     }
 
@@ -74,8 +74,7 @@ public class KeyMetaConstruct extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CHILD, this.child, child);
-        if (this.child != null)
-            this.child.setParentNode(null);
+        if (this.child != null) this.child.setParentNode(null);
         this.child = child;
         setAsParentNodeOf(child);
         return this;
@@ -109,8 +108,7 @@ public class KeyMetaConstruct extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.SCHEMAS, this.schemas, schemas);
-        if (this.schemas != null)
-            this.schemas.setParentNode(null);
+        if (this.schemas != null) this.schemas.setParentNode(null);
         this.schemas = schemas;
         setAsParentNodeOf(schemas);
         return this;

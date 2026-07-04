@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.key;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -16,7 +17,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
-import com.github.javaparser.ast.Node;
 
 /// A transaction statement is a Java statement to modeling JavaCard transaction.
 ///
@@ -57,8 +57,10 @@ public class KeyTransactionStmt extends Statement {
     }
 
     public enum TransactionType {
-
-        BEGIN("#beginJavaCardTransaction"), COMMIT("#commitJavaCardTransaction"), FINISH("#finishJavaCardTransaction"), ABORT("#abortJavaCardTransaction");
+        BEGIN("#beginJavaCardTransaction"),
+        COMMIT("#commitJavaCardTransaction"),
+        FINISH("#finishJavaCardTransaction"),
+        ABORT("#abortJavaCardTransaction");
 
         public final String symbol;
 

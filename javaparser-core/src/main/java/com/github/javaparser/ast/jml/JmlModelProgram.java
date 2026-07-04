@@ -18,7 +18,10 @@ import com.github.javaparser.metamodel.OptionalProperty;
  * @author Alexander Weigl
  * @version 1 (12/14/21)
  */
-public class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelProgram>, NodeWithAnnotations<JmlModelProgram>, NodeWithContracts<JmlModelProgram> {
+public class JmlModelProgram extends Node
+        implements NodeWithModifiers<JmlModelProgram>,
+                NodeWithAnnotations<JmlModelProgram>,
+                NodeWithContracts<JmlModelProgram> {
 
     private Modifier modifiers;
 
@@ -34,11 +37,20 @@ public class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelP
     }
 
     @AllFieldsConstructor
-    public JmlModelProgram(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, JmlContract contracts, NodeList<Statement> statements) {
+    public JmlModelProgram(
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            JmlContract contracts,
+            NodeList<Statement> statements) {
         this(null, modifiers, annotations, contracts, statements);
     }
 
-    public JmlModelProgram(TokenRange range, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, JmlContract contracts, NodeList<Statement> statements) {
+    public JmlModelProgram(
+            TokenRange range,
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            JmlContract contracts,
+            NodeList<Statement> statements) {
         super(range);
     }
 
@@ -48,8 +60,7 @@ public class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelP
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-    }
+    public <A> void accept(VoidVisitor<A> v, A arg) {}
 
     @Override
     public NodeList<JmlContract> getContracts() {

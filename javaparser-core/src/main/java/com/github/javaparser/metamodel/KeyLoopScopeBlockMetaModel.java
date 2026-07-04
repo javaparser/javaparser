@@ -38,7 +38,13 @@ public class KeyLoopScopeBlockMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyLoopScopeBlockMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeyLoopScopeBlockStmt.class, "KeyLoopScopeBlock", "com.github.javaparser.ast.key", false, false);
+        super(
+                superBaseNodeMetaModel,
+                KeyLoopScopeBlockStmt.class,
+                "KeyLoopScopeBlock",
+                "com.github.javaparser.ast.key",
+                false,
+                false);
     }
 
     public PropertyMetaModel blockPropertyMetaModel;

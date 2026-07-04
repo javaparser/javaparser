@@ -57,8 +57,7 @@ testing {
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {
     java {
         removeUnusedImports()
-        val version = libs.findVersion("palantirJavaFormat").get().strictVersion
-        palantirJavaFormat(version).formatJavadoc(false).style("PALANTIR")
+        palantirJavaFormat(libs.findVersion("palantirJavaFormat").get().toString()).formatJavadoc(false).style("PALANTIR")
     }
 }
 

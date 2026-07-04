@@ -20,6 +20,13 @@
  */
 package com.github.javaparser;
 
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Providers.resourceProvider;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.toList;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -38,19 +45,11 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Supplier;
-
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.Providers.resourceProvider;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Parse Java source code and creates Abstract Syntax Trees.
@@ -117,7 +116,8 @@ public final class JavaParser {
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
         assertNotNull(start);
         assertNotNull(provider);
-        List<Processor> processors = configuration.getProcessors().stream().map(Supplier::get).collect(toList());
+        List<Processor> processors =
+                configuration.getProcessors().stream().map(Supplier::get).collect(toList());
         for (Processor processor : processors) {
             provider = processor.preProcess(provider);
         }
@@ -192,7 +192,8 @@ public final class JavaParser {
      * @throws FileNotFoundException the file was not found
      */
     public ParseResult<CompilationUnit> parse(final File file) throws FileNotFoundException {
-        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(file, configuration.getCharacterEncoding()));
+        ParseResult<CompilationUnit> result =
+                parse(COMPILATION_UNIT, provider(file, configuration.getCharacterEncoding()));
         result.getResult().ifPresent(cu -> cu.setStorage(file.toPath(), configuration.getCharacterEncoding()));
         return result;
     }
@@ -223,7 +224,8 @@ public final class JavaParser {
      * @throws IOException the path could not be accessed
      */
     public ParseResult<CompilationUnit> parse(final Path path) throws IOException {
-        ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
+        ParseResult<CompilationUnit> result =
+                parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
         result.setSourcePath(path);
         result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
         return result;
@@ -270,7 +272,8 @@ public final class JavaParser {
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
-    public ParseResult<CompilationUnit> parseResource(final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
+    public ParseResult<CompilationUnit> parseResource(
+            final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
         return parse(COMPILATION_UNIT, resourceProvider(classLoader, path, encoding));
     }
 
@@ -520,7 +523,7 @@ public final class JavaParser {
         return parse(ARRAY_INITIALIZER_EXPR, provider(arrayInitializerExpr));
     }
 
-    //region JML
+    // region JML
     private <T> ParseStart<T> enableJml(ParseStart<T> start) {
         return it -> {
             it.token_source.SwitchTo(GeneratedJavaParserConstants.JML_MULTI_CONTRACT);
@@ -617,6 +620,7 @@ public final class JavaParser {
         if (result.getResult().isPresent()) {
             s = result.getResult().get().getStatements();
         }
-        return new ParseResult<>(s, result.getProblems(), result.getCommentsCollection().orElse(null));
+        return new ParseResult<>(
+                s, result.getProblems(), result.getCommentsCollection().orElse(null));
     }
 }

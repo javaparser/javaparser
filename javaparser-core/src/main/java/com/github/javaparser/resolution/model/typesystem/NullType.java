@@ -61,6 +61,7 @@ public class NullType implements ResolvedType {
 
     @Override
     public boolean isAssignableBy(ResolvedType other) {
-        throw new UnsupportedOperationException("It does not make sense to assign a value to null, it can only be assigned");
+        throw new UnsupportedOperationException(
+                "It does not make sense to assign a value to null, it can only be assigned");
     }
 }

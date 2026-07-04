@@ -22,6 +22,7 @@ package com.github.javaparser.ast.type;
 
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -43,7 +44,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
-import com.github.javaparser.ast.Node;
 
 /**
  * A primitive type.
@@ -88,7 +88,6 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     }
 
     public enum Primitive implements Stringable {
-
         BOOLEAN("Boolean", "Z"),
         CHAR("Character", "C"),
         BYTE("Byte", "B"),

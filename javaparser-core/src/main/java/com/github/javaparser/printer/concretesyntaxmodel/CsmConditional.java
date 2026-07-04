@@ -61,7 +61,6 @@ public class CsmConditional implements CsmElement {
     }
 
     public enum Condition {
-
         IS_EMPTY {
 
             @Override
@@ -69,42 +68,43 @@ public class CsmConditional implements CsmElement {
                 NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value == null || value.isEmpty();
             }
-        }
-        , IS_NOT_EMPTY {
+        },
+        IS_NOT_EMPTY {
 
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value != null && !value.isEmpty();
             }
-        }
-        , IS_PRESENT {
+        },
+        IS_PRESENT {
 
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 return !property.isNullOrNotPresent(node);
             }
-        }
-        , FLAG {
+        },
+        FLAG {
 
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 return property.getValueAsBooleanAttribute(node);
             }
-        }
-        ;
+        };
 
         abstract boolean evaluate(Node node, ObservableProperty property);
     }
 
-    public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
+    public CsmConditional(
+            ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
         this.properties = Arrays.asList(property);
         this.condition = condition;
         this.thenElement = thenElement;
         this.elseElement = elseElement;
     }
 
-    public CsmConditional(List<ObservableProperty> properties, Condition condition, CsmElement thenElement, CsmElement elseElement) {
+    public CsmConditional(
+            List<ObservableProperty> properties, Condition condition, CsmElement thenElement, CsmElement elseElement) {
         if (properties.size() < 1) {
             throw new IllegalArgumentException();
         }

@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.key.sv.KeyJumpLabelSV;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.key.sv.KeyJumpLabelSV;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class KeyJumpLabelSVMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyJumpLabelSVMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeyJumpLabelSV.class, "KeyJumpLabelSV", "com.github.javaparser.ast.key.sv", false, false);
+        super(
+                superBaseNodeMetaModel,
+                KeyJumpLabelSV.class,
+                "KeyJumpLabelSV",
+                "com.github.javaparser.ast.key.sv",
+                false,
+                false);
     }
 
     public PropertyMetaModel textPropertyMetaModel;

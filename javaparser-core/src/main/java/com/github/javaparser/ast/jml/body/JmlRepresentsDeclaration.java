@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.jml.body;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
@@ -29,7 +30,10 @@ import org.jspecify.annotations.NonNull;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepresentsDeclaration> implements NodeWithName<JmlRepresentsDeclaration>, NodeWithModifiers<JmlRepresentsDeclaration>, NodeWithAccessModifiers<JmlRepresentsDeclaration> {
+public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepresentsDeclaration>
+        implements NodeWithName<JmlRepresentsDeclaration>,
+                NodeWithModifiers<JmlRepresentsDeclaration>,
+                NodeWithAccessModifiers<JmlRepresentsDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -40,7 +44,8 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
     private NodeList<SimpleName> jmlTags;
 
     @AllFieldsConstructor
-    public JmlRepresentsDeclaration(NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, Name name, Expression expr) {
+    public JmlRepresentsDeclaration(
+            NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, Name name, Expression expr) {
         this(null, jmlTags, modifiers, name, expr);
     }
 
@@ -48,7 +53,12 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlRepresentsDeclaration(TokenRange tokenRange, NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, Name name, Expression expr) {
+    public JmlRepresentsDeclaration(
+            TokenRange tokenRange,
+            NodeList<SimpleName> jmlTags,
+            NodeList<Modifier> modifiers,
+            Name name,
+            Expression expr) {
         super(tokenRange);
         setJmlTags(jmlTags);
         setModifiers(modifiers);
@@ -69,8 +79,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
-            this.modifiers.setParentNode(null);
+        if (this.modifiers != null) this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return this;
@@ -100,8 +109,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-        if (this.expr != null)
-            this.expr.setParentNode(null);
+        if (this.expr != null) this.expr.setParentNode(null);
         this.expr = expr;
         setAsParentNodeOf(expr);
         return this;
@@ -119,8 +127,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -201,8 +208,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
             return this;
         }
         notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
-        if (this.jmlTags != null)
-            this.jmlTags.setParentNode(null);
+        if (this.jmlTags != null) this.jmlTags.setParentNode(null);
         this.jmlTags = jmlTags;
         setAsParentNodeOf(jmlTags);
         return this;

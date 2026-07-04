@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.key.sv.KeyMetaConstruct;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.key.sv.KeyMetaConstruct;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class KeyMetaConstructMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyMetaConstructMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeyMetaConstruct.class, "KeyMetaConstruct", "com.github.javaparser.ast.key.sv", false, false);
+        super(
+                superBaseNodeMetaModel,
+                KeyMetaConstruct.class,
+                "KeyMetaConstruct",
+                "com.github.javaparser.ast.key.sv",
+                false,
+                false);
     }
 
     public PropertyMetaModel childPropertyMetaModel;

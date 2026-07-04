@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -100,8 +101,7 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -114,8 +114,7 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
             return this;
         }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        if (this.value != null)
-            this.value.setParentNode(null);
+        if (this.value != null) this.value.setParentNode(null);
         this.value = value;
         setAsParentNodeOf(value);
         return this;

@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.key;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -65,8 +66,7 @@ public class KeyExecStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BRANCHES, this.branches, branches);
-        if (this.branches != null)
-            this.branches.setParentNode(null);
+        if (this.branches != null) this.branches.setParentNode(null);
         this.branches = branches;
         setAsParentNodeOf(branches);
         return this;
@@ -84,8 +84,7 @@ public class KeyExecStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXEC_BLOCK, this.execBlock, execBlock);
-        if (this.execBlock != null)
-            this.execBlock.setParentNode(null);
+        if (this.execBlock != null) this.execBlock.setParentNode(null);
         this.execBlock = execBlock;
         setAsParentNodeOf(execBlock);
         return this;

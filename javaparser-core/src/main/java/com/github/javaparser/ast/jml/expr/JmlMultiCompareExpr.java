@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.jml.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.BinaryExpr;
@@ -126,8 +127,7 @@ public class JmlMultiCompareExpr extends JmlExpression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSIONS, this.expressions, expressions);
-        if (this.expressions != null)
-            this.expressions.setParentNode(null);
+        if (this.expressions != null) this.expressions.setParentNode(null);
         this.expressions = expressions;
         setAsParentNodeOf(expressions);
         return this;

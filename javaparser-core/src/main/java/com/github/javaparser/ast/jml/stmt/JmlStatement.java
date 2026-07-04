@@ -10,7 +10,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlStatementMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.Node;
 
 /**
  * @author Alexander Weigl
@@ -19,8 +18,7 @@ import com.github.javaparser.ast.Node;
 public abstract class JmlStatement extends Statement implements Jmlish {
 
     @AllFieldsConstructor
-    public JmlStatement() {
-    }
+    public JmlStatement() {}
 
     /**
      * This constructor is used by the parser and is considered private.

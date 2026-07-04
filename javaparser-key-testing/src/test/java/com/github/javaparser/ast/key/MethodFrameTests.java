@@ -1,5 +1,7 @@
 package com.github.javaparser.ast.key;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -15,7 +17,6 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.google.common.truth.Truth;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,14 +28,11 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class MethodFrameTests {
     @Test
     void mftest1() throws IOException {
         loadAndResolveAll(new File("src/test/resources/nameResolution/A.java"));
     }
-
 
     @Test
     void mftestB() throws IOException {
@@ -101,7 +99,8 @@ public class MethodFrameTests {
         public <T extends ResolvedDeclaration, N extends Expression & Resolvable<T>> void resolve(N n) {
             Path base = n.findCompilationUnit()
                     .flatMap(CompilationUnit::getStorage)
-                    .map(it -> it.getPath().getParent()).get();
+                    .map(it -> it.getPath().getParent())
+                    .get();
             String pos = n.getRange().map(it -> it.begin.toString()).orElse("_");
 
             try {
@@ -110,11 +109,12 @@ public class MethodFrameTests {
                 try {
                     Node t = rtype.toAst().get();
                     target = t.getRange().map(it -> it.begin.toString()).orElse("_");
-                    target += " in " + t.findCompilationUnit()
-                            .flatMap(CompilationUnit::getStorage)
-                            .map(it -> base.relativize(it.getPath()).toString())
-                            .orElse(null);
-                }catch (NoSuchElementException e) {
+                    target += " in "
+                            + t.findCompilationUnit()
+                                    .flatMap(CompilationUnit::getStorage)
+                                    .map(it -> base.relativize(it.getPath()).toString())
+                                    .orElse(null);
+                } catch (NoSuchElementException e) {
                     target = "_";
                 }
 
