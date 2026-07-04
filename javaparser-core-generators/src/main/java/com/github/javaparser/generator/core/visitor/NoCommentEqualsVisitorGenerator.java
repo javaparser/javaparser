@@ -46,9 +46,7 @@ public class NoCommentEqualsVisitorGenerator extends VisitorGenerator {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        if (!(node.equals(JavaParserMetaModel.lineCommentMetaModel)
-                || node.equals(JavaParserMetaModel.blockCommentMetaModel)
-                || node.equals(JavaParserMetaModel.traditionalJavadocCommentMetaModel))) {
+        if (!com.github.javaparser.ast.comments.Comment.class.isAssignableFrom(node.getType())) {
 
             body.addStatement(f("final %s n2 = (%s) arg;", node.getTypeName(), node.getTypeName()));
 

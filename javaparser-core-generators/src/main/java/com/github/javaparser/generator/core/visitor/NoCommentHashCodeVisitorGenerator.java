@@ -50,9 +50,7 @@ public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
 
         final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("return ", "* 31 +", ";");
         final List<PropertyMetaModel> propertyMetaModels = node.getAllPropertyMetaModels();
-        if (node.equals(JavaParserMetaModel.lineCommentMetaModel)
-                || node.equals(JavaParserMetaModel.blockCommentMetaModel)
-                || node.equals(JavaParserMetaModel.traditionalJavadocCommentMetaModel)
+        if (com.github.javaparser.ast.comments.Comment.class.isAssignableFrom(node.getType())
                 || propertyMetaModels.isEmpty()) {
             builder.append("0");
         } else {
