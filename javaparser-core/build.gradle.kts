@@ -10,10 +10,12 @@ val javacc by configurations.creating
 dependencies {
     api(libs.org.jspecify.jspecify)
     api(libs.net.bytebuddy.byte.buddy.agent)
-    javacc("com.helger:parser-generator-cc:2.0.1")
+    //javacc("com.helger:parser-generator-cc:2.0.1")
+    javacc("com.helger:parser-generator-cc:1.1.4")
 }
 
 val javaBuildFile by tasks.registering(Copy::class) {
+    description = "Create a Java file containing build information"
     from("src/main/java-templates/")
     includeEmptyDirs = false
 
@@ -28,7 +30,7 @@ tasks.compileJava { dependsOn(javaBuildFile) }
 tasks.sourcesJar { dependsOn(javaBuildFile) }
 tasks.spotlessJava { dependsOn(javaBuildFile); dependsOn(tasks.named("compileJavacc")) }
 
-val javaccOutput =
+val javaccOutput: String =
     layout.buildDirectory
         .dir("generated-src/main/javacc")
         .get()
@@ -37,6 +39,8 @@ val javaccOutput =
 val javaccInput = "src/main/javacc/java.jj"
 
 val compileJavacc by tasks.registering(JavaExec::class) {
+    description = "Compiles the JavaCC grammars into Java"
+
     inputs.file(javaccInput).withPathSensitivity(PathSensitivity.RELATIVE)
     outputs.dir(javaccOutput)
     mainClass.set("com.helger.pgcc.parser.Main")
