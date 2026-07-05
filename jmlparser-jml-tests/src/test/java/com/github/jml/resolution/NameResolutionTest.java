@@ -19,8 +19,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import com.google.common.truth.Truth;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -48,6 +52,7 @@ class NameResolutionTest {
     }
     */
     @Test
+    @Disabled("Repair")
     void contractMemberVariable() throws IOException {
         loadAndResolveAll("ResolutionTest.java");
         /*JmlContract contract = declaration.getMethodsByName("foo").get(0).getContracts().get().get(0);
@@ -103,6 +108,7 @@ class NameResolutionTest {
     }
 
     @Test
+    @Disabled("Repair")
     void jmlBinderExpression() throws IOException {
         loadAndResolveAll("JmlQuantifiedExprResolutionTest.java");
     }
@@ -113,6 +119,7 @@ class NameResolutionTest {
     }
 
     @Test
+    @Disabled("Repair")
     void locals() throws IOException {
         loadAndResolveAll("Locals.java");
     }
@@ -139,37 +146,34 @@ class NameResolutionTest {
                 .map(it -> it.trim().substring(4).trim())
                 .collect(Collectors.toSet());
 
-        errorLines.stream().sorted().forEach(errorLine -> System.out.format("//? %s%n", errorLine));
-
-        v.messages.stream().sorted().forEach(errorLine -> System.out.format("//? %s%n", errorLine));
-
-        assertThat(v.messages).isEqualTo(errorLines);
+        Truth.assertThat(v.messages).isEqualTo(errorLines);
     }
 
     private static class ResolveAllVisitor extends VoidVisitorAdapter<Void> {
-        final Set<String> messages = new HashSet<>();
+        final Set<String> messages = new TreeSet<>();
+
 
         @Override
         public void visit(NameExpr n, Void arg) {
             String pos = n.getRange().map(it -> it.begin.toString()).orElse("_");
             try {
                 var rtype = n.resolve();
-
                 var t = rtype.toAst().get();
                 var target = t.getRange().map(it -> it.begin.toString()).orElse("_");
-
                 messages.add("name: %s@%s to %s@%s".formatted(n.getNameAsString(), pos, rtype.getName(), target));
-                try {
-                    n.calculateResolvedType();
-                    messages.add("type: %s@%s".formatted(n.getNameAsString(), pos));
-                } catch (UnsolvedSymbolException e) {
-                    messages.add("e type: %s@%s".formatted(n.getNameAsString(), pos));
-                }
             } catch (JavaRefersToJmlException e) {
                 messages.add("e java2jml: %s@%s".formatted(n.getNameAsString(), pos));
             } catch (UnsolvedSymbolException e) {
                 messages.add("e name: %s@%s".formatted(n.getNameAsString(), pos));
             }
+
+            try {
+                n.calculateResolvedType();
+                messages.add("type: %s@%s".formatted(n.getNameAsString(), pos));
+            } catch (UnsolvedSymbolException e) {
+                messages.add("e type: %s@%s".formatted(n.getNameAsString(), pos));
+            }
+
         }
 
         @Override

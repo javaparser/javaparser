@@ -50,12 +50,6 @@ class FragmentTest {
         Assertions.assertTrue(r.isSuccessful());
     }
 
-    @Test
-    void test() throws FileNotFoundException {
-        testClassLevel(new File(
-                "/home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fragments/decl_1153518565.txt"));
-    }
-
     private boolean ignorableMessages(String message) {
         return message.contains("model_program")
                 || message.contains("recommends")
