@@ -1,9 +1,12 @@
 package com.github.javaparser.ast.key;
 
 import com.github.javaparser.*;
+import com.github.javaparser.ast.expr.BinaryExpr;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import static com.google.common.truth.Truth.assertThat;
 
 /**
  * Test for the conflicts between DOUBLE_LITERAL and RANGE_OPERATOR.
@@ -16,7 +19,6 @@ import org.junit.jupiter.api.Test;
  */
 public class RangeExpressionTest {
     @Test
-    @Disabled
     void test1() {
         var input = "5..6";
         var jp = new JavaParser();
@@ -40,11 +42,17 @@ public class RangeExpressionTest {
 
     @Test
     void test2() {
-        var expr = StaticJavaParser.parseExpression("2..a");
+        var expr = StaticJavaParser.parseExpression("2..a").asBinaryExpr();
+        assertThat(expr.operator()).isEqualTo(BinaryExpr.Operator.RANGE);
+        assertThat(expr.left().toString()).isEqualTo("2");
+        assertThat(expr.right().toString()).isEqualTo("a");
     }
 
     @Test
     void testFPLiteral() {
-        var expr = StaticJavaParser.parseExpression("2./a");
+        var expr = StaticJavaParser.parseExpression("2./a").asBinaryExpr();
+        assertThat(expr.operator()).isEqualTo(BinaryExpr.Operator.DIVIDE);
+        assertThat(expr.left().toString()).isEqualTo("2.");
+        assertThat(expr.right().toString()).isEqualTo("a");
     }
 }

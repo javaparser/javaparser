@@ -513,17 +513,25 @@ TOKEN_MGR_DECLS :
         }
     }
 
+	/** Handle the situation <digit>..<digit> on lexer level. */
 	private void handleFloatingPointRangeTokens(Token matchedToken) {
         try {
-            final char r = input_stream.readChar();
-            if(image.charAt(image.length()-1) == '.' && r == '.') {
-                image.deleteCharAt(image.length() - 1); // 3. => 3
-                matchedToken.kind = INTEGER_LITERAL;
-                input_stream.backup(2);
-                return;
-            }
-            input_stream.backup(1);
-        } catch (java.io.IOException e) {}
+	        // If we matched "<digits>." with no fraction digits, check what's next.
+	        if (image.charAt(image.length() - 1) == '.') {
+	          // last char was '.'
+	          int c = input_stream.readChar();
+	          if (c == '.') {
+	            // It's really "<digits>" followed by "..": undo both peeked chars,
+	            // and re-tag this token as INTEGER without the trailing dot.
+	            input_stream.backup(2);
+	            //matchedToken = jjFillToken();
+	            matchedToken.kind = INTEGER_LITERAL;
+	            matchedToken.image = image.substring(0, image.length() - 1);
+	          } else {
+	            input_stream.backup(1);
+	          }
+	        }
+        } catch(java.io.IOException ignore) {}
       }
 
     private void CommonTokenAction(Token token) {
