@@ -2,6 +2,9 @@
 # See: https://circleci.com/docs/reference/configuration-reference
 version: 2.1
 
+orbs:
+  gradle: circleci/gradle@3.0.0
+
 # Define reusable executors for different OS and JDK combinations
 executors:
   ubuntu-jdk21:
@@ -30,6 +33,23 @@ jobs:
       # Checkout the code as the first step.
       - checkout
 
+      # Cache Gradle dependencies between builds
+      - restore_cache:
+          keys:
+            - gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - gradle-cache-
+
+      - run:
+          name: Download dependencies
+          command: ./gradlew dependencies --no-daemon
+
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+            - ~/.gradle/caches
+          key: gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+
       # Echo exact java version being used
       - run:
           name: "Echo exact java version"
@@ -40,11 +60,16 @@ jobs:
           name: "Test with Gradle"
           command: |
             chmod +x ./gradlew
-            ./gradlew --continue --parallel test
+            ./gradlew --continue --parallel --no-daemon test
 
-      # Store test results
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
       - store_test_results:
-          path: "**/build/test-results/test/*.xml"
+          path: ~/test-results
 
       # Store test artifacts for reporting
       - store_artifacts:
