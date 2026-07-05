@@ -1,5 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
+import gradle.kotlin.dsl.accessors._ae9e0b2037dda18deae2e3c073f1e076.compileJava
+
+
 plugins {
     `java-library`
     id("test-report-aggregation")
@@ -36,6 +39,10 @@ java {
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.compilerArgs.add("-parameters")
+
+    // See: https://docs.oracle.com/en/java/javase/12/tools/javac.html
+    options.compilerArgs.add("-Xlint:all")
+    //"-Werror", // Terminates compilation when warnings occur.
 }
 
 tasks.withType<Javadoc> {
@@ -50,6 +57,14 @@ testing {
     suites {
         val test by getting(JvmTestSuite::class) {
             useJUnitJupiter()
+            targets {
+                all {
+                    testTask.configure {
+                        maxHeapSize = "8g"
+                        //jvmArgs("-Xmx2g")
+                    }
+                }
+            }
         }
     }
 }

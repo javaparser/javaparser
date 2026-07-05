@@ -7,17 +7,17 @@ executors:
   ubuntu-jdk21:
     docker:
       - image: cimg/openjdk:21.0
-    resource_class: xlarge
+    resource_class: large
   ubuntu-jdk25:
     docker:
       - image: cimg/openjdk:25.0
-    resource_class: xlarge
+    resource_class: large
 
 # Define a job for running tests
 # See: https://circleci.com/docs/guides/orchestrate/jobs-steps/#jobs-overview & https://circleci.com/docs/reference/configuration-reference/#jobs
 jobs:
   gradle_test:
-    resource_class: xlarge
+    resource_class: large
     parameters:
       executor_name:
         type: string
