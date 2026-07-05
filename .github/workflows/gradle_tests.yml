@@ -82,7 +82,7 @@ jobs:
         if: success() || failure()
         with:
           name: Test Report
-          path: "**/build/test-results/tests/test/**/*.xml"
+          path: "*/build/test-results/test/*.xml"
           reporter: java-junit
 
   gradle_test_on_branch:

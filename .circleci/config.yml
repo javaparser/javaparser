@@ -44,7 +44,7 @@ jobs:
 
       # Store test results
       - store_test_results:
-          path: "**/build/test-results/test/*.xml"
+          path: "*/build/test-results/test/*.xml"
 
       # Store test artifacts for reporting
       - store_artifacts:
