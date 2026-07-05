@@ -1,7 +1,5 @@
 package com.github.jml.resolution;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -14,15 +12,13 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.JavaRefersToJmlException;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
+import com.google.common.truth.Truth;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-
-import com.google.common.truth.Truth;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -152,7 +148,6 @@ class NameResolutionTest {
     private static class ResolveAllVisitor extends VoidVisitorAdapter<Void> {
         final Set<String> messages = new TreeSet<>();
 
-
         @Override
         public void visit(NameExpr n, Void arg) {
             String pos = n.getRange().map(it -> it.begin.toString()).orElse("_");
@@ -173,7 +168,6 @@ class NameResolutionTest {
             } catch (UnsolvedSymbolException e) {
                 messages.add("e type: %s@%s".formatted(n.getNameAsString(), pos));
             }
-
         }
 
         @Override

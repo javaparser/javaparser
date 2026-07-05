@@ -71,7 +71,7 @@ class JavaParserTest {
         assertTrue(memberDeclaration.hasRange());
         assertEquals(
                 new Range(new Position(1, 17), new Position(1, 29)),
-                memberDeclaration.getRange(). get());
+                memberDeclaration.getRange().get());
     }
 
     @Test
