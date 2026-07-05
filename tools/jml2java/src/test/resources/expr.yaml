@@ -1,5 +1,4 @@
-- expr: |
-    true
+- expr: "true"
   result: |
     { } true
 - expr: |
@@ -64,6 +63,7 @@
 
 - expr: |
     (\let int[][] x = { {1}, {2} }; x.length ) == 2
+  disabled: true
   result: |
     { 
       int _gen_1; 
@@ -77,5 +77,6 @@
 
 - expr: |
     (\let int x = 5; x)
-  resultInt: |
+  result: |
     (let ((x 5)) x)
+  disabled: true

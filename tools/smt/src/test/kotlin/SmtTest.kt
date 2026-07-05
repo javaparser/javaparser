@@ -12,13 +12,28 @@ import io.github.jmltoolkit.smt.model.SExpr
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
-import org.junit.jupiter.api.function.Executable
 import org.yaml.snakeyaml.Yaml
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.util.function.Consumer
-import java.util.function.Function
-import java.util.stream.Stream
+
+data class ExprTestCase(
+    val expr: String,
+    val result: String? = null,
+    val resultBv: String? = null,
+    val resultInt: String? = null,
+    val disabled: Boolean = false
+) {
+    constructor(m: Map<String, Any?>)
+            : this(
+        expr = m["expr"] as String,
+        result = m["result"] as String?,
+        resultInt = m["resultInt"] as String?,
+        resultBv = m["resultBv"] as String?,
+        disabled = m["disabled"] as? Boolean ?: false
+    )
+
+}
 
 /**
  * @author Alexander Weigl
@@ -41,22 +56,28 @@ class SmtTest {
         parent = r.result.get().getType(0)
     }
 
+
     @TestFactory
-    fun smtTranslation(): Stream<DynamicTest> {
+    fun smtTranslation(): List<DynamicTest> {
         javaClass.getResourceAsStream("expr.yaml").use { inputStream ->
             val yaml = Yaml()
             val obj: List<Map<String, Any>> = yaml.load(inputStream)
-            return obj.stream().map<DynamicTest>(Function<Map<String, Any>, DynamicTest> { m: Map<String, Any> ->
-                val a = m["expr"] as String
-                val result = m["result"] as String?
-                val resultInt = m["resultInt"] as String?
-                val resultBv = m["resultBv"] as String?
-                DynamicTest.dynamicTest(a) {
-                    if (resultInt != null) smtTranslation(a, resultInt, true)
-                    if (resultBv != null) smtTranslation(a, resultBv, false)
-                    if (result != null) smtTranslation(a, result, false)
+            return obj
+                .map { ExprTestCase(it) }
+                .filter { !it.disabled }
+                .flatMap {
+                    listOf(
+                        DynamicTest.dynamicTest(it.expr + " int") {
+                            it.resultInt?.let { r -> smtTranslation(it.expr, r, true) }
+                        },
+                        DynamicTest.dynamicTest(it.expr + " bv") {
+                            it.resultBv?.let { r -> smtTranslation(it.expr, r, false) }
+                        },
+                        DynamicTest.dynamicTest(it.expr + " _") {
+                            it.result?.let { r -> smtTranslation(it.expr, r, true) }
+                        }
+                    )
                 }
-            })
         }
     }
 

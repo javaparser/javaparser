@@ -7,17 +7,17 @@ executors:
   ubuntu-jdk21:
     docker:
       - image: cimg/openjdk:21.0
-    resource_class: large
+    resource_class: xlarge
   ubuntu-jdk25:
     docker:
       - image: cimg/openjdk:25.0
-    resource_class: large
+    resource_class: xlarge
 
 # Define a job for running tests
 # See: https://circleci.com/docs/guides/orchestrate/jobs-steps/#jobs-overview & https://circleci.com/docs/reference/configuration-reference/#jobs
 jobs:
   gradle_test:
-    resource_class: large
+    resource_class: xlarge
     parameters:
       executor_name:
         type: string
@@ -44,11 +44,11 @@ jobs:
 
       # Store test results
       - store_test_results:
-          path: "*/build/test-results/test/*.xml"
+          path: "**/build/test-results/test/*.xml"
 
       # Store test artifacts for reporting
       - store_artifacts:
-          path: "**/build/reports/tests/test"
+          path: "**/build/reports/tests/*"
           destination: test-report
 
 # Orchestrate jobs using workflows

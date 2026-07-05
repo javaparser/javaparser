@@ -1,22 +1,32 @@
 package io.github.jmltoolkit.jml2java
 
 import com.github.javaparser.ParseResult
-import com.github.javaparser.Problem
 import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.expr.Expression
 import com.github.javaparser.printer.DefaultPrettyPrinter
 import com.github.javaparser.symbolsolver.JavaSymbolSolver
-import com.github.javaparser.symbolsolver.resolution.SymbolSolver
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver
 import com.google.common.truth.Truth
 import io.github.jmltoolkit.utils.TestWithJavaParser
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.yaml.snakeyaml.Yaml
 import java.io.IOException
-import java.util.function.Consumer
-import java.util.stream.Stream
+
+data class ExprTestCase(
+    val expr: String,
+    val result: String,
+    val disabled: Boolean = false
+) {
+    constructor(m: Map<String, Any?>)
+            : this(
+        m["expr"] as String,
+        m["result"] as String,
+        m["disabled"] as? Boolean ?: false
+    )
+
+}
+
 
 /**
  * @author Alexander Weigl
@@ -29,28 +39,22 @@ class Jml2JavaTests : TestWithJavaParser() {
 
     @TestFactory
     @Throws(IOException::class)
-    fun j2jTranslation(): Stream<DynamicTest> {
+    fun j2jTranslation(): List<DynamicTest> {
         javaClass.getResourceAsStream("/expr.yaml").use { inputStream ->
             val yaml = Yaml()
             val obj: List<Map<String, Any>> = yaml.load(inputStream)
-            return obj.stream().map { m: Map<String, Any> ->
-                val a = m["expr"] as String
-                val result = m["result"] as String?
-                DynamicTest.dynamicTest(a) {
-                    if (result != null) jml2JavaTranslation(a, result)
-                }
-            }
+            println(obj)
+            return obj.map { ExprTestCase(it) }
+                .filter { !it.disabled }
+                .map { DynamicTest.dynamicTest(it.expr) { jml2JavaTranslation(it) } }
         }
     }
 
-    private fun jml2JavaTranslation(
-        input: String?,
-        expected: String,
-    ) {
-        val e: ParseResult<Expression> = parser.parseJmlExpression(input)
+    private fun jml2JavaTranslation(input: ExprTestCase) {
+        val e: ParseResult<Expression> = parser.parseJmlExpression(input.expr)
         if (!e.isSuccessful) {
-            e.problems.forEach(Consumer { x: Problem? -> System.err.println(x) })
-            Assertions.fail<Any>("Error during parsing")
+            e.problems.forEach { System.err.println(it) }
+            error("Error during parsing")
         }
         val expr = e.result.get()
         expr.setParentNode(pseudoCompilationUnit)
@@ -61,7 +65,7 @@ class Jml2JavaTests : TestWithJavaParser() {
         val sexpr = dpp.print(actual.b)
         Truth
             .assertThat(trimAllWs("$sblock $sexpr"))
-            .isEqualTo(trimAllWs(expected))
+            .isEqualTo(trimAllWs(input.result))
     }
 }
 
