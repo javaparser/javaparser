@@ -36,7 +36,7 @@ jobs:
       # Cache Gradle dependencies between builds
       - restore_cache:
           keys:
-            - gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - gradle-cache-{{ checksum "build.gradle.kts" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
             - gradle-cache-
 
       - run:
@@ -47,7 +47,7 @@ jobs:
           paths:
             - ~/.gradle/wrapper
             - ~/.gradle/caches
-          key: gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: gradle-cache-{{ checksum "build.gradle.kts" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
 
 
       # Echo exact java version being used
