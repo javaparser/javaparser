@@ -447,9 +447,9 @@
                         <java>
                             <!-- google-java-format, but better: see https://github.com/palantir/palantir-java-format -->
                             <palantirJavaFormat/>
-                            <trimTrailingWhitespace/>
-                            <endWithNewline/>
                         </java>
+                        <trimTrailingWhitespace/>
+      					<endWithNewline/>
                     </configuration>
                 </plugin>
             </plugins>
