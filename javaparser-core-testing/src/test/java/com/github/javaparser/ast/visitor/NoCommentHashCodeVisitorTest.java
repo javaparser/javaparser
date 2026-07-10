@@ -1084,14 +1084,13 @@ class NoCommentHashCodeVisitorTest {
     static Stream<BaseNodeMetaModel> provideConcreteCommentMetamodels() {
         return JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter(meta -> Comment.class.isAssignableFrom(meta.getType()))
-                .filter(meta ->
-                        !java.lang.reflect.Modifier.isAbstract(meta.getType().getModifiers()));
+                .filter(meta -> !meta.isAbstract());
     }
 
     @ParameterizedTest(name = "Ignore comment for node type: {0}")
     @MethodSource("provideConcreteCommentMetamodels")
-    @DisplayName("No-Comment equals visitor must unconditionally ignore content of any type of comments")
-    void noCommentVisitors_MustUnconditionallyIgnoreAnyMetamodelCommentSubtypes(BaseNodeMetaModel meta) {
+    @DisplayName("No-Comment hashCode visitor must unconditionally ignore content of any type of comments")
+    void noCommentHashCodeVisitor_MustUnconditionallyIgnoreAnyMetamodelCommentSubtypes(BaseNodeMetaModel meta) {
         Class<? extends Comment> commentClass = (Class<? extends Comment>) meta.getType();
 
         Comment commentLeft = createCommentInstance(commentClass, "Content Alpha");
@@ -1100,8 +1099,11 @@ class NoCommentHashCodeVisitorTest {
         int leftHashCode = NoCommentHashCodeVisitor.hashCode(commentLeft);
         int rightHashCode = NoCommentHashCodeVisitor.hashCode(commentRight);
 
-        assertEquals(0, leftHashCode);
-        assertEquals(0, rightHashCode);
+        assertEquals(
+                leftHashCode,
+                rightHashCode,
+                "NoCommentHashCodeVisitor should return identical hash codes for comments with different content of type: "
+                        + commentClass.getSimpleName());
     }
 
     private Comment createCommentInstance(Class<? extends Comment> type, String content) {

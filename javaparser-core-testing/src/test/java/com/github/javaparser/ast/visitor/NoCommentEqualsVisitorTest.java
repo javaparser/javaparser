@@ -29,7 +29,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import java.lang.reflect.Modifier;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,7 +61,7 @@ class NoCommentEqualsVisitorTest {
     static Stream<BaseNodeMetaModel> provideConcreteCommentMetamodels() {
         return JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter(meta -> Comment.class.isAssignableFrom(meta.getType()))
-                .filter(meta -> !Modifier.isAbstract(meta.getType().getModifiers()));
+                .filter(meta -> !meta.isAbstract());
     }
 
     @ParameterizedTest(name = "Ignore comment for node type: {0}")
