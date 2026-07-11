@@ -635,11 +635,9 @@ public class JavaParserFacade {
      * return type of {@code cast} is still the type variable {@code T}; this method replaces it
      * with {@code Sub}.
      */
-    private static MethodUsage applyTypeParametersFromScope(
-            MethodUsage methodUsage, ResolvedReferenceType scopeType) {
+    private static MethodUsage applyTypeParametersFromScope(MethodUsage methodUsage, ResolvedReferenceType scopeType) {
         MethodUsage result = methodUsage;
-        for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> typeParamEntry :
-                scopeType.getTypeParametersMap()) {
+        for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> typeParamEntry : scopeType.getTypeParametersMap()) {
             result = result.replaceTypeParameter(typeParamEntry.a, typeParamEntry.b);
         }
         return result;

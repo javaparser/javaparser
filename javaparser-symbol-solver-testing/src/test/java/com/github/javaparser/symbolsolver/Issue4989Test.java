@@ -85,8 +85,8 @@ public class Issue4989Test extends AbstractResolutionTest {
 
     @BeforeEach
     void setup() {
-        ParserConfiguration config = new ParserConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
     }
 
@@ -150,10 +150,8 @@ public class Issue4989Test extends AbstractResolutionTest {
         CompilationUnit cu = StaticJavaParser.parse(CODE);
 
         for (MethodCallExpr mce : cu.findAll(MethodCallExpr.class)) {
-            ResolvedMethodDeclaration resolved = assertDoesNotThrow(
-                    mce::resolve, () -> "Failed to resolve: " + mce);
-            assertDoesNotThrow(
-                    resolved::getQualifiedSignature, () -> "Failed getQualifiedSignature for: " + mce);
+            ResolvedMethodDeclaration resolved = assertDoesNotThrow(mce::resolve, () -> "Failed to resolve: " + mce);
+            assertDoesNotThrow(resolved::getQualifiedSignature, () -> "Failed getQualifiedSignature for: " + mce);
         }
     }
 
