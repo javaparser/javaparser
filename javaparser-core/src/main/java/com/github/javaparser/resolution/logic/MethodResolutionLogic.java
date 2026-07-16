@@ -657,11 +657,11 @@ public class MethodResolutionLogic {
                 return false;
             }
         }
-        // Unboxing (primitive expected, reference type provided)
+        // Both are primitive types
         if (expectedType.isPrimitive() && actualType.isPrimitive()) {
             ResolvedPrimitiveType expectedPrimitive = expectedType.asPrimitive();
             ResolvedPrimitiveType actualPrimitive = actualType.asPrimitive();
-            return expectedPrimitive.isAssignableBy(actualPrimitive);
+            return expectedPrimitive.equals(actualPrimitive);
         }
         // Both are reference types but one might be a constrained/wildcard type
         // This can happen after type variable substitution
