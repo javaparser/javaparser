@@ -354,6 +354,28 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         assertEquals(true, MethodResolutionLogic.isApplicable(mu, "forEach", ImmutableList.of(typeParam), typeSolver));
     }
 
+    @Test
+    void testIssue5065() {
+        String code = "public class Arrays {"
+                + "     public static int[] copyOf(int[] original, int newLength) { return original; }"
+                + "     public static float[] copyOf(float[] original, int newLength) { return original; }"
+                + "     public static void test() {"
+                + "       copyOf(new int[]{1});"
+                + "     }"
+                + "   }";
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        MethodCallExpr expr = cu.findAll(MethodCallExpr.class).stream()
+                .filter(mce -> mce.getNameAsString().equals("copyOf"))
+                .findFirst()
+                .get();
+        String signature = expr.resolve().getQualifiedSignature();
+
+        assertTrue(
+                "Arrays.print(int[])".equals(signature),
+                "arrays of primitive types should only match on exact component types");
+    }
+
     /**
      * Test variadic method with primitive varargs and primitive arguments
      * Example: print(int... values) called with print(1, 2, 3)
