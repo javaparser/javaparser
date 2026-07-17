@@ -35,9 +35,6 @@ public class TreeVisitorValidator implements Validator {
 
     @Override
     public final void accept(Node node, ProblemReporter reporter) {
-        validator.accept(node, reporter);
-        for (Node child : node.getChildNodes()) {
-            accept(child, reporter);
-        }
+        node.walk(n -> validator.accept(n, reporter));
     }
 }
