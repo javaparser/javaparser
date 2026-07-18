@@ -151,7 +151,7 @@ public class MethodResolutionLogic {
                 // array.
                 // Confirm all of these grouped "trailing" arguments have the required type -- if not, this is not a
                 // valid type. (Maybe this is also done later..?)
-                for (int variadicArgumentIndex = countOfMethodParametersDeclared;
+                for (int variadicArgumentIndex = getLastParameterIndex(countOfMethodParametersDeclared);
                         variadicArgumentIndex < countOfNeedleArgumentsPassed;
                         variadicArgumentIndex++) {
                     ResolvedType currentArgumentType = needleArgumentTypes.get(variadicArgumentIndex);
