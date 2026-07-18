@@ -360,7 +360,7 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
                 + "     public static int[] copyOf(int[] original, int newLength) { return original; }"
                 + "     public static float[] copyOf(float[] original, int newLength) { return original; }"
                 + "     public static void test() {"
-                + "       copyOf(new int[]{1});"
+                + "       copyOf(new int[]{1}, 1);"
                 + "     }"
                 + "   }";
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
@@ -371,8 +371,9 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
                 .get();
         String signature = expr.resolve().getQualifiedSignature();
 
-        assertTrue(
-                "Arrays.print(int[])".equals(signature),
+        assertEquals(
+                "Arrays.copyOf(int[], int)",
+                signature,
                 "arrays of primitive types should only match on exact component types");
     }
 
