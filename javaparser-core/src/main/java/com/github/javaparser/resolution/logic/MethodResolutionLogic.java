@@ -49,8 +49,7 @@ public class MethodResolutionLogic {
             // TODO if there are no variadic values we should default to the bound of the formal type
             res.add(variadicType);
         } else {
-            ResolvedType componentType = findCommonType(variadicValues);
-            res.add(convertToVariadicParameter(componentType));
+            res.add(convertToVariadicParameter(variadicType));
         }
         return res;
     }
