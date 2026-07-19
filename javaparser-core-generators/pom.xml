@@ -12,6 +12,10 @@
 	<url>https://github.com/javaparser</url>
     <description>A code generator framework, and the generators for javaparser-core</description>
 
+    <properties>
+        <jpms.moduleName>com.github.javaparser.core.generators</jpms.moduleName>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.github.javaparser</groupId>
@@ -24,6 +28,25 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>biz.aQute.bnd</groupId>
+                <artifactId>bnd-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <!-- Pick up the manifest produced by bnd-maven-plugin's bnd-process goal (MJAR-193). -->
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>
