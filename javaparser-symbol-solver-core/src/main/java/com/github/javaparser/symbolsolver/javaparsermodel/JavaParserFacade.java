@@ -51,6 +51,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.Pair;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -481,6 +482,15 @@ public class JavaParserFacade {
             throw new UnsolvedSymbolException("Cannot find method '" + methodName + "' in type " + typeOfScope);
         }
 
+        // Substitute type arguments from the scope type (e.g. Class<Sub>) into candidate methods
+        // so that Class.cast returns Sub rather than the raw type variable T. getAllMethods()
+        // returns methods as declared on the raw type declaration; without this substitution,
+        // poly inference for stream pipelines like list.stream().map(Sub.class::cast) cannot
+        // refine Stream<Base> to Stream<Sub> (see issue #4989).
+        candidateMethods = candidateMethods.stream()
+                .map(m -> applyTypeParametersFromScope(m, typeOfScope.asReferenceType()))
+                .collect(Collectors.toList());
+
         // JLS §15.13.1: Method references have different forms based on their scope:
         //
         // Form 1: ReferenceType :: [TypeArguments] Identifier
@@ -615,6 +625,22 @@ public class JavaParserFacade {
                         + paramTypes + ". Candidates found: "
                         + candidateMethods.size() + " method(s) named '"
                         + methodName + "' in type " + typeOfScope);
+    }
+
+    /**
+     * Substitutes type arguments from {@code scopeType} into {@code methodUsage}.
+     *
+     * <p>Methods obtained via {@link ResolvedReferenceTypeDeclaration#getAllMethods()} are typed
+     * against the raw type declaration. For a parameterized scope such as {@code Class<Sub>}, the
+     * return type of {@code cast} is still the type variable {@code T}; this method replaces it
+     * with {@code Sub}.
+     */
+    private static MethodUsage applyTypeParametersFromScope(MethodUsage methodUsage, ResolvedReferenceType scopeType) {
+        MethodUsage result = methodUsage;
+        for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> typeParamEntry : scopeType.getTypeParametersMap()) {
+            result = result.replaceTypeParameter(typeParamEntry.a, typeParamEntry.b);
+        }
+        return result;
     }
 
     protected ResolvedType getBinaryTypeConcrete(
