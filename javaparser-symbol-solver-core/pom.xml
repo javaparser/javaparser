@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-      <artifactId>javaparser-parent</artifactId>
-      <groupId>com.github.javaparser</groupId>
-      <version>3.29.0-SNAPSHOT</version>
-  </parent>    
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.javaparser</groupId>
+        <artifactId>javaparser-parent</artifactId>
+        <version>3.29.0-SNAPSHOT</version>
+    </parent>
 
     <artifactId>javaparser-symbol-solver-core</artifactId>
     <packaging>jar</packaging>
-	<name>${project.groupId}:${project.artifactId}</name>
-	<url>https://github.com/javaparser</url>
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>A Symbol Solver for Java, built on top of JavaParser (core)</description>
+    <url>https://github.com/javaparser</url>
 
     <licenses>
         <license>
@@ -46,10 +46,10 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-		<dependency>
-			<groupId>org.checkerframework</groupId>
-			<artifactId>checker-qual</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker-qual</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
