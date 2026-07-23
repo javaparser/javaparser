@@ -26,7 +26,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.metamodel.BaseNodeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class NoCommentEqualsVisitorTest {
 
@@ -49,5 +56,38 @@ class NoCommentEqualsVisitorTest {
         CompilationUnit p1 = parse("class X { }");
         CompilationUnit p2 = parse("class Y { }");
         assertFalse(NoCommentEqualsVisitor.equals(p1, p2));
+    }
+
+    static Stream<BaseNodeMetaModel> provideConcreteCommentMetamodels() {
+        return JavaParserMetaModel.getNodeMetaModels().stream()
+                .filter(meta -> Comment.class.isAssignableFrom(meta.getType()))
+                .filter(meta -> !meta.isAbstract());
+    }
+
+    @ParameterizedTest(name = "Ignore comment for node type: {0}")
+    @MethodSource("provideConcreteCommentMetamodels")
+    @DisplayName("No-Comment equals visitor must unconditionally ignore content of any type of comments")
+    void noCommentVisitors_MustUnconditionallyIgnoreAnyMetamodelCommentSubtypes(BaseNodeMetaModel meta) {
+        Class<? extends Comment> commentClass = (Class<? extends Comment>) meta.getType();
+
+        Comment commentLeft = createCommentInstance(commentClass, "Content Alpha");
+        Comment commentRight = createCommentInstance(commentClass, "Content Omega");
+
+        boolean equalsResult = NoCommentEqualsVisitor.equals(commentLeft, commentRight);
+
+        String commentTypeName = commentClass.getSimpleName();
+        assertTrue(
+                equalsResult,
+                String.format(
+                        "NoCommentEqualsVisitor failed for %s. It evaluated the content instead of skipping the node.",
+                        commentTypeName));
+    }
+
+    private Comment createCommentInstance(Class<? extends Comment> type, String content) {
+        try {
+            return type.getConstructor(String.class).newInstance(content);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to dynamically instantiate comment type: " + type.getName(), e);
+        }
     }
 }

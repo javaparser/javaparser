@@ -30,13 +30,20 @@ import static org.mockito.Mockito.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.metamodel.BaseNodeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class NoCommentHashCodeVisitorTest {
 
@@ -1072,5 +1079,38 @@ class NoCommentHashCodeVisitorTest {
         verify(node, times(1)).getType();
         verify(node, times(1)).getPatternList();
         verify(node, never()).getComment();
+    }
+
+    static Stream<BaseNodeMetaModel> provideConcreteCommentMetamodels() {
+        return JavaParserMetaModel.getNodeMetaModels().stream()
+                .filter(meta -> Comment.class.isAssignableFrom(meta.getType()))
+                .filter(meta -> !meta.isAbstract());
+    }
+
+    @ParameterizedTest(name = "Ignore comment for node type: {0}")
+    @MethodSource("provideConcreteCommentMetamodels")
+    @DisplayName("No-Comment hashCode visitor must unconditionally ignore content of any type of comments")
+    void noCommentHashCodeVisitor_MustUnconditionallyIgnoreAnyMetamodelCommentSubtypes(BaseNodeMetaModel meta) {
+        Class<? extends Comment> commentClass = (Class<? extends Comment>) meta.getType();
+
+        Comment commentLeft = createCommentInstance(commentClass, "Content Alpha");
+        Comment commentRight = createCommentInstance(commentClass, "Content Omega");
+
+        int leftHashCode = NoCommentHashCodeVisitor.hashCode(commentLeft);
+        int rightHashCode = NoCommentHashCodeVisitor.hashCode(commentRight);
+
+        assertEquals(
+                leftHashCode,
+                rightHashCode,
+                "NoCommentHashCodeVisitor should return identical hash codes for comments with different content of type: "
+                        + commentClass.getSimpleName());
+    }
+
+    private Comment createCommentInstance(Class<? extends Comment> type, String content) {
+        try {
+            return type.getConstructor(String.class).newInstance(content);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to dynamically instantiate comment type: " + type.getName(), e);
+        }
     }
 }
