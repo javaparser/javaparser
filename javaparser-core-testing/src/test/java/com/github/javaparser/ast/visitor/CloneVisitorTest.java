@@ -21,17 +21,32 @@
 
 package com.github.javaparser.ast.visitor;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.CompilationUnit.Storage;
+import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.type.Type;
+
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class CloneVisitorTest {
     CompilationUnit cu;
@@ -44,6 +59,10 @@ class CloneVisitorTest {
     @AfterEach
     void teardown() {
         cu = null;
+    }
+
+    private static <T> T require(Optional<T> optional) {
+        return optional.orElseThrow(AssertionError::new);
     }
 
     @Test
@@ -102,5 +121,67 @@ class CloneVisitorTest {
     void cloneAnnotationOnWildcardTypeArgument() {
         Type type = parseType("List<@C ? extends Object>").clone();
         assertEquals("List<@C ? extends Object>", type.toString());
+    }
+
+    @Test
+    void cloneRecordWithCompactConstructor() {
+        JavaParser javaParser = new JavaParser(
+                new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_14));
+        CompilationUnit original = javaParser
+                .parse("record Point(int x, int y) {\n"
+                + "    public Point {\n"
+                + "        if (x < 0) {\n"
+                + "            throw new IllegalArgumentException();\n"
+                + "        }\n"
+                + "    }\n"
+                + "}")
+                .getResult()
+                .get();
+
+        CompilationUnit cloned = original.clone();
+
+        assertEquals(original.toString(), cloned.toString());
+    }
+
+    @Test
+    void cloneCompilationUnitKeepsTopLevelStateAndModuleDirectives(@TempDir Path tempDir) throws Exception {
+        DataKey<String> testData = new DataKey<String>() {};
+        Path source = tempDir.resolve("Example.java");
+
+        cu.setPackageDeclaration("a.b");
+        cu.addImport("java.util.List");
+        cu.addClass("Example");
+        cu.setModule(require(parse("open module com.example {\n"
+                        + "    requires transitive java.sql;\n"
+                        + "    exports com.example.api to other.module;\n"
+                        + "    opens com.example.internal;\n"
+                        + "    uses com.example.Service;\n"
+                        + "    provides com.example.Service with com.example.impl.ServiceImpl;\n"
+                        + "}")
+                .getModule()));
+        cu.setStorage(source, StandardCharsets.UTF_16);
+        cu.addOrphanComment(new LineComment("orphan comment"));
+        cu.setData(testData, "metadata");
+
+        CompilationUnit clone = cu.clone();
+        ModuleDeclaration originalModule = require(cu.getModule());
+        ModuleDeclaration clonedModule = require(clone.getModule());
+        Storage clonedStorage = require(clone.getStorage());
+        Comment clonedOrphanComment = clone.getOrphanComments().get(0);
+
+        assertNotSame(cu, clone);
+        assertEquals("a.b", require(clone.getPackageDeclaration()).getNameAsString());
+        assertEquals("java.util.List", clone.getImport(0).getNameAsString());
+        assertEquals("Example", clone.getType(0).getNameAsString());
+        assertEquals(originalModule.toString(), clonedModule.toString());
+        assertNotSame(originalModule, clonedModule);
+        assertSame(clone, require(clonedModule.getParentNode()));
+        assertEquals(source.toAbsolutePath(), clonedStorage.getPath());
+        assertEquals(StandardCharsets.UTF_16, clonedStorage.getEncoding());
+        assertSame(clone, clonedStorage.getCompilationUnit());
+        assertEquals("orphan comment", clonedOrphanComment.getContent());
+        assertNotSame(cu.getOrphanComments().get(0), clonedOrphanComment);
+        assertSame(clone, require(clonedOrphanComment.getParentNode()));
+        assertEquals("metadata", clone.getData(testData));
     }
 }
