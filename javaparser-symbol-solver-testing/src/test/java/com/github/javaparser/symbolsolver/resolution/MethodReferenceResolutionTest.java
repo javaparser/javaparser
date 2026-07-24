@@ -573,6 +573,169 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
     }
 
+    /**
+     * BinaryOperator inherits its functional method apply(T, U) from BiFunction, so resolving
+     * BigDecimal::add must bind the ancestor's type parameters instead of leaking them unresolved.
+     * See <a href="https://github.com/javaparser/javaparser/issues/4936">issue #4936</a>.
+     */
+    @Test
+    public void issue4936_inheritedFunctionalMethodTypeParametersDoNotLeak() {
+        String code = "import java.math.BigDecimal;\n" + "import java.util.stream.Stream;\n"
+                + "public class Test{\n"
+                + "    public void test(){\n"
+                + "        Stream.of(new BigDecimal(0L)).reduce(BigDecimal::add).orElse(null);\n"
+                + "    }\n"
+                + "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        assertEquals(
+                "java.util.stream.Stream.of(T)",
+                Navigator.findMethodCall(cu, "of").get().resolve().getQualifiedSignature());
+        assertEquals(
+                "java.util.stream.Stream.reduce(java.util.function.BinaryOperator<T>)",
+                Navigator.findMethodCall(cu, "reduce").get().resolve().getQualifiedSignature());
+        assertEquals(
+                "java.util.Optional.orElse(T)",
+                Navigator.findMethodCall(cu, "orElse").get().resolve().getQualifiedSignature());
+    }
+
+    /**
+     * Inherited functional method type parameters must not leak even when the interface declares
+     * no type parameters of its own, leaving name-based matching nothing to bind.
+     * See <a href="https://github.com/javaparser/javaparser/issues/4936">issue #4936</a>.
+     */
+    @Test
+    public void issue4936_inheritedFunctionalMethodTypeParametersDoNotLeak_noOwnTypeParameters() {
+        String code = "import java.math.BigDecimal;\n"
+                + "public class Test {\n"
+                + "    interface DecimalOp extends java.util.function.BinaryOperator<BigDecimal> {}\n"
+                + "    static BigDecimal use(DecimalOp op) { return null; }\n"
+                + "    public void test() {\n"
+                + "        use(BigDecimal::add).negate();\n"
+                + "    }\n"
+                + "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        assertEquals(
+                "Test.use(Test.DecimalOp)",
+                Navigator.findMethodCall(cu, "use").get().resolve().getQualifiedSignature());
+        assertEquals(
+                "java.math.BigDecimal.negate()",
+                Navigator.findMethodCall(cu, "negate").get().resolve().getQualifiedSignature());
+    }
+
+    /**
+     * Inherited functional method type parameters must not leak across a multi-level inheritance
+     * chain whose own type-parameter names differ from the ancestor's.
+     * See <a href="https://github.com/javaparser/javaparser/issues/4936">issue #4936</a>.
+     */
+    @Test
+    public void issue4936_inheritedFunctionalMethodTypeParametersDoNotLeak_transitiveInheritance() {
+        String code = "import java.math.BigDecimal;\n"
+                + "public class Test {\n"
+                + "    interface Step1<Z> extends java.util.function.BiFunction<Z, Z, Z> {}\n"
+                + "    interface Step2<A> extends Step1<A> {}\n"
+                + "    static BigDecimal use(Step2<BigDecimal> op) { return null; }\n"
+                + "    public void test() {\n"
+                + "        use(BigDecimal::add).negate();\n"
+                + "    }\n"
+                + "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        assertEquals(
+                "Test.use(Test.Step2<java.math.BigDecimal>)",
+                Navigator.findMethodCall(cu, "use").get().resolve().getQualifiedSignature());
+        assertEquals(
+                "java.math.BigDecimal.negate()",
+                Navigator.findMethodCall(cu, "negate").get().resolve().getQualifiedSignature());
+    }
+
+    /**
+     * Inherited functional method type parameters must not leak when resolving a static method
+     * reference (JLS §15.13.1 form 1a), not just an unbound instance one.
+     * See <a href="https://github.com/javaparser/javaparser/issues/4936">issue #4936</a>.
+     */
+    @Test
+    public void issue4936_inheritedFunctionalMethodTypeParametersDoNotLeak_staticMethodReference() {
+        String code = "import java.util.stream.Stream;\n"
+                + "public class Test {\n"
+                + "    public void test() {\n"
+                + "        Stream.of(1).reduce(Integer::sum).orElse(null);\n"
+                + "    }\n"
+                + "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        assertEquals(
+                "java.util.stream.Stream.of(T)",
+                Navigator.findMethodCall(cu, "of").get().resolve().getQualifiedSignature());
+        assertEquals(
+                "java.util.stream.Stream.reduce(java.util.function.BinaryOperator<T>)",
+                Navigator.findMethodCall(cu, "reduce").get().resolve().getQualifiedSignature());
+        assertEquals(
+                "java.util.Optional.orElse(T)",
+                Navigator.findMethodCall(cu, "orElse").get().resolve().getQualifiedSignature());
+    }
+
+    /**
+     * Inherited functional method type parameters bound to a wildcard type argument must be
+     * substituted (and then unwrapped) instead of leaking.
+     * See <a href="https://github.com/javaparser/javaparser/issues/4936">issue #4936</a>.
+     */
+    @Test
+    public void issue4936_inheritedFunctionalMethodTypeParametersDoNotLeak_wildcardTypeArgument() {
+        String code = "import java.math.BigDecimal;\n"
+                + "public class Test {\n"
+                + "    interface Op<A> extends java.util.function.BiFunction<A, A, A> {}\n"
+                + "    static BigDecimal use(Op<? super BigDecimal> op) { return null; }\n"
+                + "    public void test() {\n"
+                + "        use(BigDecimal::add).negate();\n"
+                + "    }\n"
+                + "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        assertEquals(
+                "Test.use(Test.Op<? super java.math.BigDecimal>)",
+                Navigator.findMethodCall(cu, "use").get().resolve().getQualifiedSignature());
+        assertEquals(
+                "java.math.BigDecimal.negate()",
+                Navigator.findMethodCall(cu, "negate").get().resolve().getQualifiedSignature());
+    }
+
+    /**
+     * Without a chained call, resolving reduce() does not force full type resolution of the
+     * method reference argument; this is the case that already worked before issue #4936.
+     * See <a href="https://github.com/javaparser/javaparser/issues/4936">issue #4936</a>.
+     */
+    @Test
+    public void issue4936_inheritedFunctionalMethodTypeParametersDoNotLeak_withoutChainedCall() {
+        String code = "import java.math.BigDecimal;\n" + "import java.util.stream.Stream;\n"
+                + "public class Test{\n"
+                + "    public void test(){\n"
+                + "        Stream.of(new BigDecimal(0L)).reduce(BigDecimal::add);\n"
+                + "    }\n"
+                + "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        assertEquals(
+                "java.util.stream.Stream.of(T)",
+                Navigator.findMethodCall(cu, "of").get().resolve().getQualifiedSignature());
+        assertEquals(
+                "java.util.stream.Stream.reduce(java.util.function.BinaryOperator<T>)",
+                Navigator.findMethodCall(cu, "reduce").get().resolve().getQualifiedSignature());
+    }
+
     @Test
     public void testIssue3289() {
         String code = "import java.util.ArrayList;\n" + "import java.util.List;\n"

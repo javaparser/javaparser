@@ -53,6 +53,7 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
@@ -60,7 +61,6 @@ import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprRe
 import com.github.javaparser.symbolsolver.resolution.typeinference.LeastUpperBoundLogic;
 import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 import com.github.javaparser.utils.Log;
-import com.github.javaparser.utils.Pair;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Objects;
@@ -843,10 +843,23 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 if (functionalMethodOpt.isPresent()) {
                     MethodUsage functionalMethod = functionalMethodOpt.get();
 
-                    for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> typeParamDecl :
-                            result.asReferenceType().getTypeParametersMap()) {
-                        functionalMethod = functionalMethod.replaceTypeParameter(typeParamDecl.a, typeParamDecl.b);
+                    // Bind the type variables that appear in the functional method's signature using
+                    // the type arguments of the functional interface. The functional method is often
+                    // inherited (e.g. BinaryOperator<T> inherits apply from BiFunction<T, T, T>), so its
+                    // formal types are expressed with the *ancestor's* type variables. Resolving them via
+                    // useThisTypeParametersOnTheGivenType() walks the type hierarchy, so ancestor type
+                    // variables such as BiFunction's U are bound instead of leaking out unresolved (which
+                    // previously happened because a direct, name-based substitution only matched the
+                    // interface's own type parameters). See issue #4936.
+                    ResolvedReferenceType functionalInterfaceType = result.asReferenceType();
+                    for (int i = 0; i < functionalMethod.getNoParams(); i++) {
+                        functionalMethod = functionalMethod.replaceParamType(
+                                i,
+                                functionalInterfaceType.useThisTypeParametersOnTheGivenType(
+                                        functionalMethod.getParamType(i)));
                     }
+                    functionalMethod = functionalMethod.replaceReturnType(
+                            functionalInterfaceType.useThisTypeParametersOnTheGivenType(functionalMethod.returnType()));
 
                     // replace wildcards
                     for (int i = 0; i < functionalMethod.getNoParams(); i++) {
