@@ -1,25 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <modules>
-        <module>javaparser-core</module>
-        <module>javaparser-core-testing</module>
-        <module>javaparser-core-testing-bdd</module>
-        <module>javaparser-core-generators</module>
-        <module>javaparser-core-metamodel-generator</module>
-        <module>javaparser-core-serialization</module>
-        <module>javaparser-symbol-solver-core</module>
-        <module>javaparser-symbol-solver-testing</module>
-    </modules>
 
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-parent</artifactId>
-    <packaging>pom</packaging>
     <version>3.29.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <name>javaparser-parent</name>
+    <description>Java Parser and Abstract Syntax Tree for Java</description>
     <url>https://github.com/javaparser</url>
     <inceptionYear>2007</inceptionYear>
-    <description>Java Parser and Abstract Syntax Tree for Java</description>
 
     <licenses>
         <license>
@@ -37,64 +28,64 @@
 
     <developers>
         <developer>
+            <id>matozoid</id>
             <name>Danny van Bruggen</name>
             <email>hexagonaal@gmail.com</email>
             <url>https://github.com/matozoid</url>
-            <id>matozoid</id>
         </developer>
         <developer>
+            <id>jgesser@gmail.com</id>
             <name>Júlio Vilmar Gesser</name>
             <email>jgesser@gmail.com</email>
-            <id>jgesser@gmail.com</id>
         </developer>
         <developer>
+            <id>sebastiankirsch</id>
             <name>Sebastian Kirsch</name>
             <email>sebastian.kirsch@immobilienscout24.de</email>
             <url>https://github.com/sebastiankirsch</url>
-            <id>sebastiankirsch</id>
         </developer>
         <developer>
+            <id>before</id>
             <name>André Rouél</name>
             <url>https://github.com/before</url>
-            <id>before</id>
         </developer>
         <developer>
+            <id>SmiddyPence</id>
             <name>Nicholas Smith</name>
             <email>smiddypence@gmail.com</email>
             <url>https://github.com/SmiddyPence</url>
-            <id>SmiddyPence</id>
         </developer>
         <developer>
+            <id>ftomassetti</id>
             <name>Federico Tomassetti</name>
             <email>federico@tomassetti.me</email>
             <url>https://github.com/ftomassetti</url>
-            <id>ftomassetti</id>
         </developer>
         <developer>
+            <id>ptitjes</id>
             <name>Didier Villevalois</name>
             <email>ptitjes@free.fr</email>
             <url>https://github.com/ptitjes</url>
-            <id>ptitjes</id>
         </developer>
         <developer>
+            <id>MysterAitch</id>
             <name>Roger Howell</name>
             <url>https://github.com/MysterAitch</url>
-            <id>MysterAitch</id>
         </developer>
         <developer>
+            <id>MysterAitch</id>
             <name>Roger Howell</name>
             <url>https://github.com/MysterAitch</url>
-            <id>MysterAitch</id>
         </developer>
         <developer>
+            <id>jlerbsc</id>
             <name>Jean Pierre Lerbscher</name>
             <url>https://github.com/jlerbsc</url>
-            <id>jlerbsc</id>
         </developer>
         <developer>
+            <id>maartenc</id>
             <name>Maarten Coene</name>
             <url>https://github.com/maartenc</url>
-            <id>maartenc</id>
         </developer>
     </developers>
     <contributors>
@@ -143,6 +134,32 @@
             <url>https://github.com/DeepSnowNeeL</url>
         </contributor>
     </contributors>
+    <modules>
+        <module>javaparser-core</module>
+        <module>javaparser-core-testing</module>
+        <module>javaparser-core-testing-bdd</module>
+        <module>javaparser-core-generators</module>
+        <module>javaparser-core-metamodel-generator</module>
+        <module>javaparser-core-serialization</module>
+        <module>javaparser-symbol-solver-core</module>
+        <module>javaparser-symbol-solver-testing</module>
+    </modules>
+
+    <scm>
+        <connection>scm:git:git://github.com/javaparser/javaparser.git</connection>
+        <developerConnection>scm:git:git@github.com:javaparser/javaparser.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/javaparser/javaparser.git</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issue Tracker</system>
+        <url>https://github.com/javaparser/javaparser/issues</url>
+    </issueManagement>
+
+    <distributionManagement>
+        <!-- According to the documentation https://central.sonatype.org/publish/publish-portal-maven/, it is no longer necessary to configure a repository -->
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -161,46 +178,56 @@
         <osgi.export>${project.groupId}.*</osgi.export>
     </properties>
 
-    <scm>
-        <connection>scm:git:git://github.com/javaparser/javaparser.git</connection>
-        <developerConnection>scm:git:git@github.com:javaparser/javaparser.git</developerConnection>
-        <url>https://github.com/javaparser/javaparser.git</url>
-        <tag>HEAD</tag>
-    </scm>
-
-    <issueManagement>
-        <system>GitHub Issue Tracker</system>
-        <url>https://github.com/javaparser/javaparser/issues</url>
-    </issueManagement>
-
-    <distributionManagement>
-	<!-- According to the documentation https://central.sonatype.org/publish/publish-portal-maven/, it is no longer necessary to configure a repository -->
-    </distributionManagement>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>3.32.0-GA</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>33.6.0-jre</version>
+            </dependency>
+            <dependency>
+                <groupId>org.checkerframework</groupId>
+                <artifactId>checker-qual</artifactId>
+                <version>3.55.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+                <version>3.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.14.4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-inline</artifactId>
+                <version>4.11.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${byte-buddy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${byte-buddy.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-			<plugin>
-					<groupId>org.sonatype.central</groupId>
-					<artifactId>central-publishing-maven-plugin</artifactId>
-					<configuration>
-						<excludeArtifacts>
-							<excludeArtifact>com.github.javaparser:javaparser-core-testing</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-core-testing-bdd</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-symbol-solver-testing</excludeArtifact>
-							<excludeArtifact>com.github.javaparser:javaparser-core-metamodel-generator</excludeArtifact>
-						</excludeArtifacts>
-					</configuration>
-			</plugin>
-        </plugins>
         <pluginManagement>
             <plugins>
                 <!--
@@ -212,13 +239,6 @@
                     <groupId>biz.aQute.bnd</groupId>
                     <artifactId>bnd-maven-plugin</artifactId>
                     <version>6.4.0</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>bnd-process</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                     <configuration>
                         <!--
                             Bundle-SymbolicName is derived from groupId + artifactId. OSGi permits
@@ -237,6 +257,13 @@
                             Bundle-DocURL: https://javaparser.org
                         ]]></bnd>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>bnd-process</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>com.helger.maven</groupId>
@@ -282,45 +309,45 @@
                         <releaseProfiles>run-release</releaseProfiles>
                         <!-- Disable pushing of changes (i.e. false, for local testing) -->
                         <pushChanges>false</pushChanges>
-						<!-- NEW: Disable deployment during release:perform -->
-						<goals>deploy</goals>
+                        <!-- NEW: Disable deployment during release:perform -->
+                        <goals>deploy</goals>
                     </configuration>
                 </plugin>
-				<!-- NEW: Disable the old maven-deploy-plugin -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>3.1.4</version>
-					<executions>
-						<execution>
-							<id>default-deploy</id>
-							<phase>deploy</phase>
-							<goals>
-								<goal>deploy</goal>
-							</goals>
-							<configuration>
-								<skip>true</skip>
-							</configuration>
-						</execution>
-					</executions>
-					<configuration>
-						<skip>true</skip>
-					</configuration>
-				</plugin>
-				<!-- NEW: Plugin for publishing to Maven Central -->
-				<plugin>
-					<groupId>org.sonatype.central</groupId>
-					<artifactId>central-publishing-maven-plugin</artifactId>
-					<version>0.11.0</version>
-					<extensions>true</extensions>
-					<configuration>
-						<publishingServerId>central</publishingServerId>
-						<!-- Automatic publication after validation -->
-						<autoPublish>true</autoPublish>
-						<!-- Readable name to identify the deployment -->
-						<deploymentName>${project.artifactId}-${project.version}</deploymentName>
-					</configuration>
-				</plugin>
+                <!-- NEW: Disable the old maven-deploy-plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.1.4</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>default-deploy</id>
+                            <goals>
+                                <goal>deploy</goal>
+                            </goals>
+                            <phase>deploy</phase>
+                            <configuration>
+                                <skip>true</skip>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- NEW: Plugin for publishing to Maven Central -->
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>0.11.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <publishingServerId>central</publishingServerId>
+                        <!-- Automatic publication after validation -->
+                        <autoPublish>true</autoPublish>
+                        <!-- Readable name to identify the deployment -->
+                        <deploymentName>${project.artifactId}-${project.version}</deploymentName>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
@@ -342,9 +369,7 @@
                     <version>0.8.15</version>
                     <configuration>
                         <includes>
-                            <include>
-                                com/github/javaparser/**
-                            </include>
+                            <include>com/github/javaparser/**</include>
                         </includes>
                     </configuration>
                     <executions>
@@ -359,10 +384,10 @@
                         </execution>
                         <execution>
                             <id>jacoco-report</id>
-                            <phase>test</phase>
                             <goals>
                                 <goal>report-aggregate</goal>
                             </goals>
+                            <phase>test</phase>
                             <configuration>
                                 <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
                             </configuration>
@@ -443,67 +468,46 @@
                     <artifactId>spotless-maven-plugin</artifactId>
                     <version>2.46.1</version>
                     <configuration>
-						<lineEndings>UNIX</lineEndings>
+                        <lineEndings>UNIX</lineEndings>
                         <java>
                             <!-- google-java-format, but better: see https://github.com/palantir/palantir-java-format -->
                             <palantirJavaFormat/>
                         </java>
+                        <pom>
+                            <sortPom>
+                                <nrOfIndentSpace>4</nrOfIndentSpace>
+                                <expandEmptyElements>false</expandEmptyElements>
+                                <spaceBeforeCloseEmptyElement>false</spaceBeforeCloseEmptyElement>
+                                <keepBlankLines>true</keepBlankLines>
+                            </sortPom>
+                        </pom>
                     </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <configuration>
+                    <excludeArtifacts>
+                        <excludeArtifact>com.github.javaparser:javaparser-core-testing</excludeArtifact>
+                        <excludeArtifact>com.github.javaparser:javaparser-core-testing-bdd</excludeArtifact>
+                        <excludeArtifact>com.github.javaparser:javaparser-symbol-solver-testing</excludeArtifact>
+                        <excludeArtifact>com.github.javaparser:javaparser-core-metamodel-generator</excludeArtifact>
+                    </excludeArtifacts>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
-
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>3.32.0-GA</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>33.6.0-jre</version>
-            </dependency>
-			<dependency>
-				<groupId>org.checkerframework</groupId>
-				<artifactId>checker-qual</artifactId>
-				<version>3.55.1</version>
-			</dependency>
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest</artifactId>
-                <version>3.0</version>
-                <scope>test</scope>
-            </dependency>
-			<dependency>
-				<groupId>org.junit</groupId>
-				<artifactId>junit-bom</artifactId>
-				<version>5.14.4</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-inline</artifactId>
-                <version>4.11.0</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>net.bytebuddy</groupId>
-                <artifactId>byte-buddy</artifactId>
-                <version>${byte-buddy.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.bytebuddy</groupId>
-                <artifactId>byte-buddy-agent</artifactId>
-                <version>${byte-buddy.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
 
     <profiles>
         <profile>
@@ -527,10 +531,10 @@
                         <executions>
                             <execution>
                                 <id>copy-readme</id>
-                                <phase>compile</phase>
                                 <goals>
                                     <goal>copy-resources</goal>
                                 </goals>
+                                <phase>compile</phase>
                                 <configuration>
                                     <outputDirectory>${project.basedir}</outputDirectory>
                                     <resources>
@@ -596,10 +600,10 @@
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
-                                <phase>verify</phase>
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
+                                <phase>verify</phase>
                                 <configuration>
                                     <!-- Prevent `gpg` from using pinentry programs -->
                                     <gpgArguments>
