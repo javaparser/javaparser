@@ -49,8 +49,7 @@ public class MethodResolutionLogic {
             // TODO if there are no variadic values we should default to the bound of the formal type
             res.add(variadicType);
         } else {
-            ResolvedType componentType = findCommonType(variadicValues);
-            res.add(convertToVariadicParameter(componentType));
+            res.add(convertToVariadicParameter(variadicType));
         }
         return res;
     }
@@ -151,7 +150,7 @@ public class MethodResolutionLogic {
                 // array.
                 // Confirm all of these grouped "trailing" arguments have the required type -- if not, this is not a
                 // valid type. (Maybe this is also done later..?)
-                for (int variadicArgumentIndex = countOfMethodParametersDeclared;
+                for (int variadicArgumentIndex = getLastParameterIndex(countOfMethodParametersDeclared);
                         variadicArgumentIndex < countOfNeedleArgumentsPassed;
                         variadicArgumentIndex++) {
                     ResolvedType currentArgumentType = needleArgumentTypes.get(variadicArgumentIndex);
@@ -657,11 +656,11 @@ public class MethodResolutionLogic {
                 return false;
             }
         }
-        // Unboxing (primitive expected, reference type provided)
+        // Both are primitive types
         if (expectedType.isPrimitive() && actualType.isPrimitive()) {
             ResolvedPrimitiveType expectedPrimitive = expectedType.asPrimitive();
             ResolvedPrimitiveType actualPrimitive = actualType.asPrimitive();
-            return expectedPrimitive.isAssignableBy(actualPrimitive);
+            return expectedPrimitive.equals(actualPrimitive);
         }
         // Both are reference types but one might be a constrained/wildcard type
         // This can happen after type variable substitution
