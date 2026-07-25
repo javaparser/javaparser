@@ -21,39 +21,27 @@
 
 package com.github.javaparser.ast.stmt;
 
-import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.EXPRESSION;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.STATEMENT_GROUP;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class SwitchStmtTest {
 
-    private static final ParserConfiguration.LanguageLevel storedLanguageLevel =
-            StaticJavaParser.getParserConfiguration().getLanguageLevel();
-
-    @BeforeAll
-    public static void setLanguageLevel() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
-    }
-
-    @AfterAll
-    public static void resetLanguageLevel() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(storedLanguageLevel);
-    }
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
+            new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE));
 
     @Test
     void classicSwitch() {
-        SwitchStmt switchStmt = parseStatement("switch (day) {\n" + "    case TUESDAY: System.out.println(7); break;\n"
+        SwitchStmt switchStmt = parser.parseStatement("switch (day) {\n" + "    case TUESDAY: System.out.println(7); break;\n"
                         + "    case FRIDAY: System.out.println(8); break;\n"
                         + "    default: System.out.println(-1); \n"
                         + "}")
@@ -70,7 +58,7 @@ class SwitchStmtTest {
 
     @Test
     void jep325Example1() {
-        SwitchStmt switchStmt = parseStatement("switch (day) {\n" +
+        SwitchStmt switchStmt = parser.parseStatement("switch (day) {\n" +
                         //                "    case MONDAY, FRIDAY, SUNDAY -> System.out.println(6);\n" +
                         "    case TUESDAY                -> System.out.println(7);\n"
                         +
@@ -84,7 +72,7 @@ class SwitchStmtTest {
 
     @Test
     void jep441Example1() {
-        SwitchStmt switchStmt = parseStatement(
+        SwitchStmt switchStmt = parser.parseStatement(
                         "switch (day) {\n" + "    case null, default -> System.out.println(-1); \n" + "}")
                 .asSwitchStmt();
 
@@ -95,7 +83,7 @@ class SwitchStmtTest {
 
     @Test
     void issue4455Test() {
-        SwitchStmt switchStmt = parseStatement(
+        SwitchStmt switchStmt = parser.parseStatement(
                         "switch (column) {\n" + "  case CustomDeployTableModel.ARTIFACT_NAME:\n" + "}")
                 .asSwitchStmt();
 
@@ -110,7 +98,7 @@ class SwitchStmtTest {
 
     @Test
     void issue4607Test() {
-        SwitchStmt switchStmt = parseStatement("switch (o) { case String s when s.length() == 1 -> 0; }")
+        SwitchStmt switchStmt = parser.parseStatement("switch (o) { case String s when s.length() == 1 -> 0; }")
                 .asSwitchStmt();
         assertEquals(switchStmt.toString(), switchStmt.clone().toString());
     }
