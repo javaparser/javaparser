@@ -21,33 +21,36 @@
 
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Test;
 
 class NoCommentEqualsVisitorTest {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void testEquals() {
-        CompilationUnit p1 = parse("class X { }");
-        CompilationUnit p2 = parse("class X { }");
+        CompilationUnit p1 = parser.parse("class X { }");
+        CompilationUnit p2 = parser.parse("class X { }");
         assertTrue(NoCommentEqualsVisitor.equals(p1, p2));
     }
 
     @Test
     void testEqualsWithDifferentComments() {
-        CompilationUnit p1 = parse("/* a */ class X { /** b */} //c");
-        CompilationUnit p2 = parse("/* b */ class X { }  //c");
+        CompilationUnit p1 = parser.parse("/* a */ class X { /** b */} //c");
+        CompilationUnit p2 = parser.parse("/* b */ class X { }  //c");
         assertTrue(NoCommentEqualsVisitor.equals(p1, p2));
     }
 
     @Test
     void testNotEquals() {
-        CompilationUnit p1 = parse("class X { }");
-        CompilationUnit p2 = parse("class Y { }");
+        CompilationUnit p1 = parser.parse("class X { }");
+        CompilationUnit p2 = parser.parse("class Y { }");
         assertFalse(NoCommentEqualsVisitor.equals(p1, p2));
     }
 }

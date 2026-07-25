@@ -21,9 +21,10 @@
 
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.StaticJavaParser.parseType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
@@ -34,6 +35,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class CloneVisitorTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     CompilationUnit cu;
 
     @BeforeEach
@@ -100,7 +104,7 @@ class CloneVisitorTest {
 
     @Test
     void cloneAnnotationOnWildcardTypeArgument() {
-        Type type = parseType("List<@C ? extends Object>").clone();
+        Type type = parser.parseType("List<@C ? extends Object>").clone();
         assertEquals("List<@C ? extends Object>", type.toString());
     }
 }
