@@ -62,12 +62,10 @@ public class Issue3859Test extends AbstractResolutionTest {
 
         List<NameExpr> exprs = cu.findAll(NameExpr.class);
         assertEquals(2, exprs.size());
-        assertEquals(
-                "? super java.lang.String", exprs.get(0).calculateResolvedType().describe());
+        assertEquals("java.lang.String", exprs.get(0).calculateResolvedType().describe());
         // Before the fix the following statement failed with an
         // `UnsupportedOperationException` because an extra `(...)` around
         // an argument wasn't handled.
-        assertEquals(
-                "? super java.lang.String", exprs.get(1).calculateResolvedType().describe());
+        assertEquals("java.lang.String", exprs.get(1).calculateResolvedType().describe());
     }
 }
