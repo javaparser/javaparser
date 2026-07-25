@@ -21,11 +21,11 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.utils.TestParser;
@@ -35,9 +35,12 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.opentest4j.AssertionFailedError;
 
 class ClassOrInterfaceDeclarationTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void staticNestedClass() {
-        CompilationUnit cu = parse("class X{static class Y{}}");
+        CompilationUnit cu = parser.parse("class X{static class Y{}}");
         ClassOrInterfaceDeclaration y =
                 cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
@@ -48,7 +51,7 @@ class ClassOrInterfaceDeclarationTest {
 
     @Test
     void nestedInterface() {
-        CompilationUnit cu = parse("class X{interface Y{}}");
+        CompilationUnit cu = parser.parse("class X{interface Y{}}");
         ClassOrInterfaceDeclaration y =
                 cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
@@ -59,7 +62,7 @@ class ClassOrInterfaceDeclarationTest {
 
     @Test
     void nonStaticNestedClass() {
-        CompilationUnit cu = parse("class X{class Y{}}");
+        CompilationUnit cu = parser.parse("class X{class Y{}}");
         ClassOrInterfaceDeclaration y =
                 cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
@@ -70,7 +73,7 @@ class ClassOrInterfaceDeclarationTest {
 
     @Test
     void topClass() {
-        CompilationUnit cu = parse("class X{}");
+        CompilationUnit cu = parser.parse("class X{}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get();
 
         assertFalse(y.isInnerClass());
@@ -80,7 +83,7 @@ class ClassOrInterfaceDeclarationTest {
 
     @Test
     void localClass() {
-        MethodDeclaration method = parseBodyDeclaration("void x(){class X{};}").asMethodDeclaration();
+        MethodDeclaration method = parser.parseBodyDeclaration("void x(){class X{};}").asMethodDeclaration();
         ClassOrInterfaceDeclaration x =
                 method.findFirst(ClassOrInterfaceDeclaration.class).get();
 

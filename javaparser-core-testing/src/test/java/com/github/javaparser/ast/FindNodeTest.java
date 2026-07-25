@@ -21,9 +21,10 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
@@ -34,9 +35,12 @@ import org.junit.jupiter.api.Test;
  * Some tests for finding descendant and ancestor nodes.
  */
 class FindNodeTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void testFindFirst() {
-        CompilationUnit cu = parse("class Foo {\n" + "    void foo() {\n"
+        CompilationUnit cu = parser.parse("class Foo {\n" + "    void foo() {\n"
                 + "        try {\n"
                 + "        } catch (Exception e) {\n"
                 + "        } finally {\n"
@@ -77,7 +81,7 @@ class FindNodeTest {
 
     @Test
     void testFindAncestralFinallyBlock() {
-        CompilationUnit cu = parse("class Foo {\n" + "    void foo() {\n"
+        CompilationUnit cu = parser.parse("class Foo {\n" + "    void foo() {\n"
                 + "        try {\n"
                 + "        } catch (Exception e) {\n"
                 + "        } finally {\n"

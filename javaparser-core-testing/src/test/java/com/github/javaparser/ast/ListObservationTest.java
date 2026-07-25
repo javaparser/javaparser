@@ -20,11 +20,12 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -37,6 +38,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class ListObservationTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
 
     private FieldDeclaration createIntField(String name) {
         return new FieldDeclaration(new NodeList<>(), PrimitiveType.intType(), name);
@@ -74,7 +78,7 @@ public class ListObservationTest {
     void addAllWithoutIndex() {
         List<String> changes = new LinkedList<>();
         String code = "class A { void foo(int p) { }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -91,7 +95,7 @@ public class ListObservationTest {
     void addAllWithIndex() {
         List<String> changes = new LinkedList<>();
         String code = "class A { void foo(int p) { }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -108,7 +112,7 @@ public class ListObservationTest {
     void clear() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -125,7 +129,7 @@ public class ListObservationTest {
     void set() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -137,7 +141,7 @@ public class ListObservationTest {
     void removeNode() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -149,7 +153,7 @@ public class ListObservationTest {
     void removeFirstNode() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -169,7 +173,7 @@ public class ListObservationTest {
     void removeLastNode() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -189,7 +193,7 @@ public class ListObservationTest {
     void removeObject() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -201,7 +205,7 @@ public class ListObservationTest {
     void removeAll() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -217,7 +221,7 @@ public class ListObservationTest {
     void retainAll() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; int d; int e; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -237,7 +241,7 @@ public class ListObservationTest {
     void replaceAll() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int b; int c; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 
@@ -258,7 +262,7 @@ public class ListObservationTest {
     void removeIf() {
         List<String> changes = new LinkedList<>();
         String code = "class A { int a; int longName; int c; }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         ClassOrInterfaceDeclaration cd = cu.getClassByName("A").get();
         cd.getMembers().register(createObserver(changes));
 

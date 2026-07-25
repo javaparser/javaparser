@@ -21,10 +21,9 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
@@ -34,9 +33,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class FieldDeclarationTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void wofjweoifj() {
-        CompilationUnit compilationUnit = parse("" + "class A {\n" + "    int a, b;\n" + "}");
+        CompilationUnit compilationUnit = parser.parse("" + "class A {\n" + "    int a, b;\n" + "}");
 
         BodyDeclaration<?> declaration = compilationUnit.getType(0).getMembers().get(0);
         FieldDeclaration fieldDeclaration = declaration.asFieldDeclaration();
@@ -49,14 +51,14 @@ class FieldDeclarationTest {
     @Test
     void setModifiersPrimitiveType() {
         FieldDeclaration field =
-                parseBodyDeclaration("public static final int var = 1;").asFieldDeclaration();
+                parser.parseBodyDeclaration("public static final int var = 1;").asFieldDeclaration();
         testChangingModifiers(field);
     }
 
     @Test
     void setModifiersNonPrimitiveType() {
         FieldDeclaration field =
-                parseBodyDeclaration("public static final String var = \"a\";").asFieldDeclaration();
+                parser.parseBodyDeclaration("public static final String var = \"a\";").asFieldDeclaration();
         testChangingModifiers(field);
     }
 
@@ -80,7 +82,7 @@ class FieldDeclarationTest {
 
     @Test
     void interfaceFieldTest() {
-        CompilationUnit compilationUnit = parse("" + "interface A {\n"
+        CompilationUnit compilationUnit = parser.parse("" + "interface A {\n"
                 + "    int a = 1;\n"
                 + "    static int a_s = 1;\n"
                 + "    final int a_f = 1;\n"
@@ -116,7 +118,7 @@ class FieldDeclarationTest {
                 + "    private int i;\n"
                 + "  }\n"
                 + "}";
-        CompilationUnit cu = StaticJavaParser.parse(source);
+        CompilationUnit cu = parser.parse(source);
         FieldDeclaration i = cu.getTypes()
                 .get(0)
                 .asClassOrInterfaceDeclaration()

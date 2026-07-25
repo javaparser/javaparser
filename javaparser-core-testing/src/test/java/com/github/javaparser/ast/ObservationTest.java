@@ -20,11 +20,12 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -35,10 +36,13 @@ import org.junit.jupiter.api.Test;
 
 public class ObservationTest {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
+
     @Test
     void registerSubTree() {
         String code = "class A { int f; void foo(int p) { return 'z'; }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
@@ -86,7 +90,7 @@ public class ObservationTest {
     @Test
     void registerWithJustNodeMode() {
         String code = "class A { int f; void foo(int p) { return 'z'; }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
@@ -133,7 +137,7 @@ public class ObservationTest {
     @Test
     void registerWithNodeAndExistingDescendantsMode() {
         String code = "class A { int f; void foo(int p) { return 'z'; }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
@@ -196,7 +200,7 @@ public class ObservationTest {
     @Test
     void registerWithSelfPropagatingMode() {
         String code = "class A { int f; void foo(int p) { return 'z'; }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
@@ -258,7 +262,7 @@ public class ObservationTest {
     @Test
     void deleteAParameterTriggerNotifications() {
         String code = "class A { void foo(int p) { }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
 
@@ -281,7 +285,7 @@ public class ObservationTest {
     @Test
     void deleteClassNameDoesNotTriggerNotifications() {
         String code = "class A { void foo(int p) { }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
 
@@ -300,7 +304,7 @@ public class ObservationTest {
     @Test
     void deleteMethodBodyDoesTriggerNotifications() {
         String code = "class A { void foo(int p) { }}";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
 
