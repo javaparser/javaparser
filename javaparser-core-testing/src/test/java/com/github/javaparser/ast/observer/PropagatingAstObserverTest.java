@@ -21,10 +21,11 @@
 
 package com.github.javaparser.ast.observer;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -34,10 +35,13 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class PropagatingAstObserverTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void verifyPropagation() {
         String code = "class A {  }";
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parser.parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new PropagatingAstObserver() {
             @Override
