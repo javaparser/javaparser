@@ -21,15 +21,19 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.Test;
 
 class StringLiteralExprTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void unicodeEscapesArePreservedInStrings() {
-        StringLiteralExpr omega = parseExpression("\"xxx\\u03a9xxx\"");
+        StringLiteralExpr omega = parser.parseExpression("\"xxx\\u03a9xxx\"");
         assertEquals("xxx\\u03a9xxx", omega.getValue());
     }
 }

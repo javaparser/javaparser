@@ -20,16 +20,14 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import java.util.function.Consumer;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -39,18 +37,8 @@ import org.junit.jupiter.api.Test;
  */
 public class PatternExprTest {
 
-    private static final ParserConfiguration.LanguageLevel storedLanguageLevel =
-            StaticJavaParser.getParserConfiguration().getLanguageLevel();
-
-    @BeforeAll
-    public static void setLanguageLevel() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
-    }
-
-    @AfterAll
-    public static void resetLanguageLevel() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(storedLanguageLevel);
-    }
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
+            new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE));
 
     class TestConsumer<T> implements Consumer<T> {
         public boolean isConsumed = false;
@@ -63,7 +51,7 @@ public class PatternExprTest {
 
     @Test
     public void patternGeneratedMethodsShouldWork() {
-        Expression expr = parseExpression("x instanceof Foo f");
+        Expression expr = parser.parseExpression("x instanceof Foo f");
 
         assertTrue(expr.isInstanceOfExpr());
 
@@ -103,7 +91,7 @@ public class PatternExprTest {
 
     @Test
     public void recordPatternGeneratedMethodsShouldWork() {
-        Expression expr = parseExpression("x instanceof Foo(Bar b)");
+        Expression expr = parser.parseExpression("x instanceof Foo(Bar b)");
 
         assertTrue(expr.isInstanceOfExpr());
 
@@ -144,7 +132,7 @@ public class PatternExprTest {
 
     @Test
     public void aSingleMatchAllPatternInRecordListShouldWork() {
-        Expression expr = parseExpression("x instanceof Foo(_)");
+        Expression expr = parser.parseExpression("x instanceof Foo(_)");
 
         assertTrue(expr.isInstanceOfExpr());
 
@@ -166,7 +154,7 @@ public class PatternExprTest {
 
     @Test
     public void multipleMatchAllPatternsInRecordListShouldWork() {
-        Expression expr = parseExpression("x instanceof Foo(_, Bar b, _)");
+        Expression expr = parser.parseExpression("x instanceof Foo(_, Bar b, _)");
 
         assertTrue(expr.isInstanceOfExpr());
 
@@ -196,7 +184,7 @@ public class PatternExprTest {
     public void emptyRecordPatternListShouldWork() {
         // JLS 14.30: RecordPattern = ReferenceType ( [ComponentPatternList] )
         // The component list is optional — "Point()" is valid.
-        Expression expr = parseExpression("x instanceof Point()");
+        Expression expr = parser.parseExpression("x instanceof Point()");
 
         assertTrue(expr.isInstanceOfExpr());
         InstanceOfExpr instanceOfExpr = expr.asInstanceOfExpr();
@@ -212,7 +200,7 @@ public class PatternExprTest {
 
     @Test
     public void anUnnamedTypePatternShouldWork() {
-        Expression expr = parseExpression("x instanceof Foo _");
+        Expression expr = parser.parseExpression("x instanceof Foo _");
 
         assertTrue(expr.isInstanceOfExpr());
 
