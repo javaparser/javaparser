@@ -221,7 +221,8 @@ class PrettyPrinterTest {
 
     @Test
     void printingInconsistentVariables() {
-        FieldDeclaration fieldDeclaration = parser.parseBodyDeclaration("int a, b;").asFieldDeclaration();
+        FieldDeclaration fieldDeclaration =
+                parser.parseBodyDeclaration("int a, b;").asFieldDeclaration();
 
         assertEquals("int a, b;", fieldDeclaration.toString());
 

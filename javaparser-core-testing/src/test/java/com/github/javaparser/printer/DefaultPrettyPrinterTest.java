@@ -239,7 +239,8 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void printingInconsistentVariables() {
-        FieldDeclaration fieldDeclaration = parserAdapter.parseBodyDeclaration("int a, b;").asFieldDeclaration();
+        FieldDeclaration fieldDeclaration =
+                parserAdapter.parseBodyDeclaration("int a, b;").asFieldDeclaration();
 
         assertEquals("int a, b;", fieldDeclaration.toString());
 
@@ -340,9 +341,8 @@ class DefaultPrettyPrinterTest {
     @Test
     void indentWithTabsAsFarAsPossible() {
 
-        CompilationUnit cu =
-                parserAdapter.parse(
-                        "class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
+        CompilationUnit cu = parserAdapter.parse(
+                "class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
 
         Indentation indentation = new Indentation(IndentType.TABS, 1);
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()

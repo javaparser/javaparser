@@ -22,14 +22,13 @@
 package com.github.javaparser.javadoc;
 
 import static com.github.javaparser.javadoc.description.JavadocInlineTag.Type.*;
-
-import com.github.javaparser.JavaParserAdapter;
-import com.github.javaparser.StaticJavaParser;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
@@ -43,7 +42,6 @@ import org.junit.jupiter.api.Test;
 class JavadocTest {
 
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
-
 
     @Test
     void toTextForEmptyJavadoc() {

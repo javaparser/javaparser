@@ -38,7 +38,6 @@ public class ObservationTest {
 
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
-
     @Test
     void registerSubTree() {
         String code = "class A { int f; void foo(int p) { return 'z'; }}";

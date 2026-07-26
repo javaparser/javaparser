@@ -43,7 +43,8 @@ class ForEachStmtTest {
 
     @Test
     void finalNonPrimitive() {
-        ForEachStmt statement = parser.parseStatement("for (final Object o : objs) {}").asForEachStmt();
+        ForEachStmt statement =
+                parser.parseStatement("for (final Object o : objs) {}").asForEachStmt();
         assertTrue(statement.hasFinalVariable());
         assertEquals(
                 new ClassOrInterfaceType(null, "Object"),

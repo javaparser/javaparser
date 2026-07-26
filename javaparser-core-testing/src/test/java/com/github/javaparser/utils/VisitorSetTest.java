@@ -37,7 +37,6 @@ class VisitorSetTest {
 
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
-
     @Test
     void normalEqualsDoesDeepCompare() {
         Set<CompilationUnit> set = new HashSet<>();

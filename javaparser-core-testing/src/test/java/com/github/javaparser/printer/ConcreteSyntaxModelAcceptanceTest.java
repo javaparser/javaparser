@@ -56,7 +56,8 @@ class ConcreteSyntaxModelAcceptanceTest {
         CompilationUnit enums = parser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsEnums.java"));
         CompilationUnit innerClass =
                 parser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsInnerClasses.java"));
-        CompilationUnit methods = parser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsMethods.java"));
+        CompilationUnit methods =
+                parser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsMethods.java"));
         CompilationUnit ugly = parser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsUgly.java"));
         TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsBase"), prettyPrint(base));
         TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsEnums"), prettyPrint(enums));

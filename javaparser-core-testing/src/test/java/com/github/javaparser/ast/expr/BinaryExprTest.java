@@ -114,8 +114,7 @@ class BinaryExprTest {
 
         @Test
         public void example() {
-            Expression expression =
-                    parser.parseExpression("year % 4 == 0 && year % 100 != 0 || year % 400 == 0");
+            Expression expression = parser.parseExpression("year % 4 == 0 && year % 100 != 0 || year % 400 == 0");
             Expression bracketedExpression = applyBrackets(expression);
 
             String expected = "((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)";

@@ -55,20 +55,24 @@ class MethodDeclarationTest {
 
     @Test
     void explicitReceiverParameters2() {
-        MethodDeclaration method = parser.parseBodyDeclaration("void x(A this) { }").asMethodDeclaration();
+        MethodDeclaration method =
+                parser.parseBodyDeclaration("void x(A this) { }").asMethodDeclaration();
         assertEquals("this", method.getReceiverParameter().get().getNameAsString());
     }
 
     @Test
     void explicitReceiverParameters3() {
-        MethodDeclaration method = parser.parseBodyDeclaration("void x(A that) { }").asMethodDeclaration();
+        MethodDeclaration method =
+                parser.parseBodyDeclaration("void x(A that) { }").asMethodDeclaration();
         assertFalse(method.getReceiverParameter().isPresent());
     }
 
     @Test
     void signaturesEqual() {
-        MethodDeclaration method1 = parser.parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
-        MethodDeclaration method2 = parser.parseBodyDeclaration("int x(String z);").asMethodDeclaration();
+        MethodDeclaration method1 =
+                parser.parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
+        MethodDeclaration method2 =
+                parser.parseBodyDeclaration("int x(String z);").asMethodDeclaration();
         assertEquals(method1.getSignature(), method2.getSignature());
     }
 
@@ -92,14 +96,17 @@ class MethodDeclarationTest {
 
     @Test
     void signaturesDifferentName() {
-        MethodDeclaration method1 = parser.parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
-        MethodDeclaration method2 = parser.parseBodyDeclaration("int y(String z);").asMethodDeclaration();
+        MethodDeclaration method1 =
+                parser.parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
+        MethodDeclaration method2 =
+                parser.parseBodyDeclaration("int y(String z);").asMethodDeclaration();
         assertNotEquals(method1.getSignature(), method2.getSignature());
     }
 
     @Test
     void signaturesDifferentTypes() {
-        MethodDeclaration method1 = parser.parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
+        MethodDeclaration method1 =
+                parser.parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
         MethodDeclaration method2 = parser.parseBodyDeclaration("int x(int z);").asMethodDeclaration();
         assertNotEquals(method1.getSignature(), method2.getSignature());
     }
@@ -107,7 +114,8 @@ class MethodDeclarationTest {
     @Test
     void signaturesDifferentVarargs() {
         MethodDeclaration method1 = parser.parseBodyDeclaration("int x(int z);").asMethodDeclaration();
-        MethodDeclaration method2 = parser.parseBodyDeclaration("int x(int... z);").asMethodDeclaration();
+        MethodDeclaration method2 =
+                parser.parseBodyDeclaration("int x(int... z);").asMethodDeclaration();
         assertNotEquals(method1.getSignature(), method2.getSignature());
     }
 
@@ -120,7 +128,8 @@ class MethodDeclarationTest {
 
     @Test
     void isVariableArityMethod() {
-        MethodDeclaration method1 = parser.parseBodyDeclaration("int x(int... z);").asMethodDeclaration();
+        MethodDeclaration method1 =
+                parser.parseBodyDeclaration("int x(int... z);").asMethodDeclaration();
         assertTrue(method1.isVariableArityMethod());
         MethodDeclaration method2 =
                 parser.parseBodyDeclaration("int x(int i, int... z);").asMethodDeclaration();

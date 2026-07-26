@@ -23,7 +23,6 @@ package com.github.javaparser;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.CURRENT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
@@ -49,8 +48,8 @@ import org.junit.jupiter.api.Test;
 
 class JavaParserTest {
 
-    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
-            new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE));
+    private final JavaParserAdapter parser =
+            StaticJavaParser.newParserAdapter(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE));
 
     @Test
     void rangeOfAnnotationMemberDeclarationIsCorrect() {

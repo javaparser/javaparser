@@ -133,7 +133,8 @@ class NodeTest {
 
     @Test
     void findCompilationUnitOfOrphanCommentNode() {
-        CompilationUnit cu = parser.parse("class X {\n" + "  void x() {\n" + "    // this is a comment\n" + "  }\n" + "}\n");
+        CompilationUnit cu =
+                parser.parse("class X {\n" + "  void x() {\n" + "    // this is a comment\n" + "  }\n" + "}\n");
 
         Comment comment = cu.getType(0)
                 .getMember(0)

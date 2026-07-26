@@ -122,10 +122,10 @@ class LiteralStringValueExprTest {
         LongLiteralExpr negOct = parser.parseExpression("010_0000_0000_0000_0000_0000L");
         LongLiteralExpr posHex = parser.parseExpression("0x7fff_ffff_ffff_ffffL");
         LongLiteralExpr negHex = parser.parseExpression("0xffff_ffff_ffff_ffffL");
-        LongLiteralExpr posBin =
-                parser.parseExpression("0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L");
-        LongLiteralExpr negBin =
-                parser.parseExpression("0b1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000L");
+        LongLiteralExpr posBin = parser.parseExpression(
+                "0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L");
+        LongLiteralExpr negBin = parser.parseExpression(
+                "0b1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000L");
 
         assertThat(dec.asLong()).isEqualTo(9223372036854775807L);
         assertThat(posOct.asLong()).isEqualTo(9223372036854775807L); // 07_7777_7777_7777_7777_7777L

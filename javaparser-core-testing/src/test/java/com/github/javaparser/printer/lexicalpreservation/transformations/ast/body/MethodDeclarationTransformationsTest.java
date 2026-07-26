@@ -555,7 +555,8 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     public void replaceBodyShouldNotBreakAnonymousClasses() {
         MethodDeclaration it = consider("public void method() { }");
         it.getBody().ifPresent(body -> {
-            Statement statement = parser.parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM + "};");
+            Statement statement =
+                    parser.parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM + "};");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
             body.setStatements(statements);

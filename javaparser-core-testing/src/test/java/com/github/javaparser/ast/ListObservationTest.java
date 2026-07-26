@@ -41,7 +41,6 @@ public class ListObservationTest {
 
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
-
     private FieldDeclaration createIntField(String name) {
         return new FieldDeclaration(new NodeList<>(), PrimitiveType.intType(), name);
     }

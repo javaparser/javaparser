@@ -57,8 +57,8 @@ class FieldDeclarationTest {
 
     @Test
     void setModifiersNonPrimitiveType() {
-        FieldDeclaration field =
-                parser.parseBodyDeclaration("public static final String var = \"a\";").asFieldDeclaration();
+        FieldDeclaration field = parser.parseBodyDeclaration("public static final String var = \"a\";")
+                .asFieldDeclaration();
         testChangingModifiers(field);
     }
 

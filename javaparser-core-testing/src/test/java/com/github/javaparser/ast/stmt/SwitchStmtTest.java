@@ -41,10 +41,11 @@ class SwitchStmtTest {
 
     @Test
     void classicSwitch() {
-        SwitchStmt switchStmt = parser.parseStatement("switch (day) {\n" + "    case TUESDAY: System.out.println(7); break;\n"
-                        + "    case FRIDAY: System.out.println(8); break;\n"
-                        + "    default: System.out.println(-1); \n"
-                        + "}")
+        SwitchStmt switchStmt = parser.parseStatement(
+                        "switch (day) {\n" + "    case TUESDAY: System.out.println(7); break;\n"
+                                + "    case FRIDAY: System.out.println(8); break;\n"
+                                + "    default: System.out.println(-1); \n"
+                                + "}")
                 .asSwitchStmt();
 
         assertEquals(STATEMENT_GROUP, switchStmt.getEntry(0).getType());

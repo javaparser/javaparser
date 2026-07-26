@@ -23,11 +23,11 @@ package com.github.javaparser.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
-import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.ConfigurablePrinter;

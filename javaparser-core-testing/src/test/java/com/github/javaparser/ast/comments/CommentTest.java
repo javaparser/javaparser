@@ -251,7 +251,8 @@ class CommentTest {
     @Test
     void testJavadocCommentContent() {
         String commentCode = "\n   * This is a regular {@code JavaDoc comment}\n   * @see some reference\n    ";
-        CompilationUnit cu = parser.parse("class Test {\n" + "  /**" + commentCode + "*/\n" + "  void test() {}\n" + "}");
+        CompilationUnit cu =
+                parser.parse("class Test {\n" + "  /**" + commentCode + "*/\n" + "  void test() {}\n" + "}");
 
         MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
 
@@ -297,7 +298,8 @@ class CommentTest {
                 + "  ///  */\n"
                 + "  /// // and single line comments\n";
         String comment2Code = "  ///\n" + "  /// and empty lines preceded by ///\n" + "  /// without issues\n";
-        CompilationUnit cu = parser.parse("class Test {\n" + comment1Code + "\n" + comment2Code + "  void test() {}\n" + "}");
+        CompilationUnit cu =
+                parser.parse("class Test {\n" + comment1Code + "\n" + comment2Code + "  void test() {}\n" + "}");
 
         MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
 

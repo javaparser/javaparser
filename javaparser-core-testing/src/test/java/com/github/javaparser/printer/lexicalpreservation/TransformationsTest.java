@@ -178,8 +178,8 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
         considerStatement("    if(value != null) {" + LineSeparator.SYSTEM + "        value.value();"
                 + LineSeparator.SYSTEM + "    }");
 
-        BlockStmt blockStmt = LexicalPreservingPrinter.setup(
-                parser.parseBlock("{" + LineSeparator.SYSTEM + "       value1();"
+        BlockStmt blockStmt =
+                LexicalPreservingPrinter.setup(parser.parseBlock("{" + LineSeparator.SYSTEM + "       value1();"
                         + LineSeparator.SYSTEM + "    value2(); // Test"
                         + LineSeparator.SYSTEM + "}"));
 
@@ -199,8 +199,8 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
         considerStatement("    if(value != null) {" + LineSeparator.SYSTEM + "        value.value();"
                 + LineSeparator.SYSTEM + "    }");
 
-        BlockStmt blockStmt = LexicalPreservingPrinter.setup(
-                parser.parseBlock("{" + LineSeparator.SYSTEM + "       value1();"
+        BlockStmt blockStmt =
+                LexicalPreservingPrinter.setup(parser.parseBlock("{" + LineSeparator.SYSTEM + "       value1();"
                         + LineSeparator.SYSTEM + "    value2(); /* test */"
                         + LineSeparator.SYSTEM + "}"));
 

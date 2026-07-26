@@ -110,11 +110,13 @@ class ModuleDeclarationTest {
 
         ModuleExportsDirective moduleExportsStmt = module.getDirectives().get(5).asModuleExportsStmt();
         assertThat(moduleExportsStmt.getNameAsString()).isEqualTo("R.S");
-        assertThat(moduleExportsStmt.getModuleNames()).containsExactly(parserAdapter.parseName("T1.U1"), parserAdapter.parseName("T2.U2"));
+        assertThat(moduleExportsStmt.getModuleNames())
+                .containsExactly(parserAdapter.parseName("T1.U1"), parserAdapter.parseName("T2.U2"));
 
         ModuleOpensDirective moduleOpensStmt = module.getDirectives().get(7).asModuleOpensStmt();
         assertThat(moduleOpensStmt.getNameAsString()).isEqualTo("R.S");
-        assertThat(moduleOpensStmt.getModuleNames()).containsExactly(parserAdapter.parseName("T1.U1"), parserAdapter.parseName("T2.U2"));
+        assertThat(moduleOpensStmt.getModuleNames())
+                .containsExactly(parserAdapter.parseName("T1.U1"), parserAdapter.parseName("T2.U2"));
 
         ModuleUsesDirective moduleUsesStmt = module.getDirectives().get(8).asModuleUsesStmt();
         assertThat(moduleUsesStmt.getNameAsString()).isEqualTo("V.W");
@@ -122,7 +124,8 @@ class ModuleDeclarationTest {
         ModuleProvidesDirective moduleProvidesStmt =
                 module.getDirectives().get(9).asModuleProvidesStmt();
         assertThat(moduleProvidesStmt.getNameAsString()).isEqualTo("X.Y");
-        assertThat(moduleProvidesStmt.getWith()).containsExactly(parserAdapter.parseName("Z1.Z2"), parserAdapter.parseName("Z3.Z4"));
+        assertThat(moduleProvidesStmt.getWith())
+                .containsExactly(parserAdapter.parseName("Z1.Z2"), parserAdapter.parseName("Z3.Z4"));
     }
 
     @Test

@@ -34,8 +34,8 @@ class MethodCallExprTest {
 
     @Test
     void replaceLambdaIssue1290() {
-        MethodCallExpr methodCallExpr =
-                parser.parseExpression("callSomeFun(r -> r instanceof SomeType)").asMethodCallExpr();
+        MethodCallExpr methodCallExpr = parser.parseExpression("callSomeFun(r -> r instanceof SomeType)")
+                .asMethodCallExpr();
         LambdaExpr lambdaExpr = methodCallExpr.getArgument(0).asLambdaExpr();
         MethodCallExpr lambdaWrapper = new MethodCallExpr("lambdaWrapper");
         lambdaExpr.replace(lambdaWrapper);

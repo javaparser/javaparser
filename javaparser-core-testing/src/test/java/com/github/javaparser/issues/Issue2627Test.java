@@ -22,8 +22,8 @@ package com.github.javaparser.issues;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.Range;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -37,7 +37,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class Issue2627Test {
 
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
-
 
     private static final String RESOURCE_PATH_STRING_CR = "com/github/javaparser/issue_samples/issue_2627/Ops_cr.java";
     private static final String RESOURCE_PATH_STRING_LF = "com/github/javaparser/issue_samples/issue_2627/Ops_lf.java";

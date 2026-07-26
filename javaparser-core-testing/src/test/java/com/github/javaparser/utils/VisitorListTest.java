@@ -38,7 +38,6 @@ class VisitorListTest {
 
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
-
     @Test
     void visitorAddAll() {
         List<CompilationUnit> list = new ArrayList<>();

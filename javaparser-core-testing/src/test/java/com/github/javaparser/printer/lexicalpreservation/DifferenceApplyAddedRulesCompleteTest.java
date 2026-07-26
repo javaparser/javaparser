@@ -287,8 +287,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         BlockStmt body = method.getBody().get();
 
         // Add nested if statements
-        IfStmt ifStmt =
-                parser.parseStatement("if (true) { int x = 1; }").asIfStmt();
+        IfStmt ifStmt = parser.parseStatement("if (true) { int x = 1; }").asIfStmt();
         body.addStatement(ifStmt);
 
         String result = print();
@@ -311,8 +310,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         BlockStmt thenBlock = ifStmt.getThenStmt().asBlockStmt();
 
         // Add nested if inside existing if
-        IfStmt nestedIf =
-                parser.parseStatement("if (false) { int x = 1; }").asIfStmt();
+        IfStmt nestedIf = parser.parseStatement("if (false) { int x = 1; }").asIfStmt();
         thenBlock.addStatement(nestedIf);
 
         String result = print();

@@ -35,7 +35,6 @@ class JavadocExtractorTest {
 
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
-
     @Test
     void canParseAllJavadocsInJavaParser() throws FileNotFoundException {
         processDir(new File(".."));

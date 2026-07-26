@@ -83,7 +83,8 @@ class ClassOrInterfaceDeclarationTest {
 
     @Test
     void localClass() {
-        MethodDeclaration method = parser.parseBodyDeclaration("void x(){class X{};}").asMethodDeclaration();
+        MethodDeclaration method =
+                parser.parseBodyDeclaration("void x(){class X{};}").asMethodDeclaration();
         ClassOrInterfaceDeclaration x =
                 method.findFirst(ClassOrInterfaceDeclaration.class).get();
 
