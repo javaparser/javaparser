@@ -63,6 +63,9 @@ class PrettyPrinterTest {
         return config.get(new DefaultConfigurationOption(cOption));
     }
 
+    // Several tests exercise printing of recent syntax (switch patterns, guards, record and unnamed patterns since
+    // Java 21+, and module imports since Java 25), so the parser is configured class-wide at JAVA_25. The remaining
+    // tests parse basic code and behave identically at this higher level.
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
             new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25));
 

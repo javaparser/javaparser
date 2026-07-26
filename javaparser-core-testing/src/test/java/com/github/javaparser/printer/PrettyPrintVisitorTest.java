@@ -49,6 +49,9 @@ import org.junit.jupiter.api.Test;
 
 class PrettyPrintVisitorTest extends TestParser {
 
+    // This class parses through two mechanisms: the helpers inherited from TestParser (which use BLEEDING_EDGE) and
+    // this field, used by the parse(...) calls. Some of those need recent syntax (e.g. module imports since Java 25),
+    // hence JAVA_25; a few tests additionally request a specific level inline via TestParser.
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
             new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25));
 
