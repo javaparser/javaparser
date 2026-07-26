@@ -31,6 +31,8 @@ import org.junit.jupiter.api.Test;
 
 class ImportDeclarationTest {
 
+    // JAVA_25 is required by the module import tests ("import module ...;"), which the parser only accepts from
+    // Java 25 onwards. The remaining (regular/static) import tests are language-level agnostic and pass at any level.
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
             new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25));
 
