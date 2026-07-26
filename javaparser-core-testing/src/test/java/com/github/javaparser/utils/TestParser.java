@@ -38,6 +38,15 @@ import java.util.Map;
 
 public class TestParser {
 
+    /*
+     * Parsers are cached per language level and shared statically across all tests. This is safe only because tests
+     * run sequentially (JUnit's default lifecycle) and the cached parsers' configuration is never mutated after
+     * creation.
+     *
+     * WARNING: JavaParser is not thread-safe. If parallel test execution is ever enabled, these shared instances
+     * become a data race. The cache would then have to be made thread-local (one parser per level per thread) or
+     * dropped (create a fresh parser per call).
+     */
     private static final Map<LanguageLevel, JavaParser> parserCache = new HashMap<>();
 
     private static JavaParser parser(LanguageLevel languageLevel) {
