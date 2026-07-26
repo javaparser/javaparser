@@ -21,9 +21,10 @@
 
 package com.github.javaparser.javadoc;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseJavadoc;
 import static com.github.javaparser.javadoc.description.JavadocInlineTag.Type.*;
+
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,6 +41,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class JavadocTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
 
     @Test
     void toTextForEmptyJavadoc() {
@@ -95,7 +99,7 @@ class JavadocTest {
 
     @Test
     void descriptionAndBlockTagsAreRetrievable() {
-        Javadoc javadoc = parseJavadoc(
+        Javadoc javadoc = parser.parseJavadoc(
                 "first line" + LineSeparator.SYSTEM + "second line" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
                         + "@param node a node" + LineSeparator.SYSTEM + "@return result the result",
                 false);
@@ -115,7 +119,7 @@ class JavadocTest {
                 + LineSeparator.SYSTEM
                 + "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID."
                 + LineSeparator.SYSTEM;
-        Javadoc javadoc = parseJavadoc(docText, false);
+        Javadoc javadoc = parser.parseJavadoc(docText, false);
 
         List<JavadocInlineTag> inlineTags = javadoc.getDescription().getElements().stream()
                 .filter(element -> element instanceof JavadocInlineTag)
@@ -146,7 +150,7 @@ class JavadocTest {
                 + LineSeparator.SYSTEM + " * "
                 + LineSeparator.SYSTEM + " * @param <T>"
                 + LineSeparator.SYSTEM;
-        Javadoc javadoc = parseJavadoc(comment, false);
+        Javadoc javadoc = parser.parseJavadoc(comment, false);
         assertEquals(2, javadoc.getBlockTags().size());
     }
 
@@ -160,7 +164,7 @@ class JavadocTest {
                 + LineSeparator.SYSTEM + "    /// "
                 + LineSeparator.SYSTEM + "    /// @param <T>"
                 + LineSeparator.SYSTEM;
-        Javadoc javadoc = parseJavadoc(comment, true);
+        Javadoc javadoc = parser.parseJavadoc(comment, true);
         assertEqualsStringIgnoringEol(
                 "The type of the Object to be mapped.\n"
                         + "This interface maps the given Objects to existing ones in the database and\n"
@@ -205,7 +209,7 @@ class JavadocTest {
     @Test
     void issue1533() {
         CompilationUnit compilationUnit =
-                parse("/** hallo {@link Foo} welt */ public interface Foo extends Comparable { }");
+                parser.parse("/** hallo {@link Foo} welt */ public interface Foo extends Comparable { }");
         List<JavadocDescriptionElement> elements =
                 compilationUnit.getType(0).getJavadoc().get().getDescription().getElements();
         assertEquals(3, elements.size());

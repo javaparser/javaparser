@@ -27,6 +27,7 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.ConfigurablePrinter;
@@ -47,6 +48,9 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 class SourceRootTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     private final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class)
             .resolve("src/test/resources/com/github/javaparser/utils/");
     private final SourceRoot sourceRoot = new SourceRoot(root);
@@ -196,7 +200,7 @@ class SourceRootTest {
         SourceRoot sr = new SourceRoot(oldRoot);
 
         // relative key -> saved under newRoot
-        CompilationUnit cuRel = StaticJavaParser.parse("package p; class R {}");
+        CompilationUnit cuRel = parser.parse("package p; class R {}");
         sr.add("p", "R.java", cuRel);
         Path expectedRelativeTarget =
                 newRoot.resolve("p/R.java").toAbsolutePath().normalize();
@@ -204,7 +208,7 @@ class SourceRootTest {
 
         // absolute key -> remains at absolute path
         Path absPath = absDir.resolve("X.java").toAbsolutePath();
-        CompilationUnit cuAbs = StaticJavaParser.parse("package abs; class X {}");
+        CompilationUnit cuAbs = parser.parse("package abs; class X {}");
         cuAbs.setStorage(absPath, StandardCharsets.UTF_8);
         sr.add(cuAbs);
 

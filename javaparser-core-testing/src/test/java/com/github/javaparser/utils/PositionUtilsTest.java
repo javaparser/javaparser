@@ -24,6 +24,7 @@ import static com.github.javaparser.utils.PositionUtils.nodeContains;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -36,9 +37,12 @@ import com.github.javaparser.ast.type.Type;
 import org.junit.jupiter.api.Test;
 
 public class PositionUtilsTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     public void nodeContains_NoAnnotationsAnywhere_IgnoringAnnotations() {
-        CompilationUnit cu = StaticJavaParser.parse("class X { int a; }");
+        CompilationUnit cu = parser.parse("class X { int a; }");
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
         boolean contains = nodeContains(cu, field, true);
@@ -47,7 +51,7 @@ public class PositionUtilsTest {
 
     @Test
     public void nodeDoesNotContain_NoAnnotationsAnywhere_IgnoringAnnotations() {
-        CompilationUnit cu = StaticJavaParser.parse("class X { int a; }");
+        CompilationUnit cu = parser.parse("class X { int a; }");
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
         Type fieldType = field.getVariable(0).getType();
@@ -59,7 +63,7 @@ public class PositionUtilsTest {
 
     @Test
     public void nodeContains_NoAnnotationsAnywhere_IncludeAnnotations() {
-        CompilationUnit cu = StaticJavaParser.parse("class X { int a; }");
+        CompilationUnit cu = parser.parse("class X { int a; }");
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
         boolean contains = nodeContains(cu, field, false);
@@ -68,7 +72,7 @@ public class PositionUtilsTest {
 
     @Test
     public void nodeDoesNotContain_NoAnnotationsAnywhere_IncludeAnnotations() {
-        CompilationUnit cu = StaticJavaParser.parse("class X { int a; }");
+        CompilationUnit cu = parser.parse("class X { int a; }");
         FieldDeclaration field = cu.findFirst(FieldDeclaration.class).get();
 
         Type fieldType = field.getVariable(0).getType();
@@ -80,7 +84,7 @@ public class PositionUtilsTest {
 
     @Test
     public void nodeContainsAnnotations_IgnoringAnnotations() {
-        CompilationUnit cu = StaticJavaParser.parse("@A class X {} class Y {}");
+        CompilationUnit cu = parser.parse("@A class X {} class Y {}");
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
         ClassOrInterfaceDeclaration y = cu.getClassByName("Y").get();
 
@@ -92,7 +96,7 @@ public class PositionUtilsTest {
     public void nodeContainsAnnotations_WithCommentNodeInTheMiddle_IgnoringAnnotations() {
         String code = "" + "@A\n" + "/*o*/\n" + "@B\n" + "class X {\n" + "}\n" + "";
 
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = parser.parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString(), "Issue with the parsing of the code, not this test.");
 
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
@@ -109,7 +113,7 @@ public class PositionUtilsTest {
     @Test
     public void nodeContainsAnnotations_WithAnnotationNodeInTheMiddle() {
         String code = "" + "@A\n" + "@B\n" + "@C\n" + "class X {\n" + "}\n" + "";
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = parser.parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString(), "Issue with the parsing of the code, not this test.");
 
         final ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
@@ -142,7 +146,7 @@ public class PositionUtilsTest {
 
     @Test
     public void nodeContainsAnnotations_WithCommentAtTheEndOfAnnotations_IgnoringAnnotations() {
-        CompilationUnit cu = StaticJavaParser.parse("@A @B /*o*/ public class X {}");
+        CompilationUnit cu = parser.parse("@A @B /*o*/ public class X {}");
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
 
         // TODO: Should the comment be attached to the SimpleName (as opposed to the ClassOrInterfaceDeclaration?)
@@ -174,7 +178,7 @@ public class PositionUtilsTest {
 
     @Test
     public void nodeContainsAnnotations_WithCommentAfterTheEnd_IgnoringAnnotations() {
-        CompilationUnit cu = StaticJavaParser.parse("@A @B public /*o*/ class X {}");
+        CompilationUnit cu = parser.parse("@A @B public /*o*/ class X {}");
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
 
         // TODO: Should the comment be attached to the SimpleName (as opposed to the ClassOrInterfaceDeclaration?)
@@ -206,7 +210,7 @@ public class PositionUtilsTest {
 
     @Test
     public void nodeContainsAnnotations_WithCommentAfterTheEnd_IgnoringAnnotations2() {
-        CompilationUnit cu = StaticJavaParser.parse("@A @B public class /*o*/ X {}");
+        CompilationUnit cu = parser.parse("@A @B public class /*o*/ X {}");
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
 
         // TODO: Should the comment be attached to the SimpleName (as opposed to the ClassOrInterfaceDeclaration?)
@@ -239,7 +243,7 @@ public class PositionUtilsTest {
 
     @Test
     public void nodeContainsAnnotations_WithCommentAfterTheEnd_IgnoringAnnotations3() {
-        CompilationUnit cu = StaticJavaParser.parse("@A @B public class X /*o*/ {}");
+        CompilationUnit cu = parser.parse("@A @B public class X /*o*/ {}");
         ClassOrInterfaceDeclaration x = cu.getClassByName("X").get();
 
         //        // TODO: At what point is the declaration supposed to end and the code block begin? Should the block
