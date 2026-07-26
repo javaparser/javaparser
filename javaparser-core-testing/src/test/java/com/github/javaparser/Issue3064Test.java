@@ -52,7 +52,7 @@ public class Issue3064Test {
                 + "        Supplier<String> aStringSupplier = false ? () -> \"F\" : true ? () -> \"T\" : () -> \"path\";\n"
                 + "    }\n"
                 + "}";
-        CompilationUnit unit = StaticJavaParser.parse(str);
+        CompilationUnit unit = StaticJavaParser.newParserAdapter().parse(str);
         assertEquals(str.replace("\n", ""), unit.toString().replace("\n", ""));
     }
 }

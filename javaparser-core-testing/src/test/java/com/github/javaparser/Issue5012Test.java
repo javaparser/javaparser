@@ -19,8 +19,6 @@
  */
 package com.github.javaparser;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.StaticJavaParser.parseSimpleName;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -39,27 +37,29 @@ import org.junit.jupiter.api.Test;
  */
 public class Issue5012Test {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void parseStringWithMultipleUUnicodeEscape() {
-        StringLiteralExpr expr = parseExpression("\"t\\uuuu1234\"");
+        StringLiteralExpr expr = parser.parseExpression("\"t\\uuuu1234\"");
         assertEquals("t\\uuuu1234", expr.getValue());
     }
 
     @Test
     void parseStringWithSingleUUnicodeEscape() {
-        StringLiteralExpr expr = parseExpression("\"t\\u1234\"");
+        StringLiteralExpr expr = parser.parseExpression("\"t\\u1234\"");
         assertEquals("t\\u1234", expr.getValue());
     }
 
     @Test
     void parseCharWithMultipleUUnicodeEscape() {
-        CharLiteralExpr expr = parseExpression("'\\uuuu1234'");
+        CharLiteralExpr expr = parser.parseExpression("'\\uuuu1234'");
         assertEquals("\\uuuu1234", expr.getValue());
     }
 
     @Test
     void parseIdentifierWithMultipleUUnicodeEscape() {
-        SimpleName name = parseSimpleName("xxx\\uuu2122xxx");
+        SimpleName name = parser.parseSimpleName("xxx\\uuu2122xxx");
         assertEquals("xxx\\uuu2122xxx", name.asString());
     }
 
