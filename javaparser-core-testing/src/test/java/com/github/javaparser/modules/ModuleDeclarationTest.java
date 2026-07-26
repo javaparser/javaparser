@@ -48,9 +48,7 @@ class ModuleDeclarationTest {
 
     private CompilationUnit parse(String code) {
         ParseResult<CompilationUnit> result = parser.getParser().parse(ParseStart.COMPILATION_UNIT, provider(code));
-        if (!result.isSuccessful()) {
-            System.err.println(result);
-        }
+        assertTrue(result.isSuccessful(), () -> "Parsing failed with problems: " + result.getProblems());
         return result.getResult().get();
     }
 
