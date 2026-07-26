@@ -21,19 +21,23 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.Test;
 
 class ThisExprTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void justThis() {
-        Expression expr = parseExpression("this");
+        Expression expr = parser.parseExpression("this");
 
         assertTrue(expr.isThisExpr());
     }
@@ -48,7 +52,7 @@ class ThisExprTest {
 
     @Test
     void singleScopeThis() {
-        Expression expr = parseExpression("A.this");
+        Expression expr = parser.parseExpression("A.this");
 
         Name className = expr.asThisExpr().getTypeName().get();
 
@@ -65,7 +69,7 @@ class ThisExprTest {
 
     @Test
     void multiScopeThis() {
-        Expression expr = parseExpression("a.B.this");
+        Expression expr = parser.parseExpression("a.B.this");
 
         Name className = expr.asThisExpr().getTypeName().get();
 

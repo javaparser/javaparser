@@ -21,16 +21,18 @@
 
 package com.github.javaparser.builders;
 
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import org.junit.jupiter.api.Test;
 
 class NodeWithThrownExceptionsBuildersTest {
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
     private final CompilationUnit cu = new CompilationUnit();
 
     @Test
@@ -39,7 +41,7 @@ class NodeWithThrownExceptionsBuildersTest {
         addMethod.addThrownException(IllegalStateException.class);
         assertEquals(1, addMethod.getThrownExceptions().size());
         assertTrue(addMethod.isThrown(IllegalStateException.class));
-        addMethod.addThrownException(parseClassOrInterfaceType("Test"));
+        addMethod.addThrownException(parser.parseClassOrInterfaceType("Test"));
         assertEquals(2, addMethod.getThrownExceptions().size());
         assertEquals("Test", addMethod.getThrownException(1).toString());
     }

@@ -23,7 +23,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -38,7 +37,7 @@ public class Issue3818Test extends AbstractLexicalPreservingTest {
 
         String expected = "public class Foo {\n" + "\n" + "    public Long[][] m(int[] b){}\n" + "}";
 
-        BodyDeclaration<?> cu = StaticJavaParser.parseBodyDeclaration(src);
+        BodyDeclaration<?> cu = parser.parseBodyDeclaration(src);
         MethodDeclaration md = cu.findAll(MethodDeclaration.class).get(0);
         LexicalPreservingPrinter.setup(md);
         Parameter p = md.getParameter(0);

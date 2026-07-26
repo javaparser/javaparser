@@ -23,7 +23,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -52,7 +51,7 @@ public class Issue4163Test extends AbstractLexicalPreservingTest {
         PrinterConfiguration config = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
         Printer printer = new DefaultPrettyPrinter(config);
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = parser.parse(code);
         MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
 
         // expected result is

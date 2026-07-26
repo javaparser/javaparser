@@ -24,7 +24,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -179,8 +178,8 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
         considerStatement("    if(value != null) {" + LineSeparator.SYSTEM + "        value.value();"
                 + LineSeparator.SYSTEM + "    }");
 
-        BlockStmt blockStmt = LexicalPreservingPrinter.setup(
-                StaticJavaParser.parseBlock("{" + LineSeparator.SYSTEM + "       value1();"
+        BlockStmt blockStmt =
+                LexicalPreservingPrinter.setup(parser.parseBlock("{" + LineSeparator.SYSTEM + "       value1();"
                         + LineSeparator.SYSTEM + "    value2(); // Test"
                         + LineSeparator.SYSTEM + "}"));
 
@@ -200,8 +199,8 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
         considerStatement("    if(value != null) {" + LineSeparator.SYSTEM + "        value.value();"
                 + LineSeparator.SYSTEM + "    }");
 
-        BlockStmt blockStmt = LexicalPreservingPrinter.setup(
-                StaticJavaParser.parseBlock("{" + LineSeparator.SYSTEM + "       value1();"
+        BlockStmt blockStmt =
+                LexicalPreservingPrinter.setup(parser.parseBlock("{" + LineSeparator.SYSTEM + "       value1();"
                         + LineSeparator.SYSTEM + "    value2(); /* test */"
                         + LineSeparator.SYSTEM + "}"));
 
@@ -222,7 +221,7 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
                 + LineSeparator.SYSTEM + "        }");
 
         CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(
-                StaticJavaParser.parse("public class Test {" + LineSeparator.SYSTEM + "    public void method() {"
+                parser.parse("public class Test {" + LineSeparator.SYSTEM + "    public void method() {"
                         + LineSeparator.SYSTEM + "           value1();"
                         + LineSeparator.SYSTEM + "        value2(); // Test"
                         + LineSeparator.SYSTEM + "    }"
@@ -251,7 +250,7 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
                 + LineSeparator.SYSTEM + "        }");
 
         CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(
-                StaticJavaParser.parse("public class Test {" + LineSeparator.SYSTEM + "    public void method() {"
+                parser.parse("public class Test {" + LineSeparator.SYSTEM + "    public void method() {"
                         + LineSeparator.SYSTEM + "           value1();"
                         + LineSeparator.SYSTEM + "        value2();"
                         + LineSeparator.SYSTEM + "    }"
@@ -280,7 +279,7 @@ class TransformationsTest extends AbstractLexicalPreservingTest {
                 + LineSeparator.SYSTEM + "        }");
 
         CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(
-                StaticJavaParser.parse("public class Test {" + LineSeparator.SYSTEM + "    public void method() {"
+                parser.parse("public class Test {" + LineSeparator.SYSTEM + "    public void method() {"
                         + LineSeparator.SYSTEM + "           value1();"
                         + LineSeparator.SYSTEM + "        value2();"
                         + LineSeparator.SYSTEM + LineSeparator.SYSTEM + "    }"

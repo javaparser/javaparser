@@ -22,9 +22,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ParserConfiguration.LanguageLevel;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import org.junit.jupiter.api.Test;
 
@@ -33,9 +31,7 @@ class Issue4245Test extends AbstractLexicalPreservingTest {
     @Test
     public void test() {
 
-        ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setLanguageLevel(LanguageLevel.JAVA_17);
-        StaticJavaParser.setConfiguration(parserConfiguration);
+        parser.getParserConfiguration().setLanguageLevel(LanguageLevel.JAVA_17);
         considerCode("public sealed interface IUpdatePortCommand permits UpdateScheduleCommand, UpdateStateCommand {}");
 
         ClassOrInterfaceDeclaration classOrInterface =

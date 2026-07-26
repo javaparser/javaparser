@@ -21,7 +21,6 @@
 
 package com.github.javaparser;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,9 +29,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class TokenRangeTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void toStringWorks() {
-        CompilationUnit cu = parse("class X {\n\tX(){\n// hello\n}\n}");
+        CompilationUnit cu = parser.parse("class X {\n\tX(){\n// hello\n}\n}");
         assertEquals(
                 "X(){\n// hello\n}",
                 cu.getClassByName("X")
@@ -46,7 +48,7 @@ class TokenRangeTest {
 
     @Test
     void renumberRangesWorks() {
-        CompilationUnit cu = parse("class X {\n\tX(){\n// hello\n}\n}");
+        CompilationUnit cu = parser.parse("class X {\n\tX(){\n// hello\n}\n}");
 
         assertEquals(
                 "1,1-5/6,1-1/7,1-1/8,1-1/9,1-1/10,1-1/1,2-1/2,2-1/3,2-1/4,2-1/5,2-1/6,2-1/1,3-8/9,3-1/1,4-1/2,4-1/1,5-1/1,5-1/",

@@ -21,13 +21,11 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -115,7 +113,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     @Test
     void replacingExtendedTypes() {
         ClassOrInterfaceDeclaration cid = consider("public class A extends Foo {}");
-        cid.getExtendedTypes().set(0, parseClassOrInterfaceType("Bar"));
+        cid.getExtendedTypes().set(0, parser.parseClassOrInterfaceType("Bar"));
         assertTransformedToString("public class A extends Bar {}", cid);
     }
 
@@ -138,7 +136,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     @Test
     void replacingImplementedTypes() {
         ClassOrInterfaceDeclaration cid = consider("public class A implements Foo {}");
-        cid.getImplementedTypes().set(0, parseClassOrInterfaceType("Bar"));
+        cid.getImplementedTypes().set(0, parser.parseClassOrInterfaceType("Bar"));
         assertTransformedToString("public class A implements Bar {}", cid);
     }
 
@@ -211,7 +209,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void addingFieldToCompactClass() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         considerCode("void main() { }");
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
         cid.addField("int", "count");
@@ -220,7 +218,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void addingMethodToCompactClass() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         considerCode("void main() { }");
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
         cid.addMethod("greet", PUBLIC);
@@ -232,7 +230,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void modifyingFieldInCompactClass() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         considerCode("int count = 0;" + LineSeparator.SYSTEM + LineSeparator.SYSTEM + "void main() { }");
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
         cid.getFields().get(0).getVariables().get(0).setType(PrimitiveType.longType());
@@ -242,7 +240,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void modifyingMethodInCompactClass() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         considerCode("int add(int a, int b) { return a + b; }" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
                 + "void main() { }");
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -255,7 +253,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void removingFieldFromCompactClass() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         considerCode("int count = 0;" + LineSeparator.SYSTEM + LineSeparator.SYSTEM + "void main() { }");
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
         cid.getMembers().remove(0);
@@ -264,7 +262,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void removingMethodFromCompactClass() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         considerCode("int add(int a, int b) { return a + b; }" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
                 + "void main() { }");
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
@@ -274,7 +272,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void makingNonCompactClassCompact() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         considerCode("class Foo {" + LineSeparator.SYSTEM + "    void main() { }" + LineSeparator.SYSTEM + "}");
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
         cid.setCompact(true);
@@ -283,7 +281,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void makingCompactClassNonCompact() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         considerCode("void main() { }");
         ClassOrInterfaceDeclaration cid = cu.getType(0).asClassOrInterfaceDeclaration();
         cid.setCompact(false);

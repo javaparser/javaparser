@@ -22,6 +22,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -35,10 +36,10 @@ public class Issue4488Test {
     void cannotChangeMethodNameInLambda() {
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setLexicalPreservationEnabled(true);
-        StaticJavaParser.setConfiguration(parserConfiguration);
+        JavaParserAdapter parser = StaticJavaParser.newParserAdapter(parserConfiguration);
 
         CompilationUnit cu =
-                StaticJavaParser.parse("class Test {\n" + "	private Map<String, String> dummyMap = new HashMap<>();\n"
+                parser.parse("class Test {\n" + "	private Map<String, String> dummyMap = new HashMap<>();\n"
                         + "	public String dummyFunction(String name) {\n"
                         + "		return dummyMap.computeIfAbsent(name,\n"
                         + "			(Function<String, String>) s -> SomeFunction.withAMethodHere(\"test\").build());\n"

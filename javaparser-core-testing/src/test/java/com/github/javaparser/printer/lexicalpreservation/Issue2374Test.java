@@ -23,7 +23,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
 import java.util.Optional;
@@ -49,7 +48,7 @@ public class Issue2374Test extends AbstractLexicalPreservingTest {
                 + "    }\n"
                 + "}";
         // contruct a statement with a comment
-        Statement stmt = StaticJavaParser.parseStatement("System.out.println(\"World!\");");
+        Statement stmt = parser.parseStatement("System.out.println(\"World!\");");
         stmt.setLineComment(lineComment);
         // add the statement to the ast
         Optional<MethodDeclaration> md = cu.findFirst(MethodDeclaration.class);

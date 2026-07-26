@@ -21,16 +21,19 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.StaticJavaParser.parseSimpleName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.observer.AstObserver;
 import org.junit.jupiter.api.Test;
 
 class SimpleNameTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
     @Test
     void defaultConstructorSetsIdentifierToEmpty() {
@@ -49,7 +52,7 @@ class SimpleNameTest {
 
     @Test
     void unicodeEscapesArePreservedInIdentifiers() {
-        SimpleName name = parseSimpleName("xxx\\u2122xxx");
+        SimpleName name = parser.parseSimpleName("xxx\\u2122xxx");
         assertEquals("xxx\\u2122xxx", name.asString());
     }
 

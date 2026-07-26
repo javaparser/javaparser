@@ -21,65 +21,64 @@
 
 package com.github.javaparser.ast.imports;
 
-import static com.github.javaparser.StaticJavaParser.parseImport;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ImportDeclarationTest {
 
-    @BeforeAll
-    static void initParser() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
-    }
+    // JAVA_25 is required by the module import tests ("import module ...;"), which the parser only accepts from
+    // Java 25 onwards. The remaining (regular/static) import tests are language-level agnostic and pass at any level.
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
+            new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25));
 
     @Test
     void singleTypeImportDeclaration() {
-        ImportDeclaration i = parseImport("import a.b.c.X;");
+        ImportDeclaration i = parser.parseImport("import a.b.c.X;");
         assertEquals("a.b.c.X", i.getNameAsString());
     }
 
     @Test
     void typeImportOnDemandDeclaration() {
-        ImportDeclaration i = parseImport("import a.b.c.D.*;");
+        ImportDeclaration i = parser.parseImport("import a.b.c.D.*;");
         assertEquals("a.b.c.D", i.getName().toString());
         assertEquals("D", i.getName().getIdentifier());
     }
 
     @Test
     void singleStaticImportDeclaration() {
-        ImportDeclaration i = parseImport("import static a.b.c.X.def;");
+        ImportDeclaration i = parser.parseImport("import static a.b.c.X.def;");
         assertEquals("a.b.c.X", i.getName().getQualifier().get().asString());
         assertEquals("def", i.getName().getIdentifier());
     }
 
     @Test
     void staticImportOnDemandDeclaration() {
-        ImportDeclaration i = parseImport("import static a.b.c.X.*;");
+        ImportDeclaration i = parser.parseImport("import static a.b.c.X.*;");
         assertEquals("a.b.c.X", i.getNameAsString());
     }
 
     @Test
     void moduleImport() {
-        ImportDeclaration i = parseImport("import module java.base;");
+        ImportDeclaration i = parser.parseImport("import module java.base;");
         assertEquals("java.base", i.getNameAsString());
         assertTrue(i.isModule());
     }
 
     @Test
     void modulePackageImport() {
-        ImportDeclaration i = parseImport("import module.base.Foo;");
+        ImportDeclaration i = parser.parseImport("import module.base.Foo;");
         assertEquals("module.base.Foo", i.getNameAsString());
         assertFalse(i.isModule());
     }
 
     @Test
     void staticModulePackageImport() {
-        ImportDeclaration i = parseImport("import static module.base.Foo;");
+        ImportDeclaration i = parser.parseImport("import static module.base.Foo;");
         assertEquals("module.base.Foo", i.getNameAsString());
         assertFalse(i.isModule());
         assertTrue(i.isStatic());

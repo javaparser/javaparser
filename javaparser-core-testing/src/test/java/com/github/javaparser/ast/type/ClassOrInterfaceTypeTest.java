@@ -22,6 +22,7 @@ package com.github.javaparser.ast.type;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -33,6 +34,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ClassOrInterfaceTypeTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
     @Test
     void testSetName() {
@@ -67,7 +70,7 @@ class ClassOrInterfaceTypeTest {
 
     @Test
     void testWithAnnotations() {
-        AnnotationExpr annotationExpr = StaticJavaParser.parseAnnotation("@Override");
+        AnnotationExpr annotationExpr = parser.parseAnnotation("@Override");
         ClassOrInterfaceType classA =
                 new ClassOrInterfaceType(null, new SimpleName("A"), null, new NodeList<>(annotationExpr));
 

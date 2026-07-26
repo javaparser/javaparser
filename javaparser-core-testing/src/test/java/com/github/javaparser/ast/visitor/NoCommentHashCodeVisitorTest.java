@@ -21,12 +21,13 @@
 
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.ast.type.PrimitiveType.intType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.*;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -40,17 +41,19 @@ import org.junit.jupiter.api.Test;
 
 class NoCommentHashCodeVisitorTest {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void testEquals() {
-        CompilationUnit p1 = parse("class X { }");
-        CompilationUnit p2 = parse("class X { }");
+        CompilationUnit p1 = parser.parse("class X { }");
+        CompilationUnit p2 = parser.parse("class X { }");
         assertEquals(p1.hashCode(), p2.hashCode());
     }
 
     @Test
     void testEqualsWithDifferentComments() {
-        CompilationUnit p1 = parse("/* a */ class X { /** b */} //c");
-        CompilationUnit p2 = parse("/* b */ class X { }  //c");
+        CompilationUnit p1 = parser.parse("/* a */ class X { /** b */} //c");
+        CompilationUnit p2 = parser.parse("/* b */ class X { }  //c");
         assertEquals(p1.hashCode(), p2.hashCode());
         assertEquals(3, p1.getAllComments().size());
         assertEquals(2, p2.getAllComments().size());
@@ -58,8 +61,8 @@ class NoCommentHashCodeVisitorTest {
 
     @Test
     void testNotEquals() {
-        CompilationUnit p1 = parse("class X { }");
-        CompilationUnit p2 = parse("class Y { }");
+        CompilationUnit p1 = parser.parse("class X { }");
+        CompilationUnit p2 = parser.parse("class Y { }");
         assertNotEquals(p1.hashCode(), p2.hashCode());
     }
 

@@ -21,28 +21,24 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UnaryExprTest {
-    @BeforeEach
-    void initParser() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-    }
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
     @Test
     void unaryPlusTest() {
-        Expression e = parseExpression("+x");
+        Expression e = parser.parseExpression("+x");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.PLUS, unary.getOperator());
@@ -53,7 +49,7 @@ class UnaryExprTest {
 
     @Test
     void unaryMinusTest() {
-        Expression e = parseExpression("-x");
+        Expression e = parser.parseExpression("-x");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.MINUS, unary.getOperator());
@@ -64,7 +60,7 @@ class UnaryExprTest {
 
     @Test
     void prefixIncrementTest() {
-        Expression e = parseExpression("++x");
+        Expression e = parser.parseExpression("++x");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.PREFIX_INCREMENT, unary.getOperator());
@@ -75,7 +71,7 @@ class UnaryExprTest {
 
     @Test
     void prefixDecrementTest() {
-        Expression e = parseExpression("--x");
+        Expression e = parser.parseExpression("--x");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.PREFIX_DECREMENT, unary.getOperator());
@@ -86,7 +82,7 @@ class UnaryExprTest {
 
     @Test
     void logicalComplementTest() {
-        Expression e = parseExpression("!flag");
+        Expression e = parser.parseExpression("!flag");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.LOGICAL_COMPLEMENT, unary.getOperator());
@@ -97,7 +93,7 @@ class UnaryExprTest {
 
     @Test
     void bitwiseComplementTest() {
-        Expression e = parseExpression("~x");
+        Expression e = parser.parseExpression("~x");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.BITWISE_COMPLEMENT, unary.getOperator());
@@ -108,7 +104,7 @@ class UnaryExprTest {
 
     @Test
     void postfixIncrementTest() {
-        Expression e = parseExpression("x++");
+        Expression e = parser.parseExpression("x++");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.POSTFIX_INCREMENT, unary.getOperator());
@@ -119,7 +115,7 @@ class UnaryExprTest {
 
     @Test
     void postfixDecrementTest() {
-        Expression e = parseExpression("x--");
+        Expression e = parser.parseExpression("x--");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.POSTFIX_DECREMENT, unary.getOperator());
@@ -130,7 +126,7 @@ class UnaryExprTest {
 
     @Test
     void nestedUnaryTest() {
-        Expression e = parseExpression("!!flag");
+        Expression e = parser.parseExpression("!!flag");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr outerUnary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.LOGICAL_COMPLEMENT, outerUnary.getOperator());
@@ -145,7 +141,7 @@ class UnaryExprTest {
 
     @Test
     void unaryWithMethodCallTest() {
-        Expression e = parseExpression("!obj.isValid()");
+        Expression e = parser.parseExpression("!obj.isValid()");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.LOGICAL_COMPLEMENT, unary.getOperator());
@@ -160,7 +156,7 @@ class UnaryExprTest {
 
     @Test
     void unaryWithArrayAccessTest() {
-        Expression e = parseExpression("++array[i]");
+        Expression e = parser.parseExpression("++array[i]");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.PREFIX_INCREMENT, unary.getOperator());
@@ -177,7 +173,7 @@ class UnaryExprTest {
 
     @Test
     void unaryWithFieldAccessTest() {
-        Expression e = parseExpression("-obj.value");
+        Expression e = parser.parseExpression("-obj.value");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr unary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.MINUS, unary.getOperator());
@@ -192,7 +188,7 @@ class UnaryExprTest {
 
     @Test
     void mixedPrefixAndPostfixTest() {
-        Expression e = parseExpression("++(x--)");
+        Expression e = parser.parseExpression("++(x--)");
         assertInstanceOf(UnaryExpr.class, e);
         UnaryExpr prefixUnary = e.asUnaryExpr();
         assertEquals(UnaryExpr.Operator.PREFIX_INCREMENT, prefixUnary.getOperator());
@@ -210,7 +206,7 @@ class UnaryExprTest {
 
     @Test
     void unaryInBinaryExprTest() {
-        Expression e = parseExpression("-x + y");
+        Expression e = parser.parseExpression("-x + y");
         assertInstanceOf(BinaryExpr.class, e);
         BinaryExpr binary = e.asBinaryExpr();
         assertEquals(BinaryExpr.Operator.PLUS, binary.getOperator());
@@ -226,7 +222,7 @@ class UnaryExprTest {
 
     @Test
     void unaryInAssertStatementTest() {
-        Statement stmt = parseStatement("assert ++counter == 1 : \"Counter should be incremented\";");
+        Statement stmt = parser.parseStatement("assert ++counter == 1 : \"Counter should be incremented\";");
         assertInstanceOf(AssertStmt.class, stmt);
         AssertStmt assertStmt = stmt.asAssertStmt();
 
@@ -255,9 +251,10 @@ class UnaryExprTest {
         // Note: "assert" as an identifier is only valid in Java < 1.4 In modern Java,
         // "assert" is a keyword. However, "assert" as an identifier is still supported
         // for backward compatibility
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_1_0);
+        JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
+                new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_1_0));
 
-        Statement stmt = parseStatement("assert++;");
+        Statement stmt = parser.parseStatement("assert++;");
         assertInstanceOf(ExpressionStmt.class, stmt);
         ExpressionStmt exprStmt = stmt.asExpressionStmt();
 
@@ -274,9 +271,10 @@ class UnaryExprTest {
         // Note: "assert" as an identifier is only valid in Java < 1.4 In modern Java,
         // "assert" is a keyword. However, "assert" as an identifier is still supported
         // for backward compatibility
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_1_0);
+        JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
+                new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_1_0));
 
-        Statement stmt = parseStatement("++assert;");
+        Statement stmt = parser.parseStatement("++assert;");
         assertInstanceOf(ExpressionStmt.class, stmt);
         ExpressionStmt exprStmt = stmt.asExpressionStmt();
 

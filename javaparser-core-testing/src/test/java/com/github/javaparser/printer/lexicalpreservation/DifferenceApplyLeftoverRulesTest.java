@@ -22,7 +22,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -69,7 +68,7 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         BlockStmt body = method.getBody().get();
 
         // Add statement at end (may have leftover indent directive)
-        ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
+        ExpressionStmt newStmt = parser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
         String expected = "class X {\n" + "    void method() {\n"
@@ -98,7 +97,7 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         BlockStmt body = method.getBody().get();
 
         // Add statement after if (may have leftover unindent)
-        ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
+        ExpressionStmt newStmt = parser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
         String expected = "class X {\n" + "    void method() {\n"
@@ -124,8 +123,8 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         BlockStmt body = method.getBody().get();
 
         // Add multiple statements (some may be leftover)
-        body.getStatements().add(StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt());
-        body.getStatements().add(StaticJavaParser.parseStatement("int z = 3;").asExpressionStmt());
+        body.getStatements().add(parser.parseStatement("int y = 2;").asExpressionStmt());
+        body.getStatements().add(parser.parseStatement("int z = 3;").asExpressionStmt());
 
         String expected = "class X {\n" + "    void method() {\n"
                 + "        int x = 1;\n"
@@ -285,7 +284,7 @@ class DifferenceApplyLeftoverRulesTest extends AbstractLexicalPreservingTest {
         BlockStmt body = method.getBody().get();
 
         // Add statement at end
-        body.getStatements().add(StaticJavaParser.parseStatement("int z = 3;").asExpressionStmt());
+        body.getStatements().add(parser.parseStatement("int z = 3;").asExpressionStmt());
 
         String result = print();
 

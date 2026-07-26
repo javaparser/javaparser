@@ -21,8 +21,8 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.utils.CodeGenerationUtils;
@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 class ConcreteSyntaxModelAcceptanceTest {
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
     private final Path rootDir = CodeGenerationUtils.mavenModuleRoot(ConcreteSyntaxModelAcceptanceTest.class)
             .resolve("src/test/test_sourcecode");
 
@@ -45,18 +46,19 @@ class ConcreteSyntaxModelAcceptanceTest {
 
     @Test
     void printingExamplePrettyPrintVisitor() throws IOException {
-        CompilationUnit cu = parse(rootDir.resolve("com/github/javaparser/printer/PrettyPrintVisitor.java"));
+        CompilationUnit cu = parser.parse(rootDir.resolve("com/github/javaparser/printer/PrettyPrintVisitor.java"));
         TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("PrettyPrintVisitor"), prettyPrint(cu));
     }
 
     @Test
     void printingExampleJavaConcepts() throws IOException {
-        CompilationUnit base = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsBase.java"));
-        CompilationUnit enums = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsEnums.java"));
+        CompilationUnit base = parser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsBase.java"));
+        CompilationUnit enums = parser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsEnums.java"));
         CompilationUnit innerClass =
-                parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsInnerClasses.java"));
-        CompilationUnit methods = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsMethods.java"));
-        CompilationUnit ugly = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsUgly.java"));
+                parser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsInnerClasses.java"));
+        CompilationUnit methods =
+                parser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsMethods.java"));
+        CompilationUnit ugly = parser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsUgly.java"));
         TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsBase"), prettyPrint(base));
         TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsEnums"), prettyPrint(enums));
         TestUtils.assertEqualsStringIgnoringEol(

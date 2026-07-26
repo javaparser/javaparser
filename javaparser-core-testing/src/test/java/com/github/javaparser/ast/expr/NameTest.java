@@ -21,12 +21,13 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.StaticJavaParser.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.observer.AstObserver;
@@ -36,26 +37,28 @@ import org.junit.jupiter.api.Test;
 
 class NameTest {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void outerNameExprIsTheRightMostIdentifier() {
-        Name name = parseName("a.b.c");
+        Name name = parser.parseName("a.b.c");
         assertEquals("c", name.getIdentifier());
     }
 
     @Test
     void parsingAndUnparsingWorks() {
-        Name name = parseName("a.b.c");
+        Name name = parser.parseName("a.b.c");
         assertEquals("a.b.c", name.asString());
     }
 
     @Test
     void parsingEmptyNameThrowsException() {
-        assertThrows(ParseProblemException.class, () -> parseName(""));
+        assertThrows(ParseProblemException.class, () -> parser.parseName(""));
     }
 
     @Test
     void importName() {
-        ImportDeclaration importDeclaration = parseImport("import java.util.List;");
+        ImportDeclaration importDeclaration = parser.parseImport("import java.util.List;");
 
         assertEquals("import java.util.List;" + LineSeparator.SYSTEM, importDeclaration.toString());
         assertEquals("import java.util.List;", ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
@@ -63,7 +66,7 @@ class NameTest {
 
     @Test
     void packageName() {
-        CompilationUnit cu = parse("package p1.p2;");
+        CompilationUnit cu = parser.parse("package p1.p2;");
 
         assertEquals("package p1.p2;" + LineSeparator.SYSTEM + LineSeparator.SYSTEM, cu.toString());
         assertEquals(
@@ -73,27 +76,27 @@ class NameTest {
 
     @Test
     void isInternalNegative() {
-        Name name = parseName("a.b.c");
+        Name name = parser.parseName("a.b.c");
         assertFalse(name.isInternal());
     }
 
     @Test
     void isInternalPositive() {
-        Name name = parseName("a.b.c");
+        Name name = parser.parseName("a.b.c");
         assertTrue(name.getQualifier().get().isInternal());
         assertTrue(name.getQualifier().get().getQualifier().get().isInternal());
     }
 
     @Test
     void isTopLevelNegative() {
-        Name name = parseName("a.b.c");
+        Name name = parser.parseName("a.b.c");
         assertFalse(name.getQualifier().get().isTopLevel());
         assertFalse(name.getQualifier().get().getQualifier().get().isTopLevel());
     }
 
     @Test
     void isTopLevelPositive() {
-        Name name = parseName("a.b.c");
+        Name name = parser.parseName("a.b.c");
         assertTrue(name.isTopLevel());
     }
 

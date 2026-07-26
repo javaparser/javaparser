@@ -22,6 +22,7 @@ package com.github.javaparser.issues;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.Range;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -34,6 +35,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class Issue2627Test {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
     private static final String RESOURCE_PATH_STRING_CR = "com/github/javaparser/issue_samples/issue_2627/Ops_cr.java";
     private static final String RESOURCE_PATH_STRING_LF = "com/github/javaparser/issue_samples/issue_2627/Ops_lf.java";
@@ -84,7 +87,7 @@ public class Issue2627Test {
 
     //    @Test
     //    public void cuLength_minimal() throws IOException {
-    //        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
+    //        CompilationUnit cu = parser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
     //
     //        final Range cuRange = cu.getRange().get();
     //
@@ -94,7 +97,7 @@ public class Issue2627Test {
 
     //    @Test
     //    public void commentPositions_minimal() throws IOException {
-    //        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
+    //        CompilationUnit cu = parser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
     //
     //        List<Comment> allComments = cu.getAllComments();
     //        for (int i = 0; i < allComments.size(); i++) {
@@ -119,42 +122,42 @@ public class Issue2627Test {
     @ParameterizedTest
     @MethodSource("arguments_minimal")
     public void method_minimal(String name, int expectedStart, int expectedEnd) throws IOException {
-        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
+        CompilationUnit cu = parser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
         assertMethodInExpectedLines(cu, name, expectedStart, expectedEnd);
     }
 
     @ParameterizedTest
     @MethodSource("arguments_original")
     public void method_original(String name, int expectedStart, int expectedEnd) throws IOException {
-        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_ORIGINAL);
+        CompilationUnit cu = parser.parseResource(RESOURCE_PATH_STRING_ORIGINAL);
         assertMethodInExpectedLines(cu, name, expectedStart, expectedEnd);
     }
 
     @ParameterizedTest
     @MethodSource("arguments_original")
     public void method_original_cr(String name, int expectedStart, int expectedEnd) throws IOException {
-        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_CR);
+        CompilationUnit cu = parser.parseResource(RESOURCE_PATH_STRING_CR);
         assertMethodInExpectedLines(cu, name, expectedStart, expectedEnd);
     }
 
     @ParameterizedTest
     @MethodSource("arguments_original")
     public void method_original_crlf(String name, int expectedStart, int expectedEnd) throws IOException {
-        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_CRLF);
+        CompilationUnit cu = parser.parseResource(RESOURCE_PATH_STRING_CRLF);
         assertMethodInExpectedLines(cu, name, expectedStart, expectedEnd);
     }
 
     @ParameterizedTest
     @MethodSource("arguments_original")
     public void method_original_lf(String name, int expectedStart, int expectedEnd) throws IOException {
-        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_LF);
+        CompilationUnit cu = parser.parseResource(RESOURCE_PATH_STRING_LF);
         assertMethodInExpectedLines(cu, name, expectedStart, expectedEnd);
     }
 
     @ParameterizedTest
     @MethodSource("arguments_groovy_original")
     public void method_groovy_original(String name, int expectedStart, int expectedEnd) throws IOException {
-        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_GROOVY_ORIGINAL);
+        CompilationUnit cu = parser.parseResource(RESOURCE_PATH_GROOVY_ORIGINAL);
         assertMethodInExpectedLines(cu, name, expectedStart, expectedEnd);
     }
 }

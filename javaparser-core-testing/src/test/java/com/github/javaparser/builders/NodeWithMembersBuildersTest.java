@@ -21,10 +21,11 @@
 
 package com.github.javaparser.builders;
 
-import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -33,6 +34,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class NodeWithMembersBuildersTest {
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
     private final CompilationUnit cu = new CompilationUnit();
     private final ClassOrInterfaceDeclaration classDeclaration = cu.addClass("test");
 
@@ -97,8 +99,8 @@ class NodeWithMembersBuildersTest {
     void testGetMethodsWithParameterTypes() {
         MethodDeclaration mFoo = classDeclaration.addMethod("foo", PUBLIC); // foo()
         MethodDeclaration mFooInt = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "i"); // foo(int)
-        ClassOrInterfaceType type = parseClassOrInterfaceType("List");
-        type.setTypeArguments(parseClassOrInterfaceType("String"));
+        ClassOrInterfaceType type = parser.parseClassOrInterfaceType("List");
+        type.setTypeArguments(parser.parseClassOrInterfaceType("String"));
         MethodDeclaration mFooIntList = classDeclaration
                 .addMethod("foo", PUBLIC)
                 .addParameter(int.class, "i")
@@ -161,8 +163,8 @@ class NodeWithMembersBuildersTest {
     void testGetConstructorsWithParameterTypes() {
         ConstructorDeclaration c = classDeclaration.addConstructor(PUBLIC); // Foo()
         ConstructorDeclaration cInt = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "i"); // Foo(int)
-        ClassOrInterfaceType type = parseClassOrInterfaceType("List");
-        type.setTypeArguments(parseClassOrInterfaceType("String"));
+        ClassOrInterfaceType type = parser.parseClassOrInterfaceType("List");
+        type.setTypeArguments(parser.parseClassOrInterfaceType("String"));
         ConstructorDeclaration cIntList = classDeclaration
                 .addConstructor(PUBLIC)
                 .addParameter(int.class, "i")
@@ -229,7 +231,7 @@ class NodeWithMembersBuildersTest {
     void testAddPrivateFieldWithType() {
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
-        classOrInterfaceDeclaration.addPrivateField(parseType("java.lang.String"), "name");
+        classOrInterfaceDeclaration.addPrivateField(parser.parseType("java.lang.String"), "name");
 
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -247,7 +249,7 @@ class NodeWithMembersBuildersTest {
     void testAddPublicFieldWithType() {
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
-        classOrInterfaceDeclaration.addPublicField(parseType("java.lang.String"), "name");
+        classOrInterfaceDeclaration.addPublicField(parser.parseType("java.lang.String"), "name");
 
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -265,7 +267,7 @@ class NodeWithMembersBuildersTest {
     void testAddProtectedFieldWithType() {
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
-        classOrInterfaceDeclaration.addProtectedField(parseType("java.lang.String"), "name");
+        classOrInterfaceDeclaration.addProtectedField(parser.parseType("java.lang.String"), "name");
 
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
@@ -285,7 +287,7 @@ class NodeWithMembersBuildersTest {
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
         classOrInterfaceDeclaration.addFieldWithInitializer(
-                "java.lang.String", "name", parseExpression("John"), PUBLIC);
+                "java.lang.String", "name", parser.parseExpression("John"), PUBLIC);
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
@@ -306,7 +308,7 @@ class NodeWithMembersBuildersTest {
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
         classOrInterfaceDeclaration.addFieldWithInitializer(
-                List.class, "skills", parseExpression("new ArrayList()"), PUBLIC);
+                List.class, "skills", parser.parseExpression("new ArrayList()"), PUBLIC);
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 

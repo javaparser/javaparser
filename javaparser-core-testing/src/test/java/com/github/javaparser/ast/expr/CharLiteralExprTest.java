@@ -22,42 +22,46 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.Test;
 
 class CharLiteralExprTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void parseSimpleChar() {
-        CharLiteralExpr c = parseExpression("'a'");
+        CharLiteralExpr c = parser.parseExpression("'a'");
         assertEquals("a", c.getValue());
     }
 
     @Test
     void parseSimpleEscape() {
-        CharLiteralExpr c = parseExpression("'\\t'");
+        CharLiteralExpr c = parser.parseExpression("'\\t'");
         assertEquals("\\t", c.getValue());
     }
 
     @Test
     void parseUnicode() {
-        CharLiteralExpr c = parseExpression("'Ω'");
+        CharLiteralExpr c = parser.parseExpression("'Ω'");
         assertEquals("Ω", c.getValue());
     }
 
     @Test
     void parseNumericEscape() {
-        CharLiteralExpr c = parseExpression("'\\177'");
+        CharLiteralExpr c = parser.parseExpression("'\\177'");
         assertEquals("\\177", c.getValue());
     }
 
     @Test
     void parseUnicodeEscape() {
-        CharLiteralExpr c = parseExpression("'\\u03a9'");
+        CharLiteralExpr c = parser.parseExpression("'\\u03a9'");
         assertEquals("\\u03a9", c.getValue());
     }
 
