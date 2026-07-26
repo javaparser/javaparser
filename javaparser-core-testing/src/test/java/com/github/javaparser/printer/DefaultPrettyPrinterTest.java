@@ -24,7 +24,6 @@ package com.github.javaparser.printer;
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -66,12 +65,12 @@ class DefaultPrettyPrinterTest {
     }
 
     private String prettyPrintField(String code) {
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parserAdapter.parse(code);
         return getDefaultPrinter().print(cu.findFirst(FieldDeclaration.class).get());
     }
 
     private String prettyPrintVar(String code) {
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parserAdapter.parse(code);
         return getDefaultPrinter()
                 .print(cu.findAll(VariableDeclarationExpr.class).get(0));
     }
@@ -116,7 +115,7 @@ class DefaultPrettyPrinterTest {
 
     @Disabled
     private String prettyPrintConfigurable(String code) {
-        CompilationUnit cu = parse(code);
+        CompilationUnit cu = parserAdapter.parse(code);
         return getDefaultPrinter()
                 .print(cu.findFirst(ClassOrInterfaceDeclaration.class).get().getName());
     }
@@ -151,7 +150,7 @@ class DefaultPrettyPrinterTest {
                 + EOL + "}"
                 + EOL + "";
 
-        assertEquals(expected, getDefaultPrinter(configuration).print(parse(code)));
+        assertEquals(expected, getDefaultPrinter(configuration).print(parserAdapter.parse(code)));
     }
 
     @Test
@@ -171,7 +170,7 @@ class DefaultPrettyPrinterTest {
                 + EOL + "}"
                 + EOL + "";
 
-        assertEquals(expected, getDefaultPrinter(configuration).print(parse(code)));
+        assertEquals(expected, getDefaultPrinter(configuration).print(parserAdapter.parse(code)));
     }
 
     @Test
@@ -198,7 +197,7 @@ class DefaultPrettyPrinterTest {
                 + EOL + "}"
                 + EOL + "";
 
-        String printed = getDefaultPrinter(configuration).print(parse(code));
+        String printed = getDefaultPrinter(configuration).print(parserAdapter.parse(code));
 
         assertEquals(expected, printed);
     }
@@ -222,25 +221,25 @@ class DefaultPrettyPrinterTest {
                 + EOL + "}"
                 + EOL + "";
 
-        assertEquals(expected, getDefaultPrinter(configuration).print(parse(code)));
+        assertEquals(expected, getDefaultPrinter(configuration).print(parserAdapter.parse(code)));
     }
 
     @Test
     void enumConstantsHorizontally() {
-        CompilationUnit cu = parse("enum X{A, B, C, D, E}");
+        CompilationUnit cu = parserAdapter.parse("enum X{A, B, C, D, E}");
         assertEqualsStringIgnoringEol("enum X {\n\n    A, B, C, D, E\n}\n", new DefaultPrettyPrinter().print(cu));
     }
 
     @Test
     void enumConstantsVertically() {
-        CompilationUnit cu = parse("enum X{A, B, C, D, E, F}");
+        CompilationUnit cu = parserAdapter.parse("enum X{A, B, C, D, E, F}");
         assertEqualsStringIgnoringEol(
                 "enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new DefaultPrettyPrinter().print(cu));
     }
 
     @Test
     void printingInconsistentVariables() {
-        FieldDeclaration fieldDeclaration = parseBodyDeclaration("int a, b;").asFieldDeclaration();
+        FieldDeclaration fieldDeclaration = parserAdapter.parseBodyDeclaration("int a, b;").asFieldDeclaration();
 
         assertEquals("int a, b;", fieldDeclaration.toString());
 
@@ -256,7 +255,7 @@ class DefaultPrettyPrinterTest {
     @Test
     void prettyAlignMethodCallChainsIndentsArgumentsWithBlocksCorrectly() {
 
-        CompilationUnit cu = parse(
+        CompilationUnit cu = parserAdapter.parse(
                 "class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
 
         Indentation indentation = new Indentation(IndentType.TABS_WITH_SPACE_ALIGN, 1);
@@ -304,7 +303,7 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void noChainsIndentsInIf() {
-        Statement cu = parseStatement("if (x.y().z()) { boo().baa().bee(); }");
+        Statement cu = parserAdapter.parseStatement("if (x.y().z()) { boo().baa().bee(); }");
 
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
@@ -315,7 +314,7 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void noChainsIndentsInFor() {
-        Statement cu = parseStatement("for(int x=1; x.y().z(); x.z().z()) { boo().baa().bee(); }");
+        Statement cu = parserAdapter.parseStatement("for(int x=1; x.y().z(); x.z().z()) { boo().baa().bee(); }");
 
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
@@ -328,7 +327,7 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void noChainsIndentsInWhile() {
-        Statement cu = parseStatement("while(x.y().z()) { boo().baa().bee(); }");
+        Statement cu = parserAdapter.parseStatement("while(x.y().z()) { boo().baa().bee(); }");
 
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
@@ -342,7 +341,8 @@ class DefaultPrettyPrinterTest {
     void indentWithTabsAsFarAsPossible() {
 
         CompilationUnit cu =
-                parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
+                parserAdapter.parse(
+                        "class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
 
         Indentation indentation = new Indentation(IndentType.TABS, 1);
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
@@ -371,7 +371,7 @@ class DefaultPrettyPrinterTest {
     @Test
     void indentWithTabsAlignWithSpaces() {
 
-        CompilationUnit cu = parse(
+        CompilationUnit cu = parserAdapter.parse(
                 "class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
 
         Indentation indentation = new Indentation(IndentType.TABS_WITH_SPACE_ALIGN, 1);
@@ -530,7 +530,7 @@ class DefaultPrettyPrinterTest {
     @Test
     public void testIssue2578() {
         String code = "class C{\n" + "  //orphan\n" + "  /*orphan*/\n" + "}";
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = parserAdapter.parse(code);
         TypeDeclaration td = cu.findFirst(TypeDeclaration.class).get();
         assertEquals(2, td.getAllContainedComments().size());
         td.setPublic(true); // --- simple AST change -----
@@ -548,9 +548,7 @@ class DefaultPrettyPrinterTest {
                 + " }\n"
                 + "}";
 
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = parserAdapter.parse(code);
 
         // default indent is 4 spaces
         assertTrue(cu.toString().contains("        // TODO"));
@@ -608,9 +606,7 @@ class DefaultPrettyPrinterTest {
                 + "    }\n"
                 + "}\n";
 
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = parserAdapter.parse(code);
 
         assertEqualsStringIgnoringEol(expected, cu.toString());
     }
