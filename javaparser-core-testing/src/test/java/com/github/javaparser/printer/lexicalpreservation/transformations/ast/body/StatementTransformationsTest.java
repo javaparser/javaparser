@@ -42,6 +42,11 @@ import org.junit.jupiter.api.*;
  */
 class StatementTransformationsTest extends AbstractLexicalPreservingTest {
 
+    // Most tests in this class parse recent-language constructs (arrow switches since Java 14, and type/record/unnamed
+    // patterns in switch since Java 21+), which the default level (JAVA_11) cannot parse. Configuring the parser
+    // class-wide via @BeforeEach is therefore the right choice here. Had only a few tests needed it, we would instead
+    // set the level inline in those specific tests (as AnnotationMemberDeclarationTransformationsTest does) rather than
+    // raise the level for the whole class.
     @BeforeEach
     public void setLanguageLevel() {
         parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
