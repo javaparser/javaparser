@@ -35,18 +35,12 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.utils.LineSeparator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
  * Transforming AnnotationMemberDeclaration and verifying the LexicalPreservation works as expected.
  */
 class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
-
-    @BeforeEach
-    public void setLanguageLevel() {
-        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
-    }
 
     protected AnnotationMemberDeclaration consider(String code) {
         considerCode("@interface AD { " + code + " }");
@@ -186,6 +180,8 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void modifyingRecord() {
+        // Records nested in an annotation type require a language level >= Java 16 (the default is JAVA_11).
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
         considerCode("@interface AD { record Bar(String s) {} }");
         RecordDeclaration recordDecl =
                 cu.getAnnotationDeclarationByName("AD").get().getMember(0).asRecordDeclaration();
