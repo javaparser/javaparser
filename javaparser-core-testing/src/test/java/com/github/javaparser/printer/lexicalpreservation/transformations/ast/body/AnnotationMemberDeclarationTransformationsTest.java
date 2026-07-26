@@ -27,7 +27,6 @@ import static com.github.javaparser.ast.Modifier.createModifierList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.RecordDeclaration;
@@ -36,7 +35,6 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.utils.LineSeparator;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,17 +43,9 @@ import org.junit.jupiter.api.Test;
  */
 class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
-    private static final ParserConfiguration.LanguageLevel storedLanguageLevel =
-            StaticJavaParser.getParserConfiguration().getLanguageLevel();
-
     @BeforeEach
     public void setLanguageLevel() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
-    }
-
-    @AfterEach
-    public void resetLanguageLevel() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(storedLanguageLevel);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
     }
 
     protected AnnotationMemberDeclaration consider(String code) {

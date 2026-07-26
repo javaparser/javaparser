@@ -2,6 +2,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -17,9 +18,11 @@ import org.junit.jupiter.api.Test;
  */
 class TokenOwnerDetectorTest {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     // Helper method to parse and find nodes
     private CompilationUnit parse(String code) {
-        return StaticJavaParser.parse(code);
+        return parser.parse(code);
     }
 
     // =========================================================================
@@ -160,8 +163,8 @@ class TokenOwnerDetectorTest {
 
     @Test
     void typeInRecordImplementsClause() {
-        StaticJavaParser.getConfiguration().setLanguageLevel(LanguageLevel.BLEEDING_EDGE);
-        CompilationUnit cu = StaticJavaParser.parse("record X() implements List<String> {}");
+        parser.getParserConfiguration().setLanguageLevel(LanguageLevel.BLEEDING_EDGE);
+        CompilationUnit cu = parser.parse("record X() implements List<String> {}");
         ClassOrInterfaceType type = cu.findFirst(
                         ClassOrInterfaceType.class, t -> t.getNameAsString().equals("List"))
                 .get();
@@ -213,8 +216,8 @@ class TokenOwnerDetectorTest {
 
     @Test
     void typeInRecordPatternExpression() {
-        StaticJavaParser.getConfiguration().setLanguageLevel(LanguageLevel.BLEEDING_EDGE);
-        CompilationUnit cu = StaticJavaParser.parse("class X { void m() { switch (a) { case Box(String s) -> {} } } }");
+        parser.getParserConfiguration().setLanguageLevel(LanguageLevel.BLEEDING_EDGE);
+        CompilationUnit cu = parser.parse("class X { void m() { switch (a) { case Box(String s) -> {} } } }");
         ClassOrInterfaceType type = cu.findFirst(
                         ClassOrInterfaceType.class, t -> t.getNameAsString().equals("Box"))
                 .get();

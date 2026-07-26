@@ -22,7 +22,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -109,7 +108,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         BlockStmt body = method.getBody().get();
 
         // Add statement (should be positioned correctly relative to comment)
-        ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
+        ExpressionStmt newStmt = parser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(0, newStmt);
 
         String result = print();
@@ -134,7 +133,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         BlockStmt body = method.getBody().get();
 
         // Add statement after line with trailing comment
-        ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
+        ExpressionStmt newStmt = parser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
         String expected = "class X {\n" + "    void method() {\n"
@@ -158,7 +157,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         BlockStmt body = method.getBody().get();
 
         // Add statement (should skip newline and add with proper indentation)
-        ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
+        ExpressionStmt newStmt = parser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
         String result = print();
@@ -180,7 +179,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         BlockStmt body = method.getBody().get();
 
         // Add statement at beginning (special case)
-        ExpressionStmt newStmt = StaticJavaParser.parseStatement("int x = 1;").asExpressionStmt();
+        ExpressionStmt newStmt = parser.parseStatement("int x = 1;").asExpressionStmt();
         body.getStatements().add(0, newStmt);
 
         String expected = "class X {\n" + "    void method() {\n"
@@ -200,7 +199,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         BlockStmt body = method.getBody().get();
 
         // Add statement (should handle multiple newlines)
-        ExpressionStmt newStmt = StaticJavaParser.parseStatement("int x = 1;").asExpressionStmt();
+        ExpressionStmt newStmt = parser.parseStatement("int x = 1;").asExpressionStmt();
         body.getStatements().add(0, newStmt);
 
         String result = print();
@@ -243,7 +242,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         BlockStmt body = method.getBody().get();
 
         // Add statement (creates newline)
-        ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
+        ExpressionStmt newStmt = parser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
         String result = print();
@@ -266,7 +265,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
         BlockStmt body = method.getBody().get();
 
         // Add statement (should handle closing brace properly)
-        ExpressionStmt newStmt = StaticJavaParser.parseStatement("int y = 2;").asExpressionStmt();
+        ExpressionStmt newStmt = parser.parseStatement("int y = 2;").asExpressionStmt();
         body.getStatements().add(newStmt);
 
         String result = print();
@@ -289,7 +288,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
 
         // Add nested if statements
         IfStmt ifStmt =
-                StaticJavaParser.parseStatement("if (true) { int x = 1; }").asIfStmt();
+                parser.parseStatement("if (true) { int x = 1; }").asIfStmt();
         body.addStatement(ifStmt);
 
         String result = print();
@@ -313,7 +312,7 @@ class DifferenceApplyAddedRulesCompleteTest extends AbstractLexicalPreservingTes
 
         // Add nested if inside existing if
         IfStmt nestedIf =
-                StaticJavaParser.parseStatement("if (false) { int x = 1; }").asIfStmt();
+                parser.parseStatement("if (false) { int x = 1; }").asIfStmt();
         thenBlock.addStatement(nestedIf);
 
         String result = print();

@@ -22,7 +22,6 @@
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast;
 
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
@@ -37,7 +36,7 @@ class CompilationUnitTransformationsTest extends AbstractLexicalPreservingTest {
 
     @BeforeEach
     void initParser() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
     }
 
     // packageDeclaration

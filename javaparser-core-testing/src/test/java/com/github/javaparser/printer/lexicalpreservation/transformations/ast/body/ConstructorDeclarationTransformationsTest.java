@@ -26,7 +26,6 @@ import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -131,7 +130,7 @@ class ConstructorDeclarationTransformationsTest extends AbstractLexicalPreservin
 
     @Test
     void modifyingConstructorInvocationAsSecondStatement() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         ConstructorDeclaration cd = consider("public A() { int x; super(); }");
         cd.getBody()
                 .getStatements()
@@ -143,7 +142,7 @@ class ConstructorDeclarationTransformationsTest extends AbstractLexicalPreservin
 
     @Test
     void removingConstructorInvocationAsSecondStatement() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_25);
         ConstructorDeclaration cd = consider("public A() { int x; super(); }");
         cd.getBody().getStatements().remove(1);
         assertTransformedToString("public A() { int x; }", cd);

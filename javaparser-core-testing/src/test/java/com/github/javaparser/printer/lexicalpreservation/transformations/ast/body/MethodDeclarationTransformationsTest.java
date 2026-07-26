@@ -21,8 +21,6 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
@@ -541,14 +539,14 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
     @Test
     public void parseAndPrintAnonymousClassExpression() {
-        Expression expression = parseExpression("new Object() {" + LineSeparator.SYSTEM + "}");
+        Expression expression = parser.parseExpression("new Object() {" + LineSeparator.SYSTEM + "}");
         String expected = "new Object() {" + LineSeparator.SYSTEM + "}";
         assertTransformedToString(expected, expression);
     }
 
     @Test
     public void parseAndPrintAnonymousClassStatement() {
-        Statement statement = parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM + "};");
+        Statement statement = parser.parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM + "};");
         String expected = "Object anonymous = new Object() {" + LineSeparator.SYSTEM + "};";
         assertTransformedToString(expected, statement);
     }
@@ -557,7 +555,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     public void replaceBodyShouldNotBreakAnonymousClasses() {
         MethodDeclaration it = consider("public void method() { }");
         it.getBody().ifPresent(body -> {
-            Statement statement = parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM + "};");
+            Statement statement = parser.parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM + "};");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
             body.setStatements(statements);
