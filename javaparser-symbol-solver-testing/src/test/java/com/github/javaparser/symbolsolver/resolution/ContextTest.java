@@ -320,7 +320,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ResolvedType ref = javaParserFacade.getType(refToT);
 
-        assertEquals("? super java.lang.String", ref.describe());
+        assertEquals("java.lang.String", ref.describe());
     }
 
     @Test
@@ -564,7 +564,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
         ResolvedType typeOfT = JavaParserFacade.get(typeSolver).getType(referenceToT);
 
-        assertEquals("? super com.github.javaparser.ast.body.TypeDeclaration", typeOfT.describe());
+        assertEquals("com.github.javaparser.ast.body.TypeDeclaration", typeOfT.describe());
     }
 
     @Test

@@ -28,9 +28,15 @@ public class ResolvedLambdaConstraintType implements ResolvedType {
         this.bound = bound;
     }
 
+    /**
+     * The bound is the type the lambda parameter was inferred to, so that is what callers are
+     * shown. Rendering it as {@code "? super " + bound} used to suggest a lower-bounded wildcard,
+     * but no wildcard is involved: when the functional interface method parameter is one,
+     * {@code LambdaExprContext} already stores its bounded type here.
+     */
     @Override
     public String describe() {
-        return "? super " + bound.describe();
+        return bound.describe();
     }
 
     public ResolvedType getBound() {
