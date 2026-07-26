@@ -588,4 +588,32 @@ class LambdaResolutionTest extends AbstractResolutionTest {
 
         assertEquals("java.lang.String", vExpr.calculateResolvedType().describe());
     }
+
+    @Test
+    void lambdaParameterOfWildcardBoundedFunctionalInterfaceKeepsANonFinalBound() {
+        String source = "import java.util.function.Consumer;\n"
+                + "class Test {\n"
+                + "    public void example(Consumer<? super Number> consumer) {\n"
+                + "        consumer.accept(1);\n"
+                + "    }\n"
+                + "    public void call() {\n"
+                + "        example(n -> n.intValue());\n"
+                + "    }\n"
+                + "}";
+
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+
+        LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+        assertEquals("java.lang.Number", lambda.getParameter(0).resolve().describeType());
+
+        MethodCallExpr intValueCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("intValue"))
+                .findFirst()
+                .get();
+        Expression nExpr = intValueCall.getScope().get();
+
+        assertEquals("java.lang.Number", nExpr.calculateResolvedType().describe());
+    }
 }
