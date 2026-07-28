@@ -156,44 +156,28 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                                             String outerMethodName = outerCall.getNameAsString();
                                             int outerArgCount =
                                                     outerCall.getArguments().size();
-                                            final int fOuterArgPos = outerArgPos;
-                                            final ResolvedType fOuterScopeType = outerScopeType;
-                                            // getTypeDeclaration().getAllMethods() returns MethodUsage objects
-                                            // whose parameter types still carry the type declaration's own
-                                            // type parameters (e.g. Stream<T_stream>), not yet substituted
-                                            // with the concrete arguments (e.g. Stream<A>). We apply
-                                            // useThisTypeParametersOnTheGivenType() below to perform that
-                                            // substitution using the outer scope's concrete type arguments.
-                                            outerScopeType
+                                            // getAllMethodsAsUsages() already substitutes the outer scope's type
+                                            // arguments into each usage (e.g. Stream<A>.sorted expects
+                                            // Comparator<? super A>, not Comparator<? super T_stream>), so no
+                                            // consumer-side substitution is needed here (see #5081).
+                                            for (MethodUsage mu : outerScopeType
                                                     .asReferenceType()
-                                                    .getTypeDeclaration()
-                                                    .ifPresent(outerDecl -> {
-                                                        for (MethodUsage mu : outerDecl.getAllMethods()) {
-                                                            if (mu.getName().equals(outerMethodName)
-                                                                    && mu.getNoParams() == outerArgCount) {
-                                                                // Raw parameter type from the type declaration,
-                                                                // e.g. `Comparator<? super T_stream>` for sorted.
-                                                                ResolvedType rawType =
-                                                                        MethodResolutionLogic
-                                                                                .getMethodUsageExplicitAndVariadicParameterType(
-                                                                                        mu, fOuterArgPos);
-                                                                // Substitute the outer scope's concrete type
-                                                                // arguments (e.g. T_stream → A for Stream<A>),
-                                                                // yielding the expected type `Comparator<? super A>`.
-                                                                ResolvedType expectedType = fOuterScopeType
-                                                                        .asReferenceType()
-                                                                        .useThisTypeParametersOnTheGivenType(rawType);
-                                                                // Register the pair in the inference context:
-                                                                //   comparing's return type `Comparator<T>`
-                                                                //   ↔ expected type `Comparator<? super A>`
-                                                                // This lets the engine resolve T → `? super A`,
-                                                                // whose bound (A) is the concrete element type.
-                                                                inferenceContext.addPair(
-                                                                        methodUsage.returnType(), expectedType);
-                                                                break;
-                                                            }
-                                                        }
-                                                    });
+                                                    .getAllMethodsAsUsages()) {
+                                                if (mu.getName().equals(outerMethodName)
+                                                        && mu.getNoParams() == outerArgCount) {
+                                                    ResolvedType expectedType =
+                                                            MethodResolutionLogic
+                                                                    .getMethodUsageExplicitAndVariadicParameterType(
+                                                                            mu, outerArgPos);
+                                                    // Register the pair in the inference context:
+                                                    //   comparing's return type `Comparator<T>`
+                                                    //   ↔ expected type `Comparator<? super A>`
+                                                    // This lets the engine resolve T → `? super A`,
+                                                    // whose bound (A) is the concrete element type.
+                                                    inferenceContext.addPair(methodUsage.returnType(), expectedType);
+                                                    break;
+                                                }
+                                            }
                                         }
                                     }
                                 }
