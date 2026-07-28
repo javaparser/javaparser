@@ -474,8 +474,17 @@ public class JavaParserFacade {
         // "The class or interface determined by compile-time step 1 (§15.12.1) is searched
         // for all member methods that are potentially applicable to this method invocation."
         // Filter methods by name first.
-        List<MethodUsage> candidateMethods =
-                allMethods.stream().filter(m -> m.getName().equals(methodName)).collect(Collectors.toList());
+        //
+        // getAllMethods() returns usages typed against the raw type declaration, so a method such as
+        // Class<T>::cast still returns the type variable T. We substitute the scope type's arguments
+        // (e.g. T -> Sub for Class<Sub>) using the same primitive as LambdaExprContext, so that poly
+        // inference for pipelines like list.stream().map(Sub.class::cast) can refine Stream<Base> to
+        // Stream<Sub> and the following method reference resolves (see issue #4989).
+        ResolvedReferenceType scopeType = typeOfScope.asReferenceType();
+        List<MethodUsage> candidateMethods = allMethods.stream()
+                .filter(m -> m.getName().equals(methodName))
+                .map(m -> substituteScopeTypeParameters(m, scopeType))
+                .collect(Collectors.toList());
 
         if (candidateMethods.isEmpty()) {
             throw new UnsolvedSymbolException("Cannot find method '" + methodName + "' in type " + typeOfScope);
@@ -615,6 +624,30 @@ public class JavaParserFacade {
                         + paramTypes + ". Candidates found: "
                         + candidateMethods.size() + " method(s) named '"
                         + methodName + "' in type " + typeOfScope);
+    }
+
+    /**
+     * Applies {@code scopeType}'s type arguments to {@code methodUsage}'s parameter, return and exception
+     * types, mirroring what {@link ResolvedReferenceType#getFieldType(String)} does for fields.
+     *
+     * <p>Methods obtained via {@link ResolvedReferenceTypeDeclaration#getAllMethods()} are typed against the
+     * raw type declaration; for a parameterized scope such as {@code Class<Sub>} the return type of
+     * {@code cast} is still the type variable {@code T}. Substitution relies on
+     * {@link ResolvedReferenceType#useThisTypeParametersOnTheGivenType(ResolvedType)}, which only replaces
+     * type variables declared on the type (not on the method) and resolves them against ancestors.
+     */
+    private static MethodUsage substituteScopeTypeParameters(MethodUsage methodUsage, ResolvedReferenceType scopeType) {
+        MethodUsage result = methodUsage;
+        List<ResolvedType> paramTypes = result.getParamTypes();
+        for (int i = 0; i < paramTypes.size(); i++) {
+            result = result.replaceParamType(i, scopeType.useThisTypeParametersOnTheGivenType(paramTypes.get(i)));
+        }
+        List<ResolvedType> exceptionTypes = result.exceptionTypes();
+        for (int i = 0; i < exceptionTypes.size(); i++) {
+            result =
+                    result.replaceExceptionType(i, scopeType.useThisTypeParametersOnTheGivenType(exceptionTypes.get(i)));
+        }
+        return result.replaceReturnType(scopeType.useThisTypeParametersOnTheGivenType(result.returnType()));
     }
 
     protected ResolvedType getBinaryTypeConcrete(
