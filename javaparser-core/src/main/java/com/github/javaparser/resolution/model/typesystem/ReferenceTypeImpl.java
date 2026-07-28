@@ -158,15 +158,33 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     @Override
     public Set<MethodUsage> getDeclaredMethods() {
-        // TODO replace variables
         Set<MethodUsage> methods = new HashSet<>();
         getTypeDeclaration().ifPresent(referenceTypeDeclaration -> {
             for (ResolvedMethodDeclaration methodDeclaration : referenceTypeDeclaration.getDeclaredMethods()) {
-                MethodUsage methodUsage = new MethodUsage(methodDeclaration);
-                methods.add(methodUsage);
+                methods.add(substituteTypeParameters(new MethodUsage(methodDeclaration)));
             }
         });
         return methods;
+    }
+
+    /**
+     * Applies this type's type arguments to the given method usage's parameter, return and exception
+     * types, mirroring what {@link #getFieldType(String)} does for fields. For a parameterized type such
+     * as {@code List<String>}, the usage of {@code get(int)} thus reports {@code String} rather than the
+     * raw type variable {@code E}. Only type variables declared on the type are replaced (not those
+     * declared on the method), and they are resolved against ancestors (see issue #5080).
+     */
+    private MethodUsage substituteTypeParameters(MethodUsage methodUsage) {
+        MethodUsage result = methodUsage;
+        List<ResolvedType> paramTypes = result.getParamTypes();
+        for (int i = 0; i < paramTypes.size(); i++) {
+            result = result.replaceParamType(i, useThisTypeParametersOnTheGivenType(paramTypes.get(i)));
+        }
+        List<ResolvedType> exceptionTypes = result.exceptionTypes();
+        for (int i = 0; i < exceptionTypes.size(); i++) {
+            result = result.replaceExceptionType(i, useThisTypeParametersOnTheGivenType(exceptionTypes.get(i)));
+        }
+        return result.replaceReturnType(useThisTypeParametersOnTheGivenType(result.returnType()));
     }
 
     @Override
