@@ -644,8 +644,8 @@ public class JavaParserFacade {
         }
         List<ResolvedType> exceptionTypes = result.exceptionTypes();
         for (int i = 0; i < exceptionTypes.size(); i++) {
-            result =
-                    result.replaceExceptionType(i, scopeType.useThisTypeParametersOnTheGivenType(exceptionTypes.get(i)));
+            result = result.replaceExceptionType(
+                    i, scopeType.useThisTypeParametersOnTheGivenType(exceptionTypes.get(i)));
         }
         return result.replaceReturnType(scopeType.useThisTypeParametersOnTheGivenType(result.returnType()));
     }
