@@ -432,6 +432,41 @@ public abstract class ResolvedReferenceType
     }
 
     /**
+     * All methods available on this type — declared here and inherited — as {@link MethodUsage}s whose
+     * parameter, return and exception types carry this type's (and each ancestor's) type arguments. This is
+     * the {@link MethodUsage} counterpart of {@link #getAllMethods()} (which returns raw declarations) and
+     * the whole-hierarchy extension of {@link #getFieldType(String)}. Methods overridden further down the
+     * hierarchy shadow the inherited ones and are not duplicated.
+     */
+    public Set<MethodUsage> getAllMethodsAsUsages() {
+        Set<MethodUsage> methods = new HashSet<>();
+        Set<String> visitedSignatures = new HashSet<>();
+        // Methods declared on this type, already substituted with this type's own arguments.
+        for (MethodUsage methodUsage : getDeclaredMethods()) {
+            if (visitedSignatures.add(enhancedSignature(methodUsage))) {
+                methods.add(methodUsage);
+            }
+        }
+        // Inherited methods: getAllAncestors() expresses each ancestor's arguments in terms of this type,
+        // so ancestor.getDeclaredMethods() yields usages already substituted relative to this type.
+        for (ResolvedReferenceType ancestor : getAllAncestors()) {
+            for (MethodUsage methodUsage : ancestor.getDeclaredMethods()) {
+                if (visitedSignatures.add(enhancedSignature(methodUsage))) {
+                    methods.add(methodUsage);
+                }
+            }
+        }
+        return methods;
+    }
+
+    // Deduplication key used to drop overridden methods: the declared return type plus the (substituted)
+    // signature. Mirrors the key historically used by AbstractTypeDeclaration#getAllMethods.
+    private static String enhancedSignature(MethodUsage methodUsage) {
+        return String.format(
+                "%s %s", methodUsage.getDeclaration().getReturnType().describe(), methodUsage.getSignature());
+    }
+
+    /**
      * Fields which are visible to inheritors. They include all inherited fields which are visible to this
      * type plus all declared fields which are not private.
      */
