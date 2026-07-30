@@ -124,19 +124,17 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * In the example above, this method returns B,C,E,D
      */
     Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> depthFirstFunc = (rrtd) -> {
-        List<ResolvedReferenceType> ancestors = new ArrayList<>();
+        Set<ResolvedReferenceType> ancestors = new LinkedHashSet<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
             for (ResolvedReferenceType ancestor : rrtd.getAncestors()) {
                 ancestors.add(ancestor);
                 for (ResolvedReferenceType inheritedAncestor : ancestor.getAllAncestors()) {
-                    if (!ancestors.contains(inheritedAncestor)) {
-                        ancestors.add(inheritedAncestor);
-                    }
+                    ancestors.add(inheritedAncestor);
                 }
             }
         }
-        return ancestors;
+        return new ArrayList<>(ancestors);
     };
 
     /*
@@ -144,7 +142,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * In the example above, this method returns B,C,D,E
      */
     Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
-        List<ResolvedReferenceType> ancestors = new ArrayList<>();
+        Set<ResolvedReferenceType> ancestors = new LinkedHashSet<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
             // init direct ancestors
@@ -154,17 +152,15 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
                 ResolvedReferenceType queuedAncestor = queuedAncestors.removeFirst();
                 queuedAncestor.getTypeDeclaration().ifPresent(rtd -> new LinkedHashSet<>(
                                 queuedAncestor.getDirectAncestors())
-                        .stream().forEach(ancestor -> {
+                        .forEach(ancestor -> {
                             // add this ancestor to the queue (for a deferred search)
                             queuedAncestors.add(ancestor);
                             // add this ancestor to the list of ancestors
-                            if (!ancestors.contains(ancestor)) {
-                                ancestors.add(ancestor);
-                            }
+                            ancestors.add(ancestor);
                         }));
             }
         }
-        return ancestors;
+        return new ArrayList<>(ancestors);
     };
 
     // /
