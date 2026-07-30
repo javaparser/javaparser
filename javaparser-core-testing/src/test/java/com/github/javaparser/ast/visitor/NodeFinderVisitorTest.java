@@ -20,11 +20,12 @@
 
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -32,11 +33,13 @@ import org.junit.jupiter.api.Test;
 
 class NodeFinderVisitorTest {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     NodeFinderVisitor finder = new NodeFinderVisitor(NodeFinderVisitor.fConveringNode);
 
     @Test
     void testNoCoveringNode() {
-        CompilationUnit cu = parse("class X { }");
+        CompilationUnit cu = parser.parse("class X { }");
         Position position = new Position(0, 0);
         Range range = new Range(position, position);
         cu.accept(finder, range);
@@ -45,7 +48,7 @@ class NodeFinderVisitorTest {
 
     @Test
     void testClassOrInterfaceDeclarationIsCovering() {
-        CompilationUnit cu = parse("class X { }");
+        CompilationUnit cu = parser.parse("class X { }");
         ClassOrInterfaceDeclaration cid =
                 cu.findFirst(ClassOrInterfaceDeclaration.class).get();
         Range range = new Range(Position.HOME, Position.HOME);
@@ -55,7 +58,7 @@ class NodeFinderVisitorTest {
 
     @Test
     void testClassOrInterfaceDeclarationIsCovering2() {
-        CompilationUnit cu = parse("class X { }");
+        CompilationUnit cu = parser.parse("class X { }");
         ClassOrInterfaceDeclaration cid =
                 cu.findFirst(ClassOrInterfaceDeclaration.class).get();
         cu.accept(finder, range(1, 11));
@@ -64,7 +67,7 @@ class NodeFinderVisitorTest {
 
     @Test
     void testClassOrInterfaceDeclarationCovering() {
-        CompilationUnit cu = parse("class X {\n" + "  Boolean f;\n" + "}");
+        CompilationUnit cu = parser.parse("class X {\n" + "  Boolean f;\n" + "}");
 
         ClassOrInterfaceDeclaration cid =
                 cu.findFirst(ClassOrInterfaceDeclaration.class).get();
@@ -74,7 +77,7 @@ class NodeFinderVisitorTest {
 
     @Test
     void testNoCoveringOrCoveredNode2() {
-        CompilationUnit cu = parse("class X {\n" + "  void f() {\n" + "     int i = 0;\n" + "  }\n" + "}");
+        CompilationUnit cu = parser.parse("class X {\n" + "  void f() {\n" + "     int i = 0;\n" + "  }\n" + "}");
         MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
         cu.accept(finder, range(3, 11));
         System.out.println(finder.getSelectedNode().toString());

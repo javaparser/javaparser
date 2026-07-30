@@ -26,12 +26,14 @@ import org.junit.jupiter.api.Test;
 
 public class Issue1017Test {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test()
     void test() {
         String code = "class X{int x(){ a(1+1 -> 10);}}";
 
         Assertions.assertThrows(ParseProblemException.class, () -> {
-            CompilationUnit cu = StaticJavaParser.parse(code);
+            CompilationUnit cu = parser.parse(code);
         });
     }
 }

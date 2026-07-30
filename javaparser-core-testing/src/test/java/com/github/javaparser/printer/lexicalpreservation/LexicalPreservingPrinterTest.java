@@ -21,7 +21,6 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
@@ -30,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
@@ -979,7 +977,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 .get()
                 .getStatements()
                 .add(new ExpressionStmt(new VariableDeclarationExpr(new VariableDeclarator(
-                        parseClassOrInterfaceType("String"), "test2", new StringLiteralExpr("")))));
+                        parser.parseClassOrInterfaceType("String"), "test2", new StringLiteralExpr("")))));
         TestUtils.assertEqualsStringIgnoringEol(
                 "public void someMethod() {" + LineSeparator.SYSTEM
                         + "        String test = \"\";" + LineSeparator.SYSTEM
@@ -1338,14 +1336,14 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         considerExample("IndentOfInsertedCodeBlocks");
 
         IfStmt ifStmt = new IfStmt();
-        ifStmt.setCondition(StaticJavaParser.parseExpression("name.equals(\"foo\")"));
+        ifStmt.setCondition(parser.parseExpression("name.equals(\"foo\")"));
         BlockStmt blockStmt = new BlockStmt();
-        blockStmt.addStatement(StaticJavaParser.parseStatement("int i = 0;"));
-        blockStmt.addStatement(StaticJavaParser.parseStatement("System.out.println(i);"));
+        blockStmt.addStatement(parser.parseStatement("int i = 0;"));
+        blockStmt.addStatement(parser.parseStatement("System.out.println(i);"));
         blockStmt.addStatement(new IfStmt()
-                .setCondition(StaticJavaParser.parseExpression("i < 0"))
-                .setThenStmt(new BlockStmt().addStatement(StaticJavaParser.parseStatement("i = 0;"))));
-        blockStmt.addStatement(StaticJavaParser.parseStatement("new Object(){};"));
+                .setCondition(parser.parseExpression("i < 0"))
+                .setThenStmt(new BlockStmt().addStatement(parser.parseStatement("i = 0;"))));
+        blockStmt.addStatement(parser.parseStatement("new Object(){};"));
         ifStmt.setThenStmt(blockStmt);
         ifStmt.setElseStmt(new BlockStmt());
 
@@ -1826,7 +1824,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     @Test
     void checkLPPIsAvailableOnNode() {
         String code = "class A {void foo(int p1, float p2) { }}";
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = parser.parse(code);
         MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
         LexicalPreservingPrinter.setup(md);
 
@@ -1866,16 +1864,16 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     @Test
     void checkLPPIsDefaultPrinter() {
         String code = "class A {void foo(int p1, float p2) { }}";
-        StaticJavaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        parser.getParserConfiguration().setLexicalPreservationEnabled(true);
+        CompilationUnit cu = parser.parse(code);
         assertEquals(code, cu.toString());
     }
 
     @Test
     void checkLegacyLPPExecution() {
         String code = "class A {void foo(int p1, float p2) { }}";
-        StaticJavaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        parser.getParserConfiguration().setLexicalPreservationEnabled(true);
+        CompilationUnit cu = parser.parse(code);
         LexicalPreservingPrinter.setup(cu);
         assertEquals(cu.toString(), LexicalPreservingPrinter.print(cu));
     }
@@ -1883,7 +1881,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     @Test
     void checkLPPIsNotDefaultPrinter() {
         String code = "class A {void foo(int p1, float p2) { }}";
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = parser.parse(code);
         assertNotEquals(code, cu.toString());
     }
 
@@ -1915,8 +1913,8 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // that, combined with issue #4781, caused toString() to re-enter LPP during PrimitiveType init)
     @Test
     void issue4781_addIntFieldWithLPPAsDefaultPrinterPreservesTypeKeyword() {
-        StaticJavaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
-        CompilationUnit cu = StaticJavaParser.parse("class Foo {}");
+        parser.getParserConfiguration().setLexicalPreservationEnabled(true);
+        CompilationUnit cu = parser.parse("class Foo {}");
         cu.getClassByName("Foo").get().addField(PrimitiveType.intType(), "foo");
         String printed = LexicalPreservingPrinter.print(cu);
         assertTrue(printed.contains("int foo"), "Type keyword 'int' missing — got: " + printed);

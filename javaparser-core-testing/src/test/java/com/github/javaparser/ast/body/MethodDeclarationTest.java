@@ -21,30 +21,33 @@
 
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Test;
 
 class MethodDeclarationTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void annotationsAllowedAfterGenericsAndBeforeReturnType() {
-        parseBodyDeclaration("public <T> @Abc String method() {return null;}");
+        parser.parseBodyDeclaration("public <T> @Abc String method() {return null;}");
     }
 
     @Test
     void annotationsAllowedBeforeGenerics() {
-        parseBodyDeclaration("public @Abc <T> String method() {return null;}");
+        parser.parseBodyDeclaration("public @Abc <T> String method() {return null;}");
     }
 
     @Test
     void explicitReceiverParameters1() {
-        MethodDeclaration method = parseBodyDeclaration(
+        MethodDeclaration method = parser.parseBodyDeclaration(
                         "void InnerInner(@mypackage.Anno Source.@mypackage.Anno Inner Source.Inner.this) { }")
                 .asMethodDeclaration();
         assertEquals("Source.Inner.this", method.getReceiverParameter().get().getNameAsString());
@@ -52,83 +55,92 @@ class MethodDeclarationTest {
 
     @Test
     void explicitReceiverParameters2() {
-        MethodDeclaration method = parseBodyDeclaration("void x(A this) { }").asMethodDeclaration();
+        MethodDeclaration method =
+                parser.parseBodyDeclaration("void x(A this) { }").asMethodDeclaration();
         assertEquals("this", method.getReceiverParameter().get().getNameAsString());
     }
 
     @Test
     void explicitReceiverParameters3() {
-        MethodDeclaration method = parseBodyDeclaration("void x(A that) { }").asMethodDeclaration();
+        MethodDeclaration method =
+                parser.parseBodyDeclaration("void x(A that) { }").asMethodDeclaration();
         assertFalse(method.getReceiverParameter().isPresent());
     }
 
     @Test
     void signaturesEqual() {
-        MethodDeclaration method1 = parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
-        MethodDeclaration method2 = parseBodyDeclaration("int x(String z);").asMethodDeclaration();
+        MethodDeclaration method1 =
+                parser.parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
+        MethodDeclaration method2 =
+                parser.parseBodyDeclaration("int x(String z);").asMethodDeclaration();
         assertEquals(method1.getSignature(), method2.getSignature());
     }
 
     @Test
     void signaturesEqualWhenGenericsDiffer() {
         MethodDeclaration method1 =
-                parseBodyDeclaration("void x(List<Long> a) { }").asMethodDeclaration();
+                parser.parseBodyDeclaration("void x(List<Long> a) { }").asMethodDeclaration();
         MethodDeclaration method2 =
-                parseBodyDeclaration("void x(List<Integer> a) { }").asMethodDeclaration();
+                parser.parseBodyDeclaration("void x(List<Integer> a) { }").asMethodDeclaration();
         assertEquals(method1.getSignature(), method2.getSignature());
     }
 
     @Test
     void signaturesEqualWhenAnnotationsDiffer() {
         MethodDeclaration method1 =
-                parseBodyDeclaration("void x(@A @B List a) { }").asMethodDeclaration();
+                parser.parseBodyDeclaration("void x(@A @B List a) { }").asMethodDeclaration();
         MethodDeclaration method2 =
-                parseBodyDeclaration("void x(@C List a) { }").asMethodDeclaration();
+                parser.parseBodyDeclaration("void x(@C List a) { }").asMethodDeclaration();
         assertEquals(method1.getSignature(), method2.getSignature());
     }
 
     @Test
     void signaturesDifferentName() {
-        MethodDeclaration method1 = parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
-        MethodDeclaration method2 = parseBodyDeclaration("int y(String z);").asMethodDeclaration();
+        MethodDeclaration method1 =
+                parser.parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
+        MethodDeclaration method2 =
+                parser.parseBodyDeclaration("int y(String z);").asMethodDeclaration();
         assertNotEquals(method1.getSignature(), method2.getSignature());
     }
 
     @Test
     void signaturesDifferentTypes() {
-        MethodDeclaration method1 = parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
-        MethodDeclaration method2 = parseBodyDeclaration("int x(int z);").asMethodDeclaration();
+        MethodDeclaration method1 =
+                parser.parseBodyDeclaration("void x(String a) { }").asMethodDeclaration();
+        MethodDeclaration method2 = parser.parseBodyDeclaration("int x(int z);").asMethodDeclaration();
         assertNotEquals(method1.getSignature(), method2.getSignature());
     }
 
     @Test
     void signaturesDifferentVarargs() {
-        MethodDeclaration method1 = parseBodyDeclaration("int x(int z);").asMethodDeclaration();
-        MethodDeclaration method2 = parseBodyDeclaration("int x(int... z);").asMethodDeclaration();
+        MethodDeclaration method1 = parser.parseBodyDeclaration("int x(int z);").asMethodDeclaration();
+        MethodDeclaration method2 =
+                parser.parseBodyDeclaration("int x(int... z);").asMethodDeclaration();
         assertNotEquals(method1.getSignature(), method2.getSignature());
     }
 
     @Test
     void signatureToString() {
         MethodDeclaration method1 =
-                parseBodyDeclaration("int x(int z, String q);").asMethodDeclaration();
+                parser.parseBodyDeclaration("int x(int z, String q);").asMethodDeclaration();
         assertEquals("x(int, String)", method1.getSignature().toString());
     }
 
     @Test
     void isVariableArityMethod() {
-        MethodDeclaration method1 = parseBodyDeclaration("int x(int... z);").asMethodDeclaration();
+        MethodDeclaration method1 =
+                parser.parseBodyDeclaration("int x(int... z);").asMethodDeclaration();
         assertTrue(method1.isVariableArityMethod());
         MethodDeclaration method2 =
-                parseBodyDeclaration("int x(int i, int... z);").asMethodDeclaration();
+                parser.parseBodyDeclaration("int x(int i, int... z);").asMethodDeclaration();
         assertTrue(method2.isVariableArityMethod());
     }
 
     @Test
     void isFixedArityMethod() {
-        MethodDeclaration method1 = parseBodyDeclaration("int x(int z);").asMethodDeclaration();
+        MethodDeclaration method1 = parser.parseBodyDeclaration("int x(int z);").asMethodDeclaration();
         assertTrue(method1.isFixedArityMethod());
-        MethodDeclaration method2 = parseBodyDeclaration("int x();").asMethodDeclaration();
+        MethodDeclaration method2 = parser.parseBodyDeclaration("int x();").asMethodDeclaration();
         assertTrue(method2.isFixedArityMethod());
     }
 
@@ -139,13 +151,13 @@ class MethodDeclarationTest {
      */
     @Test
     void isMethodInterfaceImplictlyPublic() {
-        CompilationUnit cu = parse("interface Foo { void m(); }");
+        CompilationUnit cu = parser.parse("interface Foo { void m(); }");
         assertTrue(cu.findFirst(MethodDeclaration.class).get().isPublic());
-        cu = parse("interface Foo { public void m(); }");
+        cu = parser.parse("interface Foo { public void m(); }");
         assertTrue(cu.findFirst(MethodDeclaration.class).get().isPublic());
-        cu = parse("interface Foo { abstract void m(); }");
+        cu = parser.parse("interface Foo { abstract void m(); }");
         assertTrue(cu.findFirst(MethodDeclaration.class).get().isPublic());
-        cu = parse("interface Foo { private void m(); }");
+        cu = parser.parse("interface Foo { private void m(); }");
         assertFalse(cu.findFirst(MethodDeclaration.class).get().isPublic());
     }
 
@@ -155,15 +167,15 @@ class MethodDeclarationTest {
      */
     @Test
     void isMethodInterfaceImplictlyAbstract() {
-        CompilationUnit cu = parse("interface Foo { void m(); }");
+        CompilationUnit cu = parser.parse("interface Foo { void m(); }");
         assertTrue(cu.findFirst(MethodDeclaration.class).get().isAbstract());
-        cu = parse("interface Foo { abstract void m(); }");
+        cu = parser.parse("interface Foo { abstract void m(); }");
         assertTrue(cu.findFirst(MethodDeclaration.class).get().isAbstract());
-        cu = parse("interface Foo { private void m(); }");
+        cu = parser.parse("interface Foo { private void m(); }");
         assertFalse(cu.findFirst(MethodDeclaration.class).get().isAbstract());
-        cu = parse("interface Foo { static void m(); }");
+        cu = parser.parse("interface Foo { static void m(); }");
         assertFalse(cu.findFirst(MethodDeclaration.class).get().isAbstract());
-        cu = parse("interface Foo { default void m(){} }");
+        cu = parser.parse("interface Foo { default void m(){} }");
         assertFalse(cu.findFirst(MethodDeclaration.class).get().isAbstract());
     }
 }

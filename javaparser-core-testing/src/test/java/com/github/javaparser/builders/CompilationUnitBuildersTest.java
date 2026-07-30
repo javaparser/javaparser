@@ -21,11 +21,12 @@
 
 package com.github.javaparser.builders;
 
-import static com.github.javaparser.StaticJavaParser.parseImport;
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Modifier;
@@ -43,6 +44,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class CompilationUnitBuildersTest {
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
     private final CompilationUnit cu = new CompilationUnit();
 
     @Test
@@ -219,7 +221,7 @@ class CompilationUnitBuildersTest {
     @Test
     void doNotAddDuplicateImportsByImportDeclaration() {
         cu.addImport(Map.class);
-        cu.addImport(parseImport("import java.util.Map;"));
+        cu.addImport(parser.parseImport("import java.util.Map;"));
         assertEquals(1, cu.getImports().size());
     }
 

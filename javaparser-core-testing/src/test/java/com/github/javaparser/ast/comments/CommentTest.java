@@ -21,12 +21,13 @@
 
 package com.github.javaparser.ast.comments;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -50,6 +51,8 @@ class CommentTest {
 
     private static final PrinterConfiguration PRETTY_PRINTER_CONFIG_TWO_INDENT = new DefaultPrinterConfiguration()
             .addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, new Indentation(IndentType.SPACES, 2)));
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
     @Test
     void removeOrphanComment() {
@@ -79,7 +82,7 @@ class CommentTest {
 
     @Test
     void unicodeEscapesArePreservedInComments() {
-        CompilationUnit cu = parse("// xxx\\u2122xxx");
+        CompilationUnit cu = parser.parse("// xxx\\u2122xxx");
         Comment comment = cu.getAllContainedComments().get(0);
         assertEquals(" xxx\\u2122xxx", comment.getContent());
     }
@@ -87,7 +90,7 @@ class CommentTest {
     @Test
     void testReplaceDuplicateJavaDocComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+        CompilationUnit cu = parser.parse("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
                 + "  /**"
                 + LineSeparator.SYSTEM + "   * Comment A"
                 + LineSeparator.SYSTEM + "   */"
@@ -130,7 +133,7 @@ class CommentTest {
     @Test
     void testRemoveDuplicateComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+        CompilationUnit cu = parser.parse("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
                 + "  /**"
                 + LineSeparator.SYSTEM + "   * Comment A"
                 + LineSeparator.SYSTEM + "   */"
@@ -169,7 +172,7 @@ class CommentTest {
     @Test
     void testRemoveDuplicateJavaDocComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+        CompilationUnit cu = parser.parse("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
                 + "  /**"
                 + LineSeparator.SYSTEM + "   * Comment A"
                 + LineSeparator.SYSTEM + "   */"
@@ -228,7 +231,7 @@ class CommentTest {
 
     @Test
     void testSingleLineCommentContent() {
-        CompilationUnit cu = parse("class Test {\n" + "  // this is a single line comment\n"
+        CompilationUnit cu = parser.parse("class Test {\n" + "  // this is a single line comment\n"
                 + "  // and so is this\n"
                 + "  void test() {}\n"
                 + "}");
@@ -248,7 +251,8 @@ class CommentTest {
     @Test
     void testJavadocCommentContent() {
         String commentCode = "\n   * This is a regular {@code JavaDoc comment}\n   * @see some reference\n    ";
-        CompilationUnit cu = parse("class Test {\n" + "  /**" + commentCode + "*/\n" + "  void test() {}\n" + "}");
+        CompilationUnit cu =
+                parser.parse("class Test {\n" + "  /**" + commentCode + "*/\n" + "  void test() {}\n" + "}");
 
         MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
 
@@ -268,7 +272,7 @@ class CommentTest {
                 + "  ///\n"
                 + "  ///  and empty lines preceded by ///\n"
                 + "  ///  without issues\n";
-        CompilationUnit cu = parse("class Test {\n" + commentCode + "  void test() {}\n" + "}");
+        CompilationUnit cu = parser.parse("class Test {\n" + commentCode + "  void test() {}\n" + "}");
 
         MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
 
@@ -294,7 +298,8 @@ class CommentTest {
                 + "  ///  */\n"
                 + "  /// // and single line comments\n";
         String comment2Code = "  ///\n" + "  /// and empty lines preceded by ///\n" + "  /// without issues\n";
-        CompilationUnit cu = parse("class Test {\n" + comment1Code + "\n" + comment2Code + "  void test() {}\n" + "}");
+        CompilationUnit cu =
+                parser.parse("class Test {\n" + comment1Code + "\n" + comment2Code + "  void test() {}\n" + "}");
 
         MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
 
@@ -320,7 +325,7 @@ class CommentTest {
 
     @Test
     void markdownCommentShouldNotHaveSingleLineContent() {
-        CompilationUnit cu = parse(
+        CompilationUnit cu = parser.parse(
                 "class Test {\n" + "  /// this is a single-line markdown comment test\n" + "  void test() {}\n" + "}");
 
         MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
@@ -344,7 +349,7 @@ class CommentTest {
                 + "  ///\n"
                 + "  ///  and empty lines preceded by ///\n"
                 + "  ///  without issues\n";
-        CompilationUnit cu = parse("class Test {\n" + commentCode + "  void test() {}\n" + "}");
+        CompilationUnit cu = parser.parse("class Test {\n" + commentCode + "  void test() {}\n" + "}");
 
         MethodDeclaration testMethod = cu.findFirst(MethodDeclaration.class).get();
 
@@ -378,7 +383,7 @@ class CommentTest {
 
     @Test
     void testTraditionalJavadocComment() {
-        CompilationUnit cu = parse("class Test {\n" + "  /**\n"
+        CompilationUnit cu = parser.parse("class Test {\n" + "  /**\n"
                 + "   * This is a traditional javadoc comment\n"
                 + "   */\n"
                 + "  void test() {}\n"

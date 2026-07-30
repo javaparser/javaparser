@@ -21,14 +21,15 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -50,6 +51,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class NodeTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void removeOrphanCommentPositiveCase() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
@@ -112,7 +116,7 @@ class NodeTest {
 
     @Test
     void findCompilationUnitOfCommentNode() {
-        CompilationUnit cu = parse(
+        CompilationUnit cu = parser.parse(
                 "class X {\n" + "  void x() {\n" + "    // this is a comment\n" + "    foo();\n" + "  }\n" + "}\n");
 
         Comment comment = cu.getType(0)
@@ -129,7 +133,8 @@ class NodeTest {
 
     @Test
     void findCompilationUnitOfOrphanCommentNode() {
-        CompilationUnit cu = parse("class X {\n" + "  void x() {\n" + "    // this is a comment\n" + "  }\n" + "}\n");
+        CompilationUnit cu =
+                parser.parse("class X {\n" + "  void x() {\n" + "    // this is a comment\n" + "  }\n" + "}\n");
 
         Comment comment = cu.getType(0)
                 .getMember(0)
@@ -144,7 +149,7 @@ class NodeTest {
 
     @Test
     void removeAllOnRequiredProperty() {
-        CompilationUnit cu = parse("class X{ void x(){}}");
+        CompilationUnit cu = parser.parse("class X{ void x(){}}");
         MethodDeclaration methodDeclaration = cu.getType(0).getMethods().get(0);
         methodDeclaration.getName().removeForced();
         // Name is required, so to remove it the whole method is removed.
@@ -153,7 +158,7 @@ class NodeTest {
 
     @Test
     void removingTheSecondOfAListOfIdenticalStatementsDoesNotMessUpTheParents() {
-        CompilationUnit unit = parse(String.format(
+        CompilationUnit unit = parser.parse(String.format(
                 "public class Example {%1$s" + "  public static void example() {%1$s"
                         + "    boolean swapped;%1$s"
                         + "    swapped=false;%1$s"
@@ -170,7 +175,7 @@ class NodeTest {
 
     @Test
     void findNodeByRange() {
-        CompilationUnit cu = parse("class X {\n" + "  void x() {\n" + "  }\n" + "}\n");
+        CompilationUnit cu = parser.parse("class X {\n" + "  void x() {\n" + "  }\n" + "}\n");
         ClassOrInterfaceDeclaration coid =
                 cu.findFirst(ClassOrInterfaceDeclaration.class).get();
         MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
@@ -222,7 +227,7 @@ class NodeTest {
 
         @Test
         void astHasMultipleLeafs() {
-            Node root = parse("package com;" + "import com.*;" + "import org.*;" + "abstract class Foo {}");
+            Node root = parser.parse("package com;" + "import com.*;" + "import org.*;" + "abstract class Foo {}");
             List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.PREORDER);
             assertEquals(
                     Arrays.asList(
@@ -262,7 +267,7 @@ class NodeTest {
 
         @Test
         void astHasMultipleLeafs() {
-            Node root = parse("package com;" + "import com.*;" + "import org.*;" + "abstract class Foo {}");
+            Node root = parser.parse("package com;" + "import com.*;" + "import org.*;" + "abstract class Foo {}");
             List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.POSTORDER);
             assertEquals(
                     Arrays.asList(

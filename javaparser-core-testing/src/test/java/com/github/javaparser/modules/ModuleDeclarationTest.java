@@ -24,7 +24,6 @@ package com.github.javaparser.modules;
 import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,13 +40,15 @@ import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
 
 class ModuleDeclarationTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
+
+    // A single parser (Java 9, for module support) backs both the low-level parse(...) helper below and the
+    // parseName(...) convenience calls, the latter through its JavaParserAdapter wrapper.
+    private final JavaParserAdapter parser =
+            JavaParserAdapter.of(new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9)));
 
     private CompilationUnit parse(String code) {
-        ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(code));
-        if (!result.isSuccessful()) {
-            System.err.println(result);
-        }
+        ParseResult<CompilationUnit> result = parser.getParser().parse(ParseStart.COMPILATION_UNIT, provider(code));
+        assertTrue(result.isSuccessful(), () -> "Parsing failed with problems: " + result.getProblems());
         return result.getResult().get();
     }
 
@@ -108,11 +109,13 @@ class ModuleDeclarationTest {
 
         ModuleExportsDirective moduleExportsStmt = module.getDirectives().get(5).asModuleExportsStmt();
         assertThat(moduleExportsStmt.getNameAsString()).isEqualTo("R.S");
-        assertThat(moduleExportsStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
+        assertThat(moduleExportsStmt.getModuleNames())
+                .containsExactly(parser.parseName("T1.U1"), parser.parseName("T2.U2"));
 
         ModuleOpensDirective moduleOpensStmt = module.getDirectives().get(7).asModuleOpensStmt();
         assertThat(moduleOpensStmt.getNameAsString()).isEqualTo("R.S");
-        assertThat(moduleOpensStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
+        assertThat(moduleOpensStmt.getModuleNames())
+                .containsExactly(parser.parseName("T1.U1"), parser.parseName("T2.U2"));
 
         ModuleUsesDirective moduleUsesStmt = module.getDirectives().get(8).asModuleUsesStmt();
         assertThat(moduleUsesStmt.getNameAsString()).isEqualTo("V.W");
@@ -120,7 +123,7 @@ class ModuleDeclarationTest {
         ModuleProvidesDirective moduleProvidesStmt =
                 module.getDirectives().get(9).asModuleProvidesStmt();
         assertThat(moduleProvidesStmt.getNameAsString()).isEqualTo("X.Y");
-        assertThat(moduleProvidesStmt.getWith()).containsExactly(parseName("Z1.Z2"), parseName("Z3.Z4"));
+        assertThat(moduleProvidesStmt.getWith()).containsExactly(parser.parseName("Z1.Z2"), parser.parseName("Z3.Z4"));
     }
 
     @Test

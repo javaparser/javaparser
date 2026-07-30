@@ -23,17 +23,9 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class Issue1793Test extends AbstractLexicalPreservingTest {
-
-    @AfterEach
-    public void reset() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-    }
 
     @Test
     void importIsAddedOnTheSameLine() {

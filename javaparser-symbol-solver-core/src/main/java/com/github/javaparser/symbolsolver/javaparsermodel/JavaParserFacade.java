@@ -460,20 +460,18 @@ public class JavaParserFacade {
                     + typeOfScope.getClass().getCanonicalName());
         }
 
-        // Extract the type declaration from the reference type
-        ResolvedReferenceTypeDeclaration resolvedTypeDecl = typeOfScope
-                .asReferenceType()
-                .getTypeDeclaration()
-                .orElseThrow(() ->
-                        new UnsolvedSymbolException("TypeDeclaration unexpectedly empty for type: " + typeOfScope));
-
-        Set<MethodUsage> allMethods = resolvedTypeDecl.getAllMethods();
-        String methodName = methodReferenceExpr.getIdentifier();
-
         // JLS §15.12.2.1: "Identify Potentially Applicable Methods"
         // "The class or interface determined by compile-time step 1 (§15.12.1) is searched
         // for all member methods that are potentially applicable to this method invocation."
-        // Filter methods by name first.
+        //
+        // getAllMethodsAsUsages() returns member methods (declared and inherited) with the scope type's
+        // arguments already substituted, so e.g. Class<Sub>::cast reports Sub rather than the type
+        // variable T. This lets poly inference for pipelines like list.stream().map(Sub.class::cast)
+        // refine Stream<Base> to Stream<Sub> without any consumer-side compensation (see #4989, #5080).
+        Set<MethodUsage> allMethods = typeOfScope.asReferenceType().getAllMethodsAsUsages();
+        String methodName = methodReferenceExpr.getIdentifier();
+
+        // Filter methods by name.
         List<MethodUsage> candidateMethods =
                 allMethods.stream().filter(m -> m.getName().equals(methodName)).collect(Collectors.toList());
 

@@ -30,6 +30,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -430,7 +432,7 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         Expression s1Expr = compareToCall.getScope().get();
 
         ResolvedType s1Type = JavaParserFacade.get(typeSolver).getType(s1Expr);
-        assertEquals("? super java.lang.String", s1Type.describe());
+        assertEquals("java.lang.String", s1Type.describe());
     }
 
     // --- Tests for issue #3626 ---
@@ -554,5 +556,64 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         assertEquals(
                 "java.lang.String.toLowerCase()",
                 assertDoesNotThrow(toLowerCaseCall::resolve).getQualifiedSignature());
+    }
+
+    @Test
+    void lambdaParameterOfWildcardBoundedFunctionalInterfaceIsDescribedWithoutTheWildcard() {
+        String source = "import java.util.Map;\n"
+                + "import java.util.HashMap;\n"
+                + "class Value<T> { public Value(T val) {} }\n"
+                + "class Test {\n"
+                + "    public void example(Map<String, String> request) {\n"
+                + "        Map<String, Value<String>> result = new HashMap<>();\n"
+                + "        request.forEach((key, v) -> {\n"
+                + "            result.put(key, new Value<String>(v));\n"
+                + "        });\n"
+                + "    }\n"
+                + "}";
+
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+
+        LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+        assertEquals("java.lang.String", lambda.getParameter(0).resolve().describeType());
+        assertEquals("java.lang.String", lambda.getParameter(1).resolve().describeType());
+
+        MethodCallExpr putCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("put"))
+                .findFirst()
+                .get();
+        NameExpr vExpr = (NameExpr) ((ObjectCreationExpr) putCall.getArgument(1)).getArgument(0);
+
+        assertEquals("java.lang.String", vExpr.calculateResolvedType().describe());
+    }
+
+    @Test
+    void lambdaParameterOfWildcardBoundedFunctionalInterfaceKeepsANonFinalBound() {
+        String source = "import java.util.function.Consumer;\n"
+                + "class Test {\n"
+                + "    public void example(Consumer<? super Number> consumer) {\n"
+                + "        consumer.accept(1);\n"
+                + "    }\n"
+                + "    public void call() {\n"
+                + "        example(n -> n.intValue());\n"
+                + "    }\n"
+                + "}";
+
+        ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(source);
+
+        LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+        assertEquals("java.lang.Number", lambda.getParameter(0).resolve().describeType());
+
+        MethodCallExpr intValueCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("intValue"))
+                .findFirst()
+                .get();
+        Expression nExpr = intValueCall.getScope().get();
+
+        assertEquals("java.lang.Number", nExpr.calculateResolvedType().describe());
     }
 }

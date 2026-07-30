@@ -21,13 +21,11 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Range;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.*;
@@ -44,21 +42,18 @@ import org.junit.jupiter.api.*;
  */
 class StatementTransformationsTest extends AbstractLexicalPreservingTest {
 
-    private static final ParserConfiguration.LanguageLevel storedLanguageLevel =
-            StaticJavaParser.getParserConfiguration().getLanguageLevel();
-
+    // Most tests in this class parse recent-language constructs (arrow switches since Java 14, and type/record/unnamed
+    // patterns in switch since Java 21+), which the default level (JAVA_11) cannot parse. Configuring the parser
+    // class-wide via @BeforeEach is therefore the right choice here. Had only a few tests needed it, we would instead
+    // set the level inline in those specific tests (as AnnotationMemberDeclarationTransformationsTest does) rather than
+    // raise the level for the whole class.
     @BeforeEach
     public void setLanguageLevel() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
-    }
-
-    @AfterEach
-    public void resetLanguageLevel() {
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(storedLanguageLevel);
+        parser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
     }
 
     Statement consider(String code) {
-        Statement statement = parseStatement(code);
+        Statement statement = parser.parseStatement(code);
         LexicalPreservingPrinter.setup(statement);
         return statement;
     }
@@ -159,10 +154,7 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
                 + "				case Box(_) -> new Object();\n"
                 + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
                 + "			}";
-        ParserConfiguration config = new ParserConfiguration();
-        config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
-        StaticJavaParser.setConfiguration(config);
-        CompilationUnit cu = LexicalPreservingPrinter.setup(StaticJavaParser.parse(originalCode));
+        CompilationUnit cu = LexicalPreservingPrinter.setup(parser.parse(originalCode));
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         NodeList<SwitchEntry> entries = switchExpr.getEntries();
 
@@ -189,10 +181,7 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
                 + "				case Box(String _) -> new Object();\n"
                 + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
                 + "			}";
-        ParserConfiguration config = new ParserConfiguration();
-        config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
-        StaticJavaParser.setConfiguration(config);
-        CompilationUnit cu = LexicalPreservingPrinter.setup(StaticJavaParser.parse(originalCode));
+        CompilationUnit cu = LexicalPreservingPrinter.setup(parser.parse(originalCode));
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         NodeList<SwitchEntry> entries = switchExpr.getEntries();
 
@@ -220,10 +209,7 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
                 + "				case 2024 -> new java.lang.Object();\n"
                 + "				default -> throw new IllegalStateException(\"Cant create for year\");\n"
                 + "			}";
-        ParserConfiguration config = new ParserConfiguration();
-        config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
-        StaticJavaParser.setConfiguration(config);
-        CompilationUnit cu = LexicalPreservingPrinter.setup(StaticJavaParser.parse(originalCode));
+        CompilationUnit cu = LexicalPreservingPrinter.setup(parser.parse(originalCode));
         SwitchExpr switchExpr = cu.findFirst(SwitchExpr.class).get();
         NodeList<SwitchEntry> entries = switchExpr.getEntries();
         NodeList<Expression> labels = NodeList.nodeList(new IntegerLiteralExpr("2024"));

@@ -21,8 +21,6 @@
 
 package com.github.javaparser.ast.visitor;
 
-import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
-import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -78,7 +76,7 @@ class ModifierVisitorTest extends AbstractLexicalPreservingTest {
 
     @Test
     void binaryExprReturnsLeftExpressionWhenRightSideIsRemoved() {
-        Expression expression = parseExpression("1+2");
+        Expression expression = parser.parseExpression("1+2");
         Visitable result = expression.accept(
                 new ModifierVisitor<Void>() {
                     public Visitable visit(IntegerLiteralExpr integerLiteralExpr, Void arg) {
@@ -94,7 +92,7 @@ class ModifierVisitorTest extends AbstractLexicalPreservingTest {
 
     @Test
     void binaryExprReturnsRightExpressionWhenLeftSideIsRemoved() {
-        final Expression expression = parseExpression("1+2");
+        final Expression expression = parser.parseExpression("1+2");
         final Visitable result = expression.accept(
                 new ModifierVisitor<Void>() {
                     public Visitable visit(IntegerLiteralExpr integerLiteralExpr, Void arg) {
@@ -110,7 +108,7 @@ class ModifierVisitorTest extends AbstractLexicalPreservingTest {
 
     @Test
     void fieldDeclarationCantSurviveWithoutVariables() {
-        final BodyDeclaration<?> bodyDeclaration = parseBodyDeclaration("int x=1;");
+        final BodyDeclaration<?> bodyDeclaration = parser.parseBodyDeclaration("int x=1;");
 
         final Visitable result = bodyDeclaration.accept(
                 new ModifierVisitor<Void>() {
@@ -125,7 +123,7 @@ class ModifierVisitorTest extends AbstractLexicalPreservingTest {
 
     @Test
     void variableDeclarationCantSurviveWithoutVariables() {
-        final BodyDeclaration<?> bodyDeclaration = parseBodyDeclaration("void x() {int x=1;}");
+        final BodyDeclaration<?> bodyDeclaration = parser.parseBodyDeclaration("void x() {int x=1;}");
 
         final Visitable result = bodyDeclaration.accept(
                 new ModifierVisitor<Void>() {

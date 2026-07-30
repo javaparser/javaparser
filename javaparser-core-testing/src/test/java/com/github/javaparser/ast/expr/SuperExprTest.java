@@ -21,22 +21,26 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.Test;
 
 class SuperExprTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void justSuper() {
-        assertThrows(ParseProblemException.class, () -> parseExpression("super"));
+        assertThrows(ParseProblemException.class, () -> parser.parseExpression("super"));
     }
 
     @Test
     void singleScopeSuper() {
-        Expression expr = parseExpression("A.super");
+        Expression expr = parser.parseExpression("A.super");
 
         Name className = expr.asSuperExpr().getTypeName().get();
 
@@ -45,7 +49,7 @@ class SuperExprTest {
 
     @Test
     void multiScopeSuper() {
-        Expression expr = parseExpression("a.B.super");
+        Expression expr = parser.parseExpression("a.B.super");
 
         Name className = expr.asSuperExpr().getTypeName().get();
 

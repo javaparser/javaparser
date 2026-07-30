@@ -28,6 +28,8 @@ import org.junit.jupiter.api.Test;
 
 public class Issue3064Test {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     public void test0() {
         String str = "import java.util.function.Supplier;\n" + "\n"
@@ -38,10 +40,7 @@ public class Issue3064Test {
                 + "    }\n"
                 + "}\n";
 
-        JavaParser parser = new JavaParser();
-        ParseResult<CompilationUnit> unitOpt = parser.parse(new StringReader(str));
-        unitOpt.getProblems().stream().forEach(p -> System.err.println(p.toString()));
-        CompilationUnit unit = unitOpt.getResult().orElseThrow(() -> new IllegalStateException("Could not parse file"));
+        CompilationUnit unit = parser.parse(new StringReader(str));
 
         assertEquals(str, unit.toString());
     }
@@ -52,7 +51,7 @@ public class Issue3064Test {
                 + "        Supplier<String> aStringSupplier = false ? () -> \"F\" : true ? () -> \"T\" : () -> \"path\";\n"
                 + "    }\n"
                 + "}";
-        CompilationUnit unit = StaticJavaParser.parse(str);
+        CompilationUnit unit = parser.parse(str);
         assertEquals(str.replace("\n", ""), unit.toString().replace("\n", ""));
     }
 }

@@ -76,7 +76,7 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
         Optional<Value> ref = context.solveSymbolAsValue("p");
         assertTrue(ref.isPresent());
-        assertEquals("? super java.lang.String", ref.get().getType().describe());
+        assertEquals("java.lang.String", ref.get().getType().describe());
     }
 
     @Test
@@ -156,7 +156,7 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         // expects Comparator<? super String>, so the inference engine matches
         // comparing's return type Comparator<T> against Comparator<? super String>
         // and concludes T = ? super String.  The lambda parameter therefore has
-        // type "? super java.lang.String".
+        // type "java.lang.String".
         String source = "import java.util.Arrays;\n"
                 + "import java.util.Comparator;\n"
                 + "import java.util.List;\n"
@@ -176,7 +176,7 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         Context context = new LambdaExprContext(lambdaExpr, typeSolver);
         Optional<Value> ref = context.solveSymbolAsValue("s");
         assertTrue(ref.isPresent());
-        assertEquals("? super java.lang.String", ref.get().getType().describe());
+        assertEquals("java.lang.String", ref.get().getType().describe());
     }
 
     @Test

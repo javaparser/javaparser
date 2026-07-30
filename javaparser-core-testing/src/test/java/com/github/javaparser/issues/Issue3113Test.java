@@ -22,6 +22,7 @@ package com.github.javaparser.issues;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -33,7 +34,8 @@ import org.junit.jupiter.api.Test;
 public class Issue3113Test extends AbstractLexicalPreservingTest {
     @Test
     public void issue3113() {
-        StaticJavaParser.getConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_12);
+        JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
+                new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_12));
 
         String originalSourceCode = "public class HelloWorld {\n" + "  public static void main(String[] args) {\n"
                 + "      final int value = 2;\n"
@@ -47,7 +49,7 @@ public class Issue3113Test extends AbstractLexicalPreservingTest {
                 + "  }\n"
                 + "}\n";
 
-        CompilationUnit cu = StaticJavaParser.parse(originalSourceCode);
+        CompilationUnit cu = parser.parse(originalSourceCode);
         LexicalPreservingPrinter.setup(cu);
         SwitchStmt expr = cu.findFirst(SwitchStmt.class).get();
         String modifiedSourceCode = LexicalPreservingPrinter.print(expr);

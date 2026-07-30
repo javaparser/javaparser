@@ -36,9 +36,9 @@ public class Issue3577Test {
                 + "}";
 
         ParserConfiguration config = new ParserConfiguration().setLanguageLevel(LanguageLevel.JAVA_15);
-        StaticJavaParser.setConfiguration(config);
+        JavaParserAdapter parser = StaticJavaParser.newParserAdapter(config);
 
-        assertDoesNotThrow(() -> StaticJavaParser.parse(str));
+        assertDoesNotThrow(() -> parser.parse(str));
         //        unitOpt.getProblems().stream().forEach(p -> System.err.println(p.toString()));
     }
 }

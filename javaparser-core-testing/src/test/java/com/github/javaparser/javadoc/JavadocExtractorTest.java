@@ -21,9 +21,9 @@
 
 package com.github.javaparser.javadoc;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.TraditionalJavadocComment;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -33,6 +33,8 @@ import org.junit.jupiter.api.Test;
 
 class JavadocExtractorTest {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void canParseAllJavadocsInJavaParser() throws FileNotFoundException {
         processDir(new File(".."));
@@ -40,7 +42,7 @@ class JavadocExtractorTest {
 
     private void processFile(File file) throws FileNotFoundException {
         try {
-            CompilationUnit cu = parse(file);
+            CompilationUnit cu = parser.parse(file);
             new VoidVisitorAdapter<Object>() {
                 @Override
                 public void visit(TraditionalJavadocComment n, Object arg) {

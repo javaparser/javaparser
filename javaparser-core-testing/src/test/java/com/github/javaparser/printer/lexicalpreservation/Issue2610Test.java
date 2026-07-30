@@ -21,7 +21,6 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import java.util.Optional;
@@ -41,7 +40,7 @@ public class Issue2610Test extends AbstractLexicalPreservingTest {
                 + "    }\n"
                 + "}");
         // contruct a statement with a comment
-        Expression expr = StaticJavaParser.parseExpression("System.out.println(\"warning\")");
+        Expression expr = parser.parseExpression("System.out.println(\"warning\")");
         // Replace the method expression
         Optional<MethodCallExpr> mce = cu.findFirst(MethodCallExpr.class);
         mce.get().getParentNode().get().replace(mce.get(), expr);

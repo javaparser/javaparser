@@ -21,22 +21,18 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class BinaryExprTest {
 
-    @BeforeEach
-    void initParser() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-    }
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
     @Test
     void convertOperator() {
@@ -63,7 +59,7 @@ class BinaryExprTest {
 
         @Test
         public void logicalAndOr() {
-            Expression expression = StaticJavaParser.parseExpression("true || false && false || false");
+            Expression expression = parser.parseExpression("true || false && false || false");
             Expression bracketedExpression = applyBrackets(expression);
 
             String expected = "(true || (false && false)) || false";
@@ -74,7 +70,7 @@ class BinaryExprTest {
 
         @Test
         public void logicalOrEvaluationLeftToRight() {
-            Expression expression = StaticJavaParser.parseExpression("false || true || false || true || false || true");
+            Expression expression = parser.parseExpression("false || true || false || true || false || true");
             Expression bracketedExpression = applyBrackets(expression);
 
             String expected = "((((false || true) || false) || true) || false) || true";
@@ -85,7 +81,7 @@ class BinaryExprTest {
 
         @Test
         public void logicalAndEvaluationLeftToRight() {
-            Expression expression = StaticJavaParser.parseExpression("false && true && false && true && false && true");
+            Expression expression = parser.parseExpression("false && true && false && true && false && true");
             Expression bracketedExpression = applyBrackets(expression);
 
             String expected = "((((false && true) && false) && true) && false) && true";
@@ -96,7 +92,7 @@ class BinaryExprTest {
 
         @Test
         public void andTakesPrecedenceOverOr() {
-            Expression expression = StaticJavaParser.parseExpression("true || false && false");
+            Expression expression = parser.parseExpression("true || false && false");
             Expression bracketedExpression = applyBrackets(expression);
 
             String expected = "true || (false && false)";
@@ -107,7 +103,7 @@ class BinaryExprTest {
 
         @Test
         public void andTakesPrecedenceOverOrThenLeftToRight() {
-            Expression expression = StaticJavaParser.parseExpression("true || false && false || true");
+            Expression expression = parser.parseExpression("true || false && false || true");
             Expression bracketedExpression = applyBrackets(expression);
 
             String expected = "(true || (false && false)) || true";
@@ -118,8 +114,7 @@ class BinaryExprTest {
 
         @Test
         public void example() {
-            Expression expression =
-                    StaticJavaParser.parseExpression("year % 4 == 0 && year % 100 != 0 || year % 400 == 0");
+            Expression expression = parser.parseExpression("year % 4 == 0 && year % 100 != 0 || year % 400 == 0");
             Expression bracketedExpression = applyBrackets(expression);
 
             String expected = "((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)";
@@ -150,9 +145,10 @@ class BinaryExprTest {
         // Note: "assert" as an identifier is only valid in Java < 1.4
         // In modern Java, "assert" is a keyword. However, "assert" as an identifier is still supported
         // for backward compatibility.
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_1_0);
+        JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
+                new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_1_0));
 
-        Expression e = parseExpression("assert + 42");
+        Expression e = parser.parseExpression("assert + 42");
         assertInstanceOf(BinaryExpr.class, e);
         BinaryExpr binary = e.asBinaryExpr();
         assertEquals(BinaryExpr.Operator.PLUS, binary.getOperator());
@@ -170,9 +166,10 @@ class BinaryExprTest {
         // Note: "assert" as an identifier is only valid in Java < 1.4
         // In modern Java, "assert" is a keyword. However, "assert" as an identifier is still supported
         // for backward compatibility.
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_1_0);
+        JavaParserAdapter parser = StaticJavaParser.newParserAdapter(
+                new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_1_0));
 
-        Expression e = parseExpression("x + assert");
+        Expression e = parser.parseExpression("x + assert");
         assertInstanceOf(BinaryExpr.class, e);
         BinaryExpr binary = e.asBinaryExpr();
         assertEquals(BinaryExpr.Operator.PLUS, binary.getOperator());

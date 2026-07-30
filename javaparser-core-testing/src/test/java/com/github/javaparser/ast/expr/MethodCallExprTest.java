@@ -21,18 +21,21 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static java.util.Optional.empty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.Test;
 
 class MethodCallExprTest {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void replaceLambdaIssue1290() {
-        MethodCallExpr methodCallExpr =
-                parseExpression("callSomeFun(r -> r instanceof SomeType)").asMethodCallExpr();
+        MethodCallExpr methodCallExpr = parser.parseExpression("callSomeFun(r -> r instanceof SomeType)")
+                .asMethodCallExpr();
         LambdaExpr lambdaExpr = methodCallExpr.getArgument(0).asLambdaExpr();
         MethodCallExpr lambdaWrapper = new MethodCallExpr("lambdaWrapper");
         lambdaExpr.replace(lambdaWrapper);

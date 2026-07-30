@@ -21,10 +21,10 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.StaticJavaParser.parseType;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
 import java.io.ByteArrayInputStream;
@@ -57,6 +57,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 class XmlPrinterTest {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
     // Used for building XML documents
     private static DocumentBuilderFactory documentBuilderFactory;
@@ -157,7 +159,7 @@ class XmlPrinterTest {
 
     @Test
     void testWithType() throws SAXException, IOException {
-        Expression expression = parseExpression("1+1");
+        Expression expression = parser.parseExpression("1+1");
         XmlPrinter xmlOutput = new XmlPrinter(true);
 
         String output = xmlOutput.output(expression);
@@ -174,7 +176,7 @@ class XmlPrinterTest {
 
     @Test
     void testWithTypeXmlKeyCollision() throws SAXException, IOException {
-        Type type = parseType("int");
+        Type type = parser.parseType("int");
         XmlPrinter xmlOutput = new XmlPrinter(true);
 
         String output = xmlOutput.output(type);
@@ -184,7 +186,7 @@ class XmlPrinterTest {
 
     @Test
     void testWithoutType() throws SAXException, IOException {
-        Expression expression = parseExpression("1+1");
+        Expression expression = parser.parseExpression("1+1");
 
         XmlPrinter xmlOutput = new XmlPrinter(false);
 
@@ -195,7 +197,7 @@ class XmlPrinterTest {
 
     @Test
     void testList() throws SAXException, IOException {
-        Expression expression = parseExpression("a(1,2)");
+        Expression expression = parser.parseExpression("a(1,2)");
 
         XmlPrinter xmlOutput = new XmlPrinter(true);
 
@@ -222,7 +224,7 @@ class XmlPrinterTest {
 
         try (FileWriter fileWriter = new FileWriter(tempFile)) {
             XmlPrinter xmlOutput = new XmlPrinter(false);
-            xmlOutput.outputDocument(parseExpression("1+1"), "root", fileWriter);
+            xmlOutput.outputDocument(parser.parseExpression("1+1"), "root", fileWriter);
         }
 
         assertXMLEquals(
@@ -250,8 +252,8 @@ class XmlPrinterTest {
         xmlWriter.writeStartDocument();
         xmlWriter.writeStartElement("custom");
 
-        xmlOutput.outputNode(parseExpression("1+1"), "plusExpr", xmlWriter);
-        xmlOutput.outputNode(parseExpression("a(1,2)"), "callExpr", xmlWriter);
+        xmlOutput.outputNode(parser.parseExpression("1+1"), "plusExpr", xmlWriter);
+        xmlOutput.outputNode(parser.parseExpression("a(1,2)"), "callExpr", xmlWriter);
 
         xmlWriter.writeEndElement();
         xmlWriter.writeEndDocument();
@@ -279,7 +281,7 @@ class XmlPrinterTest {
 
     @Test
     void testAbsentTypeParameterList() throws SAXException, IOException, XMLStreamException {
-        Expression expression = parseExpression("new HashSet()");
+        Expression expression = parser.parseExpression("new HashSet()");
         XmlPrinter xmlOutput = new XmlPrinter(false);
         String output = xmlOutput.output(expression);
         assertXMLEquals(
@@ -296,7 +298,7 @@ class XmlPrinterTest {
 
     @Test
     void testEmptyTypeParameterList() throws SAXException, IOException, XMLStreamException {
-        Expression expression = parseExpression("new HashSet<>()");
+        Expression expression = parser.parseExpression("new HashSet<>()");
         XmlPrinter xmlOutput = new XmlPrinter(false);
         String output = xmlOutput.output(expression);
         assertXMLEquals(
@@ -314,7 +316,7 @@ class XmlPrinterTest {
 
     @Test
     void testNonEmptyTypeParameterList() throws SAXException, IOException, XMLStreamException {
-        Expression expression = parseExpression("new HashSet<Integer,File>()");
+        Expression expression = parser.parseExpression("new HashSet<Integer,File>()");
         XmlPrinter xmlOutput = new XmlPrinter(false);
         String output = xmlOutput.output(expression);
         assertXMLEquals(

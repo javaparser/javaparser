@@ -21,7 +21,6 @@
 
 package com.github.javaparser;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,12 +33,14 @@ import org.junit.jupiter.api.Test;
 
 public class TokenTypesTest {
 
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     void everyTokenHasACategory() throws IOException {
         final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
         Path tokenTypesPath = mavenModuleRoot(JavaParserTest.class)
                 .resolve("../javaparser-core/src/main/java/com/github/javaparser/TokenTypes.java");
-        CompilationUnit tokenTypesCu = parse(tokenTypesPath);
+        CompilationUnit tokenTypesCu = parser.parse(tokenTypesPath);
 
         // -1 to take off the default: case.
         int switchEntries = tokenTypesCu.findAll(SwitchEntry.class).size() - 1;

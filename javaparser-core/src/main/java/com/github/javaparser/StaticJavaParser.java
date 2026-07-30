@@ -80,6 +80,36 @@ public final class StaticJavaParser {
     }
 
     /**
+     * Creates a new, independent parser with a fresh default {@link ParserConfiguration}.
+     * <p>
+     * Unlike the static {@code parse...} methods, the returned parser does <b>not</b> share the global
+     * {@link #setConfiguration(ParserConfiguration) static configuration}: configuring it never affects other callers.
+     * This makes it the preferred entry point whenever a specific configuration is needed without disturbing the shared
+     * state (for example in tests).
+     *
+     * @return a new independent parser
+     */
+    public static JavaParserAdapter newParserAdapter() {
+        return newParserAdapter(new ParserConfiguration());
+    }
+
+    /**
+     * Creates a new, independent parser using the given {@link ParserConfiguration}.
+     * <p>
+     * Unlike the static {@code parse...} methods, the returned parser does <b>not</b> share the global
+     * {@link #setConfiguration(ParserConfiguration) static configuration}: configuring it never affects other callers.
+     * This makes it the preferred entry point whenever a specific configuration is needed without disturbing the shared
+     * state (for example in tests).
+     *
+     * @param configuration the configuration the returned parser will use
+     * @return a new independent parser
+     */
+    public static JavaParserAdapter newParserAdapter(@NotNull ParserConfiguration configuration) {
+        Preconditions.checkNotNull(configuration, "Parameter configuration can't be null.");
+        return new JavaParserAdapter(new JavaParser(configuration));
+    }
+
+    /**
      * Parses the Java code contained in the {@link InputStream} and returns a
      * {@link CompilationUnit} that represents it.
      *
@@ -540,7 +570,7 @@ public final class StaticJavaParser {
     }
 
     private static JavaParserAdapter newParserAdapted() {
-        return new JavaParserAdapter(newParser());
+        return newParserAdapter(getParserConfiguration());
     }
 
     @Deprecated

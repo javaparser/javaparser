@@ -24,44 +24,40 @@ package com.github.javaparser.printer.lexicalpreservation;
 import static com.github.javaparser.utils.TestUtils.assertEqualsString;
 import static com.github.javaparser.utils.TestUtils.readResource;
 
-import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import java.io.IOException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 
 public abstract class AbstractLexicalPreservingTest {
+
+    /**
+     * The parser used by the {@code consider...} helpers. Each test class gets its own isolated
+     * instance, so configuring it (for example the language level) never leaks to other tests.
+     */
+    protected final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
     protected CompilationUnit cu;
     protected Expression expression;
     protected Statement statement;
 
-    @AfterAll
-    public static void tearDown() {}
-
-    @AfterEach
-    public void reset() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-    }
-
     protected void considerCode(String code) {
-        cu = LexicalPreservingPrinter.setup(StaticJavaParser.parse(code));
+        cu = LexicalPreservingPrinter.setup(parser.parse(code));
     }
 
     protected void considerExpression(String code) {
-        expression = LexicalPreservingPrinter.setup(StaticJavaParser.parseExpression(code));
+        expression = LexicalPreservingPrinter.setup(parser.parseExpression(code));
     }
 
     protected void considerStatement(String code) {
-        statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(code));
+        statement = LexicalPreservingPrinter.setup(parser.parseStatement(code));
     }
 
     protected void considerVariableDeclaration(String code) {
-        expression = LexicalPreservingPrinter.setup(StaticJavaParser.parseVariableDeclarationExpr(code));
+        expression = LexicalPreservingPrinter.setup(parser.parseVariableDeclarationExpr(code));
     }
 
     protected String considerExample(String resourceName) throws IOException {

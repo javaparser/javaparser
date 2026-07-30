@@ -31,10 +31,13 @@ import org.junit.jupiter.api.Test;
  * Tests related to https://github.com/javaparser/javaparser/issues/2482.
  */
 public class Issue2482Test {
+
+    private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
     @Test
     public void commentBeforeLambda() {
-        LambdaExpr le = StaticJavaParser.parseExpression(
-                "// a comment before parent" + System.lineSeparator() + "()->{return 1;}");
+        LambdaExpr le =
+                parser.parseExpression("// a comment before parent" + System.lineSeparator() + "()->{return 1;}");
 
         assertTrue(le.getComment().isPresent());
         assertTrue(le.getOrphanComments().isEmpty());
@@ -43,8 +46,8 @@ public class Issue2482Test {
 
     @Test
     public void commentBeforeBlock() {
-        Statement st = StaticJavaParser.parseBlock(
-                "// a comment before parent" + System.lineSeparator() + "{ if (file != null) {} }");
+        Statement st =
+                parser.parseBlock("// a comment before parent" + System.lineSeparator() + "{ if (file != null) {} }");
         assertTrue(st.getComment().isPresent());
         assertTrue(st.getOrphanComments().isEmpty());
         assertEquals(0, st.getAllContainedComments().size());
@@ -52,8 +55,8 @@ public class Issue2482Test {
 
     @Test
     public void commentBeforeIfStatement() {
-        Statement st = StaticJavaParser.parseStatement(
-                "// a comment before parent" + System.lineSeparator() + "if (file != null) {}");
+        Statement st =
+                parser.parseStatement("// a comment before parent" + System.lineSeparator() + "if (file != null) {}");
         assertTrue(st.getComment().isPresent());
         assertTrue(st.getOrphanComments().isEmpty());
         assertEquals(0, st.getAllContainedComments().size());
@@ -61,7 +64,7 @@ public class Issue2482Test {
 
     @Test
     public void commentBeforeAssignment() {
-        Statement st = StaticJavaParser.parseStatement("// a comment" + System.lineSeparator() + "int x = 3;");
+        Statement st = parser.parseStatement("// a comment" + System.lineSeparator() + "int x = 3;");
 
         assertTrue(st.getComment().isPresent());
         assertTrue(st.getOrphanComments().isEmpty());
