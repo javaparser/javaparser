@@ -40,6 +40,7 @@ import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -107,7 +108,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
          */
         public static Optional<Primitive> byTypeName(String name) {
             for (Primitive primitive : values()) {
-                if (primitive.name().toLowerCase().equals(name)) {
+                if (primitive.name().toLowerCase(Locale.ROOT).equals(name)) {
                     return Optional.of(primitive);
                 }
             }
@@ -136,7 +137,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
 
         Primitive(String nameOfBoxedType, String descriptor) {
             this.nameOfBoxedType = nameOfBoxedType;
-            this.codeRepresentation = name().toLowerCase();
+            this.codeRepresentation = name().toLowerCase(Locale.ROOT);
             this.descriptor = descriptor;
         }
     }
