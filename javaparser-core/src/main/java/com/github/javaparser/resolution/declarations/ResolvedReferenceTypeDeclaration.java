@@ -124,17 +124,21 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * In the example above, this method returns B,C,E,D
      */
     Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> depthFirstFunc = (rrtd) -> {
-        Set<ResolvedReferenceType> ancestors = new LinkedHashSet<>();
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
+            Set<ResolvedReferenceType> seen = new HashSet<>();
             for (ResolvedReferenceType ancestor : rrtd.getAncestors()) {
                 ancestors.add(ancestor);
+                seen.add(ancestor);
                 for (ResolvedReferenceType inheritedAncestor : ancestor.getAllAncestors()) {
-                    ancestors.add(inheritedAncestor);
+                    if (seen.add(inheritedAncestor)) {
+                        ancestors.add(inheritedAncestor);
+                    }
                 }
             }
         }
-        return new ArrayList<>(ancestors);
+        return ancestors;
     };
 
     /*
@@ -142,25 +146,25 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * In the example above, this method returns B,C,D,E
      */
     Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
-        Set<ResolvedReferenceType> ancestors = new LinkedHashSet<>();
-        // We want to avoid infinite recursion in case of Object having Object as ancestor
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
         if (!rrtd.isJavaLangObject()) {
-            // init direct ancestors
+            Set<ResolvedReferenceType> seen = new HashSet<>();
             Deque<ResolvedReferenceType> queuedAncestors = new LinkedList<>(rrtd.getAncestors());
             ancestors.addAll(queuedAncestors);
+            seen.addAll(queuedAncestors);
             while (!queuedAncestors.isEmpty()) {
                 ResolvedReferenceType queuedAncestor = queuedAncestors.removeFirst();
                 queuedAncestor.getTypeDeclaration().ifPresent(rtd -> new LinkedHashSet<>(
-                                queuedAncestor.getDirectAncestors())
+                        queuedAncestor.getDirectAncestors())
                         .forEach(ancestor -> {
-                            // add this ancestor to the queue (for a deferred search)
                             queuedAncestors.add(ancestor);
-                            // add this ancestor to the list of ancestors
-                            ancestors.add(ancestor);
+                            if (seen.add(ancestor)) {
+                                ancestors.add(ancestor);
+                            }
                         }));
             }
         }
-        return new ArrayList<>(ancestors);
+        return ancestors;
     };
 
     // /
