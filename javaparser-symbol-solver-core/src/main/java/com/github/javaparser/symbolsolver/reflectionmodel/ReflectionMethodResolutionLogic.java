@@ -108,7 +108,12 @@ class ReflectionMethodResolutionLogic {
             }
         }
         List<MethodUsage> methods = new ArrayList<>();
-        for (Method method : clazz.getMethods()) {
+        // Declared methods only. Class.getMethods() already includes inherited public methods;
+        // adding those again from the ancestor walk below duplicates the same declaration with
+        // different type-parameter substitutions (unsubstituted T vs substituted R) and used to
+        // throw MethodAmbiguityException for B<P> extends A<P> (issue #5039). Matches
+        // ReflectionClassDeclaration / JavassistUtils, which also walk ancestors separately.
+        for (Method method : clazz.getDeclaredMethods()) {
             if (method.getName().equals(name) && !method.isBridge() && !method.isSynthetic()) {
                 ResolvedMethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
                 MethodUsage methodUsage = replaceParams(typeParameterValues, scopeType, methodDeclaration);
