@@ -61,11 +61,13 @@ class PrettyPrintVisitorTest extends TestParser {
 
     @Test
     void getMaximumCommonTypeWithoutAnnotations() {
+        // C-style array brackets (ArrayType.Origin.NAME) belong after the variable name and are not
+        // part of the maximum common type, so only the type-side [] levels are kept here (issue #3444).
         VariableDeclarationExpr vde1 = parseVariableDeclarationExpr("int a[], b[]");
-        assertEquals("int[]", vde1.getMaximumCommonType().get().toString());
+        assertEquals("int", vde1.getMaximumCommonType().get().toString());
 
         VariableDeclarationExpr vde2 = parseVariableDeclarationExpr("int[][] a[], b[]");
-        assertEquals("int[][][]", vde2.getMaximumCommonType().get().toString());
+        assertEquals("int[][]", vde2.getMaximumCommonType().get().toString());
 
         VariableDeclarationExpr vde3 = parseVariableDeclarationExpr("int[][] a, b[]");
         assertEquals("int[][]", vde3.getMaximumCommonType().get().toString());
@@ -76,8 +78,9 @@ class PrettyPrintVisitorTest extends TestParser {
         VariableDeclarationExpr vde1 = parseVariableDeclarationExpr("int a @Foo [], b[]");
         assertEquals("int", vde1.getMaximumCommonType().get().toString());
 
+        // The trailing name-side [] level is excluded from the maximum common type (issue #3444).
         VariableDeclarationExpr vde2 = parseVariableDeclarationExpr("int[]@Foo [] a[], b[]");
-        assertEquals("int[][] @Foo []", vde2.getMaximumCommonType().get().toString());
+        assertEquals("int[] @Foo []", vde2.getMaximumCommonType().get().toString());
     }
 
     private String print(Node node) {
