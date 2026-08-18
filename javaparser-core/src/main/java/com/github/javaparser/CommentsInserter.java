@@ -157,16 +157,39 @@ class CommentsInserter {
         commentsToAttribute.stream()
                 .filter(comment -> comment.hasRange())
                 .filter(Comment::isLineComment)
-                .forEach(comment -> children.stream()
-                        .filter(child -> child.hasRange())
-                        .forEach(child -> {
-                            Range commentRange = comment.getRange().get();
-                            Range childRange = child.getRange().get();
-                            if (childRange.end.line == commentRange.begin.line
-                                    && attributeLineCommentToNodeOrChild(child, comment.asLineComment())) {
-                                attributedComments.add(comment);
-                            }
-                        }));
+                .forEach(comment -> {
+                    Position commentBegin = comment.getRange().get().begin;
+                    // Candidates: children whose end is on the comment's line and
+                    // before it, i.e. the nodes the comment could trail. Sort them by
+                    // begin position and try from the nearest (greatest begin) backwards,
+                    // stopping at the first one that accepts the comment. The previous
+                    // implementation iterated every such sibling without stopping, so the
+                    // same comment object was set on several of them. Trying in order and
+                    // breaking on first accept keeps the attribution unique while still
+                    // falling back to an earlier sibling when the nearest one refuses
+                    // (e.g. it already carries a comment), matching the old behavior.
+                    List<Node> trailing = new LinkedList<>();
+                    for (Node child : children) {
+                        if (!child.hasRange()) {
+                            continue;
+                        }
+                        Position childEnd = child.getRange().get().end;
+                        // Excludes a child that starts to the right of the comment on
+                        // the same line: it cannot be what the comment trails.
+                        if (childEnd.line == commentBegin.line && childEnd.isBefore(commentBegin)) {
+                            trailing.add(child);
+                        }
+                    }
+                    PositionUtils.sortByBeginPosition(
+                            trailing, configuration.isIgnoreAnnotationsWhenAttributingComments());
+                    Collections.reverse(trailing);
+                    for (Node candidate : trailing) {
+                        if (attributeLineCommentToNodeOrChild(candidate, comment.asLineComment())) {
+                            attributedComments.add(comment);
+                            break;
+                        }
+                    }
+                });
         commentsToAttribute.removeAll(attributedComments);
     }
 
