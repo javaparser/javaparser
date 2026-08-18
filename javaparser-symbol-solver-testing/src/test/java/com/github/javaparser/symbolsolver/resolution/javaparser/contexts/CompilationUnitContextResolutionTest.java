@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.when;
 
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -39,14 +41,19 @@ import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,6 +64,18 @@ import org.junit.jupiter.api.Test;
 class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
+
+    /** Fixture root for static import cycle (works from repo root or module dir). */
+    private static Path fixtureRootForStaticImportCycle() throws URISyntaxException {
+        try {
+            return adaptPath("src/test/resources/static_import_cycle_fixture");
+        } catch (IllegalArgumentException e) {
+            return Paths.get(CompilationUnitContextResolutionTest.class
+                    .getClassLoader()
+                    .getResource("static_import_cycle_fixture")
+                    .toURI());
+        }
+    }
 
     @BeforeEach
     void setup() {
@@ -267,5 +286,22 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
                         .getType()
                         .asReferenceType()
                         .getQualifiedName());
+    }
+
+    @Test
+    void resolveMethodCallsInElephantBuilderWithCyclicStaticImportsWithoutStackOverflow()
+            throws IOException, URISyntaxException {
+        Path fixtureRoot = fixtureRootForStaticImportCycle();
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
+        typeSolver.add(new ReflectionTypeSolver());
+        typeSolver.add(new JavaParserTypeSolver(fixtureRoot));
+
+        CompilationUnit cu =
+                parseSampleWithStandardExtension("static_import_cycle_fixture/ElephantBuilder", typeSolver);
+
+        NameExpr lionExpr = cu.findFirst(
+                        NameExpr.class, n -> n.getNameAsString().equals("Lion"))
+                .get();
+        assertDoesNotThrow(() -> JavaParserFacade.get(typeSolver).solve(lionExpr));
     }
 }
