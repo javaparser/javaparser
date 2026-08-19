@@ -47,14 +47,19 @@ public class InferenceContext {
     }
 
     private InferenceVariableType inferenceVariableTypeForTp(ResolvedTypeParameterDeclaration tp) {
-        if (!inferenceVariableTypeMap.containsKey(tp.getName())) {
+        // The key must identify the type parameter *declaration*, not just its name: two distinct
+        // type variables that happen to share a name (e.g. the U of Stream.reduce(U, BiFunction<U,
+        // ? super T, U>, BinaryOperator<U>) and the U of BiFunction<T, U, R>) would otherwise be
+        // unified into a single inference variable and accumulate contradictory bounds.
+        String key = tp.getQualifiedName();
+        if (!inferenceVariableTypeMap.containsKey(key)) {
             InferenceVariableType inferenceVariableType =
                     new InferenceVariableType(nextInferenceVariableId++, typeSolver);
             inferenceVariableTypes.add(inferenceVariableType);
             inferenceVariableType.setCorrespondingTp(tp);
-            inferenceVariableTypeMap.put(tp.getName(), inferenceVariableType);
+            inferenceVariableTypeMap.put(key, inferenceVariableType);
         }
-        return inferenceVariableTypeMap.get(tp.getName());
+        return inferenceVariableTypeMap.get(key);
     }
 
     /**

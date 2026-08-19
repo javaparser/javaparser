@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -32,6 +33,13 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class Issue2065Test extends AbstractResolutionTest {
+
+    private CompilationUnit parse(String code) {
+        ParserConfiguration config = new ParserConfiguration();
+        config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
+        StaticJavaParser.setConfiguration(config);
+        return StaticJavaParser.parse(code);
+    }
 
     @Test
     void test() {
@@ -42,16 +50,30 @@ public class Issue2065Test extends AbstractResolutionTest {
                 + "    }\n"
                 + "}";
 
-        ParserConfiguration config = new ParserConfiguration();
-        config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
-        StaticJavaParser.setConfiguration(config);
-
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         List<MethodCallExpr> exprs = cu.findAll(MethodCallExpr.class);
         for (MethodCallExpr expr : exprs) {
             if (expr.getNameAsString().contentEquals("max")) {
                 assertEquals("java.lang.Math.max(int, int)", expr.resolve().getQualifiedSignature());
             }
         }
+    }
+
+    /**
+     * The lambda passed to {@code reduce} must be typed as {@code BinaryOperator<Integer>}, not left
+     * with an unresolved type variable.
+     */
+    @Test
+    void theTypeOfTheLambdaIsInferred() {
+        CompilationUnit cu = parse("import java.util.stream.Stream;\n" + "public class A {\n"
+                + "    public void test(){\n"
+                + "        Stream.of(1,2).reduce((a, b) -> Math.max(a, b));\n"
+                + "    }\n"
+                + "}");
+
+        LambdaExpr lambda = cu.findFirst(LambdaExpr.class).get();
+        assertEquals(
+                "java.util.function.BinaryOperator<java.lang.Integer>",
+                lambda.calculateResolvedType().describe());
     }
 }
