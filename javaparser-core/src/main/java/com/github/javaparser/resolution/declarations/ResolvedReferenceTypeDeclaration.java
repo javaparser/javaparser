@@ -154,9 +154,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
             seen.addAll(queuedAncestors);
             while (!queuedAncestors.isEmpty()) {
                 ResolvedReferenceType queuedAncestor = queuedAncestors.removeFirst();
-                queuedAncestor.getTypeDeclaration().ifPresent(rtd -> new LinkedHashSet<>(
-                        queuedAncestor.getDirectAncestors())
-                        .forEach(ancestor -> {
+                queuedAncestor
+                        .getTypeDeclaration()
+                        .ifPresent(rtd -> new LinkedHashSet<>(queuedAncestor.getDirectAncestors()).forEach(ancestor -> {
                             queuedAncestors.add(ancestor);
                             if (seen.add(ancestor)) {
                                 ancestors.add(ancestor);
