@@ -509,13 +509,9 @@ public class LexicalPreservingPrinter {
                         // Found a line comment that matches the first line of the markdown comment.
                         TokenTextElement startToken = (TokenTextElement) textElement;
                         maybeMatchingTokens.add(startToken);
-                        String startText = startToken.getText();
                         // A one-line Markdown comment is a single token. Completing the match only on a later
                         // SINGLE_LINE_COMMENT would leave that case unmatched and later drop the method node.
-                        if (oldContent.equals(startText)
-                                || oldContent.equals(startText + "\n")
-                                || oldContent.equals(startText + "\r\n")
-                                || oldContent.equals(startText + "\r")) {
+                        if (oldContent.equals(startToken.getText())) {
                             matchingTokens.add(startToken);
                             maybeMatchingTokens.clear();
                             inMatch = false;

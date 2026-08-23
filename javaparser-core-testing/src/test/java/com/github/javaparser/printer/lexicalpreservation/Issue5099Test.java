@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2013-2026 The JavaParser Team.
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2026 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -63,11 +64,7 @@ class Issue5099Test extends AbstractLexicalPreservingTest {
         assertTrue(method.removeJavaDocComment());
 
         assertEqualsStringIgnoringEol(
-                "package test;\n" + "public class Error\n"
-                        + "{\n"
-                        + "  public void x()\n"
-                        + "  { }\n"
-                        + "}\n",
+                "package test;\n" + "public class Error\n" + "{\n" + "  public void x()\n" + "  { }\n" + "}\n",
                 LexicalPreservingPrinter.print(cu));
     }
 }
