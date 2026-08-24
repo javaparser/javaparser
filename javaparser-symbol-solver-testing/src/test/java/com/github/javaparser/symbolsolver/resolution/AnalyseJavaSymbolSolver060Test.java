@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.javaparser.SlowTest;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -90,7 +89,7 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         PrintStream outErr = new PrintStream(outErrStream);
 
         // set configuration to ignore comment
-        StaticJavaParser.getParserConfiguration().setAttributeComments(false);
+        sourceFileInfoExtractor.getParserConfiguration().setAttributeComments(false);
 
         sourceFileInfoExtractor.setOut(outErr);
         sourceFileInfoExtractor.setErr(outErr);

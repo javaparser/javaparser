@@ -21,11 +21,12 @@
 
 package com.github.javaparser.symbolsolver;
 
-import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static java.util.Comparator.comparing;
 
-import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -63,6 +64,7 @@ import java.util.List;
 public class SourceFileInfoExtractor {
 
     private final TypeSolver typeSolver;
+    private final JavaParserAdapter parser;
 
     private int successes = 0;
     private int failures = 0;
@@ -74,8 +76,14 @@ public class SourceFileInfoExtractor {
 
     public SourceFileInfoExtractor(TypeSolver typeSolver) {
         this.typeSolver = typeSolver;
-        // We must initialise the symbol resolver in the parser configuration in order to resolve expressions.
-        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        // Each extractor owns its own parser/config instead of mutating the shared
+        // StaticJavaParser state, so it doesn't depend on (or leak into) global config.
+        this.parser = JavaParserAdapter.of(
+                new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver))));
+    }
+
+    public ParserConfiguration getParserConfiguration() {
+        return parser.getParserConfiguration();
     }
 
     public void setVerbose(boolean verbose) {
@@ -197,7 +205,7 @@ public class SourceFileInfoExtractor {
                     if (printFileName) {
                         out.println("- parsing " + file.toAbsolutePath());
                     }
-                    CompilationUnit cu = parse(file);
+                    CompilationUnit cu = parser.parse(file);
                     List<Node> nodes = collectAllNodes(cu);
                     nodes.forEach(n -> solve(n));
                 }
@@ -214,7 +222,7 @@ public class SourceFileInfoExtractor {
                     if (printFileName) {
                         out.println("- parsing " + file.toAbsolutePath());
                     }
-                    CompilationUnit cu = parse(file);
+                    CompilationUnit cu = parser.parse(file);
                     solveMethodCalls(cu);
                 }
                 return FileVisitResult.CONTINUE;
