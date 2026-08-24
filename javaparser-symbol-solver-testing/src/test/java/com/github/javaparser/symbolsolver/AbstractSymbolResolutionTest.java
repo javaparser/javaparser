@@ -37,6 +37,15 @@ import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractSymbolResolutionTest {
 
+    /**
+     * NOTE: this per-test reset is incompatible with configuring StaticJavaParser
+     * in {@code @BeforeAll}. If a subclass sets up its resolver once in
+     * {@code @BeforeAll} but parses inside the test method itself, the resolver
+     * will already have been wiped by resetBefore() below by the time parsing
+     * happens (this is what broke AnonymousClassesResolutionTest). Classes that
+     * also parse during {@code @BeforeAll} are unaffected, since the resolver is
+     * captured in the AST before resetBefore() ever runs.
+     */
     @BeforeEach
     public void resetBefore() {
         // Plain, blank configuration — deliberately without a symbol resolver,
