@@ -24,25 +24,21 @@ package com.github.javaparser.symbolsolver.resolution;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import java.io.IOException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class AnonymousClassesResolutionTest extends AbstractResolutionTest {
 
-    @BeforeAll
-    static void configureSymbolSolver() throws IOException {
-        // configure symbol solver before parsing
+    // See #1703
+    @Test
+    void solveAnonymousClassMethodClass() {
+        // Build an isolated resolver for this test only. no shared/static state touched.
         CombinedTypeSolver typeSolver = new CombinedTypeSolver();
         typeSolver.add(new ReflectionTypeSolver());
         MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
@@ -52,19 +48,8 @@ class AnonymousClassesResolutionTest extends AbstractResolutionTest {
         memoryTypeSolver.addDeclaration("org.springframework.transaction.support.TransactionCallbackWithoutResult", cd);
 
         typeSolver.add(memoryTypeSolver);
-        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
-    }
 
-    @AfterAll
-    static void unConfigureSymbolSolver() {
-        // unconfigure symbol solver so as not to potentially disturb tests in other classes
-        StaticJavaParser.getParserConfiguration().setSymbolResolver(null);
-    }
-
-    // See #1703
-    @Test
-    void solveAnonymousClassMethodClass() {
-        CompilationUnit cu = parseSample("AnonymousClassMethodClass");
+        CompilationUnit cu = parseSample("AnonymousClassMethodClass", typeSolver);
 
         cu.accept(
                 new VoidVisitorAdapter<Object>() {

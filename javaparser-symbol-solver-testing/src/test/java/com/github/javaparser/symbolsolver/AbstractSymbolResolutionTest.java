@@ -33,15 +33,23 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractSymbolResolutionTest {
 
+    @BeforeEach
+    public void resetBefore() {
+        // Plain, blank configuration — deliberately without a symbol resolver,
+        // so tests that need one are forced to configure it themselves
+        // instead of silently inheriting one from here.
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+    }
+
     @AfterEach
-    public void reset() {
-        // reset configuration to not potentially disturb others tests.
-        // So we have to set specific configuration between each test.
-        StaticJavaParser.setConfiguration(
-                new ParserConfiguration().setSymbolResolver(symbolResolver(defaultTypeSolver())));
+    public void resetAfter() {
+        // Same plain reset, so this test doesn't leak its own configuration
+        // into whatever runs next.
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
     }
 
     @AfterAll
