@@ -506,10 +506,18 @@ public class LexicalPreservingPrinter {
                         }
                     } else if (textElement.isToken(SINGLE_LINE_COMMENT)
                             && oldContent.startsWith(((TokenTextElement) textElement).getText())) {
-                        // Found a line comment that matches the first line of the markdown comment, so start looking
-                        // for the rest of the comment.
-                        maybeMatchingTokens.add(textElement);
-                        inMatch = true;
+                        // Found a line comment that matches the first line of the markdown comment.
+                        TokenTextElement startToken = (TokenTextElement) textElement;
+                        maybeMatchingTokens.add(startToken);
+                        // A one-line Markdown comment is a single token. Completing the match only on a later
+                        // SINGLE_LINE_COMMENT would leave that case unmatched and later drop the method node.
+                        if (oldContent.equals(startToken.getText())) {
+                            matchingTokens.add(startToken);
+                            maybeMatchingTokens.clear();
+                            inMatch = false;
+                        } else {
+                            inMatch = true;
+                        }
                     }
                 }
             } else {
