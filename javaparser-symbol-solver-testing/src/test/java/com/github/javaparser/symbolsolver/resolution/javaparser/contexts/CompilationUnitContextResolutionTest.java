@@ -21,13 +21,17 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -39,10 +43,12 @@ import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
@@ -267,5 +273,57 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
                         .getType()
                         .asReferenceType()
                         .getQualifiedName());
+    }
+
+    /**
+     * The fixture's static imports form a cycle (CycleA imports CycleB, CycleB imports CycleA), which
+     * used to recurse forever while resolving a name that none of those types declares. See issue 4450.
+     */
+    @Test
+    void resolveNameInCompilationUnitWithCyclicStaticImportsWithoutStackOverflow() throws IOException {
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+        combinedTypeSolver.add(new ReflectionTypeSolver());
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath("src/test/resources/static_import_cycle_fixture")));
+
+        CompilationUnit cu =
+                parseSampleWithStandardExtension("static_import_cycle_fixture/cycle/EntryPoint", combinedTypeSolver);
+
+        // Resolving the qualifier as a name is what follows the static imports into the cycle.
+        NameExpr targetRef = cu.findFirst(
+                        NameExpr.class, n -> n.getNameAsString().equals("Target"))
+                .get();
+        assertDoesNotThrow(() -> JavaParserFacade.get(combinedTypeSolver).solve(targetRef));
+
+        FieldAccessExpr objCode = cu.findFirst(
+                        FieldAccessExpr.class, f -> f.getNameAsString().equals("OBJCODE"))
+                .get();
+        assertEquals(
+                "java.lang.String",
+                JavaParserFacade.get(combinedTypeSolver).getType(objCode).describe());
+    }
+
+    /**
+     * Static imports are not transitive (JLS 7.5.3, 7.5.4): EntryPoint statically imports CycleA, and
+     * CycleA statically imports SolvableConstants, but that does not make SolvableConstants.ID a member
+     * of CycleA. A reference to ID in EntryPoint does not compile, so it must not resolve either.
+     */
+    @Test
+    void doesNotResolveNameReachableOnlyThroughTransitiveStaticImport() throws IOException {
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+        combinedTypeSolver.add(new ReflectionTypeSolver());
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath("src/test/resources/static_import_cycle_fixture")));
+
+        CompilationUnit entryPoint =
+                parseSampleWithStandardExtension("static_import_cycle_fixture/cycle/EntryPoint", combinedTypeSolver);
+        assertFalse(new CompilationUnitContext(entryPoint, combinedTypeSolver)
+                .solveSymbol("ID")
+                .isSolved());
+
+        // Control: the same name resolves from the compilation unit that imports it directly.
+        CompilationUnit cycleA =
+                parseSampleWithStandardExtension("static_import_cycle_fixture/cycle/CycleA", combinedTypeSolver);
+        assertTrue(new CompilationUnitContext(cycleA, combinedTypeSolver)
+                .solveSymbol("ID")
+                .isSolved());
     }
 }
