@@ -22,8 +22,9 @@ package com.github.javaparser.symbolsolver.resolution.typeinference;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -50,13 +51,11 @@ class LeastUpperBoundTest {
 
     private TypeSolver typeSolver;
 
-    @BeforeAll
-    static void setUpBeforeClass() throws Exception {
-        ParserConfiguration configuration =
-                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-        // Setup parser
-        StaticJavaParser.setConfiguration(configuration);
-    }
+    // Each test class owns its own parser/config instead of mutating the shared
+    // StaticJavaParser state, so it doesn't depend on (or leak into) global config.
+    private static final JavaParserAdapter parser = JavaParserAdapter.of(
+            new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()))));
+
 
     @AfterAll
     static void tearDownAfterClass() throws Exception {}
@@ -434,6 +433,6 @@ class LeastUpperBoundTest {
         for (String line : lines) {
             builder.append(line).append(System.lineSeparator());
         }
-        return StaticJavaParser.parse(builder.toString());
+        return parser.parse(builder.toString());
     }
 }
