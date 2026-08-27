@@ -45,7 +45,6 @@ public abstract class AbstractSymbolResolutionTest {
         JavaParserFacade.clearInstances();
     }
 
-
     /**
      * An initial attempt at allowing JDK-specific test cases. It is a work-in-progress, and subject to change.
      * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>

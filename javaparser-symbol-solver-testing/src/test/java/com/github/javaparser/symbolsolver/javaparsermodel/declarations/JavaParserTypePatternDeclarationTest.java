@@ -32,14 +32,12 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.util.Optional;
 
-
 class JavaParserTypePatternDeclarationTest implements ResolvedTypePatternDeclarationTest {
 
     // Each test class owns its own parser/config instead of mutating the shared
     // StaticJavaParser state, so it doesn't depend on (or leak into) global config.
-    private static final JavaParserAdapter parser = JavaParserAdapter.of(
-            new JavaParser(new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW)));
-
+    private static final JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(
+            new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW)));
 
     @Override
     public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {

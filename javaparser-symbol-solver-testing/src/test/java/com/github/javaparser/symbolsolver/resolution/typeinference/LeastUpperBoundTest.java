@@ -53,9 +53,8 @@ class LeastUpperBoundTest {
 
     // Each test class owns its own parser/config instead of mutating the shared
     // StaticJavaParser state, so it doesn't depend on (or leak into) global config.
-    private static final JavaParserAdapter parser = JavaParserAdapter.of(
-            new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()))));
-
+    private static final JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(
+            new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()))));
 
     @AfterAll
     static void tearDownAfterClass() throws Exception {}
