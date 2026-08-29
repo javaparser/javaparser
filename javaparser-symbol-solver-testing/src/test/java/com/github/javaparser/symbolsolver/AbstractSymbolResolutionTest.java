@@ -21,8 +21,6 @@
 
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -32,34 +30,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractSymbolResolutionTest {
 
-    /**
-     * NOTE: this per-test reset is incompatible with configuring StaticJavaParser
-     * in {@code @BeforeAll}. If a subclass sets up its resolver once in
-     * {@code @BeforeAll} but parses inside the test method itself, the resolver
-     * will already have been wiped by resetBefore() below by the time parsing
-     * happens (this is what broke AnonymousClassesResolutionTest). Classes that
-     * also parse during {@code @BeforeAll} are unaffected, since the resolver is
-     * captured in the AST before resetBefore() ever runs.
-     */
-    @BeforeEach
-    public void resetBefore() {
-        // Plain, blank configuration — deliberately without a symbol resolver,
-        // so tests that need one are forced to configure it themselves
-        // instead of silently inheriting one from here.
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-    }
-
-    @AfterEach
-    public void resetAfter() {
-        // Same plain reset, so this test doesn't leak its own configuration
-        // into whatever runs next.
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-    }
+    // StaticJavaParser is now reset before/after every test in this module by
+    // StaticJavaParserConfigResetExtension (auto-detected via
+    // src/test/resources/META-INF/services), so this class no longer needs its
+    // own @BeforeEach/@AfterEach reset. See that class for the full explanation
+    // of the @BeforeAll incompatibility this reset creates.
 
     @AfterAll
     public static void tearDown() {

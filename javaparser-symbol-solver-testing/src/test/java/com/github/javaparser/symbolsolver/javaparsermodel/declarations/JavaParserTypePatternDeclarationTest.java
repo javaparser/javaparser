@@ -21,8 +21,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
@@ -30,14 +31,13 @@ import com.github.javaparser.resolution.declarations.ResolvedTypePatternDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeAll;
 
 class JavaParserTypePatternDeclarationTest implements ResolvedTypePatternDeclarationTest {
 
-    @BeforeAll
-    public static void setup() {
-        StaticJavaParser.getConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW);
-    }
+    // Each test class owns its own parser/config instead of mutating the shared
+    // StaticJavaParser state, so it doesn't depend on (or leak into) global config.
+    private static final JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(
+            new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW)));
 
     @Override
     public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
@@ -47,7 +47,7 @@ class JavaParserTypePatternDeclarationTest implements ResolvedTypePatternDeclara
 
     @Override
     public JavaParserTypePatternDeclaration createValue() {
-        TypePatternExpr wrappedNode = StaticJavaParser.parse("class A {a() {if (object instanceof String d) return;}}")
+        TypePatternExpr wrappedNode = parser.parse("class A {a() {if (object instanceof String d) return;}}")
                 .findFirst(TypePatternExpr.class)
                 .get();
         ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
