@@ -1038,8 +1038,12 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
                 "java.lang.Object.wait(long, int)"));
 
         // Temporary workaround to allow tests to pass on JDK14
-        if (TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
+        if (currentHostJdkMajor() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
+        }
+        // JDK 21 split Object.wait(long) into wait0
+        if (currentHostJdkMajor() >= 21) {
+            expected.add("java.lang.Object.wait0(long)");
         }
 
         assertThat(signatures, containsInAnyOrder(expected.toArray()));

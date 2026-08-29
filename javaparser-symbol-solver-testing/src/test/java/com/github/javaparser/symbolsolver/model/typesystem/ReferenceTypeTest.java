@@ -648,7 +648,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         rawArrayList.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        assertEquals(9, ancestors.size());
+        // JDK 21 inserts java.util.SequencedCollection into the List/Collection hierarchy
+        assertEquals(currentHostJdkMajor() >= 21 ? 10 : 9, ancestors.size());
 
         ResolvedTypeVariable tv =
                 new ResolvedTypeVariable(arraylist.getTypeParameters().get(0));
@@ -695,7 +696,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         listOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        assertEquals(2, ancestors.size());
+        // JDK 21 inserts java.util.SequencedCollection into the List/Collection hierarchy
+        assertEquals(currentHostJdkMajor() >= 21 ? 3 : 2, ancestors.size());
 
         assertEquals(
                 new ReferenceTypeImpl(
@@ -742,7 +744,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         abstractListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        assertEquals(5, ancestors.size());
+        // JDK 21 inserts java.util.SequencedCollection into the List/Collection hierarchy
+        assertEquals(currentHostJdkMajor() >= 21 ? 6 : 5, ancestors.size());
 
         assertEquals(
                 new ReferenceTypeImpl(
@@ -775,7 +778,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         arrayListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        assertEquals(9, ancestors.size());
+        // JDK 21 inserts java.util.SequencedCollection into the List/Collection hierarchy
+        assertEquals(currentHostJdkMajor() >= 21 ? 10 : 9, ancestors.size());
 
         assertEquals(
                 new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(RandomAccess.class, typeResolver)),
@@ -946,8 +950,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         // FIXME: Remove this temporary fix which varies the test based on the detected JDK which is running these
         // tests.
-        TestJdk currentJdk = TestJdk.getCurrentHostJdk();
-        if (currentJdk.getMajorVersion() < 12) {
+        if (currentHostJdkMajor() < 12) {
             // JDK 12 introduced "java.lang.constant.Constable"
             assertThat(
                     ancestors,
