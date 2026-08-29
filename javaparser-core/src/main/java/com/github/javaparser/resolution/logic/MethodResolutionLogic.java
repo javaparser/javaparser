@@ -224,8 +224,15 @@ public class MethodResolutionLogic {
                     expectedDeclaredType = replaceTypeParam(expectedDeclaredType, tp, typeSolver);
                 }
                 if (!expectedDeclaredType.isAssignableBy(actualArgumentType)) {
-                    // Check boxing/unboxing compatibility using TypeSolver
-                    if (isBoxingCompatibleWithTypeSolver(expectedDeclaredType, actualArgumentType, typeSolver)) {
+                    // Check boxing/unboxing compatibility using TypeSolver.
+                    // Boxing or widening of the component types of two array types is only
+                    // meaningful for a variadic parameter, where the conversion applies to each
+                    // individual argument instead of to the array as a whole.
+                    if (isBoxingCompatibleWithTypeSolver(
+                            expectedDeclaredType,
+                            actualArgumentType,
+                            typeSolver,
+                            methodDeclaration.getParam(i).isVariadic())) {
                         // This parameter is compatible via boxing/unboxing
                         continue;
                     }
@@ -595,6 +602,23 @@ public class MethodResolutionLogic {
      */
     private static boolean isBoxingCompatibleWithTypeSolver(
             ResolvedType expectedType, ResolvedType actualType, TypeSolver typeSolver) {
+        return isBoxingCompatibleWithTypeSolver(expectedType, actualType, typeSolver, true);
+    }
+
+    /**
+     * Same as {@link #isBoxingCompatibleWithTypeSolver(ResolvedType, ResolvedType, TypeSolver)} but
+     * allows to forbid boxing and widening between the component types of two array types.
+     *
+     * @param arrayComponentConversionAllowed {@code true} when the compared array types stand for a
+     *      variadic parameter, in which case the conversion applies to each individual argument.
+     *      {@code false} for a genuine array parameter: no boxing or widening conversion exists
+     *      between distinct primitive array types (JLS 5.2), so the component types must be equal.
+     */
+    private static boolean isBoxingCompatibleWithTypeSolver(
+            ResolvedType expectedType,
+            ResolvedType actualType,
+            TypeSolver typeSolver,
+            boolean arrayComponentConversionAllowed) {
         // Handle null types
         if (expectedType == null || actualType == null) {
             return false;
@@ -604,7 +628,8 @@ public class MethodResolutionLogic {
             ResolvedWildcard wildcard = expectedType.asWildcard();
             if (wildcard.isBounded()) {
                 // Check compatibility with the wildcard bound
-                return isBoxingCompatibleWithTypeSolver(wildcard.getBoundedType(), actualType, typeSolver);
+                return isBoxingCompatibleWithTypeSolver(
+                        wildcard.getBoundedType(), actualType, typeSolver, arrayComponentConversionAllowed);
             }
             // Unbounded wildcard (?) - can accept anything via boxing
             return actualType.isPrimitive();
@@ -613,8 +638,13 @@ public class MethodResolutionLogic {
         if (expectedType.isArray() && actualType.isArray()) {
             ResolvedType expectedComponent = expectedType.asArrayType().getComponentType();
             ResolvedType actualComponent = actualType.asArrayType().getComponentType();
+            if (!arrayComponentConversionAllowed
+                    && (expectedComponent.isPrimitive() || actualComponent.isPrimitive())) {
+                return expectedComponent.equals(actualComponent);
+            }
             // Check if component types are boxing compatible
-            return isBoxingCompatibleWithTypeSolver(expectedComponent, actualComponent, typeSolver);
+            return isBoxingCompatibleWithTypeSolver(
+                    expectedComponent, actualComponent, typeSolver, arrayComponentConversionAllowed);
         }
         // Boxing (reference type expected, primitive provided)
         if (expectedType.isReferenceType() && actualType.isPrimitive()) {
@@ -674,7 +704,10 @@ public class MethodResolutionLogic {
         if (actualType.isConstraint()) {
             // Check compatibility with the constraint bound
             return isBoxingCompatibleWithTypeSolver(
-                    expectedType, actualType.asConstraintType().getBound(), typeSolver);
+                    expectedType,
+                    actualType.asConstraintType().getBound(),
+                    typeSolver,
+                    arrayComponentConversionAllowed);
         }
         return false;
     }
