@@ -112,7 +112,7 @@ public class MethodResolutionLogic {
      *
      * @return true, if the given ResolvedMethodDeclaration matches the given name/types (normally obtained from a MethodUsage)
      *
-     * @see {@link MethodResolutionLogic#isApplicable(MethodUsage, String, List, TypeSolver)}
+     * @see MethodResolutionLogic#isApplicable(MethodUsage, String, List, TypeSolver)
      */
     private static boolean isApplicable(
             ResolvedMethodDeclaration methodDeclaration,
@@ -577,9 +577,8 @@ public class MethodResolutionLogic {
      * @return true, if the given MethodUsage matches the given name/types (normally
      *         obtained from a ResolvedMethodDeclaration)
      *
-     * @see {@link MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver)}
-     *      }
-     * @see {@link MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver, boolean)}
+     * @see MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver)
+     * @see MethodResolutionLogic#isApplicable(ResolvedMethodDeclaration, String, List, TypeSolver, boolean)
      */
     public static boolean isApplicable(
             MethodUsage methodUsage,
@@ -752,21 +751,21 @@ public class MethodResolutionLogic {
      *
      * This method performs deep substitution of type variables, handling various
      * type structures including:
-     * - Simple type variables (T, E, K, V, etc.)
-     * - Wildcards with type variable bounds (? super T, ? extends E)
-     * - Parameterized types with type variables (List<T>, Map<K, V>)
-     * - Nested combinations of the above (Consumer<? super T>, List<List<E>>)
+     * - Simple type variables ({@code T}, {@code E}, {@code K}, {@code V}, etc.)
+     * - Wildcards with type variable bounds ({@code ? super T}, {@code ? extends E})
+     * - Parameterized types with type variables ({@code List<T>}, {@code Map<K, V>})
+     * - Nested combinations of the above ({@code Consumer<? super T>}, {@code List<List<E>>})
      *
      * The substitution is based on a mapping between type parameter declarations
-     * (the formal parameters as declared, e.g., <T> in class Foo<T>) and their
-     * actual type arguments (the concrete types used, e.g., String in Foo<String>).
+     * (the formal parameters as declared, e.g., {@code <T>} in class {@code Foo<T>}) and their
+     * actual type arguments (the concrete types used, e.g., {@code String} in {@code Foo<String>}).
      *
      * Example transformations:
-     * - T -> String (when typeParams contains T and typeArgs contains String)
-     * - ? super T -> ? super String
-     * - Consumer<? super T> -> Consumer<? super String>
-     * - List<T> -> List<String>
-     * - Map<K, V> -> Map<String, Integer> (with appropriate mappings)
+     * - {@code T -> String} (when typeParams contains T and typeArgs contains String)
+     * - {@code ? super T -> ? super String}
+     * - {@code Consumer<? super T> -> Consumer<? super String>}
+     * - {@code List<T> -> List<String>}
+     * - {@code Map<K, V> -> Map<String, Integer>} (with appropriate mappings)
      *
      * @param type the type in which to substitute type variables
      * @param typeParams the list of type parameter declarations (formal parameters)
