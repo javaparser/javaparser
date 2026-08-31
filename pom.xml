@@ -164,6 +164,13 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+        <!--
+            Java release the artifacts are compiled against. Using `<release>` rather than
+            `<source>/<target>` makes javac resolve the JDK 8 API signatures from ct.sym instead
+            of the host JDK's, so the Java 8 baseline is actually verified and the build is not
+            affected by APIs added to JDK classes later on (e.g. SequencedCollection in JDK 21).
+        -->
+        <java.release>8</java.release>
         <byte-buddy.version>1.18.12-jdk5</byte-buddy.version>
         <argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'</argLine>
         <build.timestamp>2026-05-31T00:00:00Z</build.timestamp>
@@ -399,7 +406,7 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.12.0</version>
                     <configuration>
-                        <source>${java.version}</source>
+                        <release>${java.release}</release>
                         <additionalOptions>
                             <!-- doclint requires perfect JavaDoc, and fails the generation of javadoc on even minor problems -->
                             <!-- Ideally we will have perfectly formatted javadoc, but for now just disable it. -->
@@ -490,8 +497,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>${java.release}</release>
                 </configuration>
             </plugin>
             <plugin>
