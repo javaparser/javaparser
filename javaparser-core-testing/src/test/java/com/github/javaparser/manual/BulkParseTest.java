@@ -26,6 +26,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
 import static java.util.Comparator.comparing;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
@@ -35,7 +36,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -93,16 +93,8 @@ class BulkParseTest {
         Log.info("Writing results...");
 
         Path testResults = mavenModuleRoot(BulkParseTest.class)
-                .resolve(Paths.get(
-                        "..",
-                        "javaparser-core-testing",
-                        "src",
-                        "test",
-                        "resources",
-                        "com",
-                        "github",
-                        "javaparser",
-                        "bulk_test_results"))
+                .resolve("target")
+                .resolve("bulk_test_results")
                 .normalize();
         testResults.toFile().mkdirs();
         testResults = testResults.resolve(testResultsFileName);
@@ -124,5 +116,8 @@ class BulkParseTest {
 
         Path finalTestResults = testResults;
         Log.info("Results are in %s", () -> finalTestResults);
+
+        assertEquals(
+                0, problemTotal, f("%s parse problems in %s files, see %s", problemTotal, results.size(), testResults));
     }
 }
