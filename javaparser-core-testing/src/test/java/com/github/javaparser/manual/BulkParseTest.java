@@ -21,25 +21,21 @@
 
 package com.github.javaparser.manual;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
-import static com.github.javaparser.utils.TestUtils.download;
-import static com.github.javaparser.utils.TestUtils.temporaryDirectory;
 import static java.util.Comparator.comparing;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
-import com.github.javaparser.utils.SourceZip;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -48,46 +44,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class BulkParseTest {
-    /**
-     * Running this will download a version of the OpenJDK, unzip it, and parse it. If it throws a stack overflow
-     * exception, increase the JVM's stack size.
-     */
-    public static void main(String[] args) throws IOException {
-        Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
-        // This contains all kinds of test cases so it will lead to a lot of errors:
-        new BulkParseTest().parseOpenJdkLangToolsRepository();
-        // This contains the JDK source code, so it should have zero errors:
-        new BulkParseTest().parseJdkSrcZip();
-    }
-
-    private void parseOpenJdkLangToolsRepository() throws IOException {
-        Path workdir = mavenModuleRoot(BulkParseTest.class)
-                .resolve(Paths.get(temporaryDirectory(), "javaparser_bulkparsetest"));
-        workdir.toFile().mkdirs();
-        Path openJdkZipPath = workdir.resolve("langtools.zip");
-        if (Files.notExists(openJdkZipPath)) {
-            Log.info("Downloading JDK langtools");
-            /* Found by choosing a tag here: http://hg.openjdk.java.net/jdk9/jdk9/langtools/tags
-            then copying the "zip" link to the line below: */
-            download(
-                    new URL("http://hg.openjdk.java.net/jdk10/jdk10/langtools/archive/19293ea3999f.zip"),
-                    openJdkZipPath);
-        }
-        bulkTest(
-                new SourceZip(openJdkZipPath),
-                "openjdk_src_repo_test_results.txt",
-                new ParserConfiguration().setLanguageLevel(JAVA_10));
-    }
-
-    private void parseJdkSrcZip() throws IOException {
-        // This is where Ubuntu stores the contents of package openjdk-8-src
-        Path path = Paths.get("/usr/lib/jvm/openjdk-9/src.zip");
-        bulkTest(
-                new SourceZip(path),
-                "openjdk_src_zip_test_results.txt",
-                new ParserConfiguration().setLanguageLevel(JAVA_9));
-    }
-
     @BeforeEach
     void startLogging() {
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
@@ -133,35 +89,12 @@ class BulkParseTest {
         writeResults(results, testResultsFileName);
     }
 
-    public void bulkTest(SourceZip sourceRoot, String testResultsFileName, ParserConfiguration configuration)
-            throws IOException {
-        sourceRoot.setParserConfiguration(configuration);
-        TreeMap<Path, List<Problem>> results =
-                new TreeMap<>(comparing(o -> o.toString().toLowerCase()));
-        sourceRoot.parse((path, result) -> {
-            if (!path.toString().contains("target")) {
-                if (!result.isSuccessful()) {
-                    results.put(path, result.getProblems());
-                }
-            }
-        });
-        writeResults(results, testResultsFileName);
-    }
-
     private void writeResults(TreeMap<Path, List<Problem>> results, String testResultsFileName) throws IOException {
         Log.info("Writing results...");
 
         Path testResults = mavenModuleRoot(BulkParseTest.class)
-                .resolve(Paths.get(
-                        "..",
-                        "javaparser-core-testing",
-                        "src",
-                        "test",
-                        "resources",
-                        "com",
-                        "github",
-                        "javaparser",
-                        "bulk_test_results"))
+                .resolve("target")
+                .resolve("bulk_test_results")
                 .normalize();
         testResults.toFile().mkdirs();
         testResults = testResults.resolve(testResultsFileName);
@@ -183,5 +116,8 @@ class BulkParseTest {
 
         Path finalTestResults = testResults;
         Log.info("Results are in %s", () -> finalTestResults);
+
+        assertEquals(
+                0, problemTotal, f("%s parse problems in %s files, see %s", problemTotal, results.size(), testResults));
     }
 }
