@@ -32,7 +32,7 @@ import java.util.Map;
  * <ul>
  *     <li>
  *         It could be a primitive type or a reference type (enum, class, interface).
- *         In the latter case, it could take type typeParametersValues (other {@code TypeUsages}).</p>
+ *         In the latter case, it could take type typeParametersValues (other {@code TypeUsages}).
  *     </li>
  *     <li>
  *         It could also be a {@code TypeVariable}, like in: {@code class A<B> {} } where {@code B} is a {@code TypeVariable}.

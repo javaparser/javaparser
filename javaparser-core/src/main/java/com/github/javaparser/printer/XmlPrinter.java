@@ -124,7 +124,7 @@ public class XmlPrinter {
      * Output the XML Document representing an AST node to given XMLStreamWriter.
      * <p>
      * This method outputs the starting of XML document, then delegates to
-     * {@link #outputNode(Node, String, XMLStreamWriter) for writing the root element of XML document, and finally
+     * {@link #outputNode(Node, String, XMLStreamWriter)} for writing the root element of XML document, and finally
      * outputs the ending of XML document.
      * </p>
      * <p>

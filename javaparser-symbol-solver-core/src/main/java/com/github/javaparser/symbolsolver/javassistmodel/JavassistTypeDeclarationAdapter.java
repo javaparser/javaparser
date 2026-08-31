@@ -276,7 +276,7 @@ public class JavassistTypeDeclarationAdapter {
     /**
      * Get the nested classes.
      * <br>
-     * {@code class Foo { class Bar {} }
+     * {@code class Foo { class Bar {} }}
      * In the example above we expect the nested types for {@code Foo} to be {@code Bar}.
      *
      * @return The nested classes.
