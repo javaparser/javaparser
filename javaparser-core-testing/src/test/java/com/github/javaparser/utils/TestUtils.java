@@ -47,9 +47,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class TestUtils {
 
@@ -193,17 +190,6 @@ public class TestUtils {
             }
         }
         Log.info("Unzipped %s to %s", () -> zipFile, () -> outputFolder);
-    }
-
-    /**
-     * Download a file from a URL to disk.
-     */
-    public static void download(URL url, Path destination) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url).build();
-
-        Response response = client.newCall(request).execute();
-        Files.write(destination, response.body().bytes());
     }
 
     public static String temporaryDirectory() {
