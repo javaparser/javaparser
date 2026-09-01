@@ -950,16 +950,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         // FIXME: Remove this temporary fix which varies the test based on the detected JDK which is running these
         // tests.
-        if (currentHostJdkMajor() < 12) {
-            // JDK 12 introduced "java.lang.constant.Constable"
-            assertThat(
-                    ancestors,
-                    containsInAnyOrder(
-                            "java.lang.CharSequence",
-                            "java.lang.Object",
-                            "java.lang.Comparable<java.lang.String>",
-                            "java.io.Serializable"));
-        } else {
+        if (hasConstable()) {
             // JDK 12 introduced "java.lang.constant.Constable"
             assertThat(
                     ancestors,
@@ -970,6 +961,14 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                             "java.io.Serializable",
                             "java.lang.constant.Constable",
                             "java.lang.constant.ConstantDesc"));
+        } else {
+            assertThat(
+                    ancestors,
+                    containsInAnyOrder(
+                            "java.lang.CharSequence",
+                            "java.lang.Object",
+                            "java.lang.Comparable<java.lang.String>",
+                            "java.io.Serializable"));
         }
     }
 

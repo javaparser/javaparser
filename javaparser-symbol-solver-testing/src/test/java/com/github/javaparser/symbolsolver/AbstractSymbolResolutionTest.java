@@ -33,8 +33,6 @@ import org.junit.jupiter.api.AfterAll;
 
 public abstract class AbstractSymbolResolutionTest {
 
-    private static final int HOST_JDK_MAJOR = parseHostJdkMajor();
-
     // StaticJavaParser is now reset before/after every test in this module by
     // StaticJavaParserConfigResetExtension (auto-detected via
     // src/test/resources/META-INF/services), so this class no longer needs its
@@ -45,34 +43,6 @@ public abstract class AbstractSymbolResolutionTest {
     public static void tearDown() {
         // clear internal caches
         JavaParserFacade.clearInstances();
-    }
-
-    /**
-     * Host JDK major version parsed from {@code java.specification.version}
-     * ({@code 1.8} -&gt; 8, {@code 21} -&gt; 21). Prefer JDK-agnostic assertions; use this
-     * only when a test must branch on a known library change.
-     */
-    protected static int currentHostJdkMajor() {
-        return HOST_JDK_MAJOR;
-    }
-
-    private static int parseHostJdkMajor() {
-        String spec = System.getProperty("java.specification.version");
-        if (spec == null || spec.isEmpty()) {
-            throw new IllegalStateException("java.specification.version is not set");
-        }
-        if (spec.startsWith("1.")) {
-            spec = spec.substring(2);
-        }
-        int separator = spec.indexOf('.');
-        if (separator > 0) {
-            spec = spec.substring(0, separator);
-        }
-        try {
-            return Integer.parseInt(spec);
-        } catch (NumberFormatException e) {
-            throw new IllegalStateException("Unable to determine the current version of java running", e);
-        }
     }
 
     /**
@@ -95,6 +65,30 @@ public abstract class AbstractSymbolResolutionTest {
             Object.class.getDeclaredMethod("wait0", long.class);
             return true;
         } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Whether {@code Object.registerNatives()} is present (removed in JDK 14).
+     */
+    protected static boolean hasRegisterNatives() {
+        try {
+            Object.class.getDeclaredMethod("registerNatives");
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Whether {@code java.lang.constant.Constable} is present (JDK 12+).
+     */
+    protected static boolean hasConstable() {
+        try {
+            Class.forName("java.lang.constant.Constable");
+            return true;
+        } catch (ClassNotFoundException e) {
             return false;
         }
     }
