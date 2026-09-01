@@ -82,8 +82,8 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         list.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        // JDK 21 inserts java.util.SequencedCollection into the List/Collection hierarchy
-        assertEquals(currentHostJdkMajor() >= 21 ? 3 : 2, ancestors.size());
+        // SequencedCollection sits between List and Collection when the JRE exposes it
+        assertEquals(hasSequencedCollection() ? 3 : 2, ancestors.size());
 
         // Since List is an interface, Object cannot be an ancestor of List
         ResolvedTypeVariable typeVariable =
@@ -105,11 +105,12 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         List<ResolvedReferenceType> ancestors = list.getAllAncestors(ResolvedReferenceTypeDeclaration.breadthFirstFunc);
-        // JDK 21 inserts java.util.SequencedCollection into the List/Collection hierarchy
-        assertEquals(currentHostJdkMajor() >= 21 ? 3 : 2, ancestors.size());
         List<String> names =
                 ancestors.stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toList());
-        assertTrue(names.indexOf("java.util.Collection") < names.indexOf("java.lang.Iterable"));
+        List<String> expectedNames = hasSequencedCollection()
+                ? ImmutableList.of("java.util.SequencedCollection", "java.util.Collection", "java.lang.Iterable")
+                : ImmutableList.of("java.util.Collection", "java.lang.Iterable");
+        assertEquals(expectedNames, names);
 
         Map<String, ResolvedReferenceType> byName = new HashMap<>();
         ancestors.forEach(a -> byName.put(a.getQualifiedName(), a));

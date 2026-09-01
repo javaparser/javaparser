@@ -1041,8 +1041,8 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
         if (currentHostJdkMajor() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
         }
-        // JDK 21 split Object.wait(long) into wait0
-        if (currentHostJdkMajor() >= 21) {
+        // Object.wait0(long) is present on JREs that split wait(long)
+        if (hasWait0()) {
             expected.add("java.lang.Object.wait0(long)");
         }
 

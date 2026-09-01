@@ -33,6 +33,8 @@ import org.junit.jupiter.api.AfterAll;
 
 public abstract class AbstractSymbolResolutionTest {
 
+    private static final int HOST_JDK_MAJOR = parseHostJdkMajor();
+
     // StaticJavaParser is now reset before/after every test in this module by
     // StaticJavaParserConfigResetExtension (auto-detected via
     // src/test/resources/META-INF/services), so this class no longer needs its
@@ -51,6 +53,10 @@ public abstract class AbstractSymbolResolutionTest {
      * only when a test must branch on a known library change.
      */
     protected static int currentHostJdkMajor() {
+        return HOST_JDK_MAJOR;
+    }
+
+    private static int parseHostJdkMajor() {
         String spec = System.getProperty("java.specification.version");
         if (spec == null || spec.isEmpty()) {
             throw new IllegalStateException("java.specification.version is not set");
@@ -66,6 +72,30 @@ public abstract class AbstractSymbolResolutionTest {
             return Integer.parseInt(spec);
         } catch (NumberFormatException e) {
             throw new IllegalStateException("Unable to determine the current version of java running", e);
+        }
+    }
+
+    /**
+     * Whether the running JRE exposes {@code java.util.SequencedCollection} (JDK 21+).
+     */
+    protected static boolean hasSequencedCollection() {
+        try {
+            Class.forName("java.util.SequencedCollection");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Whether {@code Object.wait0(long)} is present (JDK 21 split of {@code wait(long)}).
+     */
+    protected static boolean hasWait0() {
+        try {
+            Object.class.getDeclaredMethod("wait0", long.class);
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
         }
     }
 

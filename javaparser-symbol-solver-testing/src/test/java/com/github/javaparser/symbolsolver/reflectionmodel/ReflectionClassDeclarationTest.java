@@ -312,15 +312,14 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         // Serializable, Cloneable, Iterable<E>, Collection<E>, List<E>, RandomAccess
-        Set<String> expected = new HashSet<>(ImmutableSet.of(
+        Set<String> expected = new HashSet<>(Arrays.asList(
                 Serializable.class.getCanonicalName(),
                 Cloneable.class.getCanonicalName(),
                 List.class.getCanonicalName(),
                 RandomAccess.class.getCanonicalName(),
                 Collection.class.getCanonicalName(),
                 Iterable.class.getCanonicalName()));
-        // JDK 21 inserts java.util.SequencedCollection into the List/Collection hierarchy
-        if (currentHostJdkMajor() >= 21) {
+        if (hasSequencedCollection()) {
             expected.add("java.util.SequencedCollection");
         }
         assertEquals(
@@ -434,8 +433,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         arraylist.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        // JDK 21 inserts java.util.SequencedCollection into the List/Collection hierarchy
-        assertEquals(currentHostJdkMajor() >= 21 ? 10 : 9, ancestors.size());
+        // SequencedCollection sits between List and Collection when the JRE exposes it
+        assertEquals(hasSequencedCollection() ? 10 : 9, ancestors.size());
 
         ResolvedTypeVariable typeVariable =
                 new ResolvedTypeVariable(arraylist.getTypeParameters().get(0));
