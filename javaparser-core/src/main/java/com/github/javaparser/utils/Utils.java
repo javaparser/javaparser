@@ -113,7 +113,7 @@ public class Utils {
      */
     public static String screamingToCamelCase(String original) {
         StringBuilder sb = new StringBuilder();
-        String[] parts = original.toLowerCase().split("_");
+        String[] parts = original.toLowerCase(Locale.ROOT).split("_");
         for (int i = 0; i < parts.length; i++) {
             sb.append(i == 0 ? parts[i] : capitalize(parts[i]));
         }
@@ -128,7 +128,7 @@ public class Utils {
         if (input.isEmpty()) {
             return "";
         }
-        StringBuilder scream = new StringBuilder(input.substring(0, 1).toUpperCase());
+        StringBuilder scream = new StringBuilder(input.substring(0, 1).toUpperCase(Locale.ROOT));
         for (char c : input.substring(1).toCharArray()) {
             if (Character.isUpperCase(c)) {
                 scream.append("_");
@@ -163,14 +163,14 @@ public class Utils {
      * Capitalizes the first character in the string.
      */
     public static String capitalize(String s) {
-        return stringTransformer(s, "capitalize", String::toUpperCase);
+        return stringTransformer(s, "capitalize", str -> str.toUpperCase(Locale.ROOT));
     }
 
     /**
      * Lower-cases the first character in the string.
      */
     public static String decapitalize(String s) {
-        return stringTransformer(s, "decapitalize", String::toLowerCase);
+        return stringTransformer(s, "decapitalize", str -> str.toLowerCase(Locale.ROOT));
     }
 
     private static String stringTransformer(
