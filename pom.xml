@@ -171,7 +171,7 @@
             affected by APIs added to JDK classes later on (e.g. SequencedCollection in JDK 21).
         -->
         <java.release>8</java.release>
-        <byte-buddy.version>1.18.12-jdk5</byte-buddy.version>
+        <byte-buddy.version>1.18.13-jdk5</byte-buddy.version>
         <argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'</argLine>
         <build.timestamp>2026-05-31T00:00:00Z</build.timestamp>
         <jacoco.javaagent/>
