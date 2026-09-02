@@ -312,14 +312,18 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         // Serializable, Cloneable, Iterable<E>, Collection<E>, List<E>, RandomAccess
+        Set<String> expected = new HashSet<>(Arrays.asList(
+                Serializable.class.getCanonicalName(),
+                Cloneable.class.getCanonicalName(),
+                List.class.getCanonicalName(),
+                RandomAccess.class.getCanonicalName(),
+                Collection.class.getCanonicalName(),
+                Iterable.class.getCanonicalName()));
+        if (hasSequencedCollection()) {
+            expected.add("java.util.SequencedCollection");
+        }
         assertEquals(
-                ImmutableSet.of(
-                        Serializable.class.getCanonicalName(),
-                        Cloneable.class.getCanonicalName(),
-                        List.class.getCanonicalName(),
-                        RandomAccess.class.getCanonicalName(),
-                        Collection.class.getCanonicalName(),
-                        Iterable.class.getCanonicalName()),
+                expected,
                 arraylist.getAllInterfaces().stream()
                         .map(i -> i.getQualifiedName())
                         .collect(Collectors.toSet()));
@@ -429,7 +433,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         arraylist.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        assertEquals(9, ancestors.size());
+        // SequencedCollection sits between List and Collection when the JRE exposes it
+        assertEquals(hasSequencedCollection() ? 10 : 9, ancestors.size());
 
         ResolvedTypeVariable typeVariable =
                 new ResolvedTypeVariable(arraylist.getTypeParameters().get(0));

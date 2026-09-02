@@ -648,7 +648,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         rawArrayList.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        assertEquals(9, ancestors.size());
+        // SequencedCollection sits between List and Collection when the JRE exposes it
+        assertEquals(hasSequencedCollection() ? 10 : 9, ancestors.size());
 
         ResolvedTypeVariable tv =
                 new ResolvedTypeVariable(arraylist.getTypeParameters().get(0));
@@ -695,7 +696,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         listOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        assertEquals(2, ancestors.size());
+        // SequencedCollection sits between List and Collection when the JRE exposes it
+        assertEquals(hasSequencedCollection() ? 3 : 2, ancestors.size());
 
         assertEquals(
                 new ReferenceTypeImpl(
@@ -742,7 +744,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         abstractListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        assertEquals(5, ancestors.size());
+        // SequencedCollection sits between List and Collection when the JRE exposes it
+        assertEquals(hasSequencedCollection() ? 6 : 5, ancestors.size());
 
         assertEquals(
                 new ReferenceTypeImpl(
@@ -775,7 +778,8 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         arrayListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        assertEquals(9, ancestors.size());
+        // SequencedCollection sits between List and Collection when the JRE exposes it
+        assertEquals(hasSequencedCollection() ? 10 : 9, ancestors.size());
 
         assertEquals(
                 new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(RandomAccess.class, typeResolver)),
@@ -946,17 +950,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         // FIXME: Remove this temporary fix which varies the test based on the detected JDK which is running these
         // tests.
-        TestJdk currentJdk = TestJdk.getCurrentHostJdk();
-        if (currentJdk.getMajorVersion() < 12) {
-            // JDK 12 introduced "java.lang.constant.Constable"
-            assertThat(
-                    ancestors,
-                    containsInAnyOrder(
-                            "java.lang.CharSequence",
-                            "java.lang.Object",
-                            "java.lang.Comparable<java.lang.String>",
-                            "java.io.Serializable"));
-        } else {
+        if (hasConstable()) {
             // JDK 12 introduced "java.lang.constant.Constable"
             assertThat(
                     ancestors,
@@ -967,6 +961,14 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                             "java.io.Serializable",
                             "java.lang.constant.Constable",
                             "java.lang.constant.ConstantDesc"));
+        } else {
+            assertThat(
+                    ancestors,
+                    containsInAnyOrder(
+                            "java.lang.CharSequence",
+                            "java.lang.Object",
+                            "java.lang.Comparable<java.lang.String>",
+                            "java.io.Serializable"));
         }
     }
 

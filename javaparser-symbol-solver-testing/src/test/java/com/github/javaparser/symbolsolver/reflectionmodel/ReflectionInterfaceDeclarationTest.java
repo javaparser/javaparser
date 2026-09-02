@@ -82,7 +82,8 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         list.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
-        assertEquals(2, ancestors.size());
+        // SequencedCollection sits between List and Collection when the JRE exposes it
+        assertEquals(hasSequencedCollection() ? 3 : 2, ancestors.size());
 
         // Since List is an interface, Object cannot be an ancestor of List
         ResolvedTypeVariable typeVariable =
@@ -104,7 +105,15 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         List<ResolvedReferenceType> ancestors = list.getAllAncestors(ResolvedReferenceTypeDeclaration.breadthFirstFunc);
-        assertEquals(2, ancestors.size());
+        List<String> names =
+                ancestors.stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toList());
+        List<String> expectedNames = hasSequencedCollection()
+                ? ImmutableList.of("java.util.SequencedCollection", "java.util.Collection", "java.lang.Iterable")
+                : ImmutableList.of("java.util.Collection", "java.lang.Iterable");
+        assertEquals(expectedNames, names);
+
+        Map<String, ResolvedReferenceType> byName = new HashMap<>();
+        ancestors.forEach(a -> byName.put(a.getQualifiedName(), a));
 
         ResolvedTypeVariable typeVariable =
                 new ResolvedTypeVariable(list.getTypeParameters().get(0));
@@ -112,12 +121,12 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
                 new ReferenceTypeImpl(
                         new ReflectionInterfaceDeclaration(Collection.class, typeResolver),
                         ImmutableList.of(typeVariable)),
-                ancestors.get(0));
+                byName.get("java.util.Collection"));
         assertEquals(
                 new ReferenceTypeImpl(
                         new ReflectionInterfaceDeclaration(Iterable.class, typeResolver),
                         ImmutableList.of(typeVariable)),
-                ancestors.get(1));
+                byName.get("java.lang.Iterable"));
     }
 
     @Test

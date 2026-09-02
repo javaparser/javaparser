@@ -988,9 +988,13 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest
                 "java.lang.Object.wait(long)",
                 "java.lang.Object.wait(long, int)"));
 
-        // Temporary workaround to allow tests to pass on JDK14
-        if (TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
+        // Object.registerNatives() is absent on JREs that dropped it
+        if (!hasRegisterNatives()) {
             expected.remove("java.lang.Object.registerNatives()");
+        }
+        // Object.wait0(long) is present on JREs that split wait(long)
+        if (hasWait0()) {
+            expected.add("java.lang.Object.wait0(long)");
         }
 
         assertThat(signatures, containsInAnyOrder(expected.toArray()));
