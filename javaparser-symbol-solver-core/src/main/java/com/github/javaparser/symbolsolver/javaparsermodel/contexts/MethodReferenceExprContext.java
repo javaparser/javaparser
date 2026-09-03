@@ -25,6 +25,7 @@ import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -35,6 +36,7 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.logic.ConstructorResolutionLogic;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.logic.InferenceContext;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
@@ -62,8 +64,9 @@ public class MethodReferenceExprContext extends ExpressionContext<MethodReferenc
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        if ("new".equals(name)) {
-            throw new UnsupportedOperationException("Constructor calls not yet resolvable");
+        // A constructor reference does not denote a method; it is resolved by solveConstructor().
+        if (MethodReferenceExpr.CONSTRUCTOR_REFERENCE_IDENTIFIER.equals(name)) {
+            return SymbolReference.unsolved();
         }
 
         argumentsTypes.addAll(inferArgumentTypes());
@@ -94,9 +97,60 @@ public class MethodReferenceExprContext extends ExpressionContext<MethodReferenc
         return SymbolReference.unsolved();
     }
 
+    /**
+     * Given a constructor reference (e.g. {@code Foo::new}) find out to which constructor declaration it
+     * corresponds. The candidate constructors are those of the scope type, and they are matched against the
+     * parameter types of the functional interface method the reference is assigned to, so that
+     * {@code Supplier<Foo>} selects {@code Foo()} while {@code Function<String, Foo>} selects
+     * {@code Foo(String)}.
+     *
+     * @param argumentsTypes an empty, mutable list which is populated with the inferred argument types.
+     * @return the referenced constructor, or an unsolved reference when this is not a constructor reference,
+     *         when it is an array constructor reference, or when no constructor is applicable.
+     */
+    public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes) {
+        if (!wrappedNode.isConstructorReference()) {
+            return SymbolReference.unsolved();
+        }
+        // JLS 15.13.1: an array constructor reference such as String[]::new denotes array creation, for
+        // which no constructor declaration exists. It has to be rejected here because
+        // findTypeDeclarations() maps an array scope to java.lang.Object, which would otherwise make
+        // String[]::new resolve to a constructor of Object.
+        if (isArrayConstructorReference()) {
+            return SymbolReference.unsolved();
+        }
+
+        argumentsTypes.addAll(inferArgumentTypes());
+
+        // Unlike MethodResolutionLogic, ConstructorResolutionLogic does not know about the lambda
+        // constraint types that inferArgumentTypes() produces, so they are replaced by their bound.
+        List<ResolvedType> boundArgumentsTypes = new ArrayList<>(argumentsTypes.size());
+        for (ResolvedType argumentType : argumentsTypes) {
+            boundArgumentsTypes.add(
+                    argumentType.isConstraint()
+                            ? argumentType.asConstraintType().getBound()
+                            : argumentType);
+        }
+
+        for (ResolvedReferenceTypeDeclaration rrtd : findTypeDeclarations(Optional.of(wrappedNode.getScope()))) {
+            SymbolReference<ResolvedConstructorDeclaration> resAttempt = ConstructorResolutionLogic.findMostApplicable(
+                    rrtd.getConstructors(), boundArgumentsTypes, typeSolver);
+            if (resAttempt.isSolved()) {
+                return resAttempt;
+            }
+        }
+
+        return SymbolReference.unsolved();
+    }
+
     ///
     /// Private methods
     ///
+
+    private boolean isArrayConstructorReference() {
+        Expression scope = wrappedNode.getScope();
+        return scope.isTypeExpr() && scope.asTypeExpr().getType().isArrayType();
+    }
 
     private List<ResolvedType> inferArgumentTypes() {
         if (demandParentNode(wrappedNode) instanceof MethodCallExpr) {

@@ -861,7 +861,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     // constructors are not returned by getAllMethods(). Skipping is safe: a constructor
                     // always returns the constructed type, which equals the functional interface's
                     // return type — the inference pair (formal, actual) would carry no new information.
-                    if (!"new".equals(node.getIdentifier())) {
+                    if (!node.isConstructorReference()) {
                         ResolvedType actualType = facade.toMethodUsage(node, functionalMethod.getParamTypes())
                                 .returnType();
                         ResolvedType formalType = functionalMethod.returnType();

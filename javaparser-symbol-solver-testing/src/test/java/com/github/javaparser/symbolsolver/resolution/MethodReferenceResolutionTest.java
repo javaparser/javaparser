@@ -22,6 +22,9 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -33,13 +36,13 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class MethodReferenceResolutionTest extends AbstractResolutionTest {
@@ -608,7 +611,6 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    @Disabled(value = "Waiting for constructor calls to be resolvable")
     void zeroArgumentConstructor_resolveToDeclaration() {
         // configure symbol solver before parsing
         StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
@@ -622,11 +624,142 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         MethodReferenceExpr methodReferenceExpr =
                 (MethodReferenceExpr) returnStmt.getExpression().get();
 
-        // resolve method reference expression
-        ResolvedMethodDeclaration resolvedMethodDeclaration = methodReferenceExpr.resolve();
+        // resolve constructor reference expression
+        ResolvedConstructorDeclaration resolvedConstructorDeclaration = methodReferenceExpr.resolveInvokedConstructor();
 
-        // check that the expected method declaration equals the resolved method declaration
-        assertEquals("Supplier<SuperClass>", resolvedMethodDeclaration.getQualifiedSignature());
+        // the target type Supplier<SuperClass> takes no argument, so the no-arg constructor is selected
+        assertEquals("SuperClass.SuperClass()", resolvedConstructorDeclaration.getQualifiedSignature());
+    }
+
+    @Test
+    void singleArgumentConstructor_resolveToDeclaration() {
+        // configure symbol solver before parsing
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get method reference expression
+        CompilationUnit cu = parseSample("MethodReferences");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz =
+                Navigator.demandClass(cu, "MethodReferences");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "singleArgumentConstructor");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+        MethodReferenceExpr methodReferenceExpr =
+                (MethodReferenceExpr) returnStmt.getExpression().get();
+
+        // resolve constructor reference expression
+        ResolvedConstructorDeclaration resolvedConstructorDeclaration = methodReferenceExpr.resolveInvokedConstructor();
+
+        // the same SuperClass::new text selects a different constructor, driven by the target type
+        // Function<String, SuperClass>
+        assertEquals("SuperClass.SuperClass(java.lang.String)", resolvedConstructorDeclaration.getQualifiedSignature());
+    }
+
+    @Test
+    void constructorReference_resolveReportsTheConstructorSpecificEntryPoint() {
+        // configure symbol solver before parsing
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        CompilationUnit cu = parseSample("MethodReferences");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz =
+                Navigator.demandClass(cu, "MethodReferences");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "zeroArgumentConstructor");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+        MethodReferenceExpr methodReferenceExpr =
+                (MethodReferenceExpr) returnStmt.getExpression().get();
+
+        assertTrue(methodReferenceExpr.isConstructorReference());
+
+        // a constructor declaration is not a method declaration, so resolve() cannot serve it
+        UnsolvedSymbolException exception = assertThrows(UnsolvedSymbolException.class, methodReferenceExpr::resolve);
+        assertTrue(exception.getMessage().contains("resolveInvokedConstructor()"));
+    }
+
+    @Test
+    void methodReference_resolveInvokedConstructorReportsTheMethodSpecificEntryPoint() {
+        // configure symbol solver before parsing
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        CompilationUnit cu = parseSample("MethodReferences");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz =
+                Navigator.demandClass(cu, "MethodReferences");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "classMethod");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+        MethodReferenceExpr methodReferenceExpr =
+                (MethodReferenceExpr) returnStmt.getExpression().get();
+
+        assertFalse(methodReferenceExpr.isConstructorReference());
+
+        UnsolvedSymbolException exception =
+                assertThrows(UnsolvedSymbolException.class, methodReferenceExpr::resolveInvokedConstructor);
+        assertTrue(exception.getMessage().contains("resolve()"));
+    }
+
+    @Test
+    void genericConstructorReference_resolveToDeclaration() {
+        String s = "import java.util.ArrayList;\n" + "import java.util.Collection;\n"
+                + "import java.util.List;\n"
+                + "import java.util.function.Function;\n"
+                + "\n"
+                + "public class GenericConstructorReference {\n"
+                + "    Function<Collection<String>, List<String>> copy() {\n"
+                + "        return ArrayList::new;\n"
+                + "    }\n"
+                + "}";
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+
+        MethodReferenceExpr methodReferenceExpr =
+                cu.findFirst(MethodReferenceExpr.class).get();
+
+        ResolvedConstructorDeclaration resolvedConstructorDeclaration = methodReferenceExpr.resolveInvokedConstructor();
+
+        assertEquals(
+                "java.util.ArrayList.ArrayList(java.util.Collection<? extends E>)",
+                resolvedConstructorDeclaration.getQualifiedSignature());
+    }
+
+    @Test
+    void constructorReferenceAsMethodArgument_resolveToDeclaration() {
+        String s = "import java.util.stream.Stream;\n" + "\n"
+                + "public class ConstructorReferenceArgument {\n"
+                + "    static class Box {\n"
+                + "        Box() { }\n"
+                + "        Box(String s) { }\n"
+                + "    }\n"
+                + "    long count(Stream<String> stream) {\n"
+                + "        return stream.map(Box::new).count();\n"
+                + "    }\n"
+                + "}";
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+
+        MethodReferenceExpr methodReferenceExpr =
+                cu.findFirst(MethodReferenceExpr.class).get();
+
+        ResolvedConstructorDeclaration resolvedConstructorDeclaration = methodReferenceExpr.resolveInvokedConstructor();
+
+        // the argument type comes from the parameter of Stream.map, i.e. Function<? super String, ? extends R>
+        assertEquals(
+                "ConstructorReferenceArgument.Box.Box(java.lang.String)",
+                resolvedConstructorDeclaration.getQualifiedSignature());
+    }
+
+    @Test
+    void arrayConstructorReference_isNotResolvable() {
+        String s = "import java.util.function.IntFunction;\n" + "\n"
+                + "public class ArrayConstructorReference {\n"
+                + "    IntFunction<String[]> create() {\n"
+                + "        return String[]::new;\n"
+                + "    }\n"
+                + "}";
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+
+        MethodReferenceExpr methodReferenceExpr =
+                cu.findFirst(MethodReferenceExpr.class).get();
+
+        // JLS 15.13.1: an array constructor reference denotes array creation, there is no constructor
+        // declaration to resolve to. It must not silently fall back to a constructor of java.lang.Object.
+        assertThrows(UnsolvedSymbolException.class, methodReferenceExpr::resolveInvokedConstructor);
     }
 
     @Test

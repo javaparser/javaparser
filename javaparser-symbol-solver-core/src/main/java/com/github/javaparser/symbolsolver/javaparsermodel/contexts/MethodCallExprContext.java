@@ -355,7 +355,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             MethodReferenceExpr ref = rawArg.asMethodReferenceExpr();
             ResolvedType actualReturnType = null;
 
-            if ("new".equals(ref.getIdentifier())) {
+            if (ref.isConstructorReference()) {
                 // Constructor reference X::new always returns the constructed type X
                 try {
                     actualReturnType = ref.getScope().calculateResolvedType();

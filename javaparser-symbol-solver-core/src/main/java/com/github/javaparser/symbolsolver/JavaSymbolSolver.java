@@ -255,8 +255,32 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof MethodReferenceExpr) {
+            MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) node;
+            if (methodReferenceExpr.isConstructorReference()) {
+                // A constructor reference denotes a ResolvedConstructorDeclaration, which is not a
+                // ResolvedMethodDeclaration. Callers asking for the latter -- MethodReferenceExpr#resolve()
+                // among them -- cannot be served, so point them at the constructor-specific entry point.
+                if (!resultClass.isAssignableFrom(ResolvedConstructorDeclaration.class)) {
+                    throw new UnsolvedSymbolException("\"" + node + "\" is a constructor reference, not a method "
+                            + "reference. Use MethodReferenceExpr#resolveInvokedConstructor() or "
+                            + "resolveDeclaration(node, ResolvedConstructorDeclaration.class).");
+                }
+                SymbolReference<ResolvedConstructorDeclaration> result =
+                        JavaParserFacade.get(typeSolver).solveConstructorReference(methodReferenceExpr);
+                if (result.isSolved()) {
+                    return resultClass.cast(result.getCorrespondingDeclaration());
+                }
+                throw new UnsolvedSymbolException(
+                        "We are unable to find the constructor declaration corresponding to " + node);
+            }
+            // Conversely, an ordinary method reference cannot produce a ResolvedConstructorDeclaration.
+            if (!resultClass.isAssignableFrom(ResolvedMethodDeclaration.class)) {
+                throw new UnsolvedSymbolException("\"" + node + "\" is a method reference, not a constructor "
+                        + "reference. Use MethodReferenceExpr#resolve() or "
+                        + "resolveDeclaration(node, ResolvedMethodDeclaration.class).");
+            }
             SymbolReference<ResolvedMethodDeclaration> result =
-                    JavaParserFacade.get(typeSolver).solve((MethodReferenceExpr) node);
+                    JavaParserFacade.get(typeSolver).solve(methodReferenceExpr);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
