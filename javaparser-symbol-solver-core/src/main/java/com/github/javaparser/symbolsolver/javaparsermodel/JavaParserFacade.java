@@ -46,6 +46,7 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.FieldAccessContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodReferenceExprContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
@@ -339,6 +340,18 @@ public class JavaParserFacade {
         List<ResolvedType> argumentTypes = new LinkedList<>();
         return JavaParserFactory.getContext(methodReferenceExpr, typeSolver)
                 .solveMethod(methodReferenceExpr.getIdentifier(), argumentTypes, false);
+    }
+
+    /**
+     * Given a constructor reference (e.g. {@code Foo::new}) find out to which constructor declaration it
+     * corresponds.
+     */
+    public SymbolReference<ResolvedConstructorDeclaration> solveConstructorReference(
+            MethodReferenceExpr methodReferenceExpr) {
+        // pass empty argument list to be populated
+        List<ResolvedType> argumentTypes = new LinkedList<>();
+        return ((MethodReferenceExprContext) JavaParserFactory.getContext(methodReferenceExpr, typeSolver))
+                .solveConstructor(argumentTypes);
     }
 
     public SymbolReference<ResolvedAnnotationDeclaration> solve(AnnotationExpr annotationExpr) {

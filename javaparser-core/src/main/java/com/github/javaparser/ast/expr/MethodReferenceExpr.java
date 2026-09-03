@@ -40,6 +40,8 @@ import com.github.javaparser.metamodel.MethodReferenceExprMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -59,6 +61,12 @@ public class MethodReferenceExpr extends Expression
         implements NodeWithTypeArguments<MethodReferenceExpr>,
                 NodeWithIdentifier<MethodReferenceExpr>,
                 Resolvable<ResolvedMethodDeclaration> {
+
+    /**
+     * The identifier of a constructor reference, as opposed to the method name of an ordinary method
+     * reference (JLS §15.13).
+     */
+    public static final String CONSTRUCTOR_REFERENCE_IDENTIFIER = "new";
 
     private Expression scope;
 
@@ -235,10 +243,46 @@ public class MethodReferenceExpr extends Expression
 
     /**
      * @return the method declaration this method reference is referencing.
+     * @throws UnsolvedSymbolException if the method declaration cannot be found, or if this is a
+     *         constructor reference. A constructor reference denotes a
+     *         {@link ResolvedConstructorDeclaration}, which is not a
+     *         {@link ResolvedMethodDeclaration}; use {@link #resolveInvokedConstructor()} instead.
+     * @see #isConstructorReference()
+     * @see #resolveInvokedConstructor()
      */
     @Override
     public ResolvedMethodDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
+    }
+
+    /**
+     * Resolves the constructor this constructor reference is referencing.
+     * <p>
+     * The constructor is selected from the constructors of the scope type using the parameter types
+     * of the functional interface method the reference is assigned to, so that
+     * {@code Supplier<Foo> s = Foo::new} and {@code Function<String, Foo> f = Foo::new} resolve to
+     * {@code Foo()} and {@code Foo(String)} respectively.
+     * <p>
+     * Array constructor references such as {@code String[]::new} cannot be resolved: JLS §15.13.1
+     * defines them as array creation, for which there is no constructor declaration.
+     *
+     * @return the constructor declaration this constructor reference is referencing.
+     * @throws UnsolvedSymbolException if the constructor declaration cannot be found, or if this is
+     *         an ordinary method reference rather than a constructor reference.
+     * @see #isConstructorReference()
+     */
+    public ResolvedConstructorDeclaration resolveInvokedConstructor() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
+    }
+
+    /**
+     * A constructor reference is a method reference whose identifier is the keyword {@code new},
+     * such as {@code Foo::new} or {@code String[]::new} (JLS §15.13).
+     *
+     * @return whether this method reference references a constructor rather than a method.
+     */
+    public boolean isConstructorReference() {
+        return CONSTRUCTOR_REFERENCE_IDENTIFIER.equals(getIdentifier());
     }
 
     /*
