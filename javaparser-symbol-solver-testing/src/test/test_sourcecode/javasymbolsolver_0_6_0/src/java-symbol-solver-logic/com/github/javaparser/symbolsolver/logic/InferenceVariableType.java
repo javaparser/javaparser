@@ -95,7 +95,7 @@ public class InferenceVariableType implements Type {
 
     @Override
     public boolean isAssignableBy(Type other) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("Unable to assign the type %s", other));
     }
 
     private Set<Type> concreteEquivalentTypesAlsoIndirectly(Set<InferenceVariableType> considered, InferenceVariableType inferenceVariableType) {
