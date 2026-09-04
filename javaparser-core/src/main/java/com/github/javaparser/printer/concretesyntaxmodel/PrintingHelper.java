@@ -21,6 +21,7 @@
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.printer.Stringable;
+import java.util.Locale;
 
 class PrintingHelper {
 
@@ -29,7 +30,7 @@ class PrintingHelper {
             return ((Stringable) value).asString();
         }
         if (value instanceof Enum) {
-            return ((Enum) value).name().toLowerCase();
+            return ((Enum) value).name().toLowerCase(Locale.ROOT);
         } else {
             if (value != null) {
                 return value.toString();
