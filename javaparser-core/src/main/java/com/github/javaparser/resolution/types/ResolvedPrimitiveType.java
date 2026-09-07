@@ -24,6 +24,7 @@ import com.github.javaparser.utils.TypeUtils;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -55,7 +56,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     }
 
     public static ResolvedType byName(String name) {
-        name = name.toLowerCase();
+        name = name.toLowerCase(Locale.ROOT);
         for (ResolvedPrimitiveType ptu : values()) {
             if (ptu.describe().equals(name)) {
                 return ptu;

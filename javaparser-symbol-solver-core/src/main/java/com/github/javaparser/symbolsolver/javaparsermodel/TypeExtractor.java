@@ -63,6 +63,7 @@ import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -317,7 +318,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(DoubleLiteralExpr node, Boolean solveLambdas) {
-        if (node.getValue().toLowerCase().endsWith("f")) {
+        if (node.getValue().toLowerCase(Locale.ROOT).endsWith("f")) {
             return ResolvedPrimitiveType.FLOAT;
         }
         return ResolvedPrimitiveType.DOUBLE;

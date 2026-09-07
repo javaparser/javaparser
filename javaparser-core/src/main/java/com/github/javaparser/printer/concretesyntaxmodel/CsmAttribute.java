@@ -27,6 +27,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
+import java.util.Locale;
 
 public class CsmAttribute implements CsmElement {
 
@@ -57,7 +58,7 @@ public class CsmAttribute implements CsmElement {
             case IDENTIFIER:
                 return GeneratedJavaParserConstants.IDENTIFIER;
             case TYPE: {
-                String expectedImage = "\"" + text.toLowerCase() + "\"";
+                String expectedImage = "\"" + text.toLowerCase(Locale.ROOT) + "\"";
                 for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
                     if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
                         return i;
@@ -69,7 +70,7 @@ public class CsmAttribute implements CsmElement {
             }
             case KEYWORD:
             case OPERATOR: {
-                String expectedImage = "\"" + tokenText.toLowerCase() + "\"";
+                String expectedImage = "\"" + tokenText.toLowerCase(Locale.ROOT) + "\"";
                 for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
                     if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
                         return i;

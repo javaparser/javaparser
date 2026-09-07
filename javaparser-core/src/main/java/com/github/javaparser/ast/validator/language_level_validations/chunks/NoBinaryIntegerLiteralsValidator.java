@@ -25,6 +25,7 @@ import com.github.javaparser.ast.expr.LiteralStringValueExpr;
 import com.github.javaparser.ast.expr.LongLiteralExpr;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
+import java.util.Locale;
 
 public class NoBinaryIntegerLiteralsValidator extends VisitorValidator {
 
@@ -41,7 +42,7 @@ public class NoBinaryIntegerLiteralsValidator extends VisitorValidator {
     }
 
     private static void validate(LiteralStringValueExpr n, ProblemReporter arg) {
-        if (n.getValue().toUpperCase().startsWith("0B")) {
+        if (n.getValue().toUpperCase(Locale.ROOT).startsWith("0B")) {
             arg.report(n, "Binary literal values are not supported.");
         }
     }
