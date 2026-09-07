@@ -32,6 +32,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 class PropagatingAstObserverTest {
@@ -49,7 +50,10 @@ class PropagatingAstObserverTest {
                     Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 changes.add(String.format(
                         "%s.%s changed from %s to %s",
-                        observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+                        observedNode.getClass().getSimpleName(),
+                        property.name().toLowerCase(Locale.ROOT),
+                        oldValue,
+                        newValue));
             }
         };
         cu.registerForSubtree(observer);

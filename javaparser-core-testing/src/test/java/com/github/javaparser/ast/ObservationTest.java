@@ -32,6 +32,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 public class ObservationTest {
@@ -49,7 +50,10 @@ public class ObservationTest {
                     Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 changes.add(String.format(
                         "%s.%s changed from %s to %s",
-                        observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+                        observedNode.getClass().getSimpleName(),
+                        property.name().toLowerCase(Locale.ROOT),
+                        oldValue,
+                        newValue));
             }
         };
         cu.registerForSubtree(observer);
@@ -97,7 +101,10 @@ public class ObservationTest {
                     Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 changes.add(String.format(
                         "%s.%s changed from %s to %s",
-                        observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+                        observedNode.getClass().getSimpleName(),
+                        property.name().toLowerCase(Locale.ROOT),
+                        oldValue,
+                        newValue));
             }
         };
         cu.getClassByName("A").get().register(observer, Node.ObserverRegistrationMode.JUST_THIS_NODE);
@@ -144,7 +151,10 @@ public class ObservationTest {
                     Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 changes.add(String.format(
                         "%s.%s changed from %s to %s",
-                        observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+                        observedNode.getClass().getSimpleName(),
+                        property.name().toLowerCase(Locale.ROOT),
+                        oldValue,
+                        newValue));
             }
         };
         cu.getClassByName("A")
@@ -207,7 +217,10 @@ public class ObservationTest {
                     Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 changes.add(String.format(
                         "%s.%s changed from %s to %s",
-                        observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+                        observedNode.getClass().getSimpleName(),
+                        property.name().toLowerCase(Locale.ROOT),
+                        oldValue,
+                        newValue));
             }
         };
         cu.getClassByName("A").get().register(observer, Node.ObserverRegistrationMode.SELF_PROPAGATING);
