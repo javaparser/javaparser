@@ -42,5 +42,17 @@
 		<!-- Imports that are not used, should be removed -->
 		<module name="UnusedImports"/>
 
+		<!--
+			Java keywords and identifiers are source tokens, not human-readable text. The no-arg
+			toLowerCase()/toUpperCase() overloads fold case with the JVM's default locale, which
+			corrupts them under tr/az/lt ("INT" becomes "ınt"). See issue 3018.
+		-->
+		<module name="RegexpSinglelineJava">
+			<property name="format" value="\.to(Lower|Upper)Case\(\)|::to(Lower|Upper)Case"/>
+			<property name="message"
+			          value="Use toLowerCase(Locale.ROOT) / toUpperCase(Locale.ROOT): the no-arg overloads depend on the JVM default locale."/>
+			<property name="ignoreComments" value="true"/>
+		</module>
+
 	</module>
 </module>

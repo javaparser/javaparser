@@ -114,3 +114,39 @@ jobs:
           verbose: false # optional (default = false):
           flags: javaparser-symbol-solver,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
           env_vars: OS,JDK
+
+  ## What JavaParser reads and prints is Java source -- keywords and identifiers, not human-readable
+  ## text -- so nothing it produces may depend on the JVM's default locale. Turkish is the locale
+  ## that breaks the naive assumption: 'I' lower-cases to the dotless 'ı' and 'i' upper-cases to the
+  ## dotted 'İ', which silently corrupts keywords and reflective getter lookups alike. See issue 3018.
+  ## One run is enough: this is a property of the code, not of the OS or the JDK, both of which the
+  ## matrix above already covers.
+  turkish_locale_test:
+    name: Test in a Turkish locale
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout latest code
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: "0"
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'zulu'
+          java-version: 21
+          java-package: jdk
+
+      - name: Cache Maven packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      ## `test.locale.args` is appended to the forked test JVMs' argLine by the root pom, so the
+      ## default locale is Turkish inside the tests themselves, not merely in the Maven process.
+      - name: Test with a Turkish default locale
+        shell: bash
+        run: ./mvnw -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B --errors clean test --activate-profiles AlsoSlowTests -Dtest.locale.args="-Duser.language=tr -Duser.country=TR"

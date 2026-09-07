@@ -172,7 +172,13 @@
         -->
         <java.release>8</java.release>
         <byte-buddy.version>1.18.13-jdk5</byte-buddy.version>
-        <argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'</argLine>
+        <!--
+            Extra JVM arguments appended to every forked test JVM. Empty by default; the CI job that
+            runs the suite in a Turkish locale sets it to `-Duser.language=tr -Duser.country=TR`, so
+            that a default-locale case conversion cannot creep back in unnoticed. See issue 3018.
+        -->
+        <test.locale.args/>
+        <argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar' ${test.locale.args}</argLine>
         <build.timestamp>2026-05-31T00:00:00Z</build.timestamp>
         <jacoco.javaagent/>
 

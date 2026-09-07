@@ -180,7 +180,7 @@ class NodeListTest extends AbstractLexicalPreservingTest {
                     propertyChanges.add(String.format(
                             "%s.%s changed from %s to %s",
                             observedNode.getClass().getSimpleName(),
-                            property.name().toLowerCase(),
+                            property.name().toLowerCase(Locale.ROOT),
                             oldValue,
                             newValue));
                 }
