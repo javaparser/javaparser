@@ -64,7 +64,8 @@
                 <configuration>
                     <reportFormat>plain</reportFormat>
                     <failIfNoTests>true</failIfNoTests>
-                    <argLine>@{jacoco.javaagent}</argLine>
+                    <!-- Note that <argLine> overwrites, not appends, hence need for `${argLine}` -->
+                    <argLine>${argLine} @{jacoco.javaagent}</argLine>
                 </configuration>
             </plugin>
         </plugins>

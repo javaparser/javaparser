@@ -74,7 +74,7 @@
                             <parallel>methods</parallel>
                             <threadCount>4</threadCount>
                             <!-- Note that <argLine> overwrites, not appends, hence need for `${argLine}` -->
-                            <argLine>-Xms256m -Xmx2g -verbose:gc @{jacoco.javaagent}</argLine>
+                            <argLine>${argLine} -Xms256m -Xmx2g -verbose:gc @{jacoco.javaagent}</argLine>
                             <reportFormat>plain</reportFormat>
                             <failIfNoTests>true</failIfNoTests>
                         </configuration>
@@ -92,7 +92,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <!-- Note that <argLine> overwrites, not appends, hence need for `${argLine}` -->
-                            <argLine>-Xms256m -Xmx2g -verbose:gc @{jacoco.javaagent}</argLine>
+                            <argLine>${argLine} -Xms256m -Xmx2g -verbose:gc @{jacoco.javaagent}</argLine>
                             <reportFormat>plain</reportFormat>
                             <failIfNoTests>true</failIfNoTests>
                         </configuration>
