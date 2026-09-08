@@ -66,4 +66,16 @@ class PrimitiveTypeTest {
             Locale.setDefault(originalLocale);
         }
     }
+
+    /**
+     * The printed keyword and the lookup key are now the same literal, rather than two independent
+     * derivations of the constant's name that could drift apart -- which is exactly how issue 3018
+     * ended up with two faces.
+     */
+    @Test
+    void everyPrimitiveResolvesByItsCodeRepresentation() {
+        for (PrimitiveType.Primitive primitive : PrimitiveType.Primitive.values()) {
+            assertEquals(Optional.of(primitive), PrimitiveType.Primitive.byTypeName(primitive.asString()));
+        }
+    }
 }
