@@ -40,7 +40,6 @@ import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -87,20 +86,20 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     }
 
     public enum Primitive implements Stringable {
-        BOOLEAN("Boolean", "Z"),
-        CHAR("Character", "C"),
-        BYTE("Byte", "B"),
-        SHORT("Short", "S"),
-        INT("Integer", "I"),
-        LONG("Long", "J"),
-        FLOAT("Float", "F"),
-        DOUBLE("Double", "D");
+        BOOLEAN("boolean", "Boolean", "Z"),
+        CHAR("char", "Character", "C"),
+        BYTE("byte", "Byte", "B"),
+        SHORT("short", "Short", "S"),
+        INT("int", "Integer", "I"),
+        LONG("long", "Long", "J"),
+        FLOAT("float", "Float", "F"),
+        DOUBLE("double", "Double", "D");
 
         final String nameOfBoxedType;
 
         final String descriptor;
 
-        private String codeRepresentation;
+        private final String codeRepresentation;
 
         /*
          * Returns the Primitive constant corresponding to the specified type name (e.g. "boolean", "int",
@@ -108,7 +107,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
          */
         public static Optional<Primitive> byTypeName(String name) {
             for (Primitive primitive : values()) {
-                if (primitive.name().toLowerCase(Locale.ROOT).equals(name)) {
+                if (primitive.asString().equals(name)) {
                     return Optional.of(primitive);
                 }
             }
@@ -135,9 +134,9 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
             return descriptor;
         }
 
-        Primitive(String nameOfBoxedType, String descriptor) {
+        Primitive(String codeRepresentation, String nameOfBoxedType, String descriptor) {
             this.nameOfBoxedType = nameOfBoxedType;
-            this.codeRepresentation = name().toLowerCase(Locale.ROOT);
+            this.codeRepresentation = codeRepresentation;
             this.descriptor = descriptor;
         }
     }

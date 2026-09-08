@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModifierMetaModel;
+import com.github.javaparser.printer.Stringable;
 import java.util.Arrays;
 
 /**
@@ -96,7 +97,7 @@ public class Modifier extends Node {
     /**
      * The Java modifier keywords.
      */
-    public enum Keyword {
+    public enum Keyword implements Stringable {
         DEFAULT("default"),
         PUBLIC("public"),
         PROTECTED("protected"),
@@ -122,6 +123,7 @@ public class Modifier extends Node {
         /**
          * @return the Java keyword represented by this enum constant.
          */
+        @Override
         public String asString() {
             return codeRepresentation;
         }

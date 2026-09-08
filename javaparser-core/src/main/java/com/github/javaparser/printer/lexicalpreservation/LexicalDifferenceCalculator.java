@@ -360,36 +360,22 @@ class LexicalDifferenceCalculator {
         }
     }
 
+    /**
+     * The token that spells out the given modifier.
+     * <p>
+     * The mapping is derived from {@link Modifier.Keyword#asString()} rather than hand-written, so a
+     * keyword added to the language cannot be forgotten here. It was: {@code default}, {@code sealed}
+     * and {@code non-sealed} all threw {@link UnsupportedOperationException}.
+     */
     public static int toToken(Modifier modifier) {
-        switch (modifier.getKeyword()) {
-            case PUBLIC:
-                return GeneratedJavaParserConstants.PUBLIC;
-            case PRIVATE:
-                return GeneratedJavaParserConstants.PRIVATE;
-            case PROTECTED:
-                return GeneratedJavaParserConstants.PROTECTED;
-            case STATIC:
-                return GeneratedJavaParserConstants.STATIC;
-            case FINAL:
-                return GeneratedJavaParserConstants.FINAL;
-            case ABSTRACT:
-                return GeneratedJavaParserConstants.ABSTRACT;
-            case TRANSIENT:
-                return GeneratedJavaParserConstants.TRANSIENT;
-            case SYNCHRONIZED:
-                return GeneratedJavaParserConstants.SYNCHRONIZED;
-            case VOLATILE:
-                return GeneratedJavaParserConstants.VOLATILE;
-            case NATIVE:
-                return GeneratedJavaParserConstants.NATIVE;
-            case STRICTFP:
-                return GeneratedJavaParserConstants.STRICTFP;
-            case TRANSITIVE:
-                return GeneratedJavaParserConstants.TRANSITIVE;
-            default:
-                throw new UnsupportedOperationException(
-                        "Not supported keyword" + modifier.getKeyword().name());
+        String expectedImage = "\"" + modifier.getKeyword().asString() + "\"";
+        for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
+            if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
+                return i;
+            }
         }
+        throw new UnsupportedOperationException(
+                "Not supported keyword " + modifier.getKeyword().name());
     }
 
     // /

@@ -21,8 +21,10 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import static com.github.javaparser.ast.Modifier.Keyword.NON_SEALED;
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.Keyword.SEALED;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 
 import com.github.javaparser.ParserConfiguration;
@@ -161,6 +163,25 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
         ClassOrInterfaceDeclaration cid = consider("public class A {}");
         cid.setModifiers(createModifierList(PROTECTED));
         assertTransformedToString("protected class A {}", cid);
+    }
+
+    /**
+     * Modifiers used to be mapped to their token by a hand-written switch that predated the sealed
+     * classes: {@code sealed}, {@code non-sealed} and {@code default} all threw
+     * {@link UnsupportedOperationException} instead of being printed.
+     */
+    @Test
+    void addingSealedModifier() {
+        ClassOrInterfaceDeclaration cid = consider("class A {}");
+        cid.setModifiers(createModifierList(SEALED));
+        assertTransformedToString("sealed class A {}", cid);
+    }
+
+    @Test
+    void addingNonSealedModifier() {
+        ClassOrInterfaceDeclaration cid = consider("class A {}");
+        cid.setModifiers(createModifierList(NON_SEALED));
+        assertTransformedToString("non-sealed class A {}", cid);
     }
 
     // members

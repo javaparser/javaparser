@@ -25,7 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
@@ -95,5 +97,18 @@ class ConcreteSyntaxModelTest {
     void printAnEmptyInterfaceWithModifier() {
         Node node = parser.parse("public interface A {}");
         assertEquals("public interface A {" + LineSeparator.SYSTEM + "}" + LineSeparator.SYSTEM, print(node));
+    }
+
+    /**
+     * The keyword text must come from {@link Modifier.Keyword#asString()}, not from the constant's
+     * name: {@code NON_SEALED} spells out as {@code non-sealed}, and lower-casing the name produced
+     * the illegal {@code non_sealed}.
+     */
+    @Test
+    void printAClassWithATwoWordModifier() {
+        ClassOrInterfaceDeclaration node = new ClassOrInterfaceDeclaration();
+        node.setName("A");
+        node.setModifiers(Modifier.Keyword.NON_SEALED);
+        assertEquals("non-sealed class A {" + LineSeparator.SYSTEM + "}", print(node));
     }
 }
