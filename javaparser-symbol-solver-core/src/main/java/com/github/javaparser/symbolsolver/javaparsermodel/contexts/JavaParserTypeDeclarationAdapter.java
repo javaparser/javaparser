@@ -120,15 +120,8 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
-        // Before checking the ancestors of the node,
-        // it is necessary to check that the name to be resolved is not declared in the compilation unit.
-        // An example is provided in the issue https://github.com/javaparser/javaparser/issues/3214
-        SymbolReference<ResolvedTypeDeclaration> symbolRef = context.getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name, typeArguments);
-        if (symbolRef.isSolved()) return symbolRef;
-
-        // Check if is a type parameter
+        // A type parameter declared here shadows any same-named type in an enclosing scope (JLS 6.4.1),
+        // so it has to be checked before delegating to the parent context.
         if (wrappedNode instanceof NodeWithTypeParameters) {
             NodeWithTypeParameters<?> nodeWithTypeParameters = (NodeWithTypeParameters<?>) wrappedNode;
             for (TypeParameter astTpRaw : nodeWithTypeParameters.getTypeParameters()) {
@@ -137,6 +130,14 @@ public class JavaParserTypeDeclarationAdapter {
                 }
             }
         }
+
+        // Before checking the ancestors of the node,
+        // it is necessary to check that the name to be resolved is not declared in the compilation unit.
+        // An example is provided in the issue https://github.com/javaparser/javaparser/issues/3214
+        SymbolReference<ResolvedTypeDeclaration> symbolRef = context.getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name, typeArguments);
+        if (symbolRef.isSolved()) return symbolRef;
 
         // Check if the node implements other types
         if (wrappedNode instanceof NodeWithImplements) {

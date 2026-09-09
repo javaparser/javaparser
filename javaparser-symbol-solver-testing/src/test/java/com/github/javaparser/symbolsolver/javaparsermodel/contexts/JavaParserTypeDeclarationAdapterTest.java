@@ -129,4 +129,61 @@ class JavaParserTypeDeclarationAdapterTest extends AbstractResolutionTest {
 
         returnTypes.forEach(type -> assertEquals("Activity.Timestamps", type));
     }
+
+    /**
+     * A type parameter shadows a same-named type declared in an enclosing scope (JLS 6.4.1), so
+     * {@code Holder<T>}'s own {@code T} must win over the top-level class {@code T}.
+     */
+    @Test
+    void typeParameterShadowsSameNamedTopLevelClass() {
+        String code = "class T {}\n"
+                + "class Holder<T> {\n"
+                + "    T get() { return null; }\n"
+                + "}\n"
+                + "class Usage {\n"
+                + "    void m(Holder<String> holder) {\n"
+                + "        holder.get();\n"
+                + "    }\n"
+                + "}";
+
+        JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
+        CompilationUnit cu = parser.parse(code);
+
+        MethodCallExpr mce = cu.findAll(MethodCallExpr.class).get(0);
+
+        assertEquals("java.lang.String", mce.calculateResolvedType().describe());
+    }
+
+    /**
+     * A nested class' type parameter shadows the enclosing class' identically named one. Resolving
+     * {@code Aggregator}'s {@code T} to {@code Runner}'s used to drop the {@code Void} argument, leaving
+     * the receiver as {@code FailFastRunner<Runner.T>}. Its ancestor {@code Runner<List<T>>} then reported
+     * the value of {@code Runner}'s {@code T} as {@code List<T>} - a value mentioning the very type
+     * parameter being replaced - so substituting it recursed until the stack overflowed.
+     */
+    @Test
+    void nestedTypeParameterShadowsEnclosingOneWithSameName() {
+        String code = "import java.util.List;\n"
+                + "class Runner<T> {\n"
+                + "    Runner<T> onFailure() { return this; }\n"
+                + "    static class Aggregator<T> {\n"
+                + "        FailFastRunner<T> failFastRunner() { return null; }\n"
+                + "    }\n"
+                + "}\n"
+                + "final class FailFastRunner<T> extends Runner<List<T>> {}\n"
+                + "class Usage {\n"
+                + "    void m(Runner.Aggregator<Void> aggregator) {\n"
+                + "        aggregator.failFastRunner().onFailure();\n"
+                + "    }\n"
+                + "}";
+
+        JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
+        CompilationUnit cu = parser.parse(code);
+
+        MethodCallExpr onFailure = cu.findAll(MethodCallExpr.class).get(0);
+
+        assertEquals(
+                "Runner<java.util.List<java.lang.Void>>",
+                onFailure.calculateResolvedType().describe());
+    }
 }
