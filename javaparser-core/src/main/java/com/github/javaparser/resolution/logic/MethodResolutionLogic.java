@@ -1206,6 +1206,19 @@ public class MethodResolutionLogic {
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }
 
+    public static SymbolReference<ResolvedMethodDeclaration> solveMethodInType(
+            ResolvedTypeDeclaration typeDeclaration,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            boolean memberOnly) {
+        if (typeDeclaration instanceof MethodResolutionCapability) {
+            return ((MethodResolutionCapability) typeDeclaration)
+                    .solveMethod(name, argumentsTypes, staticOnly, memberOnly);
+        }
+        throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
+    }
+
     public static void inferTypes(
             ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
         if (source.equals(target)) {

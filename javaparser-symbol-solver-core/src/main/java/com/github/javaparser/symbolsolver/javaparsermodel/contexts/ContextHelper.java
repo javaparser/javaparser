@@ -44,10 +44,20 @@ public class ContextHelper {
             List<ResolvedType> argumentsTypes,
             Context invokationContext,
             List<ResolvedType> typeParameters) {
+        return solveMethodAsUsage(typeDeclaration, name, argumentsTypes, invokationContext, typeParameters, false);
+    }
+
+    public static Optional<MethodUsage> solveMethodAsUsage(
+            ResolvedTypeDeclaration typeDeclaration,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            Context invokationContext,
+            List<ResolvedType> typeParameters,
+            boolean memberOnly) {
 
         if (typeDeclaration instanceof MethodUsageResolutionCapability) {
             return ((MethodUsageResolutionCapability) typeDeclaration)
-                    .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters);
+                    .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters, memberOnly);
         }
         throw new UnsupportedOperationException(typeDeclaration.toString());
     }

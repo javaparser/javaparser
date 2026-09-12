@@ -61,6 +61,12 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return solveMethod(name, argumentsTypes, staticOnly, false);
+    }
+
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, boolean memberOnly) {
         List<ResolvedMethodDeclaration> candidateMethods = myDeclaration.getDeclaredMethods().stream()
                 .filter(m -> m.getName().equals(name) && (!staticOnly || m.isStatic()))
                 .collect(Collectors.toList());
@@ -69,7 +75,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
             for (ResolvedReferenceType ancestor : myDeclaration.getAncestors()) {
                 ancestor.getTypeDeclaration().ifPresent(ancestorTypeDeclaration -> {
                     SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
-                            ancestorTypeDeclaration, name, argumentsTypes, staticOnly);
+                            ancestorTypeDeclaration, name, argumentsTypes, staticOnly, memberOnly);
 
                     // consider methods from superclasses and only default methods from interfaces :
                     // not true, we should keep abstract as a valid candidate
@@ -83,7 +89,9 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
 
         // We want to avoid infinite recursion when a class is using its own method
         // see issue #75
-        if (candidateMethods.isEmpty()) {
+        // A member lookup must not escape into the enclosing lexical context
+        // (see JavaParserTypeDeclarationAdapter#solveMethod and issue #5105)
+        if (candidateMethods.isEmpty() && !memberOnly) {
             SymbolReference<ResolvedMethodDeclaration> parentSolution = getParent()
                     .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
                     .solveMethod(name, argumentsTypes, staticOnly);

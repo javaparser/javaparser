@@ -29,4 +29,14 @@ public interface MethodResolutionCapability {
 
     SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly);
+
+    /**
+     * Similar to {@link #solveMethod(String, List, boolean)}, but a member lookup
+     * must not escape into the enclosing lexical context of this declaration
+     * (e.g. the imports of the file declaring the type).
+     */
+    default SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, boolean memberOnly) {
+        return solveMethod(name, argumentsTypes, staticOnly);
+    }
 }

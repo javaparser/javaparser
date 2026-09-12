@@ -191,6 +191,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             List<ResolvedType> argumentTypes,
             Context invokationContext,
             List<ResolvedType> typeParameters) {
+        return solveMethodAsUsage(name, argumentTypes, invokationContext, typeParameters, false);
+    }
+
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name,
+            List<ResolvedType> argumentTypes,
+            Context invocationContext,
+            List<ResolvedType> typeParameters,
+            boolean memberOnly) {
         if (VALUES.equals(name) && argumentTypes.isEmpty()) {
             return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver)));
         }
@@ -201,12 +211,18 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver)));
             }
         }
-        return getContext().solveMethodAsUsage(name, argumentTypes);
+        return getContext().solveMethodAsUsage(name, argumentTypes, memberOnly);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return solveMethod(name, argumentsTypes, staticOnly, false);
+    }
+
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, boolean memberOnly) {
         if (VALUES.equals(name) && argumentsTypes.isEmpty()) {
             return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver));
         }
@@ -217,7 +233,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 return SymbolReference.solved(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver));
             }
         }
-        return getContext().solveMethod(name, argumentsTypes, staticOnly);
+        return getContext().solveMethod(name, argumentsTypes, staticOnly, memberOnly);
     }
 
     @Override

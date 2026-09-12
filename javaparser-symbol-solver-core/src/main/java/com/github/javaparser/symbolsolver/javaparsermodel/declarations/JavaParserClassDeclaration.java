@@ -169,6 +169,16 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         return getContext().solveMethodAsUsage(name, argumentTypes);
     }
 
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name,
+            List<ResolvedType> argumentTypes,
+            Context invocationContext,
+            List<ResolvedType> typeParameters,
+            boolean memberOnly) {
+        return getContext().solveMethodAsUsage(name, argumentTypes, memberOnly);
+    }
+
     /**
      * This method is deprecated because the context is an implementation detail that should not be exposed.
      * Ideally this method should become private. For this reason all further usages of this method are discouraged.
@@ -332,6 +342,12 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         return getContext().solveMethod(name, argumentsTypes, staticOnly);
+    }
+
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, boolean memberOnly) {
+        return getContext().solveMethod(name, argumentsTypes, staticOnly, memberOnly);
     }
 
     @Override
