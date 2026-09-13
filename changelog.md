@@ -5,6 +5,9 @@ Next Release (Version 3.29.0-snapshot)
 
 ### Added
 ### Changed
+
+* refactor: deduplicate the deprecated `PrettyPrintVisitor` by extending `DefaultPrettyPrinterVisitor`, removing ~1900 lines of duplicated printing logic while preserving its public API and historical output (issue [#4914](https://github.com/javaparser/javaparser/issues/4914))
+
 ### Deprecated
 ### Removed
 ### Fixed
