@@ -371,6 +371,18 @@ public interface Context {
         return solveMethodInParentContext(name, argumentsTypes, staticOnly);
     }
 
+    /**
+     * Similar to {@link #solveMethod(String, List, boolean)}, but a member lookup
+     * stops at the declared and inherited members of the type it started from:
+     * it must not escape into the enclosing lexical context (e.g. the imports of
+     * the file declaring that type, which are not visible from outside, see JLS
+     * 7.5.3/7.5.4 on the non-transitivity of static imports).
+     */
+    default SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, boolean memberOnly) {
+        return solveMethod(name, argumentsTypes, staticOnly);
+    }
+
     default SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         Optional<Context> optionalParentContext = getParent();
@@ -386,4 +398,14 @@ public interface Context {
      * A MethodUsage corresponds to a MethodDeclaration plus the resolved type variables.
      */
     Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes);
+
+    /**
+     * Similar to {@link #solveMethodAsUsage(String, List)}, but the lookup is a
+     * member lookup and must not escape into the enclosing lexical context of
+     * the receiver type declaration.
+     */
+    default Optional<MethodUsage> solveMethodAsUsage(
+            String name, List<ResolvedType> argumentsTypes, boolean memberOnly) {
+        return solveMethodAsUsage(name, argumentsTypes);
+    }
 }

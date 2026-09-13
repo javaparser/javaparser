@@ -91,8 +91,12 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 String className = ((NameExpr) scope).getName().getId();
                 SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
                 if (ref.isSolved()) {
+                    // The receiver is a type name, so only static members are
+                    // eligible (JLS 15.12) and the lookup must not escape into
+                    // the lexical context of the file declaring that type: its
+                    // static imports are not members (JLS 7.5.3/7.5.4, #5105)
                     SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(
-                            ref.getCorrespondingDeclaration(), name, argumentsTypes);
+                            ref.getCorrespondingDeclaration(), name, argumentsTypes, true);
                     if (m.isSolved()) {
                         MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
                         methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
@@ -167,9 +171,13 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             rrtds = Collections.singleton(typeSolver.getSolvedJavaLangObject());
         }
 
+        // A call qualified by a receiver is a member lookup: it must not
+        // escape into the lexical context of the file declaring the receiver
+        // type, whose static imports are not members (JLS 7.5.3/7.5.4, #5105)
+        boolean memberOnly = wrappedNode.hasScope();
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
             SymbolReference<ResolvedMethodDeclaration> res =
-                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
+                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false, memberOnly);
             if (res.isSolved()) {
                 return res;
             }
@@ -188,12 +196,17 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             return Optional.empty();
         }
 
+        // A call qualified by a receiver is a member lookup: it must not
+        // escape into the lexical context of the file declaring the receiver
+        // type, whose static imports are not members (JLS 7.5.3/7.5.4, #5105)
+        boolean memberOnly = wrappedNode.hasScope();
         Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(
                 refType.getTypeDeclaration().get(),
                 name,
                 argumentsTypes,
                 invokationContext,
-                refType.typeParametersValues());
+                refType.typeParametersValues(),
+                memberOnly);
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
 

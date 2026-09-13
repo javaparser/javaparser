@@ -343,7 +343,13 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
      */
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
-        SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
+        return solveMethodAsUsage(name, argumentsTypes, false);
+    }
+
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name, List<ResolvedType> argumentsTypes, boolean memberOnly) {
+        SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false, memberOnly);
         if (methodSolved.isSolved()) {
             ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
             if (!(methodDeclaration instanceof TypeVariableResolutionCapability)) {

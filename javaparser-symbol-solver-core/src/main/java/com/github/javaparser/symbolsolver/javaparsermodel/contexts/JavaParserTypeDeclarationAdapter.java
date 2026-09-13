@@ -277,6 +277,11 @@ public class JavaParserTypeDeclarationAdapter {
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        return solveMethod(name, argumentsTypes, staticOnly, false);
+    }
+
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, boolean memberOnly) {
 
         // Begin by locating methods declared "here"
         List<ResolvedMethodDeclaration> candidateMethods = typeDeclaration.getDeclaredMethods().stream()
@@ -302,7 +307,7 @@ public class JavaParserTypeDeclarationAdapter {
                     // not true, we should keep abstract as a valid candidate
                     // abstract are removed in MethodResolutionLogic.isApplicable is necessary
                     SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
-                            ancestorTypeDeclaration.get(), name, argumentsTypes, staticOnly);
+                            ancestorTypeDeclaration.get(), name, argumentsTypes, staticOnly, memberOnly);
                     if (res.isSolved()) {
                         candidateMethods.add(res.getCorrespondingDeclaration());
                     }
@@ -315,7 +320,10 @@ public class JavaParserTypeDeclarationAdapter {
         // This is relevant e.g. with nested classes.
         // Note that we want to avoid infinite recursion when a class is using its own method - see issue #75
         // We also want to avoid infinite recursion when handling static imports - see issue #4358
-        if (candidateMethods.isEmpty() && !staticOnly) {
+        // A member lookup (e.g. a call qualified by this type) must stop at the
+        // members: the imports of the file declaring the type are not visible
+        // from other files, see JLS 7.5.3/7.5.4 - see issue #5105
+        if (candidateMethods.isEmpty() && !staticOnly && !memberOnly) {
             SymbolReference<ResolvedMethodDeclaration> parentSolution = context.getParent()
                     .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
                     .solveMethod(name, argumentsTypes, staticOnly);

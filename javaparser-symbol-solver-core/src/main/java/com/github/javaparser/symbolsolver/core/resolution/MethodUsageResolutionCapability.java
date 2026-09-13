@@ -33,4 +33,18 @@ public interface MethodUsageResolutionCapability {
             List<ResolvedType> argumentTypes,
             Context invocationContext,
             List<ResolvedType> typeParameters);
+
+    /**
+     * Similar to {@link #solveMethodAsUsage(String, List, Context, List)}, but the
+     * lookup is a member lookup on this declaration and must not escape into the
+     * enclosing lexical context (e.g. the imports of the file declaring the type).
+     */
+    default Optional<MethodUsage> solveMethodAsUsage(
+            String name,
+            List<ResolvedType> argumentTypes,
+            Context invocationContext,
+            List<ResolvedType> typeParameters,
+            boolean memberOnly) {
+        return solveMethodAsUsage(name, argumentTypes, invocationContext, typeParameters);
+    }
 }

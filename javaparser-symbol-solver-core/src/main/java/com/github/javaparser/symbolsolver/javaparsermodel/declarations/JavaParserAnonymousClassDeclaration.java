@@ -96,12 +96,28 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
     }
 
     @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, boolean memberOnly) {
+        return getContext().solveMethod(name, argumentsTypes, staticOnly, memberOnly);
+    }
+
+    @Override
     public Optional<MethodUsage> solveMethodAsUsage(
             String name,
             List<ResolvedType> argumentTypes,
             Context invocationContext,
             List<ResolvedType> typeParameters) {
         return getContext().solveMethodAsUsage(name, argumentTypes);
+    }
+
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name,
+            List<ResolvedType> argumentTypes,
+            Context invocationContext,
+            List<ResolvedType> typeParameters,
+            boolean memberOnly) {
+        return getContext().solveMethodAsUsage(name, argumentTypes, memberOnly);
     }
 
     @Override

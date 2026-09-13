@@ -108,6 +108,12 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly);
     }
 
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, boolean memberOnly) {
+        return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly, memberOnly);
+    }
+
     public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes) {
         return javaParserTypeDeclarationAdapter.solveConstructor(argumentsTypes);
     }

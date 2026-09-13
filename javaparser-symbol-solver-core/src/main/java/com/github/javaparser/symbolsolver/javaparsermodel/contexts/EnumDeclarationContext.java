@@ -77,6 +77,12 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
         return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly);
     }
 
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, boolean memberOnly) {
+        return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly, memberOnly);
+    }
+
     ///
     /// Private methods
     ///
