@@ -91,7 +91,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
 
             @Override
             public Optional<ResolvedReferenceTypeDeclaration> containerType() {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(String.format("Container type not available for %s", this.getClass().getCanonicalName()));
             }
 
             @Override
@@ -134,7 +134,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     @Override
     default String getPackageName() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("Unable to get package name for %s", this.getClass().getCanonicalName()));
     }
 
     /**
@@ -143,7 +143,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     @Override
     default String getClassName() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("Unable to get class name for %s", this.getClass().getCanonicalName()));
     }
 
     /**
