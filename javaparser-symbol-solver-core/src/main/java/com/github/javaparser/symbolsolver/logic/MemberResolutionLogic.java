@@ -102,6 +102,40 @@ public class MemberResolutionLogic {
     }
 
     /**
+     * Solves a type among the members of {@code typeDeclaration}: the types it declares and the ones it
+     * inherits, and nothing else. A composite name such as {@code Outer.Inner} is resolved one member at
+     * a time, each step staying within the members of the type the previous one found.
+     */
+    public static SymbolReference<ResolvedTypeDeclaration> solveTypeInMembers(
+            ResolvedTypeDeclaration typeDeclaration, String name) {
+
+        int firstDot = name.indexOf('.');
+        if (firstDot > -1) {
+            SymbolReference<ResolvedTypeDeclaration> outer =
+                    solveTypeInMembers(typeDeclaration, name.substring(0, firstDot));
+            if (!outer.isSolved()) {
+                return SymbolReference.unsolved();
+            }
+            return solveTypeInMembers(outer.getCorrespondingDeclaration(), name.substring(firstDot + 1));
+        }
+
+        for (ResolvedReferenceTypeDeclaration internalType : typeDeclaration.internalTypes()) {
+            if (internalType.getName().equals(name)) {
+                return SymbolReference.solved(internalType);
+            }
+        }
+
+        if (typeDeclaration.isReferenceType()) {
+            ResolvedTypeDeclaration inherited = checkAncestorsForType(name, typeDeclaration.asReferenceType());
+            if (inherited != null) {
+                return SymbolReference.solved(inherited);
+            }
+        }
+
+        return SymbolReference.unsolved();
+    }
+
+    /**
      * Collects the methods named {@code name} that {@code typeDeclaration} declares or inherits.
      *
      * @return a mutable list, so that callers can keep adding candidates of their own.
