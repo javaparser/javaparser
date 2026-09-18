@@ -115,8 +115,27 @@ public class Issue5105Test extends AbstractSymbolResolutionTest {
         assertEquals("java.lang.String", call.calculateResolvedType().describe());
     }
 
+    @Test
+    void aCallThroughATypeParameterBoundDoesNotSeeThatFilesStaticImports() throws IOException {
+        // The receiver is a type variable, so the members considered are those of its bound.
+        CompilationUnit generic = parse("qq/Generic.java");
+
+        MethodCallExpr throughMid = callIn(generic, "throughTheBound");
+        assertThrows(UnsolvedSymbolException.class, throughMid::resolve);
+
+        MethodCallExpr instanceMethod = callIn(generic, "instanceThroughTheBound");
+        assertEquals("qq.Sink.inst()", instanceMethod.resolve().getQualifiedSignature());
+
+        MethodCallExpr staticMethod = callIn(generic, "staticThroughTheBound");
+        assertEquals("qq.Sink.ping()", staticMethod.resolve().getQualifiedSignature());
+    }
+
     private MethodCallExpr callIn(String methodName) {
-        MethodDeclaration method = cu.findAll(MethodDeclaration.class).stream()
+        return callIn(cu, methodName);
+    }
+
+    private MethodCallExpr callIn(CompilationUnit compilationUnit, String methodName) {
+        MethodDeclaration method = compilationUnit.findAll(MethodDeclaration.class).stream()
                 .filter(it -> it.getNameAsString().equals(methodName))
                 .findFirst()
                 .get();
