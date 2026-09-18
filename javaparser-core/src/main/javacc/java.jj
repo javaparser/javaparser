@@ -4561,14 +4561,20 @@ Statement BlockStatement():
     Expression expr;
     ClassOrInterfaceDeclaration typeDecl;
     RecordDeclaration recordDeclaration;
+    EnumDeclaration enumDeclaration;
     ModifierHolder modifier;
 }
 {
     try {
         (
-            LOOKAHEAD( Modifiers() ("class" | "interface") ) // JLS specifies local class. Since java 16 local enum or interface are allowed.
+            LOOKAHEAD( Modifiers() ("class" | "interface") ) // JLS specifies local class. Since java 16 local interface is also allowed.
             modifier = Modifiers()
             typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl, token()), typeDecl); }
+         |
+            // Since java 16 local enum is also allowed (JEP 395).
+            LOOKAHEAD( Modifiers() "enum" )
+            modifier = Modifiers()
+            enumDeclaration = EnumDeclaration(modifier) { ret = new LocalEnumDeclarationStmt(range(enumDeclaration, token()), enumDeclaration); }
          |
             // Extended lookahead required to allow for e.g. `record.toString()` where looking past "record" is required for disambiguation
             LOOKAHEAD( Modifiers() "record" SimpleName() [ TypeParameters() ] Parameters() )

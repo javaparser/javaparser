@@ -1268,6 +1268,29 @@ class GenericListVisitorAdapterTest {
     }
 
     @Test
+    void visit_GivenLocalEnumDeclarationStmt() {
+        // Given
+        Object argument = mock(Object.class);
+        LocalEnumDeclarationStmt node = mock(LocalEnumDeclarationStmt.class);
+
+        // When
+        Mockito.when(node.getEnumDeclaration()).thenReturn(mock(EnumDeclaration.class));
+        Mockito.when(node.getComment()).thenReturn(Optional.of(mock(Comment.class)));
+
+        // Then
+        List<Object> result = visitor.visit(node, argument);
+
+        // Assert
+        assertNotNull(result);
+
+        // Verify
+        InOrder order = Mockito.inOrder(node);
+        order.verify(node).getEnumDeclaration();
+        order.verify(node, times(2)).getComment();
+        order.verifyNoMoreInteractions();
+    }
+
+    @Test
     void visit_GivenLongLiteralExpr() {
         // Given
         Object argument = mock(Object.class);

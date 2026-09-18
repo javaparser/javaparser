@@ -25,13 +25,20 @@ import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_16;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.stmt.LocalEnumDeclarationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -45,6 +52,57 @@ class Java16ValidatorTest {
         ParseResult<CompilationUnit> result =
                 javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {" + "interface I{}}}"));
         assertNoProblems(result);
+    }
+
+    @Test
+    void localEnum() {
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {enum E{A,B}}}"));
+        assertNoProblems(result);
+
+        CompilationUnit cu = result.getResult().get();
+        LocalEnumDeclarationStmt localEnumStmt =
+                cu.findFirst(LocalEnumDeclarationStmt.class).get();
+        assertTrue(localEnumStmt.isLocalEnumDeclarationStmt());
+        assertSame(localEnumStmt, localEnumStmt.asLocalEnumDeclarationStmt());
+
+        EnumDeclaration enumDeclaration = localEnumStmt.getEnumDeclaration();
+        assertEquals("E", enumDeclaration.getNameAsString());
+        assertEquals("A", enumDeclaration.getEntry(0).getNameAsString());
+        assertEquals("B", enumDeclaration.getEntry(1).getNameAsString());
+        assertSame(localEnumStmt, enumDeclaration.getParentNode().get());
+        assertTrue(enumDeclaration.isLocalEnumDeclaration());
+        assertFalse(enumDeclaration.getFullyQualifiedName().isPresent());
+
+        LocalEnumDeclarationStmt cloned = localEnumStmt.clone();
+        assertEquals(localEnumStmt, cloned);
+
+        ParseResult<Statement> reprinted = javaParser.parse(STATEMENT, provider(cloned.toString()));
+        assertNoProblems(reprinted);
+        assertEquals(cloned, reprinted.getResult().get());
+    }
+
+    @Test
+    void localEnumModifiers() {
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "enum E{A,B}}}"));
+        assertProblems(
+                result,
+                "(line 1,col 20) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 20) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 20) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 20) 'public' is not allowed here.",
+                "(line 1,col 20) 'protected' is not allowed here.",
+                "(line 1,col 20) 'private' is not allowed here.",
+                "(line 1,col 20) 'abstract' is not allowed here.",
+                "(line 1,col 20) 'static' is not allowed here.",
+                "(line 1,col 20) 'final' is not allowed here.",
+                "(line 1,col 20) 'transient' is not allowed here.",
+                "(line 1,col 20) 'volatile' is not allowed here.",
+                "(line 1,col 20) 'synchronized' is not allowed here.",
+                "(line 1,col 20) 'native' is not allowed here.",
+                "(line 1,col 20) 'transitive' is not allowed here.",
+                "(line 1,col 20) 'default' is not allowed here.");
     }
 
     @Nested
