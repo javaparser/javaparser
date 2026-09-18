@@ -211,9 +211,11 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     /**
      * Returns the fully qualified name of this type, derived only from information available in this compilation unit. (So no symbol solving happens.)
      * If the declared type is a local class declaration, it will return Optional.empty().
+     * If the declared type is a local enum declaration, it will return Optional.empty().
      * If the declared type is a local record declaration, it will return Optional.empty().
      * If the declared type is not contained in a compilation unit, it will return Optional.empty().
      * @see com.github.javaparser.ast.stmt.LocalClassDeclarationStmt
+     * @see com.github.javaparser.ast.stmt.LocalEnumDeclarationStmt
      * @see com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt
      */
     public Optional<String> getFullyQualifiedName() {

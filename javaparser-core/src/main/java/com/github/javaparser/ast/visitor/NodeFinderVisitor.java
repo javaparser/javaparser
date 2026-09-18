@@ -101,6 +101,7 @@ import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.LabeledStmt;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
+import com.github.javaparser.ast.stmt.LocalEnumDeclarationStmt;
 import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchEntry;
@@ -1574,6 +1575,22 @@ public class NodeFinderVisitor extends VoidVisitorAdapter<Range> {
     public void visit(final LocalClassDeclarationStmt n, final Range arg) {
         {
             n.getClassDeclaration().accept(this, arg);
+            if (selectedNode != null) return;
+        }
+        if (n.getComment().isPresent()) {
+            n.getComment().get().accept(this, arg);
+            if (selectedNode != null) return;
+        }
+        if (fn.apply(n, arg)) {
+            selectedNode = n;
+        }
+        return;
+    }
+
+    @Override
+    public void visit(final LocalEnumDeclarationStmt n, final Range arg) {
+        {
+            n.getEnumDeclaration().accept(this, arg);
             if (selectedNode != null) return;
         }
         if (n.getComment().isPresent()) {

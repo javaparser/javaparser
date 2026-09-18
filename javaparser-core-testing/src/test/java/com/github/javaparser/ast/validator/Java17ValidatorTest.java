@@ -24,6 +24,7 @@ package com.github.javaparser.ast.validator;
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_17;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -50,6 +51,23 @@ class Java17ValidatorTest {
         @Test
         void nonSealedAllowed() {
             ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("non-sealed class X {}"));
+            TestUtils.assertNoProblems(result);
+        }
+
+        @Test
+        void sealedAndNonSealedRejectedOnLocalEnum() {
+            ParseResult<CompilationUnit> result =
+                    javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {sealed non-sealed enum E{A,B}}}"));
+            assertProblems(
+                    result,
+                    "(line 1,col 20) 'sealed' is not allowed here.",
+                    "(line 1,col 20) 'non-sealed' is not allowed here.");
+        }
+
+        @Test
+        void strictfpAllowedOnLocalEnum() {
+            ParseResult<CompilationUnit> result =
+                    javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {strictfp enum E{A,B}}}"));
             TestUtils.assertNoProblems(result);
         }
     }
