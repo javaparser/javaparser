@@ -39,11 +39,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -52,36 +49,6 @@ import java.util.stream.Collectors;
 public class CompilationUnitContext extends AbstractJavaParserContext<CompilationUnit> {
 
     private static final String DEFAULT_PACKAGE = "java.lang";
-
-    /** Names currently in flight as a member lookup, per thread. */
-    private static final ThreadLocal<Set<String>> MEMBERS_IN_FLIGHT = new ThreadLocal<>();
-
-    /** Runs {@code supplier} with {@code name} marked in flight as a member lookup. */
-    private static <T> T withMemberInFlight(String name, Supplier<T> supplier) {
-        Set<String> inFlight = MEMBERS_IN_FLIGHT.get();
-        if (inFlight == null) {
-            inFlight = new HashSet<>();
-            MEMBERS_IN_FLIGHT.set(inFlight);
-        }
-        // Remove only what this frame added, so a nested lookup cannot clear its caller's state.
-        boolean added = inFlight.add(name);
-        try {
-            return supplier.get();
-        } finally {
-            if (added) {
-                inFlight.remove(name);
-            }
-            if (inFlight.isEmpty()) {
-                // Outermost frame: leave no entry behind for pooled threads.
-                MEMBERS_IN_FLIGHT.remove();
-            }
-        }
-    }
-
-    private static boolean isMemberInFlight(String name) {
-        Set<String> inFlight = MEMBERS_IN_FLIGHT.get();
-        return inFlight != null && inFlight.contains(name);
-    }
 
     ///
     /// Static methods
@@ -108,17 +75,9 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             String memberName = getMember(itName);
             SymbolReference<ResolvedTypeDeclaration> type = this.solveType(typeName);
             if (type.isSolved()) {
-                return withMemberInFlight(memberName, () -> new SymbolSolver(typeSolver)
-                        .solveSymbolInType(type.getCorrespondingDeclaration(), memberName));
+                return new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName);
             }
             itName = typeName;
-        }
-
-        // Reached as the parent context of a type whose member is being resolved. Static imports are not
-        // transitive (JLS 7.5.3, 7.5.4), so they do not apply to that lookup, and following them here is
-        // what makes cyclic static imports recurse forever. See issues 4450 & 2720.
-        if (isMemberInFlight(name)) {
-            return SymbolReference.unsolved();
         }
 
         // Look among statically imported values
@@ -127,8 +86,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 if (importDecl.isAsterisk()) {
                     String qName = importDecl.getNameAsString();
                     ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
-                    SymbolReference<? extends ResolvedValueDeclaration> ref = withMemberInFlight(
-                            name, () -> new SymbolSolver(typeSolver).solveSymbolInType(importedType, name));
+                    SymbolReference<? extends ResolvedValueDeclaration> ref =
+                            new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
                     if (ref.isSolved()) {
                         return ref;
                     }
@@ -141,8 +100,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
                     if (memberName.equals(name)) {
                         ResolvedTypeDeclaration importedType = typeSolver.solveType(typeName);
-                        return withMemberInFlight(memberName, () -> new SymbolSolver(typeSolver)
-                                .solveSymbolInType(importedType, memberName));
+                        return new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName);
                     }
                 }
             }
