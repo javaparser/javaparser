@@ -26,9 +26,11 @@ import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.HasAccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -130,6 +132,28 @@ public class MemberResolutionLogic {
             if (inherited != null) {
                 return SymbolReference.solved(inherited);
             }
+        }
+
+        return SymbolReference.unsolved();
+    }
+
+    /**
+     * Solves a value among the members of {@code typeDeclaration}: its enum constants, then the fields it
+     * declares and the ones it inherits, and nothing else.
+     */
+    public static SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInMembers(
+            ResolvedReferenceTypeDeclaration typeDeclaration, String name) {
+
+        if (typeDeclaration.isEnum()) {
+            // Enum constants are members of the enum, and no field declaration declares them.
+            ResolvedEnumDeclaration enumDeclaration = typeDeclaration.asEnum();
+            if (enumDeclaration.hasEnumConstant(name)) {
+                return SymbolReference.solved(enumDeclaration.getEnumConstant(name));
+            }
+        }
+
+        if (typeDeclaration.hasVisibleField(name)) {
+            return SymbolReference.solved(typeDeclaration.getVisibleField(name));
         }
 
         return SymbolReference.unsolved();
