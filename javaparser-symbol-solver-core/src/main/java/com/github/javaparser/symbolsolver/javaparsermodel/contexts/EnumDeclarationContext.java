@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumConstantDeclaration;
@@ -74,6 +75,13 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        // values() and valueOf(String) are members of the enum although nothing declares them in the AST
+        // (JLS 8.9.3), and the declaration is what knows about them.
+        SymbolReference<ResolvedMethodDeclaration> implicitMember =
+                MethodResolutionLogic.solveMethodInType(getDeclaration(), name, argumentsTypes, staticOnly);
+        if (implicitMember.isSolved()) {
+            return implicitMember;
+        }
         return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly);
     }
 

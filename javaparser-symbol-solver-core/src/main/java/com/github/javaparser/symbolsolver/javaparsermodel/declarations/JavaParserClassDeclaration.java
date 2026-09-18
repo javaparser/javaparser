@@ -40,6 +40,7 @@ import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapabi
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -156,8 +157,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     ///
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes) {
-        Context ctx = getContext();
-        return ctx.solveMethod(name, parameterTypes, false);
+        return MemberResolutionLogic.solveMethodInMembers(this, name, parameterTypes, false, typeSolver);
     }
 
     @Override
@@ -166,7 +166,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             List<ResolvedType> argumentTypes,
             Context invocationContext,
             List<ResolvedType> typeParameters) {
-        return getContext().solveMethodAsUsage(name, argumentTypes);
+        return MemberResolutionLogic.solveMethodAsUsageInMembers(this, name, argumentTypes, getContext(), typeSolver);
     }
 
     /**
@@ -331,7 +331,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getContext().solveMethod(name, argumentsTypes, staticOnly);
+        return MemberResolutionLogic.solveMethodInMembers(this, name, argumentsTypes, staticOnly, typeSolver);
     }
 
     @Override

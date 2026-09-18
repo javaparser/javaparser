@@ -44,6 +44,7 @@ import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolution
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -201,7 +202,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver)));
             }
         }
-        return getContext().solveMethodAsUsage(name, argumentTypes);
+        return MemberResolutionLogic.solveMethodAsUsageInMembers(this, name, argumentTypes, getContext(), typeSolver);
     }
 
     @Override
@@ -217,7 +218,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 return SymbolReference.solved(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver));
             }
         }
-        return getContext().solveMethod(name, argumentsTypes, staticOnly);
+        return MemberResolutionLogic.solveMethodInMembers(this, name, argumentsTypes, staticOnly, typeSolver);
     }
 
     @Override

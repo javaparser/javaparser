@@ -47,9 +47,8 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
+import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -278,37 +277,9 @@ public class JavaParserTypeDeclarationAdapter {
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
 
-        // Begin by locating methods declared "here"
-        List<ResolvedMethodDeclaration> candidateMethods = typeDeclaration.getDeclaredMethods().stream()
-                .filter(m -> m.getName().equals(name))
-                .filter(m -> !staticOnly || m.isStatic())
-                .collect(Collectors.toList());
-
-        // Next, consider methods declared within ancestors.
-        // Note that we only consider ancestors when we are not currently at java.lang.Object (avoiding infinite
-        // recursion).
-        if (!typeDeclaration.isJavaLangObject()) {
-            for (ResolvedReferenceType ancestor : typeDeclaration.getAncestors(true)) {
-                Optional<ResolvedReferenceTypeDeclaration> ancestorTypeDeclaration = ancestor.getTypeDeclaration();
-
-                // Avoid recursion on self
-                if (ancestor.getTypeDeclaration().isPresent() && typeDeclaration != ancestorTypeDeclaration.get()) {
-                    // Consider methods declared on self
-                    candidateMethods.addAll(ancestor.getAllMethodsVisibleToInheritors().stream()
-                            .filter(m -> m.getName().equals(name))
-                            .collect(Collectors.toList()));
-
-                    // consider methods from superclasses and only default methods from interfaces :
-                    // not true, we should keep abstract as a valid candidate
-                    // abstract are removed in MethodResolutionLogic.isApplicable is necessary
-                    SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
-                            ancestorTypeDeclaration.get(), name, argumentsTypes, staticOnly);
-                    if (res.isSolved()) {
-                        candidateMethods.add(res.getCorrespondingDeclaration());
-                    }
-                }
-            }
-        }
+        // Begin by locating the methods this type declares or inherits.
+        List<ResolvedMethodDeclaration> candidateMethods =
+                MemberResolutionLogic.collectCandidateMembers(typeDeclaration, name, argumentsTypes, staticOnly);
 
         // If we haven't located any candidates that are declared on this type or its ancestors, consider the parent
         // context.
