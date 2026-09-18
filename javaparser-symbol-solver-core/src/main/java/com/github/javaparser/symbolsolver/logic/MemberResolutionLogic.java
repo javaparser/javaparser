@@ -21,11 +21,14 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.HasAccessSpecifier;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -50,6 +53,52 @@ public class MemberResolutionLogic {
 
     private MemberResolutionLogic() {
         // This class is meant to be used statically only.
+    }
+
+    /**
+     * Recursively checks the ancestors of the {@param declaration} if an internal type is declared with a name equal
+     * to {@param name}.
+     * TODO: Edit to remove return of null (favouring a return of optional)
+     * @return A ResolvedTypeDeclaration matching the {@param name}, null otherwise
+     */
+    public static ResolvedTypeDeclaration checkAncestorsForType(
+            String name, ResolvedReferenceTypeDeclaration declaration) {
+        for (ResolvedReferenceType ancestor : declaration.getAncestors(true)) {
+            try {
+                // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+                ResolvedReferenceTypeDeclaration ancestorReferenceTypeDeclaration = ancestor.getTypeDeclaration()
+                        .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
+
+                for (ResolvedTypeDeclaration internalTypeDeclaration :
+                        ancestorReferenceTypeDeclaration.internalTypes()) {
+                    boolean visible = true;
+                    if (internalTypeDeclaration instanceof ResolvedReferenceTypeDeclaration) {
+                        ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration =
+                                internalTypeDeclaration.asReferenceType();
+                        if (resolvedReferenceTypeDeclaration instanceof HasAccessSpecifier) {
+                            visible = ((HasAccessSpecifier) resolvedReferenceTypeDeclaration).accessSpecifier()
+                                    != AccessSpecifier.PRIVATE;
+                        }
+                    }
+                    if (internalTypeDeclaration.getName().equals(name)) {
+                        if (visible) {
+                            return internalTypeDeclaration;
+                        }
+                        return null;
+                    }
+                }
+
+                // check recursively the ancestors of this ancestor
+                ResolvedTypeDeclaration ancestorTypeDeclaration =
+                        checkAncestorsForType(name, ancestorReferenceTypeDeclaration);
+                if (ancestorTypeDeclaration != null) {
+                    return ancestorTypeDeclaration;
+                }
+            } catch (UnsupportedOperationException e) {
+                // just continue using the next ancestor
+            }
+        }
+        return null; // FIXME -- Avoid returning null.
     }
 
     /**
