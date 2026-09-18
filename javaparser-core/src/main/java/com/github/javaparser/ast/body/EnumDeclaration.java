@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.LocalEnumDeclarationStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -170,6 +171,23 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
         EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
         getEntries().add(enumConstant);
         return enumConstant;
+    }
+
+    // TODO document and remove duplication between here and com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+    /**
+     * @return is this enum's parent a LocalEnumDeclarationStmt ?
+     */
+    public boolean isLocalEnumDeclaration() {
+        return getParentNode().map(p -> p instanceof LocalEnumDeclarationStmt).orElse(false);
+    }
+
+    // TODO document and remove duplication between here and com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+    @Override
+    public Optional<String> getFullyQualifiedName() {
+        if (isLocalEnumDeclaration()) {
+            return Optional.empty();
+        }
+        return super.getFullyQualifiedName();
     }
 
     @Override

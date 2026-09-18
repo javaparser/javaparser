@@ -309,6 +309,10 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
         return (n.getRecordDeclaration().accept(this, arg));
     }
 
+    public Integer visit(final LocalEnumDeclarationStmt n, final Void arg) {
+        return (n.getEnumDeclaration().accept(this, arg));
+    }
+
     public Integer visit(final LongLiteralExpr n, final Void arg) {
         return (n.getValue().hashCode());
     }

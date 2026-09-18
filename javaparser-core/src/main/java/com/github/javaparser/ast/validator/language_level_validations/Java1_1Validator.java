@@ -22,7 +22,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
+import com.github.javaparser.ast.stmt.LocalEnumDeclarationStmt;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 import com.github.javaparser.ast.validator.Validator;
 
@@ -42,9 +44,20 @@ public class Java1_1Validator extends Java1_0Validator {
                                             ParserConfiguration.LanguageLevel.JAVA_16));
                     }));
 
+    final Validator noLocalEnums = new SingleNodeTypeValidator<>(
+            EnumDeclaration.class, (n, reporter) -> n.getParentNode().ifPresent(p -> {
+                if (p instanceof LocalEnumDeclarationStmt)
+                    reporter.report(
+                            n,
+                            new UpgradeJavaMessage(
+                                    "There is no such thing as a local enum.",
+                                    ParserConfiguration.LanguageLevel.JAVA_16));
+            }));
+
     public Java1_1Validator() {
         super();
         replace(noInnerClasses, innerClasses);
+        add(noLocalEnums);
         remove(noReflection);
     }
 }
