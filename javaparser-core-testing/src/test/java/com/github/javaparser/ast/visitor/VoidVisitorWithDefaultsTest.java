@@ -397,6 +397,12 @@ class VoidVisitorWithDefaultsTest {
     }
 
     @Test
+    void testThatVisitWithLocalEnumDeclarationStmtAsParameterCallDefaultAction() {
+        visitor.visit(mock(LocalEnumDeclarationStmt.class), argument);
+        assertNodeVisitDefaultAction();
+    }
+
+    @Test
     void testThatVisitWithLongLiteralExprAsParameterCallDefaultAction() {
         visitor.visit(mock(LongLiteralExpr.class), argument);
         assertNodeVisitDefaultAction();

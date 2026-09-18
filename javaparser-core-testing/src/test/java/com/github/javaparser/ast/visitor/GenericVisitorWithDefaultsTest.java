@@ -399,6 +399,12 @@ class GenericVisitorWithDefaultsTest {
     }
 
     @Test
+    void testThatVisitWithLocalEnumDeclarationStmtAsParameterCallDefaultAction() {
+        Node node = visitor.visit(mock(LocalEnumDeclarationStmt.class), argument);
+        assertNodeVisitDefaultAction(node);
+    }
+
+    @Test
     void testThatVisitWithLongLiteralExprAsParameterCallDefaultAction() {
         Node node = visitor.visit(mock(LongLiteralExpr.class), argument);
         assertNodeVisitDefaultAction(node);
