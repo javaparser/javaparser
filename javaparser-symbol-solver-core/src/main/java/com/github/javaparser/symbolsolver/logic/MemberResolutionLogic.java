@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -28,6 +30,7 @@ import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -119,5 +122,34 @@ public class MemberResolutionLogic {
         }
 
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
+    }
+
+    /**
+     * Solves a method among the members of {@code typeDeclaration} and resolves its type variables, so that
+     * the result can be used as a {@link MethodUsage}.
+     *
+     * @param context the context the resulting usage is resolved against; it is not searched for candidates.
+     */
+    public static Optional<MethodUsage> solveMethodAsUsageInMembers(
+            ResolvedReferenceTypeDeclaration typeDeclaration,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            Context context,
+            TypeSolver typeSolver) {
+
+        SymbolReference<ResolvedMethodDeclaration> methodSolved =
+                solveMethodInMembers(typeDeclaration, name, argumentsTypes, false, typeSolver);
+        if (!methodSolved.isSolved()) {
+            return Optional.empty();
+        }
+
+        ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
+        if (!(methodDeclaration instanceof TypeVariableResolutionCapability)) {
+            throw new UnsupportedOperationException(String.format(
+                    "Resolved method declarations must implement %s.",
+                    TypeVariableResolutionCapability.class.getName()));
+        }
+        return Optional.of(
+                ((TypeVariableResolutionCapability) methodDeclaration).resolveTypeVariables(context, argumentsTypes));
     }
 }

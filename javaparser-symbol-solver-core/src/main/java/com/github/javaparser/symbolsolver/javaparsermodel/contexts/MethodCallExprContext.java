@@ -21,12 +21,20 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.expr.EnclosedExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -40,6 +48,7 @@ import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.resolution.typeinference.LeastUpperBoundLogic;
 import com.github.javaparser.utils.Pair;
 import java.util.*;
@@ -131,7 +140,33 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             argumentsTypes.set(i, updatedArgumentType);
         }
 
-        return solveMethodAsUsage(typeOfScope, name, argumentsTypes, this);
+        Optional<MethodUsage> ref = solveMethodAsUsage(typeOfScope, name, argumentsTypes, this);
+        if (!ref.isPresent() && !wrappedNode.hasScope()) {
+            // A call without a receiver is a lexical lookup, so when the type it is written in has no such
+            // member the enclosing scopes still apply -- including that file's static imports. See
+            // solveMethod for why this starts at the enclosing type rather than at the parent context.
+            ref = JavaParserFactory.getContext(enclosingTypeOf(wrappedNode), typeSolver)
+                    .solveMethodAsUsage(name, argumentsTypes);
+        }
+        return ref;
+    }
+
+    /**
+     * The node whose type provides {@code this} for a call written at {@code node}: the type declaration
+     * enclosing it, or the anonymous class body it is written in. The compilation unit acts as the stop
+     * condition for a call written outside any type.
+     */
+    private static Node enclosingTypeOf(Node node) {
+        Node parent = demandParentNode(node);
+        if (parent instanceof ClassOrInterfaceDeclaration
+                || parent instanceof RecordDeclaration
+                || parent instanceof EnumDeclaration
+                || parent instanceof CompilationUnit
+                || (parent instanceof ObjectCreationExpr
+                        && ((ObjectCreationExpr) parent).getAnonymousClassBody().isPresent())) {
+            return parent;
+        }
+        return enclosingTypeOf(parent);
     }
 
     private MethodUsage resolveMethodTypeParametersFromExplicitList(TypeSolver typeSolver, MethodUsage methodUsage) {
@@ -157,6 +192,15 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        // A call without a receiver is a lexical lookup, not a member lookup: besides the members of the
+        // type it is written in, it can reach the enclosing types and that file's static imports. Start it
+        // at the enclosing type, whose context searches exactly those, rather than at the parent context:
+        // the expressions a call is nested in resolve calls of their own and do not relay such a lookup.
+        if (!wrappedNode.hasScope()) {
+            return JavaParserFactory.getContext(enclosingTypeOf(wrappedNode), typeSolver)
+                    .solveMethod(name, argumentsTypes, staticOnly);
+        }
+
         Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
 
         if (rrtds.isEmpty()) {

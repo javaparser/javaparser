@@ -49,7 +49,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Federico Tomassetti

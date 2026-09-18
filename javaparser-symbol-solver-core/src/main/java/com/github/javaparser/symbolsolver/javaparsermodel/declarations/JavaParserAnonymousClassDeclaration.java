@@ -41,6 +41,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ObjectCreationContext;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import java.util.*;
@@ -92,7 +93,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getContext().solveMethod(name, argumentsTypes, staticOnly);
+        return MemberResolutionLogic.solveMethodInMembers(this, name, argumentsTypes, staticOnly, typeSolver);
     }
 
     @Override
@@ -101,7 +102,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
             List<ResolvedType> argumentTypes,
             Context invocationContext,
             List<ResolvedType> typeParameters) {
-        return getContext().solveMethodAsUsage(name, argumentTypes);
+        return MemberResolutionLogic.solveMethodAsUsageInMembers(this, name, argumentTypes, getContext(), typeSolver);
     }
 
     @Override
