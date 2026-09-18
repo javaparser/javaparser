@@ -37,8 +37,7 @@ import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
+import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -277,21 +276,11 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         SymbolReference<ResolvedTypeDeclaration> ref = null;
         String remaining = name.substring(name.indexOf(".") + 1);
         SymbolReference<ResolvedTypeDeclaration> outerMostRef = solveType(name.substring(0, name.indexOf(".")));
-        // Use context-based resolution (.getContext().solveType) instead of declaration-based
-        // resolution (.solveType) so that inherited nested types are found via ancestor checking.
-        // This is consistent with how solveExternalTypeFromOuterMostRef already works.
-        if (outerMostRef != null
-                && outerMostRef.isSolved()
-                && outerMostRef.getCorrespondingDeclaration() instanceof JavaParserClassDeclaration) {
-            ref = ((JavaParserClassDeclaration) outerMostRef.getCorrespondingDeclaration())
-                    .getContext()
-                    .solveType(remaining);
-        } else if (outerMostRef != null
-                && outerMostRef.isSolved()
-                && outerMostRef.getCorrespondingDeclaration() instanceof JavaParserInterfaceDeclaration) {
-            ref = ((JavaParserInterfaceDeclaration) outerMostRef.getCorrespondingDeclaration())
-                    .getContext()
-                    .solveType(remaining);
+        // Look for the remaining name among the members of that type: the nested types it declares and
+        // the ones it inherits. Asking its context instead would also reach the imports of the file it is
+        // declared in, and those are not members of it (JLS 7.5.1, 7.5.2, 7.5.3, 7.5.4).
+        if (outerMostRef != null && outerMostRef.isSolved()) {
+            ref = MemberResolutionLogic.solveTypeInMembers(outerMostRef.getCorrespondingDeclaration(), remaining);
         }
         return ref;
     }
@@ -303,18 +292,10 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         SymbolReference<ResolvedTypeDeclaration> ref = null;
         SymbolReference<ResolvedReferenceTypeDeclaration> outerMostRef =
                 typeSolver.tryToSolveType(name.substring(0, name.indexOf(".")));
-        if (outerMostRef != null
-                && outerMostRef.isSolved()
-                && outerMostRef.getCorrespondingDeclaration() instanceof JavaParserClassDeclaration) {
-            ref = ((JavaParserClassDeclaration) outerMostRef.getCorrespondingDeclaration())
-                    .getContext()
-                    .solveType(name.substring(name.indexOf(".") + 1));
-        } else if (outerMostRef != null
-                && outerMostRef.isSolved()
-                && outerMostRef.getCorrespondingDeclaration() instanceof JavaParserInterfaceDeclaration) {
-            ref = ((JavaParserInterfaceDeclaration) outerMostRef.getCorrespondingDeclaration())
-                    .getContext()
-                    .solveType(name.substring(name.indexOf(".") + 1));
+        // Members only, for the same reason as in solveTypeFromOuterMostRef.
+        if (outerMostRef != null && outerMostRef.isSolved()) {
+            ref = MemberResolutionLogic.solveTypeInMembers(
+                    outerMostRef.getCorrespondingDeclaration(), name.substring(name.indexOf(".") + 1));
         }
         return ref;
     }
