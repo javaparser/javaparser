@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.cache.InMemoryCache;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -150,30 +151,7 @@ public class CombinedTypeSolver implements TypeSolver {
 
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
-        Optional<SymbolReference<ResolvedReferenceTypeDeclaration>> cachedSymbol = typeCache.get(name);
-        if (cachedSymbol.isPresent()) {
-            return cachedSymbol.get();
-        }
-
-        // If the symbol is not cached
-        for (TypeSolver ts : elements) {
-            try {
-                SymbolReference<ResolvedReferenceTypeDeclaration> res = ts.tryToSolveType(name);
-                if (res.isSolved()) {
-                    typeCache.put(name, res);
-                    return res;
-                }
-            } catch (Exception e) {
-                if (!exceptionHandler.test(e)) { // we shouldn't ignore this exception
-                    throw e;
-                }
-            }
-        }
-
-        // When unable to solve, cache the value with unsolved symbol
-        SymbolReference<ResolvedReferenceTypeDeclaration> unsolvedSymbol = SymbolReference.unsolved();
-        typeCache.put(name, unsolvedSymbol);
-        return unsolvedSymbol;
+        return tryToSolveType(name, solver -> solver.tryToSolveType(name));
     }
 
     /**
@@ -186,29 +164,35 @@ public class CombinedTypeSolver implements TypeSolver {
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(
             String moduleQualifiedName, String simpleTypeName) {
-        String cacheName = createModuleTypeName(moduleQualifiedName, simpleTypeName);
+        return tryToSolveType(
+                createModuleTypeName(moduleQualifiedName, simpleTypeName),
+                solver -> solver.tryToSolveTypeInModule(moduleQualifiedName, simpleTypeName));
+    }
 
+    /**
+     * Applies the shared cache, solver ordering, and exception policy to a lookup operation.
+     */
+    private SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(
+            String cacheName, Function<TypeSolver, SymbolReference<ResolvedReferenceTypeDeclaration>> lookup) {
         Optional<SymbolReference<ResolvedReferenceTypeDeclaration>> cachedType = typeCache.get(cacheName);
         if (cachedType.isPresent()) {
             return cachedType.get();
         }
 
-        for (TypeSolver ts : elements) {
+        for (TypeSolver solver : elements) {
             try {
-                SymbolReference<ResolvedReferenceTypeDeclaration> res =
-                        ts.tryToSolveTypeInModule(moduleQualifiedName, simpleTypeName);
-                if (res.isSolved()) {
-                    typeCache.put(cacheName, res);
-                    return res;
+                SymbolReference<ResolvedReferenceTypeDeclaration> result = lookup.apply(solver);
+                if (result.isSolved()) {
+                    typeCache.put(cacheName, result);
+                    return result;
                 }
             } catch (Exception e) {
-                if (!exceptionHandler.test(e)) { // we shouldn't ignore this exception
+                if (!exceptionHandler.test(e)) {
                     throw e;
                 }
             }
         }
 
-        // When unable to solve, cache the value with unsolved symbol
         SymbolReference<ResolvedReferenceTypeDeclaration> unsolvedSymbol = SymbolReference.unsolved();
         typeCache.put(cacheName, unsolvedSymbol);
         return unsolvedSymbol;
