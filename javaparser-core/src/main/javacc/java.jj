@@ -4572,7 +4572,11 @@ Statement BlockStatement():
             typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl, token()), typeDecl); }
          |
             // Since java 16 local enum is also allowed (JEP 395).
-            LOOKAHEAD( Modifiers() "enum" )
+            // Extended lookahead past "enum" required so that `enum` used as an identifier
+            // (e.g. `enum = 3;`, `enum.foo();`, `enum x = null;`) is not greedily committed
+            // to EnumDeclaration() but falls through to a VariableDeclarationExpression/Statement,
+            // matching pre-Java-16 behavior. Keyword rejection stays the validator's job.
+            LOOKAHEAD( Modifiers() "enum" SimpleName() ( "{" | "implements" ) )
             modifier = Modifiers()
             enumDeclaration = EnumDeclaration(modifier) { ret = new LocalEnumDeclarationStmt(range(enumDeclaration, token()), enumDeclaration); }
          |

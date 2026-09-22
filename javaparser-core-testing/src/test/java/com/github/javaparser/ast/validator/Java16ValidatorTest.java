@@ -30,7 +30,9 @@ import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParser;
@@ -38,8 +40,11 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.stmt.LocalEnumDeclarationStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +70,12 @@ class Java16ValidatorTest {
                 cu.findFirst(LocalEnumDeclarationStmt.class).get();
         assertTrue(localEnumStmt.isLocalEnumDeclarationStmt());
         assertSame(localEnumStmt, localEnumStmt.asLocalEnumDeclarationStmt());
+        assertSame(JavaParserMetaModel.localEnumDeclarationStmtMetaModel, localEnumStmt.getMetaModel());
+
+        AtomicBoolean consumerCalled = new AtomicBoolean(false);
+        localEnumStmt.ifLocalEnumDeclarationStmt(s -> consumerCalled.set(true));
+        assertTrue(consumerCalled.get());
+        assertSame(localEnumStmt, localEnumStmt.toLocalEnumDeclarationStmt().get());
 
         EnumDeclaration enumDeclaration = localEnumStmt.getEnumDeclaration();
         assertEquals("E", enumDeclaration.getNameAsString());
@@ -74,12 +85,88 @@ class Java16ValidatorTest {
         assertTrue(enumDeclaration.isLocalEnumDeclaration());
         assertFalse(enumDeclaration.getFullyQualifiedName().isPresent());
 
+        // setEnumDeclaration is a no-op when given the node it already holds
+        localEnumStmt.setEnumDeclaration(enumDeclaration);
+        assertSame(enumDeclaration, localEnumStmt.getEnumDeclaration());
+
         LocalEnumDeclarationStmt cloned = localEnumStmt.clone();
         assertEquals(localEnumStmt, cloned);
+
+        LocalEnumDeclarationStmt differentEnumDeclaration =
+                new LocalEnumDeclarationStmt(new EnumDeclaration().setName("Other"));
+        assertNotEquals(localEnumStmt, differentEnumDeclaration);
+
+        LocalEnumDeclarationStmt differentComment = cloned.clone();
+        differentComment.setComment(new LineComment("different"));
+        assertNotEquals(localEnumStmt, differentComment);
 
         ParseResult<Statement> reprinted = javaParser.parse(STATEMENT, provider(cloned.toString()));
         assertNoProblems(reprinted);
         assertEquals(cloned, reprinted.getResult().get());
+
+        EnumDeclaration replacement = new EnumDeclaration().setName("F");
+        assertTrue(localEnumStmt.replace(enumDeclaration, replacement));
+        assertSame(replacement, localEnumStmt.getEnumDeclaration());
+        assertFalse(localEnumStmt.replace(null, replacement));
+        assertFalse(localEnumStmt.replace(new EnumDeclaration(), replacement));
+
+        LocalEnumDeclarationStmt viaAllFieldsConstructor = new LocalEnumDeclarationStmt(replacement.clone());
+        assertEquals("F", viaAllFieldsConstructor.getEnumDeclaration().getNameAsString());
+    }
+
+    @Test
+    void localEnumWithImplements() {
+        ParseResult<CompilationUnit> result = javaParser.parse(
+                COMPILATION_UNIT, provider("class X{ void x() {enum E implements Comparable<E> {A,B}}}"));
+        assertNoProblems(result);
+
+        LocalEnumDeclarationStmt localEnumStmt = result.getResult()
+                .get()
+                .findFirst(LocalEnumDeclarationStmt.class)
+                .get();
+        assertEquals(
+                "Comparable",
+                localEnumStmt.getEnumDeclaration().getImplementedTypes(0).getNameAsString());
+    }
+
+    @Test
+    void nonLocalEnumStatementRejectsLocalEnumCasters() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider(";"));
+        assertNoProblems(result);
+        Statement emptyStmt = result.getResult().get();
+
+        assertFalse(emptyStmt.isLocalEnumDeclarationStmt());
+        assertThrows(IllegalStateException.class, emptyStmt::asLocalEnumDeclarationStmt);
+        assertFalse(emptyStmt.toLocalEnumDeclarationStmt().isPresent());
+
+        AtomicBoolean consumerCalled = new AtomicBoolean(false);
+        emptyStmt.ifLocalEnumDeclarationStmt(s -> consumerCalled.set(true));
+        assertFalse(consumerCalled.get());
+    }
+
+    /**
+     * A statement beginning with `enum` used as an identifier must still stay parsable, and must
+     * yield the clean {@code ReservedKeywordValidator} message instead of a raw JavaCC parse
+     * error. The local-enum-declaration lookahead in BlockStatement() must not greedily commit
+     * these to EnumDeclaration().
+     */
+    @Test
+    void enumUsedAsIdentifierYieldsCleanMessageInsteadOfParseError() {
+        assertProblems(
+                javaParser.parse(STATEMENT, provider("enum = 3;")),
+                "(line 1,col 1) 'enum' cannot be used as an identifier as it is a keyword.");
+        assertProblems(
+                javaParser.parse(STATEMENT, provider("enum.foo();")),
+                "(line 1,col 1) 'enum' cannot be used as an identifier as it is a keyword.");
+        assertProblems(
+                javaParser.parse(STATEMENT, provider("enum x = null;")),
+                "(line 1,col 1) 'enum' cannot be used as an identifier as it is a keyword.");
+        assertProblems(
+                javaParser.parse(STATEMENT, provider("enum[0] = 1;")),
+                "(line 1,col 1) 'enum' cannot be used as an identifier as it is a keyword.");
+        assertProblems(
+                javaParser.parse(STATEMENT, provider("enum++;")),
+                "(line 1,col 1) 'enum' cannot be used as an identifier as it is a keyword.");
     }
 
     @Test
