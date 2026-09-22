@@ -20,7 +20,9 @@
 
 package com.github.javaparser.ast.visitor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
@@ -34,6 +36,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -1288,6 +1291,64 @@ class GenericListVisitorAdapterTest {
         order.verify(node).getEnumDeclaration();
         order.verify(node, times(2)).getComment();
         order.verifyNoMoreInteractions();
+    }
+
+    @Test
+    void visit_GivenLocalEnumDeclarationStmtWhenEnumDeclarationYieldsResult() {
+        // Given
+        Object argument = mock(Object.class);
+        LocalEnumDeclarationStmt node = mock(LocalEnumDeclarationStmt.class);
+        EnumDeclaration enumDeclaration = mock(EnumDeclaration.class);
+        Object item = mock(Object.class);
+
+        // When
+        Mockito.when(node.getEnumDeclaration()).thenReturn(enumDeclaration);
+        Mockito.when(enumDeclaration.accept(visitor, argument)).thenReturn(Collections.singletonList(item));
+        Mockito.when(node.getComment()).thenReturn(Optional.empty());
+
+        // Then
+        List<Object> result = visitor.visit(node, argument);
+
+        // Assert
+        assertTrue(result.contains(item));
+    }
+
+    @Test
+    void visit_GivenLocalEnumDeclarationStmtWithoutComment() {
+        // Given
+        Object argument = mock(Object.class);
+        LocalEnumDeclarationStmt node = mock(LocalEnumDeclarationStmt.class);
+
+        // When
+        Mockito.when(node.getEnumDeclaration()).thenReturn(mock(EnumDeclaration.class));
+        Mockito.when(node.getComment()).thenReturn(Optional.empty());
+
+        // Then
+        List<Object> result = visitor.visit(node, argument);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void visit_GivenLocalEnumDeclarationStmtWhenCommentYieldsResult() {
+        // Given
+        Object argument = mock(Object.class);
+        LocalEnumDeclarationStmt node = mock(LocalEnumDeclarationStmt.class);
+        Comment comment = mock(Comment.class);
+        Object item = mock(Object.class);
+
+        // When
+        Mockito.when(node.getEnumDeclaration()).thenReturn(mock(EnumDeclaration.class));
+        Mockito.when(node.getComment()).thenReturn(Optional.of(comment));
+        Mockito.when(comment.accept(visitor, argument)).thenReturn(Collections.singletonList(item));
+
+        // Then
+        List<Object> result = visitor.visit(node, argument);
+
+        // Assert
+        assertEquals(Collections.singletonList(item), result);
     }
 
     @Test
