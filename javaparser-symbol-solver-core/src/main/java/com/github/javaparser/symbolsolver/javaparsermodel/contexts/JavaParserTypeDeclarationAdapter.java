@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import static com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext.JAVA_BASE_MODULE_NAME;
 
-import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -40,7 +39,6 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.ConstructorResolutionLogic;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -169,7 +167,8 @@ public class JavaParserTypeDeclarationAdapter {
             int firstDot = name.indexOf('.');
             String outerName = name.substring(0, firstDot);
             String remainingName = name.substring(firstDot + 1);
-            ResolvedTypeDeclaration outerType = checkAncestorsForType(outerName, this.typeDeclaration);
+            ResolvedTypeDeclaration outerType =
+                    MemberResolutionLogic.checkAncestorsForType(outerName, this.typeDeclaration);
             if (outerType instanceof JavaParserClassDeclaration) {
                 SymbolReference<ResolvedTypeDeclaration> innerRef =
                         ((JavaParserClassDeclaration) outerType).solveType(remainingName);
@@ -180,7 +179,7 @@ public class JavaParserTypeDeclarationAdapter {
                 if (innerRef.isSolved()) return innerRef;
             }
         } else {
-            ResolvedTypeDeclaration type = checkAncestorsForType(name, this.typeDeclaration);
+            ResolvedTypeDeclaration type = MemberResolutionLogic.checkAncestorsForType(name, this.typeDeclaration);
             if (type != null) {
                 return SymbolReference.solved(type);
             }
@@ -227,51 +226,6 @@ public class JavaParserTypeDeclarationAdapter {
             return compareTypeParameters((NodeWithTypeParameters<?>) typeDeclaration, resolvedTypeArguments);
         }
         return true;
-    }
-
-    /**
-     * Recursively checks the ancestors of the {@param declaration} if an internal type is declared with a name equal
-     * to {@param name}.
-     * TODO: Edit to remove return of null (favouring a return of optional)
-     * @return A ResolvedTypeDeclaration matching the {@param name}, null otherwise
-     */
-    private ResolvedTypeDeclaration checkAncestorsForType(String name, ResolvedReferenceTypeDeclaration declaration) {
-        for (ResolvedReferenceType ancestor : declaration.getAncestors(true)) {
-            try {
-                // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
-                ResolvedReferenceTypeDeclaration ancestorReferenceTypeDeclaration = ancestor.getTypeDeclaration()
-                        .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
-
-                for (ResolvedTypeDeclaration internalTypeDeclaration :
-                        ancestorReferenceTypeDeclaration.internalTypes()) {
-                    boolean visible = true;
-                    if (internalTypeDeclaration instanceof ResolvedReferenceTypeDeclaration) {
-                        ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration =
-                                internalTypeDeclaration.asReferenceType();
-                        if (resolvedReferenceTypeDeclaration instanceof HasAccessSpecifier) {
-                            visible = ((HasAccessSpecifier) resolvedReferenceTypeDeclaration).accessSpecifier()
-                                    != AccessSpecifier.PRIVATE;
-                        }
-                    }
-                    if (internalTypeDeclaration.getName().equals(name)) {
-                        if (visible) {
-                            return internalTypeDeclaration;
-                        }
-                        return null;
-                    }
-                }
-
-                // check recursively the ancestors of this ancestor
-                ResolvedTypeDeclaration ancestorTypeDeclaration =
-                        checkAncestorsForType(name, ancestorReferenceTypeDeclaration);
-                if (ancestorTypeDeclaration != null) {
-                    return ancestorTypeDeclaration;
-                }
-            } catch (UnsupportedOperationException e) {
-                // just continue using the next ancestor
-            }
-        }
-        return null; // FIXME -- Avoid returning null.
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(

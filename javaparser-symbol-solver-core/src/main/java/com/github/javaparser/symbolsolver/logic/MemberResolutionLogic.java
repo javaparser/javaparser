@@ -21,11 +21,16 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.HasAccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -50,6 +55,108 @@ public class MemberResolutionLogic {
 
     private MemberResolutionLogic() {
         // This class is meant to be used statically only.
+    }
+
+    /**
+     * Recursively checks the ancestors of the {@param declaration} if an internal type is declared with a name equal
+     * to {@param name}.
+     * TODO: Edit to remove return of null (favouring a return of optional)
+     * @return A ResolvedTypeDeclaration matching the {@param name}, null otherwise
+     */
+    public static ResolvedTypeDeclaration checkAncestorsForType(
+            String name, ResolvedReferenceTypeDeclaration declaration) {
+        for (ResolvedReferenceType ancestor : declaration.getAncestors(true)) {
+            try {
+                // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+                ResolvedReferenceTypeDeclaration ancestorReferenceTypeDeclaration = ancestor.getTypeDeclaration()
+                        .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
+
+                for (ResolvedTypeDeclaration internalTypeDeclaration :
+                        ancestorReferenceTypeDeclaration.internalTypes()) {
+                    boolean visible = true;
+                    if (internalTypeDeclaration instanceof ResolvedReferenceTypeDeclaration) {
+                        ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration =
+                                internalTypeDeclaration.asReferenceType();
+                        if (resolvedReferenceTypeDeclaration instanceof HasAccessSpecifier) {
+                            visible = ((HasAccessSpecifier) resolvedReferenceTypeDeclaration).accessSpecifier()
+                                    != AccessSpecifier.PRIVATE;
+                        }
+                    }
+                    if (internalTypeDeclaration.getName().equals(name)) {
+                        if (visible) {
+                            return internalTypeDeclaration;
+                        }
+                        return null;
+                    }
+                }
+
+                // check recursively the ancestors of this ancestor
+                ResolvedTypeDeclaration ancestorTypeDeclaration =
+                        checkAncestorsForType(name, ancestorReferenceTypeDeclaration);
+                if (ancestorTypeDeclaration != null) {
+                    return ancestorTypeDeclaration;
+                }
+            } catch (UnsupportedOperationException e) {
+                // just continue using the next ancestor
+            }
+        }
+        return null; // FIXME -- Avoid returning null.
+    }
+
+    /**
+     * Solves a type among the members of {@code typeDeclaration}: the types it declares and the ones it
+     * inherits, and nothing else. A composite name such as {@code Outer.Inner} is resolved one member at
+     * a time, each step staying within the members of the type the previous one found.
+     */
+    public static SymbolReference<ResolvedTypeDeclaration> solveTypeInMembers(
+            ResolvedTypeDeclaration typeDeclaration, String name) {
+
+        int firstDot = name.indexOf('.');
+        if (firstDot > -1) {
+            SymbolReference<ResolvedTypeDeclaration> outer =
+                    solveTypeInMembers(typeDeclaration, name.substring(0, firstDot));
+            if (!outer.isSolved()) {
+                return SymbolReference.unsolved();
+            }
+            return solveTypeInMembers(outer.getCorrespondingDeclaration(), name.substring(firstDot + 1));
+        }
+
+        for (ResolvedReferenceTypeDeclaration internalType : typeDeclaration.internalTypes()) {
+            if (internalType.getName().equals(name)) {
+                return SymbolReference.solved(internalType);
+            }
+        }
+
+        if (typeDeclaration.isReferenceType()) {
+            ResolvedTypeDeclaration inherited = checkAncestorsForType(name, typeDeclaration.asReferenceType());
+            if (inherited != null) {
+                return SymbolReference.solved(inherited);
+            }
+        }
+
+        return SymbolReference.unsolved();
+    }
+
+    /**
+     * Solves a value among the members of {@code typeDeclaration}: its enum constants, then the fields it
+     * declares and the ones it inherits, and nothing else.
+     */
+    public static SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInMembers(
+            ResolvedReferenceTypeDeclaration typeDeclaration, String name) {
+
+        if (typeDeclaration.isEnum()) {
+            // Enum constants are members of the enum, and no field declaration declares them.
+            ResolvedEnumDeclaration enumDeclaration = typeDeclaration.asEnum();
+            if (enumDeclaration.hasEnumConstant(name)) {
+                return SymbolReference.solved(enumDeclaration.getEnumConstant(name));
+            }
+        }
+
+        if (typeDeclaration.hasVisibleField(name)) {
+            return SymbolReference.solved(typeDeclaration.getVisibleField(name));
+        }
+
+        return SymbolReference.unsolved();
     }
 
     /**

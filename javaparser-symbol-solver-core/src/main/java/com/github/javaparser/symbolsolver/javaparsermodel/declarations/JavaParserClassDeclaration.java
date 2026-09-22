@@ -336,7 +336,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        return getContext().solveSymbol(name);
+        return MemberResolutionLogic.solveSymbolInMembers(this, name);
     }
 
     @Override
