@@ -81,6 +81,8 @@ public final class StaticJavaParser {
 
     /**
      * Resets the configuration for the static parse methods.
+     * Subsequent calls get a fresh default configuration for the current thread.
+     * Only the calling thread's configuration is reset.
      */
     public static void resetConfiguration() {
         localConfiguration.remove();

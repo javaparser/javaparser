@@ -32,7 +32,6 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -63,12 +62,6 @@ class Issue2684Test {
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         StaticJavaParser.setConfiguration(config);
-    }
-
-    @AfterEach
-    void tearDown() {
-        // Reset to a clean configuration so this test does not affect other test classes.
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
     }
 
     // -------------------------------------------------------------------------

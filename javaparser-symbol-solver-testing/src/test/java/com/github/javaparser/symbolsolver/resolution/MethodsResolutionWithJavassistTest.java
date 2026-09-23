@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -46,7 +45,6 @@ public class MethodsResolutionWithJavassistTest extends AbstractResolutionTest {
 
     @AfterEach
     void resetConfiguration() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
         Log.setAdapter(new Log.SilentAdapter());
     }
 

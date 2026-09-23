@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
@@ -79,7 +78,6 @@ class EnumResolutionTest extends AbstractResolutionTest {
     // Related to issue 1699
     @Test
     void resolveEnumConstantAccess() {
-        try {
             // configure symbol solver before parsing
             StaticJavaParser.getParserConfiguration()
                     .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
@@ -102,14 +100,10 @@ class EnumResolutionTest extends AbstractResolutionTest {
             assertEquals("SOME", resolvedEnumConstantDeclaration.getName());
             assertTrue(resolvedEnumConstantDeclaration.isEnumConstant());
             assertTrue(resolvedEnumConstantDeclaration.hasName());
-        } finally {
-            StaticJavaParser.setConfiguration(new ParserConfiguration());
-        }
     }
 
     @Test
     void enumAccessSpecifier() {
-        try {
             StaticJavaParser.getParserConfiguration()
                     .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
             CompilationUnit cu = parseSample("EnumAccessSpecifier");
@@ -139,9 +133,6 @@ class EnumResolutionTest extends AbstractResolutionTest {
                     .toEnumDeclaration()
                     .get();
             assertEquals(AccessSpecifier.NONE, ((JavaParserEnumDeclaration) ed_default.resolve()).accessSpecifier());
-        } finally {
-            StaticJavaParser.setConfiguration(new ParserConfiguration());
-        }
     }
 
     @Test

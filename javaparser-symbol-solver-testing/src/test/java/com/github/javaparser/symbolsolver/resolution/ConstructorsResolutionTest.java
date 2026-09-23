@@ -24,7 +24,6 @@ package com.github.javaparser.symbolsolver.resolution;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -47,15 +46,9 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class ConstructorsResolutionTest extends AbstractResolutionTest {
-
-    @AfterEach
-    void resetConfiguration() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-    }
 
     @Test
     void solveNormalConstructor() {

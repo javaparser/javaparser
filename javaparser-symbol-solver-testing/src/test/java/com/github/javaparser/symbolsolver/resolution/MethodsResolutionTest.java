@@ -25,7 +25,6 @@ import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -54,7 +53,6 @@ class MethodsResolutionTest extends AbstractResolutionTest {
 
     @AfterEach
     void resetConfiguration() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
         Log.setAdapter(new Log.SilentAdapter());
     }
 

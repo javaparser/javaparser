@@ -26,7 +26,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
@@ -1219,22 +1218,18 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
 
     @Test
     void issue1528() {
-        try {
-            TypeSolver typeSolver = new ReflectionTypeSolver();
-            StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
-            JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-            CompilationUnit compilationUnit = StaticJavaParser.parse("public interface Foo extends Comparable { }");
-            ClassOrInterfaceDeclaration foo = (ClassOrInterfaceDeclaration) compilationUnit.getType(0);
-            ResolvedInterfaceDeclaration interfaceDeclaration =
-                    javaParserFacade.getTypeDeclaration(foo).asInterface();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+        CompilationUnit compilationUnit = StaticJavaParser.parse("public interface Foo extends Comparable { }");
+        ClassOrInterfaceDeclaration foo = (ClassOrInterfaceDeclaration) compilationUnit.getType(0);
+        ResolvedInterfaceDeclaration interfaceDeclaration =
+                javaParserFacade.getTypeDeclaration(foo).asInterface();
 
-            ResolvedReferenceType extendedInterface =
-                    interfaceDeclaration.getAllInterfacesExtended().get(0);
+        ResolvedReferenceType extendedInterface =
+                interfaceDeclaration.getAllInterfacesExtended().get(0);
 
-            assertEquals("java.lang.Comparable", extendedInterface.getQualifiedName());
-        } finally {
-            StaticJavaParser.setConfiguration(new ParserConfiguration());
-        }
+        assertEquals("java.lang.Comparable", extendedInterface.getQualifiedName());
     }
 
     @Override

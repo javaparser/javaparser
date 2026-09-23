@@ -21,14 +21,13 @@
 
 package com.github.javaparser.symbolsolver.utils;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 /**
- * Resets StaticJavaParser to a blank ParserConfiguration before and after each
+ * Resets StaticJavaParser to its default configuration before and after each
  * test, so tests don't leak parser state (language level, symbol resolver, etc.)
  * into each other.
  *
@@ -40,11 +39,11 @@ public class StaticJavaParserConfigResetExtension implements BeforeEachCallback,
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
+        StaticJavaParser.resetConfiguration();
     }
 
     @Override
     public void afterEach(ExtensionContext context) {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
+        StaticJavaParser.resetConfiguration();
     }
 }
