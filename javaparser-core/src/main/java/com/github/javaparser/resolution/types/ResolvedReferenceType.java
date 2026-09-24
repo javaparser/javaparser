@@ -246,6 +246,16 @@ public abstract class ResolvedReferenceType
      */
     public abstract List<ResolvedReferenceType> getDirectAncestors();
 
+    /**
+     * Same as {@link #getDirectAncestors()}, but when {@code acceptIncompleteList} is {@code true} the ancestors
+     * that cannot be resolved are left out instead of raising an {@code UnsolvedSymbolException}, as
+     * {@link ResolvedReferenceTypeDeclaration#getAncestors(boolean)} does. Subclasses that cannot leave them out
+     * inherit this implementation, which always raises the exception.
+     */
+    public List<ResolvedReferenceType> getDirectAncestors(boolean acceptIncompleteList) {
+        return getDirectAncestors();
+    }
+
     public final List<ResolvedReferenceType> getAllInterfacesAncestors() {
         return getAllAncestors().stream()
                 .filter(it -> it.getTypeDeclaration().isPresent())
@@ -410,7 +420,7 @@ public abstract class ResolvedReferenceType
     /**
      * Get a list of all the methods available on this type. This list includes methods declared in this type and
      * methods inherited. This list includes methods of all sort of visibility. However it does not include methods
-     * that have been overwritten.
+     * that have been overwritten. The methods of the ancestors that cannot be resolved are missing from it.
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
         return getAllMethods(new HashSet<>());
@@ -427,7 +437,8 @@ public abstract class ResolvedReferenceType
         }
         List<ResolvedMethodDeclaration> allMethods =
                 new LinkedList<>(this.getTypeDeclaration().get().getDeclaredMethods());
-        getDirectAncestors().forEach(a -> allMethods.addAll(a.getAllMethods(visitedTypeIds)));
+        // An ancestor that cannot be resolved hides its own methods only, not those of the rest of the hierarchy
+        getDirectAncestors(true).forEach(a -> allMethods.addAll(a.getAllMethods(visitedTypeIds)));
         return allMethods;
     }
 
@@ -468,7 +479,8 @@ public abstract class ResolvedReferenceType
 
     /**
      * Fields which are visible to inheritors. They include all inherited fields which are visible to this
-     * type plus all declared fields which are not private.
+     * type plus all declared fields which are not private. The fields of the ancestors that cannot be resolved are
+     * missing from them.
      */
     public List<ResolvedFieldDeclaration> getAllFieldsVisibleToInheritors() {
         return getAllFieldsVisibleToInheritors(new HashSet<>());
@@ -483,7 +495,8 @@ public abstract class ResolvedReferenceType
         List<ResolvedFieldDeclaration> res = new LinkedList<>(this.getDeclaredFields().stream()
                 .filter(f -> f.accessSpecifier() != AccessSpecifier.PRIVATE)
                 .collect(Collectors.toList()));
-        getDirectAncestors().forEach(a -> res.addAll(a.getAllFieldsVisibleToInheritors(visitedTypeIds)));
+        // An ancestor that cannot be resolved hides its own fields only, not those of the rest of the hierarchy
+        getDirectAncestors(true).forEach(a -> res.addAll(a.getAllFieldsVisibleToInheritors(visitedTypeIds)));
         return res;
     }
 

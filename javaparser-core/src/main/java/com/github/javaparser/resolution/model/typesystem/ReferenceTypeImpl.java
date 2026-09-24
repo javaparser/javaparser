@@ -21,6 +21,7 @@
 package com.github.javaparser.resolution.model.typesystem;
 
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -110,7 +111,18 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             if (compareConsideringTypeParameters(otherRef)) {
                 return true;
             }
-            for (ResolvedReferenceType otherAncestor : otherRef.getAllAncestors()) {
+            List<ResolvedReferenceType> otherAncestors;
+            try {
+                otherAncestors = otherRef.getAllAncestors();
+            } catch (UnsolvedSymbolException e) {
+                // The ancestors that cannot be resolved cannot disprove assignability, but the resolvable ones
+                // can still prove it (see issue #4985).
+                if (getResolvableAncestors(otherRef).stream().anyMatch(this::compareConsideringTypeParameters)) {
+                    return true;
+                }
+                throw e;
+            }
+            for (ResolvedReferenceType otherAncestor : otherAncestors) {
                 if (compareConsideringTypeParameters(otherAncestor)) {
                     return true;
                 }
@@ -240,10 +252,34 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         return ancestors;
     }
 
+    /**
+     * All the ancestors of {@code type}, direct and indirect, leaving out the ones that cannot be resolved
+     * together with their own ancestors.
+     */
+    private static List<ResolvedReferenceType> getResolvableAncestors(ResolvedReferenceType type) {
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
+        Set<String> visitedTypeIds = new HashSet<>();
+        Deque<ResolvedReferenceType> queuedAncestors = new ArrayDeque<>(type.getDirectAncestors(true));
+        while (!queuedAncestors.isEmpty()) {
+            ResolvedReferenceType ancestor = queuedAncestors.removeFirst();
+            // Guard against cyclic hierarchies, which incomplete or erroneous sources may contain
+            if (visitedTypeIds.add(ancestor.getId())) {
+                ancestors.add(ancestor);
+                queuedAncestors.addAll(ancestor.getDirectAncestors(true));
+            }
+        }
+        return ancestors;
+    }
+
     @Override
     public List<ResolvedReferenceType> getDirectAncestors() {
+        return getDirectAncestors(false);
+    }
+
+    @Override
+    public List<ResolvedReferenceType> getDirectAncestors(boolean acceptIncompleteList) {
         // We need to go through the inheritance line and propagate the type parameters
-        List<ResolvedReferenceType> ancestors = typeDeclaration.getAncestors();
+        List<ResolvedReferenceType> ancestors = typeDeclaration.getAncestors(acceptIncompleteList);
         ancestors = ancestors.stream()
                 .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
                 .collect(Collectors.toList());
