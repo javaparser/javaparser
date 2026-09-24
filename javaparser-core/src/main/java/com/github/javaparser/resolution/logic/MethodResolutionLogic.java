@@ -257,6 +257,16 @@ public class MethodResolutionLogic {
                         if (convertToVariadicParameter(expectedDeclaredType).isAssignableBy(actualArgumentType)) {
                             continue;
                         }
+                        // Variadic arguments grouped into an array may match the component type through
+                        // boxing, unboxing or widening (JLS 15.12.2.4), e.g. print(1, 2) with print(Integer...)
+                        if (expectedDeclaredType.isArray()
+                                && actualArgumentType.isArray()
+                                && isBoxingCompatibleWithTypeSolver(
+                                        expectedDeclaredType.asArrayType().getComponentType(),
+                                        actualArgumentType.asArrayType().getComponentType(),
+                                        typeSolver)) {
+                            continue;
+                        }
                     }
                     return false;
                 }
@@ -590,7 +600,7 @@ public class MethodResolutionLogic {
 
     /**
      * Checks if a primitive type can be boxed to a reference type (or vice versa).
-     * Also handles array types for variadic parameters and wildcards.
+     * Also handles wildcards.
      */
     private static boolean isBoxingCompatibleWithTypeSolver(
             ResolvedType expectedType, ResolvedType actualType, TypeSolver typeSolver) {
@@ -608,12 +618,10 @@ public class MethodResolutionLogic {
             // Unbounded wildcard (?) - can accept anything via boxing
             return actualType.isPrimitive();
         }
-        // Handle array types (for variadic parameters)
-        if (expectedType.isArray() && actualType.isArray()) {
-            ResolvedType expectedComponent = expectedType.asArrayType().getComponentType();
-            ResolvedType actualComponent = actualType.asArrayType().getComponentType();
-            // Check if component types are boxing compatible
-            return isBoxingCompatibleWithTypeSolver(expectedComponent, actualComponent, typeSolver);
+        // Boxing never applies to array components (JLS 5.3): int[] is not compatible with Integer[] nor long[].
+        // Array compatibility is fully handled by ResolvedArrayType#isAssignableBy.
+        if (expectedType.isArray() || actualType.isArray()) {
+            return false;
         }
         // Boxing (reference type expected, primitive provided)
         if (expectedType.isReferenceType() && actualType.isPrimitive()) {
