@@ -68,8 +68,6 @@ class Issue4991Test extends AbstractResolutionTest {
                 .get();
         MethodCallExpr call = cu.findFirst(MethodCallExpr.class).get();
 
-        assertEquals(
-                "Arrays.copyOf(" + primitive + "[], int)",
-                call.resolve().getQualifiedSignature());
+        assertEquals("Arrays.copyOf(" + primitive + "[], int)", call.resolve().getQualifiedSignature());
     }
 }
