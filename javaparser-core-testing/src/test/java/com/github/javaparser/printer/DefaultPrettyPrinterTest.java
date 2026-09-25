@@ -30,11 +30,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
@@ -81,8 +84,9 @@ class DefaultPrettyPrinterTest {
         code = "class A { int a, b[]; }";
         assertEquals("int a, b[];", prettyPrintField(code));
 
+        // C-style array brackets (ArrayType.Origin.NAME) are kept after the variable name (issue #3444)
         code = "class A { int[] a[], b[]; }";
-        assertEquals("int[][] a, b;", prettyPrintField(code));
+        assertEquals("int[] a[], b[];", prettyPrintField(code));
 
         code = "class A { int[] a[][], b; }";
         assertEquals("int[] a[][], b;", prettyPrintField(code));
@@ -91,7 +95,7 @@ class DefaultPrettyPrinterTest {
         assertEquals("int[] a, b;", prettyPrintField(code));
 
         code = "class A { int a[], b[]; }";
-        assertEquals("int[] a, b;", prettyPrintField(code));
+        assertEquals("int a[], b[];", prettyPrintField(code));
     }
 
     @Test
@@ -100,8 +104,9 @@ class DefaultPrettyPrinterTest {
         code = "class A { void foo(){ int a, b[]; }}";
         assertEquals("int a, b[]", prettyPrintVar(code));
 
+        // C-style array brackets (ArrayType.Origin.NAME) are kept after the variable name (issue #3444)
         code = "class A { void foo(){ int[] a[], b[]; }}";
-        assertEquals("int[][] a, b", prettyPrintVar(code));
+        assertEquals("int[] a[], b[]", prettyPrintVar(code));
 
         code = "class A { void foo(){ int[] a[][], b; }}";
         assertEquals("int[] a[][], b", prettyPrintVar(code));
@@ -110,7 +115,57 @@ class DefaultPrettyPrinterTest {
         assertEquals("int[] a, b", prettyPrintVar(code));
 
         code = "class A { void foo(){ int a[], b[]; }}";
-        assertEquals("int[] a, b", prettyPrintVar(code));
+        assertEquals("int a[], b[]", prettyPrintVar(code));
+    }
+
+    @Test
+    void printingArrayFieldsPreservesOrigin_issue3444() {
+        // The pretty printer must respect ArrayType.Origin: brackets found on the name (C-style,
+        // Origin.NAME) stay after the variable name, brackets found on the type (Origin.TYPE) stay
+        // before it. See https://github.com/javaparser/javaparser/issues/3444
+
+        // Exact reproduction from the issue: the two origins must print differently.
+        assertEquals("int name[];", prettyPrintField("class A { int name[]; }"));
+        assertEquals("int[] name;", prettyPrintField("class A { int[] name; }"));
+
+        // Multi-variable declarations keep each variable's own brackets.
+        assertEquals("int a, b[];", prettyPrintField("class A { int a, b[]; }"));
+        assertEquals("int a[], b;", prettyPrintField("class A { int a[], b; }"));
+
+        // Nested arrays.
+        assertEquals("int a[][];", prettyPrintField("class A { int a[][]; }"));
+        assertEquals("int[][] a;", prettyPrintField("class A { int[][] a; }"));
+
+        // Mixed type-side and name-side brackets in a single declaration.
+        assertEquals("int[] a, b[];", prettyPrintField("class A { int[] a, b[]; }"));
+
+        // Plain declarations are unaffected.
+        assertEquals("int a;", prettyPrintField("class A { int a; }"));
+        assertEquals("int[] a;", prettyPrintField("class A { int[] a; }"));
+        assertEquals("int a, b, c;", prettyPrintField("class A { int a, b, c; }"));
+    }
+
+    @Test
+    void printingProgrammaticallyBuiltArrayTypeRespectsOrigin_issue3444() {
+        // The exact reproduction from issue #3444: an AST built from scratch (not parsed) must still
+        // honour ArrayType.Origin when pretty-printed.
+        ClassOrInterfaceDeclaration testClass = new ClassOrInterfaceDeclaration();
+        testClass.setName("TestArrayTypeOrigin");
+        testClass.addField(
+                new ArrayType(PrimitiveType.intType(), ArrayType.Origin.NAME, new NodeList<>()),
+                "originName",
+                Modifier.Keyword.PUBLIC);
+        testClass.addField(
+                new ArrayType(PrimitiveType.intType(), ArrayType.Origin.TYPE, new NodeList<>()),
+                "originType",
+                Modifier.Keyword.PUBLIC);
+
+        assertEquals(
+                "public int originName[];",
+                getDefaultPrinter().print(testClass.getFields().get(0)));
+        assertEquals(
+                "public int[] originType;",
+                getDefaultPrinter().print(testClass.getFields().get(1)));
     }
 
     @Disabled
