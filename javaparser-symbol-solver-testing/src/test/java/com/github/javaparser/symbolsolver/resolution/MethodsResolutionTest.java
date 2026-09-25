@@ -52,7 +52,7 @@ import org.junit.jupiter.api.Test;
 class MethodsResolutionTest extends AbstractResolutionTest {
 
     @AfterEach
-    void resetConfiguration() {
+    void resetLog() {
         Log.setAdapter(new Log.SilentAdapter());
     }
 

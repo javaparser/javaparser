@@ -27,7 +27,7 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 /**
- * Resets StaticJavaParser to a blank ParserConfiguration before and after each
+ * Resets StaticJavaParser to its default configuration before and after each
  * test, so tests don't leak parser state (language level, symbol resolver, etc.)
  * into each other.
  *
