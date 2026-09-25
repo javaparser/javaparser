@@ -341,6 +341,11 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
+    public ResolvedType visit(LocalEnumDeclarationStmt node, Boolean aBoolean) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
     public ResolvedType visit(LocalRecordDeclarationStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }

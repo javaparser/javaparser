@@ -26,12 +26,20 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_1_4;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.ArrayAccessExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.UnaryExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
 
@@ -102,6 +110,67 @@ class Java1_4ValidatorTest {
     @Test
     void enumAllowedAsIdentifier() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int enum;"));
+        assertNoProblems(result);
+    }
+
+    /**
+     * A statement beginning with `enum` must stay parsable as an identifier, matching the
+     * pre-Java-5 `Enumeration enum = ...; enum.hasMoreElements();` idiom. The local-enum-declaration
+     * lookahead in BlockStatement() must not greedily commit these to EnumDeclaration().
+     */
+    @Test
+    void enumAssignmentAllowedAsIdentifier() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("enum = 3;"));
+        assertNoProblems(result);
+        ExpressionStmt stmt = result.getResult().get().asExpressionStmt();
+        AssignExpr assign = stmt.getExpression().asAssignExpr();
+        assertEquals("enum", assign.getTarget().asNameExpr().getNameAsString());
+    }
+
+    @Test
+    void enumMethodCallAllowedAsIdentifier() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("enum.hasMoreElements();"));
+        assertNoProblems(result);
+        ExpressionStmt stmt = result.getResult().get().asExpressionStmt();
+        MethodCallExpr call = stmt.getExpression().asMethodCallExpr();
+        assertEquals("enum", call.getScope().get().asNameExpr().getNameAsString());
+    }
+
+    @Test
+    void enumTypedVariableAllowedAsIdentifier() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("enum x = null;"));
+        assertNoProblems(result);
+        ExpressionStmt stmt = result.getResult().get().asExpressionStmt();
+        VariableDeclarationExpr vde = stmt.getExpression().asVariableDeclarationExpr();
+        assertEquals("enum", vde.getElementType().asString());
+        assertEquals("x", vde.getVariable(0).getNameAsString());
+    }
+
+    @Test
+    void enumArrayAccessAllowedAsIdentifier() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("enum[0] = 1;"));
+        assertNoProblems(result);
+        ExpressionStmt stmt = result.getResult().get().asExpressionStmt();
+        AssignExpr assign = stmt.getExpression().asAssignExpr();
+        ArrayAccessExpr arrayAccess = assign.getTarget().asArrayAccessExpr();
+        assertEquals("enum", arrayAccess.getName().asNameExpr().getNameAsString());
+    }
+
+    @Test
+    void enumIncrementAllowedAsIdentifier() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("enum++;"));
+        assertNoProblems(result);
+        ExpressionStmt stmt = result.getResult().get().asExpressionStmt();
+        UnaryExpr unary = stmt.getExpression().asUnaryExpr();
+        assertEquals("enum", unary.getExpression().asNameExpr().getNameAsString());
+        assertTrue(unary.getOperator() == UnaryExpr.Operator.POSTFIX_INCREMENT);
+    }
+
+    @Test
+    void enumUsedAsIdentifierInFullIdiom() {
+        ParseResult<CompilationUnit> result = javaParser.parse(
+                COMPILATION_UNIT,
+                provider("class X { void m() { Enumeration enum = elements(); enum.hasMoreElements(); } }"));
         assertNoProblems(result);
     }
 }

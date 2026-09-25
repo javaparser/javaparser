@@ -168,6 +168,7 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.stmt.IfStmt.class);
             add(com.github.javaparser.ast.stmt.LabeledStmt.class);
             add(com.github.javaparser.ast.stmt.LocalClassDeclarationStmt.class);
+            add(com.github.javaparser.ast.stmt.LocalEnumDeclarationStmt.class);
             add(com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt.class);
             add(com.github.javaparser.ast.stmt.ReturnStmt.class);
             add(com.github.javaparser.ast.stmt.SwitchEntry.class);

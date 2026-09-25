@@ -1213,6 +1213,13 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(final LocalEnumDeclarationStmt n, final Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        n.getEnumDeclaration().accept(this, arg);
+    }
+
+    @Override
     public void visit(final LocalRecordDeclarationStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
