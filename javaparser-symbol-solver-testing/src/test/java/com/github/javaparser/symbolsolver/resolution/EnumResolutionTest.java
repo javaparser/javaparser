@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
@@ -79,69 +78,58 @@ class EnumResolutionTest extends AbstractResolutionTest {
     // Related to issue 1699
     @Test
     void resolveEnumConstantAccess() {
-        try {
-            // configure symbol solver before parsing
-            StaticJavaParser.getParserConfiguration()
-                    .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        // configure symbol solver before parsing
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
-            // parse compilation unit and get field access expression
-            CompilationUnit cu = parseSample("EnumFieldAccess");
-            ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "EnumFieldAccess");
-            MethodDeclaration method = Navigator.demandMethod(clazz, "accessField");
-            ReturnStmt returnStmt =
-                    (ReturnStmt) method.getBody().get().getStatements().get(0);
-            FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
+        // parse compilation unit and get field access expression
+        CompilationUnit cu = parseSample("EnumFieldAccess");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "EnumFieldAccess");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "accessField");
+        ReturnStmt returnStmt =
+                (ReturnStmt) method.getBody().get().getStatements().get(0);
+        FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
 
-            // resolve field access expression
-            ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
+        // resolve field access expression
+        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
 
-            assertFalse(resolvedValueDeclaration.isField());
-            assertTrue(resolvedValueDeclaration.isEnumConstant());
+        assertFalse(resolvedValueDeclaration.isField());
+        assertTrue(resolvedValueDeclaration.isEnumConstant());
 
-            ResolvedEnumConstantDeclaration resolvedEnumConstantDeclaration = resolvedValueDeclaration.asEnumConstant();
-            assertEquals("SOME", resolvedEnumConstantDeclaration.getName());
-            assertTrue(resolvedEnumConstantDeclaration.isEnumConstant());
-            assertTrue(resolvedEnumConstantDeclaration.hasName());
-        } finally {
-            StaticJavaParser.setConfiguration(new ParserConfiguration());
-        }
+        ResolvedEnumConstantDeclaration resolvedEnumConstantDeclaration = resolvedValueDeclaration.asEnumConstant();
+        assertEquals("SOME", resolvedEnumConstantDeclaration.getName());
+        assertTrue(resolvedEnumConstantDeclaration.isEnumConstant());
+        assertTrue(resolvedEnumConstantDeclaration.hasName());
     }
 
     @Test
     void enumAccessSpecifier() {
-        try {
-            StaticJavaParser.getParserConfiguration()
-                    .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-            CompilationUnit cu = parseSample("EnumAccessSpecifier");
-            ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = parseSample("EnumAccessSpecifier");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
 
-            EnumDeclaration ed_public = Navigator.findType(clazz, "EnumPublic")
-                    .get()
-                    .toEnumDeclaration()
-                    .get();
-            assertEquals(AccessSpecifier.PUBLIC, ((JavaParserEnumDeclaration) ed_public.resolve()).accessSpecifier());
+        EnumDeclaration ed_public = Navigator.findType(clazz, "EnumPublic")
+                .get()
+                .toEnumDeclaration()
+                .get();
+        assertEquals(AccessSpecifier.PUBLIC, ((JavaParserEnumDeclaration) ed_public.resolve()).accessSpecifier());
 
-            EnumDeclaration ed_protected = Navigator.findType(clazz, "EnumProtected")
-                    .get()
-                    .toEnumDeclaration()
-                    .get();
-            assertEquals(
-                    AccessSpecifier.PROTECTED, ((JavaParserEnumDeclaration) ed_protected.resolve()).accessSpecifier());
+        EnumDeclaration ed_protected = Navigator.findType(clazz, "EnumProtected")
+                .get()
+                .toEnumDeclaration()
+                .get();
+        assertEquals(AccessSpecifier.PROTECTED, ((JavaParserEnumDeclaration) ed_protected.resolve()).accessSpecifier());
 
-            EnumDeclaration ed_private = Navigator.findType(clazz, "EnumPrivate")
-                    .get()
-                    .toEnumDeclaration()
-                    .get();
-            assertEquals(AccessSpecifier.PRIVATE, ((JavaParserEnumDeclaration) ed_private.resolve()).accessSpecifier());
+        EnumDeclaration ed_private = Navigator.findType(clazz, "EnumPrivate")
+                .get()
+                .toEnumDeclaration()
+                .get();
+        assertEquals(AccessSpecifier.PRIVATE, ((JavaParserEnumDeclaration) ed_private.resolve()).accessSpecifier());
 
-            EnumDeclaration ed_default = Navigator.findType(clazz, "EnumDefault")
-                    .get()
-                    .toEnumDeclaration()
-                    .get();
-            assertEquals(AccessSpecifier.NONE, ((JavaParserEnumDeclaration) ed_default.resolve()).accessSpecifier());
-        } finally {
-            StaticJavaParser.setConfiguration(new ParserConfiguration());
-        }
+        EnumDeclaration ed_default = Navigator.findType(clazz, "EnumDefault")
+                .get()
+                .toEnumDeclaration()
+                .get();
+        assertEquals(AccessSpecifier.NONE, ((JavaParserEnumDeclaration) ed_default.resolve()).accessSpecifier());
     }
 
     @Test
