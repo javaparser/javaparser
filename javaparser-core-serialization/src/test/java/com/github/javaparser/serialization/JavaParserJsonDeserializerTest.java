@@ -26,7 +26,6 @@ import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Range;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.TokenRange;
@@ -45,7 +44,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.LineSeparator;
 import jakarta.json.Json;
 import java.io.StringReader;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 class JavaParserJsonDeserializerTest {
@@ -221,11 +219,6 @@ class JavaParserJsonDeserializerTest {
                 (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
         assertTrue(deserialized.containsData(Node.SYMBOL_RESOLVER_KEY));
         assertEquals(stubResolver, deserialized.getData(Node.SYMBOL_RESOLVER_KEY));
-    }
-
-    @AfterAll
-    static void clearConfiguration() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
     }
 
     /**

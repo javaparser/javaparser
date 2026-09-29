@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.utils;
+package com.github.javaparser.serialization;
 
 import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.extension.AfterEachCallback;

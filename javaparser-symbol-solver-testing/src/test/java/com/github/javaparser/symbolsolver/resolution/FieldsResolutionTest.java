@@ -24,7 +24,6 @@ package com.github.javaparser.symbolsolver.resolution;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -47,15 +46,9 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import java.nio.file.Path;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class FieldsResolutionTest extends AbstractResolutionTest {
-
-    @AfterEach
-    void resetConfiguration() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-    }
 
     @Test
     void accessClassFieldThroughThis() {

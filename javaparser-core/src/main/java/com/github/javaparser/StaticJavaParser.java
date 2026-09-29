@@ -80,6 +80,15 @@ public final class StaticJavaParser {
     }
 
     /**
+     * Resets the configuration for the static parse methods.
+     * Subsequent calls get a fresh default configuration for the current thread.
+     * Only the calling thread's configuration is reset.
+     */
+    public static void resetConfiguration() {
+        localConfiguration.remove();
+    }
+
+    /**
      * Creates a new, independent parser with a fresh default {@link ParserConfiguration}.
      * <p>
      * Unlike the static {@code parse...} methods, the returned parser does <b>not</b> share the global
