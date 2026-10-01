@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,9 @@ import org.junit.jupiter.api.Test;
 class NoCommentEqualsVisitorTest {
 
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
+
+    private final JavaParserAdapter java16Parser = StaticJavaParser.newParserAdapter(
+            new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16));
 
     @Test
     void testEquals() {
@@ -51,6 +55,20 @@ class NoCommentEqualsVisitorTest {
     void testNotEquals() {
         CompilationUnit p1 = parser.parse("class X { }");
         CompilationUnit p2 = parser.parse("class Y { }");
+        assertFalse(NoCommentEqualsVisitor.equals(p1, p2));
+    }
+
+    @Test
+    void testEqualsWithLocalEnumDeclarationIgnoringComments() {
+        CompilationUnit p1 = java16Parser.parse("class X { void m() { /* a */ enum E { A, B } } }");
+        CompilationUnit p2 = java16Parser.parse("class X { void m() { /* b */ enum E { A, B } } }");
+        assertTrue(NoCommentEqualsVisitor.equals(p1, p2));
+    }
+
+    @Test
+    void testNotEqualsWithDifferentLocalEnumDeclaration() {
+        CompilationUnit p1 = java16Parser.parse("class X { void m() { enum E { A } } }");
+        CompilationUnit p2 = java16Parser.parse("class X { void m() { enum E { B } } }");
         assertFalse(NoCommentEqualsVisitor.equals(p1, p2));
     }
 }

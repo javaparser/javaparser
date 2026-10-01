@@ -370,6 +370,11 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
+    public Integer visit(final LocalEnumDeclarationStmt n, final Void arg) {
+        return (n.getEnumDeclaration().accept(this, arg)) * 31
+                + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
     public Integer visit(final LongLiteralExpr n, final Void arg) {
         return (n.getValue().hashCode()) * 31
                 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);

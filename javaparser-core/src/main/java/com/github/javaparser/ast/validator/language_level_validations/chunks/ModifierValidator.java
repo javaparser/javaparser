@@ -101,6 +101,8 @@ public class ModifierValidator extends VisitorValidator {
             validateModifiers(n, reporter, PUBLIC, STRICTFP);
         } else if (n.isNestedType()) {
             validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, STRICTFP);
+        } else if (n.isLocalEnumDeclaration()) {
+            validateModifiers(n, reporter, STRICTFP);
         }
         super.visit(n, reporter);
     }

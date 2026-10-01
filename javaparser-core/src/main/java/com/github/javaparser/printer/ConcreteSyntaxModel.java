@@ -848,6 +848,8 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(
                 LocalClassDeclarationStmt.class, sequence(comment(), child(ObservableProperty.CLASS_DECLARATION)));
         concreteSyntaxModelByClass.put(
+                LocalEnumDeclarationStmt.class, sequence(comment(), child(ObservableProperty.ENUM_DECLARATION)));
+        concreteSyntaxModelByClass.put(
                 LocalRecordDeclarationStmt.class, sequence(comment(), child(ObservableProperty.RECORD_DECLARATION)));
         concreteSyntaxModelByClass.put(
                 ReturnStmt.class,

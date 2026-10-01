@@ -154,6 +154,12 @@ public class ControlFlowLogic {
             }
 
             @Override
+            public Boolean visit(LocalEnumDeclarationStmt n, Void arg) {
+                // A local enum declaration statement can complete normally if it is reachable.
+                return isReachable(n);
+            }
+
+            @Override
             public Boolean visit(LocalRecordDeclarationStmt n, Void arg) {
                 // A local record declaration statement can complete normally if it is reachable.
                 return isReachable(n);
@@ -229,6 +235,11 @@ public class ControlFlowLogic {
 
             @Override
             public Boolean visit(LocalClassDeclarationStmt n, Void arg) {
+                return super.visit(n, arg);
+            }
+
+            @Override
+            public Boolean visit(LocalEnumDeclarationStmt n, Void arg) {
                 return super.visit(n, arg);
             }
 

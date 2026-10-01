@@ -758,6 +758,31 @@ class PrettyPrintVisitorTest extends TestParser {
         assertEqualsStringIgnoringEol(code, cu.toString());
     }
 
+    /**
+     * The legacy {@link PrettyPrinter}/{@link PrettyPrintVisitor} pair is reachable only through
+     * the deprecated {@code PrettyPrinter} facade; {@link DefaultPrettyPrinter} does not exercise
+     * it. This covers {@code PrettyPrintVisitor.visit(LocalEnumDeclarationStmt, Void)}.
+     */
+    @Test
+    @SuppressWarnings("deprecation")
+    void legacyPrettyPrinterPrintsLocalEnumDeclarationStmt() {
+        CompilationUnit cu = parser.parse("class X { void m() { enum E { A, B } } }");
+
+        String printed = new PrettyPrinter().print(cu);
+
+        assertEqualsStringIgnoringEol(
+                "class X {" + LineSeparator.SYSTEM
+                        + LineSeparator.SYSTEM + "    void m() {"
+                        + LineSeparator.SYSTEM + "        enum E {"
+                        + LineSeparator.SYSTEM
+                        + LineSeparator.SYSTEM + "            A, B"
+                        + LineSeparator.SYSTEM + "        }"
+                        + LineSeparator.SYSTEM + "    }"
+                        + LineSeparator.SYSTEM + "}"
+                        + LineSeparator.SYSTEM,
+                printed);
+    }
+
     @Test
     void printCompactClassWithCustomAnnotationAndAnnotatedMethods() {
         String code = "@interface Author {\n"
