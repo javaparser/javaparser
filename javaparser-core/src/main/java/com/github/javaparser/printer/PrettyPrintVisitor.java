@@ -1020,6 +1020,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         if (n.getOperator().isPrefix()) {
             printer.print(n.getOperator().asString());
+            if (UnaryOperatorSeparation.isRequired(n)) {
+                printer.print(" ");
+            }
         }
         n.getExpression().accept(this, arg);
         if (n.getOperator().isPostfix()) {
