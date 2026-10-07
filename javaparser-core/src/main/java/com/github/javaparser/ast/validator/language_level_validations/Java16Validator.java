@@ -38,6 +38,9 @@ public class Java16Validator extends Java15Validator {
             // local interface released within Java 16 -
             // https://docs.oracle.com/javase/specs/jls/se16/html/jls-14.html#jls-14.3
             remove(innerClasses);
+            // local enum released within Java 16 -
+            // https://docs.oracle.com/javase/specs/jls/se16/html/jls-14.html#jls-14.3
+            remove(noLocalEnums);
             add(recordAsTypeIdentifierNotAllowed);
             add(recordDeclarationValidator);
         }
