@@ -614,6 +614,6 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final MarkdownComment n, final Void arg) {
-        return (n.getContent().hashCode());
+        return 0;
     }
 }
