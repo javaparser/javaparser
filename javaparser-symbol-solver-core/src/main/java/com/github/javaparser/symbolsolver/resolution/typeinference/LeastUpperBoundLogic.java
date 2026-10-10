@@ -29,6 +29,7 @@ import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.resolution.types.ResolvedWildcard.BoundType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap.Builder;
@@ -303,9 +304,28 @@ public class LeastUpperBoundLogic {
     }
 
     private Set<ResolvedType> supertypes(ResolvedType type) {
-        // How to deal with other types like for example type variable?
-        if (type.isTypeVariable()) return supertypes(type.asTypeVariable().erasure());
-        return type.isReferenceType() ? supertypes(type.asReferenceType()) : new LinkedHashSet<>();
+        ResolvedType concreteType = concreteType(type);
+        if (concreteType.isTypeVariable()) return supertypes(concreteType.asTypeVariable());
+        return concreteType.isReferenceType() ? supertypes(concreteType.asReferenceType()) : new LinkedHashSet<>();
+    }
+
+    /*
+     * The direct supertypes of a type variable are the types listed in its bound (JLS 4.10.2), with their type
+     * arguments, so the supertypes of all its bounds are kept. The type variable itself is left out: it is not a
+     * parameterization of a generic type, and its erasure, the erasure of its leftmost bound, is already among the
+     * erased supertypes of the bound.
+     */
+    private Set<ResolvedType> supertypes(ResolvedTypeVariable typeVariable) {
+        List<ResolvedType> upperBounds = typeVariable.asTypeParameter().getBounds().stream()
+                .filter(Bound::isExtends)
+                .map(Bound::getType)
+                .collect(Collectors.toList());
+        if (upperBounds.isEmpty()) {
+            return supertypes(typeVariable.erasure());
+        }
+        Set<ResolvedType> supertypes = new LinkedHashSet<>();
+        upperBounds.forEach(bound -> supertypes.addAll(supertypes(bound)));
+        return supertypes;
     }
 
     private Set<ResolvedType> supertypes(ResolvedReferenceType type) {

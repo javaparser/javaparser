@@ -419,6 +419,33 @@ class LeastUpperBoundTest {
     }
 
     @Test
+    void lub_of_type_variable_and_class() {
+        List<ResolvedType> types =
+                declaredMethodParameterTypes("class A { <T extends Number> void m(T t, Integer i) {} }");
+        // the supertypes of T are those of its bound
+        ResolvedType lub = leastUpperBound(types.get(0), types.get(1));
+        assertEquals(type(Number.class.getCanonicalName()), lub);
+    }
+
+    @Test
+    void lub_of_type_variable_with_parameterized_bound() {
+        List<ResolvedType> types = declaredMethodParameterTypes(
+                "class A { <T extends java.util.List<String>> void m(T t, java.util.ArrayList<Integer> l) {} }");
+        // the type arguments of the bound of T are kept
+        ResolvedType lub = leastUpperBound(types.get(0), types.get(1));
+        assertEquals("java.util.List<? extends java.io.Serializable>", lub.describe());
+    }
+
+    @Test
+    void lub_of_type_variable_with_several_bounds() {
+        List<ResolvedType> types = declaredMethodParameterTypes(
+                "class A { <T extends Runnable & Comparable<T>> void m(T t, String s) {} }");
+        // Comparable is a supertype of T through its second bound
+        ResolvedType lub = leastUpperBound(types.get(0), types.get(1));
+        assertEquals(type(Comparable.class.getCanonicalName()).erasure(), lub.erasure());
+    }
+
+    @Test
     void lub_of_generics_with_bounded_type_variable() {
         ResolvedType listOfT = declaredFieldType("class A<T extends Number> { java.util.List<T> f; }");
         ResolvedType listOfString = genericType(List.class.getCanonicalName(), String.class.getCanonicalName());
@@ -587,6 +614,12 @@ class LeastUpperBoundTest {
 
     private ResolvedType declaredMethodReturnType(String... lines) {
         return treeOf(lines).findFirst(MethodDeclaration.class).get().resolve().getReturnType();
+    }
+
+    private List<ResolvedType> declaredMethodParameterTypes(String... lines) {
+        return treeOf(lines).findFirst(MethodDeclaration.class).get().getParameters().stream()
+                .map(parameter -> parameter.resolve().getType())
+                .collect(Collectors.toList());
     }
 
     private List<ResolvedType> declaredEnumTypes(String... lines) {
