@@ -36,7 +36,9 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedIntersectionType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -416,6 +418,58 @@ class LeastUpperBoundTest {
         // a type variable of a method is a type argument that was not inferred, it is replaced by the other one
         ResolvedType lub = leastUpperBound(listOfString, listOfT);
         assertEquals(listOfString.describe(), lub.describe());
+    }
+
+    @Test
+    void lub_of_arrays_of_reference_types_is_an_array() {
+        ResolvedType strings = new ResolvedArrayType(type(String.class.getCanonicalName()));
+        ResolvedType integers = new ResolvedArrayType(type(Integer.class.getCanonicalName()));
+        // S[] is a direct supertype of T[] when S is a direct supertype of T (JLS 4.10.3)
+        assertEquals(
+                new ResolvedArrayType(type(Serializable.class.getCanonicalName())), leastUpperBound(strings, integers));
+    }
+
+    @Test
+    void lub_of_arrays_of_parameterized_types_keeps_type_arguments() {
+        ResolvedType listsOfString =
+                new ResolvedArrayType(genericType(List.class.getCanonicalName(), String.class.getCanonicalName()));
+        ResolvedType listsOfInteger =
+                new ResolvedArrayType(genericType(List.class.getCanonicalName(), Integer.class.getCanonicalName()));
+        assertEquals(
+                "java.util.List<? extends java.io.Serializable>[]",
+                leastUpperBound(listsOfString, listsOfInteger).describe());
+    }
+
+    @Test
+    void lub_of_multidimensional_array_and_array() {
+        ResolvedType stringMatrix = new ResolvedArrayType(new ResolvedArrayType(type(String.class.getCanonicalName())));
+        ResolvedType integers = new ResolvedArrayType(type(Integer.class.getCanonicalName()));
+        // lub(String[], Integer)[]: an array is Serializable
+        assertEquals(
+                new ResolvedArrayType(type(Serializable.class.getCanonicalName())),
+                leastUpperBound(stringMatrix, integers));
+    }
+
+    @Test
+    void lub_of_arrays_of_primitive_and_reference_types() {
+        ResolvedType ints = new ResolvedArrayType(ResolvedPrimitiveType.INT);
+        ResolvedType strings = new ResolvedArrayType(type(String.class.getCanonicalName()));
+        // Object, Cloneable and Serializable are the supertypes of every array type (JLS 4.10.3): the lub is
+        // Cloneable & Serializable, approximated by its first interface in the order of their qualified names
+        assertEquals(type(Serializable.class.getCanonicalName()), leastUpperBound(ints, strings));
+        assertEquals(
+                type(Serializable.class.getCanonicalName()),
+                leastUpperBound(ints, new ResolvedArrayType(ResolvedPrimitiveType.LONG)));
+    }
+
+    @Test
+    void lub_of_array_and_class() {
+        ResolvedType strings = new ResolvedArrayType(type(String.class.getCanonicalName()));
+        assertEquals(
+                type(Serializable.class.getCanonicalName()),
+                leastUpperBound(strings, type(Integer.class.getCanonicalName())));
+        assertEquals(
+                type(Object.class.getCanonicalName()), leastUpperBound(strings, type(Thread.class.getCanonicalName())));
     }
 
     @Test

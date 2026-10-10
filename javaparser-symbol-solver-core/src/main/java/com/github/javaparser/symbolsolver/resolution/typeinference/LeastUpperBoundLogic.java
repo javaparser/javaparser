@@ -27,6 +27,7 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -38,6 +39,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,7 +52,9 @@ public class LeastUpperBoundLogic {
 
     /**
      * Without a type solver, java.lang.Object cannot be added to the supertypes of interfaces, so the lub of an
-     * interface and a type that does not implement it is {@code null}. Prefer {@link #of(TypeSolver)}.
+     * interface and a type that does not implement it is {@code null}, and neither can Object, Cloneable and
+     * Serializable be added to the supertypes of arrays, so the lub of an array and a type that is not an array of
+     * reference types is {@code null}. Prefer {@link #of(TypeSolver)}.
      */
     public static LeastUpperBoundLogic of() {
         return new LeastUpperBoundLogic(null);
@@ -108,6 +112,19 @@ public class LeastUpperBoundLogic {
 
         if (resolvedTypes.size() == 1) {
             return resolvedTypes.stream().findFirst().get();
+        }
+
+        // The direct supertypes of an array type S[], S being a reference type, are the arrays T[] of the direct
+        // supertypes T of S, then Object, Cloneable and Serializable (JLS 4.10.3). When all the types are arrays of
+        // reference types, the minimal erased candidates are therefore the arrays of the minimal erased candidates of
+        // the component types. The lub is computed on the component types, as javac does, which also recovers their
+        // type arguments: strictly, Best(X[]) is X[] erased, an array type not being a generic type.
+        if (resolvedTypes.stream().allMatch(this::isArrayOfReferenceType)) {
+            Set<ResolvedType> componentTypes = resolvedTypes.stream()
+                    .map(type -> type.asArrayType().getComponentType())
+                    .collect(Collectors.toSet());
+            ResolvedType componentLub = lub(componentTypes);
+            return componentLub == null ? null : new ResolvedArrayType(componentLub);
         }
 
         // can we have primitive types?
@@ -306,7 +323,29 @@ public class LeastUpperBoundLogic {
     private Set<ResolvedType> supertypes(ResolvedType type) {
         ResolvedType concreteType = concreteType(type);
         if (concreteType.isTypeVariable()) return supertypes(concreteType.asTypeVariable());
+        if (concreteType.isArray()) return supertypes(concreteType.asArrayType());
         return concreteType.isReferenceType() ? supertypes(concreteType.asReferenceType()) : new LinkedHashSet<>();
+    }
+
+    private boolean isArrayOfReferenceType(ResolvedType type) {
+        return type.isArray()
+                && !concreteType(type.asArrayType().getComponentType()).isPrimitive();
+    }
+
+    /*
+     * Object, Cloneable and Serializable are supertypes of every array type (JLS 4.10.3). The arrays of the
+     * supertypes of the component type are left out: they can only be shared supertypes when all the types are
+     * arrays of reference types, a case that lub computes on the component types.
+     */
+    private Set<ResolvedType> supertypes(ResolvedArrayType arrayType) {
+        Set<ResolvedType> supertypes = new LinkedHashSet<>();
+        supertypes.add(arrayType);
+        if (typeSolver != null) {
+            supertypes.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+            supertypes.add(new ReferenceTypeImpl(typeSolver.solveType(Cloneable.class.getCanonicalName())));
+            supertypes.add(new ReferenceTypeImpl(typeSolver.solveType(Serializable.class.getCanonicalName())));
+        }
+        return supertypes;
     }
 
     /*
