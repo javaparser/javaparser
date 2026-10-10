@@ -26,12 +26,18 @@ import static java.util.stream.Collectors.toList;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.utils.PositionUtils;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 
 /**
@@ -91,17 +97,26 @@ class CommentsInserter {
                         .collect(toList());
         boolean attributeToAnnotation = !(configuration.isIgnoreAnnotationsWhenAttributingComments());
         for (Node child : children) {
+            if (commentsToAttribute.isEmpty()) {
+                break;
+            }
             // Some child nodes of a compact class declaration may not have a range, so first check that the child
             // in question does have a range.
             if (!child.hasRange()) {
                 continue;
             }
+            // Move the comments inside the child from the pending ones to the child's own.
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
-            commentsInsideChild.addAll(commentsToAttribute.stream()
-                    .filter(comment -> comment.hasRange())
-                    .filter(comment -> PositionUtils.nodeContains(child, comment, !attributeToAnnotation))
-                    .collect(toList()));
-            commentsToAttribute.removeAll(commentsInsideChild);
+            Iterator<Comment> candidates = commentsBeginningIn(
+                            commentsToAttribute, child.getRange().get())
+                    .iterator();
+            while (candidates.hasNext()) {
+                Comment comment = candidates.next();
+                if (PositionUtils.nodeContains(child, comment, !attributeToAnnotation)) {
+                    commentsInsideChild.add(comment);
+                    candidates.remove();
+                }
+            }
             insertComments(child, commentsInsideChild);
         }
         attributeLineCommentsOnSameLine(commentsToAttribute, children);
@@ -141,7 +156,7 @@ class CommentsInserter {
                 }
             }
         }
-        commentsToAttribute.removeAll(attributedComments);
+        removeAttributed(commentsToAttribute, attributedComments);
         // all the remaining are orphan nodes
         for (Comment c : commentsToAttribute) {
             if (c.isOrphan()) {
@@ -150,10 +165,48 @@ class CommentsInserter {
         }
     }
 
+    /**
+     * Removes the attributed comments one by one, each found through the set's order. ({@code removeAll} would instead
+     * search the list for every comment in the set whenever the set is no larger than the list.)
+     */
+    private static void removeAttributed(TreeSet<Comment> comments, List<Comment> attributed) {
+        attributed.forEach(comments::remove);
+    }
+
+    /**
+     * The comments that begin inside the range: only these can lie inside a node with that range. Looking them up
+     * through the comments' order by begin position, rather than testing every comment, keeps attribution from
+     * growing with the number of children times the number of comments. Comments without a range are never inside.
+     */
+    private static NavigableSet<Comment> commentsBeginningIn(TreeSet<Comment> comments, Range range) {
+        return comments.subSet(commentBeginningAt(range.begin), true, commentBeginningAt(range.end), true);
+    }
+
+    /**
+     * A stand-in for looking comments up by where they begin, which is all their order compares.
+     */
+    private static Comment commentBeginningAt(Position position) {
+        Comment comment = new BlockComment();
+        comment.setRange(Range.range(position, position));
+        return comment;
+    }
+
     private void attributeLineCommentsOnSameLine(TreeSet<Comment> commentsToAttribute, List<Node> children) {
         /* I can attribute in line comments to elements preceeding them, if
         there is something contained in their line */
+        if (commentsToAttribute.stream().noneMatch(Comment::isLineComment)) {
+            return;
+        }
         List<Comment> attributedComments = new LinkedList<>();
+        // The children ending on each line, in order: a line comment can only trail those ending on its own line.
+        Map<Integer, List<Node>> childrenEndingOnLine = new HashMap<>();
+        for (Node child : children) {
+            if (child.hasRange()) {
+                childrenEndingOnLine
+                        .computeIfAbsent(child.getRange().get().end.line, line -> new ArrayList<>())
+                        .add(child);
+            }
+        }
         commentsToAttribute.stream()
                 .filter(comment -> comment.hasRange())
                 .filter(Comment::isLineComment)
@@ -169,14 +222,11 @@ class CommentsInserter {
                     // falling back to an earlier sibling when the nearest one refuses
                     // (e.g. it already carries a comment), matching the old behavior.
                     List<Node> trailing = new LinkedList<>();
-                    for (Node child : children) {
-                        if (!child.hasRange()) {
-                            continue;
-                        }
+                    for (Node child : childrenEndingOnLine.getOrDefault(commentBegin.line, Collections.emptyList())) {
                         Position childEnd = child.getRange().get().end;
                         // Excludes a child that starts to the right of the comment on
                         // the same line: it cannot be what the comment trails.
-                        if (childEnd.line == commentBegin.line && childEnd.isBefore(commentBegin)) {
+                        if (childEnd.isBefore(commentBegin)) {
                             trailing.add(child);
                         }
                     }
@@ -190,7 +240,7 @@ class CommentsInserter {
                         }
                     }
                 });
-        commentsToAttribute.removeAll(attributedComments);
+        removeAttributed(commentsToAttribute, attributedComments);
     }
 
     private boolean attributeLineCommentToNodeOrChild(Node node, LineComment lineComment) {
@@ -206,10 +256,18 @@ class CommentsInserter {
             }
             return true;
         }
-        // try with all the children, sorted by reverse position (so the
-        // first one is the nearest to the comment
-        List<Node> children = new LinkedList<>();
-        children.addAll(node.getChildNodes());
+        // try with the children spanning the comment's line, sorted by reverse
+        // position so the first one is the nearest to the comment. Only such a
+        // child can be, or contain, a node beginning on that line.
+        int commentLine = lineComment.getBegin().get().line;
+        List<Node> children = new ArrayList<>();
+        for (Node child : node.getChildNodes()) {
+            if (child.hasRange()
+                    && child.getBegin().get().line <= commentLine
+                    && commentLine <= child.getEnd().get().line) {
+                children.add(child);
+            }
+        }
         PositionUtils.sortByBeginPosition(children);
         Collections.reverse(children);
         for (Node child : children) {
