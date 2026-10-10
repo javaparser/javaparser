@@ -33,12 +33,16 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -185,19 +189,13 @@ public class MemberResolutionLogic {
 
                 // Avoid recursion on self
                 if (ancestorTypeDeclaration.isPresent() && typeDeclaration != ancestorTypeDeclaration.get()) {
-                    // Consider methods declared on self
+                    // Consider the methods of the ancestor and of its own ancestors. They are only collected here:
+                    // resolving the call on the ancestor itself would compare them on its raw declaration, where
+                    // overloads such as set(T) and set(U) cannot be told apart, instead of comparing them with
+                    // the others on their parameter types as seen from typeDeclaration (see parameterTypesSeenFrom).
                     candidateMethods.addAll(ancestor.getAllMethodsVisibleToInheritors().stream()
                             .filter(m -> m.getName().equals(name))
                             .collect(Collectors.toList()));
-
-                    // consider methods from superclasses and only default methods from interfaces :
-                    // not true, we should keep abstract as a valid candidate
-                    // abstract are removed in MethodResolutionLogic.isApplicable is necessary
-                    SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
-                            ancestorTypeDeclaration.get(), name, argumentsTypes, staticOnly);
-                    if (res.isSolved()) {
-                        candidateMethods.add(res.getCorrespondingDeclaration());
-                    }
                 }
             }
         }
@@ -228,7 +226,53 @@ public class MemberResolutionLogic {
             }
         }
 
-        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicable(
+                candidateMethods, name, argumentsTypes, typeSolver, parameterTypesSeenFrom(typeDeclaration));
+    }
+
+    /**
+     * Gives the parameter types of a candidate method as seen from {@code typeDeclaration}: a method inherited
+     * from a parameterized ancestor has the type variables of its declaring type replaced by the type arguments
+     * that the hierarchy of {@code typeDeclaration} supplies for them, as in {@code set(T)} seen as
+     * {@code set(String)} from a type that {@code extends Base<String>}.
+     */
+    public static Function<ResolvedMethodDeclaration, List<ResolvedType>> parameterTypesSeenFrom(
+            ResolvedReferenceTypeDeclaration typeDeclaration) {
+        Map<String, ResolvedReferenceType> ancestorsByName = new HashMap<>();
+        return method -> {
+            List<ResolvedType> parameterTypes = new ArrayList<>(method.getNumberOfParams());
+            for (int i = 0; i < method.getNumberOfParams(); i++) {
+                parameterTypes.add(method.getParam(i).getType());
+            }
+            ResolvedReferenceTypeDeclaration declaringType = method.declaringType();
+            if (declaringType.getTypeParameters().isEmpty()
+                    || declaringType.getQualifiedName().equals(typeDeclaration.getQualifiedName())) {
+                return parameterTypes;
+            }
+            // The hierarchy is only walked once a candidate needs it, which most lookups never do
+            if (ancestorsByName.isEmpty()) {
+                collectResolvableAncestors(ReferenceTypeImpl.undeterminedParameters(typeDeclaration), ancestorsByName);
+            }
+            ResolvedReferenceType ancestor = ancestorsByName.get(declaringType.getQualifiedName());
+            if (ancestor != null) {
+                parameterTypes.replaceAll(ancestor::useThisTypeParametersOnTheGivenType);
+            }
+            return parameterTypes;
+        };
+    }
+
+    /**
+     * Collects the ancestors of {@code type}, direct and indirect, with the type arguments its hierarchy
+     * supplies, leaving out the ones that cannot be resolved together with their own ancestors.
+     */
+    private static void collectResolvableAncestors(
+            ResolvedReferenceType type, Map<String, ResolvedReferenceType> ancestorsByName) {
+        for (ResolvedReferenceType ancestor : type.getDirectAncestors(true)) {
+            // Guard against cyclic hierarchies, which incomplete or erroneous sources may contain
+            if (ancestorsByName.putIfAbsent(ancestor.getQualifiedName(), ancestor) == null) {
+                collectResolvableAncestors(ancestor, ancestorsByName);
+            }
+        }
     }
 
     /**
