@@ -20,19 +20,30 @@
 
 package com.github.javaparser.symbolsolver.resolution.promotion;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
+import com.github.javaparser.symbolsolver.resolution.typeinference.LeastUpperBoundLogic;
 import java.util.Arrays;
 import java.util.HashSet;
 
 public class ReferenceConditionalExprHandler implements ConditionalExprHandler {
     ResolvedType thenExpr;
     ResolvedType elseExpr;
+    TypeSolver typeSolver;
 
     public ReferenceConditionalExprHandler(ResolvedType thenExpr, ResolvedType elseExpr) {
+        this(thenExpr, elseExpr, null);
+    }
+
+    /**
+     * @param typeSolver used to solve java.lang.Object, the lub of an interface and a type not implementing it, may
+     *     be null
+     */
+    public ReferenceConditionalExprHandler(ResolvedType thenExpr, ResolvedType elseExpr, TypeSolver typeSolver) {
         this.thenExpr = thenExpr;
         this.elseExpr = elseExpr;
+        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -45,6 +56,6 @@ public class ReferenceConditionalExprHandler implements ConditionalExprHandler {
         if (elseExpr.isNull()) {
             return thenExpr;
         }
-        return TypeHelper.leastUpperBound(new HashSet<>(Arrays.asList(thenExpr, elseExpr)));
+        return LeastUpperBoundLogic.of(typeSolver).lub(new HashSet<>(Arrays.asList(thenExpr, elseExpr)));
     }
 }

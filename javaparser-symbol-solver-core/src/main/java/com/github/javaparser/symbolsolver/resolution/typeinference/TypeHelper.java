@@ -219,6 +219,15 @@ public class TypeHelper {
     }
 
     /**
+     * See JLS 4.10.4. Least Upper Bound.
+     * Unlike {@link #leastUpperBound(Set)}, java.lang.Object is solved with the type solver and taken into account
+     * as a supertype of interfaces.
+     */
+    public static ResolvedType leastUpperBound(Set<ResolvedType> types, TypeSolver typeSolver) {
+        return LeastUpperBoundLogic.of(typeSolver).lub(types);
+    }
+
+    /**
      * See JLS 15.27.3. Type of a Lambda Expression
      * @return
      */

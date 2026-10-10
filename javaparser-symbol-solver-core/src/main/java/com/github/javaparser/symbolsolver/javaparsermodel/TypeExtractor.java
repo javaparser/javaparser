@@ -196,7 +196,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         ResolvedType thenExpr = node.getThenExpr().accept(this, solveLambdas);
         ResolvedType elseExpr = node.getElseExpr().accept(this, solveLambdas);
 
-        ConditionalExprHandler rce = ConditionalExprResolver.getConditionExprHandler(thenExpr, elseExpr);
+        ConditionalExprHandler rce = ConditionalExprResolver.getConditionExprHandler(thenExpr, elseExpr, typeSolver);
         try {
             return rce.resolveType();
         } catch (UnsupportedOperationException e) {
@@ -468,7 +468,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 .map(type -> type.isPrimitive() ? TypeHelper.toBoxedType(type.asPrimitive(), typeSolver) : type)
                 .collect(Collectors.toSet());
 
-        return LeastUpperBoundLogic.of().lub(boxedTypes);
+        return LeastUpperBoundLogic.of(typeSolver).lub(boxedTypes);
     }
 
     /**
@@ -737,7 +737,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                                     .map(e -> facade.getType(e))
                                     .orElse(ResolvedVoidType.INSTANCE))
                             .collect(Collectors.toSet());
-                    actualType = LeastUpperBoundLogic.of().lub(resolvedTypes);
+                    actualType = LeastUpperBoundLogic.of(typeSolver).lub(resolvedTypes);
 
                 } else {
                     actualType = ResolvedVoidType.INSTANCE;

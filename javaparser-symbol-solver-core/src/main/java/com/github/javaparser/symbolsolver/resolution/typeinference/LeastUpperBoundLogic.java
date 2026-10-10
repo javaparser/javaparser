@@ -20,11 +20,13 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
 import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
@@ -43,11 +45,26 @@ public class LeastUpperBoundLogic {
     // Sets of types whose candidate parameterization is being computed further up the call stack
     private final Set<Set<ResolvedType>> lubsInProgress = new HashSet<>();
 
+    private final TypeSolver typeSolver;
+
+    /**
+     * Without a type solver, java.lang.Object cannot be added to the supertypes of interfaces, so the lub of an
+     * interface and a type that does not implement it is {@code null}. Prefer {@link #of(TypeSolver)}.
+     */
     public static LeastUpperBoundLogic of() {
-        return new LeastUpperBoundLogic();
+        return new LeastUpperBoundLogic(null);
     }
 
-    private LeastUpperBoundLogic() {}
+    /**
+     * @param typeSolver used to solve java.lang.Object, a supertype of every interface (JLS 4.10.2)
+     */
+    public static LeastUpperBoundLogic of(TypeSolver typeSolver) {
+        return new LeastUpperBoundLogic(typeSolver);
+    }
+
+    private LeastUpperBoundLogic(TypeSolver typeSolver) {
+        this.typeSolver = typeSolver;
+    }
 
     /**
      * See JLS 4.10.4. Least Upper Bound.
@@ -295,7 +312,16 @@ public class LeastUpperBoundLogic {
         Set<ResolvedType> supertypes = new LinkedHashSet<>();
         supertypes.add(type);
         supertypes.addAll(type.getAllAncestors());
+        // Object is a supertype of every interface (JLS 4.10.2), but getAllAncestors() does not return it for
+        // interfaces: without it, the erased candidate set of an interface and a class not implementing it is empty
+        if (typeSolver != null && supertypes.stream().noneMatch(this::isJavaLangObject)) {
+            supertypes.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+        }
         return supertypes;
+    }
+
+    private boolean isJavaLangObject(ResolvedType type) {
+        return type.isReferenceType() && type.asReferenceType().isJavaLangObject();
     }
 
     private List<Set<ResolvedType>> erased(List<Set<ResolvedType>> typeSets) {

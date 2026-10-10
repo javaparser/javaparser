@@ -203,6 +203,46 @@ class LeastUpperBoundTest {
     }
 
     @Test
+    void lub_of_interface_and_class_not_implementing_it_is_object() {
+        // Object is a supertype of every interface (JLS 4.10.2), see issue #5158
+        ResolvedType map = genericType(
+                Map.class.getCanonicalName(), String.class.getCanonicalName(), String.class.getCanonicalName());
+        ResolvedType integer = type(Integer.class.getCanonicalName());
+        assertEquals(type(Object.class.getCanonicalName()), leastUpperBound(map, integer));
+    }
+
+    @Test
+    void lub_of_declared_interface_and_class_not_implementing_it_is_object() {
+        ResolvedType i1 = declaredTypes("interface I1 {}").get(0);
+        ResolvedType integer = type(Integer.class.getCanonicalName());
+        assertEquals(type(Object.class.getCanonicalName()), leastUpperBound(i1, integer));
+    }
+
+    @Test
+    void lub_of_unrelated_interfaces_is_object() {
+        ResolvedType map = genericType(
+                Map.class.getCanonicalName(), String.class.getCanonicalName(), String.class.getCanonicalName());
+        ResolvedType runnable = type(Runnable.class.getCanonicalName());
+        assertEquals(type(Object.class.getCanonicalName()), leastUpperBound(map, runnable));
+    }
+
+    @Test
+    void lub_of_interface_and_class_sharing_an_interface() {
+        // non-regression: Object must not hide the shared interface
+        ResolvedType arrayList = genericType(ArrayList.class.getCanonicalName(), String.class.getCanonicalName());
+        ResolvedType integer = type(Integer.class.getCanonicalName());
+        assertEquals(type(Serializable.class.getCanonicalName()), leastUpperBound(arrayList, integer));
+    }
+
+    @Test
+    void lub_of_interface_and_class_without_type_solver_is_null() {
+        // without a type solver, Object cannot be added to the supertypes of interfaces
+        ResolvedType runnable = type(Runnable.class.getCanonicalName());
+        ResolvedType integer = type(Integer.class.getCanonicalName());
+        assertNull(TypeHelper.leastUpperBound(toSet(runnable, integer)));
+    }
+
+    @Test
     public void lub_of_enum() {
         ResolvedType type = type("java.math.RoundingMode");
 
@@ -484,7 +524,7 @@ class LeastUpperBoundTest {
     }
 
     private ResolvedType leastUpperBound(ResolvedType... types) {
-        return TypeHelper.leastUpperBound(toSet(types));
+        return TypeHelper.leastUpperBound(toSet(types), typeSolver);
     }
 
     private List<ResolvedType> declaredTypes(String... lines) {
