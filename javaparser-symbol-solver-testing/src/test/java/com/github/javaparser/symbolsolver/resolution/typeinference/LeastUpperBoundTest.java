@@ -33,6 +33,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedIntersectionType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -236,7 +237,8 @@ class LeastUpperBoundTest {
     void lub_of_generics_with_different_parametrized_type() {
         ResolvedType list1 = genericType(List.class.getCanonicalName(), String.class.getCanonicalName());
         ResolvedType list2 = genericType(List.class.getCanonicalName(), Object.class.getCanonicalName());
-        ResolvedType expected = genericType(List.class.getCanonicalName(), Object.class.getCanonicalName());
+        // lcta(String, Object) = ? extends Object = ?, List<Object> is not a supertype of List<String>
+        ResolvedType expected = genericType(List.class.getCanonicalName(), unbound());
         ResolvedType lub = leastUpperBound(list1, list2);
         assertEquals(expected, lub);
     }
@@ -271,8 +273,72 @@ class LeastUpperBoundTest {
     }
 
     @Test
-    @Disabled("Waiting for generic type inheritance")
-    // we have to find the inheritance tree for List<? extends Integer> or List<? extends Number>
+    void lub_of_generics_with_type_and_extends_wildcard() {
+        ResolvedType list1 = genericType(List.class.getCanonicalName(), Integer.class.getCanonicalName());
+        ResolvedType list2 = genericType(List.class.getCanonicalName(), extendsBound(Long.class.getCanonicalName()));
+        // lcta(U, ? extends V) = ? extends lub(U, V)
+        ResolvedType expected =
+                genericType(List.class.getCanonicalName(), extendsBound(Number.class.getCanonicalName()));
+        ResolvedType lub = leastUpperBound(list1, list2);
+        assertEquals(expected.describe(), lub.describe());
+    }
+
+    @Test
+    void lub_of_generics_with_type_and_super_wildcard() {
+        ResolvedType list1 = genericType(List.class.getCanonicalName(), Integer.class.getCanonicalName());
+        ResolvedType list2 = genericType(List.class.getCanonicalName(), superBound(Integer.class.getCanonicalName()));
+        // lcta(U, ? super V) = ? super glb(U, V)
+        ResolvedType expected =
+                genericType(List.class.getCanonicalName(), superBound(Integer.class.getCanonicalName()));
+        ResolvedType lub = leastUpperBound(list1, list2);
+        assertEquals(expected.describe(), lub.describe());
+    }
+
+    @Test
+    void lub_of_generics_with_two_super_wildcards() {
+        ResolvedType integer = type(Integer.class.getCanonicalName());
+        ResolvedType lng = type(Long.class.getCanonicalName());
+        ResolvedType list1 = genericType(List.class.getCanonicalName(), superBound(Integer.class.getCanonicalName()));
+        ResolvedType list2 = genericType(List.class.getCanonicalName(), superBound(Long.class.getCanonicalName()));
+        // lcta(? super U, ? super V) = ? super glb(U, V)
+        ResolvedType lub = leastUpperBound(list1, list2);
+        ResolvedType typeArgument = lub.asReferenceType().typeParametersValues().get(0);
+        assertTrue(typeArgument.isWildcard() && typeArgument.asWildcard().isSuper());
+        ResolvedType glb = typeArgument.asWildcard().getBoundedType();
+        assertTrue(glb instanceof ResolvedIntersectionType);
+        assertEquals(toSet(integer, lng), new HashSet<>(((ResolvedIntersectionType) glb).getElements()));
+    }
+
+    @Test
+    void lub_of_generics_with_unbounded_wildcard() {
+        ResolvedType unboundedList = genericType(List.class.getCanonicalName(), unbound());
+        ResolvedType[] lists = {
+            genericType(List.class.getCanonicalName(), String.class.getCanonicalName()),
+            genericType(List.class.getCanonicalName(), extendsBound(Integer.class.getCanonicalName())),
+            genericType(List.class.getCanonicalName(), superBound(Integer.class.getCanonicalName()))
+        };
+        for (ResolvedType list : lists) {
+            assertEquals(unboundedList, leastUpperBound(list, unboundedList), list.describe());
+        }
+    }
+
+    @Test
+    void lub_of_generics_computes_same_type_arguments_consistently() {
+        String list = List.class.getCanonicalName();
+        ResolvedType listOfString = genericType(list, String.class.getCanonicalName());
+        ResolvedType listOfInteger = genericType(list, Integer.class.getCanonicalName());
+        ResolvedType map1 = genericType(Map.class.getCanonicalName(), listOfString, listOfString);
+        ResolvedType map2 = genericType(Map.class.getCanonicalName(), listOfInteger, listOfInteger);
+        // both type arguments are computed from the same lcta, so they must be equal
+        ResolvedType lub = leastUpperBound(map1, map2);
+        List<ResolvedType> typeArguments = lub.asReferenceType().typeParametersValues();
+        assertEquals(
+                "? extends java.util.List<? extends java.io.Serializable>",
+                typeArguments.get(0).describe());
+        assertEquals(typeArguments.get(0), typeArguments.get(1));
+    }
+
+    @Test
     void lub_of_generics_with_upper_bounded_type_in_hierarchy() {
         ResolvedType list1 = genericType(List.class.getCanonicalName(), extendsBound(Number.class.getCanonicalName()));
         ResolvedType list2 = genericType(List.class.getCanonicalName(), extendsBound(Integer.class.getCanonicalName()));

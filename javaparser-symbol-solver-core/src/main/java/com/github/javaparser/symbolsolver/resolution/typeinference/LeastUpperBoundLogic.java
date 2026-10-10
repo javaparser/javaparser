@@ -40,7 +40,8 @@ import java.util.stream.Collectors;
 
 public class LeastUpperBoundLogic {
 
-    private Set<Set<ResolvedType>> lubCache = new HashSet<>();
+    // Sets of types whose candidate parameterization is being computed further up the call stack
+    private final Set<Set<ResolvedType>> lubsInProgress = new HashSet<>();
 
     public static LeastUpperBoundLogic of() {
         return new LeastUpperBoundLogic();
@@ -219,11 +220,14 @@ public class LeastUpperBoundLogic {
         Collection<ResolvedType> erasedTypeParameterizations = relevantParameterizations.get(erasedBest);
         if (erasedTypeParameterizations != null && !erasedTypeParameterizations.contains(erasedBest)) {
             Set<ResolvedType> searchedTypes = new HashSet<>(resolvedTypes);
-            // if we already encountered these types in LUB calculation,
+            // if the lub of these types is already being computed further up the call stack (infinite type),
             // we interrupt calculation and use the erasure of the parameterized type instead
-            if (!lubCache.contains(searchedTypes)) {
-                lubCache.add(searchedTypes);
-                return leastContainingParameterization(new ArrayList<>(erasedTypeParameterizations));
+            if (lubsInProgress.add(searchedTypes)) {
+                try {
+                    return leastContainingParameterization(new ArrayList<>(erasedTypeParameterizations));
+                } finally {
+                    lubsInProgress.remove(searchedTypes);
+                }
             }
         }
         return erasedBest;
@@ -514,22 +518,33 @@ public class LeastUpperBoundLogic {
     }
 
     private ResolvedType lctaOneWildcard(ResolvedType rawType, ResolvedWildcard wildcardType) {
-        if (wildcardType.isUpperBounded()) {
+        // lcta(U, ?) = lcta(U, ? extends Object) = ? extends lub(U, Object) = ?
+        if (!wildcardType.isBounded()) {
+            return ResolvedWildcard.UNBOUNDED;
+        }
+        // lcta(U, ? super V) = ? super glb(U, V)
+        if (wildcardType.isSuper()) {
             ResolvedType glb = TypeHelper.glb(toSet(rawType, wildcardType.getBoundedType()));
             return bound(glb, BoundType.SUPER);
         }
+        // lcta(U, ? extends V) = ? extends lub(U, V)
         ResolvedType lub = lub(toSet(rawType, wildcardType.getBoundedType()));
         return bound(lub, BoundType.EXTENDS);
     }
 
     private ResolvedType lctaBothWildcards(ResolvedWildcard type1, ResolvedWildcard type2) {
+        // ? is ? extends Object: lcta(? extends U, ?) = ? extends lub(U, Object) = ?
+        // and lcta(? super U, ?) = ? (or Object if U is Object, which ? also contains)
+        if (!type1.isBounded() || !type2.isBounded()) {
+            return ResolvedWildcard.UNBOUNDED;
+        }
         // lcta(? super U, ? super V) = ? super glb(U, V)
-        if (type1.isUpperBounded() && type2.isUpperBounded()) {
+        if (type1.isSuper() && type2.isSuper()) {
             ResolvedType glb = TypeHelper.glb(toSet(type1.getBoundedType(), type2.getBoundedType()));
             return bound(glb, BoundType.SUPER);
         }
         // lcta(? extends U, ? extends V) = ? extends lub(U, V)
-        if (type1.isLowerBounded() && type2.isLowerBounded()) {
+        if (type1.isExtends() && type2.isExtends()) {
             ResolvedType lub = lub(toSet(type1.getBoundedType(), type2.getBoundedType()));
             return bound(lub, BoundType.EXTENDS);
         }
@@ -543,14 +558,16 @@ public class LeastUpperBoundLogic {
     // Replace all type parameters in generic types with their bounds or Object if the type parameters are unbounded.
 
     /*
-     * Returns the corresponding wildcard type or Object if we want to build a wildcard type like {@code ? extends
-     * Object}
+     * Returns the corresponding wildcard type. {@code ? extends Object} is returned as the unbounded wildcard
+     * {@code ?}, and {@code ? super Object} as {@code Object}, the only type it contains.
      */
     private ResolvedType bound(ResolvedType type, BoundType boundType) {
-        if (type != null && type.isReferenceType() && type.asReferenceType().isJavaLangObject()) return type;
-        return boundType.equals(BoundType.EXTENDS)
-                ? ResolvedWildcard.extendsBound(type)
-                : ResolvedWildcard.superBound(type);
+        boolean isObject =
+                type != null && type.isReferenceType() && type.asReferenceType().isJavaLangObject();
+        if (boundType == BoundType.EXTENDS) {
+            return isObject ? ResolvedWildcard.UNBOUNDED : ResolvedWildcard.extendsBound(type);
+        }
+        return isObject ? type : ResolvedWildcard.superBound(type);
     }
 
     private Set<ResolvedType> toSet(ResolvedType... resolvedTypes) {
