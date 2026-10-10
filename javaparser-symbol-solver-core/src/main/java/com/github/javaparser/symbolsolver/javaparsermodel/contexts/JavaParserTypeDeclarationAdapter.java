@@ -258,7 +258,14 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
-        return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
+        // A call without a receiver is made from within the type: inherited methods are compared with the type
+        // arguments that its hierarchy supplies, its own type variables standing for themselves.
+        return MethodResolutionLogic.findMostApplicable(
+                candidateMethods,
+                name,
+                argumentsTypes,
+                typeSolver,
+                MemberResolutionLogic.parameterTypesSeenFrom(typeDeclaration));
     }
 
     public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes) {

@@ -201,19 +201,23 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                     .solveMethod(name, argumentsTypes, staticOnly);
         }
 
-        Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
+        // The receiver is kept with its type arguments, not reduced to its declaration: on a Box<String>, they tell
+        // set(T) apart from an overload set(U) once T and U are bound to different types.
+        // Limitation: only the JavaParser declarations use them. A receiver whose type comes from Reflection or
+        // Javassist (a JDK or library class) is still resolved on its declared signatures.
+        Collection<ResolvedReferenceType> receiverTypes = findReceiverTypes(wrappedNode.getScope());
 
-        if (rrtds.isEmpty()) {
+        if (receiverTypes.isEmpty()) {
             // if the bounds of a type parameter are empty, then the bound is implicitly "extends Object"
             // we don't make this _ex_plicit in the data representation because that would affect codegen
             // and make everything generate like <T extends Object> instead of <T>
             // https://github.com/javaparser/javaparser/issues/2044
-            rrtds = Collections.singleton(typeSolver.getSolvedJavaLangObject());
+            receiverTypes = Collections.singleton(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
         }
 
-        for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
+        for (ResolvedReferenceType receiverType : receiverTypes) {
             SymbolReference<ResolvedMethodDeclaration> res =
-                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
+                    MethodResolutionLogic.solveMethodInType(receiverType, name, argumentsTypes, false);
             if (res.isSolved()) {
                 return res;
             }

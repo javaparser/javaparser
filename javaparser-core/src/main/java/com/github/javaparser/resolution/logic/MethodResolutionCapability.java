@@ -29,4 +29,15 @@ public interface MethodResolutionCapability {
 
     SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly);
+
+    /**
+     * Same as {@link #solveMethod(String, List, boolean)}, for a call on a receiver that supplies
+     * {@code typeArguments} for the type parameters of this type. They distinguish overloads that only differ by
+     * those type parameters, such as {@code set(T)} and {@code set(U)} called on a {@code Pair<String, Integer>}.
+     * Implementations that do not take them into account resolve the call on the declared signatures.
+     */
+    default SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, List<ResolvedType> typeArguments) {
+        return solveMethod(name, argumentsTypes, staticOnly);
+    }
 }

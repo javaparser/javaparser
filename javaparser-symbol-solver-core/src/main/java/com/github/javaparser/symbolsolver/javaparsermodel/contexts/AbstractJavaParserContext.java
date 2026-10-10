@@ -35,6 +35,7 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
@@ -194,7 +195,35 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 .findFirst();
     }
 
+    /**
+     * The declarations of the types a call or an access on {@code optScope} looks its members up in, without the
+     * type arguments that {@link #findReceiverTypes(Optional)} keeps.
+     */
     protected Collection<ResolvedReferenceTypeDeclaration> findTypeDeclarations(Optional<Expression> optScope) {
+        // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
+        return findReceiverTypes(optScope).stream()
+                .map(receiverType -> receiverType
+                        .getTypeDeclaration()
+                        .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * The types a call or an access on {@code optScope} looks its members up in, with the type arguments they
+     * carry: several for a type variable bounded by an intersection, a single one otherwise.
+     * <p>
+     * The type of the scope is reduced to the type whose members it has: the bound of a wildcard, of a type
+     * variable or of a lambda parameter constraint, {@code Object} for an array or an unbounded wildcard, the
+     * common ancestor of a union type, and the enclosing type when there is no scope. Unlike a type declaration,
+     * the result keeps the type arguments, e.g. {@code Box<String>} for a scope of type
+     * {@code ? extends Box<String>}, so that overload resolution can take them into account.
+     * <p>
+     * Limitation: only method calls use these type arguments so far. Method references still look their methods
+     * up through {@link #findTypeDeclarations(Optional)}, so that {@code box::set} remains ambiguous between
+     * {@code set(T)} and {@code set(U)} on a {@code Box<A, B>}, even when only one of them suits the target
+     * functional interface.
+     */
+    protected Collection<ResolvedReferenceType> findReceiverTypes(Optional<Expression> optScope) {
         if (optScope.isPresent()) {
             Expression scope = optScope.get();
 
@@ -214,29 +243,20 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends()
                         || typeOfScope.asWildcard().isSuper()) {
-                    // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
-                    return singletonList(typeOfScope
-                            .asWildcard()
-                            .getBoundedType()
-                            .asReferenceType()
-                            .getTypeDeclaration()
-                            .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                    return singletonList(
+                            typeOfScope.asWildcard().getBoundedType().asReferenceType());
                 }
-                return singletonList(typeSolver.getSolvedJavaLangObject());
+                return singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
             }
             if (typeOfScope.isArray()) {
                 // method call on array are Object methods
-                return singletonList(typeSolver.getSolvedJavaLangObject());
+                return singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
             }
             if (typeOfScope.isTypeVariable()) {
-                Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
+                Collection<ResolvedReferenceType> result = new ArrayList<>();
                 for (ResolvedTypeParameterDeclaration.Bound bound :
                         typeOfScope.asTypeParameter().getBounds()) {
-                    // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
-                    result.add(bound.getType()
-                            .asReferenceType()
-                            .getTypeDeclaration()
-                            .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                    result.add(bound.getType().asReferenceType());
                 }
                 return result;
             }
@@ -245,13 +265,10 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 // parameter, e.g. when resolving `a` in `Comparator.comparing(a -> a.getName())`.
                 // We need the type declaration of the bound so that method lookups (like getName())
                 // can proceed.
-                // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
                 ResolvedType type = typeOfScope.asConstraintType().getBound();
                 if (type.isReferenceType()) {
                     // Common case: the bound is a fully-resolved reference type, e.g. `A`.
-                    return singletonList(type.asReferenceType()
-                            .getTypeDeclaration()
-                            .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                    return singletonList(type.asReferenceType());
                 }
                 if (type.isTypeVariable()) {
                     // The bound is still an unresolved type variable (e.g. `T` in
@@ -259,16 +276,13 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                     // The best we can do is use the type variable's explicit upper bounds;
                     // if the variable is unconstrained (declared as plain `T`), we fall back
                     // to Object, which is Java's implicit upper bound for all type parameters.
-                    Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
+                    Collection<ResolvedReferenceType> result = new ArrayList<>();
                     for (ResolvedTypeParameterDeclaration.Bound bound :
                             type.asTypeParameter().getBounds()) {
-                        result.add(bound.getType()
-                                .asReferenceType()
-                                .getTypeDeclaration()
-                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                        result.add(bound.getType().asReferenceType());
                     }
                     if (result.isEmpty()) {
-                        result.add(typeSolver.getSolvedJavaLangObject());
+                        result.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
                     }
                     return result;
                 }
@@ -285,25 +299,20 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                     ResolvedType bounded = type.asWildcard().getBoundedType();
                     if (bounded.isReferenceType()) {
                         // Normal case: `? super A` where A is a concrete reference type.
-                        return singletonList(bounded.asReferenceType()
-                                .getTypeDeclaration()
-                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                        return singletonList(bounded.asReferenceType());
                     }
                     if (bounded.isTypeVariable()) {
                         // Edge case: `? super T` where T is itself still an unresolved type
                         // variable (outer context inference did not fully concretize T).
                         // Apply the same upper-bound / Object fallback as the plain
                         // type-variable case above.
-                        Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
+                        Collection<ResolvedReferenceType> result = new ArrayList<>();
                         for (ResolvedTypeParameterDeclaration.Bound bound :
                                 bounded.asTypeParameter().getBounds()) {
-                            result.add(bound.getType()
-                                    .asReferenceType()
-                                    .getTypeDeclaration()
-                                    .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+                            result.add(bound.getType().asReferenceType());
                         }
                         if (result.isEmpty()) {
-                            result.add(typeSolver.getSolvedJavaLangObject());
+                            result.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
                         }
                         return result;
                     }
@@ -315,26 +324,19 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 return typeOfScope
                         .asUnionType()
                         .getCommonAncestor()
-                        .flatMap(ResolvedReferenceType::getTypeDeclaration)
+                        .filter(commonAncestor ->
+                                commonAncestor.getTypeDeclaration().isPresent())
                         .map(Collections::singletonList)
                         .orElseThrow(() -> new UnsolvedSymbolException(
                                 "No common ancestor available for UnionType" + typeOfScope.describe()));
             }
 
-            // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
-            return singletonList(typeOfScope
-                    .asReferenceType()
-                    .getTypeDeclaration()
-                    .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+            return singletonList(typeOfScope.asReferenceType());
         }
 
         ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
 
-        // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
-        return singletonList(typeOfScope
-                .asReferenceType()
-                .getTypeDeclaration()
-                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty.")));
+        return singletonList(typeOfScope.asReferenceType());
     }
 
     /**
