@@ -378,7 +378,8 @@ class LeastUpperBoundTest {
     }
 
     @Test
-    @Disabled("Waiting for generic type resolution")
+    @Disabled("Unsolved: the type variable Y of the raw Child is replaced by String in lcp (undetermined type "
+            + "argument heuristic), giving Child<String> instead of the raw type Child")
     public void lub_of_generics_with_raw_type() {
         List<ResolvedType> types = declaredTypes(
                 "class Parent<X> {}",
@@ -394,7 +395,6 @@ class LeastUpperBoundTest {
     }
 
     @Test
-    @Disabled("Waiting for generic type resolution")
     public void lub_of_generics_with_inheritance_and_wildcard() {
         List<ResolvedType> types = declaredTypes(
                 "class Parent<X> {}",
@@ -406,13 +406,12 @@ class LeastUpperBoundTest {
         ResolvedType ChildP = types.get(4);
         ResolvedType childC = types.get(5);
 
+        // lcta(U, U) = U, the type arguments of ancestors declared in source code being lazy types
         ResolvedType lub = leastUpperBound(ChildP, childC);
-        System.out.println(lub.describe());
         assertEquals("Parent<Other<? extends A>>", lub.describe());
     }
 
     @Test
-    @Disabled("Waiting for generic type resolution")
     public void lub_of_generics_without_loop() {
         List<ResolvedType> types = declaredTypes(
                 "class Parent<X1, X2> {}",
@@ -430,30 +429,12 @@ class LeastUpperBoundTest {
         ResolvedType childCA = types.get(8);
         ResolvedType grandChildDD = types.get(9);
 
+        // lcp(Child<B, A>, Child<C, A>, Child<D, D>) = Child<lcta(lcta(B, C), D), lcta(lcta(A, A), D)>
         ResolvedType lub = leastUpperBound(childBA, childCA, grandChildDD);
-        System.out.println(lub.describe());
+        assertEquals("Child<? extends A, ? extends A>", lub.describe());
     }
 
     @Test
-    @Disabled("Waiting for generic type resolution")
-    public void lub_of_generics_without_loop2() {
-        List<ResolvedType> typesFromInput = declaredTypes(
-                "class Parent<X> {}",
-                "class Child<Y> extends Parent<Y> {}",
-                "class Other<Z> {}",
-                "class A {}",
-                "class ChildP extends Parent<Other<? extends A>> {}",
-                "class ChildC extends Child<Other<? extends A>> {}");
-
-        ResolvedType ChildP = typesFromInput.get(4);
-        ResolvedType childC = typesFromInput.get(5);
-
-        ResolvedType lub = leastUpperBound(ChildP, childC);
-        System.out.println(lub.describe());
-    }
-
-    @Test
-    @Disabled("Waiting for generic type resolution")
     public void lub_of_generics_infinite_types() {
         List<ResolvedType> types = declaredTypes(
                 "class Parent<X> {}",
@@ -464,8 +445,10 @@ class LeastUpperBoundTest {
         ResolvedType childInteger = types.get(2);
         ResolvedType childString = types.get(3);
 
+        // lub(Integer, String) is an infinite type (Comparable<? extends lub(Integer, String)>), approximated by
+        // the first minimal erased candidate
         ResolvedType lub = leastUpperBound(childInteger, childString);
-        System.out.println(lub.describe());
+        assertEquals("Child<? extends java.io.Serializable>", lub.describe());
     }
 
     private List<ResolvedType> types(String... types) {

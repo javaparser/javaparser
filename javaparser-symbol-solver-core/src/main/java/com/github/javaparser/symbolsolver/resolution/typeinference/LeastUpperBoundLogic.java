@@ -407,8 +407,9 @@ public class LeastUpperBoundLogic {
 
         TypeSubstitution typeSubstitution = TypeSubstitution.empty();
         for (ResolvedTypeParameterDeclaration typeDecl : substitution1.typeParameterDeclarations()) {
-            ResolvedType subs1 = substitution1.substitutedType(typeDecl);
-            ResolvedType subs2 = substitution2.substitutedType(typeDecl);
+            // type arguments of ancestors declared in source code are lazy, and LazyType does not define equality
+            ResolvedType subs1 = concreteType(substitution1.substitutedType(typeDecl));
+            ResolvedType subs2 = concreteType(substitution2.substitutedType(typeDecl));
             subs1 = isSubstituable(subs1) && subs2.isReferenceType() ? subs2 : subs1;
             subs2 = isSubstituable(subs2) && subs1.isReferenceType() ? subs1 : subs2;
             ResolvedType newType = lcta(subs1, subs2);
