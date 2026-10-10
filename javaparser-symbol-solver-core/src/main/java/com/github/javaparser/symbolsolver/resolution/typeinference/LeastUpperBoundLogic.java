@@ -51,6 +51,13 @@ public class LeastUpperBoundLogic {
 
     /**
      * See JLS 4.10.4. Least Upper Bound.
+     * <p>
+     * This implementation approximates the lub specified by the JLS: when the minimal erased candidate set contains
+     * several types, the lub should be their intersection {@code Best(W1) & ... & Best(Wr)}, but only one of them is
+     * returned, classes first, then interfaces in the order of their qualified names.
+     *
+     * @return the least upper bound of the types, or {@code null} if no shared supertype is found (for example for
+     *     primitive types, which have no supertype here)
      */
     public ResolvedType lub(Set<ResolvedType> types) {
         if (types.isEmpty()) {
@@ -59,7 +66,7 @@ public class LeastUpperBoundLogic {
 
         // If there is only one type then the lub is the type itself
         if (types.size() == 1) {
-            return types.iterator().next();
+            return concreteType(types.iterator().next());
         }
 
         // The direct supertypes of the null type are all reference types other than the null type itself.
@@ -218,7 +225,7 @@ public class LeastUpperBoundLogic {
         // The possibility of an infinite type stems from the recursive calls to lub().
         // Readers familiar with recursive types should note that an infinite type is not the same as a recursive type.
         Collection<ResolvedType> erasedTypeParameterizations = relevantParameterizations.get(erasedBest);
-        if (erasedTypeParameterizations != null && !erasedTypeParameterizations.contains(erasedBest)) {
+        if (!erasedTypeParameterizations.contains(erasedBest)) {
             Set<ResolvedType> searchedTypes = new HashSet<>(resolvedTypes);
             // if the lub of these types is already being computed further up the call stack (infinite type),
             // we interrupt calculation and use the erasure of the parameterized type instead
@@ -381,7 +388,7 @@ public class LeastUpperBoundLogic {
         }
         ResolvedType type1 = types.get(0);
         ResolvedType type2 = types.get(1);
-        ResolvedType reduction = leastContainingTypeArgument(type1, type2);
+        ResolvedType reduction = leastContainingParameterization(type1, type2);
 
         List<ResolvedType> reducedList = Lists.newArrayList(reduction);
         reducedList.addAll(types.subList(2, types.size()));
@@ -393,7 +400,7 @@ public class LeastUpperBoundLogic {
      * lcp(G<X1, ..., Xn>, G<Y1, ..., Yn>) = G<lcta(X1, Y1), ..., lcta(Xn, Yn)>
      * lcp(G<X1, ..., Xn>) = G<lcta(X1), ..., lcta(Xn)>
      */
-    private ResolvedType leastContainingTypeArgument(ResolvedType type1, ResolvedType type2) {
+    private ResolvedType leastContainingParameterization(ResolvedType type1, ResolvedType type2) {
 
         TypeSubstitution substitution1 = substitution(type1.asReferenceType().getTypeParametersMap());
         TypeSubstitution substitution2 = substitution(type2.asReferenceType().getTypeParametersMap());
@@ -408,7 +415,7 @@ public class LeastUpperBoundLogic {
             typeSubstitution.withPair(typeDecl, newType);
         }
 
-        return typeSubstitution.isEmpty() ? lcta(type1, type2) : substituteType(type1, typeSubstitution);
+        return substituteType(type1, typeSubstitution);
     }
 
     /*
@@ -448,8 +455,6 @@ public class LeastUpperBoundLogic {
         private List<ResolvedTypeParameterDeclaration> typeParameterDeclarations;
         private List<ResolvedType> types;
 
-        private static final TypeSubstitution EMPTY = new TypeSubstitution();
-
         public static TypeSubstitution empty() {
             return new TypeSubstitution();
         }
@@ -457,10 +462,6 @@ public class LeastUpperBoundLogic {
         private TypeSubstitution() {
             this.typeParameterDeclarations = new LinkedList<>();
             this.types = new LinkedList<>();
-        }
-
-        public boolean isEmpty() {
-            return this == EMPTY;
         }
 
         public void withPair(ResolvedTypeParameterDeclaration typeParameterDeclaration, ResolvedType type) {

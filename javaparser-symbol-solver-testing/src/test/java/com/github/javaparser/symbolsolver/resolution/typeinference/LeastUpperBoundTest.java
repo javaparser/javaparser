@@ -32,6 +32,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedIntersectionType;
@@ -74,6 +75,13 @@ class LeastUpperBoundTest {
         ResolvedType exception = type(Exception.class.getCanonicalName());
         ResolvedType lub = leastUpperBound(exception);
         assertEquals(lub, exception);
+    }
+
+    @Test
+    void lub_of_one_lazy_type_is_its_concrete_type() {
+        ResolvedType exception = type(Exception.class.getCanonicalName());
+        ResolvedType lub = leastUpperBound(new LazyType(v -> exception));
+        assertEquals(exception, lub);
     }
 
     @Test
