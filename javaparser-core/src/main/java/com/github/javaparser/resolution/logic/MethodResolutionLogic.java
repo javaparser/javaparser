@@ -1208,6 +1208,25 @@ public class MethodResolutionLogic {
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }
 
+    /**
+     * Same as {@link #solveMethodInType(ResolvedTypeDeclaration, String, List, boolean)}, for a call on a
+     * receiver of type {@code receiverType}, whose type arguments distinguish overloads that only differ by
+     * type variables of the declaring type.
+     */
+    public static SymbolReference<ResolvedMethodDeclaration> solveMethodInType(
+            ResolvedReferenceType receiverType, String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        ResolvedReferenceTypeDeclaration typeDeclaration = receiverType
+                .getTypeDeclaration()
+                .orElseThrow(() -> new UnsupportedOperationException(receiverType.describe()));
+        if (typeDeclaration instanceof MethodResolutionCapability) {
+            // The declaration decides what to do with the type arguments: by default they are ignored and the
+            // call is resolved as by solveMethodInType(typeDeclaration, ...)
+            return ((MethodResolutionCapability) typeDeclaration)
+                    .solveMethod(name, argumentsTypes, staticOnly, receiverType.typeParametersValues());
+        }
+        throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
+    }
+
     public static void inferTypes(
             ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
         if (source.equals(target)) {

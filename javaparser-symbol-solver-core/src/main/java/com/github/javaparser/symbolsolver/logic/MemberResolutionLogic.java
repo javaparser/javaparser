@@ -30,14 +30,17 @@ import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -213,6 +216,22 @@ public class MemberResolutionLogic {
             List<ResolvedType> argumentsTypes,
             boolean staticOnly,
             TypeSolver typeSolver) {
+        return solveMethodInMembers(
+                typeDeclaration, name, argumentsTypes, staticOnly, Collections.emptyList(), typeSolver);
+    }
+
+    /**
+     * Same as {@link #solveMethodInMembers(ResolvedReferenceTypeDeclaration, String, List, boolean, TypeSolver)},
+     * for a call on a receiver that supplies {@code typeArguments} for the type parameters of
+     * {@code typeDeclaration}.
+     */
+    public static SymbolReference<ResolvedMethodDeclaration> solveMethodInMembers(
+            ResolvedReferenceTypeDeclaration typeDeclaration,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            List<ResolvedType> typeArguments,
+            TypeSolver typeSolver) {
 
         List<ResolvedMethodDeclaration> candidateMethods =
                 collectCandidateMembers(typeDeclaration, name, argumentsTypes, staticOnly);
@@ -226,44 +245,128 @@ public class MemberResolutionLogic {
             }
         }
 
+        // The candidates are compared on their parameter types as seen from the receiver, so that the overloads
+        // that only differ by type variables of their declaring type can be told apart
         return MethodResolutionLogic.findMostApplicable(
-                candidateMethods, name, argumentsTypes, typeSolver, parameterTypesSeenFrom(typeDeclaration));
+                candidateMethods,
+                name,
+                argumentsTypes,
+                typeSolver,
+                parameterTypesSeenFrom(typeDeclaration, typeArguments));
     }
 
     /**
-     * Gives the parameter types of a candidate method as seen from {@code typeDeclaration}: a method inherited
-     * from a parameterized ancestor has the type variables of its declaring type replaced by the type arguments
-     * that the hierarchy of {@code typeDeclaration} supplies for them, as in {@code set(T)} seen as
-     * {@code set(String)} from a type that {@code extends Base<String>}.
+     * Same as {@link #parameterTypesSeenFrom(ResolvedReferenceTypeDeclaration, List)}, for a lookup made from
+     * within {@code typeDeclaration}, where its own type variables stand for themselves.
      */
     public static Function<ResolvedMethodDeclaration, List<ResolvedType>> parameterTypesSeenFrom(
             ResolvedReferenceTypeDeclaration typeDeclaration) {
-        Map<String, ResolvedReferenceType> ancestorsByName = new HashMap<>();
+        return parameterTypesSeenFrom(typeDeclaration, Collections.emptyList());
+    }
+
+    /**
+     * Gives the parameter types of a candidate method as seen from a receiver of type {@code typeDeclaration}
+     * parameterized with {@code typeArguments}: the type variables of the declaring type are replaced by the
+     * type arguments that the receiver and its hierarchy supply for them, as in {@code set(T)} seen as
+     * {@code set(String)} on a {@code Box<String>} or from a type that {@code extends Box<String>}.
+     * <p>
+     * Only the type variables declared on a type are replaced, never those declared on the method itself, which
+     * are inferred from the arguments of the call. A type variable for which no type argument is known, such as
+     * {@code T} on a {@code Box<? extends A, B>} whose type argument for {@code T} is a wildcard (see
+     * {@link #receiverType}), is left in place and keeps accepting any argument.
+     * <p>
+     * The returned function is meant for a single lookup: it remembers the hierarchy of the receiver once walked.
+     * <p>
+     * Limitation: an ancestor declared as a raw type, as in {@code class Sub extends Base}, supplies no type
+     * argument, so the type variables of its methods are left in place. javac compares such methods on their
+     * erasure (JLS 4.8), {@code set(Object)} and {@code set(A)} for {@code set(U)} and {@code set(T extends A)},
+     * whereas they still look equally applicable here, and the call stays ambiguous.
+     */
+    public static Function<ResolvedMethodDeclaration, List<ResolvedType>> parameterTypesSeenFrom(
+            ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments) {
+        // The receiver and each of its ancestors, by qualified name, with the type arguments the receiver
+        // supplies to them: for a receiver Sub that extends Mid<String>, which extends Base<String, Long>, it maps
+        // Mid to Mid<String> and Base to Base<String, Long>.
+        Map<String, ResolvedReferenceType> typesByName = new HashMap<>();
         return method -> {
             List<ResolvedType> parameterTypes = new ArrayList<>(method.getNumberOfParams());
             for (int i = 0; i < method.getNumberOfParams(); i++) {
                 parameterTypes.add(method.getParam(i).getType());
             }
+            // A non generic declaring type has no type variable of its own that the receiver could bind
             ResolvedReferenceTypeDeclaration declaringType = method.declaringType();
-            if (declaringType.getTypeParameters().isEmpty()
-                    || declaringType.getQualifiedName().equals(typeDeclaration.getQualifiedName())) {
+            if (declaringType.getTypeParameters().isEmpty()) {
                 return parameterTypes;
             }
             // The hierarchy is only walked once a candidate needs it, which most lookups never do
-            if (ancestorsByName.isEmpty()) {
-                collectResolvableAncestors(ReferenceTypeImpl.undeterminedParameters(typeDeclaration), ancestorsByName);
+            if (typesByName.isEmpty()) {
+                ResolvedReferenceType receiverType = receiverType(typeDeclaration, typeArguments);
+                typesByName.put(typeDeclaration.getQualifiedName(), receiverType);
+                collectResolvableAncestors(receiverType, typesByName);
             }
-            ResolvedReferenceType ancestor = ancestorsByName.get(declaringType.getQualifiedName());
-            if (ancestor != null) {
-                parameterTypes.replaceAll(ancestor::useThisTypeParametersOnTheGivenType);
+            // The declaring type as the receiver sees it, e.g. Base<String, Long> for a method of Base<T, U>.
+            // It is missing when the method comes from an ancestor that could not be resolved, in which case
+            // the declared types are kept.
+            ResolvedReferenceType seenFrom = typesByName.get(declaringType.getQualifiedName());
+            if (seenFrom != null) {
+                // Replaces T and U, also inside types such as List<T> or ? super U, by String and Long
+                parameterTypes.replaceAll(seenFrom::useThisTypeParametersOnTheGivenType);
             }
             return parameterTypes;
         };
     }
 
     /**
+     * The receiver {@code typeDeclaration<typeArguments>}. Without a type argument for each type parameter, as
+     * for a raw type or a lookup from within the type, the type variables stand for themselves. So does a type
+     * variable whose type argument is a wildcard, such as {@code T} on a {@code Box<? extends Number, B>}: the
+     * wildcard is not substituted for it, since a parameter of type {@code ? extends Number} accepts no argument
+     * other than {@code null}, which would make the method inapplicable where javac captures the wildcard.
+     * <p>
+     * Limitations:
+     * <ul>
+     *   <li>A raw receiver is not erased (JLS 4.8): its type variables stand for themselves, so overloads such as
+     *   {@code set(T)} and {@code set(U)} stay ambiguous on it, where javac compares their erasures.</li>
+     *   <li>Leaving in place a type variable whose type argument is a wildcard only approximates capture
+     *   conversion (JLS 5.1.10). It accepts at least the arguments that javac accepts, but may rank the overloads
+     *   differently: on a {@code Box<? extends A, B>}, the call {@code set(null)} resolves to {@code set(U)}
+     *   because {@code B} is more specific than the type variable {@code T}, whereas javac selects
+     *   {@code set(T)}.</li>
+     *   <li>{@code typeArguments} are trusted to be the type arguments of {@code typeDeclaration}; only their
+     *   number is checked. The Reflection and Javassist declarations hand the type arguments of their own
+     *   receiver to the lookup in each of their ancestors. Should such an ancestor be a JavaParser declaration
+     *   with as many type parameters, these type arguments would be applied to it as if they were its own.</li>
+     * </ul>
+     */
+    private static ResolvedReferenceType receiverType(
+            ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments) {
+        List<ResolvedTypeParameterDeclaration> typeParameters = typeDeclaration.getTypeParameters();
+        // No type argument at all (raw type, lookup from within the type, non generic type) or an unexpected
+        // number of them: each type variable is bound to itself, so that only the ancestors' type arguments,
+        // which the type declares in its extends and implements clauses, are substituted
+        if (typeArguments.size() != typeParameters.size()) {
+            return ReferenceTypeImpl.undeterminedParameters(typeDeclaration);
+        }
+        List<ResolvedType> knownTypeArguments = new ArrayList<>(typeArguments.size());
+        for (int i = 0; i < typeArguments.size(); i++) {
+            ResolvedType typeArgument = typeArguments.get(i);
+            // A wildcard type argument is not substituted: the type variable it is given for is kept, and accepts
+            // any argument, as when nothing is known about the receiver
+            knownTypeArguments.add(
+                    typeArgument.isWildcard() ? new ResolvedTypeVariable(typeParameters.get(i)) : typeArgument);
+        }
+        return new ReferenceTypeImpl(typeDeclaration, knownTypeArguments);
+    }
+
+    /**
      * Collects the ancestors of {@code type}, direct and indirect, with the type arguments its hierarchy
      * supplies, leaving out the ones that cannot be resolved together with their own ancestors.
+     * <p>
+     * Each step goes through {@link ResolvedReferenceType#getDirectAncestors(boolean)}, which expresses the type
+     * arguments of an ancestor in terms of those of {@code type}: from {@code Mid<String>}, the ancestor declared
+     * as {@code Base<K, Long>} is returned as {@code Base<String, Long>}. Passing {@code true} tolerates
+     * ancestors that cannot be resolved, as {@code getAllMethodsVisibleToInheritors} does when collecting the
+     * candidates, so that both walk the same hierarchy.
      */
     private static void collectResolvableAncestors(
             ResolvedReferenceType type, Map<String, ResolvedReferenceType> ancestorsByName) {
@@ -287,9 +390,28 @@ public class MemberResolutionLogic {
             List<ResolvedType> argumentsTypes,
             Context context,
             TypeSolver typeSolver) {
+        return solveMethodAsUsageInMembers(
+                typeDeclaration, name, argumentsTypes, context, Collections.emptyList(), typeSolver);
+    }
 
+    /**
+     * Same as
+     * {@link #solveMethodAsUsageInMembers(ResolvedReferenceTypeDeclaration, String, List, Context, TypeSolver)},
+     * for a call on a receiver that supplies {@code typeArguments} for the type parameters of
+     * {@code typeDeclaration}.
+     */
+    public static Optional<MethodUsage> solveMethodAsUsageInMembers(
+            ResolvedReferenceTypeDeclaration typeDeclaration,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            Context context,
+            List<ResolvedType> typeArguments,
+            TypeSolver typeSolver) {
+
+        // The receiver's type arguments only select the method; the usage is then built from the selected
+        // declaration, as before, the caller substituting the receiver's type arguments into it
         SymbolReference<ResolvedMethodDeclaration> methodSolved =
-                solveMethodInMembers(typeDeclaration, name, argumentsTypes, false, typeSolver);
+                solveMethodInMembers(typeDeclaration, name, argumentsTypes, false, typeArguments, typeSolver);
         if (!methodSolved.isSolved()) {
             return Optional.empty();
         }
