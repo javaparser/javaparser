@@ -402,8 +402,8 @@ public class LeastUpperBoundLogic {
         for (ResolvedTypeParameterDeclaration typeDecl : substitution1.typeParameterDeclarations()) {
             ResolvedType subs1 = substitution1.substitutedType(typeDecl);
             ResolvedType subs2 = substitution2.substitutedType(typeDecl);
-            subs1 = isSubstituable(typeDecl, subs1) && subs2.isReferenceType() ? subs2 : subs1;
-            subs2 = isSubstituable(typeDecl, subs2) && subs1.isReferenceType() ? subs1 : subs2;
+            subs1 = isSubstituable(subs1) && subs2.isReferenceType() ? subs2 : subs1;
+            subs2 = isSubstituable(subs2) && subs1.isReferenceType() ? subs1 : subs2;
             ResolvedType newType = lcta(subs1, subs2);
             typeSubstitution.withPair(typeDecl, newType);
         }
@@ -413,11 +413,18 @@ public class LeastUpperBoundLogic {
 
     /*
      * In case where the {@code ResolvedType} is an unbounded type variable,
-     * then the type can be can substituted by other reference type. For example
-     * the result of lcta(List<String>, List<T>) should be in List<String>.
+     * then the type can be substituted by other reference type. For example
+     * the result of lcp(List<String>, List<T>) should be List<String>.
+     * This is not part of JLS 4.10.4: it handles type arguments that are left undetermined.
+     * The bounds checked are those of the type variable itself, not those of the type parameter of the generic
+     * type: in lcp(List<String>, List<T extends Number>), T cannot be substituted by String.
      */
-    private boolean isSubstituable(ResolvedTypeParameterDeclaration typeDecl, ResolvedType type) {
-        return type.isTypeVariable() && (!typeDecl.hasBound() || boundedAsObject(typeDecl));
+    private boolean isSubstituable(ResolvedType type) {
+        if (!type.isTypeVariable()) {
+            return false;
+        }
+        ResolvedTypeParameterDeclaration typeParameter = type.asTypeVariable().asTypeParameter();
+        return !typeParameter.hasBound() || boundedAsObject(typeParameter);
     }
 
     private boolean boundedAsObject(ResolvedTypeParameterDeclaration typeDecl) {

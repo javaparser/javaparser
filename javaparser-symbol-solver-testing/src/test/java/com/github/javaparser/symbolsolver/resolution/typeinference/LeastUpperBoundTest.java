@@ -28,6 +28,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -349,6 +350,26 @@ class LeastUpperBoundTest {
     }
 
     @Test
+    void lub_of_generics_with_unbounded_type_variable() {
+        ResolvedType listOfT = declaredFieldType("class A<T> { java.util.List<T> f; }");
+        ResolvedType listOfString = genericType(List.class.getCanonicalName(), String.class.getCanonicalName());
+        // an unbounded type variable is replaced by the other type argument
+        ResolvedType lub = leastUpperBound(listOfString, listOfT);
+        assertEquals(listOfString.describe(), lub.describe());
+    }
+
+    @Test
+    void lub_of_generics_with_bounded_type_variable() {
+        ResolvedType listOfT = declaredFieldType("class A<T extends Number> { java.util.List<T> f; }");
+        ResolvedType listOfString = genericType(List.class.getCanonicalName(), String.class.getCanonicalName());
+        // a bounded type variable cannot be replaced by String: lcta(String, T) = ? extends lub(String, Number)
+        ResolvedType expected =
+                genericType(List.class.getCanonicalName(), extendsBound(Serializable.class.getCanonicalName()));
+        ResolvedType lub = leastUpperBound(listOfString, listOfT);
+        assertEquals(expected.describe(), lub.describe());
+    }
+
+    @Test
     @Disabled("Waiting for generic type resolution")
     public void lub_of_generics_with_raw_type() {
         List<ResolvedType> types = declaredTypes(
@@ -482,6 +503,10 @@ class LeastUpperBoundTest {
             results.add(new ReferenceTypeImpl(classTree.resolve()));
         }
         return results;
+    }
+
+    private ResolvedType declaredFieldType(String... lines) {
+        return treeOf(lines).findFirst(FieldDeclaration.class).get().resolve().getType();
     }
 
     private List<ResolvedType> declaredEnumTypes(String... lines) {
