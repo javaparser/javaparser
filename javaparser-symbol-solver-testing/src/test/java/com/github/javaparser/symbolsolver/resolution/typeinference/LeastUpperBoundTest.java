@@ -307,7 +307,8 @@ class LeastUpperBoundTest {
         ResolvedType list1 =
                 genericType(List.class.getCanonicalName(), extendsBound(Exception.class.getCanonicalName()));
         ResolvedType list2 = genericType(List.class.getCanonicalName(), superBound(Exception.class.getCanonicalName()));
-        ResolvedType expected = genericType(List.class.getCanonicalName(), Exception.class.getCanonicalName());
+        // lcta(? extends U, ? super V) = ?, List<Exception> is not a supertype of List<? extends Exception>
+        ResolvedType expected = genericType(List.class.getCanonicalName(), unbound());
         ResolvedType lub = leastUpperBound(list1, list2);
         assertEquals(expected.describe(), lub.describe());
     }

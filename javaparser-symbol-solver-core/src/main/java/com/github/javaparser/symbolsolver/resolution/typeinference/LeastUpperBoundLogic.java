@@ -208,7 +208,7 @@ public class LeastUpperBoundLogic {
         //
         // lcta(? extends U, ? extends V) = ? extends lub(U, V)
         //
-        // lcta(? extends U, ? super V) = U if U = V, otherwise ?
+        // lcta(? extends U, ? super V) = ?
         //
         // lcta(? super U, ? super V) = ? super glb(U, V)
         //
@@ -569,7 +569,7 @@ public class LeastUpperBoundLogic {
      * lcta(U, ? extends V) = ? extends lub(U, V)
      * lcta(U, ? super V) = ? super glb(U, V)
      * lcta(? extends U, ? extends V) = ? extends lub(U, V)
-     * lcta(? extends U, ? super V) = U if U = V, otherwise ?
+     * lcta(? extends U, ? super V) = ?
      * lcta(? super U, ? super V) = ? super glb(U, V)
      * lcta(U) = ? if U's upper bound is Object, otherwise ? extends lub(U,Object)
      * and where glb() is as defined in §5.1.10.
@@ -619,8 +619,7 @@ public class LeastUpperBoundLogic {
     }
 
     private ResolvedType lctaBothWildcards(ResolvedWildcard type1, ResolvedWildcard type2) {
-        // ? is ? extends Object: lcta(? extends U, ?) = ? extends lub(U, Object) = ?
-        // and lcta(? super U, ?) = ? (or Object if U is Object, which ? also contains)
+        // ? is ? extends Object: lcta(? extends U, ?) = ? extends lub(U, Object) = ? and lcta(? super U, ?) = ?
         if (!type1.isBounded() || !type2.isBounded()) {
             return ResolvedWildcard.UNBOUNDED;
         }
@@ -634,10 +633,7 @@ public class LeastUpperBoundLogic {
             ResolvedType lub = lub(toSet(type1.getBoundedType(), type2.getBoundedType()));
             return bound(lub, BoundType.EXTENDS);
         }
-        // lcta(? extends U, ? super V) = U if U = V, otherwise ?
-        if (type1.getBoundedType().equals(type2.getBoundedType())) {
-            return type1.getBoundedType();
-        }
+        // lcta(? extends U, ? super V) = ?
         return ResolvedWildcard.UNBOUNDED;
     }
 
