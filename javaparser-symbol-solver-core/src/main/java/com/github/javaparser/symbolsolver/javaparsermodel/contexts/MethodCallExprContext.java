@@ -625,7 +625,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     }
 
     private ResolvedType reduceResolvedTypesWithLub(Set<ResolvedType> resolvedTypes) {
-        return LeastUpperBoundLogic.of().lub(resolvedTypes);
+        return LeastUpperBoundLogic.of(typeSolver).lub(resolvedTypes);
     }
 
     /**

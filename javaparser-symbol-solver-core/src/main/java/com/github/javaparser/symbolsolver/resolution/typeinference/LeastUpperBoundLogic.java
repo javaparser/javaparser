@@ -20,13 +20,17 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
 import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.resolution.types.ResolvedWildcard.BoundType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap.Builder;
@@ -35,21 +39,47 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class LeastUpperBoundLogic {
 
-    private Set<Set<ResolvedType>> lubCache = new HashSet<>();
+    // Sets of types whose candidate parameterization is being computed further up the call stack
+    private final Set<Set<ResolvedType>> lubsInProgress = new HashSet<>();
 
+    private final TypeSolver typeSolver;
+
+    /**
+     * Without a type solver, java.lang.Object cannot be added to the supertypes of interfaces, so the lub of an
+     * interface and a type that does not implement it is {@code null}, and neither can Object, Cloneable and
+     * Serializable be added to the supertypes of arrays, so the lub of an array and a type that is not an array of
+     * reference types is {@code null}. Prefer {@link #of(TypeSolver)}.
+     */
     public static LeastUpperBoundLogic of() {
-        return new LeastUpperBoundLogic();
+        return new LeastUpperBoundLogic(null);
     }
 
-    private LeastUpperBoundLogic() {}
+    /**
+     * @param typeSolver used to solve java.lang.Object, a supertype of every interface (JLS 4.10.2)
+     */
+    public static LeastUpperBoundLogic of(TypeSolver typeSolver) {
+        return new LeastUpperBoundLogic(typeSolver);
+    }
+
+    private LeastUpperBoundLogic(TypeSolver typeSolver) {
+        this.typeSolver = typeSolver;
+    }
 
     /**
      * See JLS 4.10.4. Least Upper Bound.
+     * <p>
+     * This implementation approximates the lub specified by the JLS: when the minimal erased candidate set contains
+     * several types, the lub should be their intersection {@code Best(W1) & ... & Best(Wr)}, but only one of them is
+     * returned, classes first, then interfaces in the order of their qualified names.
+     *
+     * @return the least upper bound of the types, or {@code null} if no shared supertype is found (for example for
+     *     primitive types, which have no supertype here)
      */
     public ResolvedType lub(Set<ResolvedType> types) {
         if (types.isEmpty()) {
@@ -58,7 +88,7 @@ public class LeastUpperBoundLogic {
 
         // If there is only one type then the lub is the type itself
         if (types.size() == 1) {
-            return types.iterator().next();
+            return concreteType(types.iterator().next());
         }
 
         // The direct supertypes of the null type are all reference types other than the null type itself.
@@ -82,6 +112,19 @@ public class LeastUpperBoundLogic {
 
         if (resolvedTypes.size() == 1) {
             return resolvedTypes.stream().findFirst().get();
+        }
+
+        // The direct supertypes of an array type S[], S being a reference type, are the arrays T[] of the direct
+        // supertypes T of S, then Object, Cloneable and Serializable (JLS 4.10.3). When all the types are arrays of
+        // reference types, the minimal erased candidates are therefore the arrays of the minimal erased candidates of
+        // the component types. The lub is computed on the component types, as javac does, which also recovers their
+        // type arguments: strictly, Best(X[]) is X[] erased, an array type not being a generic type.
+        if (resolvedTypes.stream().allMatch(this::isArrayOfReferenceType)) {
+            Set<ResolvedType> componentTypes = resolvedTypes.stream()
+                    .map(type -> type.asArrayType().getComponentType())
+                    .collect(Collectors.toSet());
+            ResolvedType componentLub = lub(componentTypes);
+            return componentLub == null ? null : new ResolvedArrayType(componentLub);
         }
 
         // can we have primitive types?
@@ -183,7 +226,7 @@ public class LeastUpperBoundLogic {
         //
         // lcta(? extends U, ? extends V) = ? extends lub(U, V)
         //
-        // lcta(? extends U, ? super V) = U if U = V, otherwise ?
+        // lcta(? extends U, ? super V) = ?
         //
         // lcta(? super U, ? super V) = ? super glb(U, V)
         //
@@ -217,13 +260,16 @@ public class LeastUpperBoundLogic {
         // The possibility of an infinite type stems from the recursive calls to lub().
         // Readers familiar with recursive types should note that an infinite type is not the same as a recursive type.
         Collection<ResolvedType> erasedTypeParameterizations = relevantParameterizations.get(erasedBest);
-        if (erasedTypeParameterizations != null && !erasedTypeParameterizations.contains(erasedBest)) {
+        if (!erasedTypeParameterizations.contains(erasedBest)) {
             Set<ResolvedType> searchedTypes = new HashSet<>(resolvedTypes);
-            // if we already encountered these types in LUB calculation,
+            // if the lub of these types is already being computed further up the call stack (infinite type),
             // we interrupt calculation and use the erasure of the parameterized type instead
-            if (!lubCache.contains(searchedTypes)) {
-                lubCache.add(searchedTypes);
-                return leastContainingParameterization(new ArrayList<>(erasedTypeParameterizations));
+            if (lubsInProgress.add(searchedTypes)) {
+                try {
+                    return leastContainingParameterization(new ArrayList<>(erasedTypeParameterizations));
+                } finally {
+                    lubsInProgress.remove(searchedTypes);
+                }
             }
         }
         return erasedBest;
@@ -275,16 +321,117 @@ public class LeastUpperBoundLogic {
     }
 
     private Set<ResolvedType> supertypes(ResolvedType type) {
-        // How to deal with other types like for example type variable?
-        if (type.isTypeVariable()) return supertypes(type.asTypeVariable().erasure());
-        return type.isReferenceType() ? supertypes(type.asReferenceType()) : new LinkedHashSet<>();
+        ResolvedType concreteType = concreteType(type);
+        if (concreteType.isTypeVariable()) return supertypes(concreteType.asTypeVariable());
+        if (concreteType.isArray()) return supertypes(concreteType.asArrayType());
+        return concreteType.isReferenceType() ? supertypes(concreteType.asReferenceType()) : new LinkedHashSet<>();
+    }
+
+    private boolean isArrayOfReferenceType(ResolvedType type) {
+        return type.isArray()
+                && !concreteType(type.asArrayType().getComponentType()).isPrimitive();
+    }
+
+    /*
+     * Object, Cloneable and Serializable are supertypes of every array type (JLS 4.10.3). The arrays of the
+     * supertypes of the component type are left out: they can only be shared supertypes when all the types are
+     * arrays of reference types, a case that lub computes on the component types.
+     */
+    private Set<ResolvedType> supertypes(ResolvedArrayType arrayType) {
+        Set<ResolvedType> supertypes = new LinkedHashSet<>();
+        supertypes.add(arrayType);
+        if (typeSolver != null) {
+            supertypes.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+            supertypes.add(new ReferenceTypeImpl(typeSolver.solveType(Cloneable.class.getCanonicalName())));
+            supertypes.add(new ReferenceTypeImpl(typeSolver.solveType(Serializable.class.getCanonicalName())));
+        }
+        return supertypes;
+    }
+
+    /*
+     * The direct supertypes of a type variable are the types listed in its bound (JLS 4.10.2), with their type
+     * arguments, so the supertypes of all its bounds are kept. The type variable itself is left out: it is not a
+     * parameterization of a generic type, and its erasure, the erasure of its leftmost bound, is already among the
+     * erased supertypes of the bound.
+     */
+    private Set<ResolvedType> supertypes(ResolvedTypeVariable typeVariable) {
+        List<ResolvedType> upperBounds = typeVariable.asTypeParameter().getBounds().stream()
+                .filter(Bound::isExtends)
+                .map(Bound::getType)
+                .collect(Collectors.toList());
+        if (upperBounds.isEmpty()) {
+            return supertypes(typeVariable.erasure());
+        }
+        Set<ResolvedType> supertypes = new LinkedHashSet<>();
+        upperBounds.forEach(bound -> supertypes.addAll(supertypes(bound)));
+        return supertypes;
     }
 
     private Set<ResolvedType> supertypes(ResolvedReferenceType type) {
         Set<ResolvedType> supertypes = new LinkedHashSet<>();
         supertypes.add(type);
-        supertypes.addAll(type.getAllAncestors());
+        // The supertypes of a raw type are the erasures of its supertypes (JLS 4.8). A raw supertype written in the
+        // source code (class ChildRaw extends Child) is represented as the generic type parameterized by its own
+        // type variables (Child<Y>), so the ancestors that mention type variables out of the scope of the type are
+        // inherited through a raw type and are erased as well.
+        Set<String> typeVariableContainers = typeVariableContainers(type);
+        for (ResolvedReferenceType ancestor : type.getAllAncestors()) {
+            supertypes.add(
+                    type.isRawType() || mentionsTypeVariableOutOfScope(ancestor, typeVariableContainers)
+                            ? ancestor.erasure()
+                            : ancestor);
+        }
+        // Object is a supertype of every interface (JLS 4.10.2), but getAllAncestors() does not return it for
+        // interfaces: without it, the erased candidate set of an interface and a class not implementing it is empty
+        if (typeSolver != null && supertypes.stream().noneMatch(this::isJavaLangObject)) {
+            supertypes.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+        }
         return supertypes;
+    }
+
+    /*
+     * Ids of the type declarations whose type variables are in the scope of the type: its own declaration and the
+     * declarations enclosing it.
+     */
+    private Set<String> typeVariableContainers(ResolvedReferenceType type) {
+        Set<String> containers = new HashSet<>();
+        Optional<ResolvedReferenceTypeDeclaration> declaration = type.getTypeDeclaration();
+        while (declaration.isPresent()) {
+            containers.add(declaration.get().getId());
+            declaration = declaration.get().containerType();
+        }
+        return containers;
+    }
+
+    /*
+     * Type variables declared on methods are left aside: they are the type arguments of generic method calls that
+     * were not inferred.
+     */
+    private boolean mentionsTypeVariableOutOfScope(ResolvedType type, Set<String> typeVariableContainers) {
+        ResolvedType concreteType = concreteType(type);
+        if (concreteType.isTypeVariable()) {
+            ResolvedTypeParameterDeclaration typeParameter =
+                    concreteType.asTypeVariable().asTypeParameter();
+            return typeParameter.declaredOnType() && !typeVariableContainers.contains(typeParameter.getContainerId());
+        }
+        if (concreteType.isWildcard()) {
+            return concreteType.asWildcard().isBounded()
+                    && mentionsTypeVariableOutOfScope(
+                            concreteType.asWildcard().getBoundedType(), typeVariableContainers);
+        }
+        if (concreteType.isArray()) {
+            return mentionsTypeVariableOutOfScope(
+                    concreteType.asArrayType().getComponentType(), typeVariableContainers);
+        }
+        if (concreteType.isReferenceType()) {
+            return concreteType.asReferenceType().typeParametersValues().stream()
+                    .anyMatch(typeArgument -> mentionsTypeVariableOutOfScope(typeArgument, typeVariableContainers));
+        }
+        return false;
+    }
+
+    private boolean isJavaLangObject(ResolvedType type) {
+        return type.isReferenceType() && type.asReferenceType().isJavaLangObject();
     }
 
     private List<Set<ResolvedType>> erased(List<Set<ResolvedType>> typeSets) {
@@ -377,7 +524,7 @@ public class LeastUpperBoundLogic {
         }
         ResolvedType type1 = types.get(0);
         ResolvedType type2 = types.get(1);
-        ResolvedType reduction = leastContainingTypeArgument(type1, type2);
+        ResolvedType reduction = leastContainingParameterization(type1, type2);
 
         List<ResolvedType> reducedList = Lists.newArrayList(reduction);
         reducedList.addAll(types.subList(2, types.size()));
@@ -389,31 +536,39 @@ public class LeastUpperBoundLogic {
      * lcp(G<X1, ..., Xn>, G<Y1, ..., Yn>) = G<lcta(X1, Y1), ..., lcta(Xn, Yn)>
      * lcp(G<X1, ..., Xn>) = G<lcta(X1), ..., lcta(Xn)>
      */
-    private ResolvedType leastContainingTypeArgument(ResolvedType type1, ResolvedType type2) {
+    private ResolvedType leastContainingParameterization(ResolvedType type1, ResolvedType type2) {
 
         TypeSubstitution substitution1 = substitution(type1.asReferenceType().getTypeParametersMap());
         TypeSubstitution substitution2 = substitution(type2.asReferenceType().getTypeParametersMap());
 
         TypeSubstitution typeSubstitution = TypeSubstitution.empty();
         for (ResolvedTypeParameterDeclaration typeDecl : substitution1.typeParameterDeclarations()) {
-            ResolvedType subs1 = substitution1.substitutedType(typeDecl);
-            ResolvedType subs2 = substitution2.substitutedType(typeDecl);
-            subs1 = isSubstituable(typeDecl, subs1) && subs2.isReferenceType() ? subs2 : subs1;
-            subs2 = isSubstituable(typeDecl, subs2) && subs1.isReferenceType() ? subs1 : subs2;
+            // type arguments of ancestors declared in source code are lazy, and LazyType does not define equality
+            ResolvedType subs1 = concreteType(substitution1.substitutedType(typeDecl));
+            ResolvedType subs2 = concreteType(substitution2.substitutedType(typeDecl));
+            subs1 = isSubstituable(subs1) && subs2.isReferenceType() ? subs2 : subs1;
+            subs2 = isSubstituable(subs2) && subs1.isReferenceType() ? subs1 : subs2;
             ResolvedType newType = lcta(subs1, subs2);
             typeSubstitution.withPair(typeDecl, newType);
         }
 
-        return typeSubstitution.isEmpty() ? lcta(type1, type2) : substituteType(type1, typeSubstitution);
+        return substituteType(type1, typeSubstitution);
     }
 
     /*
-     * In case where the {@code ResolvedType} is an unbounded type variable,
-     * then the type can be can substituted by other reference type. For example
-     * the result of lcta(List<String>, List<T>) should be in List<String>.
+     * In case where the {@code ResolvedType} is an unbounded type variable of a method, it is a type argument of a
+     * generic method call that was not inferred, and it can be substituted by the other reference type. For example
+     * lcp(ArrayList<String>, List<T>) where List<T> is the type of Collections.emptyList() should be List<String>.
+     * This is not part of JLS 4.10.4. The type variables of types are real types and are not substituted.
+     * The bounds checked are those of the type variable itself, not those of the type parameter of the generic
+     * type: in lcp(List<String>, List<T extends Number>), T cannot be substituted by String.
      */
-    private boolean isSubstituable(ResolvedTypeParameterDeclaration typeDecl, ResolvedType type) {
-        return type.isTypeVariable() && (!typeDecl.hasBound() || boundedAsObject(typeDecl));
+    private boolean isSubstituable(ResolvedType type) {
+        if (!type.isTypeVariable()) {
+            return false;
+        }
+        ResolvedTypeParameterDeclaration typeParameter = type.asTypeVariable().asTypeParameter();
+        return typeParameter.declaredOnMethod() && (!typeParameter.hasBound() || boundedAsObject(typeParameter));
     }
 
     private boolean boundedAsObject(ResolvedTypeParameterDeclaration typeDecl) {
@@ -437,8 +592,6 @@ public class LeastUpperBoundLogic {
         private List<ResolvedTypeParameterDeclaration> typeParameterDeclarations;
         private List<ResolvedType> types;
 
-        private static final TypeSubstitution EMPTY = new TypeSubstitution();
-
         public static TypeSubstitution empty() {
             return new TypeSubstitution();
         }
@@ -446,10 +599,6 @@ public class LeastUpperBoundLogic {
         private TypeSubstitution() {
             this.typeParameterDeclarations = new LinkedList<>();
             this.types = new LinkedList<>();
-        }
-
-        public boolean isEmpty() {
-            return this == EMPTY;
         }
 
         public void withPair(ResolvedTypeParameterDeclaration typeParameterDeclaration, ResolvedType type) {
@@ -479,7 +628,7 @@ public class LeastUpperBoundLogic {
      * lcta(U, ? extends V) = ? extends lub(U, V)
      * lcta(U, ? super V) = ? super glb(U, V)
      * lcta(? extends U, ? extends V) = ? extends lub(U, V)
-     * lcta(? extends U, ? super V) = U if U = V, otherwise ?
+     * lcta(? extends U, ? super V) = ?
      * lcta(? super U, ? super V) = ? super glb(U, V)
      * lcta(U) = ? if U's upper bound is Object, otherwise ? extends lub(U,Object)
      * and where glb() is as defined in §5.1.10.
@@ -514,43 +663,52 @@ public class LeastUpperBoundLogic {
     }
 
     private ResolvedType lctaOneWildcard(ResolvedType rawType, ResolvedWildcard wildcardType) {
-        if (wildcardType.isUpperBounded()) {
+        // lcta(U, ?) = lcta(U, ? extends Object) = ? extends lub(U, Object) = ?
+        if (!wildcardType.isBounded()) {
+            return ResolvedWildcard.UNBOUNDED;
+        }
+        // lcta(U, ? super V) = ? super glb(U, V)
+        if (wildcardType.isSuper()) {
             ResolvedType glb = TypeHelper.glb(toSet(rawType, wildcardType.getBoundedType()));
             return bound(glb, BoundType.SUPER);
         }
+        // lcta(U, ? extends V) = ? extends lub(U, V)
         ResolvedType lub = lub(toSet(rawType, wildcardType.getBoundedType()));
         return bound(lub, BoundType.EXTENDS);
     }
 
     private ResolvedType lctaBothWildcards(ResolvedWildcard type1, ResolvedWildcard type2) {
+        // ? is ? extends Object: lcta(? extends U, ?) = ? extends lub(U, Object) = ? and lcta(? super U, ?) = ?
+        if (!type1.isBounded() || !type2.isBounded()) {
+            return ResolvedWildcard.UNBOUNDED;
+        }
         // lcta(? super U, ? super V) = ? super glb(U, V)
-        if (type1.isUpperBounded() && type2.isUpperBounded()) {
+        if (type1.isSuper() && type2.isSuper()) {
             ResolvedType glb = TypeHelper.glb(toSet(type1.getBoundedType(), type2.getBoundedType()));
             return bound(glb, BoundType.SUPER);
         }
         // lcta(? extends U, ? extends V) = ? extends lub(U, V)
-        if (type1.isLowerBounded() && type2.isLowerBounded()) {
+        if (type1.isExtends() && type2.isExtends()) {
             ResolvedType lub = lub(toSet(type1.getBoundedType(), type2.getBoundedType()));
             return bound(lub, BoundType.EXTENDS);
         }
-        // lcta(? extends U, ? super V) = U if U = V, otherwise ?
-        if (type1.getBoundedType().equals(type2.getBoundedType())) {
-            return type1.getBoundedType();
-        }
+        // lcta(? extends U, ? super V) = ?
         return ResolvedWildcard.UNBOUNDED;
     }
 
     // Replace all type parameters in generic types with their bounds or Object if the type parameters are unbounded.
 
     /*
-     * Returns the corresponding wildcard type or Object if we want to build a wildcard type like {@code ? extends
-     * Object}
+     * Returns the corresponding wildcard type. {@code ? extends Object} is returned as the unbounded wildcard
+     * {@code ?}, and {@code ? super Object} as {@code Object}, the only type it contains.
      */
     private ResolvedType bound(ResolvedType type, BoundType boundType) {
-        if (type != null && type.isReferenceType() && type.asReferenceType().isJavaLangObject()) return type;
-        return boundType.equals(BoundType.EXTENDS)
-                ? ResolvedWildcard.extendsBound(type)
-                : ResolvedWildcard.superBound(type);
+        boolean isObject =
+                type != null && type.isReferenceType() && type.asReferenceType().isJavaLangObject();
+        if (boundType == BoundType.EXTENDS) {
+            return isObject ? ResolvedWildcard.UNBOUNDED : ResolvedWildcard.extendsBound(type);
+        }
+        return isObject ? type : ResolvedWildcard.superBound(type);
     }
 
     private Set<ResolvedType> toSet(ResolvedType... resolvedTypes) {

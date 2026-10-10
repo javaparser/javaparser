@@ -20,6 +20,7 @@
 
 package com.github.javaparser.symbolsolver.resolution.promotion;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -38,6 +39,14 @@ public class ConditionalExprResolver {
     private static final ResolvedPrimitiveType TYPE_BOOLEAN = ResolvedPrimitiveType.BOOLEAN;
 
     public static ConditionalExprHandler getConditionExprHandler(ResolvedType thenExpr, ResolvedType elseExpr) {
+        return getConditionExprHandler(thenExpr, elseExpr, null);
+    }
+
+    /**
+     * @param typeSolver used to compute the type of reference conditional expressions, may be null
+     */
+    public static ConditionalExprHandler getConditionExprHandler(
+            ResolvedType thenExpr, ResolvedType elseExpr, TypeSolver typeSolver) {
         // boolean conditional expressions
         if (!thenExpr.isNull()
                 && !elseExpr.isNull()
@@ -50,6 +59,6 @@ public class ConditionalExprResolver {
             return new NumericConditionalExprHandler(thenExpr, elseExpr);
         }
         // reference conditional expressions
-        return new ReferenceConditionalExprHandler(thenExpr, elseExpr);
+        return new ReferenceConditionalExprHandler(thenExpr, elseExpr, typeSolver);
     }
 }
