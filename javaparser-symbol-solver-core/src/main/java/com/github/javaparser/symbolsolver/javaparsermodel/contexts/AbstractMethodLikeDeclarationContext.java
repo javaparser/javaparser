@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -48,6 +49,12 @@ import java.util.Optional;
 public abstract class AbstractMethodLikeDeclarationContext<
                 T extends Node & NodeWithParameters<T> & NodeWithTypeParameters<T>>
         extends AbstractJavaParserContext<T> {
+
+    /**
+     * The types declared inside a method or constructor, kept on its node: every type name looked up inside it is
+     * checked against them, and finding them means walking the whole declaration.
+     */
+    private static final DataKey<LocalTypes> LOCAL_TYPES = new DataKey<LocalTypes>() {};
 
     public AbstractMethodLikeDeclarationContext(T wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -109,8 +116,7 @@ public abstract class AbstractMethodLikeDeclarationContext<
         }
 
         // Local types
-        List<TypeDeclaration> localTypes = wrappedNode.findAll(TypeDeclaration.class);
-        for (TypeDeclaration<?> localType : localTypes) {
+        for (TypeDeclaration<?> localType : localTypes()) {
             if (localType.getName().getId().equals(name)) {
                 return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(localType));
             }
@@ -123,10 +129,40 @@ public abstract class AbstractMethodLikeDeclarationContext<
         return solveTypeInParentContext(name, typeArguments);
     }
 
+    /**
+     * The types declared inside the wrapped node, in pre-order. They are found once and then kept on the node, so,
+     * like the types the facade keeps on nodes, they reflect the node as it was when first needed.
+     */
+    private List<TypeDeclaration> localTypes() {
+        Optional<LocalTypes> kept = wrappedNode.findData(LOCAL_TYPES);
+        // A clone carries the data of the node it was cloned from, but its local types are its own nodes.
+        if (kept.isPresent() && kept.get().declaration == wrappedNode) {
+            return kept.get().types;
+        }
+        List<TypeDeclaration> types = wrappedNode.findAll(TypeDeclaration.class);
+        wrappedNode.setData(LOCAL_TYPES, new LocalTypes(wrappedNode, types));
+        return types;
+    }
+
     @Override
     public final SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
+    }
+
+    /**
+     * The types declared inside a method or constructor, with the declaration they were found in.
+     */
+    private static final class LocalTypes {
+
+        private final Node declaration;
+
+        private final List<TypeDeclaration> types;
+
+        private LocalTypes(Node declaration, List<TypeDeclaration> types) {
+            this.declaration = declaration;
+            this.types = types;
+        }
     }
 }
