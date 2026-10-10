@@ -29,6 +29,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -398,10 +399,20 @@ class LeastUpperBoundTest {
     }
 
     @Test
-    void lub_of_generics_with_unbounded_type_variable() {
+    void lub_of_generics_with_type_variable_of_a_type() {
         ResolvedType listOfT = declaredFieldType("class A<T> { java.util.List<T> f; }");
         ResolvedType listOfString = genericType(List.class.getCanonicalName(), String.class.getCanonicalName());
-        // an unbounded type variable is replaced by the other type argument
+        // T is a type: lcta(String, T) = ? extends lub(String, T) = ?
+        ResolvedType expected = genericType(List.class.getCanonicalName(), unbound());
+        ResolvedType lub = leastUpperBound(listOfString, listOfT);
+        assertEquals(expected.describe(), lub.describe());
+    }
+
+    @Test
+    void lub_of_generics_with_type_variable_of_a_method() {
+        ResolvedType listOfT = declaredMethodReturnType("class A { <T> java.util.List<T> m() { return null; } }");
+        ResolvedType listOfString = genericType(List.class.getCanonicalName(), String.class.getCanonicalName());
+        // a type variable of a method is a type argument that was not inferred, it is replaced by the other one
         ResolvedType lub = leastUpperBound(listOfString, listOfT);
         assertEquals(listOfString.describe(), lub.describe());
     }
@@ -418,8 +429,6 @@ class LeastUpperBoundTest {
     }
 
     @Test
-    @Disabled("Unsolved: the type variable Y of the raw Child is replaced by String in lcp (undetermined type "
-            + "argument heuristic), giving Child<String> instead of the raw type Child")
     public void lub_of_generics_with_raw_type() {
         List<ResolvedType> types = declaredTypes(
                 "class Parent<X> {}",
@@ -430,8 +439,43 @@ class LeastUpperBoundTest {
         ResolvedType ChildRaw = types.get(3);
 
         ResolvedType lub = leastUpperBound(ChildString, ChildRaw);
-        ResolvedType expected = types.get(1);
+        // the supertypes of the raw type Child are raw (JLS 4.8), and the raw type Child is a supertype of
+        // Child<String>
+        ResolvedType expected = types.get(1).erasure();
         assertEquals(expected, lub);
+        assertTrue(lub.asReferenceType().isRawType());
+    }
+
+    @Test
+    void lub_of_generics_with_supertype_inherited_through_a_raw_type() {
+        List<ResolvedType> types = declaredTypes(
+                "class Parent<X> {}",
+                "class Child<Y> extends Parent<Y> {}",
+                "class ParentString extends Parent<String> {}",
+                "class ChildRaw extends Child {}");
+        ResolvedType parentString = types.get(2);
+        ResolvedType childRaw = types.get(3);
+
+        // Parent is inherited through the raw type Child, so it is raw too (JLS 4.8)
+        ResolvedType lub = leastUpperBound(parentString, childRaw);
+        assertEquals(types.get(0).erasure(), lub);
+    }
+
+    @Test
+    void lub_of_generics_keeps_type_variables_of_enclosing_types() {
+        CompilationUnit cu = treeOf(
+                "class Outer<T> {",
+                "  class Inner1 extends java.util.ArrayList<T> {}",
+                "  class Inner2 extends java.util.ArrayList<T> {}",
+                "}");
+        List<ResolvedType> inners = cu.findAll(ClassOrInterfaceDeclaration.class).stream()
+                .filter(c -> c.getNameAsString().startsWith("Inner"))
+                .map(c -> (ResolvedType) new ReferenceTypeImpl(c.resolve()))
+                .collect(Collectors.toList());
+
+        // T is in the scope of the inner classes: ArrayList<T> is not inherited through a raw type
+        ResolvedType lub = leastUpperBound(inners.get(0), inners.get(1));
+        assertEquals("java.util.ArrayList<T>", lub.describe());
     }
 
     @Test
@@ -538,6 +582,10 @@ class LeastUpperBoundTest {
 
     private ResolvedType declaredFieldType(String... lines) {
         return treeOf(lines).findFirst(FieldDeclaration.class).get().resolve().getType();
+    }
+
+    private ResolvedType declaredMethodReturnType(String... lines) {
+        return treeOf(lines).findFirst(MethodDeclaration.class).get().resolve().getReturnType();
     }
 
     private List<ResolvedType> declaredEnumTypes(String... lines) {

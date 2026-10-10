@@ -311,13 +311,64 @@ public class LeastUpperBoundLogic {
     private Set<ResolvedType> supertypes(ResolvedReferenceType type) {
         Set<ResolvedType> supertypes = new LinkedHashSet<>();
         supertypes.add(type);
-        supertypes.addAll(type.getAllAncestors());
+        // The supertypes of a raw type are the erasures of its supertypes (JLS 4.8). A raw supertype written in the
+        // source code (class ChildRaw extends Child) is represented as the generic type parameterized by its own
+        // type variables (Child<Y>), so the ancestors that mention type variables out of the scope of the type are
+        // inherited through a raw type and are erased as well.
+        Set<String> typeVariableContainers = typeVariableContainers(type);
+        for (ResolvedReferenceType ancestor : type.getAllAncestors()) {
+            supertypes.add(
+                    type.isRawType() || mentionsTypeVariableOutOfScope(ancestor, typeVariableContainers)
+                            ? ancestor.erasure()
+                            : ancestor);
+        }
         // Object is a supertype of every interface (JLS 4.10.2), but getAllAncestors() does not return it for
         // interfaces: without it, the erased candidate set of an interface and a class not implementing it is empty
         if (typeSolver != null && supertypes.stream().noneMatch(this::isJavaLangObject)) {
             supertypes.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
         }
         return supertypes;
+    }
+
+    /*
+     * Ids of the type declarations whose type variables are in the scope of the type: its own declaration and the
+     * declarations enclosing it.
+     */
+    private Set<String> typeVariableContainers(ResolvedReferenceType type) {
+        Set<String> containers = new HashSet<>();
+        Optional<ResolvedReferenceTypeDeclaration> declaration = type.getTypeDeclaration();
+        while (declaration.isPresent()) {
+            containers.add(declaration.get().getId());
+            declaration = declaration.get().containerType();
+        }
+        return containers;
+    }
+
+    /*
+     * Type variables declared on methods are left aside: they are the type arguments of generic method calls that
+     * were not inferred.
+     */
+    private boolean mentionsTypeVariableOutOfScope(ResolvedType type, Set<String> typeVariableContainers) {
+        ResolvedType concreteType = concreteType(type);
+        if (concreteType.isTypeVariable()) {
+            ResolvedTypeParameterDeclaration typeParameter =
+                    concreteType.asTypeVariable().asTypeParameter();
+            return typeParameter.declaredOnType() && !typeVariableContainers.contains(typeParameter.getContainerId());
+        }
+        if (concreteType.isWildcard()) {
+            return concreteType.asWildcard().isBounded()
+                    && mentionsTypeVariableOutOfScope(
+                            concreteType.asWildcard().getBoundedType(), typeVariableContainers);
+        }
+        if (concreteType.isArray()) {
+            return mentionsTypeVariableOutOfScope(
+                    concreteType.asArrayType().getComponentType(), typeVariableContainers);
+        }
+        if (concreteType.isReferenceType()) {
+            return concreteType.asReferenceType().typeParametersValues().stream()
+                    .anyMatch(typeArgument -> mentionsTypeVariableOutOfScope(typeArgument, typeVariableContainers));
+        }
+        return false;
     }
 
     private boolean isJavaLangObject(ResolvedType type) {
@@ -446,10 +497,10 @@ public class LeastUpperBoundLogic {
     }
 
     /*
-     * In case where the {@code ResolvedType} is an unbounded type variable,
-     * then the type can be substituted by other reference type. For example
-     * the result of lcp(List<String>, List<T>) should be List<String>.
-     * This is not part of JLS 4.10.4: it handles type arguments that are left undetermined.
+     * In case where the {@code ResolvedType} is an unbounded type variable of a method, it is a type argument of a
+     * generic method call that was not inferred, and it can be substituted by the other reference type. For example
+     * lcp(ArrayList<String>, List<T>) where List<T> is the type of Collections.emptyList() should be List<String>.
+     * This is not part of JLS 4.10.4. The type variables of types are real types and are not substituted.
      * The bounds checked are those of the type variable itself, not those of the type parameter of the generic
      * type: in lcp(List<String>, List<T extends Number>), T cannot be substituted by String.
      */
@@ -458,7 +509,7 @@ public class LeastUpperBoundLogic {
             return false;
         }
         ResolvedTypeParameterDeclaration typeParameter = type.asTypeVariable().asTypeParameter();
-        return !typeParameter.hasBound() || boundedAsObject(typeParameter);
+        return typeParameter.declaredOnMethod() && (!typeParameter.hasBound() || boundedAsObject(typeParameter));
     }
 
     private boolean boundedAsObject(ResolvedTypeParameterDeclaration typeDecl) {
