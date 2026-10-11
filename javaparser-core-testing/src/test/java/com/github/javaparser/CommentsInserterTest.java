@@ -234,7 +234,7 @@ class CommentsInserterTest {
     }
 
     /**
-     * Attribution grows with the size of the source, not with the number of members times the number of comments:
+     * Attribution no longer grows with the number of members times the number of comments:
      * each child is matched only against the comments that begin inside it, a trailing line comment only against the
      * children that end on its line, and attributed comments are removed one by one. Before, a class like this took
      * more than two minutes; it now takes about a second.
@@ -244,7 +244,8 @@ class CommentsInserterTest {
         int members = 10_000;
         String source = classWithCommentedMembers(members);
         ClassOrInterfaceDeclaration type = assertTimeoutPreemptively(
-                        Duration.ofSeconds(20), () -> TestParser.parseCompilationUnit(source))
+                        Duration.ofSeconds(20),
+                        () -> new JavaParser().parse(source).getResult().orElseThrow(AssertionError::new))
                 .getClassByName("Many")
                 .get();
         assertEquals(4 * members, commentAttachmentSites(type).size() + orphanCount(type));

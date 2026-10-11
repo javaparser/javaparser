@@ -179,13 +179,14 @@ class CommentsInserter {
      * growing with the number of children times the number of comments. Comments without a range are never inside.
      */
     private static NavigableSet<Comment> commentsBeginningIn(TreeSet<Comment> comments, Range range) {
-        return comments.subSet(commentBeginningAt(range.begin), true, commentBeginningAt(range.end), true);
+        return comments.subSet(positionProbe(range.begin), true, positionProbe(range.end), true);
     }
 
     /**
-     * A stand-in for looking comments up by where they begin, which is all their order compares.
+     * A search bound for looking comments up by where they begin, which is all their order compares.
+     * The comment kind does not matter.
      */
-    private static Comment commentBeginningAt(Position position) {
+    private static Comment positionProbe(Position position) {
         Comment comment = new BlockComment();
         comment.setRange(Range.range(position, position));
         return comment;
