@@ -166,7 +166,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             List<ResolvedType> argumentTypes,
             Context invocationContext,
             List<ResolvedType> typeParameters) {
-        return MemberResolutionLogic.solveMethodAsUsageInMembers(this, name, argumentTypes, getContext(), typeSolver);
+        // typeParameters are the type arguments of the receiver, which select among overloads as in solveMethod
+        return MemberResolutionLogic.solveMethodAsUsageInMembers(
+                this, name, argumentTypes, getContext(), typeParameters, typeSolver);
     }
 
     /**
@@ -332,6 +334,15 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         return MemberResolutionLogic.solveMethodInMembers(this, name, argumentsTypes, staticOnly, typeSolver);
+    }
+
+    @Override
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, List<ResolvedType> typeArguments) {
+        // The receiver's type arguments tell apart the overloads that only differ by type variables of this type
+        // or of its ancestors, see MemberResolutionLogic.parameterTypesSeenFrom
+        return MemberResolutionLogic.solveMethodInMembers(
+                this, name, argumentsTypes, staticOnly, typeArguments, typeSolver);
     }
 
     @Override

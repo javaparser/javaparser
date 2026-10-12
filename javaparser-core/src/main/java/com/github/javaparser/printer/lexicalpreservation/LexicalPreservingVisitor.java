@@ -19,11 +19,16 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.MINUS;
+import static com.github.javaparser.GeneratedJavaParserConstants.PLUS;
+
 import java.io.StringWriter;
 
 public class LexicalPreservingVisitor {
 
     private StringWriter writer;
+
+    private TokenTextElement previous;
 
     public LexicalPreservingVisitor() {
         this(new StringWriter());
@@ -38,7 +43,17 @@ public class LexicalPreservingVisitor {
     }
 
     public void visit(TokenTextElement token) {
-        writer.append(token.getText());
+        String text = token.getText();
+        if (previous != null
+                && ((previous.isToken(PLUS) && text.startsWith("+"))
+                        || (previous.isToken(MINUS) && text.startsWith("-")))) {
+            // Preserve token boundaries introduced by AST edits, not individual characters.
+            writer.append(' ');
+        }
+        writer.append(text);
+        if (!text.isEmpty()) {
+            previous = token;
+        }
     }
 
     @Override

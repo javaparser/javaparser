@@ -33,6 +33,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
@@ -46,6 +47,8 @@ import com.github.javaparser.printer.configuration.imports.EclipseImportOrdering
 import com.github.javaparser.printer.configuration.imports.IntelliJImportOrderingStrategy;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class DefaultPrettyPrinterTest {
 
@@ -73,6 +76,36 @@ class DefaultPrettyPrinterTest {
         CompilationUnit cu = parserAdapter.parse(code);
         return getDefaultPrinter()
                 .print(cu.findAll(VariableDeclarationExpr.class).get(0));
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+            strings = {
+                "- -x",
+                "+ +x",
+                "- --x",
+                "+ ++x",
+                "- - -x",
+                "+ + +x",
+                "- -2147483648",
+                "-+x",
+                "+-x",
+                "!!x",
+                "~~x",
+                "-x--",
+                "+x++",
+                "-(-x)",
+                "+(+x)"
+            })
+    void printingNestedUnaryOperatorsPreservesTokens(String source) {
+        Expression expression = parserAdapter.parseExpression(source);
+        String printed = getDefaultPrinter().print(expression);
+        assertEquals(source, printed);
+        assertEquals(expression, parserAdapter.parseExpression(printed));
+
+        String legacyPrinted = new PrettyPrinter().print(expression);
+        assertEquals(source, legacyPrinted);
+        assertEquals(expression, parserAdapter.parseExpression(legacyPrinted));
     }
 
     @Test

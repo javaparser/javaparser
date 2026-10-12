@@ -201,19 +201,23 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                     .solveMethod(name, argumentsTypes, staticOnly);
         }
 
-        Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(wrappedNode.getScope());
+        // The receiver is kept with its type arguments, not reduced to its declaration: on a Box<String>, they tell
+        // set(T) apart from an overload set(U) once T and U are bound to different types.
+        // Limitation: only the JavaParser declarations use them. A receiver whose type comes from Reflection or
+        // Javassist (a JDK or library class) is still resolved on its declared signatures.
+        Collection<ResolvedReferenceType> receiverTypes = findReceiverTypes(wrappedNode.getScope());
 
-        if (rrtds.isEmpty()) {
+        if (receiverTypes.isEmpty()) {
             // if the bounds of a type parameter are empty, then the bound is implicitly "extends Object"
             // we don't make this _ex_plicit in the data representation because that would affect codegen
             // and make everything generate like <T extends Object> instead of <T>
             // https://github.com/javaparser/javaparser/issues/2044
-            rrtds = Collections.singleton(typeSolver.getSolvedJavaLangObject());
+            receiverTypes = Collections.singleton(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
         }
 
-        for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
+        for (ResolvedReferenceType receiverType : receiverTypes) {
             SymbolReference<ResolvedMethodDeclaration> res =
-                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
+                    MethodResolutionLogic.solveMethodInType(receiverType, name, argumentsTypes, false);
             if (res.isSolved()) {
                 return res;
             }
@@ -621,7 +625,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     }
 
     private ResolvedType reduceResolvedTypesWithLub(Set<ResolvedType> resolvedTypes) {
-        return LeastUpperBoundLogic.of().lub(resolvedTypes);
+        return LeastUpperBoundLogic.of(typeSolver).lub(resolvedTypes);
     }
 
     /**
@@ -637,7 +641,8 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
      *       in {@code Collector<T, ?, R>}), capture-conversion rules apply: a bounded wildcard
      *       ({@code ? extends Foo} or {@code ? super Foo}) contributes its declared bound as the
      *       inferred type; an unbounded wildcard {@code ?} carries no type information and is
-     *       skipped.</li>
+     *       skipped. A type variable matched against itself carries no type information either
+     *       and is skipped.</li>
      *   <li><b>Array</b> – recurses on the component type (null actual types pass through as-is,
      *       see issue #2258).</li>
      *   <li><b>Reference type</b> – recurses on each type argument when the actual type also
@@ -682,6 +687,16 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             }
             if (!type.isTypeVariable() && !type.isReferenceType() && !type.isArray()) {
                 throw new UnsupportedOperationException(type.getClass().getCanonicalName());
+            }
+            // A type variable matched against itself carries no information. This happens when a
+            // method reference argument is typed without solving lambdas: it then gets the formal
+            // parameter type of the very method being resolved (e.g. Function<R, RR>). Recording
+            // R -> R would make the least upper bound of R's candidates undefined (issue #4625).
+            if (type.isTypeVariable()
+                    && type.asTypeParameter()
+                            .getQualifiedName()
+                            .equals(expectedType.asTypeParameter().getQualifiedName())) {
+                return;
             }
             matchedTypeParameters.put(expectedType.asTypeParameter(), type);
         } else if (expectedType.isArray()) {

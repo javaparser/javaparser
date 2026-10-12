@@ -743,7 +743,7 @@ public class BoundSet {
                     //   - If αi has one or more proper lower bounds, L1, ..., Lk, then Ti = lub(L1, ..., Lk) (§4.10.4).
 
                     if (properLowerBounds.size() > 0) {
-                        Ti = leastUpperBound(properLowerBounds);
+                        Ti = leastUpperBound(properLowerBounds, typeSolver);
                     }
 
                     //   - Otherwise, if the bound set contains throws αi, and the proper upper bounds of αi are, at
