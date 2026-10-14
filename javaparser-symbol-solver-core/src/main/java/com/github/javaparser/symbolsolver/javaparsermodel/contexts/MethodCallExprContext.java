@@ -147,6 +147,13 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             // solveMethod for why this starts at the enclosing type rather than at the parent context.
             ref = JavaParserFactory.getContext(enclosingTypeOf(wrappedNode), typeSolver)
                     .solveMethodAsUsage(name, argumentsTypes);
+            if (ref.isPresent()) {
+                // The lexical lookup finds static imports too. Apply the same call-site inference as
+                // for a qualified static call, including substitution into the usage's parameter types.
+                MethodUsage methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, ref.get());
+                methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
+                ref = Optional.of(inferTypeVariablesFromPolyExpressionArguments(methodUsage, argumentsTypes));
+            }
         }
         return ref;
     }

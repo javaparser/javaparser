@@ -301,7 +301,7 @@ public class JavaParserFacade {
                 placeholders.add(placeholder);
             } else {
                 try {
-                    argumentTypes.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas));
+                    argumentTypes.add(getArgumentType(parameterValue, solveLambdas));
                 } catch (Exception e) {
                     throw failureHandler.handle(
                             e,
@@ -836,7 +836,7 @@ public class JavaParserFacade {
             for (Expression param : call.getArguments()) {
                 // getTypeConcrete(Node node, boolean solveLambdas)
                 try {
-                    params.add(getType(param, false));
+                    params.add(getArgumentType(param, false));
                 } catch (Exception e) {
                     throw failureHandler.handle(
                             e,
@@ -854,6 +854,17 @@ public class JavaParserFacade {
                     + ". Parameter types: " + params);
         }
         return methodUsage.get();
+    }
+
+    private ResolvedType getArgumentType(Expression argument, boolean solveLambdas) {
+        ResolvedType type = getType(argument, solveLambdas);
+        // An inferred lambda parameter is wrapped in a constraint. Generic method applicability and
+        // inference must see its concrete type (e.g. Query<Task>), not an opaque constraint that hides
+        // those type arguments. Keep unresolved type-variable constraints for the tolerant lookup path.
+        if (type.isConstraint() && !type.asConstraintType().getBound().isTypeVariable()) {
+            return type.asConstraintType().getBound();
+        }
+        return type;
     }
 
     public ResolvedReferenceTypeDeclaration getTypeDeclaration(Node node) {

@@ -39,6 +39,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -272,64 +273,38 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         return name.getId();
     }
 
-    private String toSimpleName(String qName) {
-        String[] parts = qName.split("\\.");
-        return parts[parts.length - 1];
-    }
-
-    private String packageName(String qName) {
-        int lastDot = qName.lastIndexOf('.');
-        if (lastDot == -1) {
-            throw new UnsupportedOperationException();
-        }
-        return qName.substring(0, lastDot);
-    }
-
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-            if (importDecl.isStatic()) {
-                if (importDecl.isAsterisk()) {
-                    String importString = importDecl.getNameAsString();
-
-                    if (this.wrappedNode.getPackageDeclaration().isPresent()
-                            && this.wrappedNode
-                                    .getPackageDeclaration()
-                                    .get()
-                                    .getName()
-                                    .getIdentifier()
-                                    .equals(packageName(importString))
-                            && this.wrappedNode.getTypes().stream()
-                                    .anyMatch(it -> it.getName().getIdentifier().equals(toSimpleName(importString)))) {
-                        // We are using a static import on a type defined in this file. It means the value was not found
-                        // at a lower level so this will fail
-                        return SymbolReference.unsolved();
-                    }
-
-                    ResolvedTypeDeclaration ref = typeSolver.solveType(importString);
-                    SymbolReference<ResolvedMethodDeclaration> method =
-                            MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true);
-                    if (method.isSolved()) {
-                        return method;
-                    }
-                } else {
-                    String qName = importDecl.getNameAsString();
-
-                    if (qName.equals(name) || qName.endsWith("." + name)) {
-                        String typeName = getType(qName);
-                        ResolvedTypeDeclaration ref = typeSolver.solveType(typeName);
-                        SymbolReference<ResolvedMethodDeclaration> method =
-                                MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true);
-                        if (method.isSolved()) {
-                            return method;
-                        }
-                        return SymbolReference.unsolved();
-                    }
-                }
-            }
+        // A single-static import shadows static-on-demand imports of the same name (JLS 6.4.1).
+        // Within each group, consider all candidates together rather than letting import order
+        // choose an overload, or stop the search at an inapplicable single-static import.
+        List<ResolvedMethodDeclaration> candidates = collectStaticImportCandidates(name, argumentsTypes, false);
+        if (candidates.isEmpty()) {
+            candidates = collectStaticImportCandidates(name, argumentsTypes, true);
         }
-        return SymbolReference.unsolved();
+        return MethodResolutionLogic.findMostApplicableFromStaticImports(candidates, name, argumentsTypes, typeSolver);
+    }
+
+    private List<ResolvedMethodDeclaration> collectStaticImportCandidates(
+            String name, List<ResolvedType> argumentsTypes, boolean onDemand) {
+        List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
+        for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+            if (!importDecl.isStatic() || importDecl.isAsterisk() != onDemand) {
+                continue;
+            }
+            if (!onDemand && !importDecl.getName().getIdentifier().equals(name)) {
+                continue;
+            }
+            String typeName = onDemand ? importDecl.getNameAsString() : getType(importDecl.getNameAsString());
+            ResolvedReferenceTypeDeclaration importedType = typeSolver.solveType(typeName);
+            // Members only: imports of the imported class are not themselves imported here.
+            candidates.addAll(
+                    MemberResolutionLogic.collectCandidateMembers(importedType, name, argumentsTypes, true).stream()
+                            .filter(ResolvedMethodDeclaration::isStatic)
+                            .collect(Collectors.toList()));
+        }
+        return candidates;
     }
 
     @Override

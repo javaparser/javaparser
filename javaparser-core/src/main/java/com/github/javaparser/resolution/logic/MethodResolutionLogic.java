@@ -780,11 +780,29 @@ public class MethodResolutionLogic {
             Function<ResolvedMethodDeclaration, List<ResolvedType>> parameterTypes) {
         // A first pass without wildcard tolerance, then a second one with it, as for the declared signatures
         SymbolReference<ResolvedMethodDeclaration> res =
-                findMostApplicable(methods, name, argumentsTypes, typeSolver, false, parameterTypes);
+                findMostApplicable(methods, name, argumentsTypes, typeSolver, false, parameterTypes, false);
         if (res.isSolved()) {
             return res;
         }
-        return findMostApplicable(methods, name, argumentsTypes, typeSolver, true, parameterTypes);
+        return findMostApplicable(methods, name, argumentsTypes, typeSolver, true, parameterTypes, false);
+    }
+
+    /**
+     * Resolves a method imported from one or more static-import declarations. Unlike member lookup, two equally
+     * applicable methods from unrelated imported types are ambiguous even when their signatures are identical.
+     */
+    public static SymbolReference<ResolvedMethodDeclaration> findMostApplicableFromStaticImports(
+            List<ResolvedMethodDeclaration> methods,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            TypeSolver typeSolver) {
+        SymbolReference<ResolvedMethodDeclaration> res = findMostApplicable(
+                methods, name, argumentsTypes, typeSolver, false, MethodResolutionLogic::declaredParameterTypes, true);
+        if (res.isSolved()) {
+            return res;
+        }
+        return findMostApplicable(
+                methods, name, argumentsTypes, typeSolver, true, MethodResolutionLogic::declaredParameterTypes, true);
     }
 
     public static SymbolReference<ResolvedMethodDeclaration> findMostApplicable(
@@ -799,7 +817,8 @@ public class MethodResolutionLogic {
                 argumentsTypes,
                 typeSolver,
                 wildcardTolerance,
-                MethodResolutionLogic::declaredParameterTypes);
+                MethodResolutionLogic::declaredParameterTypes,
+                false);
     }
 
     /**
@@ -814,13 +833,17 @@ public class MethodResolutionLogic {
             List<ResolvedType> argumentsTypes,
             TypeSolver typeSolver,
             boolean wildcardTolerance,
-            Function<ResolvedMethodDeclaration, List<ResolvedType>> parameterTypes) {
+            Function<ResolvedMethodDeclaration, List<ResolvedType>> parameterTypes,
+            boolean ambiguousBetweenDeclaringTypes) {
         List<ResolvedMethodDeclaration> applicableMethods = methods.stream()
                 .filter(m -> m.getName().equals(name))
                 .filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature))
                 .filter(m ->
                         isApplicable(m, parameterTypes.apply(m), name, argumentsTypes, typeSolver, wildcardTolerance))
                 .collect(Collectors.toList());
+        if (ambiguousBetweenDeclaringTypes) {
+            return selectStaticImport(applicableMethods, argumentsTypes);
+        }
         Optional<ResolvedMethodDeclaration> result = selectMostApplicable(
                 applicableMethods,
                 argumentsTypes,
@@ -828,6 +851,40 @@ public class MethodResolutionLogic {
                 parameterTypes,
                 ResolvedMethodDeclaration::declaringType);
         return result.map(SymbolReference::solved).orElseGet(SymbolReference::unsolved);
+    }
+
+    private static SymbolReference<ResolvedMethodDeclaration> selectStaticImport(
+            List<ResolvedMethodDeclaration> applicableMethods, List<ResolvedType> argumentsTypes) {
+        List<ResolvedMethodDeclaration> candidates =
+                filterByNullArgs(applicableMethods, argumentsTypes, Function.identity());
+        // Member lookup assumes that later declarations with the same signature are inherited.
+        // Static imports have no such ordering: retain only candidates that no other candidate beats.
+        List<ResolvedMethodDeclaration> mostSpecific = candidates.stream()
+                .filter(candidate -> candidates.stream().noneMatch(other -> {
+                    if (candidate == other) {
+                        return false;
+                    }
+                    if (isMoreSpecific(other, candidate, argumentsTypes)) {
+                        return true;
+                    }
+                    if (isMoreSpecific(candidate, other, argumentsTypes)) {
+                        return false;
+                    }
+                    if (candidate.isGeneric() != other.isGeneric()) {
+                        return candidate.isGeneric();
+                    }
+                    // A static method may hide one inherited from its superclass, but methods
+                    // with identical signatures in unrelated classes remain ambiguous.
+                    return areOverride(candidate, other)
+                            && other.declaringType().getAllAncestors().stream()
+                                    .anyMatch(ancestor -> ancestor.getQualifiedName()
+                                            .equals(candidate.declaringType().getQualifiedName()));
+                }))
+                .collect(Collectors.toList());
+        if (mostSpecific.size() > 1) {
+            throw new MethodAmbiguityException("Ambiguous statically imported method call: " + mostSpecific);
+        }
+        return mostSpecific.isEmpty() ? SymbolReference.unsolved() : SymbolReference.solved(mostSpecific.get(0));
     }
 
     protected static boolean isExactMatch(ResolvedMethodLikeDeclaration method, List<ResolvedType> argumentsTypes) {
