@@ -2173,9 +2173,6 @@ Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
     )*
 
     {
-        if(storeTokens) {
-            name.setTokenRange(name.getTokenRange().get().withEnd(token()));
-        }
         return new Pair(name, arrayBracketPairs);
     }
 }
