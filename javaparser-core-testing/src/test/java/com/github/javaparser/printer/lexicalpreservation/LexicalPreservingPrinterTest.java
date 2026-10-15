@@ -28,7 +28,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
@@ -1918,5 +1920,34 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         cu.getClassByName("Foo").get().addField(PrimitiveType.intType(), "foo");
         String printed = LexicalPreservingPrinter.print(cu);
         assertTrue(printed.contains("int foo"), "Type keyword 'int' missing — got: " + printed);
+    }
+
+    @Test
+    void recoveredMethodBodyRoundTripsSourceAndExcludesParameters() {
+        String code = "class A { void before() {} int size(int count) /* keep */ "
+                + "-> new Runnable() { public void run() { a(); } }; void after() {} }";
+        ParseResult<CompilationUnit> result = new JavaParser().parse(code);
+        CompilationUnit parsed = result.getResult().get();
+        LexicalPreservingPrinter.setup(parsed);
+
+        assertEquals(code, LexicalPreservingPrinter.print(parsed));
+
+        MethodDeclaration size = parsed.getClassByName("A").get().getMethodsByName("size").get(0);
+        TokenRange bodyRange = size.getBody().get().getTokenRange().get();
+        String bodyText = bodyRange.toString();
+        int innerSemicolon = bodyText.indexOf("a();");
+        assertEquals(")", bodyRange.getBegin().getPreviousToken().get().getText());
+        assertTrue(size.getParameter(0)
+                .getTokenRange()
+                .get()
+                .getEnd()
+                .getRange()
+                .get()
+                .end
+                .isBefore(bodyRange.getBegin().getRange().get().begin));
+        assertTrue(bodyText.contains("/* keep */"));
+        assertTrue(innerSemicolon >= 0);
+        assertTrue(bodyText.indexOf('}', innerSemicolon) > innerSemicolon);
+        assertTrue(bodyText.trim().endsWith(";"));
     }
 }
