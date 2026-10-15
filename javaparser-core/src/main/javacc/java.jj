@@ -2278,11 +2278,20 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
         throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); } )*
     ]
-    (
-        body = Block()
-     |
-        ";"
-    )
+    try {
+        (
+            body = Block()
+         |
+            ";"
+        )
+    } catch (ParseException e) {
+        // A malformed body must not escape to compilation-unit recovery. The range starts at the
+        // first unconsumed token so it does not overlap the parameter list, and nested braces are
+        // counted so an inner semicolon does not end the skipped span.
+        TokenRange errorRange = recoverStatementFromUnconsumed(SEMICOLON, LBRACE, RBRACE, e);
+        body = new BlockStmt(errorRange, new NodeList<Statement>());
+        body.setParsed(UNPARSABLE);
+    }
 
     {
         type = juggleArrayType(type, arrayBracketPairs);
