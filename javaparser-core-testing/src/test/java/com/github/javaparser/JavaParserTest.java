@@ -25,6 +25,8 @@ import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
+import static com.github.javaparser.ast.Node.Parsedness.PARSED;
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,6 +34,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
@@ -425,5 +428,71 @@ class JavaParserTest {
         parser.parse("public class Test {" + "    public void method(int @MyAnno ... param) {}"
                 + "}"
                 + "@Target(java.lang.annotation.ElementType.TYPE_USE) @interface MyAnno {}");
+    }
+
+    @Test
+    void malformedMethodBodyRecoversToUnparsableBlockAndKeepsLaterMembers() {
+        String code = "class A { void before() {} int size(int count) -> items.size(); void after() {} }";
+        ParseResult<CompilationUnit> result = new JavaParser(
+                        new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE))
+                .parse(code);
+
+        assertEquals(1, result.getProblems().size());
+        assertTrue(result.getProblems().get(0).getMessage().startsWith("Parse error"));
+        CompilationUnit cu = result.getResult().get();
+        assertEquals(PARSED, cu.getParsed());
+
+        MethodDeclaration before = cu.getClassByName("A").get().getMethodsByName("before").get(0);
+        MethodDeclaration size = cu.getClassByName("A").get().getMethodsByName("size").get(0);
+        MethodDeclaration after = cu.getClassByName("A").get().getMethodsByName("after").get(0);
+        assertEquals(PARSED, before.getBody().get().getParsed());
+        assertEquals(PARSED, after.getBody().get().getParsed());
+
+        BlockStmt body = size.getBody().get();
+        assertEquals(UNPARSABLE, body.getParsed());
+        assertTrue(body.getStatements().isEmpty());
+        TokenRange bodyRange = body.getTokenRange().get();
+        assertEquals(")", bodyRange.getBegin().getPreviousToken().get().getText());
+        assertEquals(" -> items.size();", bodyRange.toString());
+        assertTrue(size.getParameter(0)
+                .getTokenRange()
+                .get()
+                .getEnd()
+                .getRange()
+                .get()
+                .end
+                .isBefore(bodyRange.getBegin().getRange().get().begin));
+        assertEquals(bodyRange.getBegin(), result.getProblems().get(0).getLocation().get().getBegin());
+        assertEquals(bodyRange.getEnd(), result.getProblems().get(0).getLocation().get().getEnd());
+    }
+
+    @Test
+    void malformedMethodBodySkipsNestedConstructsUntilOuterSemicolon() {
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE));
+        String anonymous = "int size() -> new Runnable() { public void run() { a(); } }; void after() {}";
+        String lambda = "int size() -> xs.forEach(x -> { a(); }); void after() {}";
+        String[] sources = {
+            "class A { " + anonymous + " }",
+            "interface A { " + anonymous + " }",
+            "enum A { X; " + anonymous + " }",
+            "record A(int x) { " + lambda + " }",
+            "void before() {} " + lambda
+        };
+        for (String source : sources) {
+            ParseResult<CompilationUnit> result = javaParser.parse(source);
+            TypeDeclaration<?> type = result.getResult().get().getType(0);
+            MethodDeclaration size = type.getMethodsByName("size").get(0);
+            BlockStmt body = size.getBody().get();
+            String bodyText = body.getTokenRange().get().toString();
+            int innerSemicolon = bodyText.indexOf("a();");
+
+            assertEquals(UNPARSABLE, body.getParsed(), source);
+            assertTrue(body.getStatements().isEmpty(), source);
+            assertTrue(innerSemicolon >= 0, source);
+            assertTrue(bodyText.indexOf('}', innerSemicolon) > innerSemicolon, source);
+            assertTrue(bodyText.trim().endsWith(";"), source);
+            assertEquals("after", type.getMethodsByName("after").get(0).getNameAsString(), source);
+            assertEquals(PARSED, type.getMethodsByName("after").get(0).getParsed(), source);
+        }
     }
 }
