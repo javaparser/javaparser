@@ -38,6 +38,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmArrayBrackets;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
@@ -359,7 +360,8 @@ public class ConcreteSyntaxModel {
                                         list(ObservableProperty.VAR_ARGS_ANNOTATIONS, space(), none(), none()),
                                         token(GeneratedJavaParserConstants.ELLIPSIS))),
                         space(),
-                        child(ObservableProperty.NAME)));
+                        child(ObservableProperty.NAME),
+                        CsmArrayBrackets.nameSide()));
         concreteSyntaxModelByClass.put(
                 ReceiverParameter.class,
                 sequence(
@@ -371,9 +373,9 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(
                 VariableDeclarator.class,
                 sequence(
-                        /* FIXME: we should introduce a derived property */
-                        comment(), /* list(ObservableProperty.EXTRA_ARRAY_LEVELS), */
+                        comment(),
                         child(ObservableProperty.NAME),
+                        CsmArrayBrackets.nameSide(),
                         conditional(
                                 ObservableProperty.INITIALIZER,
                                 IS_PRESENT,
@@ -1013,9 +1015,10 @@ public class ConcreteSyntaxModel {
                 ArrayType.class,
                 sequence(
                         child(ObservableProperty.COMPONENT_TYPE),
-                        list(ObservableProperty.ANNOTATIONS),
-                        string(GeneratedJavaParserConstants.LBRACKET),
-                        string(GeneratedJavaParserConstants.RBRACKET)));
+                        CsmArrayBrackets.typeSide(sequence(
+                                list(ObservableProperty.ANNOTATIONS),
+                                string(GeneratedJavaParserConstants.LBRACKET),
+                                string(GeneratedJavaParserConstants.RBRACKET)))));
         concreteSyntaxModelByClass.put(
                 ClassOrInterfaceType.class,
                 sequence(

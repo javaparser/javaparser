@@ -129,6 +129,11 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
      * Takes lists of arrayBracketPairs, assumes the lists are ordered outer to inner and the pairs are ordered left to
      * right. The type gets wrapped in ArrayTypes so that the outermost ArrayType corresponds to the leftmost
      * ArrayBracketPair in the first list.
+     * <p>
+     * The range of an ArrayType written after the element type ({@link Origin#TYPE}) goes from the element type to its
+     * closing bracket. The range of an ArrayType written after the declared name ({@link Origin#NAME}) is the range of
+     * its component type: its brackets are separated from the element type by the name, so no contiguous range can
+     * cover them without covering the name too.
      */
     @SafeVarargs
     public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {
@@ -138,7 +143,14 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     ArrayBracketPair pair = arrayBracketPairList.get(j);
-                    if (type.getTokenRange().isPresent() && pair.getTokenRange().isPresent()) {
+                    if (pair.getOrigin() == Origin.NAME) {
+                        // Brackets written after the name (int a[]) are not contiguous with the element type:
+                        // extending the range up to them would make it cover the name, and the lexical preserving
+                        // printer would then give the tokens of the name to this type. Keep the range of the
+                        // wrapped type, the brackets belong to the declaration (parameter or variable declarator).
+                        outerMostTokenRange = type.getTokenRange().orElse(null);
+                    } else if (type.getTokenRange().isPresent()
+                            && pair.getTokenRange().isPresent()) {
                         TokenRange currentTokenRange = new TokenRange(
                                 type.getTokenRange().get().getBegin(),
                                 pair.getTokenRange().get().getEnd());
