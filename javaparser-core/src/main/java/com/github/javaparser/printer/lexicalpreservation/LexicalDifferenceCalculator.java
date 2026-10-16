@@ -299,6 +299,18 @@ class LexicalDifferenceCalculator {
             } else {
                 calculatedSyntaxModelForNode(csmConditional.getElseElement(), node, elements, change);
             }
+        } else if (csm instanceof CsmArrayBrackets) {
+            // The brackets are derived from the type (or the origin) the node has once the change is applied
+            CsmArrayBrackets csmArrayBrackets = (CsmArrayBrackets) csm;
+            if (csmArrayBrackets.isNameSide()) {
+                int levels = CsmArrayBrackets.nameSideLevels(node, change.getValue(ObservableProperty.TYPE, node));
+                for (int i = 0; i < levels; i++) {
+                    elements.add(new CsmToken(GeneratedJavaParserConstants.LBRACKET));
+                    elements.add(new CsmToken(GeneratedJavaParserConstants.RBRACKET));
+                }
+            } else if (CsmArrayBrackets.isTypeSide(change.getValue(ObservableProperty.ORIGIN, node))) {
+                calculatedSyntaxModelForNode(csmArrayBrackets.getTypeSideBrackets(), node, elements, change);
+            }
         } else if (csm instanceof CsmIndent) {
             elements.add(csm);
         } else if (csm instanceof CsmUnindent) {

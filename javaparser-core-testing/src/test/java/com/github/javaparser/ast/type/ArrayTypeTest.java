@@ -194,13 +194,18 @@ class ArrayTypeTest {
         assertThat(innerType).isEqualTo(expr.getElementType());
     }
 
+    /**
+     * The form parsed here is not legal Java, see {@link #ellipsisCanHaveAnnotationsTooWithLegalNotation()}, but
+     * JavaParser accepts it. The pretty printer moves the brackets to the type, the concrete syntax model writes them
+     * where the source has them, after the name.
+     */
     @Test
     void ellipsisCanHaveAnnotationsToo() {
         Parameter p = parser.parseParameter("int[]@X...a[]");
 
         assertThat(p.getVarArgsAnnotations()).containsExactly(new MarkerAnnotationExpr(parser.parseName("X")));
         assertEquals("int[][]@X ... a", p.toString());
-        assertEquals("int[][]@X... a", ConcreteSyntaxModel.genericPrettyPrint(p));
+        assertEquals("int[]@X... a[]", ConcreteSyntaxModel.genericPrettyPrint(p));
     }
 
     /**

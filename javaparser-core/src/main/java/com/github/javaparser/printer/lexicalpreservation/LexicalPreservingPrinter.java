@@ -35,7 +35,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
@@ -161,8 +160,12 @@ public class LexicalPreservingPrinter {
                         // Regenerate the token owner's NodeText instead of the observed node
                         LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(
                                 tokenOwnerText, tokenOwner, property, oldValue, newValue);
-                        // Early exit - we've handled the change
-                        return;
+                        // Early exit - we've handled the change, unless the observed node also prints part of
+                        // the type: a variable declarator prints the brackets written after its name (int a[]),
+                        // so its own text must be updated as well when its type changes
+                        if (!(observedNode instanceof VariableDeclarator && property == ObservableProperty.TYPE)) {
+                            return;
+                        }
                     }
                 }
             }
@@ -821,20 +824,6 @@ public class LexicalPreservingPrinter {
                             "Unknown element type: " + element.getClass().getSimpleName());
                 }
             }
-        }
-        // Array brackets are a pain... we do not have a way to represent them explicitly in the AST
-        // so they have to be handled in a special way
-        if (node instanceof VariableDeclarator) {
-            VariableDeclarator variableDeclarator = (VariableDeclarator) node;
-            variableDeclarator.getParentNode().ifPresent(parent -> ((NodeWithVariables<?>) parent)
-                    .getMaximumCommonType()
-                    .ifPresent(mct -> {
-                        int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - mct.getArrayLevel();
-                        for (int i = 0; i < extraArrayLevels; i++) {
-                            nodeText.addElement(new TokenTextElement(LBRACKET));
-                            nodeText.addElement(new TokenTextElement(RBRACKET));
-                        }
-                    }));
         }
         return nodeText;
     }
