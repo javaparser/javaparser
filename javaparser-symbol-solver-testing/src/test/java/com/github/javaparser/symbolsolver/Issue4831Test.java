@@ -21,6 +21,7 @@
 package com.github.javaparser.symbolsolver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
@@ -144,6 +145,77 @@ class Issue4831Test extends AbstractSymbolResolutionTest {
                 + "}\n";
 
         assertResolvedCallType(code, "identity", "java.lang.Integer");
+    }
+
+    @Test
+    void keepNarrowerTypeWhenSuperWildcardAcceptsNumber() {
+        String code = "import java.util.function.Consumer;\n"
+                + "class Example {\n"
+                + "    static <T> T acceptAndReturn(T value, Consumer<? super T> consumer) {\n"
+                + "        consumer.accept(value);\n"
+                + "        return value;\n"
+                + "    }\n"
+                + "    void test(Integer value, Consumer<Number> consumer) {\n"
+                + "        Example.acceptAndReturn(value, consumer);\n"
+                + "    }\n"
+                + "}\n";
+
+        assertResolvedCallType(code, "acceptAndReturn", "java.lang.Integer");
+    }
+
+    @Test
+    void inferNoSpecificTypeFromUnboundedWildcard() {
+        String code = "import java.util.List;\n"
+                + "class Example {\n"
+                + "    static <T> T unknown(List<?> values) { return null; }\n"
+                + "    void test(List<String> values) {\n"
+                + "        Example.unknown(values);\n"
+                + "    }\n"
+                + "}\n";
+        ResolvedType type = findCall(parse(code), "unknown").calculateResolvedType();
+
+        assertTrue(
+                type.isTypeVariable() || type.describe().equals("java.lang.Object"),
+                () -> "Unconstrained T may remain unresolved or default to Object, but was " + type.describe());
+    }
+
+    @Test
+    void keepInferredTypeWhenAnotherParameterHasUnboundedWildcard() {
+        String code = "import java.util.List;\n"
+                + "class Example {\n"
+                + "    static <T> T keep(T value, List<?> ignored) { return value; }\n"
+                + "    void test(Integer value, List<String> ignored) {\n"
+                + "        Example.keep(value, ignored);\n"
+                + "    }\n"
+                + "}\n";
+
+        assertResolvedCallType(code, "keep", "java.lang.Integer");
+    }
+
+    @Test
+    void combineExtendsConstraintsWhenSubtypeIsLast() {
+        assertCommonTypeFromExtendsConstraints("base, derived");
+    }
+
+    @Test
+    void combineExtendsConstraintsWhenSupertypeIsLast() {
+        assertCommonTypeFromExtendsConstraints("derived, base");
+    }
+
+    private void assertCommonTypeFromExtendsConstraints(String arguments) {
+        String code = "import java.util.List;\n"
+                + "class Example {\n"
+                + "    static class Base {}\n"
+                + "    static class Derived extends Base {}\n"
+                + "    static <T> T choose(List<? extends T> first, List<? extends T> second) {\n"
+                + "        return null;\n"
+                + "    }\n"
+                + "    void test(List<Base> base, List<Derived> derived) {\n"
+                + "        Example.choose(" + arguments + ");\n"
+                + "    }\n"
+                + "}\n";
+
+        assertResolvedCallType(code, "choose", "Example.Base");
     }
 
     private void assertStringMonoChain(String supplierType, String deferCall) {

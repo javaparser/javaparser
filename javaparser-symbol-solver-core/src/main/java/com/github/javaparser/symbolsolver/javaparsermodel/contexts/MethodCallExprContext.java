@@ -725,7 +725,30 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         } else if (expectedType.isPrimitive()) {
             // nothing to do
         } else if (expectedType.isWildcard()) {
-            // nothing to do
+            ResolvedWildcard expectedWildcard = expectedType.asWildcard();
+
+            if (expectedWildcard.isExtends()) {
+                ResolvedType expectedBound =
+                        expectedWildcard.getBoundedType();
+
+                if (actualType.isWildcard()) {
+                    ResolvedWildcard actualWildcard = actualType.asWildcard();
+
+                    if (actualWildcard.isExtends()) {
+                        matchTypeParameters(
+                                expectedBound,
+                                actualWildcard.getBoundedType(),
+                                matchedTypeParameters
+                        );
+                    }
+                } else if (actualType.isReferenceType()) {
+                    matchTypeParameters(
+                            expectedBound,
+                            actualType,
+                            matchedTypeParameters
+                    );
+                }
+            }
         } else {
             throw new UnsupportedOperationException(expectedType.getClass().getCanonicalName());
         }
