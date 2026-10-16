@@ -203,6 +203,21 @@ class ArrayTypeTest {
         assertEquals("int[][]@X... a", ConcreteSyntaxModel.genericPrettyPrint(p));
     }
 
+    /**
+     * The legal form of {@link #ellipsisCanHaveAnnotationsToo()}. Brackets after the name of a variable arity
+     * parameter ({@code ...a[]}) are not legal Java since Java 8: JLS 8.4.1 only allows an identifier after the
+     * ellipsis, and javac (from 8 to 21 at least) reports "legacy array notation not allowed on variable-arity
+     * parameter". Here all the brackets are written before the ellipsis.
+     */
+    @Test
+    void ellipsisCanHaveAnnotationsTooWithLegalNotation() {
+        Parameter p = parser.parseParameter("int[][]@X...a");
+
+        assertThat(p.getVarArgsAnnotations()).containsExactly(new MarkerAnnotationExpr(parser.parseName("X")));
+        assertEquals("int[][]@X ... a", p.toString());
+        assertEquals("int[][]@X... a", ConcreteSyntaxModel.genericPrettyPrint(p));
+    }
+
     @Test
     void arrayLevel() {
         FieldDeclaration fd1 = parser.parseBodyDeclaration("int[] a;").asFieldDeclaration();
