@@ -198,6 +198,11 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLocalEnumDeclarationStmt() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LocalClassDeclarationStmt asLocalClassDeclarationStmt() {
         throw new IllegalStateException(f(
                 "%s is not LocalClassDeclarationStmt, it is %s",
@@ -208,6 +213,13 @@ public abstract class Statement extends Node {
     public LocalRecordDeclarationStmt asLocalRecordDeclarationStmt() {
         throw new IllegalStateException(f(
                 "%s is not LocalRecordDeclarationStmt, it is %s",
+                this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LocalEnumDeclarationStmt asLocalEnumDeclarationStmt() {
+        throw new IllegalStateException(f(
+                "%s is not LocalEnumDeclarationStmt, it is %s",
                 this, this.getClass().getSimpleName()));
     }
 
@@ -328,6 +340,9 @@ public abstract class Statement extends Node {
     public void ifLocalRecordDeclarationStmt(Consumer<LocalRecordDeclarationStmt> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLocalEnumDeclarationStmt(Consumer<LocalEnumDeclarationStmt> action) {}
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifReturnStmt(Consumer<ReturnStmt> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -410,6 +425,11 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LocalRecordDeclarationStmt> toLocalRecordDeclarationStmt() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<LocalEnumDeclarationStmt> toLocalEnumDeclarationStmt() {
         return Optional.empty();
     }
 

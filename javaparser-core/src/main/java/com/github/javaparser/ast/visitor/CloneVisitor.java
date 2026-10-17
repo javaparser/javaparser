@@ -823,6 +823,18 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
+    public Visitable visit(final LocalEnumDeclarationStmt n, final Object arg) {
+        EnumDeclaration enumDeclaration = cloneNode(n.getEnumDeclaration(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocalEnumDeclarationStmt r =
+                new LocalEnumDeclarationStmt(n.getTokenRange().orElse(null), enumDeclaration);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
     public Visitable visit(final AssertStmt n, final Object arg) {
         Expression check = cloneNode(n.getCheck(), arg);
         Expression message = cloneNode(n.getMessage(), arg);
