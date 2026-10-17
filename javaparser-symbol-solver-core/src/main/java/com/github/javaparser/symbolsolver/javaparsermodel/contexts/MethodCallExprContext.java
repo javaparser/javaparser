@@ -449,8 +449,23 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         return methodUsage;
     }
 
+    private void recordInferredType(
+            ResolvedTypeParameterDeclaration parameter,
+            ResolvedType type,
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> matched,
+            Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> lowerBounds,
+            boolean isLowerBound) {
+
+        if (isLowerBound && lowerBounds != null) {
+            lowerBounds.computeIfAbsent(parameter, key -> new LinkedHashSet<>()).add(type);
+        } else {
+            matched.put(parameter, type);
+        }
+    }
+
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<ResolvedType> actualParamTypes) {
         Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters = new HashMap<>();
+        Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> lowerBoundCandidates = new HashMap<>();
 
         if (methodUsage.getDeclaration().hasVariadicParameter()) {
             if (actualParamTypes.size() == methodUsage.getDeclaration().getNumberOfParams()) {
@@ -500,7 +515,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                             expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
                 }
                 // match only the varargs type
-                matchTypeParameters(expectedType, actualType, matchedTypeParameters);
+                matchTypeParameters(expectedType, actualType, matchedTypeParameters, lowerBoundCandidates, false);
             } else if (methodUsage.getDeclaration().getNumberOfParams() == 1) {
                 // In this case the method declares only one parameter which is a variadic parameter.
                 // At this stage we can consider that the actual parameters all have the same type.
@@ -523,7 +538,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                             "Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
                             expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
                 }
-                matchTypeParameters(expectedType, actualType, matchedTypeParameters);
+                matchTypeParameters(expectedType, actualType, matchedTypeParameters, lowerBoundCandidates, false);
                 return replaceTypeParameter(methodUsage, matchedTypeParameters);
             } else {
                 return methodUsage;
@@ -537,10 +552,22 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         for (int i = 0; i < until; i++) {
             ResolvedType expectedType = methodUsage.getParamType(i);
             ResolvedType actualType = actualParamTypes.get(i);
-            matchTypeParameters(expectedType, actualType, matchedTypeParameters);
+            matchTypeParameters(expectedType, actualType, matchedTypeParameters, lowerBoundCandidates, false);
         }
+        mergeLowerBoundCandidates(matchedTypeParameters, lowerBoundCandidates);
         methodUsage = replaceTypeParameter(methodUsage, matchedTypeParameters);
         return methodUsage;
+    }
+
+    private void mergeLowerBoundCandidates(
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> matched,
+            Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> candidates) {
+        for (Map.Entry<ResolvedTypeParameterDeclaration, Set<ResolvedType>> entry : candidates.entrySet()) {
+            ResolvedType inferred = LeastUpperBoundLogic.of(typeSolver).lub(entry.getValue());
+            if (inferred != null) {
+                matched.putIfAbsent(entry.getKey(), inferred);
+            }
+        }
     }
 
     /*
@@ -659,94 +686,101 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             ResolvedType expectedType,
             ResolvedType actualType,
             Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
+        matchTypeParameters(expectedType, actualType, matchedTypeParameters, null, true);
+    }
+
+    private void matchTypeParameters(
+            ResolvedType expectedType,
+            ResolvedType actualType,
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters,
+            Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> lowerBoundCandidates,
+            boolean isLowerBound) {
         if (expectedType.isTypeVariable()) {
             ResolvedType type = actualType;
-            // in case of primitive type, the expected type must be compared with the boxed type of the actual type
+            // Keep the existing primitive boxing behavior.
             if (type.isPrimitive()) {
-                ResolvedReferenceTypeDeclaration resolvedTypedeclaration =
+                ResolvedReferenceTypeDeclaration declaration =
                         typeSolver.solveType(type.asPrimitive().getBoxTypeQName());
-                type = new ReferenceTypeImpl(resolvedTypedeclaration);
+                type = new ReferenceTypeImpl(declaration);
             }
-            /*
-             * "a value of the null type (the null reference is the only such value) may be assigned to any reference type, resulting in a null reference of that type"
-             * https://docs.oracle.com/javase/specs/jls/se15/html/jls-5.html#jls-5.2
-             */
+            // Keep the existing null handling behavior.
             if (type.isNull()) {
-                ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.getSolvedJavaLangObject();
-                type = new ReferenceTypeImpl(resolvedTypedeclaration);
+                type = new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
             }
-            // When the actual type is a wildcard (e.g. '?' in Collector<T, ?, R>), apply capture
-            // conversion: use the declared bound for bounded wildcards, and skip unbounded ones
-            // since no concrete type can be inferred from '?' alone (issue #3751).
+            // Handle an actual wildcard argument.
             if (type.isWildcard()) {
                 ResolvedWildcard wildcard = type.asWildcard();
                 if (wildcard.isBounded()) {
-                    matchedTypeParameters.put(expectedType.asTypeParameter(), wildcard.getBoundedType());
+                    recordInferredType(
+                            expectedType.asTypeParameter(),
+                            wildcard.getBoundedType(),
+                            matchedTypeParameters,
+                            lowerBoundCandidates,
+                            isLowerBound && wildcard.isExtends());
                 }
                 return;
             }
             if (!type.isTypeVariable() && !type.isReferenceType() && !type.isArray()) {
                 throw new UnsupportedOperationException(type.getClass().getCanonicalName());
             }
-            // A type variable matched against itself carries no information. This happens when a
-            // method reference argument is typed without solving lambdas: it then gets the formal
-            // parameter type of the very method being resolved (e.g. Function<R, RR>). Recording
-            // R -> R would make the least upper bound of R's candidates undefined (issue #4625).
+            // Do not record T -> T.
             if (type.isTypeVariable()
                     && type.asTypeParameter()
                             .getQualifiedName()
                             .equals(expectedType.asTypeParameter().getQualifiedName())) {
                 return;
             }
-            matchedTypeParameters.put(expectedType.asTypeParameter(), type);
+            // Previously this was a direct Map.put().
+            recordInferredType(
+                    expectedType.asTypeParameter(), type, matchedTypeParameters, lowerBoundCandidates, isLowerBound);
         } else if (expectedType.isArray()) {
-            // Issue 2258 : NullType must not fail this search
+
             if (!(actualType.isArray() || actualType.isNull())) {
                 throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
             }
             matchTypeParameters(
                     expectedType.asArrayType().getComponentType(),
                     actualType.isNull() ? actualType : actualType.asArrayType().getComponentType(),
-                    matchedTypeParameters);
+                    matchedTypeParameters,
+                    lowerBoundCandidates,
+                    isLowerBound);
         } else if (expectedType.isReferenceType()) {
-            // avoid cases where the actual type has no type parameters but the expected one has. Such as: "classX
-            // extends classY<Integer>"
+
             if (actualType.isReferenceType()
                     && actualType.asReferenceType().typeParametersValues().size() > 0) {
+
                 int i = 0;
+
                 for (ResolvedType tp : expectedType.asReferenceType().typeParametersValues()) {
                     matchTypeParameters(
                             tp,
                             actualType.asReferenceType().typeParametersValues().get(i),
-                            matchedTypeParameters);
+                            matchedTypeParameters,
+                            lowerBoundCandidates,
+                            false);
                     i++;
                 }
             }
+
         } else if (expectedType.isPrimitive()) {
-            // nothing to do
+            // Nothing to do.
         } else if (expectedType.isWildcard()) {
             ResolvedWildcard expectedWildcard = expectedType.asWildcard();
-
             if (expectedWildcard.isExtends()) {
-                ResolvedType expectedBound =
-                        expectedWildcard.getBoundedType();
+                ResolvedType expectedBound = expectedWildcard.getBoundedType();
 
                 if (actualType.isWildcard()) {
                     ResolvedWildcard actualWildcard = actualType.asWildcard();
-
                     if (actualWildcard.isExtends()) {
                         matchTypeParameters(
                                 expectedBound,
                                 actualWildcard.getBoundedType(),
-                                matchedTypeParameters
-                        );
+                                matchedTypeParameters,
+                                lowerBoundCandidates,
+                                true);
                     }
                 } else if (actualType.isReferenceType()) {
-                    matchTypeParameters(
-                            expectedBound,
-                            actualType,
-                            matchedTypeParameters
-                    );
+                    matchTypeParameters(expectedBound, actualType, matchedTypeParameters, lowerBoundCandidates, true);
                 }
             }
         } else {
