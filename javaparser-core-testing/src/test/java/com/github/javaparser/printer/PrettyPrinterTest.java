@@ -75,8 +75,9 @@ class PrettyPrinterTest {
         code = "class A { int a, b[]; }";
         assertEquals("int a, b[];", prettyPrintField(code));
 
+        // C-style array brackets (ArrayType.Origin.NAME) are kept after the variable name (issue #3444)
         code = "class A { int[] a[], b[]; }";
-        assertEquals("int[][] a, b;", prettyPrintField(code));
+        assertEquals("int[] a[], b[];", prettyPrintField(code));
 
         code = "class A { int[] a[][], b; }";
         assertEquals("int[] a[][], b;", prettyPrintField(code));
@@ -85,7 +86,7 @@ class PrettyPrinterTest {
         assertEquals("int[] a, b;", prettyPrintField(code));
 
         code = "class A { int a[], b[]; }";
-        assertEquals("int[] a, b;", prettyPrintField(code));
+        assertEquals("int a[], b[];", prettyPrintField(code));
     }
 
     @Test
@@ -94,8 +95,9 @@ class PrettyPrinterTest {
         code = "class A { void foo(){ int a, b[]; }}";
         assertEquals("int a, b[]", prettyPrintVar(code));
 
+        // C-style array brackets (ArrayType.Origin.NAME) are kept after the variable name (issue #3444)
         code = "class A { void foo(){ int[] a[], b[]; }}";
-        assertEquals("int[][] a, b", prettyPrintVar(code));
+        assertEquals("int[] a[], b[]", prettyPrintVar(code));
 
         code = "class A { void foo(){ int[] a[][], b; }}";
         assertEquals("int[] a[][], b", prettyPrintVar(code));
@@ -104,7 +106,7 @@ class PrettyPrinterTest {
         assertEquals("int[] a, b", prettyPrintVar(code));
 
         code = "class A { void foo(){ int a[], b[]; }}";
-        assertEquals("int[] a, b", prettyPrintVar(code));
+        assertEquals("int a[], b[]", prettyPrintVar(code));
     }
 
     private String prettyPrintConfigurable(String code) {
