@@ -53,6 +53,21 @@ class Issue4831Test extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    void inferDeferTypeFromSupplierVariableWithNestedExtendsWildcards() {
+        assertSupplierVariableReturnType("Supplier<? extends Mono<? extends T>>", "Supplier<Mono<String>>");
+    }
+
+    @Test
+    void inferDeferTypeFromSupplierVariableWithOuterExtendsWildcard() {
+        assertSupplierVariableReturnType("Supplier<? extends Mono<T>>", "Supplier<Mono<String>>");
+    }
+
+    @Test
+    void inferDeferTypeFromSupplierVariableWithInnerExtendsWildcard() {
+        assertSupplierVariableReturnType("Supplier<Mono<? extends T>>", "Supplier<Mono<? extends String>>");
+    }
+
+    @Test
     void inferTypeParameterFromExtendsBound() {
         String code = "import java.util.List;\n"
                 + "class Example {\n"
@@ -202,6 +217,141 @@ class Issue4831Test extends AbstractSymbolResolutionTest {
         assertCommonTypeFromExtendsConstraints("derived, base");
     }
 
+    @Test
+    void inferThreeConstraintsWithSuperclassFirst() {
+        assertResolvedCallType(threeConstraintCode("base, derived, derived"), "choose3", "Example.Base");
+    }
+
+    @Test
+    void inferThreeConstraintsWithSuperclassInMiddle() {
+        assertResolvedCallType(threeConstraintCode("derived, base, derived"), "choose3", "Example.Base");
+    }
+
+    @Test
+    void inferCommonSuperclassOfSiblings() {
+        String code = "import java.util.List;\n"
+                + "class Example {\n"
+                + "    static class Base {}\n"
+                + "    static class Left extends Base {}\n"
+                + "    static class Right extends Base {}\n"
+                + "    static <T> T choose(List<? extends T> a,"
+                + " List<? extends T> b) { return null; }\n"
+                + "    void test(List<Left> left, List<Right> right) {\n"
+                + "        Example.choose(left, right);\n"
+                + "    }\n"
+                + "}\n";
+
+        assertResolvedCallType(code, "choose", "Example.Base");
+    }
+
+    @Test
+    void inferRepeatedIdenticalConstraints() {
+        assertResolvedCallType(threeConstraintCode("base, base, base"), "choose3", "Example.Base");
+    }
+
+    private String threeConstraintCode(String arguments) {
+        return "import java.util.List;\n"
+                + "class Example {\n"
+                + "    static class Base {}\n"
+                + "    static class Derived extends Base {}\n"
+                + "    static <T> T choose3("
+                + "List<? extends T> a,"
+                + " List<? extends T> b,"
+                + " List<? extends T> c) { return null; }\n"
+                + "    void test(List<Base> base, List<Derived> derived) {\n"
+                + "        Example.choose3(" + arguments + ");\n"
+                + "    }\n"
+                + "}\n";
+    }
+
+    @Test
+    void preserveEqualityConstraintWithCompatibleLowerBound() {
+        String code = "import java.util.List;\n"
+                + "class Example {\n"
+                + "    static class Base {}\n"
+                + "    static class Derived extends Base {}\n"
+                + "    static <T> T choose("
+                + "List<T> exact,"
+                + " List<? extends T> lower) { return null; }\n"
+                + "    void test(List<Base> base, List<Derived> derived) {\n"
+                + "        Example.choose(base, derived);\n"
+                + "    }\n"
+                + "}\n";
+
+        assertResolvedCallType(code, "choose", "Example.Base");
+    }
+
+    @Test
+    void preserveEqualityConstraintWhenLowerBoundComesFirst() {
+        String code = "import java.util.List;\n"
+                + "class Example {\n"
+                + "    static class Base {}\n"
+                + "    static class Derived extends Base {}\n"
+                + "\n"
+                + "    static <T> T choose(\n"
+                + "            List<? extends T> lower,\n"
+                + "            List<T> exact) {\n"
+                + "        return null;\n"
+                + "    }\n"
+                + "\n"
+                + "    void test(List<Derived> derived, List<Base> base) {\n"
+                + "        Example.choose(derived, base);\n"
+                + "    }\n"
+                + "}\n";
+
+        assertResolvedCallType(code, "choose", "Example.Base");
+    }
+
+    @Test
+    void preserveTypeWhenSuperWildcardIsLast() {
+        String code = "import java.util.List;\n"
+                + "class Example {\n"
+                + "    static <T> T choose("
+                + "List<T> exact, List<? super T> sink) {\n"
+                + "        return null;\n"
+                + "    }\n"
+                + "    void test(List<Integer> exact, List<Number> sink) {\n"
+                + "        Example.choose(exact, sink);\n"
+                + "    }\n"
+                + "}\n";
+
+        assertResolvedCallType(code, "choose", "java.lang.Integer");
+    }
+
+    @Test
+    void preserveTypeWhenSuperWildcardIsFirst() {
+        String code = "import java.util.List;\n"
+                + "class Example {\n"
+                + "    static <T> T choose("
+                + "List<? super T> sink, List<T> exact) {\n"
+                + "        return null;\n"
+                + "    }\n"
+                + "    void test(List<Object> sink, List<Integer> exact) {\n"
+                + "        Example.choose(sink, exact);\n"
+                + "    }\n"
+                + "}\n";
+
+        assertResolvedCallType(code, "choose", "java.lang.Integer");
+    }
+
+    @Test
+    void preserveTypeWithActualSuperWildcard() {
+        String code = "import java.util.List;\n"
+                + "class Example {\n"
+                + "    static <T> T choose("
+                + "List<? super T> sink, List<T> exact) {\n"
+                + "        return null;\n"
+                + "    }\n"
+                + "    void test("
+                + "List<? super Integer> sink,"
+                + " List<Integer> exact) {\n"
+                + "        Example.choose(sink, exact);\n"
+                + "    }\n"
+                + "}\n";
+
+        assertResolvedCallType(code, "choose", "java.lang.Integer");
+    }
+
     private void assertCommonTypeFromExtendsConstraints(String arguments) {
         String code = "import java.util.List;\n"
                 + "class Example {\n"
@@ -216,6 +366,20 @@ class Issue4831Test extends AbstractSymbolResolutionTest {
                 + "}\n";
 
         assertResolvedCallType(code, "choose", "Example.Base");
+    }
+
+    private void assertSupplierVariableReturnType(String formalSupplierType, String actualSupplierType) {
+        String code = "import java.util.function.Supplier;\n"
+                + "class Foo {\n"
+                + "    static abstract class Mono<T> {\n"
+                + "        static <T> Mono<T> defer(" + formalSupplierType + " supplier) { return null; }\n"
+                + "    }\n"
+                + "    void test(" + actualSupplierType + " supplier) {\n"
+                + "        Mono.defer(supplier);\n"
+                + "    }\n"
+                + "}\n";
+
+        assertResolvedCallType(code, "defer", "Foo.Mono<java.lang.String>");
     }
 
     private void assertStringMonoChain(String supplierType, String deferCall) {
@@ -236,7 +400,8 @@ class Issue4831Test extends AbstractSymbolResolutionTest {
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_8)
                 .setSymbolResolver(new JavaSymbolSolver(
                         new TypeSolverBuilder().withCurrentClassloader().build()));
-        CompilationUnit cu = new JavaParser(configuration).parse(code).getResult().orElseThrow(AssertionError::new);
+        CompilationUnit cu =
+                new JavaParser(configuration).parse(code).getResult().orElseThrow(AssertionError::new);
 
         List<MethodCallExpr> calls = cu.findAll(MethodCallExpr.class);
         assertEquals(3, calls.size());
