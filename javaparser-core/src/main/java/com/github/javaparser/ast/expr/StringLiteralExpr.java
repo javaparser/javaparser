@@ -89,7 +89,7 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
      * @return self
      */
     public StringLiteralExpr setEscapedValue(String value) {
-        this.value = Utils.escapeEndOfLines(value);
+        setValue(Utils.escapeEndOfLines(value));
         return this;
     }
 
@@ -107,7 +107,7 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
      * @return this literal expression
      */
     public StringLiteralExpr setString(String value) {
-        this.value = escapeJava(value);
+        setValue(escapeJava(value));
         return this;
     }
 
