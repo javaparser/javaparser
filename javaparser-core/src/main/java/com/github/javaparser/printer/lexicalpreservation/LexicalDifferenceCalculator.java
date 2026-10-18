@@ -132,7 +132,32 @@ class LexicalDifferenceCalculator {
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
         CalculatedSyntaxModel after =
                 calculatedSyntaxModelAfterListRemoval(element, observableProperty, nodeList, index);
-        return new DifferenceElementCalculator().calculate(original, after);
+        List<DifferenceElement> differenceElements = new DifferenceElementCalculator().calculate(original, after);
+        if (observableProperty == ObservableProperty.IMPORTS && index > 0 && index == nodeList.size() - 1) {
+            // The model has two trailing newlines after the imports. Greedy matching can keep the
+            // separator before the last import and remove a trailing newline instead. Remove the
+            // preceding separator so the actual whitespace before the type is preserved, even
+            // when it has fewer newlines than the model.
+            for (int i = 1; i + 2 < differenceElements.size(); i++) {
+                DifferenceElement previous = differenceElements.get(i - 1);
+                DifferenceElement removed = differenceElements.get(i);
+                DifferenceElement next = differenceElements.get(i + 1);
+                DifferenceElement afterNext = differenceElements.get(i + 2);
+                if (removed.isRemoved()
+                        && removed.isChild()
+                        && ((Removed) removed).getChild() == nodeList.get(index)
+                        && previous.isKept()
+                        && ((Kept) previous).isNewLine()
+                        && next.isKept()
+                        && ((Kept) next).isNewLine()
+                        && afterNext.isRemoved()
+                        && ((Removed) afterNext).isNewLine()) {
+                    Collections.swap(differenceElements, i - 1, i + 2);
+                    break;
+                }
+            }
+        }
+        return differenceElements;
     }
 
     List<DifferenceElement> calculateListAdditionDifference(
