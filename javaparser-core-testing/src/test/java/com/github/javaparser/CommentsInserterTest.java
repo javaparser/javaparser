@@ -26,19 +26,26 @@ import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEo
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.CommentsCollection;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.TestParser;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -203,6 +210,72 @@ class CommentsInserterTest {
                 + "}");
         List<Node> attachmentSites = commentAttachmentSites(cu);
         assertEquals(2, attachmentSites.size(), "both trailing comments must survive and be attached once each");
+    }
+
+    @Test
+    void commentsAmongManyMembersAreEachAttributedToTheirOwnMember() {
+        int members = 300;
+        ClassOrInterfaceDeclaration type = TestParser.parseCompilationUnit(classWithCommentedMembers(members))
+                .getClassByName("Many")
+                .get();
+        for (int i = 0; i < members; i++) {
+            MethodDeclaration method = type.getMethodsByName("m" + i).get(0);
+            assertEquals(" Method " + i + ". ", method.getJavadocComment().get().getContent());
+            Statement statement = method.getBody().get().getStatement(0);
+            assertEquals(" inside " + i, statement.getComment().get().getContent());
+            FieldDeclaration field = type.getFieldByName("f" + i).get();
+            assertEquals(" field " + i, field.getComment().get().getContent());
+            BlockStmt emptyBody =
+                    type.getMethodsByName("e" + i).get(0).getBody().get();
+            assertEquals(
+                    " empty " + i + " ", emptyBody.getOrphanComments().get(0).getContent());
+        }
+        assertEquals(4 * members, commentAttachmentSites(type).size() + orphanCount(type));
+    }
+
+    /**
+     * Attribution no longer grows with the number of members times the number of comments:
+     * each child is matched only against the comments that begin inside it, a trailing line comment only against the
+     * children that end on its line, and attributed comments are removed one by one. Before, a class like this took
+     * more than two minutes; it now takes about a second.
+     */
+    @Test
+    void attributingCommentsInAClassWithManyMembersStaysFast() {
+        int members = 10_000;
+        String source = classWithCommentedMembers(members);
+        ClassOrInterfaceDeclaration type = assertTimeoutPreemptively(
+                        Duration.ofSeconds(20),
+                        () -> new JavaParser().parse(source).getResult().orElseThrow(AssertionError::new))
+                .getClassByName("Many")
+                .get();
+        assertEquals(4 * members, commentAttachmentSites(type).size() + orphanCount(type));
+    }
+
+    /**
+     * A class whose members each carry a comment: a Javadoc comment, a comment inside a method body, a comment
+     * trailing a field, and an orphan comment in an otherwise empty body.
+     */
+    private static String classWithCommentedMembers(int members) {
+        String memberGroup = "    /** Method %1$d. */\n"
+                + "    void m%1$d() {\n"
+                + "        // inside %1$d\n"
+                + "        int x = %1$d;\n"
+                + "    }\n"
+                + "    int f%1$d; // field %1$d\n"
+                + "    void e%1$d() { /* empty %1$d */ }\n";
+        StringBuilder source = new StringBuilder("class Many {\n");
+        for (int i = 0; i < members; i++) {
+            source.append(String.format(Locale.ROOT, memberGroup, i));
+        }
+        return source.append("}\n").toString();
+    }
+
+    private static int orphanCount(Node root) {
+        int orphans = 0;
+        for (Node node : root.findAll(Node.class)) {
+            orphans += node.getOrphanComments().size();
+        }
+        return orphans;
     }
 
     /**
