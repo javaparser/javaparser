@@ -171,7 +171,7 @@
             affected by APIs added to JDK classes later on (e.g. SequencedCollection in JDK 21).
         -->
         <java.release>8</java.release>
-        <byte-buddy.version>1.18.14-jdk5</byte-buddy.version>
+        <byte-buddy.version>1.18.15-jdk5</byte-buddy.version>
         <!--
             Extra JVM arguments appended to every forked test JVM. Empty by default; the CI job that
             runs the suite in a Turkish locale sets it to `-Duser.language=tr -Duser.country=TR`, so
@@ -351,7 +351,7 @@
                 <plugin>
                     <groupId>org.sonatype.central</groupId>
                     <artifactId>central-publishing-maven-plugin</artifactId>
-                    <version>0.11.0</version>
+                    <version>0.12.0</version>
                     <extensions>true</extensions>
                     <configuration>
                         <publishingServerId>central</publishingServerId>
@@ -453,7 +453,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.22.0</version>
+                    <version>2.23.0</version>
                     <configuration>
                         <generateBackupPoms>false</generateBackupPoms>
                     </configuration>
