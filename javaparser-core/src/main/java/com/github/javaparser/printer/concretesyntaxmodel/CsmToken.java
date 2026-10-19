@@ -110,12 +110,21 @@ public class CsmToken implements CsmElement {
     }
 
     /*
-     * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
+     * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}.
+     * An end of line corresponds to any end of line: the CSM uses the system line separator by default, which may
+     * differ from the one of the source code (e.g. "\r\n" on Windows for a source written with "\n"). Comparing their
+     * contents would make the correspondence depend on the operating system.
      */
     @Override
     public boolean isCorrespondingElement(TextElement textElement) {
-        return (textElement instanceof TokenTextElement)
-                && ((TokenTextElement) textElement).getTokenKind() == getTokenType()
-                && ((TokenTextElement) textElement).getText().equals(getContent());
+        if (!(textElement instanceof TokenTextElement)) {
+            return false;
+        }
+        TokenTextElement tokenTextElement = (TokenTextElement) textElement;
+        if (isNewLine()) {
+            return tokenTextElement.isNewline();
+        }
+        return tokenTextElement.getTokenKind() == getTokenType()
+                && tokenTextElement.getText().equals(getContent());
     }
 }
