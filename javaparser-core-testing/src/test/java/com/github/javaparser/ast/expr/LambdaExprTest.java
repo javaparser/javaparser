@@ -23,8 +23,10 @@ package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Node;
@@ -47,6 +49,20 @@ class LambdaExprTest {
     void lambdaRange2() {
         Expression expression = parser.parseExpression("(x) -> y");
         assertRange("(", "y", expression);
+    }
+
+    @Test
+    void inferredParametersAreParsed() {
+        LambdaExpr lambdaExpr = parser.parseExpression("(x, y) -> x").asLambdaExpr();
+        assertEquals(2, lambdaExpr.getParameters().size());
+        assertEquals("(x, y) -> x", lambdaExpr.toString());
+    }
+
+    @Test
+    void inferredParametersCannotHaveBrackets() {
+        // JLS 15.27.1: a concise lambda parameter is an identifier, without dims
+        assertThrows(ParseProblemException.class, () -> parser.parseExpression("(x[], y) -> x"));
+        assertThrows(ParseProblemException.class, () -> parser.parseExpression("(x, y[]) -> x"));
     }
 
     private void assertRange(String startToken, String endToken, Node node) {

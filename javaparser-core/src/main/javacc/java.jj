@@ -2436,12 +2436,14 @@ NodeList<Parameter> LambdaParameters():
 NodeList<Parameter> InferredLambdaParameters():
 {
     NodeList<Parameter> ret = null;
-    Pair<SimpleName, List<ArrayBracketPair>> id;
+    SimpleName id;
 }
 {
-    id = VariableDeclaratorId() { ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyNodeList(), new UnknownType(), false, emptyNodeList(), id.a)); }
+    // An inferred parameter is a bare identifier (JLS 15.27.1): unlike VariableDeclaratorId(), no brackets are
+    // accepted after it, so `(x[], y) -> x` is reported instead of losing the brackets.
+    id = SimpleName() { ret = add(ret, new Parameter(range(id, id), new NodeList<Modifier>(), emptyNodeList(), new UnknownType(), false, emptyNodeList(), id)); }
     (
-        "," id = VariableDeclaratorId() { ret = add(ret, new Parameter(range(id.a, id.a), new NodeList<Modifier>(), emptyNodeList(), new UnknownType(), false, emptyNodeList(), id.a)); }
+        "," id = SimpleName() { ret = add(ret, new Parameter(range(id, id), new NodeList<Modifier>(), emptyNodeList(), new UnknownType(), false, emptyNodeList(), id)); }
     )*
     { return ret;  }
 }
@@ -4034,7 +4036,8 @@ Expression PrimaryPrefix():
             ")"
             { ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true); }
          |
-            LOOKAHEAD(VariableDeclaratorId() ",")
+            // Inferred parameters `(x, y) -> ...`: identifiers only, see InferredLambdaParameters()
+            LOOKAHEAD(SimpleName() ",")
             params = InferredLambdaParameters()
             ")"
             { ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true); }
