@@ -1261,9 +1261,8 @@ public class MethodResolutionLogic {
 
     public static void inferTypes(
             ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
-        if (source.equals(target)) {
-            return;
-        }
+        // Recurse through equal-looking parameterized types as well: type variables
+        // with the same simple name may belong to different methods or types.
         if (source.isReferenceType() && target.isReferenceType()) {
             ResolvedReferenceType sourceRefType = source.asReferenceType();
             ResolvedReferenceType targetRefType = target.asReferenceType();
@@ -1342,8 +1341,20 @@ public class MethodResolutionLogic {
             inferTypes(source.asConstraintType().getBound(), target, mappings);
             return;
         }
+        if (source.isTypeVariable()
+                && target.isWildcard()
+                && target.asWildcard().isExtends()) {
+            // A caller's U remains the actual type inside nested extends bounds, e.g.
+            // Supplier<Mono<U>> matched against Supplier<? extends Mono<? extends T>>.
+            inferTypes(source, target.asWildcard().getBoundedType(), mappings);
+            return;
+        }
         if (source.isTypeVariable() && target.isTypeVariable()) {
-            mappings.put(target.asTypeParameter(), source);
+            if (!source.asTypeParameter()
+                    .getQualifiedName()
+                    .equals(target.asTypeParameter().getQualifiedName())) {
+                mappings.put(target.asTypeParameter(), source);
+            }
             return;
         }
         if (source.isTypeVariable()) {

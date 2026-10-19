@@ -87,15 +87,14 @@ public class FieldAccessContext extends ExpressionContext<FieldAccessExpr> {
         Expression scope = wrappedNode.getScope();
         if (wrappedNode.getName().toString().equals(name)) {
             ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
+            if (typeOfScope.isConstraint()) {
+                typeOfScope = typeOfScope.asConstraintType().getBound();
+            }
             if (typeOfScope.isArray() && ARRAY_LENGTH_FIELD_NAME.equals(name)) {
                 return Optional.of(new Value(ResolvedPrimitiveType.INT, ARRAY_LENGTH_FIELD_NAME));
             }
             if (typeOfScope.isReferenceType()) {
                 return solveSymbolAsValue(name, typeOfScope.asReferenceType());
-            }
-            if (typeOfScope.isConstraint()) {
-                return solveSymbolAsValue(
-                        name, typeOfScope.asConstraintType().getBound().asReferenceType());
             }
             return Optional.empty();
         }

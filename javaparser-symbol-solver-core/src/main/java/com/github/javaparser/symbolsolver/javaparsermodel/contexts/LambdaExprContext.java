@@ -208,6 +208,21 @@ public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
                             ResolvedType argType = inferenceContext.resolve(
                                     inferenceContext.addSingle(functionalMethod.getParamType(lambdaParamIndex)));
 
+                            ResolvedType declaredParameter = functionalMethod.getParamType(lambdaParamIndex);
+                            if (argType.isTypeVariable()
+                                    && declaredParameter.isTypeVariable()
+                                    && argType.asTypeParameter()
+                                            .getQualifiedName()
+                                            .equals(declaredParameter
+                                                    .asTypeParameter()
+                                                    .getQualifiedName())) {
+                                // If inference still returns the raw SAM variable, project the
+                                // actual target type before discarding a caller's U in ? super U.
+                                argType = lambdaType
+                                        .asReferenceType()
+                                        .useThisTypeParametersOnTheGivenType(declaredParameter);
+                            }
+
                             ResolvedLambdaConstraintType conType;
                             if (argType.isWildcard()) {
                                 conType = ResolvedLambdaConstraintType.bound(

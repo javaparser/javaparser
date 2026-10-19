@@ -243,8 +243,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends()) {
-                    return singletonList(
-                            typeOfScope.asWildcard().getBoundedType().asReferenceType());
+                    return upperBoundReceiverTypes(typeOfScope.asWildcard().getBoundedType());
                 }
                 return singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
             }

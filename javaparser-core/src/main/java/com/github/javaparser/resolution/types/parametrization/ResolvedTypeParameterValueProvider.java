@@ -52,8 +52,17 @@ public interface ResolvedTypeParameterValueProvider {
                     // super T"
                     if (resolvedTypeParam.isWildcard()
                             && (!resolvedTypeParam.asWildcard().equals(ResolvedWildcard.UNBOUNDED)
-                                    && type.equals(
-                                            resolvedTypeParam.asWildcard().getBoundedType()))) {
+                                    && resolvedTypeParam
+                                            .asWildcard()
+                                            .getBoundedType()
+                                            .isTypeVariable()
+                                    && typeParameter
+                                            .getQualifiedName()
+                                            .equals(resolvedTypeParam
+                                                    .asWildcard()
+                                                    .getBoundedType()
+                                                    .asTypeParameter()
+                                                    .getQualifiedName()))) {
                         return type;
                     }
                     type = resolvedTypeParam;

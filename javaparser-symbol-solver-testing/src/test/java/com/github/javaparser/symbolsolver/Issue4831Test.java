@@ -29,6 +29,7 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -1530,5 +1531,1511 @@ class Issue4831Test extends AbstractSymbolResolutionTest {
 
     private MethodCallExpr findCall(String source, String methodName) {
         return findCall(parse(source), methodName);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("scopedChainedLambdaCases")
+    void inferScopedChainedLambda(
+            String name, String source, String[] expectedCalls, int expectedArrayLengths, boolean invalid) {
+        MethodDeclaration test = parse(source)
+                .findFirst(MethodDeclaration.class, method -> method.getNameAsString()
+                        .equals("test"))
+                .get();
+        List<MethodCallExpr> calls = test.getBody().get().findAll(MethodCallExpr.class);
+        if (invalid) {
+            // The last call deliberately requests a member absent from the inferred type.
+            assertTrue(!calls.isEmpty(), name);
+            assertThrows(UnsolvedSymbolException.class, calls.get(calls.size() - 1)::calculateResolvedType, name);
+            return;
+        }
+        assertEquals(expectedCalls.length, calls.size(), name);
+        for (int i = 0; i < calls.size(); i++) {
+            MethodCallExpr call = calls.get(i);
+            String[] expected = expectedCalls[i].split("\\|");
+            String message = name + ": " + call;
+            assertEquals(expected[0], call.getNameAsString(), message);
+            assertEquals(expected[1], call.calculateResolvedType().describe().replaceAll(",\\s*", ","), message);
+            assertEquals(expected[2], call.resolve().declaringType().getQualifiedName(), message);
+        }
+        List<FieldAccessExpr> lengths = test.getBody()
+                .get()
+                .findAll(FieldAccessExpr.class, field -> field.getNameAsString().equals("length"));
+        assertEquals(expectedArrayLengths, lengths.size(), name);
+        for (FieldAccessExpr length : lengths) {
+            assertEquals("int", length.calculateResolvedType().describe(), name);
+        }
+    }
+
+    // These fixtures were checked against javac --release 8, including their declaring types.
+    // Read-only get() chains use the extends-bound view of javac's captured wildcards.
+    // Each expected call records its name, return type and declaring type in AST traversal order.
+    private static Stream<Arguments> scopedChainedLambdaCases() {
+        return Stream.of(
+                Arguments.of(
+                        "round1: lambda-0-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> { return (Mono<String>) null; }).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: lambda-0-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer((() -> (Mono<String>) null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: lambda-0-3",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> ((Mono<String>) null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: supplier-0-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static Mono<String> strings(){return null;} static class StringSupplier implements Supplier<Mono<String>>{public Mono<String> get(){return null;}}  void test(Supplier<Mono<String>> supplier){Mono.defer(Example::strings).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: supplier-0-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static Mono<String> strings(){return null;} static class StringSupplier implements Supplier<Mono<String>>{public Mono<String> get(){return null;}}  void test(Supplier<Mono<String>> supplier){Mono.defer(new StringSupplier()).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-0-0",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Single<X> extends Mono<X>{}  void test(){Mono.defer(() -> (Single<String>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-0-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Flipped<A,B> extends Mono<B>{}  void test(){Mono.defer(() -> (Flipped<Long,String>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-0-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Fixed extends Mono<String>{}  void test(){Mono.defer(() -> (Fixed) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-0-3",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Fixed extends Mono<String>{}  void test(){Mono.defer(Fixed::new).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-0-4",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Mid<A,B> extends Mono<B>{} static class Leaf<X> extends Mid<Long,X>{}  void test(){Mono.defer(() -> (Leaf<String>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: lambda-1-0",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<String>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: lambda-1-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> { return (Mono<String>) null; }).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: lambda-1-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer((() -> (Mono<String>) null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: lambda-1-3",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> ((Mono<String>) null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: supplier-1-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static Mono<String> strings(){return null;} static class StringSupplier implements Supplier<Mono<String>>{public Mono<String> get(){return null;}}  void test(Supplier<Mono<String>> supplier){Mono.defer(Example::strings).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: supplier-1-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static Mono<String> strings(){return null;} static class StringSupplier implements Supplier<Mono<String>>{public Mono<String> get(){return null;}}  void test(Supplier<Mono<String>> supplier){Mono.defer(new StringSupplier()).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-1-0",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Single<X> extends Mono<X>{}  void test(){Mono.defer(() -> (Single<String>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-1-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Flipped<A,B> extends Mono<B>{}  void test(){Mono.defer(() -> (Flipped<Long,String>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-1-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Fixed extends Mono<String>{}  void test(){Mono.defer(() -> (Fixed) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-1-3",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Fixed extends Mono<String>{}  void test(){Mono.defer(Fixed::new).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-1-4",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Mid<A,B> extends Mono<B>{} static class Leaf<X> extends Mid<Long,X>{}  void test(){Mono.defer(() -> (Leaf<String>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: lambda-2-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> { return (Mono<String>) null; }).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: lambda-2-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer((() -> (Mono<String>) null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: lambda-2-3",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> ((Mono<String>) null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: supplier-2-0",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static Mono<String> strings(){return null;} static class StringSupplier implements Supplier<Mono<String>>{public Mono<String> get(){return null;}}  void test(Supplier<Mono<String>> supplier){Mono.defer(supplier).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: supplier-2-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static Mono<String> strings(){return null;} static class StringSupplier implements Supplier<Mono<String>>{public Mono<String> get(){return null;}}  void test(Supplier<Mono<String>> supplier){Mono.defer(Example::strings).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: supplier-2-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static Mono<String> strings(){return null;} static class StringSupplier implements Supplier<Mono<String>>{public Mono<String> get(){return null;}}  void test(Supplier<Mono<String>> supplier){Mono.defer(new StringSupplier()).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-2-0",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Single<X> extends Mono<X>{}  void test(){Mono.defer(() -> (Single<String>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-2-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Flipped<A,B> extends Mono<B>{}  void test(){Mono.defer(() -> (Flipped<Long,String>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-2-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Fixed extends Mono<String>{}  void test(){Mono.defer(() -> (Fixed) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-2-3",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Fixed extends Mono<String>{}  void test(){Mono.defer(Fixed::new).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: subclass-2-4",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<Mono<T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Mid<A,B> extends Mono<B>{} static class Leaf<X> extends Mid<Long,X>{}  void test(){Mono.defer(() -> (Leaf<String>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: element-0",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<Integer>) null).consume(s -> s.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: element-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<CharSequence>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.CharSequence>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: element-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<List<String>>) null).consume(s -> s.get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<java.lang.String>>|Example.Mono",
+                            "length|int|java.lang.String",
+                            "get|java.lang.String|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: element-3",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<Map<String,Integer>>) null).consume(s -> s.get(\"x\").intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<java.lang.String,java.lang.Integer>>|Example.Mono",
+                            "intValue|int|java.lang.Integer",
+                            "get|java.lang.Integer|java.util.Map"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: caller-variable",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(){Mono.defer(() -> (Mono<U>) null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: map-chain-0",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<String>) null).map(s -> s.length()).consume(n -> n.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: map-chain-1",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<String>) null).map(s -> s.substring(1)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.String>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "substring|java.lang.String|java.lang.String",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round1: map-chain-2",
+                        "import java.util.*; import java.util.function.*; class Example { static abstract class Mono<T> { static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<List<String>>) null).map(s -> s.get(0)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.String>|Example.Mono",
+                            "defer|Example.Mono<java.util.List<java.lang.String>>|Example.Mono",
+                            "get|java.lang.String|java.util.List",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: caller-composite-0-lambda",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(){Mono.defer(() -> (Mono<List<U>>)null).consume(s -> s.get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|U|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: caller-composite-0-variable",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(Supplier<Mono<List<U>>> xs){Mono.defer(xs).consume(s -> s.get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|U|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: caller-composite-1-lambda",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(){Mono.defer(() -> (Mono<Map<String,U>>)null).consume(s -> s.get(\"x\").length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<java.lang.String,U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|U|java.util.Map"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: caller-composite-1-variable",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(Supplier<Mono<Map<String,U>>> xs){Mono.defer(xs).consume(s -> s.get(\"x\").length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<java.lang.String,U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|U|java.util.Map"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: caller-composite-2-lambda",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(){Mono.defer(() -> (Mono<U[]>)null).consume(s -> {int length=s.length;});} }",
+                        new String[] {"consume|void|Example.Mono", "defer|Example.Mono<U[]>|Example.Mono"},
+                        1,
+                        false),
+                Arguments.of(
+                        "round2: caller-composite-2-variable",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(Supplier<Mono<U[]>> xs){Mono.defer(xs).consume(s -> {int length=s.length;});} }",
+                        new String[] {"consume|void|Example.Mono", "defer|Example.Mono<U[]>|Example.Mono"},
+                        1,
+                        false),
+                Arguments.of(
+                        "round2: caller-composite-3-lambda",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(){Mono.defer(() -> (Mono<List<? extends U>>)null).consume(s -> s.get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: caller-composite-3-variable",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(Supplier<Mono<List<? extends U>>> xs){Mono.defer(xs).consume(s -> s.get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: array-0-lambda",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<String[]>)null).consume(s -> {int length=s.length;});} }",
+                        new String[] {"consume|void|Example.Mono", "defer|Example.Mono<java.lang.String[]>|Example.Mono"
+                        },
+                        1,
+                        false),
+                Arguments.of(
+                        "round2: array-0-variable",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(Supplier<Mono<String[]>> xs){Mono.defer(xs).consume(s -> {int length=s.length;});} }",
+                        new String[] {"consume|void|Example.Mono", "defer|Example.Mono<java.lang.String[]>|Example.Mono"
+                        },
+                        1,
+                        false),
+                Arguments.of(
+                        "round2: array-1-lambda",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<int[]>)null).consume(s -> {int length=s.length;});} }",
+                        new String[] {"consume|void|Example.Mono", "defer|Example.Mono<int[]>|Example.Mono"},
+                        1,
+                        false),
+                Arguments.of(
+                        "round2: array-1-variable",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(Supplier<Mono<int[]>> xs){Mono.defer(xs).consume(s -> {int length=s.length;});} }",
+                        new String[] {"consume|void|Example.Mono", "defer|Example.Mono<int[]>|Example.Mono"},
+                        1,
+                        false),
+                Arguments.of(
+                        "round2: array-2-lambda",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<String[][]>)null).consume(s -> {int length=s.length;});} }",
+                        new String[] {
+                            "consume|void|Example.Mono", "defer|Example.Mono<java.lang.String[][]>|Example.Mono"
+                        },
+                        1,
+                        false),
+                Arguments.of(
+                        "round2: array-2-variable",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(Supplier<Mono<String[][]>> xs){Mono.defer(xs).consume(s -> {int length=s.length;});} }",
+                        new String[] {
+                            "consume|void|Example.Mono", "defer|Example.Mono<java.lang.String[][]>|Example.Mono"
+                        },
+                        1,
+                        false),
+                Arguments.of(
+                        "round2: caller-ground-0",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(){Mono.defer(() -> (Mono<U>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: caller-ground-1",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(){Mono.defer(() -> (Mono<U>)null).consume((U s) -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: caller-ground-2",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(){Mono.defer(() -> (Mono<U>)null).consume(s -> {s.length();});} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: caller-intersection",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends Number & CharSequence> void test(){Mono.defer(() -> (Mono<U>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-projection-0",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Swapped<A,B> implements Supplier<Mono<B>>{public Mono<B> get(){return null;}}  void test(Swapped<Long,String> xs){Mono.defer(xs).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-projection-1",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Parent<A,B> implements Supplier<Mono<B>>{public Mono<B> get(){return null;}} static class Leaf<X> extends Parent<Long,X>{}  void test(Leaf<String> xs){Mono.defer(xs).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-projection-2",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Fixed implements Supplier<Mono<String>>{public Mono<String> get(){return null;}}  void test(Fixed xs){Mono.defer(xs).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-varargs-0",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>>... xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<String>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-varargs-1",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>>... xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<String>)null, () -> (Mono<String>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-varargs-2",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>>... xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(Supplier<Mono<String>>[] xs){Mono.defer(xs).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-varargs-3",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(String tag, Supplier<? extends Mono<? extends T>>... xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(\"tag\", () -> (Mono<String>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-varargs-4",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(String tag, Supplier<? extends Mono<? extends T>>... xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(\"tag\", () -> (Mono<String>)null, () -> (Mono<String>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-varargs-5",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> first, Supplier<? extends Mono<? extends T>>... xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<String>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-varargs-lub-0",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>>... xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Base{String name(){return \"\";}} static class Left extends Base{} static class Right extends Base{}  void test(){Mono.defer(() -> (Mono<Base>)null, () -> (Mono<Left>)null).consume(s -> s.name().length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<Example.Base>|Example.Mono",
+                            "length|int|java.lang.String",
+                            "name|java.lang.String|Example.Base"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-varargs-lub-1",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>>... xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Base{String name(){return \"\";}} static class Left extends Base{} static class Right extends Base{}  void test(){Mono.defer(() -> (Mono<Left>)null, () -> (Mono<Base>)null).consume(s -> s.name().length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<Example.Base>|Example.Mono",
+                            "length|int|java.lang.String",
+                            "name|java.lang.String|Example.Base"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: supplier-varargs-lub-2",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>>... xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static class Base{String name(){return \"\";}} static class Left extends Base{} static class Right extends Base{}  void test(){Mono.defer(() -> (Mono<Left>)null, () -> (Mono<Right>)null).consume(s -> s.name().length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<Example.Base>|Example.Mono",
+                            "length|int|java.lang.String",
+                            "name|java.lang.String|Example.Base"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: map-stage-0",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} } static Mono<String> strings(){return null;}  void test(){Mono.defer(Example::strings).map(s -> s.length()).consume(n -> n.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: map-stage-1",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<String>)null).map(String::length).consume(n -> n.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: map-stage-2",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }   void test(){Mono.defer(() -> (Mono<String>)null).map(s -> s.substring(1)).map(s -> s.length()).consume(n -> n.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "map|Example.Mono<java.lang.String>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "substring|java.lang.String|java.lang.String",
+                            "length|int|java.lang.String",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: map-stage-3",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} }  <U extends CharSequence> void test(){Mono.defer(() -> (Mono<List<U>>)null).map(s -> s.get(0)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<U>|Example.Mono",
+                            "defer|Example.Mono<java.util.List<U>>|Example.Mono",
+                            "get|U|java.util.List",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round2: inherited-consumer",
+                        "import java.util.*; import java.util.function.*; class Example {interface Sink<X>{ default void consume(Consumer<? super X> action){} } static abstract class Mono<T> implements Sink<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;}}   void test(){Mono.defer(() -> (Mono<String>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Sink",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: parenthesized-chain",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){((Mono.defer(() -> (Mono<String>)null))).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: explicit-consumer",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer(() -> (Mono<String>)null).consume((String s) -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: returning-void-consumer",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer(() -> (Mono<String>)null).consume(s -> {s.length(); return;});} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: cast-supplier",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer((Supplier<Mono<String>>) (() -> (Mono<String>)null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: explicit-supertype",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.<CharSequence>defer(() -> (Mono<String>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.CharSequence>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: caller-name-shadow",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}} <T extends CharSequence> void test(){Mono.defer(() -> (Mono<T>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<T>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: caller-class-variable",
+                        "import java.util.*; import java.util.function.*; class Example<U extends CharSequence>{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer(() -> (Mono<U>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: caller-two-variables",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}} <U extends CharSequence,V extends CharSequence> void test(){Mono.defer(() -> (Mono<Map<U,V>>)null).consume(s -> s.get((U)null).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<U,V>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|V|java.util.Map"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: block-two-returns",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(boolean flag){Mono.defer(() -> {if(flag) return (Mono<String>)null; return (Mono<String>)null;}).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: block-subclass-return",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}static class Fixed extends Mono<String>{}  void test(boolean flag){Mono.defer(() -> {if(flag) return (Mono<String>)null; return (Fixed)null;}).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: consumer-variable",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(Consumer<CharSequence> action){Mono.defer(() -> (Mono<String>)null).consume(action);} }",
+                        new String[] {"consume|void|Example.Mono", "defer|Example.Mono<java.lang.String>|Example.Mono"},
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: mapper-block-return",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer(() -> (Mono<String>)null).map(s -> {return s.length();}).consume(n -> n.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: local-alias",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}} <U extends CharSequence> void test(){Mono<U> value=Mono.defer(() -> (Mono<U>)null); value.consume(s -> s.length());} }",
+                        new String[] {
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "consume|void|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: nested-supplier-variable",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Supplier<? extends Mono<? extends String>> source=() -> (Mono<String>)null; Mono.defer(source).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round3: callback-string-must-not-be-integer",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer(() -> (Mono<String>)null).consume(s -> s.intValue());} }",
+                        new String[] {},
+                        0,
+                        true),
+                Arguments.of(
+                        "round3: callback-integer-must-not-be-string",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer(() -> (Mono<Integer>)null).consume(s -> s.length());} }",
+                        new String[] {},
+                        0,
+                        true),
+                Arguments.of(
+                        "round3: mapped-integer-must-not-be-string",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer(() -> (Mono<String>)null).map(s -> s.length()).consume(s -> s.length());} }",
+                        new String[] {},
+                        0,
+                        true),
+                Arguments.of(
+                        "round3: array-length-is-not-method",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer(() -> (Mono<String[]>)null).consume(s -> s.length());} }",
+                        new String[] {},
+                        0,
+                        true),
+                Arguments.of(
+                        "round4: shadow-number-method",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}} <T extends Number> void test(){Mono.defer(() -> (Mono<T>)null).consume(s -> s.doubleValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<T>|Example.Mono",
+                            "doubleValue|double|java.lang.Number"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round4: shadow-number-class",
+                        "import java.util.*; import java.util.function.*; class Example<T extends Number>{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}  void test(){Mono.defer(() -> (Mono<T>)null).consume(s -> s.doubleValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<T>|Example.Mono",
+                            "doubleValue|double|java.lang.Number"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round4: shadow-value-return",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}} <T extends CharSequence> void test(Mono<T> value){Mono.defer(() -> value).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<T>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round4: shadow-supplier-variable",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}} <T extends CharSequence> void test(Supplier<Mono<T>> source){Mono.defer(source).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<T>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round4: shadow-two-variables",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}} <T extends CharSequence,R extends CharSequence> void test(){Mono.defer(() -> (Mono<Map<T,R>>)null).map(s -> s.get((T)null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<R>|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<T,R>>|Example.Mono",
+                            "get|R|java.util.Map",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round4: caller-interface-member",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}} <U extends CharSequence> void test(){Mono.defer(() -> (Mono<U>)null).consume(s -> s.subSequence(0,1).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "subSequence|java.lang.CharSequence|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round4: mapper-variable",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}  void test(Function<CharSequence,Integer> fn){Mono.defer(() -> (Mono<String>)null).map(fn).consume(s -> s.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round4: mapper-explicit-input",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}  void test(){Mono.defer(() -> (Mono<String>)null).map((CharSequence s) -> s.length()).consume(s -> s.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round4: fixed-prefix-expression",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(String tag,Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}static String label(){return \"tag\";}  void test(){Mono.defer(label(), () -> (Mono<String>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "label|java.lang.String|Example",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round4: enclosed-array-chain",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}  void test(){((Mono.defer(() -> (Mono<int[]>)null))).consume(s -> {int n=s.length;});} }",
+                        new String[] {"consume|void|Example.Mono", "defer|Example.Mono<int[]>|Example.Mono"},
+                        1,
+                        false),
+                Arguments.of(
+                        "round5: producer-factory-call",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}static Mono<String> strings(){return null;}  void test(){Mono.defer(() -> strings()).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "strings|Example.Mono<java.lang.String>|Example",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: producer-generic-call",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}static <X> Mono<X> wrap(X x){return null;}  void test(){Mono.defer(() -> wrap(\"x\")).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "wrap|Example.Mono<java.lang.String>|Example",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: nested-defer-call",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}  void test(){Mono.defer(() -> Mono.defer(() -> (Mono<String>)null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: nested-defer-caller",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}} <U extends CharSequence> void test(){Mono.defer(() -> Mono.defer(() -> (Mono<U>)null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: block-supplier-get",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}} <U extends CharSequence> void test(){Mono.defer(() -> {Supplier<Mono<U>> source=() -> (Mono<U>)null; return source.get();}).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "get|Example.Mono<U>|java.util.function.Supplier",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: conditional-same-producer",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}static class Single<X> extends Mono<X>{} <U extends CharSequence> void test(boolean flag){Mono.defer(() -> flag ? (Mono<U>)null : (Single<U>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: tap-consumer-stage",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}  void test(){Mono.defer(() -> (Mono<String>)null).tap(s -> s.length()).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "tap|Example.Mono<java.lang.String>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: tap-caller-stage",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}} <U extends CharSequence> void test(){Mono.defer(() -> (Mono<U>)null).tap(s -> s.length()).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "tap|Example.Mono<U>|Example.Mono",
+                            "defer|Example.Mono<U>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: deep-caller-map-stages",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}} <U extends CharSequence> void test(){Mono.defer(() -> (Mono<Map<String,List<U>>>)null).map(s -> s.get(\"x\")).map(s -> s.get(0)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<U>|Example.Mono",
+                            "map|Example.Mono<java.util.List<U>>|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<java.lang.String,java.util.List<U>>>|Example.Mono",
+                            "get|java.util.List<U>|java.util.Map",
+                            "get|U|java.util.List",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: mapper-array-length",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}  void test(){Mono.defer(() -> (Mono<String[]>)null).map(s -> s.length).consume(s -> s.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "defer|Example.Mono<java.lang.String[]>|Example.Mono",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        1,
+                        false),
+                Arguments.of(
+                        "round5: conditional-null-producer",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}  void test(boolean flag){Mono.defer(() -> flag ? (Mono<String>)null : null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: consumer-reference",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}static void read(CharSequence s){}  void test(){Mono.defer(() -> (Mono<String>)null).consume(Example::read);} }",
+                        new String[] {"consume|void|Example.Mono", "defer|Example.Mono<java.lang.String>|Example.Mono"},
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: independent-string-then-integer",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}  void test(){Mono.defer(() -> (Mono<String>)null).consume(s -> s.length()); Mono.defer(() -> (Mono<Integer>)null).consume(s -> s.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String",
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round5: independent-integer-then-string",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;} Mono<T> tap(Consumer<? super T> fn){return this;}}  void test(){Mono.defer(() -> (Mono<Integer>)null).consume(s -> s.intValue()); Mono.defer(() -> (Mono<String>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "intValue|int|java.lang.Integer",
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.lang.String>|Example.Mono",
+                            "length|int|java.lang.String"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round6: class-R-and-map-R",
+                        "import java.util.*; import java.util.function.*; class Example<R extends CharSequence>{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer(() -> (Mono<R>)null).map(s -> s.length()).consume(s -> s.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "defer|Example.Mono<R>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round6: class-T-and-R",
+                        "import java.util.*; import java.util.function.*; class Example<T extends Number,R extends CharSequence>{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){Mono.defer(() -> (Mono<Map<T,R>>)null).map(s -> s.get((T)null)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<R>|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<T,R>>|Example.Mono",
+                            "get|R|java.util.Map",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round6: subclass-same-name-T",
+                        "import java.util.*; import java.util.function.*; class Example<T extends CharSequence>{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}static class Source<T> extends Mono<T>{}  void test(){Mono.defer(() -> (Source<T>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<T>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round6: inherited-consumer-same-name-T",
+                        "import java.util.*; import java.util.function.*; class Example<T extends CharSequence>{interface Sink<T>{default void consume(Consumer<? super T> fn){}} static abstract class Mono<T> implements Sink<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;}}  void test(){Mono.defer(() -> (Mono<T>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Sink",
+                            "defer|Example.Mono<T>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round6: supplier-same-name-T",
+                        "import java.util.*; import java.util.function.*; class Example<T extends CharSequence>{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}static class Source<T> implements Supplier<Mono<T>>{public Mono<T> get(){return null;}}  void test(Source<T> source){Mono.defer(source).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<T>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round6: explicit-caller-T",
+                        "import java.util.*; import java.util.function.*; class Example{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}} <T extends CharSequence> void test(){Mono.<T>defer(() -> (Mono<T>)null).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<T>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round6: enclosed-caller-T",
+                        "import java.util.*; import java.util.function.*; class Example<T extends CharSequence>{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}  void test(){((Mono.defer(() -> (Mono<T>)null))).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<T>|Example.Mono",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round6: callback-bound-call",
+                        "import java.util.*; import java.util.function.*; class Example<T extends Number>{static abstract class Mono<T>{static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> fn){} <R> Mono<R> map(Function<? super T,? extends R> fn){return null;}}static int read(Number n){return 0;}  void test(){Mono.defer(() -> (Mono<T>)null).consume(s -> read(s));} }",
+                        new String[] {
+                            "consume|void|Example.Mono", "defer|Example.Mono<T>|Example.Mono", "read|int|Example"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round7: bounded-wildcard-0-lambda",
+                        "import java.util.*; import java.util.function.*; class Example  {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} } <V extends CharSequence, U extends V> void test(){  Mono.defer(() -> (Mono<List<? extends U>>)null).consume(s -> s.get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round7: bounded-wildcard-0-variable",
+                        "import java.util.*; import java.util.function.*; class Example  {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} } <V extends CharSequence, U extends V> void test(){ Supplier<Mono<List<? extends U>>> xs=()->null; Mono.defer(xs).consume(s -> s.get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round7: bounded-wildcard-1-lambda",
+                        "import java.util.*; import java.util.function.*; class Example  {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} } <U extends CharSequence & java.io.Serializable> void test(){  Mono.defer(() -> (Mono<List<? extends U>>)null).consume(s -> s.get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round7: bounded-wildcard-1-variable",
+                        "import java.util.*; import java.util.function.*; class Example  {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} } <U extends CharSequence & java.io.Serializable> void test(){ Supplier<Mono<List<? extends U>>> xs=()->null; Mono.defer(xs).consume(s -> s.get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round7: bounded-wildcard-2-lambda",
+                        "import java.util.*; import java.util.function.*; class Example <U extends CharSequence> {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} }  void test(){  Mono.defer(() -> (Mono<List<? extends U>>)null).consume(s -> s.get(0).subSequence(0,1).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "subSequence|java.lang.CharSequence|java.lang.CharSequence",
+                            "get|? extends U|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round7: bounded-wildcard-2-variable",
+                        "import java.util.*; import java.util.function.*; class Example <U extends CharSequence> {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} }  void test(){ Supplier<Mono<List<? extends U>>> xs=()->null; Mono.defer(xs).consume(s -> s.get(0).subSequence(0,1).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "subSequence|java.lang.CharSequence|java.lang.CharSequence",
+                            "get|? extends U|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round7: bounded-wildcard-3-lambda",
+                        "import java.util.*; import java.util.function.*; class Example  {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} } <U extends CharSequence> void test(){  Mono.defer(() -> (Mono<Map<String, ? extends U>>)null).consume(s -> s.get(\"x\").length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<java.lang.String,? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.Map"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round7: bounded-wildcard-3-variable",
+                        "import java.util.*; import java.util.function.*; class Example  {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} } <U extends CharSequence> void test(){ Supplier<Mono<Map<String, ? extends U>>> xs=()->null; Mono.defer(xs).consume(s -> s.get(\"x\").length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<java.lang.String,? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.Map"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round7: bounded-wildcard-4-lambda",
+                        "import java.util.*; import java.util.function.*; class Example  {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} } <U extends CharSequence> void test(){  Mono.defer(() -> (Mono<List<List<? extends U>>>)null).consume(s -> s.get(0).get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<java.util.List<? extends U>>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.List",
+                            "get|java.util.List<? extends U>|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round7: bounded-wildcard-4-variable",
+                        "import java.util.*; import java.util.function.*; class Example  {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} } <U extends CharSequence> void test(){ Supplier<Mono<List<List<? extends U>>>> xs=()->null; Mono.defer(xs).consume(s -> s.get(0).get(0).length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<java.util.List<? extends U>>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.List",
+                            "get|java.util.List<? extends U>|java.util.List"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round8: final-bound-chain-0-expression",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> f){return null;} } <U extends CharSequence> void test(){Mono.defer(() -> (Mono<List<? extends U>>)null).map(s -> (U)s.get(0)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<U>|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "get|? extends U|java.util.List",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round8: final-bound-chain-0-block",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> f){return null;} } <U extends CharSequence> void test(){Mono.defer(() -> {return (Mono<List<? extends U>>)null;}).map(s -> (U)s.get(0)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<U>|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "get|? extends U|java.util.List",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round8: final-bound-chain-1-expression",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> f){return null;} } <U extends CharSequence> void test(){Mono.defer(() -> (Mono<Map<String, ? extends U>>)null).map(s -> s.get(\"x\").length()).consume(s -> s.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<java.lang.String,? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.Map",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round8: final-bound-chain-1-block",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> f){return null;} } <U extends CharSequence> void test(){Mono.defer(() -> {return (Mono<Map<String, ? extends U>>)null;}).map(s -> s.get(\"x\").length()).consume(s -> s.intValue());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.Integer>|Example.Mono",
+                            "defer|Example.Mono<java.util.Map<java.lang.String,? extends U>>|Example.Mono",
+                            "length|int|java.lang.CharSequence",
+                            "get|? extends U|java.util.Map",
+                            "intValue|int|java.lang.Integer"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round8: final-bound-chain-2-expression",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> f){return null;} } <U extends CharSequence> void test(){Mono.defer(() -> (Mono<List<? extends U>>)null).consume(s -> { U first=s.get(0); first.length(); });} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "get|? extends U|java.util.List",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round8: final-bound-chain-2-block",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> f){return null;} } <U extends CharSequence> void test(){Mono.defer(() -> {return (Mono<List<? extends U>>)null;}).consume(s -> { U first=s.get(0); first.length(); });} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "get|? extends U|java.util.List",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round8: final-bound-chain-3-expression",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> f){return null;} } <U extends CharSequence> void test(){Mono.defer(() -> (Mono<List<? extends U>>)null).map(s -> s.get(0).subSequence(0,1)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.CharSequence>|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "subSequence|java.lang.CharSequence|java.lang.CharSequence",
+                            "get|? extends U|java.util.List",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false),
+                Arguments.of(
+                        "round8: final-bound-chain-3-block",
+                        "import java.util.*; import java.util.function.*; class Example {static abstract class Mono<T>{ static <T> Mono<T> defer(Supplier<? extends Mono<? extends T>> xs){return null;} void consume(Consumer<? super T> action){} <R> Mono<R> map(Function<? super T,? extends R> f){return null;} } <U extends CharSequence> void test(){Mono.defer(() -> {return (Mono<List<? extends U>>)null;}).map(s -> s.get(0).subSequence(0,1)).consume(s -> s.length());} }",
+                        new String[] {
+                            "consume|void|Example.Mono",
+                            "map|Example.Mono<java.lang.CharSequence>|Example.Mono",
+                            "defer|Example.Mono<java.util.List<? extends U>>|Example.Mono",
+                            "subSequence|java.lang.CharSequence|java.lang.CharSequence",
+                            "get|? extends U|java.util.List",
+                            "length|int|java.lang.CharSequence"
+                        },
+                        0,
+                        false));
     }
 }

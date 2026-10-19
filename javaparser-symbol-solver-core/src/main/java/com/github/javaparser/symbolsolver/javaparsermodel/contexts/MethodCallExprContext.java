@@ -296,7 +296,9 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 // constraints as static calls, before the legacy substitution pass below.
                 methodUsage = new MethodUsage(
                         methodUsage.getDeclaration(),
-                        methodUsage.getParamTypes(),
+                        methodUsage.getParamTypes().stream()
+                                .map(refType::useThisTypeParametersOnTheGivenType)
+                                .collect(Collectors.toList()),
                         refType.useThisTypeParametersOnTheGivenType(
                                 methodUsage.getDeclaration().getReturnType()));
                 methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);

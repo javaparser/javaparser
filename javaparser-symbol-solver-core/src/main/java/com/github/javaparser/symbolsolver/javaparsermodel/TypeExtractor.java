@@ -62,8 +62,10 @@ import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.google.common.collect.ImmutableList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -213,7 +215,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(EnclosedExpr node, Boolean solveLambdas) {
-        return node.getInner().accept(this, solveLambdas);
+        // Preserve the facade's argument-lambda resolution when a generic call is parenthesized.
+        return facade.getType(node.getInner(), solveLambdas);
     }
 
     /**
@@ -760,10 +763,38 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             // we don't need to bother inferring types
             if (!(formalType instanceof ResolvedVoidType)) {
                 lambdaCtx.addPair(result, functionalTypeWithReturn);
-                result = lambdaCtx.resolve(lambdaCtx.addSingle(result));
+                ResolvedType declaredReturn = result.asReferenceType().useThisTypeParametersOnTheGivenType(formalType);
+                Map<ResolvedTypeParameterDeclaration, ResolvedType> returnBindings = new HashMap<>();
+                MethodResolutionLogic.inferTypes(actualType, declaredReturn, returnBindings);
+                ResolvedType projectedResult = result;
+                for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> binding : returnBindings.entrySet()) {
+                    if (mentionsTypeParameter(projectedResult, binding.getKey())) {
+                        projectedResult = projectedResult.replaceTypeVariables(binding.getKey(), binding.getValue());
+                    }
+                }
+                ResolvedType inferredResult = lambdaCtx.resolve(lambdaCtx.addSingle(result));
+                // Preserve caller variables throughout the actual return type, including
+                // List<U> and U[], rather than leaking intermediate inference variables.
+                result = projectedResult != result ? projectedResult : inferredResult;
             }
         }
         return result;
+    }
+
+    private boolean mentionsTypeParameter(ResolvedType type, ResolvedTypeParameterDeclaration parameter) {
+        if (type.isTypeVariable()) {
+            return type.asTypeParameter().getQualifiedName().equals(parameter.getQualifiedName());
+        }
+        if (type.isArray()) {
+            return mentionsTypeParameter(type.asArrayType().getComponentType(), parameter);
+        }
+        if (type.isWildcard()) {
+            return type.asWildcard().isBounded()
+                    && mentionsTypeParameter(type.asWildcard().getBoundedType(), parameter);
+        }
+        return type.isReferenceType()
+                && type.asReferenceType().typeParametersValues().stream()
+                        .anyMatch(value -> mentionsTypeParameter(value, parameter));
     }
 
     /**
