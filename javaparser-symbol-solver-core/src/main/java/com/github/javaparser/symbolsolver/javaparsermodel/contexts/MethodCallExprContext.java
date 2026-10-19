@@ -218,7 +218,9 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         for (ResolvedReferenceType receiverType : receiverTypes) {
             SymbolReference<ResolvedMethodDeclaration> res =
                     MethodResolutionLogic.solveMethodInType(receiverType, name, argumentsTypes, false);
-            if (res.isSolved()) {
+            if (res.isSolved()
+                    && !hasIncompatibleCaptureArgument(
+                            receiverType, res.getCorrespondingDeclaration(), argumentsTypes)) {
                 return res;
             }
         }
@@ -229,6 +231,45 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     ///
     /// Private methods
     ///
+
+    private boolean hasIncompatibleCaptureArgument(
+            ResolvedReferenceType receiver, ResolvedMethodDeclaration method, List<ResolvedType> arguments) {
+        for (int i = 0; i < arguments.size(); i++) {
+            int parameterIndex = Math.min(i, method.getNumberOfParams() - 1);
+            if (parameterIndex < 0) {
+                break;
+            }
+            ResolvedType parameter = receiver.useThisTypeParametersOnTheGivenType(
+                    method.getParam(parameterIndex).getType());
+            if (method.getParam(parameterIndex).isVariadic() && parameter.isArray()) {
+                parameter = parameter.asArrayType().getComponentType();
+                if (i == parameterIndex
+                        && arguments.size() == method.getNumberOfParams()
+                        && arguments.get(i).isArray()
+                        && parameter.isAssignableBy(
+                                arguments.get(i).asArrayType().getComponentType())) {
+                    continue;
+                }
+            }
+            if (ResolvedCaptureType.containsCapture(parameter) && !parameter.isAssignableBy(arguments.get(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean containsSuperWildcard(ResolvedType type) {
+        if (type.isWildcard()) {
+            return type.asWildcard().isSuper()
+                    || (type.asWildcard().isBounded()
+                            && containsSuperWildcard(type.asWildcard().getBoundedType()));
+        }
+        if (type.isArray()) {
+            return containsSuperWildcard(type.asArrayType().getComponentType());
+        }
+        return type.isReferenceType()
+                && type.asReferenceType().typeParametersValues().stream().anyMatch(this::containsSuperWildcard);
+    }
 
     private Optional<MethodUsage> solveMethodAsUsage(
             ResolvedReferenceType refType, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
@@ -244,8 +285,25 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 refType.typeParametersValues());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
+            if (hasIncompatibleCaptureArgument(refType, methodUsage.getDeclaration(), argumentsTypes)) {
+                return Optional.empty();
+            }
 
-            methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
+            if (!methodUsage.getDeclaration().getTypeParameters().isEmpty()
+                    && argumentsTypes.stream().anyMatch(this::containsSuperWildcard)) {
+                // The declaration-level inference may have already replaced a super capture by
+                // its lower bound. Re-infer from the declared return type, using the same
+                // constraints as static calls, before the legacy substitution pass below.
+                methodUsage = new MethodUsage(
+                        methodUsage.getDeclaration(),
+                        methodUsage.getParamTypes(),
+                        refType.useThisTypeParametersOnTheGivenType(
+                                methodUsage.getDeclaration().getReturnType()));
+                methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
+                methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
+            } else {
+                methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
+            }
 
             // At this stage I should derive from the context and the value some information on the type parameters
             // for example, when calling:
@@ -449,23 +507,119 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         return methodUsage;
     }
 
-    private void recordInferredType(
-            ResolvedTypeParameterDeclaration parameter,
-            ResolvedType type,
-            Map<ResolvedTypeParameterDeclaration, ResolvedType> matched,
-            Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> lowerBounds,
-            boolean isLowerBound) {
+    private enum ConstraintKind {
+        EQUALITY,
+        LOWER,
+        UPPER
+    }
 
-        if (isLowerBound && lowerBounds != null) {
-            lowerBounds.computeIfAbsent(parameter, key -> new LinkedHashSet<>()).add(type);
-        } else {
-            matched.put(parameter, type);
+    private class TypeParameterConstraints {
+        final Map<ResolvedTypeParameterDeclaration, ResolvedType> equalities;
+        final Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> lowerBounds = new HashMap<>();
+        final Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> upperBounds = new HashMap<>();
+
+        TypeParameterConstraints(Map<ResolvedTypeParameterDeclaration, ResolvedType> equalities) {
+            this.equalities = equalities;
         }
+
+        void record(ResolvedTypeParameterDeclaration parameter, ResolvedType type, ConstraintKind kind) {
+            if (kind == ConstraintKind.EQUALITY) {
+                equalities.put(parameter, type);
+            } else {
+                Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> bounds =
+                        kind == ConstraintKind.LOWER ? lowerBounds : upperBounds;
+                bounds.computeIfAbsent(parameter, key -> new LinkedHashSet<>()).add(type);
+            }
+        }
+
+        void resolve() {
+            Set<ResolvedTypeParameterDeclaration> parameters = new LinkedHashSet<>(lowerBounds.keySet());
+            parameters.addAll(upperBounds.keySet());
+            for (ResolvedTypeParameterDeclaration parameter : parameters) {
+                if (equalities.containsKey(parameter)) {
+                    continue;
+                }
+                Set<ResolvedType> lowers = lowerBounds.getOrDefault(parameter, Collections.emptySet());
+                ResolvedType inferred = lowers.isEmpty()
+                        ? null
+                        : LeastUpperBoundLogic.of(typeSolver).lub(lowers);
+                if (inferred == null || inferred.isNull()) {
+                    Set<ResolvedType> uppers =
+                            new LinkedHashSet<>(upperBounds.getOrDefault(parameter, Collections.emptySet()));
+                    for (ResolvedTypeParameterDeclaration.Bound bound : parameter.getBounds()) {
+                        if (bound.isExtends()) {
+                            uppers.add(bound.getType());
+                        }
+                    }
+                    inferred = mostSpecificUpperBound(uppers);
+                }
+                equalities.put(parameter, inferred);
+            }
+            for (Map.Entry<ResolvedTypeParameterDeclaration, Set<ResolvedType>> entry : upperBounds.entrySet()) {
+                ResolvedType inferred = equalities.get(entry.getKey());
+                Set<ResolvedType> bounds = new LinkedHashSet<>(entry.getValue());
+                for (ResolvedTypeParameterDeclaration.Bound bound :
+                        entry.getKey().getBounds()) {
+                    if (bound.isExtends() && !bound.getType().mention(Collections.singletonList(entry.getKey()))) {
+                        bounds.add(bound.getType());
+                    }
+                }
+                for (ResolvedType upper : bounds) {
+                    // A caller's type variable is not an inference variable we may instantiate here.
+                    // Concrete upper bounds still have to accommodate the chosen equality/lower bound.
+                    if ((!upper.isTypeVariable() || upper instanceof ResolvedCaptureType)
+                            && !(inferred instanceof ResolvedIntersectionType)
+                            && !upper.isAssignableBy(inferred)) {
+                        throw new UnsolvedSymbolException(
+                                "Incompatible bounds for " + entry.getKey().getName());
+                    }
+                }
+            }
+        }
+    }
+
+    private ResolvedType mostSpecificUpperBound(Set<ResolvedType> bounds) {
+        if (bounds.isEmpty()) {
+            return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
+        }
+        List<ResolvedType> minimal = new ArrayList<>();
+        for (ResolvedType bound : bounds) {
+            if (minimal.stream().anyMatch(existing -> bound.isAssignableBy(existing))) {
+                continue;
+            }
+            minimal.removeIf(existing -> existing.isAssignableBy(bound));
+            minimal.add(bound);
+        }
+        // Arrays cannot form an intersection with an unrelated array or reference type.
+        // Compatible bounds such as String[] and Serializable were already reduced above.
+        if (minimal.size() > 1 && minimal.stream().anyMatch(ResolvedType::isArray)) {
+            throw new UnsolvedSymbolException("Incompatible array upper bounds: " + minimal);
+        }
+        // An intersection can have at most one unrelated class bound (JLS 4.4).
+        long classBounds = minimal.stream()
+                .filter(type -> type.isReferenceType()
+                        && type.asReferenceType()
+                                .getTypeDeclaration()
+                                .map(ResolvedTypeDeclaration::isClass)
+                                .orElse(false))
+                .count();
+        if (classBounds > 1) {
+            throw new UnsolvedSymbolException("Incompatible upper bounds: " + minimal);
+        }
+        return minimal.size() == 1 ? minimal.get(0) : new ResolvedIntersectionType(minimal);
+    }
+
+    private boolean isAssignableForInference(ResolvedType expected, ResolvedType actual) {
+        return expected.isAssignableBy(actual)
+                || (expected.isReferenceType()
+                        && actual.isReferenceType()
+                        && MethodResolutionLogic.isAssignableMatchTypeParameters(
+                                expected.asReferenceType(), actual.asReferenceType(), new HashMap<>()));
     }
 
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<ResolvedType> actualParamTypes) {
         Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters = new HashMap<>();
-        Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> lowerBoundCandidates = new HashMap<>();
+        TypeParameterConstraints constraints = new TypeParameterConstraints(matchedTypeParameters);
 
         if (methodUsage.getDeclaration().hasVariadicParameter()) {
             if (actualParamTypes.size() == methodUsage.getDeclaration().getNumberOfParams()) {
@@ -495,79 +649,64 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                     // or the expected type is not a generic (IntStream.of(int... values)) and the component type is not
                     // a reference type
                     // then the actual type is the component type (in the example above 'int')
-                    if ((componentType.isReferenceType() && ResolvedTypeVariable.class.isInstance(expectedType))
+                    if ((!componentType.isPrimitive() && ResolvedTypeVariable.class.isInstance(expectedType))
                             || (!componentType.isReferenceType()
                                     && !ResolvedTypeVariable.class.isInstance(expectedType))
-                            || (componentType.isReferenceType() && expectedType.isAssignableBy(componentType))) {
+                            || (componentType.isReferenceType()
+                                    && isAssignableForInference(expectedType, componentType))) {
                         actualType = lastActualParamType.asArrayType().getComponentType();
                     }
                 }
-                if (!expectedType.isAssignableBy(actualType)) {
+                if (!isAssignableForInference(expectedType, actualType)) {
                     for (ResolvedTypeParameterDeclaration tp :
                             methodUsage.getDeclaration().getTypeParameters()) {
                         expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
                     }
                 }
-                if (!expectedType.isAssignableBy(actualType)) {
+                if (!isAssignableForInference(expectedType, actualType)) {
                     // ok, then it needs to be wrapped
                     throw new UnsupportedOperationException(String.format(
                             "Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
                             expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
                 }
                 // match only the varargs type
-                matchTypeParameters(expectedType, actualType, matchedTypeParameters, lowerBoundCandidates, false);
-            } else if (methodUsage.getDeclaration().getNumberOfParams() == 1) {
-                // In this case the method declares only one parameter which is a variadic parameter.
-                // At this stage we can consider that the actual parameters all have the same type.
+                matchTypeParameters(expectedType, actualType, constraints, ConstraintKind.LOWER);
+            } else {
+                // Collect every expanded vararg, including when fixed parameters precede it.
+                // With no varargs, the fixed arguments can still constrain the return type.
                 ResolvedType expectedType = methodUsage
                         .getDeclaration()
                         .getLastParam()
                         .getType()
                         .asArrayType()
                         .getComponentType();
-                // the varargs corresponding type can not be an Array<T> because of the assumption
-                // ResolvedType actualType = new ResolvedArrayType(actualParamTypes.get(actualParamTypes.size() - 1));
-                // It is possible that the method is called with no arguments, in which case we can't get any further
-                // type information about the parameters
-                if (actualParamTypes.isEmpty()) {
-                    return methodUsage;
+                int firstVararg = methodUsage.getDeclaration().getNumberOfParams() - 1;
+                for (int i = firstVararg; i < actualParamTypes.size(); i++) {
+                    ResolvedType actualType = actualParamTypes.get(i);
+                    if (!isAssignableForInference(expectedType, actualType)) {
+                        throw new UnsupportedOperationException(String.format(
+                                "Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                                expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
+                    }
+                    matchTypeParameters(expectedType, actualType, constraints, ConstraintKind.LOWER);
                 }
-                ResolvedType actualType = actualParamTypes.get(actualParamTypes.size() - 1);
-                if (!expectedType.isAssignableBy(actualType)) {
-                    throw new UnsupportedOperationException(String.format(
-                            "Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
-                            expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
-                }
-                matchTypeParameters(expectedType, actualType, matchedTypeParameters, lowerBoundCandidates, false);
-                return replaceTypeParameter(methodUsage, matchedTypeParameters);
-            } else {
-                return methodUsage;
             }
         }
 
         int until = methodUsage.getDeclaration().hasVariadicParameter()
-                ? actualParamTypes.size() - 1
+                ? methodUsage.getDeclaration().getNumberOfParams() - 1
                 : actualParamTypes.size();
 
         for (int i = 0; i < until; i++) {
             ResolvedType expectedType = methodUsage.getParamType(i);
             ResolvedType actualType = actualParamTypes.get(i);
-            matchTypeParameters(expectedType, actualType, matchedTypeParameters, lowerBoundCandidates, false);
+            // A direct argument of type S supplies S <: T. Invariant type arguments such as
+            // List<T> supply equality constraints when reference-type matching recurses below.
+            matchTypeParameters(expectedType, actualType, constraints, ConstraintKind.LOWER);
         }
-        mergeLowerBoundCandidates(matchedTypeParameters, lowerBoundCandidates);
+        constraints.resolve();
         methodUsage = replaceTypeParameter(methodUsage, matchedTypeParameters);
         return methodUsage;
-    }
-
-    private void mergeLowerBoundCandidates(
-            Map<ResolvedTypeParameterDeclaration, ResolvedType> matched,
-            Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> candidates) {
-        for (Map.Entry<ResolvedTypeParameterDeclaration, Set<ResolvedType>> entry : candidates.entrySet()) {
-            ResolvedType inferred = LeastUpperBoundLogic.of(typeSolver).lub(entry.getValue());
-            if (inferred != null) {
-                matched.putIfAbsent(entry.getKey(), inferred);
-            }
-        }
     }
 
     /*
@@ -655,137 +794,171 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         return LeastUpperBoundLogic.of(typeSolver).lub(resolvedTypes);
     }
 
-    /**
-     * Attempts to match the formal type parameter {@code expectedType} against the actual argument
-     * type {@code actualType}, recording any resolved type-variable bindings in
-     * {@code matchedTypeParameters}.
-     *
-     * <p>Supported cases for {@code expectedType}:
-     * <ul>
-     *   <li><b>Type variable</b> – binds the actual type to the variable after boxing primitives and
-     *       replacing {@code null} with {@code Object}.
-     *       When {@code actualType} is a wildcard (e.g. the intermediate accumulation type {@code ?}
-     *       in {@code Collector<T, ?, R>}), capture-conversion rules apply: a bounded wildcard
-     *       ({@code ? extends Foo} or {@code ? super Foo}) contributes its declared bound as the
-     *       inferred type; an unbounded wildcard {@code ?} carries no type information and is
-     *       skipped. A type variable matched against itself carries no type information either
-     *       and is skipped.</li>
-     *   <li><b>Array</b> – recurses on the component type (null actual types pass through as-is,
-     *       see issue #2258).</li>
-     *   <li><b>Reference type</b> – recurses on each type argument when the actual type also
-     *       carries type arguments.</li>
-     *   <li><b>Primitive or wildcard</b> – no binding needed; returns immediately.</li>
-     * </ul>
-     *
-     * @param expectedType          formal parameter type, possibly containing type variables
-     * @param actualType            actual argument type at the call site
-     * @param matchedTypeParameters accumulator map from type-variable declarations to inferred types
-     * @throws UnsupportedOperationException if an unrecognised type combination is encountered
-     */
+    /** Collect equality, lower and upper constraints separately before choosing an instantiation. */
     private void matchTypeParameters(
             ResolvedType expectedType,
             ResolvedType actualType,
             Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
-        matchTypeParameters(expectedType, actualType, matchedTypeParameters, null, true);
+        TypeParameterConstraints constraints = new TypeParameterConstraints(matchedTypeParameters);
+        matchTypeParameters(expectedType, actualType, constraints, ConstraintKind.LOWER);
+        constraints.resolve();
     }
 
     private void matchTypeParameters(
             ResolvedType expectedType,
             ResolvedType actualType,
-            Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters,
-            Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> lowerBoundCandidates,
-            boolean isLowerBound) {
+            TypeParameterConstraints constraints,
+            ConstraintKind kind) {
+        if (expectedType instanceof ResolvedCaptureType) {
+            return; // A capture is a fixed existential type, not a method inference variable.
+        }
         if (expectedType.isTypeVariable()) {
             ResolvedType type = actualType;
-            // Keep the existing primitive boxing behavior.
             if (type.isPrimitive()) {
-                ResolvedReferenceTypeDeclaration declaration =
-                        typeSolver.solveType(type.asPrimitive().getBoxTypeQName());
-                type = new ReferenceTypeImpl(declaration);
+                type = new ReferenceTypeImpl(
+                        typeSolver.solveType(type.asPrimitive().getBoxTypeQName()));
             }
-            // Keep the existing null handling behavior.
-            if (type.isNull()) {
-                type = new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
-            }
-            // Handle an actual wildcard argument.
             if (type.isWildcard()) {
                 ResolvedWildcard wildcard = type.asWildcard();
-                if (wildcard.isBounded()) {
-                    recordInferredType(
-                            expectedType.asTypeParameter(),
-                            wildcard.getBoundedType(),
-                            matchedTypeParameters,
-                            lowerBoundCandidates,
-                            isLowerBound && wildcard.isExtends());
+                if (wildcard.isSuper()) {
+                    type = new ResolvedCaptureType(
+                            wildcard,
+                            Collections.singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject())));
+                } else if (wildcard.isExtends()) {
+                    type = wildcard.getBoundedType();
+                } else {
+                    return;
                 }
-                return;
             }
-            if (!type.isTypeVariable() && !type.isReferenceType() && !type.isArray()) {
-                throw new UnsupportedOperationException(type.getClass().getCanonicalName());
-            }
-            // Do not record T -> T.
             if (type.isTypeVariable()
                     && type.asTypeParameter()
                             .getQualifiedName()
                             .equals(expectedType.asTypeParameter().getQualifiedName())) {
                 return;
             }
-            // Previously this was a direct Map.put().
-            recordInferredType(
-                    expectedType.asTypeParameter(), type, matchedTypeParameters, lowerBoundCandidates, isLowerBound);
+            constraints.record(expectedType.asTypeParameter(), type, kind);
         } else if (expectedType.isArray()) {
-
-            if (!(actualType.isArray() || actualType.isNull())) {
-                throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
+            if (actualType.isArray() || actualType.isNull()) {
+                matchTypeParameters(
+                        expectedType.asArrayType().getComponentType(),
+                        actualType.isNull()
+                                ? actualType
+                                : actualType.asArrayType().getComponentType(),
+                        constraints,
+                        kind);
             }
-            matchTypeParameters(
-                    expectedType.asArrayType().getComponentType(),
-                    actualType.isNull() ? actualType : actualType.asArrayType().getComponentType(),
-                    matchedTypeParameters,
-                    lowerBoundCandidates,
-                    isLowerBound);
         } else if (expectedType.isReferenceType()) {
-
-            if (actualType.isReferenceType()
-                    && actualType.asReferenceType().typeParametersValues().size() > 0) {
-
-                int i = 0;
-
-                for (ResolvedType tp : expectedType.asReferenceType().typeParametersValues()) {
-                    matchTypeParameters(
-                            tp,
-                            actualType.asReferenceType().typeParametersValues().get(i),
-                            matchedTypeParameters,
-                            lowerBoundCandidates,
-                            false);
-                    i++;
+            if (actualType.isTypeVariable()) {
+                for (ResolvedTypeParameterDeclaration.Bound bound :
+                        actualType.asTypeParameter().getBounds()) {
+                    matchTypeParameters(expectedType, bound.getType(), constraints, kind);
+                }
+                return;
+            }
+            if (!actualType.isReferenceType()) {
+                return;
+            }
+            ResolvedReferenceType expectedReference = expectedType.asReferenceType();
+            ResolvedReferenceType actualReference = actualType.asReferenceType();
+            if (actualReference.isRawType() || expectedReference.isRawType()) {
+                return;
+            }
+            if (!actualReference.getQualifiedName().equals(expectedReference.getQualifiedName())) {
+                // Capture before projecting onto an ancestor: the subclass may declare a
+                // narrower upper bound than the ancestor's type parameter.
+                List<ResolvedType> capturedArguments = new ArrayList<>();
+                for (int i = 0; i < actualReference.typeParametersValues().size(); i++) {
+                    capturedArguments.add(captureSuperArgument(actualReference, i));
+                }
+                actualReference = new ReferenceTypeImpl(
+                        actualReference.getTypeDeclaration().get(), capturedArguments);
+                // For T <: S (a super wildcard), align the formal subtype to the actual supertype.
+                // For S <: T, align the actual subtype to the formal supertype.
+                ResolvedReferenceType subtype = kind == ConstraintKind.UPPER ? expectedReference : actualReference;
+                String superName = kind == ConstraintKind.UPPER
+                        ? actualReference.getQualifiedName()
+                        : expectedReference.getQualifiedName();
+                Optional<ResolvedReferenceType> ancestor = subtype.getAllAncestors().stream()
+                        .filter(type -> type.getQualifiedName().equals(superName))
+                        .findFirst();
+                if (!ancestor.isPresent()) {
+                    return;
+                }
+                if (kind == ConstraintKind.UPPER) {
+                    expectedReference = ancestor.get();
+                } else {
+                    actualReference = ancestor.get();
                 }
             }
-
-        } else if (expectedType.isPrimitive()) {
-            // Nothing to do.
+            List<ResolvedType> expectedArguments = expectedReference.typeParametersValues();
+            List<ResolvedType> actualArguments = actualReference.typeParametersValues();
+            if (actualArguments.isEmpty()) {
+                return;
+            }
+            for (int i = 0; i < expectedArguments.size(); i++) {
+                ResolvedType expectedArgument = expectedArguments.get(i);
+                ResolvedType actualArgument = actualArguments.get(i);
+                // A poly expression may still carry the formal wildcard itself. Capturing
+                // that placeholder would freeze an inference variable before target typing.
+                if (expectedArgument.isWildcard()
+                        && actualArgument.isWildcard()
+                        && expectedArgument.asWildcard().isBounded()
+                        && actualArgument.asWildcard().isBounded()
+                        && expectedArgument.asWildcard().isSuper()
+                                == actualArgument.asWildcard().isSuper()) {
+                    ResolvedType expectedBound = expectedArgument.asWildcard().getBoundedType();
+                    ResolvedType actualBound = actualArgument.asWildcard().getBoundedType();
+                    if (expectedBound.isTypeVariable()
+                            && actualBound.isTypeVariable()
+                            && expectedBound
+                                    .asTypeParameter()
+                                    .getQualifiedName()
+                                    .equals(actualBound.asTypeParameter().getQualifiedName())) {
+                        continue;
+                    }
+                }
+                // Preserve the capture's declared upper bound as well as its wildcard lower bound.
+                if (actualArgument.isWildcard() && actualArgument.asWildcard().isSuper()) {
+                    actualArgument = captureSuperArgument(actualReference, i);
+                }
+                matchTypeParameters(expectedArgument, actualArgument, constraints, ConstraintKind.EQUALITY);
+            }
         } else if (expectedType.isWildcard()) {
             ResolvedWildcard expectedWildcard = expectedType.asWildcard();
-            if (expectedWildcard.isExtends()) {
-                ResolvedType expectedBound = expectedWildcard.getBoundedType();
-
-                if (actualType.isWildcard()) {
-                    ResolvedWildcard actualWildcard = actualType.asWildcard();
-                    if (actualWildcard.isExtends()) {
-                        matchTypeParameters(
-                                expectedBound,
-                                actualWildcard.getBoundedType(),
-                                matchedTypeParameters,
-                                lowerBoundCandidates,
-                                true);
-                    }
-                } else if (actualType.isReferenceType()) {
-                    matchTypeParameters(expectedBound, actualType, matchedTypeParameters, lowerBoundCandidates, true);
-                }
+            if (!expectedWildcard.isBounded()) {
+                return;
             }
-        } else {
-            throw new UnsupportedOperationException(expectedType.getClass().getCanonicalName());
+            ConstraintKind boundKind = expectedWildcard.isExtends() ? ConstraintKind.LOWER : ConstraintKind.UPPER;
+            if (actualType.isWildcard()) {
+                ResolvedWildcard actualWildcard = actualType.asWildcard();
+                if ((expectedWildcard.isExtends() && actualWildcard.isExtends())
+                        || (expectedWildcard.isSuper() && actualWildcard.isSuper())) {
+                    matchTypeParameters(
+                            expectedWildcard.getBoundedType(), actualWildcard.getBoundedType(), constraints, boundKind);
+                }
+            } else if (actualType.isReferenceType() || actualType.isArray() || actualType.isTypeVariable()) {
+                matchTypeParameters(expectedWildcard.getBoundedType(), actualType, constraints, boundKind);
+            }
         }
+    }
+
+    private ResolvedType captureSuperArgument(ResolvedReferenceType reference, int index) {
+        ResolvedType argument = reference.typeParametersValues().get(index);
+        if (!argument.isWildcard() || !argument.asWildcard().isSuper()) {
+            return argument;
+        }
+        List<ResolvedType> upperBounds = new ArrayList<>();
+        ResolvedTypeParameterDeclaration parameter =
+                reference.getTypeDeclaration().get().getTypeParameters().get(index);
+        for (ResolvedTypeParameterDeclaration.Bound bound : parameter.getBounds()) {
+            if (bound.isExtends()) {
+                upperBounds.add(reference.typeParametersMap().replaceAll(bound.getType()));
+            }
+        }
+        if (upperBounds.isEmpty()) {
+            upperBounds.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+        }
+        return new ResolvedCaptureType(argument.asWildcard(), upperBounds);
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(
@@ -816,6 +989,15 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
     private Optional<MethodUsage> solveMethodAsUsage(
             ResolvedType type, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
+        if (type instanceof ResolvedIntersectionType) {
+            for (ResolvedType element : ((ResolvedIntersectionType) type).getElements()) {
+                Optional<MethodUsage> usage = solveMethodAsUsage(element, name, argumentsTypes, invokationContext);
+                if (usage.isPresent()) {
+                    return usage;
+                }
+            }
+            return Optional.empty();
+        }
         if (type instanceof ResolvedReferenceType) {
             return solveMethodAsUsage((ResolvedReferenceType) type, name, argumentsTypes, invokationContext);
         }
@@ -827,9 +1009,6 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         }
         if (type instanceof ResolvedWildcard) {
             ResolvedWildcard wildcardUsage = (ResolvedWildcard) type;
-            if (wildcardUsage.isSuper()) {
-                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
-            }
             if (wildcardUsage.isExtends()) {
                 return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
             }

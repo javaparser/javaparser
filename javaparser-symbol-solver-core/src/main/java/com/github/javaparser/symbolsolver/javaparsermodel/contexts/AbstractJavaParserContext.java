@@ -36,6 +36,7 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedIntersectionType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
@@ -241,8 +242,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 throw new UnsolvedSymbolException(scope.toString(), wrappedNode.toString(), e);
             }
             if (typeOfScope.isWildcard()) {
-                if (typeOfScope.asWildcard().isExtends()
-                        || typeOfScope.asWildcard().isSuper()) {
+                if (typeOfScope.asWildcard().isExtends()) {
                     return singletonList(
                             typeOfScope.asWildcard().getBoundedType().asReferenceType());
                 }
@@ -252,13 +252,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 // method call on array are Object methods
                 return singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
             }
-            if (typeOfScope.isTypeVariable()) {
-                Collection<ResolvedReferenceType> result = new ArrayList<>();
-                for (ResolvedTypeParameterDeclaration.Bound bound :
-                        typeOfScope.asTypeParameter().getBounds()) {
-                    result.add(bound.getType().asReferenceType());
-                }
-                return result;
+            if (typeOfScope.isTypeVariable() || typeOfScope instanceof ResolvedIntersectionType) {
+                return upperBoundReceiverTypes(typeOfScope);
             }
             if (typeOfScope.isConstraint()) {
                 // A ResolvedLambdaConstraintType wraps the inferred bound of an implicit lambda
@@ -337,6 +332,28 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
 
         return singletonList(typeOfScope.asReferenceType());
+    }
+
+    private Collection<ResolvedReferenceType> upperBoundReceiverTypes(ResolvedType type) {
+        Collection<ResolvedReferenceType> result = new ArrayList<>();
+        if (type instanceof ResolvedIntersectionType) {
+            for (ResolvedType element : ((ResolvedIntersectionType) type).getElements()) {
+                result.addAll(upperBoundReceiverTypes(element));
+            }
+        } else if (type.isTypeVariable()) {
+            for (ResolvedTypeParameterDeclaration.Bound bound :
+                    type.asTypeParameter().getBounds()) {
+                if (bound.isExtends()) {
+                    result.addAll(upperBoundReceiverTypes(bound.getType()));
+                }
+            }
+            if (result.isEmpty()) {
+                result.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+            }
+        } else if (type.isReferenceType()) {
+            result.add(type.asReferenceType());
+        }
+        return result;
     }
 
     /**

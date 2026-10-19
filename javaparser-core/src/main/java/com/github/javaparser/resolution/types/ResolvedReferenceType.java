@@ -561,6 +561,11 @@ public abstract class ResolvedReferenceType
                             return false;
                         }
                     } else {
+                        // A capture is a particular unknown type, not an inference variable.
+                        // Equal upper bounds do not make two invariant type arguments equal.
+                        if (thisParam instanceof ResolvedCaptureType || otherParam instanceof ResolvedCaptureType) {
+                            return false;
+                        }
                         if (thisParam instanceof ResolvedTypeVariable && otherParam instanceof ResolvedTypeVariable) {
                             // Here we want to compare something like @{code C extends Comparable<C>} with @{code K
                             // extends Comparable<K>}

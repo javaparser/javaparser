@@ -21,6 +21,7 @@
 package com.github.javaparser.resolution.types.parametrization;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import java.util.Optional;
@@ -66,6 +67,10 @@ public interface ResolvedTypeParameterValueProvider {
             }
             return ResolvedWildcard.superBound(
                     useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
+        }
+        if (type.isArray()) {
+            return new ResolvedArrayType(
+                    useThisTypeParametersOnTheGivenType(type.asArrayType().getComponentType()));
         }
         if (type.isReferenceType()) {
             type = type.asReferenceType().transformTypeParameters(this::useThisTypeParametersOnTheGivenType);

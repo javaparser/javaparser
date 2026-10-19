@@ -162,7 +162,7 @@ public class InferenceContext {
                     }
                 }
             }
-            if (actualType.isReferenceType()) {
+            if (actualType.isReferenceType() || actualType.isArray()) {
                 if (formalType.asWildcard().isBounded()) {
                     registerCorrespondance(formalType.asWildcard().getBoundedType(), actualType);
                 }
@@ -211,6 +211,9 @@ public class InferenceContext {
     }
 
     private ResolvedType placeInferenceVariables(ResolvedType type) {
+        if (type instanceof ResolvedCaptureType) {
+            return type;
+        }
         if (type.isWildcard()) {
             if (type.asWildcard().isExtends()) {
                 return ResolvedWildcard.extendsBound(
@@ -246,6 +249,9 @@ public class InferenceContext {
     }
 
     public ResolvedType resolve(ResolvedType type) {
+        if (type instanceof ResolvedCaptureType) {
+            return type;
+        }
         if (type instanceof InferenceVariableType) {
             InferenceVariableType inferenceVariableType = (InferenceVariableType) type;
             return inferenceVariableType.equivalentType();
