@@ -353,10 +353,17 @@ class DifferenceElementCalculator {
                     originalIndex++;
                     afterIndex++;
                 } else if (matching(nextOriginal, nextAfter)) {
-                    // The two elements match according to a custom "matching" rule
-                    elements.add(new Kept(nextOriginal));
-                    originalIndex++;
-                    afterIndex++;
+                    // The two elements match according to a custom "matching" rule.
+                    // They are normally kept, unless the original element is a token that is better removed together
+                    // with the child node removed just before it (see removeWithPrecedingRemovedChild).
+                    if (removeWithPrecedingRemovedChild(elements, original, originalIndex, after, afterIndex)) {
+                        elements.add(new Removed(nextOriginal));
+                        originalIndex++;
+                    } else {
+                        elements.add(new Kept(nextOriginal));
+                        originalIndex++;
+                        afterIndex++;
+                    }
                 } else if (replacement(nextOriginal, nextAfter)) {
                     // The two elements represent a replacement: remove the old one and add the new one.
                     originalIndex = considerRemoval(nextOriginal, originalIndex, elements);
@@ -386,6 +393,63 @@ class DifferenceElementCalculator {
             }
         } while (originalIndex < original.elements.size() || afterIndex < after.elements.size());
         return elements;
+    }
+
+    /*
+     * Decides whether a token of the original model, which matches the next token of the modified model and could
+     * therefore be kept, should rather be removed together with the child node removed just before it.
+     *
+     * Why: the difference is computed on the concrete syntax model (CSM), but it is applied to the actual source
+     * text, which may not have exactly the tokens the CSM expects (the lexical preserving printer exists precisely
+     * to respect the formatting of the source). When several tokens are identical, typically end of lines, several
+     * alignments have the same cost on the CSM. For example, removing the last import "b" of
+     *
+     *   original: [a] eol [b] eol eol [class]   (the CSM prints a blank line between the imports and the type)
+     *   after:    [a] eol eol [class]
+     *
+     * the tokens between [a] and [class] can be aligned in two ways, both removing [b] and one end of line:
+     *
+     *   1. kept(eol) removed(b) kept(eol) removed(eol)   (the removed end of line is separated from [b])
+     *   2. kept(eol) removed(b) removed(eol) kept(eol)   (the removed end of line follows [b])
+     *
+     * Aligning greedily from the left gives the first one. It is correct on the CSM, but not on the actual text: if
+     * the source has no blank line before the type, the removed end of line designates a token that does not exist
+     * and the separator of [b] is left over (a blank line appears); if it has several blank lines, one of them is
+     * removed instead of the separator of [b]. Only the second alignment, which removes the element with the token
+     * that follows it, stays correct whatever the number of end of lines in the source.
+     *
+     * Rule: the token is removed instead of being kept when
+     * - the difference computed so far ends with the removal of a child node, possibly followed by the removal of
+     *   other tokens (so that a separator made of several tokens is removed as a whole), and
+     * - removing the token does not increase the cost of the whole difference, i.e. this is just a choice between
+     *   alignments of the same cost.
+     */
+    private boolean removeWithPrecedingRemovedChild(
+            List<DifferenceElement> elements,
+            LexicalDifferenceCalculator.CalculatedSyntaxModel original,
+            int originalIndex,
+            LexicalDifferenceCalculator.CalculatedSyntaxModel after,
+            int afterIndex) {
+        if (!(original.elements.get(originalIndex) instanceof CsmToken)) {
+            return false;
+        }
+        // Look backwards over the tokens already removed: the first other element must be a removed child node.
+        int index = elements.size() - 1;
+        while (index >= 0
+                && elements.get(index).isRemoved()
+                && !elements.get(index).isChild()) {
+            index--;
+        }
+        if (index < 0
+                || !elements.get(index).isRemoved()
+                || !elements.get(index).isChild()) {
+            return false;
+        }
+        // Cost of the rest of the difference in both cases: the kept token costs nothing, the removed token costs one
+        // and the token of the modified model still has to be matched afterwards.
+        long costIfKept = cost(calculate(original.from(originalIndex + 1), after.from(afterIndex + 1)));
+        long costIfRemoved = 1 + cost(calculate(original.from(originalIndex + 1), after.from(afterIndex)));
+        return costIfRemoved <= costIfKept;
     }
 
     private long cost(List<DifferenceElement> elements) {
