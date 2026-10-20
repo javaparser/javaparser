@@ -499,8 +499,10 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             }
         }
 
-        // If still unable to resolve, throw an exception.
-        if (!ref.isSolved()) {
+        // A qualified-name fallback may resolve a missing ancestor to this class itself.
+        // Treat that as unresolved so ancestor traversal cannot recurse back into this class.
+        if (!ref.isSolved()
+                || ref.getCorrespondingDeclaration().getQualifiedName().equals(getQualifiedName())) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
 
