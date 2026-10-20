@@ -1919,4 +1919,31 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         String printed = LexicalPreservingPrinter.print(cu);
         assertTrue(printed.contains("int foo"), "Type keyword 'int' missing — got: " + printed);
     }
+
+    // issue 5174: a member added to a type that uses lexical preservation is printed at column zero
+    // once it carries an annotation. The elements of the CsmMix holding the annotation and the
+    // modifiers were interpreted one at a time, each call built its own indentation context, and the
+    // indentation pending after the newline that follows the annotation was lost.
+    @Test
+    void issue5174_addedAnnotatedMemberKeepsIndentation() {
+        // A dedicated parser: the test above switches lexical preservation on for the shared
+        // StaticJavaParser configuration, which changes how this compilation unit is set up.
+        JavaParser javaParser = new JavaParser(new ParserConfiguration());
+        CompilationUnit cu = javaParser
+                .parse("class Foo {\n\n    void existing() {\n    }\n}\n")
+                .getResult()
+                .get();
+        LexicalPreservingPrinter.setup(cu);
+        MethodDeclaration added = new MethodDeclaration();
+        added.setName("added");
+        added.setType("void");
+        added.addModifier(Modifier.Keyword.PUBLIC);
+        added.addMarkerAnnotation("Deprecated");
+        added.setBody(new BlockStmt());
+        cu.getClassByName("Foo").get().addMember(added);
+        String printed = LexicalPreservingPrinter.print(cu).replace("\r\n", "\n");
+        assertTrue(
+                printed.contains("\n    @Deprecated\n    public void added() {"),
+                "The added member is not indented after its annotation, got:\n" + printed);
+    }
 }

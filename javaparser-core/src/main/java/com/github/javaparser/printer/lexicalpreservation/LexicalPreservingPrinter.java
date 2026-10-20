@@ -788,11 +788,11 @@ public class LexicalPreservingPrinter {
                 calculatedSyntaxModel.elements.add(0, new CsmChild(comment));
             }
         });
-        for (CsmElement element : calculatedSyntaxModel.elements) {
+        List<CsmElement> elements = flatten(calculatedSyntaxModel.elements);
+        for (int elementIndex = 0; elementIndex < elements.size(); elementIndex++) {
+            CsmElement element = elements.get(elementIndex);
             if (element instanceof CsmIndent) {
-                int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);
-                if (calculatedSyntaxModel.elements.size() > indexCurrentElement
-                        && !(calculatedSyntaxModel.elements.get(indexCurrentElement + 1) instanceof CsmUnindent)) {
+                if (elements.size() > elementIndex + 1 && !(elements.get(elementIndex + 1) instanceof CsmUnindent)) {
                     indentationContext.increase();
                 }
             } else if (element instanceof CsmUnindent) {
@@ -810,9 +810,6 @@ public class LexicalPreservingPrinter {
                 if (csmToken.isNewLine()) {
                     pendingIndentation = true;
                 }
-            } else if (element instanceof CsmMix) {
-                CsmMix csmMix = (CsmMix) element;
-                csmMix.getElements().forEach(e -> interpret(node, e, nodeText));
             } else {
                 // Indentation should probably be dealt with before because an indentation has effects also on the
                 // following lines
@@ -837,6 +834,29 @@ public class LexicalPreservingPrinter {
                     }));
         }
         return nodeText;
+    }
+
+    /**
+     * Expands the elements of nested {@link CsmMix} instances into a single list.
+     * <p>
+     * A mix used to be interpreted one element at a time, and each of those calls built its own
+     * indentation context. The pending indentation of a newline was therefore lost as soon as the
+     * next element was written by a separate call, which printed the rest of the child at column
+     * zero (issue #5174, a member added with an annotation).
+     *
+     * @param elements the elements to expand
+     * @return a new list with the elements of every mix expanded in place
+     */
+    private static List<CsmElement> flatten(List<CsmElement> elements) {
+        List<CsmElement> result = new ArrayList<>(elements.size());
+        for (CsmElement element : elements) {
+            if (element instanceof CsmMix) {
+                result.addAll(flatten(((CsmMix) element).getElements()));
+            } else {
+                result.add(element);
+            }
+        }
+        return result;
     }
 
     // Visible for testing
