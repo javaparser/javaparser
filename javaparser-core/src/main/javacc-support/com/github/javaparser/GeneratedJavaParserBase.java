@@ -208,21 +208,17 @@ abstract class GeneratedJavaParserBase {
     /* Called from within a catch block to skip forward to a known token,
         and report the occurred exception as a problem. */
     TokenRange recoverStatement(int recoveryTokenType, int lBraceType, int rBraceType, ParseException p) {
-        return recoverStatement(recoveryTokenType, lBraceType, rBraceType, p, false);
+        return recoverStatement(recoveryTokenType, lBraceType, rBraceType, p, null);
     }
 
-    /* Brace-aware recovery whose range starts at the first unconsumed token.
-       Method-body recovery uses this so the skipped span does not overlap the parameter list. */
-    TokenRange recoverStatementFromUnconsumed(int recoveryTokenType, int lBraceType, int rBraceType, ParseException p) {
-        return recoverStatement(recoveryTokenType, lBraceType, rBraceType, p, true);
-    }
-
-    private TokenRange recoverStatement(
-            int recoveryTokenType, int lBraceType, int rBraceType, ParseException p, boolean beginAtUnconsumed) {
-        JavaToken consumedAtStart = token();
+    /* beginToken is the offending token. Null keeps the historical begin: the last consumed token. */
+    TokenRange recoverStatement(
+            int recoveryTokenType, int lBraceType, int rBraceType, ParseException p, Token beginToken) {
         JavaToken begin = null;
-        if (p.currentToken != null) {
-            begin = beginAtUnconsumed ? firstUnconsumedToken() : consumedAtStart;
+        if (beginToken != null) {
+            begin = beginToken.javaToken;
+        } else if (p.currentToken != null) {
+            begin = token();
         }
         int level = 0;
         Token t;
@@ -230,9 +226,7 @@ abstract class GeneratedJavaParserBase {
             Token nextToken = getToken(1);
             if (nextToken != null && nextToken.kind == rBraceType && level == 0) {
                 JavaToken end = token();
-                TokenRange tokenRange = beginAtUnconsumed
-                        ? unconsumedRecoveryRange(begin, end, consumedAtStart)
-                        : range(begin, end);
+                TokenRange tokenRange = range(begin, end);
                 problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
                 return tokenRange;
             }
@@ -247,41 +241,12 @@ abstract class GeneratedJavaParserBase {
         JavaToken end = token();
 
         TokenRange tokenRange = null;
-        if (beginAtUnconsumed) {
-            tokenRange = unconsumedRecoveryRange(begin, end, consumedAtStart);
-        } else if (begin != null && end != null) {
+        if (begin != null && end != null) {
             tokenRange = range(begin, end);
         }
 
         problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
         return tokenRange;
-    }
-
-    /* The first token the parser has not consumed. Whitespace and comments after the last
-       consumed token are included when the token list is being stored. */
-    private JavaToken firstUnconsumedToken() {
-        if (storeTokens) {
-            JavaToken current = token();
-            if (current != null) {
-                Optional<JavaToken> next = current.getNextToken();
-                if (next.isPresent()) {
-                    return next.get();
-                }
-            }
-        }
-        Token lookahead = getToken(1);
-        if (lookahead != null && lookahead.javaToken != null) {
-            return lookahead.javaToken;
-        }
-        return token();
-    }
-
-    /* Null when recovery consumed nothing, so a following '}' is not pulled into the skipped span. */
-    private TokenRange unconsumedRecoveryRange(JavaToken begin, JavaToken end, JavaToken consumedAtStart) {
-        if (begin == null || end == null || end == consumedAtStart) {
-            return null;
-        }
-        return range(begin, end);
     }
 
     /**
