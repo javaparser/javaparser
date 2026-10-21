@@ -432,19 +432,21 @@ class JavaParserTest {
 
     @Test
     void malformedMethodBodyRecoversToUnparsableBlockAndKeepsLaterMembers() {
-        String code = "class A { void before() {} int size(int count) -> items.size(); void after() {} }";
-        ParseResult<CompilationUnit> result = new JavaParser(
-                        new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE))
-                .parse(code);
+        String code = "class A { void before() {} int size(int count)\n -> items.size(); void after() {} }";
+        ParseResult<CompilationUnit> result =
+                new JavaParser(new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)).parse(code);
 
         assertEquals(1, result.getProblems().size());
         assertTrue(result.getProblems().get(0).getMessage().startsWith("Parse error"));
         CompilationUnit cu = result.getResult().get();
         assertEquals(PARSED, cu.getParsed());
 
-        MethodDeclaration before = cu.getClassByName("A").get().getMethodsByName("before").get(0);
-        MethodDeclaration size = cu.getClassByName("A").get().getMethodsByName("size").get(0);
-        MethodDeclaration after = cu.getClassByName("A").get().getMethodsByName("after").get(0);
+        MethodDeclaration before =
+                cu.getClassByName("A").get().getMethodsByName("before").get(0);
+        MethodDeclaration size =
+                cu.getClassByName("A").get().getMethodsByName("size").get(0);
+        MethodDeclaration after =
+                cu.getClassByName("A").get().getMethodsByName("after").get(0);
         assertEquals(PARSED, before.getBody().get().getParsed());
         assertEquals(PARSED, after.getBody().get().getParsed());
 
@@ -452,18 +454,19 @@ class JavaParserTest {
         assertEquals(UNPARSABLE, body.getParsed());
         assertTrue(body.getStatements().isEmpty());
         TokenRange bodyRange = body.getTokenRange().get();
-        assertEquals(")", bodyRange.getBegin().getPreviousToken().get().getText());
-        assertEquals(" -> items.size();", bodyRange.toString());
+        assertEquals("->", bodyRange.getBegin().getText());
+        assertFalse(bodyRange.getBegin().getCategory().isWhitespaceOrComment());
+        assertEquals("-> items.size();", bodyRange.toString());
         assertTrue(size.getParameter(0)
-                .getTokenRange()
-                .get()
                 .getEnd()
-                .getRange()
                 .get()
-                .end
                 .isBefore(bodyRange.getBegin().getRange().get().begin));
-        assertEquals(bodyRange.getBegin(), result.getProblems().get(0).getLocation().get().getBegin());
-        assertEquals(bodyRange.getEnd(), result.getProblems().get(0).getLocation().get().getEnd());
+        assertEquals(
+                bodyRange.getBegin(),
+                result.getProblems().get(0).getLocation().get().getBegin());
+        assertEquals(
+                bodyRange.getEnd(),
+                result.getProblems().get(0).getLocation().get().getEnd());
     }
 
     @Test
@@ -494,5 +497,46 @@ class JavaParserTest {
             assertEquals("after", type.getMethodsByName("after").get(0).getNameAsString(), source);
             assertEquals(PARSED, type.getMethodsByName("after").get(0).getParsed(), source);
         }
+    }
+
+    @Test
+    void malformedMethodBodyRecoversWithoutStoredTokens() {
+        ParseResult<CompilationUnit> result = new JavaParser(new ParserConfiguration().setStoreTokens(false))
+                .parse("class A { int size() -> items.size(); void after() {} }");
+        TypeDeclaration<?> type = result.getResult().get().getType(0);
+        MethodDeclaration size = type.getMethodsByName("size").get(0);
+        assertEquals(UNPARSABLE, size.getBody().get().getParsed());
+        assertFalse(size.getBody().get().getTokenRange().isPresent());
+        assertEquals(PARSED, type.getMethodsByName("after").get(0).getParsed());
+    }
+
+    @Test
+    void missingSemicolonAfterAbstractHeaderDocumentsSwallowedMembers() {
+        TypeDeclaration<?> iface = new JavaParser()
+                .parse("interface I { void a() void b(); void c(); }")
+                .getResult()
+                .get()
+                .getType(0);
+        assertEquals(2, iface.getMethods().size());
+        assertEquals("a", iface.getMethods().get(0).getNameAsString());
+        assertEquals("c", iface.getMethods().get(1).getNameAsString());
+        assertEquals(UNPARSABLE, iface.getMethods().get(0).getBody().get().getParsed());
+
+        CompilationUnit cu = new JavaParser()
+                .parse("abstract class A { abstract void a()\n void b() {} void c() {} }")
+                .getResult()
+                .get();
+        assertEquals(PARSED, cu.getParsed());
+        assertEquals(1, cu.getType(0).getMethods().size());
+        assertTrue(cu.getType(0).getMethodsByName("a").get(0).getBody().isPresent());
+    }
+
+    @Test
+    void malformedMethodBodyRecoveryStopsAtEof() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse("class A { int size() -> items.size(");
+        TokenRange location = result.getProblems().get(0).getLocation().get();
+        assertEquals("->", location.getBegin().getText());
+        assertEquals(JavaToken.Kind.EOF.getKind(), location.getEnd().getKind());
+        assertEquals(UNPARSABLE, result.getResult().get().getParsed());
     }
 }

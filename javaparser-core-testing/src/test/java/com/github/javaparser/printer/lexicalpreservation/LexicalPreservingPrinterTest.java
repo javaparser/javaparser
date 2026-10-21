@@ -1932,22 +1932,33 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         assertEquals(code, LexicalPreservingPrinter.print(parsed));
 
-        MethodDeclaration size = parsed.getClassByName("A").get().getMethodsByName("size").get(0);
+        MethodDeclaration size =
+                parsed.getClassByName("A").get().getMethodsByName("size").get(0);
         TokenRange bodyRange = size.getBody().get().getTokenRange().get();
         String bodyText = bodyRange.toString();
         int innerSemicolon = bodyText.indexOf("a();");
-        assertEquals(")", bodyRange.getBegin().getPreviousToken().get().getText());
+        assertEquals("->", bodyRange.getBegin().getText());
+        assertFalse(bodyRange.getBegin().getCategory().isWhitespaceOrComment());
         assertTrue(size.getParameter(0)
-                .getTokenRange()
-                .get()
                 .getEnd()
-                .getRange()
                 .get()
-                .end
                 .isBefore(bodyRange.getBegin().getRange().get().begin));
-        assertTrue(bodyText.contains("/* keep */"));
         assertTrue(innerSemicolon >= 0);
         assertTrue(bodyText.indexOf('}', innerSemicolon) > innerSemicolon);
         assertTrue(bodyText.trim().endsWith(";"));
+
+        size.setName("length");
+        assertEquals(code.replace("int size(", "int length("), LexicalPreservingPrinter.print(parsed));
+    }
+
+    @Test
+    void methodHeaderClosedByBraceRoundTrips() {
+        String code = "class A { int m() }";
+        ParseResult<CompilationUnit> result = new JavaParser().parse(code);
+        CompilationUnit parsed = result.getResult().get();
+        assertEquals(Node.Parsedness.UNPARSABLE, parsed.getParsed());
+        assertTrue(result.getProblems().get(0).getLocation().isPresent());
+        LexicalPreservingPrinter.setup(parsed);
+        assertEquals(code, LexicalPreservingPrinter.print(parsed));
     }
 }
