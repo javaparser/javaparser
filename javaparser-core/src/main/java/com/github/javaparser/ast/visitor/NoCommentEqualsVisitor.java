@@ -943,8 +943,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     public Boolean visit(final MarkdownComment n, final Visitable arg) {
-        final MarkdownComment n2 = (MarkdownComment) arg;
-        if (!objEquals(n.getContent(), n2.getContent())) return false;
         return true;
     }
 }
