@@ -44,8 +44,8 @@ class TestParserTest {
         List<Problem> problems = parser.parse(source).getProblems();
         assertEquals(2, problems.size());
 
-        AssertionFailedError failure = assertThrows(
-                AssertionFailedError.class, () -> TestParser.parseCompilationUnit(JAVA_7, source));
+        AssertionFailedError failure =
+                assertThrows(AssertionFailedError.class, () -> TestParser.parseCompilationUnit(JAVA_7, source));
 
         assertEquals(problems.toString(), failure.getMessage());
     }
@@ -56,9 +56,7 @@ class TestParserTest {
 
         assertThrows(AssertionFailedError.class, () -> TestParser.parseCompilationUnit(JAVA_8, source));
         assertTrue(TestParser.parseCompilationUnit(source).getType(0).isRecordDeclaration());
-        assertTrue(TestParser.parseCompilationUnit(JAVA_16, source)
-                .getType(0)
-                .isRecordDeclaration());
+        assertTrue(TestParser.parseCompilationUnit(JAVA_16, source).getType(0).isRecordDeclaration());
         assertThrows(AssertionFailedError.class, () -> TestParser.parseCompilationUnit(JAVA_8, source));
     }
 }
