@@ -39,7 +39,12 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -48,6 +53,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.io.TempDir;
 
 public class JavaParserRecordDeclarationTest {
 
@@ -605,5 +611,48 @@ public class JavaParserRecordDeclarationTest {
         assertEquals("GenericBox", constructorInvocation.getType().getNameAsString());
         assertEquals("GenericBox", constructorInvocation.getType().resolve().describe());
         assertEquals("GenericBox", constructorInvocation.calculateResolvedType().describe());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    void testRecordResolvedViaJavaParserTypeSolver(@TempDir Path tempDir) throws Exception {
+        Path pkgDir = Files.createDirectories(tempDir.resolve("test"));
+        Files.write(
+                pkgDir.resolve("Point.java"),
+                "package test;\npublic record Point(int x, int y) {}\n".getBytes(StandardCharsets.UTF_8));
+
+        CombinedTypeSolver typeSolver =
+                new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(tempDir));
+        JavaParser parser = new JavaParser(new ParserConfiguration()
+                .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16)
+                .setSymbolResolver(new JavaSymbolSolver(typeSolver)));
+
+        CompilationUnit cu = parser.parse("package test;\n"
+                        + "class X {\n"
+                        + "    int m(Point p) {\n"
+                        + "        Point copy = new Point(p.x(), p.y());\n"
+                        + "        return copy.x();\n"
+                        + "    }\n"
+                        + "}")
+                .getResult()
+                .get();
+
+        List<MethodCallExpr> calls = cu.findAll(MethodCallExpr.class);
+        assertEquals(3, calls.size());
+        ResolvedMethodDeclaration resolvedGetter = calls.get(0).resolve();
+        assertEquals("test.Point.x()", resolvedGetter.getQualifiedSignature());
+        assertEquals("int", resolvedGetter.getReturnType().describe());
+        assertEquals("test.Point", resolvedGetter.declaringType().getQualifiedName());
+
+        ObjectCreationExpr ctorCall = cu.findFirst(ObjectCreationExpr.class).get();
+        ResolvedConstructorDeclaration resolvedCtor = ctorCall.resolve();
+        assertEquals("test.Point.Point(int, int)", resolvedCtor.getQualifiedSignature());
+        assertEquals("test.Point", resolvedCtor.declaringType().getQualifiedName());
+
+        ResolvedReferenceTypeDeclaration pointDecl = typeSolver.solveType("test.Point");
+        List<ResolvedFieldDeclaration> fields = pointDecl.getAllFields();
+        assertEquals(2, fields.size());
+        assertEquals("test.Point", fields.get(0).declaringType().getQualifiedName());
+        assertEquals("int", fields.get(0).getType().describe());
     }
 }

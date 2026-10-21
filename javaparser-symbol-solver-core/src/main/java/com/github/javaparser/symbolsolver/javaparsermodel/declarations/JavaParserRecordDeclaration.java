@@ -178,7 +178,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
 
                     @Override
                     public ResolvedTypeDeclaration declaringType() {
-                        return wrappedNode.resolve();
+                        return JavaParserRecordDeclaration.this;
                     }
 
                     @Override
@@ -188,7 +188,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
 
                     @Override
                     public ResolvedType getType() {
-                        return parameter.getType().resolve();
+                        return JavaParserFacade.get(typeSolver).convert(parameter.getType(), parameter);
                     }
 
                     @Override
@@ -285,10 +285,11 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
                 return false;
             }
             for (int i = 0; i < constructor.getNumberOfParams(); i++) {
+                Parameter parameter = wrappedNode.getParameter(i);
                 if (!constructor
                         .getParam(i)
                         .getType()
-                        .equals(wrappedNode.getParameter(i).getType().resolve())) {
+                        .equals(JavaParserFacade.get(typeSolver).convert(parameter.getType(), parameter))) {
                     return false;
                 }
             }
@@ -613,7 +614,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
 
         @Override
         public ResolvedType getReturnType() {
-            return correspondingParameter.getType().resolve();
+            return JavaParserFacade.get(typeSolver).convert(correspondingParameter.getType(), correspondingParameter);
         }
 
         @Override
@@ -638,7 +639,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
 
         @Override
         public ResolvedReferenceTypeDeclaration declaringType() {
-            return recordDeclaration.resolve();
+            return new JavaParserRecordDeclaration(recordDeclaration, typeSolver);
         }
 
         @Override
@@ -694,7 +695,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
 
         @Override
         public ResolvedReferenceTypeDeclaration declaringType() {
-            return recordDeclaration.resolve();
+            return new JavaParserRecordDeclaration(recordDeclaration, typeSolver);
         }
 
         @Override
@@ -705,7 +706,8 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
         @Override
         public ResolvedParameterDeclaration getParam(int i) {
             // TODO: Should this be a copy?
-            return recordDeclaration.getParameters().get(i).resolve();
+            return new JavaParserParameterDeclaration(
+                    recordDeclaration.getParameters().get(i), typeSolver);
         }
 
         @Override
