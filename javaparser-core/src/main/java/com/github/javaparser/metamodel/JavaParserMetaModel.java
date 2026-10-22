@@ -22,7 +22,9 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -33,6 +35,8 @@ public final class JavaParserMetaModel {
     private JavaParserMetaModel() {}
 
     private static final List<BaseNodeMetaModel> nodeMetaModels = new ArrayList<>();
+
+    private static final Map<String, BaseNodeMetaModel> nodeMetaModelsByQualifiedName = new HashMap<>();
 
     @Generated("com.github.javaparser.generator.metamodel.MetaModelGenerator")
     private static void initializeConstructorParameters() {
@@ -2998,11 +3002,15 @@ public final class JavaParserMetaModel {
 
     public static Optional<BaseNodeMetaModel> getNodeMetaModel(Class<?> c) {
         for (BaseNodeMetaModel nodeMetaModel : nodeMetaModels) {
-            if (nodeMetaModel.getTypeName().equals(c.getSimpleName())) {
+            if (nodeMetaModel.getType() == c) {
                 return Optional.of(nodeMetaModel);
             }
         }
         return Optional.empty();
+    }
+
+    public static Optional<BaseNodeMetaModel> getNodeMetaModel(String qualifiedClassName) {
+        return Optional.ofNullable(nodeMetaModelsByQualifiedName.get(qualifiedClassName));
     }
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
@@ -3455,5 +3463,8 @@ public final class JavaParserMetaModel {
         initializeNodeMetaModels();
         initializePropertyMetaModels();
         initializeConstructorParameters();
+        for (BaseNodeMetaModel nodeMetaModel : nodeMetaModels) {
+            nodeMetaModelsByQualifiedName.put(nodeMetaModel.getQualifiedClassName(), nodeMetaModel);
+        }
     }
 }
