@@ -69,67 +69,62 @@ public class JavaParserJsonDeserializer {
      *           See {@link com.github.javaparser.metamodel.BaseNodeMetaModel#construct(Map)} how the node is contructed
      */
     private Node deserializeObject(JsonObject nodeJson) {
-        try {
-            String serializedNodeType = nodeJson.getString(JsonNode.CLASS.propertyKey);
-            BaseNodeMetaModel nodeMetaModel = getNodeMetaModel(Class.forName(serializedNodeType))
-                    .orElseThrow(() -> new IllegalStateException(
-                            "Trying to deserialize an unknown node type: " + serializedNodeType));
-            Map<String, Object> parameters = new HashMap<>();
-            Map<String, JsonValue> deferredJsonValues = new HashMap<>();
+        String serializedNodeType = nodeJson.getString(JsonNode.CLASS.propertyKey);
+        BaseNodeMetaModel nodeMetaModel = getNodeMetaModel(serializedNodeType)
+                .orElseThrow(() ->
+                        new IllegalStateException("Trying to deserialize an unknown node type: " + serializedNodeType));
+        Map<String, Object> parameters = new HashMap<>();
+        Map<String, JsonValue> deferredJsonValues = new HashMap<>();
 
-            for (String name : nodeJson.keySet()) {
-                if (name.equals(JsonNode.CLASS.propertyKey)) {
-                    continue;
-                }
+        for (String name : nodeJson.keySet()) {
+            if (name.equals(JsonNode.CLASS.propertyKey)) {
+                continue;
+            }
 
-                Optional<PropertyMetaModel> optionalPropertyMetaModel =
-                        nodeMetaModel.getAllPropertyMetaModels().stream()
-                                .filter(mm -> mm.getName().equals(name))
-                                .findFirst();
-                if (!optionalPropertyMetaModel.isPresent()) {
-                    deferredJsonValues.put(name, nodeJson.get(name));
-                    continue;
-                }
+            Optional<PropertyMetaModel> optionalPropertyMetaModel = nodeMetaModel.getAllPropertyMetaModels().stream()
+                    .filter(mm -> mm.getName().equals(name))
+                    .findFirst();
+            if (!optionalPropertyMetaModel.isPresent()) {
+                deferredJsonValues.put(name, nodeJson.get(name));
+                continue;
+            }
 
-                PropertyMetaModel propertyMetaModel = optionalPropertyMetaModel.get();
-                if (propertyMetaModel.isNodeList()) {
-                    JsonArray nodeListJson = nodeJson.getJsonArray(name);
-                    parameters.put(name, deserializeNodeList(nodeListJson));
-                } else if (propertyMetaModel.isNode()) {
-                    parameters.put(name, deserializeObject(nodeJson.getJsonObject(name)));
+            PropertyMetaModel propertyMetaModel = optionalPropertyMetaModel.get();
+            if (propertyMetaModel.isNodeList()) {
+                JsonArray nodeListJson = nodeJson.getJsonArray(name);
+                parameters.put(name, deserializeNodeList(nodeListJson));
+            } else if (propertyMetaModel.isNode()) {
+                parameters.put(name, deserializeObject(nodeJson.getJsonObject(name)));
+            } else {
+                Class<?> type = propertyMetaModel.getType();
+                if (type == String.class) {
+                    parameters.put(name, nodeJson.getString(name));
+                } else if (type == boolean.class) {
+                    parameters.put(name, Boolean.parseBoolean(nodeJson.getString(name)));
+                } else if (Enum.class.isAssignableFrom(type)) {
+                    parameters.put(name, Enum.valueOf((Class<? extends Enum>) type, nodeJson.getString(name)));
                 } else {
-                    Class<?> type = propertyMetaModel.getType();
-                    if (type == String.class) {
-                        parameters.put(name, nodeJson.getString(name));
-                    } else if (type == boolean.class) {
-                        parameters.put(name, Boolean.parseBoolean(nodeJson.getString(name)));
-                    } else if (Enum.class.isAssignableFrom(type)) {
-                        parameters.put(name, Enum.valueOf((Class<? extends Enum>) type, nodeJson.getString(name)));
-                    } else {
-                        throw new IllegalStateException("Don't know how to convert: " + type);
-                    }
+                    throw new IllegalStateException("Don't know how to convert: " + type);
                 }
             }
-
-            Node node = nodeMetaModel.construct(parameters);
-            // COMMENT is in the propertyKey meta model, but not required as constructor parameter.
-            // Set it after construction
-            if (parameters.containsKey(JsonNode.COMMENT.propertyKey)) {
-                node.setComment((Comment) parameters.get(JsonNode.COMMENT.propertyKey));
-            }
-
-            for (String name : deferredJsonValues.keySet()) {
-                if (!readNonMetaProperties(name, deferredJsonValues.get(name), node)) {
-                    throw new IllegalStateException(
-                            "Unknown propertyKey: " + nodeMetaModel.getQualifiedClassName() + "." + name);
-                }
-            }
-            setSymbolResolverIfCompilationUnit(node);
-
-            return node;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
+
+        Node node = nodeMetaModel.construct(parameters);
+        // COMMENT is in the propertyKey meta model, but not required as constructor parameter.
+        // Set it after construction
+        if (parameters.containsKey(JsonNode.COMMENT.propertyKey)) {
+            node.setComment((Comment) parameters.get(JsonNode.COMMENT.propertyKey));
+        }
+
+        for (String name : deferredJsonValues.keySet()) {
+            if (!readNonMetaProperties(name, deferredJsonValues.get(name), node)) {
+                throw new IllegalStateException(
+                        "Unknown propertyKey: " + nodeMetaModel.getQualifiedClassName() + "." + name);
+            }
+        }
+        setSymbolResolverIfCompilationUnit(node);
+
+        return node;
     }
 
     private NodeList<?> deserializeNodeList(JsonArray nodeListJson) {
