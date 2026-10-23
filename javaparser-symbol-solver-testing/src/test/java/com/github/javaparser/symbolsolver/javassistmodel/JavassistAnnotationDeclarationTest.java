@@ -28,6 +28,8 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarationTest;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
@@ -152,6 +154,21 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
     }
 
     // Issue #1836
+    @Test
+    void isAssignableBy_shouldOnlyAcceptItselfAndNull() throws NotFoundException {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        JavassistAnnotationDeclaration deprecated =
+                new JavassistAnnotationDeclaration(ClassPool.getDefault().get("java.lang.Deprecated"), typeSolver);
+        JavassistAnnotationDeclaration override =
+                new JavassistAnnotationDeclaration(ClassPool.getDefault().get("java.lang.Override"), typeSolver);
+
+        assertTrue(deprecated.isAssignableBy(deprecated));
+        assertTrue(deprecated.isAssignableBy(NullType.INSTANCE));
+        assertFalse(deprecated.isAssignableBy(override));
+        assertFalse(deprecated.isAssignableBy(typeSolver.solveType("java.lang.annotation.Annotation")));
+        assertFalse(deprecated.isAssignableBy(ResolvedPrimitiveType.INT));
+    }
+
     @Test
     void canBeAssignedTo_shouldAcceptOnlyItselfAnnotationAndObject() throws NotFoundException {
         TypeSolver typeSolver = new ReflectionTypeSolver();
