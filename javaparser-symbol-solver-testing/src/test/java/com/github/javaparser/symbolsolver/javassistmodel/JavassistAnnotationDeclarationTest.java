@@ -150,4 +150,17 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
     private javassist.bytecode.annotation.Annotation createAnnotation(String annotationName, ConstPool constpool) {
         return new javassist.bytecode.annotation.Annotation(annotationName, constpool);
     }
+
+    // Issue #1836
+    @Test
+    void canBeAssignedTo_shouldAcceptOnlyItselfAnnotationAndObject() throws NotFoundException {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        JavassistAnnotationDeclaration deprecated =
+                new JavassistAnnotationDeclaration(ClassPool.getDefault().get("java.lang.Deprecated"), typeSolver);
+
+        assertTrue(deprecated.canBeAssignedTo(deprecated));
+        assertTrue(deprecated.canBeAssignedTo(typeSolver.solveType("java.lang.annotation.Annotation")));
+        assertTrue(deprecated.canBeAssignedTo(typeSolver.getSolvedJavaLangObject()));
+        assertFalse(deprecated.canBeAssignedTo(typeSolver.solveType("java.lang.Override")));
+    }
 }
