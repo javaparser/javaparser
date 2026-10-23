@@ -232,11 +232,20 @@ public abstract class Comment extends Node {
      */
     public abstract String getFooter();
 
+    /**
+     * Returns the content of the comment as it must be printed between the header and the footer. Comment types whose
+     * content could end the comment early override this to neutralize that, so that content set programmatically
+     * cannot leak out of the comment into the surrounding code.
+     */
+    public String getPrintableContent() {
+        return getContent();
+    }
+
     /*
      * Returns the content of the comment with header and footer
      */
     public String asString() {
-        return getHeader() + getContent() + getFooter();
+        return getHeader() + getPrintableContent() + getFooter();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

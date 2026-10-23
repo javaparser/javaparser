@@ -411,7 +411,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isPrintComments() && configuration.isPrintJavadoc()) {
             printer.println(n.getHeader());
             final String commentContent =
-                    normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
+                    normalizeEolInTextBlock(n.getPrintableContent(), configuration.getEndOfLineCharacter());
             String[] lines = commentContent.split("\\R");
             List<String> strippedLines = new ArrayList<>();
             for (String line : lines) {
@@ -1715,7 +1715,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isIgnoreComments()) {
             return;
         }
-        final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
+        final String commentContent =
+                normalizeEolInTextBlock(n.getPrintableContent(), configuration.getEndOfLineCharacter());
         // as BlockComment should not be formatted, -1 to preserve any trailing empty line if present
         String[] lines = commentContent.split("\\R", -1);
         printer.print(n.getHeader());
