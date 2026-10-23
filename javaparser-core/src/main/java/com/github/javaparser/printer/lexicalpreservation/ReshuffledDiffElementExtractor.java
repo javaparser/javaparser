@@ -153,39 +153,82 @@ public class ReshuffledDiffElementExtractor {
     }
 
     /*
-     * Considering that the lists of elements are ordered, We can find the common
-     * elements by starting with the list before the modifications and, for each
-     * element, by going through the list of elements containing the modifications.
+     * Computes which elements of the previous order (the CsmMix before the change, L1) are still present in the
+     * next order (the CsmMix after the change, L2). The result maps an index of L2 to the index of the
+     * corresponding element of L1. An element of L1 without correspondence is removed, an element of L2 without
+     * correspondence is added, the others are kept.
      *
-     * We can find the common elements by starting with the list before the
-     * modifications (L1) and, for each element, by going through the list of elements
-     * containing the modifications (L2).
+     * Both lists are ordered, so the correspondence must preserve the order: if a is matched with a' and b with
+     * b', a before b in L2 implies a' before b' in L1.
      *
-     * If element A in list L1 is not found in list L2, it is a deleted element.
-     * If element A of list L1 is found in list L2, it is a kept element. In this
-     * case the search for the next element of the list L1 must start from the
-     * position of the last element kept {@code syncNextIndex}.
+     * The child nodes and the tokens are not matched in the same way:
+     * - a child node is unique: it identifies without ambiguity a position in both lists, so it anchors the
+     *   correspondence;
+     * - a token (end of line, space, separator...) is not: the same token usually appears several times, after
+     *   each child node. Matched first, a token can be paired with the wrong occurrence.
+     *
+     * For example, when removing @A from [@A, eol, @B, eol], which becomes [@B, eol], a single left-to-right
+     * pass pairs the first end of line of L1 (the one following the removed @A) with the end of line of L2, then
+     * no longer finds @B after it: @B would be considered as removed and added again, which moves it and loses
+     * its comment. The expected correspondence is @B with @B and the end of line of L2 with the one following
+     * @B in L1.
+     *
+     * The correspondence is therefore computed in two steps:
+     * 1. the child nodes are matched, in order;
+     * 2. each token of L2 is matched with a token of L1 located between the child nodes surrounding it, i.e.
+     *    after the element of L1 matched with the previous child node of L2 and before the element of L1
+     *    matched with the next child node of L2, in order.
      */
     private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(
             CsmMix elementsFromPreviousOrder, CsmMix elementsFromNextOrder) {
         Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
-        IndexTrackingIterator<CsmElement> previousOrderElementsIterator =
-                new IndexTrackingIterator<>(elementsFromPreviousOrder.getElements());
+        List<CsmElement> previousOrderElements = elementsFromPreviousOrder.getElements();
+        List<CsmElement> nextOrderElements = elementsFromNextOrder.getElements();
+        // Step 1: match the child nodes. For each child node of L1, the search in L2 starts after the last matched
+        // child node (syncNextIndex), so that the order is preserved. A child node of L1 that is not found has
+        // been removed.
         int syncNextIndex = 0;
-        while (previousOrderElementsIterator.hasNext()) {
-            CsmElement pe = previousOrderElementsIterator.next();
-            IndexTrackingIterator<CsmElement> nextOrderElementsIterator =
-                    new IndexTrackingIterator<>(elementsFromNextOrder.getElements(), syncNextIndex);
-            while (nextOrderElementsIterator.hasNext()) {
-                CsmElement ne = nextOrderElementsIterator.next();
-                if (!correspondanceBetweenNextOrderAndPreviousOrder
-                                .values()
-                                .contains(previousOrderElementsIterator.currentIndex())
-                        && DifferenceElementCalculator.matching(ne, pe)) {
-                    correspondanceBetweenNextOrderAndPreviousOrder.put(
-                            nextOrderElementsIterator.currentIndex(), previousOrderElementsIterator.currentIndex());
-                    // set the position to start on the next {@code nextOrderElementsIterator} iteration
-                    syncNextIndex = nextOrderElementsIterator.nextIndex();
+        for (int pi = 0; pi < previousOrderElements.size(); pi++) {
+            CsmElement pe = previousOrderElements.get(pi);
+            if (!(pe instanceof LexicalDifferenceCalculator.CsmChild)) {
+                continue;
+            }
+            for (int ni = syncNextIndex; ni < nextOrderElements.size(); ni++) {
+                if (DifferenceElementCalculator.matching(nextOrderElements.get(ni), pe)) {
+                    correspondanceBetweenNextOrderAndPreviousOrder.put(ni, pi);
+                    syncNextIndex = ni + 1;
+                    break;
+                }
+            }
+        }
+        // Step 2: match the tokens of L2 between the anchors found in step 1.
+        // syncPreviousIndex is the first index of L1 that can still be matched: it follows the last element of L1
+        // matched so far (child node or token), so that the order is preserved.
+        int syncPreviousIndex = 0;
+        for (int ni = 0; ni < nextOrderElements.size(); ni++) {
+            Integer anchor = correspondanceBetweenNextOrderAndPreviousOrder.get(ni);
+            if (anchor != null) {
+                // a child node matched in step 1: the following tokens must be searched after it in L1
+                syncPreviousIndex = anchor + 1;
+                continue;
+            }
+            // the search in L1 stops at the element matched with the next child node of L2, if any: a token
+            // located before that child node in L2 cannot correspond to a token located after it in L1
+            int limit = previousOrderElements.size();
+            for (int nj = ni + 1; nj < nextOrderElements.size(); nj++) {
+                if (correspondanceBetweenNextOrderAndPreviousOrder.containsKey(nj)) {
+                    limit = correspondanceBetweenNextOrderAndPreviousOrder.get(nj);
+                    break;
+                }
+            }
+            // first token of L1 in [syncPreviousIndex, limit) matching the token of L2; if there is none, the
+            // token of L2 is new (added)
+            for (int pi = syncPreviousIndex; pi < limit; pi++) {
+                CsmElement pe = previousOrderElements.get(pi);
+                if (!(pe instanceof LexicalDifferenceCalculator.CsmChild)
+                        && DifferenceElementCalculator.matching(nextOrderElements.get(ni), pe)) {
+                    correspondanceBetweenNextOrderAndPreviousOrder.put(ni, pi);
+                    syncPreviousIndex = pi + 1;
                     break;
                 }
             }
