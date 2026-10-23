@@ -32,6 +32,9 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.util.List;
@@ -141,6 +144,26 @@ class JavaParserAnnotationDeclarationTest extends AbstractResolutionTest {
                 .get()
                 .resolve()
                 .asReferenceType();
+    }
+
+    @Test
+    void isAssignableBy_shouldAcceptItselfNullAndImplementingClasses() {
+        ResolvedReferenceTypeDeclaration foo = resolveTypeFromAssignabilitySource("Foo");
+
+        assertTrue(foo.isAssignableBy(foo));
+        assertTrue(foo.isAssignableBy(new ReferenceTypeImpl(foo)));
+        assertTrue(foo.isAssignableBy(NullType.INSTANCE));
+        assertTrue(foo.isAssignableBy(resolveTypeFromAssignabilitySource("FooImpl")));
+    }
+
+    @Test
+    void isAssignableBy_shouldRejectUnrelatedTypes() {
+        ResolvedReferenceTypeDeclaration foo = resolveTypeFromAssignabilitySource("Foo");
+
+        assertFalse(foo.isAssignableBy(resolveTypeFromAssignabilitySource("Bar")));
+        assertFalse(foo.isAssignableBy(resolveTypeFromAssignabilitySource("Unrelated")));
+        assertFalse(foo.isAssignableBy(typeSolver.solveType("java.lang.annotation.Annotation")));
+        assertFalse(foo.isAssignableBy(ResolvedPrimitiveType.INT));
     }
 
     @Test
