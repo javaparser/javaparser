@@ -24,6 +24,8 @@ import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.serialization.JavaParserJsonSerializerTest.serialize;
 import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.Range;
@@ -48,6 +50,48 @@ import org.junit.jupiter.api.Test;
 
 class JavaParserJsonDeserializerTest {
     private final JavaParserJsonDeserializer deserializer = new JavaParserJsonDeserializer();
+
+    /** Records whether {@link NotANode} was initialized. Kept separate so that reading it does not initialize NotANode. */
+    static class InitializationProbe {
+        static boolean notANodeInitialized;
+    }
+
+    /** Not a Node: deserializing its name must fail without initializing the class. */
+    static class NotANode {
+        static {
+            InitializationProbe.notANodeInitialized = true;
+        }
+    }
+
+    @Test
+    void unknownNodeTypeIsRejectedWithoutInitializingTheClass() {
+        String className = NotANode.class.getName();
+        String json = "{\"!\":\"" + className + "\"}";
+
+        IllegalStateException e = assertThrows(
+                IllegalStateException.class,
+                () -> deserializer.deserializeObject(Json.createReader(new StringReader(json))));
+
+        assertEquals("Trying to deserialize an unknown node type: " + className, e.getMessage());
+        assertFalse(InitializationProbe.notANodeInitialized);
+    }
+
+    static class ForeignTypes {
+        /** Not a Node, but has the simple name of one. */
+        static class CompilationUnit {}
+    }
+
+    @Test
+    void nodeTypeIsMatchedOnItsQualifiedName() {
+        String className = ForeignTypes.CompilationUnit.class.getName();
+        String json = "{\"!\":\"" + className + "\"}";
+
+        IllegalStateException e = assertThrows(
+                IllegalStateException.class,
+                () -> deserializer.deserializeObject(Json.createReader(new StringReader(json))));
+
+        assertEquals("Trying to deserialize an unknown node type: " + className, e.getMessage());
+    }
 
     @Test
     void simpleTest() {
