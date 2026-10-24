@@ -77,6 +77,8 @@ class LiteralValueSettersTest extends AbstractLexicalPreservingTest {
     void setLong() {
         considerCode("class A { long l = 1L; }");
         cu.findFirst(LongLiteralExpr.class).get().setLong(2);
+        // The deprecated setLong stores String.valueOf(value) and so drops the L suffix. This test is
+        // about the printer seeing the new value; it records that behaviour, it does not endorse it.
         assertEqualsStringIgnoringEol("class A { long l = 2; }", LexicalPreservingPrinter.print(cu));
     }
 }

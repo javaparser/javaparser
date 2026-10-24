@@ -23,11 +23,13 @@ package com.github.javaparser.ast.expr;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.observer.AstObserver;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import java.math.BigInteger;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
@@ -202,6 +204,64 @@ class LiteralStringValueExprTest {
         expression.register(observer);
 
         expression.setValue(b);
+
+        verifyNoInteractions(observer);
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void typedSettersNotifyObservers() {
+        AstObserver observer = mock(AstObserver.class);
+
+        StringLiteralExpr string = new StringLiteralExpr("a");
+        string.register(observer);
+        string.setString("b\n");
+        verify(observer).propertyChange(string, ObservableProperty.VALUE, "a", "b\\n");
+        string.setEscapedValue("c");
+        verify(observer).propertyChange(string, ObservableProperty.VALUE, "b\\n", "c");
+
+        CharLiteralExpr character = new CharLiteralExpr("a");
+        character.register(observer);
+        character.setChar('b');
+        verify(observer).propertyChange(character, ObservableProperty.VALUE, "a", "b");
+
+        DoubleLiteralExpr doubleLiteral = new DoubleLiteralExpr("1.0");
+        doubleLiteral.register(observer);
+        doubleLiteral.setDouble(2.5);
+        verify(observer).propertyChange(doubleLiteral, ObservableProperty.VALUE, "1.0", "2.5");
+
+        IntegerLiteralExpr integer = new IntegerLiteralExpr("1");
+        integer.register(observer);
+        integer.setInt(2);
+        verify(observer).propertyChange(integer, ObservableProperty.VALUE, "1", "2");
+
+        LongLiteralExpr longLiteral = new LongLiteralExpr("1L");
+        longLiteral.register(observer);
+        longLiteral.setLong(2);
+        verify(observer).propertyChange(longLiteral, ObservableProperty.VALUE, "1L", "2");
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void typedSettersDoNotNotifyForTheSameValue() {
+        AstObserver observer = mock(AstObserver.class);
+        StringLiteralExpr string = new StringLiteralExpr("a");
+        CharLiteralExpr character = new CharLiteralExpr("a");
+        DoubleLiteralExpr doubleLiteral = new DoubleLiteralExpr("1.0");
+        IntegerLiteralExpr integer = new IntegerLiteralExpr("1");
+        LongLiteralExpr longLiteral = new LongLiteralExpr("1");
+        string.register(observer);
+        character.register(observer);
+        doubleLiteral.register(observer);
+        integer.register(observer);
+        longLiteral.register(observer);
+
+        string.setString("a");
+        string.setEscapedValue("a");
+        character.setChar('a');
+        doubleLiteral.setDouble(1.0);
+        integer.setInt(1);
+        longLiteral.setLong(1);
 
         verifyNoInteractions(observer);
     }
