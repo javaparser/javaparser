@@ -76,4 +76,12 @@ class CharLiteralExprTest {
                 .asCharLiteralExpr();
         assertEquals("\\'", c.getValue());
     }
+
+    @Test
+    void spaceEscapeIsTranslated() {
+        // JLS 3.10.7: \s is an escape sequence for a space in character literals too
+        CharLiteralExpr c = parser.parseExpression("'\\s'");
+        assertEquals("\\s", c.getValue());
+        assertEquals(' ', c.asChar());
+    }
 }

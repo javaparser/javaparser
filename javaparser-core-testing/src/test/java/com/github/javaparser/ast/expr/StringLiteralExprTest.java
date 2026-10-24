@@ -36,4 +36,17 @@ class StringLiteralExprTest {
         StringLiteralExpr omega = parser.parseExpression("\"xxx\\u03a9xxx\"");
         assertEquals("xxx\\u03a9xxx", omega.getValue());
     }
+
+    @Test
+    void spaceEscapeIsTranslated() {
+        // JLS 3.10.7: \s is an escape sequence for a space in string literals, not only in text blocks
+        StringLiteralExpr s = parser.parseExpression("\"a\\sb\\s\"");
+        assertEquals("a b ", s.asString());
+    }
+
+    @Test
+    void escapedBackslashBeforeSIsNotASpaceEscape() {
+        StringLiteralExpr s = parser.parseExpression("\"a\\\\sb\"");
+        assertEquals("a\\sb", s.asString());
+    }
 }
