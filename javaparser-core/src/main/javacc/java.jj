@@ -3902,6 +3902,7 @@ Expression CastExpression():
     JavaToken begin = INVALID;
     NodeList<AnnotationExpr> annotations;
     NodeList<ReferenceType> typesOfMultiCast = emptyNodeList();
+    RangedList<Type> typeArgs = new RangedList<Type>(null);
 }
 {
     "(" { begin=token(); }
@@ -3923,6 +3924,12 @@ Expression CastExpression():
         )*
         ")"
         ret = UnaryExpressionNotPlusMinus()
+        [
+            "::"
+            [ typeArgs = TypeArguments() ]
+            (Identifier() | "new")
+            { ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image); }
+        ]
         // TODO/FIXME: Handle LambdaExpression? Or is it handled elsewhere?
         {
             if (typesOfMultiCast.size() > 1) {
