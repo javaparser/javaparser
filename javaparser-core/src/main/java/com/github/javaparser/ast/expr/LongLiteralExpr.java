@@ -146,7 +146,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
      */
     @Deprecated
     public LongLiteralExpr setLong(long value) {
-        this.value = String.valueOf(value);
+        setValue(String.valueOf(value));
         return this;
     }
 

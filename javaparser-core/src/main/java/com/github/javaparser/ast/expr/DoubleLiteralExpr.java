@@ -87,7 +87,7 @@ public class DoubleLiteralExpr extends LiteralStringValueExpr {
     }
 
     public DoubleLiteralExpr setDouble(double value) {
-        this.value = String.valueOf(value);
+        setValue(String.valueOf(value));
         return this;
     }
 

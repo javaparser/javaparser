@@ -139,7 +139,7 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
      */
     @Deprecated
     public IntegerLiteralExpr setInt(int value) {
-        this.value = String.valueOf(value);
+        setValue(String.valueOf(value));
         return this;
     }
 

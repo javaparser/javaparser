@@ -105,7 +105,7 @@ public class CharLiteralExpr extends LiteralStringValueExpr {
      * @return this expression
      */
     public CharLiteralExpr setChar(char value) {
-        this.value = String.valueOf(value);
+        setValue(String.valueOf(value));
         return this;
     }
 
