@@ -25,6 +25,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.setterName;
 
 import com.github.javaparser.ast.Node;
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -170,6 +171,15 @@ public class PropertyMetaModel {
         return "(" + getTypeName() + ")\t" + containingNodeMetaModel + "#" + name;
     }
 
+    /**
+     * Two properties are equal if they have the same runtime class and equal containing node meta models,
+     * names, and types.
+     *
+     * <p>The containing node meta models may both be {@code null}. A {@code null} containing node meta model
+     * is not equal to a non-{@code null} one.
+     *
+     * <p>Inherited properties retain the meta model of the node that declares them.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -177,14 +187,12 @@ public class PropertyMetaModel {
         PropertyMetaModel that = (PropertyMetaModel) o;
         if (!name.equals(that.name)) return false;
         if (!type.equals(that.type)) return false;
-        return true;
+        return Objects.equals(containingNodeMetaModel, that.containingNodeMetaModel);
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + type.hashCode();
-        return result;
+        return Objects.hash(containingNodeMetaModel, name, type);
     }
 
     /**

@@ -21,10 +21,18 @@
 
 package com.github.javaparser.metamodel;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -64,5 +72,69 @@ class PropertyMetaModelTest {
         PropertyMetaModel bert =
                 new PropertyMetaModel(null, "bert", Modifier.class, Optional.empty(), false, false, false, false);
         assertEquals("bertPropertyMetaModel", bert.getMetaModelFieldName());
+    }
+
+    @Test
+    void propertiesDeclaredByDifferentNodesAreNotEqual() {
+        PropertyMetaModel nameIdentifier = JavaParserMetaModel.nameMetaModel.identifierPropertyMetaModel;
+        PropertyMetaModel simpleNameIdentifier = JavaParserMetaModel.simpleNameMetaModel.identifierPropertyMetaModel;
+        PropertyMetaModel methodReferenceIdentifier =
+                JavaParserMetaModel.methodReferenceExprMetaModel.identifierPropertyMetaModel;
+        Map<PropertyMetaModel, String> values = new HashMap<>();
+        values.put(nameIdentifier, "Name value");
+        values.put(simpleNameIdentifier, "SimpleName value");
+        values.put(methodReferenceIdentifier, "MethodReferenceExpr value");
+
+        assertAll(
+                () -> assertNotEquals(nameIdentifier, simpleNameIdentifier),
+                () -> assertNotEquals(nameIdentifier, methodReferenceIdentifier),
+                () -> assertNotEquals(simpleNameIdentifier, methodReferenceIdentifier),
+                () -> assertEquals(3, values.size()),
+                () -> assertEquals("Name value", values.get(nameIdentifier)),
+                () -> assertEquals("SimpleName value", values.get(simpleNameIdentifier)),
+                () -> assertEquals("MethodReferenceExpr value", values.get(methodReferenceIdentifier)));
+    }
+
+    @Test
+    void hashSetRetainsAllDeclaredProperties() {
+        List<PropertyMetaModel> declaredProperties = new ArrayList<>();
+        for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
+            declaredProperties.addAll(nodeMetaModel.getDeclaredPropertyMetaModels());
+        }
+
+        assertEquals(declaredProperties.size(), new HashSet<>(declaredProperties).size());
+    }
+
+    @Test
+    void inheritedPropertiesRetainTheirDeclaringOwnerAndEquality() {
+        PropertyMetaModel integerValue =
+                JavaParserMetaModel.integerLiteralExprMetaModel.getAllPropertyMetaModels().stream()
+                        .filter(p -> p.getName().equals("value"))
+                        .findFirst()
+                        .get();
+        PropertyMetaModel doubleValue =
+                JavaParserMetaModel.doubleLiteralExprMetaModel.getAllPropertyMetaModels().stream()
+                        .filter(p -> p.getName().equals("value"))
+                        .findFirst()
+                        .get();
+
+        assertSame(JavaParserMetaModel.literalStringValueExprMetaModel.valuePropertyMetaModel, integerValue);
+        assertSame(integerValue, doubleValue);
+        assertSame(JavaParserMetaModel.literalStringValueExprMetaModel, integerValue.getContainingNodeMetaModel());
+    }
+
+    @Test
+    void propertiesWithNullOwnersRemainComparableAndHashable() {
+        PropertyMetaModel first =
+                new PropertyMetaModel(null, "identifier", String.class, Optional.empty(), false, false, false, false);
+        PropertyMetaModel second =
+                new PropertyMetaModel(null, "identifier", String.class, Optional.empty(), false, false, false, false);
+        PropertyMetaModel withOwner = JavaParserMetaModel.simpleNameMetaModel.identifierPropertyMetaModel;
+
+        assertAll(
+                () -> assertEquals(first, second),
+                () -> assertEquals(first.hashCode(), second.hashCode()),
+                () -> assertNotEquals(first, withOwner),
+                () -> assertNotEquals(withOwner, first));
     }
 }
