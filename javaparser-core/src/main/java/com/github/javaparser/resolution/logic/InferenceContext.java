@@ -162,7 +162,7 @@ public class InferenceContext {
                     }
                 }
             }
-            if (actualType.isReferenceType()) {
+            if (actualType.isReferenceType() || actualType.isArray()) {
                 if (formalType.asWildcard().isBounded()) {
                     registerCorrespondance(formalType.asWildcard().getBoundedType(), actualType);
                 }

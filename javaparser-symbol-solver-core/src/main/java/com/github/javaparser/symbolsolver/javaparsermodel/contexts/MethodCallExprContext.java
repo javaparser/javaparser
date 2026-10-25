@@ -713,22 +713,57 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             // extends classY<Integer>"
             if (actualType.isReferenceType()
                     && actualType.asReferenceType().typeParametersValues().size() > 0) {
-                int i = 0;
-                for (ResolvedType tp : expectedType.asReferenceType().typeParametersValues()) {
+                // Type arguments only correspond position by position on the same generic type: a
+                // subtype such as "class Sub<X> extends HashMap<String, X>" is first viewed as its
+                // HashMap<String, X> ancestor.
+                Optional<ResolvedReferenceType> actualAsExpected = asAncestor(
+                        actualType.asReferenceType(),
+                        expectedType.asReferenceType().getQualifiedName());
+                List<ResolvedType> expectedTypeArguments =
+                        expectedType.asReferenceType().typeParametersValues();
+                List<ResolvedType> actualTypeArguments = actualAsExpected
+                        .map(ResolvedReferenceType::typeParametersValues)
+                        .orElse(Collections.emptyList());
+                // no such ancestor, or a raw one as in "class Sub<X> extends HashMap"
+                if (actualTypeArguments.size() != expectedTypeArguments.size()) {
+                    return;
+                }
+                for (int i = 0; i < expectedTypeArguments.size(); i++) {
                     matchTypeParameters(
-                            tp,
-                            actualType.asReferenceType().typeParametersValues().get(i),
-                            matchedTypeParameters);
-                    i++;
+                            expectedTypeArguments.get(i), actualTypeArguments.get(i), matchedTypeParameters);
                 }
             }
         } else if (expectedType.isPrimitive()) {
             // nothing to do
         } else if (expectedType.isWildcard()) {
-            // nothing to do
+            // A type argument S matched against "? extends B" means S <: B, so the type variables
+            // of B can be inferred from S (e.g. Supplier<Mono<String>> against
+            // Supplier<? extends Mono<? extends T>> gives T = String, issue #4831).
+            if (expectedType.asWildcard().isExtends()) {
+                ResolvedType actualBound = actualType;
+                if (actualType.isWildcard()) {
+                    if (!actualType.asWildcard().isExtends()) {
+                        return;
+                    }
+                    actualBound = actualType.asWildcard().getBoundedType();
+                }
+                matchTypeParameters(expectedType.asWildcard().getBoundedType(), actualBound, matchedTypeParameters);
+            }
         } else {
             throw new UnsupportedOperationException(expectedType.getClass().getCanonicalName());
         }
+    }
+
+    /*
+     * Returns the given type, or its ancestor, whose qualified name is the given one.
+     */
+    private Optional<ResolvedReferenceType> asAncestor(ResolvedReferenceType type, String qualifiedName) {
+        if (type.getQualifiedName().equals(qualifiedName)) {
+            return Optional.of(type);
+        }
+        return type.getAllAncestors().stream()
+                .filter(ancestor -> ancestor.getQualifiedName().equals(qualifiedName))
+                .findFirst();
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(
