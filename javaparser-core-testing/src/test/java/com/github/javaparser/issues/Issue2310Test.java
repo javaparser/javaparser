@@ -29,6 +29,8 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class Issue2310Test {
 
@@ -39,35 +41,33 @@ public class Issue2310Test {
      * arrays, arrays with type annotations, fields, local variables, and the
      * already-correct catch parameter (control case).
      */
-    @Test
-    public void nameRangeMatchesIdentifierTokenForCStyleArray() {
-        String[] samples = {
-            "class A { void m(String args[]) {} }",
-            "class A { void m(String args[][]) {} }",
-            "class A { void m(int @Foo [] args @Bar []) {} }",
-            "class A { int args[]; }",
-            "class A { void m() { int args[] = null; } }",
-            "class A { void m() { try {} catch (Exception args) {} } }"
-        };
-        for (String code : samples) {
-            CompilationUnit cu = StaticJavaParser.parse(code);
-            SimpleName name = cu.findAll(SimpleName.class).stream()
-                    .filter(n -> n.getIdentifier().equals("args"))
-                    .findFirst()
-                    .orElseThrow(() -> new AssertionError("args SimpleName not found in: " + code));
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "class A { void m(String args[]) {} }",
+        "class A { void m(String args[][]) {} }",
+        "class A { void m(int @Foo [] args @Bar []) {} }",
+        "class A { int args[]; }",
+        "class A { void m() { int args[] = null; } }",
+        "class A { void m() { try {} catch (Exception args) {} } }"
+    })
+    public void nameRangeMatchesIdentifierTokenForCStyleArray(String code) {
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        SimpleName name = cu.findAll(SimpleName.class).stream()
+                .filter(n -> n.getIdentifier().equals("args"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("args SimpleName not found in: " + code));
 
-            Range nodeRange = name.getRange().orElseThrow(() -> new AssertionError("name has no range: " + code));
-            Range tokenRange = name.getTokenRange()
-                    .orElseThrow(() -> new AssertionError("name has no token range: " + code))
-                    .getBegin()
-                    .getRange()
-                    .orElseThrow(() -> new AssertionError("token has no range: " + code));
+        Range nodeRange = name.getRange().orElseThrow(() -> new AssertionError("name has no range: " + code));
+        Range tokenRange = name.getTokenRange()
+                .orElseThrow(() -> new AssertionError("name has no token range: " + code))
+                .getBegin()
+                .getRange()
+                .orElseThrow(() -> new AssertionError("token has no range: " + code));
 
-            assertEquals(
-                    tokenRange,
-                    nodeRange,
-                    "Name range should equal its single identifier token (no array brackets) for: " + code);
-        }
+        assertEquals(
+                tokenRange,
+                nodeRange,
+                "Name range should equal its single identifier token (no array brackets) for: " + code);
     }
 
     /**
