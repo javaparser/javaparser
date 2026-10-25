@@ -208,8 +208,16 @@ abstract class GeneratedJavaParserBase {
     /* Called from within a catch block to skip forward to a known token,
         and report the occurred exception as a problem. */
     TokenRange recoverStatement(int recoveryTokenType, int lBraceType, int rBraceType, ParseException p) {
+        return recoverStatement(recoveryTokenType, lBraceType, rBraceType, p, null);
+    }
+
+    /* beginToken is the offending token. Null keeps the historical begin: the last consumed token. */
+    TokenRange recoverStatement(
+            int recoveryTokenType, int lBraceType, int rBraceType, ParseException p, Token beginToken) {
         JavaToken begin = null;
-        if (p.currentToken != null) {
+        if (beginToken != null) {
+            begin = beginToken.javaToken;
+        } else if (p.currentToken != null) {
             begin = token();
         }
         int level = 0;
@@ -217,7 +225,8 @@ abstract class GeneratedJavaParserBase {
         do {
             Token nextToken = getToken(1);
             if (nextToken != null && nextToken.kind == rBraceType && level == 0) {
-                TokenRange tokenRange = range(begin, token());
+                JavaToken end = token();
+                TokenRange tokenRange = range(begin, end);
                 problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
                 return tokenRange;
             }

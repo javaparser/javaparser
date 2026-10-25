@@ -2278,11 +2278,23 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
         throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
         ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); } )*
     ]
-    (
-        body = Block()
-     |
-        ";"
-    )
+    try {
+        (
+            body = Block()
+         |
+            ";"
+        )
+    } catch (ParseException e) {
+        // Nothing to skip: a '}' directly after the header belongs to the enclosing body.
+        // Recovering here would attach a BlockStmt with no token range.
+        if (getToken(1).kind == RBRACE) {
+            throw e;
+        }
+        // Begin at the offending token so the range does not overlap ')' or start on whitespace.
+        TokenRange errorRange = recoverStatement(SEMICOLON, LBRACE, RBRACE, e, e.currentToken.next);
+        body = new BlockStmt(errorRange, new NodeList<Statement>());
+        body.setParsed(UNPARSABLE);
+    }
 
     {
         type = juggleArrayType(type, arrayBracketPairs);
