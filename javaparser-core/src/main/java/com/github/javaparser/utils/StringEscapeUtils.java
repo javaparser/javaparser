@@ -60,6 +60,16 @@ public final class StringEscapeUtils {
     }
 
     /**
+     * <p>Escapes a character using Java Character Literal rules.</p>
+     *
+     * @param input character to escape
+     * @return String with escaped value
+     */
+    public static String escapeJava(final char input) {
+        return ESCAPE_JAVA_CHAR.translate(String.valueOf(input));
+    }
+
+    /**
      * <p>Unescapes any Java literals found in the {@code String}.
      * For example, it will turn a sequence of {@code '\'} and
      * {@code 'n'} into a newline character, unless the {@code '\'}
@@ -86,6 +96,10 @@ public final class StringEscapeUtils {
 
     private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(
             new LookupTranslator(new String[][] {{"\"", "\\\""}, {"\\", "\\\\"}}), JAVA_CTRL_CHARS_ESCAPE);
+
+    private static final CharSequenceTranslator ESCAPE_JAVA_CHAR = new AggregateTranslator(
+            new LookupTranslator(new String[][] {{"\"", "\\\""}, {"\\", "\\\\"}, {"'", "\\'"}}),
+            JAVA_CTRL_CHARS_ESCAPE);
 
     private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(
             new OctalUnescaper(),
