@@ -42,14 +42,15 @@ public class Issue2310Test {
      * already-correct catch parameter (control case).
      */
     @ParameterizedTest
-    @ValueSource(strings = {
-        "class A { void m(String args[]) {} }",
-        "class A { void m(String args[][]) {} }",
-        "class A { void m(int @Foo [] args @Bar []) {} }",
-        "class A { int args[]; }",
-        "class A { void m() { int args[] = null; } }",
-        "class A { void m() { try {} catch (Exception args) {} } }"
-    })
+    @ValueSource(
+            strings = {
+                "class A { void m(String args[]) {} }",
+                "class A { void m(String args[][]) {} }",
+                "class A { void m(int @Foo [] args @Bar []) {} }",
+                "class A { int args[]; }",
+                "class A { void m() { int args[] = null; } }",
+                "class A { void m() { try {} catch (Exception args) {} } }"
+            })
     public void nameRangeMatchesIdentifierTokenForCStyleArray(String code) {
         CompilationUnit cu = StaticJavaParser.parse(code);
         SimpleName name = cu.findAll(SimpleName.class).stream()
