@@ -34,10 +34,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
-import com.github.javaparser.ast.nodeTypes.NodeWithRange;
-import com.github.javaparser.ast.nodeTypes.NodeWithScope;
-import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
@@ -198,6 +195,9 @@ public abstract class Node
 
     @InternalProperty
     private Parsedness parsed = PARSED;
+
+    @InternalProperty
+    private int nodeListIndex = -1;
 
     protected Node(TokenRange tokenRange) {
         setTokenRange(tokenRange);
@@ -1298,5 +1298,22 @@ public abstract class Node
         return node.getParentNode().isPresent()
                 && (isPhantom(node.getParentNode().get())
                         || inPhantomNode(node.getParentNode().get(), levels - 1));
+    }
+
+    /**
+     * This method exists only for internal use in NodeList and should be considered effectively private.
+     * It may be removed or the behaviour changed at any time.
+     */
+    public Node setNodeListIndex(int nodeListIndex) {
+        this.nodeListIndex = nodeListIndex;
+        return this;
+    }
+
+    /**
+     * This method exists only for internal use in NodeList and should be considered effectively private.
+     * It may be removed or the behaviour changed at any time.
+     */
+    public int getNodeListIndex() {
+        return nodeListIndex;
     }
 }
