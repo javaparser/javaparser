@@ -1390,6 +1390,42 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
         assertEquals("FooBase", ancestors.get(0).getQualifiedName());
     }
 
+    @Test
+    @SuppressWarnings("deprecation")
+    void solveType_resolvesOwnNameAndNestedClass() {
+        ClassOrInterfaceDeclaration outer = parse("class Outer { class Inner {} }")
+                .findFirst(ClassOrInterfaceDeclaration.class)
+                .get();
+        JavaParserClassDeclaration declaration = (JavaParserClassDeclaration) outer.resolve();
+
+        SymbolReference<ResolvedTypeDeclaration> ownName = declaration.solveType("Outer");
+        assertTrue(ownName.isSolved());
+        assertSame(declaration, ownName.getCorrespondingDeclaration());
+
+        SymbolReference<ResolvedTypeDeclaration> nested = declaration.solveType("Inner");
+        assertTrue(nested.isSolved());
+        assertEquals("Outer.Inner", nested.getCorrespondingDeclaration().getQualifiedName());
+
+        SymbolReference<ResolvedTypeDeclaration> qualifiedNested = declaration.solveType("Outer.Inner");
+        assertTrue(qualifiedNested.isSolved());
+        assertEquals(
+                "Outer.Inner", qualifiedNested.getCorrespondingDeclaration().getQualifiedName());
+    }
+
+    @Test
+    void getAncestors_ignoresUnresolvedInterfaceWhenIncompleteListIsAccepted() {
+        ClassOrInterfaceDeclaration declaration = parse("class Test implements Missing {}")
+                .findFirst(ClassOrInterfaceDeclaration.class)
+                .get();
+        JavaParserClassDeclaration resolved = (JavaParserClassDeclaration) declaration.resolve();
+
+        List<ResolvedReferenceType> ancestors = resolved.getAncestors(true);
+        assertEquals(1, ancestors.size());
+        assertEquals("java.lang.Object", ancestors.get(0).getQualifiedName());
+
+        assertThrows(UnsolvedSymbolException.class, () -> resolved.getAncestors(false));
+    }
+
     private List<ResolvedType> declaredTypes(String... lines) {
         CompilationUnit tree = treeOf(lines);
         List<ResolvedType> results = Lists.newLinkedList();
