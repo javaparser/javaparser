@@ -173,21 +173,11 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
         return enumConstant;
     }
 
-    // TODO document and remove duplication between here and com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
     /**
      * @return is this enum's parent a LocalEnumDeclarationStmt ?
      */
     public boolean isLocalEnumDeclaration() {
         return getParentNode().map(p -> p instanceof LocalEnumDeclarationStmt).orElse(false);
-    }
-
-    // TODO document and remove duplication between here and com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
-    @Override
-    public Optional<String> getFullyQualifiedName() {
-        if (isLocalEnumDeclaration()) {
-            return Optional.empty();
-        }
-        return super.getFullyQualifiedName();
     }
 
     @Override

@@ -312,16 +312,12 @@ class Java1_1ValidatorTest {
     }
 
     @Test
-    void localEnum() {
-        // Enums themselves aren't supported until JAVA_5, so a JAVA_5+ (but pre-JAVA_16) parser
-        // is needed here to isolate the "no local enum" message from the "no enum" message.
-        JavaParser java15Parser =
-                new JavaParser(new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_15));
+    void localEnumYieldsOnlyTheEnumerationsNotSupportedMessage() {
         ParseResult<CompilationUnit> result =
-                java15Parser.parse(COMPILATION_UNIT, provider("class X{ void x() {enum E{A,B}}}"));
+                javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {enum E{A,B}}}"));
         assertProblems(
                 result,
-                "(line 1,col 20) There is no such thing as a local enum. Pay attention that this feature is supported starting from 'JAVA_16' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+                "(line 1,col 20) Enumerations are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
