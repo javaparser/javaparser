@@ -26,10 +26,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.stmt.LocalEnumDeclarationStmt;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.utils.LineSeparator;
@@ -134,6 +136,31 @@ class ModifierVisitorTest extends AbstractLexicalPreservingTest {
                 null);
 
         assertEquals("void x() {" + LineSeparator.SYSTEM + "}", result.toString());
+    }
+
+    @Test
+    void localEnumDeclarationStmtSurvivesNoOpModifierVisitor() {
+        LocalEnumDeclarationStmt stmt = new LocalEnumDeclarationStmt(new EnumDeclaration().setName("E"));
+        ModifierVisitor<Void> modifier = new ModifierVisitor<>();
+
+        Visitable result = stmt.accept(modifier, null);
+
+        assertEquals(stmt, result);
+    }
+
+    @Test
+    void localEnumDeclarationStmtCantSurviveWithoutItsEnumDeclaration() {
+        LocalEnumDeclarationStmt stmt = new LocalEnumDeclarationStmt(new EnumDeclaration().setName("E"));
+        ModifierVisitor<Void> modifier = new ModifierVisitor<Void>() {
+            @Override
+            public Visitable visit(final EnumDeclaration n, final Void arg) {
+                return null;
+            }
+        };
+
+        Visitable result = stmt.accept(modifier, null);
+
+        assertNull(result);
     }
 
     @Test

@@ -231,15 +231,6 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration>
         return getParentNode().map(p -> p instanceof LocalRecordDeclarationStmt).orElse(false);
     }
 
-    // TODO document and remove duplication between here and com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
-    @Override
-    public Optional<String> getFullyQualifiedName() {
-        if (isLocalRecordDeclaration()) {
-            return Optional.empty();
-        }
-        return super.getFullyQualifiedName();
-    }
-
     @Override
     public ResolvedReferenceTypeDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedReferenceTypeDeclaration.class);

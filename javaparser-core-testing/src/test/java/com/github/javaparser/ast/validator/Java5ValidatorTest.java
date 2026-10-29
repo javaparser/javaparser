@@ -35,6 +35,8 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class Java5ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_5));
@@ -150,6 +152,15 @@ class Java5ValidatorTest {
     }
 
     @Test
+    void localEnum() {
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {enum E{A,B}}}"));
+        assertProblems(
+                result,
+                "(line 1,col 20) There is no such thing as a local enum. Pay attention that this feature is supported starting from 'JAVA_16' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+    }
+
+    @Test
     void varargs() {
         ParseResult<Parameter> result = javaParser.parse(PARAMETER, provider("String... x"));
         assertNoProblems(result);
@@ -195,6 +206,13 @@ class Java5ValidatorTest {
     void enumAllowedAsIdentifier() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int enum;"));
         assertProblems(result, "(line 1,col 5) 'enum' cannot be used as an identifier as it is a keyword.");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"enum = 3;", "enum.foo();", "enum x = null;", "enum[0] = 1;", "enum++;"})
+    void enumUsedAsIdentifierYieldsCleanMessageInsteadOfParseError(final String statement) {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider(statement));
+        assertProblems(result, "(line 1,col 1) 'enum' cannot be used as an identifier as it is a keyword.");
     }
 
     @Test

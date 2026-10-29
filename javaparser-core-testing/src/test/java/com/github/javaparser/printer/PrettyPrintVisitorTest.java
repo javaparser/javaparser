@@ -23,6 +23,7 @@ package com.github.javaparser.printer;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
@@ -756,6 +757,22 @@ class PrettyPrintVisitorTest extends TestParser {
                 + "}\n";
         CompilationUnit cu = parser.parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString());
+    }
+
+    /**
+     * The legacy {@link PrettyPrinter}/{@link PrettyPrintVisitor} pair is reachable only through
+     * the deprecated {@code PrettyPrinter} facade; {@link DefaultPrettyPrinter} does not exercise
+     * it. This covers {@code PrettyPrintVisitor.visit(LocalEnumDeclarationStmt, Void)}.
+     */
+    @Test
+    @SuppressWarnings("deprecation")
+    void legacyPrettyPrinterPrintsLocalEnumDeclarationStmt() {
+        CompilationUnit cu = parser.parse("class X { void m() { enum E { A, B } } }");
+
+        String printed = new PrettyPrinter().print(cu);
+
+        assertTrue(printed.contains("enum E {"), printed);
+        assertTrue(printed.contains("A, B"), printed);
     }
 
     @Test

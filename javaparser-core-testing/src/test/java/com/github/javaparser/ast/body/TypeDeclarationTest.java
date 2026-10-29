@@ -78,6 +78,16 @@ class TypeDeclarationTest {
     }
 
     @Test
+    void qualifiedNameOfLocalEnumIsEmpty() {
+        assertFQN("X,?", parseCompilationUnit("class X{ int aaa() {enum Local {A}} }"));
+    }
+
+    @Test
+    void qualifiedNameOfLocalRecordIsEmpty() {
+        assertFQN("X,?", parseCompilationUnit("class X{ int aaa() {record Local(int a) {}} }"));
+    }
+
+    @Test
     void qualifiedNameOfDetachedClassIsEmpty() {
         assertFQN("?", parseBodyDeclaration("class X{}"));
     }
