@@ -65,53 +65,123 @@ class Java16ValidatorTest {
                 javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {enum E{A,B}}}"));
         assertNoProblems(result);
 
-        CompilationUnit cu = result.getResult().get();
-        LocalEnumDeclarationStmt localEnumStmt =
-                cu.findFirst(LocalEnumDeclarationStmt.class).get();
-        assertTrue(localEnumStmt.isLocalEnumDeclarationStmt());
-        assertSame(localEnumStmt, localEnumStmt.asLocalEnumDeclarationStmt());
-        assertSame(JavaParserMetaModel.localEnumDeclarationStmtMetaModel, localEnumStmt.getMetaModel());
-
-        AtomicBoolean consumerCalled = new AtomicBoolean(false);
-        localEnumStmt.ifLocalEnumDeclarationStmt(s -> consumerCalled.set(true));
-        assertTrue(consumerCalled.get());
-        assertSame(localEnumStmt, localEnumStmt.toLocalEnumDeclarationStmt().get());
-
+        LocalEnumDeclarationStmt localEnumStmt = result.getResult()
+                .get()
+                .findFirst(LocalEnumDeclarationStmt.class)
+                .get();
         EnumDeclaration enumDeclaration = localEnumStmt.getEnumDeclaration();
         assertEquals("E", enumDeclaration.getNameAsString());
         assertEquals("A", enumDeclaration.getEntry(0).getNameAsString());
         assertEquals("B", enumDeclaration.getEntry(1).getNameAsString());
         assertSame(localEnumStmt, enumDeclaration.getParentNode().get());
+    }
+
+    @Test
+    void localEnumDeclarationIsLocalAndHasNoFullyQualifiedName() {
+        EnumDeclaration enumDeclaration = parseLocalEnum().getEnumDeclaration();
+
         assertTrue(enumDeclaration.isLocalEnumDeclaration());
         assertFalse(enumDeclaration.getFullyQualifiedName().isPresent());
+    }
 
-        // setEnumDeclaration is a no-op when given the node it already holds
+    @Test
+    void localEnumMetaModel() {
+        assertSame(
+                JavaParserMetaModel.localEnumDeclarationStmtMetaModel,
+                parseLocalEnum().getMetaModel());
+    }
+
+    @Test
+    void localEnumTypeCasters() {
+        LocalEnumDeclarationStmt localEnumStmt = parseLocalEnum();
+
+        assertTrue(localEnumStmt.isLocalEnumDeclarationStmt());
+        assertSame(localEnumStmt, localEnumStmt.asLocalEnumDeclarationStmt());
+        assertSame(localEnumStmt, localEnumStmt.toLocalEnumDeclarationStmt().get());
+    }
+
+    @Test
+    void ifLocalEnumDeclarationStmtCallsConsumer() {
+        AtomicBoolean consumerCalled = new AtomicBoolean(false);
+
+        parseLocalEnum().ifLocalEnumDeclarationStmt(s -> consumerCalled.set(true));
+
+        assertTrue(consumerCalled.get());
+    }
+
+    @Test
+    void setEnumDeclarationToTheSameNodeIsNoOp() {
+        LocalEnumDeclarationStmt localEnumStmt = parseLocalEnum();
+        EnumDeclaration enumDeclaration = localEnumStmt.getEnumDeclaration();
+
         localEnumStmt.setEnumDeclaration(enumDeclaration);
+
         assertSame(enumDeclaration, localEnumStmt.getEnumDeclaration());
+    }
 
-        LocalEnumDeclarationStmt cloned = localEnumStmt.clone();
-        assertEquals(localEnumStmt, cloned);
+    @Test
+    void cloneIsEqualToOriginal() {
+        LocalEnumDeclarationStmt localEnumStmt = parseLocalEnum();
 
+        assertEquals(localEnumStmt, localEnumStmt.clone());
+    }
+
+    @Test
+    void notEqualToStatementWithDifferentEnumDeclaration() {
         LocalEnumDeclarationStmt differentEnumDeclaration =
                 new LocalEnumDeclarationStmt(new EnumDeclaration().setName("Other"));
-        assertNotEquals(localEnumStmt, differentEnumDeclaration);
 
-        LocalEnumDeclarationStmt differentComment = cloned.clone();
+        assertNotEquals(parseLocalEnum(), differentEnumDeclaration);
+    }
+
+    @Test
+    void notEqualToStatementWithDifferentComment() {
+        LocalEnumDeclarationStmt localEnumStmt = parseLocalEnum();
+        LocalEnumDeclarationStmt differentComment = localEnumStmt.clone();
         differentComment.setComment(new LineComment("different"));
+
         assertNotEquals(localEnumStmt, differentComment);
+    }
 
-        ParseResult<Statement> reprinted = javaParser.parse(STATEMENT, provider(cloned.toString()));
+    @Test
+    void reprintedLocalEnumParsesToEqualStatement() {
+        LocalEnumDeclarationStmt localEnumStmt = parseLocalEnum();
+
+        ParseResult<Statement> reprinted = javaParser.parse(STATEMENT, provider(localEnumStmt.toString()));
+
         assertNoProblems(reprinted);
-        assertEquals(cloned, reprinted.getResult().get());
+        assertEquals(localEnumStmt, reprinted.getResult().get());
+    }
 
+    @Test
+    void replaceEnumDeclaration() {
+        LocalEnumDeclarationStmt localEnumStmt = parseLocalEnum();
         EnumDeclaration replacement = new EnumDeclaration().setName("F");
-        assertTrue(localEnumStmt.replace(enumDeclaration, replacement));
-        assertSame(replacement, localEnumStmt.getEnumDeclaration());
-        assertFalse(localEnumStmt.replace(null, replacement));
-        assertFalse(localEnumStmt.replace(new EnumDeclaration(), replacement));
 
-        LocalEnumDeclarationStmt viaAllFieldsConstructor = new LocalEnumDeclarationStmt(replacement.clone());
-        assertEquals("F", viaAllFieldsConstructor.getEnumDeclaration().getNameAsString());
+        assertTrue(localEnumStmt.replace(localEnumStmt.getEnumDeclaration(), replacement));
+
+        assertSame(replacement, localEnumStmt.getEnumDeclaration());
+    }
+
+    @Test
+    void replaceNullIsRejected() {
+        LocalEnumDeclarationStmt localEnumStmt = parseLocalEnum();
+
+        assertFalse(localEnumStmt.replace(null, new EnumDeclaration().setName("F")));
+    }
+
+    @Test
+    void replaceForeignNodeIsRejected() {
+        LocalEnumDeclarationStmt localEnumStmt = parseLocalEnum();
+
+        assertFalse(localEnumStmt.replace(new EnumDeclaration(), new EnumDeclaration().setName("F")));
+    }
+
+    @Test
+    void allFieldsConstructorKeepsEnumDeclaration() {
+        LocalEnumDeclarationStmt localEnumStmt = new LocalEnumDeclarationStmt(new EnumDeclaration().setName("F"));
+
+        assertEquals("F", localEnumStmt.getEnumDeclaration().getNameAsString());
     }
 
     @Test
@@ -281,5 +351,15 @@ class Java16ValidatorTest {
                 assertNoProblems(result);
             }
         }
+    }
+
+    private LocalEnumDeclarationStmt parseLocalEnum() {
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {enum E{A,B}}}"));
+        assertNoProblems(result);
+        return result.getResult()
+                .get()
+                .findFirst(LocalEnumDeclarationStmt.class)
+                .get();
     }
 }

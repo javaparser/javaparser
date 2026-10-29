@@ -83,6 +83,11 @@ class TypeDeclarationTest {
     }
 
     @Test
+    void qualifiedNameOfLocalRecordIsEmpty() {
+        assertFQN("X,?", parseCompilationUnit("class X{ int aaa() {record Local(int a) {}} }"));
+    }
+
+    @Test
     void qualifiedNameOfDetachedClassIsEmpty() {
         assertFQN("?", parseBodyDeclaration("class X{}"));
     }

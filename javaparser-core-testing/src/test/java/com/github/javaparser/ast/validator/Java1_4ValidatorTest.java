@@ -27,7 +27,6 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -163,7 +162,21 @@ class Java1_4ValidatorTest {
         ExpressionStmt stmt = result.getResult().get().asExpressionStmt();
         UnaryExpr unary = stmt.getExpression().asUnaryExpr();
         assertEquals("enum", unary.getExpression().asNameExpr().getNameAsString());
-        assertTrue(unary.getOperator() == UnaryExpr.Operator.POSTFIX_INCREMENT);
+        assertEquals(UnaryExpr.Operator.POSTFIX_INCREMENT, unary.getOperator());
+    }
+
+    /**
+     * The local-enum-declaration lookahead in BlockStatement() makes a real local enum parse as an
+     * EnumDeclaration even though enums do not exist yet, so the only complaint must be the one
+     * saying that enumerations are not supported, not an additional one about local enums.
+     */
+    @Test
+    void localEnumYieldsOnlyTheEnumerationsNotSupportedMessage() {
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {enum E{A,B}}}"));
+        assertProblems(
+                result,
+                "(line 1,col 20) Enumerations are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
