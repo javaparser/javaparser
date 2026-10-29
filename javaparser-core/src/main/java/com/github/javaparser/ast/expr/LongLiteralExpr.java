@@ -78,7 +78,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
      */
     @Deprecated
     public LongLiteralExpr(final long value) {
-        this(null, String.valueOf(value));
+        this(null, value + "L");
     }
 
     @Override
@@ -146,7 +146,8 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
      */
     @Deprecated
     public LongLiteralExpr setLong(long value) {
-        setValue(String.valueOf(value));
+        String suffix = (this.value != null && this.value.endsWith("l")) ? "l" : "L";
+        setValue(value + suffix);
         return this;
     }
 

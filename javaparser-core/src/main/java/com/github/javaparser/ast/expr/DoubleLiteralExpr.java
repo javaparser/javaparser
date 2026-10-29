@@ -60,7 +60,14 @@ public class DoubleLiteralExpr extends LiteralStringValueExpr {
     }
 
     public DoubleLiteralExpr(final double value) {
-        this(null, String.valueOf(value));
+        this(null, validateDouble(value));
+    }
+
+    private static String validateDouble(double value) {
+        if (!Double.isFinite(value)) {
+            throw new IllegalArgumentException("DoubleLiteralExpr cannot represent non-finite values: " + value);
+        }
+        return String.valueOf(value);
     }
 
     @Override
@@ -87,7 +94,22 @@ public class DoubleLiteralExpr extends LiteralStringValueExpr {
     }
 
     public DoubleLiteralExpr setDouble(double value) {
-        setValue(String.valueOf(value));
+        if (!Double.isFinite(value)) {
+            throw new IllegalArgumentException("DoubleLiteralExpr cannot represent non-finite values: " + value);
+        }
+        String suffix = "";
+        if (this.value != null) {
+            if (this.value.endsWith("f")) {
+                suffix = "f";
+            } else if (this.value.endsWith("F")) {
+                suffix = "F";
+            } else if (this.value.endsWith("d")) {
+                suffix = "d";
+            } else if (this.value.endsWith("D")) {
+                suffix = "D";
+            }
+        }
+        setValue(String.valueOf(value) + suffix);
         return this;
     }
 
