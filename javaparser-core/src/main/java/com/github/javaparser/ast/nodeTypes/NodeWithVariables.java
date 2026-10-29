@@ -119,7 +119,7 @@ public interface NodeWithVariables<N extends Node> {
      * <br>For {@code int a;} this is int.
      * <br>For {@code int a,b,c,d;} this is also int.
      * <br>For {@code int a,b[],c;} this is also int.
-     * <br>For {@code int[] a[][],b[],c[][];} this is int[][].
+     * <br>For {@code int[] a[][],b[],c[][];} this is int[].
      */
     @DerivedProperty
     default Optional<Type> getMaximumCommonType() {
@@ -147,6 +147,19 @@ public interface NodeWithVariables<N extends Node> {
                 }
                 return Optional.of(type);
             }
+
+            // A pair of array brackets whose origin is on the name (like the [] in {@code int a[]})
+            // must be printed after the variable name, so it cannot be merged into the maximum common
+            // type even when every variable shares that array level. Only brackets originating on the
+            // type (like the [] in {@code int[] a}) may become part of the common type. Level 0 is the
+            // element type and carries no brackets, so it is always mergeable.
+            private boolean canMergeArrayLevel(int level) {
+                return level == 0
+                        || types.stream().allMatch(v -> toArrayLevel(v, level)
+                                .filter(ArrayType.class::isInstance)
+                                .map(t -> ((ArrayType) t).getOrigin() == ArrayType.Origin.TYPE)
+                                .orElse(false));
+            }
         }
         Helper helper = new Helper();
         int level = 0;
@@ -165,7 +178,7 @@ public interface NodeWithVariables<N extends Node> {
                     })
                     .distinct()
                     .toArray();
-            if (values.length == 1 && values[0] != null) {
+            if (values.length == 1 && values[0] != null && helper.canMergeArrayLevel(currentLevel)) {
                 level++;
             } else {
                 keepGoing = false;
