@@ -26,8 +26,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.lang.annotation.Annotation;
 import java.lang.annotation.Inherited;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -39,6 +43,18 @@ import org.junit.jupiter.api.Test;
 
 @interface WithValue {
     String value();
+}
+
+class WithValueImpl implements WithValue {
+    @Override
+    public String value() {
+        return "";
+    }
+
+    @Override
+    public Class<? extends Annotation> annotationType() {
+        return WithValue.class;
+    }
 }
 
 @interface WithField {
@@ -115,5 +131,43 @@ class ReflectionAnnotationDeclarationTest {
         ReflectionAnnotationDeclaration annotation = (ReflectionAnnotationDeclaration)
                 typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.InheritedAnnotation");
         assertTrue(annotation.isInheritable());
+    }
+
+    // Issue #1836
+    @Test
+    void isAssignableBy_shouldAcceptItselfNullAndImplementingClasses() {
+        ResolvedReferenceTypeDeclaration withValue =
+                typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.WithValue");
+
+        assertTrue(withValue.isAssignableBy(withValue));
+        assertTrue(withValue.isAssignableBy(NullType.INSTANCE));
+        assertTrue(withValue.isAssignableBy(
+                typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.WithValueImpl")));
+    }
+
+    @Test
+    void isAssignableBy_shouldRejectUnrelatedTypes() {
+        ResolvedReferenceTypeDeclaration withValue =
+                typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.WithValue");
+
+        assertFalse(withValue.isAssignableBy(
+                typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.WithField")));
+        assertFalse(withValue.isAssignableBy(typeSolver.solveType("java.lang.annotation.Annotation")));
+        assertFalse(withValue.isAssignableBy(typeSolver.solveType("java.lang.String")));
+        assertFalse(withValue.isAssignableBy(ResolvedPrimitiveType.INT));
+    }
+
+    @Test
+    void supertypesOfAnAnnotation_shouldBeAssignableByIt() {
+        // Used to throw StackOverflowError
+        ResolvedReferenceTypeDeclaration deprecated = typeSolver.solveType("java.lang.Deprecated");
+        ResolvedReferenceTypeDeclaration annotation = typeSolver.solveType("java.lang.annotation.Annotation");
+        ResolvedReferenceTypeDeclaration object = typeSolver.getSolvedJavaLangObject();
+
+        assertTrue(object.isAssignableBy(deprecated));
+        assertTrue(annotation.isAssignableBy(deprecated));
+        assertTrue(deprecated.canBeAssignedTo(object));
+        assertTrue(deprecated.canBeAssignedTo(annotation));
+        assertFalse(deprecated.canBeAssignedTo(typeSolver.solveType("java.lang.Override")));
     }
 }

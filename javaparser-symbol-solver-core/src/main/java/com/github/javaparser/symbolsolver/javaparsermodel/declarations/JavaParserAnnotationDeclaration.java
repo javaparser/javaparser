@@ -28,7 +28,6 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import java.lang.annotation.Inherited;
 import java.util.*;
@@ -72,17 +71,6 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         // TODO #1838
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isAssignableBy(ResolvedType type) {
-        // TODO #1836
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         throw new UnsupportedOperationException();
     }
 

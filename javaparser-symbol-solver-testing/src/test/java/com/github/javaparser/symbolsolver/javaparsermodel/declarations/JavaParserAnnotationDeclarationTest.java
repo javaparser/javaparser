@@ -27,9 +27,14 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.util.List;
@@ -125,5 +130,49 @@ class JavaParserAnnotationDeclarationTest extends AbstractResolutionTest {
         assertTrue(annotation.isPresent());
 
         assertTrue(annotation.get().resolve().isInheritable());
+    }
+
+    // Issue #1836
+    private static final String ASSIGNABILITY_SOURCE = "@interface Foo {}\n"
+            + "@interface Bar {}\n"
+            + "class FooImpl implements Foo { public Class<Foo> annotationType() { return Foo.class; } }\n"
+            + "class Unrelated {}";
+
+    private ResolvedReferenceTypeDeclaration resolveTypeFromAssignabilitySource(String name) {
+        CompilationUnit cu = javaParser.parse(ASSIGNABILITY_SOURCE).getResult().get();
+        return cu.findFirst(TypeDeclaration.class, t -> t.getNameAsString().equals(name))
+                .get()
+                .resolve()
+                .asReferenceType();
+    }
+
+    @Test
+    void isAssignableBy_shouldAcceptItselfNullAndImplementingClasses() {
+        ResolvedReferenceTypeDeclaration foo = resolveTypeFromAssignabilitySource("Foo");
+
+        assertTrue(foo.isAssignableBy(foo));
+        assertTrue(foo.isAssignableBy(new ReferenceTypeImpl(foo)));
+        assertTrue(foo.isAssignableBy(NullType.INSTANCE));
+        assertTrue(foo.isAssignableBy(resolveTypeFromAssignabilitySource("FooImpl")));
+    }
+
+    @Test
+    void isAssignableBy_shouldRejectUnrelatedTypes() {
+        ResolvedReferenceTypeDeclaration foo = resolveTypeFromAssignabilitySource("Foo");
+
+        assertFalse(foo.isAssignableBy(resolveTypeFromAssignabilitySource("Bar")));
+        assertFalse(foo.isAssignableBy(resolveTypeFromAssignabilitySource("Unrelated")));
+        assertFalse(foo.isAssignableBy(typeSolver.solveType("java.lang.annotation.Annotation")));
+        assertFalse(foo.isAssignableBy(ResolvedPrimitiveType.INT));
+    }
+
+    @Test
+    void canBeAssignedTo_shouldAcceptOnlyItselfAnnotationAndObject() {
+        ResolvedReferenceTypeDeclaration foo = resolveTypeFromAssignabilitySource("Foo");
+
+        assertTrue(foo.canBeAssignedTo(foo));
+        assertTrue(foo.canBeAssignedTo(typeSolver.solveType("java.lang.annotation.Annotation")));
+        assertTrue(foo.canBeAssignedTo(typeSolver.getSolvedJavaLangObject()));
+        assertFalse(foo.canBeAssignedTo(resolveTypeFromAssignabilitySource("Bar")));
     }
 }
