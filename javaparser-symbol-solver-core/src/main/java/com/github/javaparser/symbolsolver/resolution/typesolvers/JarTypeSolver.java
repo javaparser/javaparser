@@ -154,7 +154,7 @@ public class JarTypeSolver implements TypeSolver {
     /**
      * Utility function to dump the input stream into a temporary file.
      *
-     * This file will be deleted when the virtual machine terminates.
+     * This file is readable only by the current user and will be deleted when the virtual machine terminates.
      *
      * @param inputStream The input to be dumped.
      *
@@ -163,7 +163,8 @@ public class JarTypeSolver implements TypeSolver {
      * @throws IOException If an I/O exception occurs while creating the temporary file.
      */
     private File dumpToTempFile(InputStream inputStream) throws IOException {
-        File tempFile = File.createTempFile("jar_file_from_input_stream", ".jar");
+        File tempFile =
+                Files.createTempFile("jar_file_from_input_stream", ".jar").toFile();
         tempFile.deleteOnExit();
 
         byte[] buffer = new byte[8 * 1024];
