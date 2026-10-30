@@ -53,6 +53,11 @@ import java.util.stream.Stream;
  * Defines a directory containing source code that should be used for solving symbols.
  * The directory must correspond to the root package of the files within.
  *
+ * <p>The files are parsed with the {@link ParserConfiguration} given to the constructor, or with a default
+ * configuration that has no symbol resolver. Nodes obtained from this solver, for example through
+ * {@code ResolvedMethodDeclaration.toAst()}, belong to these compilation units. To resolve symbols on such
+ * nodes, pass a configuration whose symbol resolver is set.
+ *
  * @author Federico Tomassetti
  */
 public class JavaParserTypeSolver implements TypeSolver {
