@@ -23,9 +23,11 @@ package com.github.javaparser.ast.validator.language_level_validations;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.LocalEnumDeclarationStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.validator.ReservedKeywordValidator;
@@ -77,6 +79,16 @@ public class Java5Validator extends Java1_4Validator {
 
     final Validator enumNotAllowed = new ReservedKeywordValidator("enum");
 
+    final Validator noLocalEnums = new SingleNodeTypeValidator<>(
+            EnumDeclaration.class, (n, reporter) -> n.getParentNode().ifPresent(p -> {
+                if (p instanceof LocalEnumDeclarationStmt)
+                    reporter.report(
+                            n,
+                            new UpgradeJavaMessage(
+                                    "There is no such thing as a local enum.",
+                                    ParserConfiguration.LanguageLevel.JAVA_16));
+            }));
+
     public Java5Validator() {
         super();
         replace(noGenerics, genericsWithoutDiamondOperator);
@@ -87,6 +99,7 @@ public class Java5Validator extends Java1_4Validator {
         // The following is probably too simple.
         remove(noAnnotations);
         remove(noEnums);
+        add(noLocalEnums);
         remove(noVarargs);
         remove(noForEach);
         remove(noStaticImports);

@@ -969,6 +969,17 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
+    public Visitable visit(final LocalEnumDeclarationStmt n, final A arg) {
+        EnumDeclaration enumDeclaration =
+                (EnumDeclaration) n.getEnumDeclaration().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (enumDeclaration == null) return null;
+        n.setEnumDeclaration(enumDeclaration);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
     public Visitable visit(final TypeParameter n, final A arg) {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);

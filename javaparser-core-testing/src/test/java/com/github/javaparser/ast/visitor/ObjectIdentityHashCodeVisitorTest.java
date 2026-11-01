@@ -329,6 +329,12 @@ class ObjectIdentityHashCodeVisitorTest {
     }
 
     @Test
+    void testVisitLocalEnumDeclarationStmt() {
+        LocalEnumDeclarationStmt node = spy(new LocalEnumDeclarationStmt());
+        assertEquals(node.hashCode(), ObjectIdentityHashCodeVisitor.hashCode(node));
+    }
+
+    @Test
     void testVisitLongLiteralExpr() {
         LongLiteralExpr node = spy(new LongLiteralExpr());
         assertEquals(node.hashCode(), ObjectIdentityHashCodeVisitor.hashCode(node));

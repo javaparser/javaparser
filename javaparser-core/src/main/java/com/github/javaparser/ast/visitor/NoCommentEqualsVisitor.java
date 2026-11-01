@@ -600,6 +600,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
+    public Boolean visit(final LocalEnumDeclarationStmt n, final Visitable arg) {
+        final LocalEnumDeclarationStmt n2 = (LocalEnumDeclarationStmt) arg;
+        if (!nodeEquals(n.getEnumDeclaration(), n2.getEnumDeclaration())) return false;
+        return true;
+    }
+
+    @Override
     public Boolean visit(final AssertStmt n, final Visitable arg) {
         final AssertStmt n2 = (AssertStmt) arg;
         if (!nodeEquals(n.getCheck(), n2.getCheck())) return false;
