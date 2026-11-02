@@ -27,15 +27,19 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 /**
  * The declarations of a record must be resolved with the type solver of the record, not with the symbol resolver
  * of its compilation unit, which may be missing.
  */
-class Issue4939Test {
+class Issue4939Test extends AbstractSymbolResolutionTest {
 
     /** Parses without any symbol resolver, as a facade user or a type solver does. */
     private static CompilationUnit parseWithoutSymbolResolver(String code) {
@@ -107,15 +111,17 @@ class Issue4939Test {
 
     /** A record declared in a library is not a JavaParserRecordDeclaration and keeps working. */
     @Test
-    void recordAccessorDeclaredInLibrary() {
+    void recordAccessorDeclaredInLibrary() throws IOException {
+        TypeSolver typeSolver = new CombinedTypeSolver(
+                new ReflectionTypeSolver(),
+                new JarTypeSolver(adaptPath("src/test/resources/record_declarations/Box.jar")));
         CompilationUnit cu = new JavaParser(new ParserConfiguration()
                         .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
-                        .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false))))
-                .parse("class Main { Object m(jdk.net.UnixDomainPrincipal p) { return p.user(); } }")
+                        .setSymbolResolver(new JavaSymbolSolver(typeSolver)))
+                .parse("class Main { Object m(box.Box<String> b) { return b.value(); } }")
                 .getResult()
                 .get();
 
-        assertEquals(
-                "jdk.net.UnixDomainPrincipal.user()", firstCall(cu).resolve().getQualifiedSignature());
+        assertEquals("box.Box.value()", firstCall(cu).resolve().getQualifiedSignature());
     }
 }
