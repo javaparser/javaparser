@@ -312,6 +312,15 @@ class Java1_1ValidatorTest {
     }
 
     @Test
+    void localEnumYieldsOnlyTheEnumerationsNotSupportedMessage() {
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {enum E{A,B}}}"));
+        assertProblems(
+                result,
+                "(line 1,col 20) Enumerations are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+    }
+
+    @Test
     void reflection() {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("Abc.class"));
         assertNoProblems(result);

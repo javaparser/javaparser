@@ -443,6 +443,9 @@ public final class JavaParserMetaModel {
         localClassDeclarationStmtMetaModel
                 .getConstructorParameters()
                 .add(localClassDeclarationStmtMetaModel.classDeclarationPropertyMetaModel);
+        localEnumDeclarationStmtMetaModel
+                .getConstructorParameters()
+                .add(localEnumDeclarationStmtMetaModel.enumDeclarationPropertyMetaModel);
         localRecordDeclarationStmtMetaModel
                 .getConstructorParameters()
                 .add(localRecordDeclarationStmtMetaModel.recordDeclarationPropertyMetaModel);
@@ -576,6 +579,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(literalExprMetaModel);
         nodeMetaModels.add(literalStringValueExprMetaModel);
         nodeMetaModels.add(localClassDeclarationStmtMetaModel);
+        nodeMetaModels.add(localEnumDeclarationStmtMetaModel);
         nodeMetaModels.add(localRecordDeclarationStmtMetaModel);
         nodeMetaModels.add(longLiteralExprMetaModel);
         nodeMetaModels.add(markdownCommentMetaModel);
@@ -2547,6 +2551,18 @@ public final class JavaParserMetaModel {
         localClassDeclarationStmtMetaModel
                 .getDeclaredPropertyMetaModels()
                 .add(localClassDeclarationStmtMetaModel.classDeclarationPropertyMetaModel);
+        localEnumDeclarationStmtMetaModel.enumDeclarationPropertyMetaModel = new PropertyMetaModel(
+                localEnumDeclarationStmtMetaModel,
+                "enumDeclaration",
+                com.github.javaparser.ast.body.EnumDeclaration.class,
+                Optional.of(enumDeclarationMetaModel),
+                false,
+                false,
+                false,
+                false);
+        localEnumDeclarationStmtMetaModel
+                .getDeclaredPropertyMetaModels()
+                .add(localEnumDeclarationStmtMetaModel.enumDeclarationPropertyMetaModel);
         localRecordDeclarationStmtMetaModel.recordDeclarationPropertyMetaModel = new PropertyMetaModel(
                 localRecordDeclarationStmtMetaModel,
                 "recordDeclaration",
@@ -3357,6 +3373,10 @@ public final class JavaParserMetaModel {
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LocalClassDeclarationStmtMetaModel localClassDeclarationStmtMetaModel =
             new LocalClassDeclarationStmtMetaModel(Optional.of(statementMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final LocalEnumDeclarationStmtMetaModel localEnumDeclarationStmtMetaModel =
+            new LocalEnumDeclarationStmtMetaModel(Optional.of(statementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LocalRecordDeclarationStmtMetaModel localRecordDeclarationStmtMetaModel =

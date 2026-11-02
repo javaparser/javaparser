@@ -134,6 +134,8 @@ public interface VoidVisitor<A> {
 
     void visit(LocalClassDeclarationStmt n, A arg);
 
+    void visit(LocalEnumDeclarationStmt n, A arg);
+
     void visit(LocalRecordDeclarationStmt n, A arg);
 
     void visit(LongLiteralExpr n, A arg);

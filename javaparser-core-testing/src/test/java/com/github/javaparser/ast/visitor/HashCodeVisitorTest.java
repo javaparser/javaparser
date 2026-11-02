@@ -521,6 +521,14 @@ class HashCodeVisitorTest {
     }
 
     @Test
+    void testVisitLocalEnumDeclarationStmt() {
+        LocalEnumDeclarationStmt node = spy(new LocalEnumDeclarationStmt());
+        HashCodeVisitor.hashCode(node);
+        verify(node, times(1)).getEnumDeclaration();
+        verify(node, times(1)).getComment();
+    }
+
+    @Test
     void testVisitLongLiteralExpr() {
         LongLiteralExpr node = spy(new LongLiteralExpr());
         HashCodeVisitor.hashCode(node);

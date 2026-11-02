@@ -401,14 +401,6 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         return getParentNode().map(p -> p instanceof LocalClassDeclarationStmt).orElse(false);
     }
 
-    @Override
-    public Optional<String> getFullyQualifiedName() {
-        if (isLocalClassDeclaration()) {
-            return Optional.empty();
-        }
-        return super.getFullyQualifiedName();
-    }
-
     /**
      * @return is this an inner class?
      * NOTE: many people are confused over terminology. Refer to https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html .

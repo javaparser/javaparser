@@ -572,6 +572,15 @@ class NoCommentHashCodeVisitorTest {
     }
 
     @Test
+    void testVisitLocalEnumDeclarationStmt() {
+        LocalEnumDeclarationStmt node = spy(new LocalEnumDeclarationStmt());
+        NoCommentHashCodeVisitor.hashCode(node);
+
+        verify(node, times(1)).getEnumDeclaration();
+        verify(node, never()).getComment();
+    }
+
+    @Test
     void testVisitLongLiteralExpr() {
         LongLiteralExpr node = spy(new LongLiteralExpr());
         NoCommentHashCodeVisitor.hashCode(node);

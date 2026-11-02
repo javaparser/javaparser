@@ -28,7 +28,9 @@ import com.github.javaparser.Range;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.stmt.LocalEnumDeclarationStmt;
 import org.junit.jupiter.api.Test;
 
 class NodeFinderVisitorTest {
@@ -82,6 +84,27 @@ class NodeFinderVisitorTest {
         cu.accept(finder, range(3, 11));
         System.out.println(finder.getSelectedNode().toString());
         assertEquals(md.getBody().get(), finder.getSelectedNode());
+    }
+
+    @Test
+    void testLocalEnumDeclarationStmtIsCovering() {
+        LocalEnumDeclarationStmt stmt = new LocalEnumDeclarationStmt(new EnumDeclaration().setName("E"));
+        NodeFinderVisitor localFinder = new NodeFinderVisitor((n, r) -> n == stmt);
+
+        stmt.accept(localFinder, new Range(Position.HOME, Position.HOME));
+
+        assertEquals(stmt, localFinder.getSelectedNode());
+    }
+
+    @Test
+    void testLocalEnumDeclarationStmtReturnsEarlyWhenEnumDeclarationAlreadyCovering() {
+        EnumDeclaration enumDeclaration = new EnumDeclaration().setName("E");
+        LocalEnumDeclarationStmt stmt = new LocalEnumDeclarationStmt(enumDeclaration);
+        NodeFinderVisitor localFinder = new NodeFinderVisitor((n, r) -> n == enumDeclaration);
+
+        stmt.accept(localFinder, new Range(Position.HOME, Position.HOME));
+
+        assertEquals(enumDeclaration, localFinder.getSelectedNode());
     }
 
     private Range range(int line, int length) {

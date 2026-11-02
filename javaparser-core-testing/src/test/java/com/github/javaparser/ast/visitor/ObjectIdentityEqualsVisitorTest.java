@@ -575,6 +575,15 @@ class ObjectIdentityEqualsVisitorTest {
     }
 
     @Test
+    void equals_GivenLocalEnumDeclarationStmt() {
+        Node nodeA = new LocalEnumDeclarationStmt();
+        Node nodeB = new LocalEnumDeclarationStmt();
+
+        Assertions.assertTrue(ObjectIdentityEqualsVisitor.equals(nodeA, nodeA));
+        Assertions.assertFalse(ObjectIdentityEqualsVisitor.equals(nodeA, nodeB));
+    }
+
+    @Test
     void equals_GivenAssertStmt() {
         Node nodeA = new AssertStmt();
         Node nodeB = new AssertStmt();

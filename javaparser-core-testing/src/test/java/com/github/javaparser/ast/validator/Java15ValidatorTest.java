@@ -40,6 +40,18 @@ class Java15ValidatorTest {
     // TODO: Confirm PERMITTED - text blocks
 
     /**
+     * Local enums are only available since Java 16, while top level and member enums have existed since Java 5.
+     */
+    @Test
+    void localEnumForbidden() {
+        String s = "class X{ void x() {enum E{A,B}}}";
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
+        TestUtils.assertProblems(
+                result,
+                "(line 1,col 20) There is no such thing as a local enum. Pay attention that this feature is supported starting from 'JAVA_16' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+    }
+
+    /**
      * Records are available within Java 14 (preview), Java 15 (2nd preview), and Java 16 (release).
      * The introduction of records means that they are no longer able to be used as identifiers.
      */

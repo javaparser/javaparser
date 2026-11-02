@@ -482,6 +482,12 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
+        public void visit(final LocalEnumDeclarationStmt n, final Void arg) {
+            assertParentIsSet(n);
+            super.visit(n, arg);
+        }
+
+        @Override
         public void visit(LocalRecordDeclarationStmt n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);
