@@ -26,8 +26,10 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_E
 import static com.github.javaparser.Providers.provider;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.resolution.Navigator;
@@ -35,6 +37,7 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.cache.Cache;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.cache.GuavaCache;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.utils.FileUtils;
@@ -52,6 +55,9 @@ import java.util.stream.Stream;
 /**
  * Defines a directory containing source code that should be used for solving symbols.
  * The directory must correspond to the root package of the files within.
+ * <p>
+ * The compilation units successfully parsed by this solver can be resolved through its root type solver,
+ * unless the parser configuration already provides a symbol resolver.
  *
  * @author Federico Tomassetti
  */
@@ -200,6 +206,16 @@ public class JavaParserTypeSolver implements TypeSolver {
         this.parent = parent;
     }
 
+    /**
+     * Attaches a symbol resolver to a unit parsed by this solver, unless its parser configuration already provided one,
+     * so that the nodes reached through {@code toAst()} can be resolved.
+     */
+    private void injectSymbolResolverIfAbsent(CompilationUnit cu) {
+        if (!cu.containsData(Node.SYMBOL_RESOLVER_KEY)) {
+            new JavaSymbolSolver(getRoot()).inject(cu);
+        }
+    }
+
     private Optional<CompilationUnit> parse(Path srcFile) {
         try {
             Optional<Optional<CompilationUnit>> cachedParsedFile = parsedFiles.get(srcFile.toAbsolutePath());
@@ -216,14 +232,13 @@ public class JavaParserTypeSolver implements TypeSolver {
 
             // JavaParser only allow one parse at time.
             synchronized (javaParser) {
-                Optional<CompilationUnit> compilationUnit = javaParser
-                        .parse(
-                                COMPILATION_UNIT,
-                                provider(
-                                        srcFile,
-                                        javaParser.getParserConfiguration().getCharacterEncoding()))
-                        .getResult()
-                        .map(cu -> cu.setStorage(srcFile));
+                ParseResult<CompilationUnit> parseResult = javaParser.parse(
+                        COMPILATION_UNIT,
+                        provider(srcFile, javaParser.getParserConfiguration().getCharacterEncoding()));
+                // As with ParserConfiguration, a unit parsed with problems gets no symbol resolver
+                parseResult.ifSuccessful(this::injectSymbolResolverIfAbsent);
+                Optional<CompilationUnit> compilationUnit =
+                        parseResult.getResult().map(cu -> cu.setStorage(srcFile));
                 parsedFiles.put(srcFile.toAbsolutePath(), compilationUnit);
                 return compilationUnit;
             }
