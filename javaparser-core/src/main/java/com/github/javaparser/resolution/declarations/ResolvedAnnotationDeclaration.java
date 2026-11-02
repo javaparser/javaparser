@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.resolution.types.ResolvedType;
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
@@ -40,4 +42,38 @@ public interface ResolvedAnnotationDeclaration extends ResolvedReferenceTypeDecl
     List<ResolvedAnnotationMemberDeclaration> getAnnotationMembers();
 
     boolean isInheritable();
+
+    @Override
+    default boolean isAssignableBy(ResolvedType type) {
+        if (type.isNull()) {
+            return true;
+        }
+        if (type.isReferenceType()) {
+            return type.asReferenceType()
+                    .getTypeDeclaration()
+                    .map(this::isAssignableBy)
+                    .orElse(false);
+        }
+        return false;
+    }
+
+    @Override
+    default boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
+        // Delegating to other.canBeAssignedTo(this) would recurse infinitely
+        if (other.getQualifiedName().equals(getQualifiedName())) {
+            return true;
+        }
+        return other.getAllAncestors().stream()
+                .anyMatch(ancestor -> ancestor.getQualifiedName().equals(getQualifiedName()));
+    }
+
+    /**
+     * The supertypes of an annotation interface are {@link Annotation} and {@link Object} (JLS 4.10.2, 9.6).
+     */
+    @Override
+    default boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
+        return other.isJavaLangObject()
+                || other.getQualifiedName().equals(getQualifiedName())
+                || other.getQualifiedName().equals(Annotation.class.getCanonicalName());
+    }
 }
