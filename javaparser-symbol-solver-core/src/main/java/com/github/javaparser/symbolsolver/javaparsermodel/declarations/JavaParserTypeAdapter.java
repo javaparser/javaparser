@@ -36,6 +36,7 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import java.util.*;
@@ -176,7 +177,7 @@ public class JavaParserTypeAdapter<
         return wrappedNode
                 .getParentNode()
                 .filter(parentNode -> !(parentNode instanceof CompilationUnit))
-                .map(node -> node.getSymbolResolver().toTypeDeclaration(node));
+                .map(node -> new JavaSymbolSolver(typeSolver).toTypeDeclaration(node));
     }
 
     public List<ResolvedFieldDeclaration> getFieldsForDeclaredVariables() {
@@ -199,7 +200,8 @@ public class JavaParserTypeAdapter<
      */
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return wrappedNode.getAnnotations().stream()
-                .map(annotation -> annotation.resolve())
+                .map(annotation -> new JavaSymbolSolver(typeSolver)
+                        .resolveDeclaration(annotation, ResolvedAnnotationDeclaration.class))
                 .collect(Collectors.toSet());
     }
 
