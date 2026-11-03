@@ -22,13 +22,13 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.CompactConstructorDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
+import com.github.javaparser.symbolsolver.javaparsermodel.NormalCompletionVisitor;
 import java.util.List;
 
 /**
@@ -106,138 +106,119 @@ public class ControlFlowLogic {
         throw new UnsupportedOperationException();
     }
 
-    private <P extends Node> boolean parentIs(Node node, Class<P> parentClass) {
-        if (node.getParentNode().isPresent()) {
-            return parentClass.isInstance(node.getParentNode().get());
-        }
-        return false;
-    }
-
-    // See JLS 14.21
+    /**
+     * Determines normal completion for reachable blocks, if statements, synchronized statements,
+     * and simple statements. Unreachable statements cannot complete normally.
+     *
+     * This analysis is incomplete. In particular, normal completion of basic loops, try statements,
+     * switches, and labeled statements is not implemented.
+     *
+     * @throws UnsupportedOperationException if reachability or normal completion requires an unsupported rule
+     */
     public boolean canCompleteNormally(Statement statement) {
         if (!isReachable(statement)) {
             return false;
         }
-        GenericVisitor<Boolean, Void> visitor = new GenericVisitorAdapter<Boolean, Void>() {
-            @Override
-            public Boolean visit(BlockStmt n, Void arg) {
-                // An empty block that is not a switch block can complete normally iff it is reachable
-                if (n.isEmpty() && !parentIs(statement, SwitchStmt.class)) {
-                    return isReachable(statement);
+        return canCompleteNormallyWhenReachable(statement);
+    }
+
+    private boolean canCompleteNormallyWhenReachable(Statement statement) {
+        if (statement.isBlockStmt()) {
+            for (Statement child : statement.asBlockStmt().getStatements()) {
+                if (!canCompleteNormallyWhenReachable(child)) {
+                    return false;
                 }
-                // A non-empty block that is not a switch block can complete normally iff the last statement in
-                // it can complete normally.
-                if (!n.isEmpty() && !parentIs(statement, SwitchStmt.class)) {
-                    return canCompleteNormally(n.getStatement(n.getStatements().size() - 1));
-                }
-                throw new UnsupportedOperationException();
             }
-
-            @Override
-            public Boolean visit(LabeledStmt n, Void arg) {
-                // A labeled statement can complete normally if at least one of the following is true:
-                // – The contained statement can complete normally.
-                // – There is a reachable break statement that exits the labeled statement.
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public Boolean visit(EmptyStmt n, Void arg) {
-                // An empty statement can complete normally iff it is reachable.
-                return isReachable(n);
-            }
-
-            @Override
-            public Boolean visit(LocalClassDeclarationStmt n, Void arg) {
-                // A local class declaration statement can complete normally if it is reachable.
-                return isReachable(n);
-            }
-
-            @Override
-            public Boolean visit(LocalRecordDeclarationStmt n, Void arg) {
-                // A local record declaration statement can complete normally if it is reachable.
-                return isReachable(n);
-            }
-
-            @Override
-            public Boolean visit(IfStmt n, Void arg) {
-                if (n.getElseStmt().isPresent()) {
-                    // An if-then-else statement can complete normally iff the then-statement can
-                    // complete normally or the else-statement can complete normally.
-                    return canCompleteNormally(n.getThenStmt())
-                            || canCompleteNormally(n.getElseStmt().get());
-                }
-                return isReachable(n);
-            }
-
-            @Override
-            public Boolean visit(AssertStmt n, Void arg) {
-                // An assert statement can complete normally iff it is reachable.
-                return isReachable(n);
-            }
-
-            @Override
-            public Boolean visit(ExpressionStmt n, Void arg) {
-                // A local variable declaration statement can complete normally iff it is reachable.
-                if (n.getExpression() instanceof VariableDeclarationExpr) {
-                    VariableDeclarationExpr expr = (VariableDeclarationExpr) n.getExpression();
-                    return isReachable(n);
-                }
-                // An expression statement can complete normally iff it is reachable.
-                return isReachable(n);
-            }
-        };
-        return statement.accept(visitor, null);
+            return true;
+        }
+        if (statement.isIfStmt()) {
+            IfStmt ifStmt = statement.asIfStmt();
+            return !ifStmt.getElseStmt().isPresent()
+                    || canCompleteNormallyWhenReachable(ifStmt.getThenStmt())
+                    || canCompleteNormallyWhenReachable(ifStmt.getElseStmt().get());
+        }
+        if (statement.isSynchronizedStmt()) {
+            return canCompleteNormallyWhenReachable(
+                    statement.asSynchronizedStmt().getBody());
+        }
+        // Reuse the existing visitor only for statements whose current implementations
+        // do not delegate recursively or contain unimplemented control-flow rules.
+        // In particular, WhileStmt/DoStmt/ForStmt currently return true as a FIXME.
+        if (statement.isEmptyStmt()
+                || statement.isExpressionStmt()
+                || statement.isAssertStmt()
+                || statement.isLocalClassDeclarationStmt()
+                || statement.isLocalRecordDeclarationStmt()
+                || statement.isLocalEnumDeclarationStmt()
+                || statement.isReturnStmt()
+                || statement.isThrowStmt()
+                || statement.isBreakStmt()
+                || statement.isContinueStmt()
+                || statement.isYieldStmt()
+                || statement.isExplicitConstructorInvocationStmt()
+                || statement.isForEachStmt()) {
+            return statement.accept(new NormalCompletionVisitor(), null);
+        }
+        throw new UnsupportedOperationException("Normal completion is not implemented for "
+                + statement.getClass().getSimpleName());
     }
 
     private boolean isReachableBecauseOfPosition(Statement statement) {
-        // The first statement in a non-empty block that is not a switch block is reachable iff the block is reachable.
+        Node parent = statement
+                .getParentNode()
+                .orElseThrow(
+                        () -> new UnsupportedOperationException("Reachability requires an enclosing AST context for "
+                                + statement.getClass().getSimpleName()));
 
-        // Every other statement S in a non-empty block that is not a switch block is reachable iff the statement
-        // preceding S can complete normally.
-
-        // The contained statement of a Labelled Statement is reachable iff the labeled statement is reachable.
-
-        // The then-statement of an if-then statement is reachable iff the if-then statement is reachable.
-
-        // The then-statement of an if-then-else  statement is reachable iff the if-then-else statement is reachable.
-        // The else-statement is reachable iff the if-then-else statement is reachable.
-
-        throw new UnsupportedOperationException();
+        if (parent instanceof MethodDeclaration
+                && ((MethodDeclaration) parent).getBody().orElse(null) == statement) {
+            return true;
+        }
+        if (parent instanceof ConstructorDeclaration && ((ConstructorDeclaration) parent).getBody() == statement) {
+            return true;
+        }
+        if (parent instanceof CompactConstructorDeclaration
+                && ((CompactConstructorDeclaration) parent).getBody() == statement) {
+            return true;
+        }
+        if (parent instanceof InitializerDeclaration && ((InitializerDeclaration) parent).getBody() == statement) {
+            return true;
+        }
+        if (parent instanceof LambdaExpr && ((LambdaExpr) parent).getBody() == statement) {
+            return true;
+        }
+        if (parent instanceof BlockStmt) {
+            BlockStmt block = (BlockStmt) parent;
+            boolean reachable = isReachable(block);
+            for (Statement child : block.getStatements()) {
+                if (child == statement) {
+                    return reachable;
+                }
+                if (reachable) {
+                    reachable = canCompleteNormallyWhenReachable(child);
+                }
+            }
+            throw new IllegalStateException("Statement is not an immediate child of its block");
+        }
+        if (parent instanceof IfStmt || parent instanceof SynchronizedStmt || parent instanceof ForEachStmt) {
+            return isReachable((Statement) parent);
+        }
+        // Loop conditions, catch reachability, labels, and switch-entry contexts
+        // require additional JLS rules. Do not silently classify them as reachable.
+        throw new UnsupportedOperationException(
+                "Reachability is not implemented for " + statement.getClass().getSimpleName() + " under "
+                        + parent.getClass().getSimpleName());
     }
 
+    /**
+     * Determines reachability from the statement's enclosing AST context and its position in a block.
+     * Method, constructor, initializer, and lambda bodies are analysis entry points. Substatements of
+     * if, synchronized, and enhanced for statements inherit their enclosing statement's reachability.
+     *
+     * @throws UnsupportedOperationException if the statement is detached or its enclosing context is unsupported
+     */
     public boolean isReachable(Statement statement) {
-
-        GenericVisitor<Boolean, Void> visitor = new GenericVisitorAdapter<Boolean, Void>() {
-            @Override
-            public Boolean visit(BlockStmt n, Void arg) {
-                // The block that is the body of a constructor, method, instance initializer, or static initializer is
-                // reachable
-                if (statement.getParentNode().isPresent()) {
-                    if (statement.getParentNode().get() instanceof ConstructorDeclaration) {
-                        return true;
-                    }
-                    if (statement.getParentNode().get() instanceof MethodDeclaration) {
-                        return true;
-                    }
-                    if (statement.getParentNode().get() instanceof InitializerDeclaration) {
-                        return true;
-                    }
-                }
-                return isReachableBecauseOfPosition(statement);
-            }
-
-            @Override
-            public Boolean visit(LocalClassDeclarationStmt n, Void arg) {
-                return super.visit(n, arg);
-            }
-
-            @Override
-            public Boolean visit(LocalRecordDeclarationStmt n, Void arg) {
-                return super.visit(n, arg);
-            }
-        };
-        return statement.accept(visitor, null);
+        return isReachableBecauseOfPosition(statement);
 
         //
         //
