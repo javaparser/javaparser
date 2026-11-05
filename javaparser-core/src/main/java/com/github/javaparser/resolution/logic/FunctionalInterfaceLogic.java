@@ -89,27 +89,30 @@ public final class FunctionalInterfaceLogic {
                         .filter(m -> m.getDeclaration().isAbstract())
                         .filter(m -> !isPublicMemberOfObject(m))
                         .collect(Collectors.toSet());
-        // TODO a functional interface can have multiple subsignature method with a return-type-substitutable
-        // see https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8
-        if (methods.size() == 0) {
-            return Optional.empty();
+        // Check signatures before comparing returns. A non-functional interface such as
+        // Collection can inherit duplicate methods as well as unrelated abstract methods.
+        // Comparing the first two returns must not decide the result of the whole set.
+        List<MethodUsage> candidates = methods.stream()
+                .filter(candidate -> methods.stream()
+                        .allMatch(other -> candidate.isSameSignature(other) || candidate.isSubSignature(other)))
+                .collect(Collectors.toList());
+        return candidates.stream()
+                .filter(candidate -> methods.stream().allMatch(other -> isReturnTypeSubstitutable(candidate, other)))
+                .findFirst();
+    }
+
+    private static boolean isReturnTypeSubstitutable(MethodUsage candidate, MethodUsage other) {
+        ResolvedType returnType = candidate.returnType();
+        ResolvedType otherReturnType = other.returnType();
+        // MethodUsage includes substitutions from the interface's type arguments;
+        // the raw declarations may still refer to different type variables.
+        if (returnType.describe().equals(otherReturnType.describe())) {
+            return true;
         }
-        Iterator<MethodUsage> iterator = methods.iterator();
-        MethodUsage methodUsage = iterator.next();
-        while (iterator.hasNext()) {
-            MethodUsage otherMethodUsage = iterator.next();
-            if (!(methodUsage.isSameSignature(otherMethodUsage)
-                    || methodUsage.isSubSignature(otherMethodUsage)
-                    || otherMethodUsage.isSubSignature(methodUsage))) {
-                methodUsage = null;
-                break;
-            }
-            if (!(methodUsage.isReturnTypeSubstituable(otherMethodUsage))) {
-                methodUsage = null;
-                break;
-            }
+        if (returnType.isReferenceType() && otherReturnType.isReferenceType()) {
+            return otherReturnType.isAssignableBy(returnType);
         }
-        return Optional.ofNullable(methodUsage);
+        return candidate.isReturnTypeSubstituable(other);
     }
 
     public static boolean isFunctionalInterfaceType(ResolvedType type) {
