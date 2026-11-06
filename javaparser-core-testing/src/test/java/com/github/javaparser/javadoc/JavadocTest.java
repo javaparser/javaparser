@@ -38,6 +38,9 @@ import com.github.javaparser.javadoc.description.JavadocSnippet;
 import com.github.javaparser.utils.LineSeparator;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class JavadocTest {
 
@@ -136,6 +139,60 @@ class JavadocTest {
 
         String javadocText = javadoc.toText();
         assertTrue(javadocText.contains("{@link TOVersion}"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"{x}", "{{x}}", "x{y}", "{x}\n{y}", "{@literal x}"})
+    void inlineCodeRetainsBalancedBraces(String code) {
+        String text = "Before {@code " + code + "} after.";
+        JavadocDescription description = parser.parseJavadoc(text, false).getDescription();
+        List<JavadocDescriptionElement> elements = description.getElements();
+
+        assertEquals(3, elements.size());
+        assertEquals(new JavadocSnippet("Before "), elements.get(0));
+        JavadocInlineTag inlineTag = (JavadocInlineTag) elements.get(1);
+        assertEquals("code", inlineTag.getName());
+        assertEquals(CODE, inlineTag.getType());
+        assertEqualsStringIgnoringEol(" " + code, inlineTag.getContent());
+        assertEquals(new JavadocSnippet(" after."), elements.get(2));
+        assertEqualsStringIgnoringEol(text, description.toText());
+    }
+
+    @ParameterizedTest
+    @CsvSource({"literal, LITERAL", "link, LINK", "custom, UNKNOWN"})
+    void otherInlineTagsRetainBalancedBraces(String name, JavadocInlineTag.Type type) {
+        String text = "{@" + name + " {x}}";
+        JavadocDescription description = JavadocDescription.parseText(text);
+
+        assertEquals(1, description.getElements().size());
+        assertEquals(
+                new JavadocInlineTag(name, type, " {x}"),
+                description.getElements().get(0));
+        assertEquals(text, description.toText());
+    }
+
+    @Test
+    void adjacentInlineTagsRetainBalancedBraces() {
+        String text = "Before {@code {a}}{@literal {b}} after.";
+        JavadocDescription description = JavadocDescription.parseText(text);
+        List<JavadocDescriptionElement> elements = description.getElements();
+
+        assertEquals(4, elements.size());
+        assertEquals(new JavadocSnippet("Before "), elements.get(0));
+        assertEquals(new JavadocInlineTag("code", CODE, " {a}"), elements.get(1));
+        assertEquals(new JavadocInlineTag("literal", LITERAL, " {b}"), elements.get(2));
+        assertEquals(new JavadocSnippet(" after."), elements.get(3));
+        assertEquals(text, description.toText());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Plain {x} text", "Before {@code x", "Before {@code {x}"})
+    void incompleteInlineTagsRemainText(String text) {
+        JavadocDescription description = JavadocDescription.parseText(text);
+
+        assertEquals(1, description.getElements().size());
+        assertEquals(new JavadocSnippet(text), description.getElements().get(0));
+        assertEquals(text, description.toText());
     }
 
     @Test
