@@ -48,6 +48,7 @@ class LiteralStringValueExprTest {
         assertThat(new CharLiteralExpr('\n').getValue()).isEqualTo("\\n");
         assertThat(new CharLiteralExpr('\\').getValue()).isEqualTo("\\\\");
         assertThat(new CharLiteralExpr('\"').getValue()).isEqualTo("\\\"");
+        assertThat(new CharLiteralExpr('\'').getValue()).isEqualTo("\\'");
 
         assertThat(new IntegerLiteralExpr("0B0").asInt()).isEqualTo(0);
         assertThat(new IntegerLiteralExpr("0b0").asInt()).isEqualTo(0);
@@ -65,6 +66,8 @@ class LiteralStringValueExprTest {
         assertThat(new LongLiteralExpr("0X0L").asLong()).isEqualTo(0);
         assertThat(new LongLiteralExpr("0x0L").asLong()).isEqualTo(0);
         assertThat(new LongLiteralExpr(0L).asLong()).isEqualTo(0);
+        assertThat(new LongLiteralExpr(0L).getValue()).isEqualTo("0L");
+        assertThat(new LongLiteralExpr(3_000_000_000L).getValue()).isEqualTo("3000000000L");
         assertThat(new LongLiteralExpr(00L).asLong()).isEqualTo(0);
         assertThat(new LongLiteralExpr(0B0L).asLong()).isEqualTo(0);
         assertThat(new LongLiteralExpr(0b0L).asLong()).isEqualTo(0);
@@ -238,7 +241,7 @@ class LiteralStringValueExprTest {
         LongLiteralExpr longLiteral = new LongLiteralExpr("1L");
         longLiteral.register(observer);
         longLiteral.setLong(2);
-        verify(observer).propertyChange(longLiteral, ObservableProperty.VALUE, "1L", "2");
+        verify(observer).propertyChange(longLiteral, ObservableProperty.VALUE, "1L", "2L");
     }
 
     @Test
@@ -249,7 +252,7 @@ class LiteralStringValueExprTest {
         CharLiteralExpr character = new CharLiteralExpr("a");
         DoubleLiteralExpr doubleLiteral = new DoubleLiteralExpr("1.0");
         IntegerLiteralExpr integer = new IntegerLiteralExpr("1");
-        LongLiteralExpr longLiteral = new LongLiteralExpr("1");
+        LongLiteralExpr longLiteral = new LongLiteralExpr("1L");
         string.register(observer);
         character.register(observer);
         doubleLiteral.register(observer);
