@@ -116,4 +116,12 @@ public class LineComment extends Comment {
     public String getFooter() {
         return "";
     }
+
+    /**
+     * A line break in the content would end the comment early, so line breaks are removed.
+     */
+    @Override
+    public String getPrintableContent() {
+        return getContent().replaceAll("\\R", "");
+    }
 }

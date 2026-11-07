@@ -27,7 +27,7 @@ import com.github.javaparser.printer.SourcePrinter;
 public class CsmComment implements CsmElement {
 
     static void process(Comment comment, SourcePrinter printer) {
-        String content = printer.normalizeEolInTextBlock(comment.getContent());
+        String content = printer.normalizeEolInTextBlock(comment.getPrintableContent());
         printer.print(comment.getHeader());
         printer.print(content);
         printer.println(comment.getFooter());

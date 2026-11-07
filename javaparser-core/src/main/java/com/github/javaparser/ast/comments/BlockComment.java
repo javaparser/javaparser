@@ -117,4 +117,12 @@ public class BlockComment extends Comment {
     public String getFooter() {
         return "*/";
     }
+
+    /**
+     * A "*&#47;" in the content would close the comment early, so it is printed as "*&amp;#47;".
+     */
+    @Override
+    public String getPrintableContent() {
+        return getContent().replace("*/", "*&#47;");
+    }
 }
