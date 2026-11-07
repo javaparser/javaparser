@@ -310,24 +310,13 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
      */
     @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        if (this.wrappedNode.getName().getId().equals(name)) {
-            return SymbolReference.solved(this);
-        }
-        SymbolReference<ResolvedTypeDeclaration> ref = javaParserTypeAdapter.solveType(name);
-        if (ref.isSolved()) {
-            return ref;
-        }
-
-        String prefix = wrappedNode.getName().asString() + ".";
-        if (name.startsWith(prefix) && name.length() > prefix.length()) {
-            return new JavaParserClassDeclaration(this.wrappedNode, typeSolver)
-                    .solveType(name.substring(prefix.length()));
-        }
-
-        return getContext()
-                .getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name);
+        return JavaParserTypeDeclarationResolution.solveType(
+                this,
+                wrappedNode,
+                javaParserTypeAdapter::solveType,
+                this::getContext,
+                name,
+                (node, nestedName) -> new JavaParserClassDeclaration(node, typeSolver).solveType(nestedName));
     }
 
     @Override
@@ -352,67 +341,13 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        List<ResolvedReferenceType> ancestors = new ArrayList<>();
-
-        // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (this.isJavaLangObject()) {
-            return ancestors;
-        }
-
-        Optional<String> qualifiedName = wrappedNode.getFullyQualifiedName();
-        if (!qualifiedName.isPresent()) {
-            return ancestors;
-        }
-
-        try {
-            // If a superclass is found, add it as an ancestor
-            Optional<ResolvedReferenceType> superClass = getSuperClass();
-            if (superClass.isPresent()) {
-                if (isAncestor(superClass.get(), qualifiedName.get())) {
-                    ancestors.add(superClass.get());
-                }
-            }
-        } catch (UnsolvedSymbolException e) {
-            // in case we could not resolve the super class, we may still be able to resolve (some of) the
-            // implemented interfaces and so we continue gracefully with an (incomplete) list of ancestors
-
-            if (!acceptIncompleteList) {
-                // Only throw if an incomplete ancestor list is unacceptable.
-                throw e;
-            }
-        }
-
-        for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
-            try {
-                // If an implemented interface is found, add it as an ancestor
-                ResolvedReferenceType rrt = toReferenceType(implemented);
-                if (isAncestor(rrt, qualifiedName.get())) {
-                    ancestors.add(rrt);
-                }
-            } catch (UnsolvedSymbolException e) {
-                // in case we could not resolve some implemented interface, we may still be able to resolve the
-                // extended class or (some of) the other implemented interfaces and so we continue gracefully
-                // with an (incomplete) list of ancestors
-
-                if (!acceptIncompleteList) {
-                    // Only throw if an incomplete ancestor list is unacceptable.
-                    throw e;
-                }
-            }
-        }
-
-        return ancestors;
-    }
-
-    private boolean isAncestor(ResolvedReferenceType candidateAncestor, String ownQualifiedName) {
-        Optional<ResolvedReferenceTypeDeclaration> resolvedReferenceTypeDeclaration =
-                candidateAncestor.getTypeDeclaration();
-        if (resolvedReferenceTypeDeclaration.isPresent()) {
-            ResolvedTypeDeclaration rtd = resolvedReferenceTypeDeclaration.get().asType();
-            // do not consider an inner or nested class as an ancestor
-            return !rtd.hasInternalType(ownQualifiedName);
-        }
-        return false;
+        return JavaParserTypeDeclarationResolution.getAncestors(
+                this,
+                wrappedNode,
+                wrappedNode.getImplementedTypes(),
+                this::getSuperClass,
+                this::toReferenceType,
+                acceptIncompleteList);
     }
 
     @Override

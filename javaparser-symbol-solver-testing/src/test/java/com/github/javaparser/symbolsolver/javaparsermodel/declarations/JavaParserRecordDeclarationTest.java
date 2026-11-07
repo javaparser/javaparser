@@ -606,4 +606,42 @@ public class JavaParserRecordDeclarationTest {
         assertEquals("GenericBox", constructorInvocation.getType().resolve().describe());
         assertEquals("GenericBox", constructorInvocation.calculateResolvedType().describe());
     }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    @SuppressWarnings("deprecation")
+    void solveType_resolvesOwnNameAndNestedRecord() {
+        ParseResult<CompilationUnit> result = javaParser.parse("record Outer() { record Inner() {} }");
+        RecordDeclaration outer =
+                result.getResult().get().findFirst(RecordDeclaration.class).get();
+        JavaParserRecordDeclaration declaration = (JavaParserRecordDeclaration) outer.resolve();
+
+        SymbolReference<ResolvedTypeDeclaration> ownName = declaration.solveType("Outer");
+        assertTrue(ownName.isSolved());
+        assertSame(declaration, ownName.getCorrespondingDeclaration());
+
+        SymbolReference<ResolvedTypeDeclaration> nested = declaration.solveType("Inner");
+        assertTrue(nested.isSolved());
+        assertEquals("Outer.Inner", nested.getCorrespondingDeclaration().getQualifiedName());
+
+        SymbolReference<ResolvedTypeDeclaration> qualifiedNested = declaration.solveType("Outer.Inner");
+        assertTrue(qualifiedNested.isSolved());
+        assertEquals(
+                "Outer.Inner", qualifiedNested.getCorrespondingDeclaration().getQualifiedName());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    void getAncestors_ignoresUnresolvedInterfaceWhenIncompleteListIsAccepted() {
+        ParseResult<CompilationUnit> result = javaParser.parse("record Test() implements Missing {}");
+        RecordDeclaration record =
+                result.getResult().get().findFirst(RecordDeclaration.class).get();
+        JavaParserRecordDeclaration resolved = (JavaParserRecordDeclaration) record.resolve();
+
+        List<ResolvedReferenceType> ancestors = resolved.getAncestors(true);
+        assertEquals(1, ancestors.size());
+        assertEquals("java.lang.Record", ancestors.get(0).getQualifiedName());
+
+        assertThrows(UnsolvedSymbolException.class, () -> resolved.getAncestors(false));
+    }
 }
