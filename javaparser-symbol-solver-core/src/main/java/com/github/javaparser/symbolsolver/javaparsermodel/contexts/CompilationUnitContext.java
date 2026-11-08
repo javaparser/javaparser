@@ -165,8 +165,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
         // Look in current package
         if (this.wrappedNode.getPackageDeclaration().isPresent()) {
-            String qName = this.wrappedNode.getPackageDeclaration().get().getNameAsString() + "." + name;
-            SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+            SymbolReference<ResolvedReferenceTypeDeclaration> ref = solveTypeInPackage(
+                    this.wrappedNode.getPackageDeclaration().get().getNameAsString(), name);
             if (ref != null && ref.isSolved()) {
                 return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
             }
@@ -189,8 +189,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         // look into asterisk imports on demand
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
             if (importDecl.isAsterisk()) {
-                String qName = importDecl.getNameAsString() + "." + name;
-                SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                SymbolReference<ResolvedReferenceTypeDeclaration> ref =
+                        solveTypeInPackage(importDecl.getNameAsString(), name);
                 if (ref != null && ref.isSolved()) {
                     return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
                 }
@@ -225,6 +225,22 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
      */
     protected boolean isCompositeName(String name) {
         return name.contains(".");
+    }
+
+    /*
+     * Solves a name among the types of a package: the current one, or one imported on demand. A package
+     * only makes its types visible, not its subpackages (JLS 6.5.2, 7.5.2), so the first identifier of a
+     * composite name must denote a type of that package: "impl.A" never stands for "<package>.impl.A".
+     */
+    private SymbolReference<ResolvedReferenceTypeDeclaration> solveTypeInPackage(String packageName, String name) {
+        if (isCompositeName(name)) {
+            SymbolReference<ResolvedReferenceTypeDeclaration> outerMostRef =
+                    typeSolver.tryToSolveType(packageName + "." + name.substring(0, name.indexOf('.')));
+            if (outerMostRef == null || !outerMostRef.isSolved()) {
+                return SymbolReference.unsolved();
+            }
+        }
+        return typeSolver.tryToSolveType(packageName + "." + name);
     }
 
     /*
