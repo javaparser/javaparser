@@ -54,7 +54,6 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest
@@ -1257,14 +1256,5 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest
     @Override
     public boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration) {
         return false;
-    }
-
-    @Disabled(
-            value = "This test was disable in this class due to a bug reported at https://github"
-                    + ".com/javaparser/javaparser/issues/3061. It should be renabled when the issue is fixed.")
-    @Test
-    @Override
-    public void containerTypeCantBeNull() {
-        super.containerTypeCantBeNull();
     }
 }
