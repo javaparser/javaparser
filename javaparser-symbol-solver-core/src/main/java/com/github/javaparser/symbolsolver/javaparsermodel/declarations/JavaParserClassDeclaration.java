@@ -486,20 +486,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
                 .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
                 .solveType(className);
 
-        // If unable to solve by the class name alone, attempt to qualify it.
-        if (!ref.isSolved()) {
-            Optional<ClassOrInterfaceType> localScope = classOrInterfaceType.getScope();
-            if (localScope.isPresent()) {
-                String localName = localScope.get().getName().getId() + "."
-                        + classOrInterfaceType.getName().getId();
-                ref = getContext()
-                        .getParent()
-                        .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                        .solveType(localName);
-            }
-        }
-
-        // If still unable to resolve, throw an exception.
+        // A qualified name is never retried with its leading segments dropped: "a.b.C" and "b.C" may
+        // denote different types, the declared type itself included (issue #4190).
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
