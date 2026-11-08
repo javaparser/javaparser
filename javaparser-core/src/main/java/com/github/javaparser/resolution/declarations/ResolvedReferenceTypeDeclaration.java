@@ -127,10 +127,12 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
+            Set<ResolvedReferenceType> seen = new HashSet<>();
             for (ResolvedReferenceType ancestor : rrtd.getAncestors()) {
                 ancestors.add(ancestor);
+                seen.add(ancestor);
                 for (ResolvedReferenceType inheritedAncestor : ancestor.getAllAncestors()) {
-                    if (!ancestors.contains(inheritedAncestor)) {
+                    if (seen.add(inheritedAncestor)) {
                         ancestors.add(inheritedAncestor);
                     }
                 }
@@ -145,20 +147,18 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
-            // init direct ancestors
+            Set<ResolvedReferenceType> seen = new HashSet<>();
             Deque<ResolvedReferenceType> queuedAncestors = new LinkedList<>(rrtd.getAncestors());
             ancestors.addAll(queuedAncestors);
+            seen.addAll(queuedAncestors);
             while (!queuedAncestors.isEmpty()) {
                 ResolvedReferenceType queuedAncestor = queuedAncestors.removeFirst();
-                queuedAncestor.getTypeDeclaration().ifPresent(rtd -> new LinkedHashSet<>(
-                                queuedAncestor.getDirectAncestors())
-                        .stream().forEach(ancestor -> {
-                            // add this ancestor to the queue (for a deferred search)
+                queuedAncestor
+                        .getTypeDeclaration()
+                        .ifPresent(rtd -> new LinkedHashSet<>(queuedAncestor.getDirectAncestors()).forEach(ancestor -> {
                             queuedAncestors.add(ancestor);
-                            // add this ancestor to the list of ancestors
-                            if (!ancestors.contains(ancestor)) {
+                            if (seen.add(ancestor)) {
                                 ancestors.add(ancestor);
                             }
                         }));
