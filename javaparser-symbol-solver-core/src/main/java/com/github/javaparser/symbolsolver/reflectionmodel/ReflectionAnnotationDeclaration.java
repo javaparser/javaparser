@@ -113,17 +113,6 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType type) {
-        // TODO #1836
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         return reflectionClassAdapter.hasDirectlyAnnotation(canonicalName);
     }
