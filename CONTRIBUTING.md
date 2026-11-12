@@ -25,7 +25,7 @@ Our development workflow is based on Pull Request. If you are not familiar with 
 
 ### Remember:
 - A pull request should include tests. You can either use BDD or JUnit.
-- Every pull request will automatically be checked by a few tools. Make sure AppVeyor and Travis are green.
+- Every pull request will automatically be checked by a few tools. Make sure the GitHub Actions checks are green.
 - Pull requests often stay open for at least a few days to give people a chance to review it.
 - A pull request is merged when all comments on it have been resolved.
 - If you create a pull request for an issue, mention the issue in the format #123 to make github link it automatically.
