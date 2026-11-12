@@ -13,19 +13,22 @@ install:
   # Download maven
   - ps: |
       Add-Type -AssemblyName System.IO.Compression.FileSystem
-      if (!(Test-Path -Path "C:\maven" )) {
+      # Check for the versioned directory: C:\maven is cached and may still contain an older Maven version.
+      if (!(Test-Path -Path "C:\maven\apache-maven-3.9.9" )) {
+        # Maven Central requires TLS 1.2, which is not the default on older Windows images.
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         (new-object System.Net.WebClient).DownloadFile(
-          'http://www.us.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip',
+          'https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.9/apache-maven-3.9.9-bin.zip',
           'C:\maven-bin.zip'
         )
         [System.IO.Compression.ZipFile]::ExtractToDirectory("C:\maven-bin.zip", "C:\maven")
       }
   # Setup environment variables for Maven and Java
   - cmd: SET JAVA_HOME=C:\Program Files\Java\jdk10
-  - cmd: SET M2_HOME=C:\maven\apache-maven-3.6.3
+  - cmd: SET M2_HOME=C:\maven\apache-maven-3.9.9
   - cmd: SET MAVEN_OPTS=-Xmx1g
   - cmd: SET JAVA_OPTS=-Xmx1g
-  - cmd: SET PATH=C:\maven\apache-maven-3.6.3\bin;%JAVA_HOME%\bin;%PATH%
+  - cmd: SET PATH=C:\maven\apache-maven-3.9.9\bin;%JAVA_HOME%\bin;%PATH%
   # Output the git config re: autocrlf to verify the "current" setting
   - cmd: git config core.autocrlf
 
