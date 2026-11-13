@@ -87,8 +87,13 @@ public class JavaParserFacade {
 
     /**
      * This method is used to clear internal caches for the sake of releasing memory.
+     * <p>
+     * Synchronization only protects the instances registry; it does not make JavaParser thread-safe.
+     * Each thread must use its own type solver and AST.
+     *
+     * @see #get(TypeSolver)
      */
-    public static void clearInstances() {
+    public static synchronized void clearInstances() {
         instances.clear();
     }
 
