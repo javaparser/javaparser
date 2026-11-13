@@ -49,6 +49,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
 
@@ -71,33 +73,37 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
         assertTrue(FunctionalInterfaceLogic.getFunctionalMethod(declaration).isPresent());
     }
 
-    @Test
-    void selectsCovariantReturnTypeRegardlessOfParentOrder() {
-        for (String parents : new String[] {"X, Y", "Y, X"}) {
-            CompilationUnit cu = StaticJavaParser.parse("interface X { Number get(); }"
-                    + "interface Y { Integer get(); }interface Z extends " + parents + " {}");
-            ResolvedInterfaceDeclaration declaration =
-                    new JavaParserInterfaceDeclaration(Navigator.demandInterface(cu, "Z"), typeSolver);
-            Optional<MethodUsage> method = FunctionalInterfaceLogic.getFunctionalMethod(declaration);
-            assertTrue(method.isPresent());
-            assertEquals("java.lang.Integer", method.get().returnType().describe());
-        }
+    @ParameterizedTest
+    @ValueSource(strings = {"X, Y", "Y, X"})
+    void selectsCovariantReturnTypeRegardlessOfParentOrder(String parents) {
+        String code = "interface X { Number get(); }" + "interface Y { Integer get(); }interface Z extends " + parents
+                + " {}";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        ResolvedInterfaceDeclaration declaration =
+                new JavaParserInterfaceDeclaration(Navigator.demandInterface(cu, "Z"), typeSolver);
+        Optional<MethodUsage> method = FunctionalInterfaceLogic.getFunctionalMethod(declaration);
+        assertTrue(method.isPresent());
+        assertEquals("java.lang.Integer", method.get().returnType().describe());
     }
 
-    @Test
-    void incompatibleParameterizedReturnTypesAreNotFunctional() {
-        CompilationUnit cu = StaticJavaParser.parse("interface X { java.util.Iterator<String> get(); }"
-                + "interface Y { java.util.Iterator<Integer> get(); }interface Z extends X, Y {}");
+    @ParameterizedTest
+    @ValueSource(strings = {"X, Y", "Y, X"})
+    void incompatibleParameterizedReturnTypesAreNotFunctional(String parents) {
+        String code = "interface X { java.util.Iterator<String> get(); }"
+                + "interface Y { java.util.Iterator<Integer> get(); }interface Z extends " + parents + " {}";
+        CompilationUnit cu = StaticJavaParser.parse(code);
         ResolvedInterfaceDeclaration declaration =
                 new JavaParserInterfaceDeclaration(Navigator.demandInterface(cu, "Z"), typeSolver);
         assertFalse(FunctionalInterfaceLogic.getFunctionalMethod(declaration).isPresent());
     }
 
-    @Test
-    void unrelatedAbstractMethodIsRejectedBeforeComparingDuplicateReturns() {
-        CompilationUnit cu = StaticJavaParser.parse("interface X { java.util.Iterator<String> iterator(); }"
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2})
+    void unrelatedAbstractMethodIsRejectedBeforeComparingDuplicateReturns(int rotation) {
+        String code = "interface X { java.util.Iterator<String> iterator(); }"
                 + "interface Y { java.util.Iterator<String> iterator(); }"
-                + "interface Z { void clear(); }");
+                + "interface Z { void clear(); }";
+        CompilationUnit cu = StaticJavaParser.parse(code);
         List<MethodUsage> methods = Arrays.asList("X", "Y", "Z").stream()
                 .map(name -> new JavaParserInterfaceDeclaration(Navigator.demandInterface(cu, name), typeSolver))
                 .map(declaration -> new MethodUsage(
@@ -109,13 +115,10 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
                     }
                 })
                 .collect(java.util.stream.Collectors.toList());
+        Collections.rotate(methods, rotation);
         ResolvedReferenceTypeDeclaration declaration = mock(ResolvedReferenceTypeDeclaration.class);
-        for (int i = 0; i < methods.size(); i++) {
-            when(declaration.getAllMethods()).thenReturn(new LinkedHashSet<>(methods));
-            assertFalse(
-                    FunctionalInterfaceLogic.getFunctionalMethod(declaration).isPresent());
-            Collections.rotate(methods, 1);
-        }
+        when(declaration.getAllMethods()).thenReturn(new LinkedHashSet<>(methods));
+        assertFalse(FunctionalInterfaceLogic.getFunctionalMethod(declaration).isPresent());
     }
 
     @Test
