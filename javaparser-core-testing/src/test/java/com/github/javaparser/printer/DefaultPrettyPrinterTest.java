@@ -26,6 +26,7 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.*;
@@ -45,6 +46,7 @@ import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.imports.EclipseImportOrderingStrategy;
 import com.github.javaparser.printer.configuration.imports.IntelliJImportOrderingStrategy;
+import java.time.Duration;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -755,5 +757,18 @@ class DefaultPrettyPrinterTest {
         String actualCode = printer.print(cu);
 
         assertEqualsStringIgnoringEol(expectedCode, actualCode);
+    }
+
+    @Test
+    void longWhitespaceRunsInCommentsPrintInLinearTime() {
+        String spaces = new String(new char[200_000]).replace('\0', ' ');
+        CompilationUnit cu = StaticJavaParser.parse("class A {\n" + "    //" + spaces + "x" + spaces + "\n"
+                + "    /** y" + spaces + "\n */\n" + "    void f() {}\n" + "}\n");
+        Printer printer = getDefaultPrinter(printerConfiguration);
+
+        String printed = assertTimeoutPreemptively(Duration.ofSeconds(10), () -> printer.print(cu));
+
+        assertTrue(printed.contains("//" + spaces + "x" + System.lineSeparator()));
+        assertTrue(printed.contains(" * y" + System.lineSeparator()));
     }
 }

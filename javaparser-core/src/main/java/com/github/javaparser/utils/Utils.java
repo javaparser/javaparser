@@ -290,10 +290,11 @@ public class Utils {
      * Like {@link String#trim()}, but only the trailing spaces.
      */
     public static String trimTrailingSpaces(String line) {
-        while (line.length() > 0 && line.charAt(line.length() - 1) <= 0x20) {
-            line = line.substring(0, line.length() - 1);
+        int end = line.length();
+        while (end > 0 && line.charAt(end - 1) <= 0x20) {
+            end--;
         }
-        return line;
+        return line.substring(0, end);
     }
 
     /**
