@@ -45,14 +45,11 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.imports.DefaultImportOrderingStrategy;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Pattern;
 
 /**
  * Outputs the AST as formatted Java source code.
  */
 public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
-
-    private static Pattern RTRIM = Pattern.compile("\\s+$");
 
     /**
      * The printer configuration.
@@ -1810,8 +1807,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) {
             return;
         }
-        printer.print(n.getHeader())
-                .println(normalizeEolInTextBlock(RTRIM.matcher(n.getContent()).replaceAll(""), ""));
+        printer.print(n.getHeader()).println(normalizeEolInTextBlock(trimTrailingSpaces(n.getContent()), ""));
     }
 
     @Override
