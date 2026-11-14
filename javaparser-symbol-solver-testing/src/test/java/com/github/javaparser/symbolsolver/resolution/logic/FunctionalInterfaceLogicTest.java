@@ -20,8 +20,11 @@
 
 package com.github.javaparser.symbolsolver.resolution.logic;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,6 +33,7 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
@@ -37,10 +41,16 @@ import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
 
@@ -51,6 +61,71 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
         CombinedTypeSolver combinedtypeSolver = new CombinedTypeSolver();
         combinedtypeSolver.add(new ReflectionTypeSolver());
         typeSolver = combinedtypeSolver;
+    }
+
+    @Test
+    void inheritedParameterizedReturnTypesAreComparedInInterfaceContext() {
+        String code = "interface X<T> { java.util.Iterator<T> iterator(); }"
+                + "interface Y<E> extends X<E> { java.util.Iterator<E> iterator(); }";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        ResolvedInterfaceDeclaration declaration =
+                new JavaParserInterfaceDeclaration(Navigator.demandInterface(cu, "Y"), typeSolver);
+        assertTrue(FunctionalInterfaceLogic.getFunctionalMethod(declaration).isPresent());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"X, Y", "Y, X"})
+    void selectsCovariantReturnTypeRegardlessOfParentOrder(String parents) {
+        String code = "interface X { Number get(); }" + "interface Y { Integer get(); }interface Z extends " + parents
+                + " {}";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        ResolvedInterfaceDeclaration declaration =
+                new JavaParserInterfaceDeclaration(Navigator.demandInterface(cu, "Z"), typeSolver);
+        Optional<MethodUsage> method = FunctionalInterfaceLogic.getFunctionalMethod(declaration);
+        assertTrue(method.isPresent());
+        assertEquals("java.lang.Integer", method.get().returnType().describe());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"X, Y", "Y, X"})
+    void incompatibleParameterizedReturnTypesAreNotFunctional(String parents) {
+        String code = "interface X { java.util.Iterator<String> get(); }"
+                + "interface Y { java.util.Iterator<Integer> get(); }interface Z extends " + parents + " {}";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        ResolvedInterfaceDeclaration declaration =
+                new JavaParserInterfaceDeclaration(Navigator.demandInterface(cu, "Z"), typeSolver);
+        assertFalse(FunctionalInterfaceLogic.getFunctionalMethod(declaration).isPresent());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2})
+    void unrelatedAbstractMethodIsRejectedBeforeComparingDuplicateReturns(int rotation) {
+        String code = "interface X { java.util.Iterator<String> iterator(); }"
+                + "interface Y { java.util.Iterator<String> iterator(); }"
+                + "interface Z { void clear(); }";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        List<MethodUsage> methods = Arrays.asList("X", "Y", "Z").stream()
+                .map(name -> new JavaParserInterfaceDeclaration(Navigator.demandInterface(cu, name), typeSolver))
+                .map(declaration -> new MethodUsage(
+                        declaration.getDeclaredMethods().iterator().next()) {
+                    @Override
+                    public int hashCode() {
+                        // Keep the chosen encounter order when collected into a HashSet.
+                        return 0;
+                    }
+                })
+                .collect(java.util.stream.Collectors.toList());
+        Collections.rotate(methods, rotation);
+        ResolvedReferenceTypeDeclaration declaration = mock(ResolvedReferenceTypeDeclaration.class);
+        when(declaration.getAllMethods()).thenReturn(new LinkedHashSet<>(methods));
+        assertFalse(FunctionalInterfaceLogic.getFunctionalMethod(declaration).isPresent());
+    }
+
+    @Test
+    void collectionIsNotAFunctionalInterface() {
+        assertFalse(FunctionalInterfaceLogic.getFunctionalMethod(
+                        new ReflectionTypeSolver().solveType("java.util.Collection"))
+                .isPresent());
     }
 
     /*
