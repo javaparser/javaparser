@@ -108,4 +108,17 @@ class DotPrinterTest {
                         + "}",
                 output);
     }
+
+    @Test
+    void backslashBeforeQuoteDoesNotCloseTheLabel() {
+        DotPrinter printer = new DotPrinter(false);
+        Expression expression = parser.parseExpression("\"a\\\"];n9[label=\\\"b\"");
+        String output = printer.output(expression);
+        assertEqualsStringIgnoringEol(
+                "digraph {\n" + "n0 [label=\"root\"];\n"
+                        + "n1 [label=\"value='a\\\\\\\"];n9[label=\\\\\\\"b'\"];\n"
+                        + "n0 -> n1;\n"
+                        + "}",
+                output);
+    }
 }

@@ -100,6 +100,6 @@ public class DotPrinter {
     }
 
     private static String escape(String value) {
-        return value.replace("\"", "\\\"");
+        return value.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 }
