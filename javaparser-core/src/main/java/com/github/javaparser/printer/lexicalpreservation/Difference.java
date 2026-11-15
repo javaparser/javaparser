@@ -54,18 +54,35 @@ public class Difference {
 
     private final List<DifferenceElement> diffElements;
 
+    /**
+     * The original elements of the NodeText being modified.
+     *
+     * This is the live list returned by {@code nodeText.getElements()},
+     * not a copy. Changes made through {@code nodeText} or this list
+     * therefore immediately affect the positions of its elements.
+     */
     private final List<TextElement> originalElements;
 
     /**
-     * Index of the next element to examine in the original NodeText.
-     * This index advances when an original element is consumed or retained,
-     * and may remain unchanged when an element is removed from the list.
+     * Current position in {@code originalElements}.
+     *
+     * Because {@code originalElements} is a live, mutable list, changes to
+     * the list can shift elements relative to this index. Consequently,
+     * {@code originalIndex} may:
+     * <ul>
+     *     <li>Increase when an original element is retained or skipped.</li>
+     *     <li>Remain unchanged when an element is removed and the next
+     *         element shifts into its position.</li>
+     *     <li>Decrease when a removal or indentation adjustment requires
+     *         moving back to an earlier position in the list.</li>
+     * </ul>
      */
     private int originalIndex = 0;
 
     /**
-     * Index of the next DifferenceElement to apply.
-     * This index advances when a difference operation has been processed
+     * Current position in {@code diffElements}.
+     *
+     * This index advances when a difference element has been processed
      * or intentionally skipped.
      */
     private int diffIndex = 0;
@@ -296,6 +313,10 @@ public class Difference {
     /**
      * Applies the calculated differences to the original NodeText.
      *
+     * Before applying the differences, the method passes {@code diffElements}
+     * through {@link ReshuffledDiffElementExtractor}, which reorders the
+     * difference elements based on the original {@code NodeText}.
+     *
      * The method processes two sequences in parallel:
      * <ul>
      *     <li>{@code originalElements}, which represents the existing text.</li>
@@ -462,25 +483,65 @@ public class Difference {
     /**
      * Applies a removal operation to the current original element.
      *
-     * The removal behavior depends on the kinds of the difference element
-     * and original element. A child removal may also remove an associated
-     * comment or adjust indentation. Token and whitespace removals follow
-     * separate matching rules because the original text can contain
-     * formatting elements that are not represented in exactly the same
-     * way in the calculated difference.
+     * <p>The method compares the current {@code Removed} difference element
+     * with the current element in the original {@code NodeText}. Depending
+     * on their types, it may remove an original element, preserve it while
+     * advancing {@code originalIndex}, or consume the removal by advancing
+     * {@code diffIndex}.
      *
-     * Cursor advancement depends on the type of removal and the original
-     * element being examined. Removing an original element generally leaves
+     * <p>Examples of input and removal behavior:
+     *
+     * <ul>
+     *     <li><b>Matching child elements:</b> When removing a child from
+     *         an existing source such as {@code class Example { int oldValue; }},
+     *         if the current removed element and original element both
+     *         represent the corresponding child node, the original child
+     *         is removed and {@code diffIndex} advances.</li>
+     *
+     *     <li><b>Associated comments:</b> When removing a child that has
+     *         an associated comment, the comment can also be removed.
+     *         Removing that comment does not consume the current removal.
+     *         Processing continues at the same {@code originalIndex} and
+     *         with the same {@code diffIndex}.</li>
+     *
+     *     <li><b>Unrelated comments:</b> When a comment is encountered
+     *         before the child being removed but is not associated with it,
+     *         the comment is preserved and {@code originalIndex} advances.
+     *         The same removal is retried against the next original element.</li>
+     *
+     *     <li><b>Matching tokens:</b> When a removed token matches the
+     *         original token kind, the original token is removed and
+     *         {@code diffIndex} advances. End-of-line tokens are also
+     *         matched using the end-of-line category.</li>
+     *
+     *     <li><b>Removing multiple spaces:</b> For an original source such as
+     *         {@code int  count;}, a whitespace removal can remove an
+     *         original space or tab without advancing either cursor.
+     *         The same removal operation can therefore remove consecutive
+     *         whitespace elements at the current position.</li>
+     *
+     *     <li><b>Consuming a whitespace removal:</b> When the current
+     *         original element is not a space or tab, a whitespace,
+     *         indentation, or unindentation removal can advance
+     *         {@code diffIndex} without removing that original element.</li>
+     *
+     *     <li><b>Preserving original whitespace:</b> When the original
+     *         element is whitespace or a comment represented by a token,
+     *         {@code originalIndex} advances to preserve it. If the removal
+     *         represents a newline, {@code diffIndex} can also advance.</li>
+     * </ul>
+     *
+     * <p>Cursor advancement depends on the branch being executed. Removing
+     * an element from the live {@code originalElements} list generally leaves
      * {@code originalIndex} at the same position because the next element
-     * shifts into that position. When an original element must be preserved,
-     * {@code originalIndex} advances instead.
+     * shifts into it. Some indentation adjustments can move the index
+     * backwards. Preserving an original element advances
+     * {@code originalIndex}, while consuming a removal operation advances
+     * {@code diffIndex}. These actions are not interchangeable: some
+     * branches remove an element without consuming the removal, and others
+     * consume a removal without removing an original element.
      *
-     * {@code diffIndex} advances when the current removal operation has been
-     * fully handled. Some removals, such as whitespace removal, can require
-     * examining additional original elements before the difference operation
-     * is complete.
-     *
-     * Consecutive removals are represented by a {@link RemovedGroup}.
+     * <p>Consecutive removals are represented by a {@link RemovedGroup}.
      * The group provides context for indentation handling and determines
      * whether the removal represents a complete line or part of a replacement.
      *
@@ -693,24 +754,72 @@ public class Difference {
     /**
      * Processes a difference element that should be kept in the resulting text.
      *
-     * The method compares the current difference element with the current
-     * original element and advances the cursors according to what was matched:
+     * <p>The method compares the current {@code Kept} difference element with
+     * the current original element. Depending on their types, it advances
+     * {@code originalIndex}, {@code diffIndex}, or both to keep the original
+     * text and difference sequence synchronized.
+     *
+     * <p>Examples of input and matching behavior:
      *
      * <ul>
-     *     <li>Advancing {@code originalIndex} consumes or retains an original
-     *         element without removing it.</li>
-     *     <li>Advancing {@code diffIndex} marks the current difference element
-     *         as handled.</li>
-     *     <li>Advancing both cursors means the original element satisfies the
-     *         current keep operation.</li>
+     *     <li><b>Child matched with child:</b> For an existing source such as
+     *         {@code class Example { void run() {} }}, when both the kept
+     *         difference element and the original element represent the
+     *         corresponding child node, both {@code diffIndex} and
+     *         {@code originalIndex} advance.</li>
+     *
+     *     <li><b>Generic type:</b> For {@code List<String> names;}, the kept
+     *         type can be represented as one child while the original text
+     *         contains separate tokens. When the original element is the
+     *         {@code List} identifier and the kept child has type arguments,
+     *         the generic-type branch advances {@code diffIndex}, skips the
+     *         three subsequent tokens {@code <}, {@code String}, and
+     *         {@code >}. It then advances {@code originalIndex} past
+     *         the complete type.</li>
+     *
+     *     <li><b>Generic type without following arguments:</b> For
+     *         {@code List names;}, the original {@code List} identifier is
+     *         followed by whitespace rather than {@code <}. The generic-type
+     *         token-counting helper must only be used when type arguments
+     *         actually follow the identifier, because otherwise it could
+     *         count whitespace and the next identifier as tokens to skip.</li>
+     *
+     *     <li><b>Fully qualified type:</b> For
+     *         {@code java.lang.Object value;}, the original text represents
+     *         the type using five tokens: {@code java}, {@code .},
+     *         {@code lang}, {@code .}, and {@code Object}. When the kept
+     *         difference element represents the fully qualified type as
+     *         one child, the corresponding branch advances
+     *         {@code diffIndex}, skips the four tokens following
+     *         {@code java}, and advances {@code originalIndex} past the
+     *         complete type.</li>
+     *
+     *     <li><b>Array type:</b> For {@code String[] values;}, when the
+     *         kept child represents an array type and the original element
+     *         is the {@code String} identifier, the array-specific helper
+     *         determines how many array-related tokens must be skipped.
+     *         The method then advances {@code diffIndex} and positions
+     *         {@code originalIndex} after the array type.</li>
+     *
+     *     <li><b>Matching tokens:</b> For {@code int count;}, when the kept
+     *         token and original token have the same token kind, both
+     *         cursors advance.</li>
+     *
+     *     <li><b>Newline and whitespace:</b> When the kept element represents
+     *         a newline and the original element is a space or tab,
+     *         {@code originalIndex} advances while {@code diffIndex}
+     *         remains unchanged. This preserves the original whitespace
+     *         while continuing to search for the matching newline.</li>
+     *
+     *     <li><b>Whitespace-only difference:</b> When the kept element is
+     *         whitespace or indentation, {@code diffIndex} advances without
+     *         consuming an original element.</li>
      * </ul>
      *
-     * In some cases, one difference element represents multiple original
-     * tokens. For example, a generic type or array type may be represented
-     * as a single child in the difference sequence but as several tokens
-     * in the original text. The corresponding helper methods calculate
-     * how many original tokens must be skipped to keep both sequences
-     * synchronized.
+     * <p>Generic types, fully qualified types, and array types require special
+     * handling because one child in the difference sequence can correspond
+     * to multiple tokens in the original text. The corresponding helper
+     * methods calculate how many original tokens must be skipped.
      *
      * @param kept the difference element that should be retained
      * @param originalElement the current element in the original text
@@ -850,9 +959,27 @@ public class Difference {
         return typeArgs.isPresent() && typeArgs.get().size() > 0;
     }
 
-    /*
-     * Try to resolve the number of token to skip in the original list to match
-     * a ClassOrInterfaceType with a list of tokens like "java", ".", "lang", ".", "Object"
+    /**
+     * Determines how many subsequent tokens in {@code originalElements}
+     * must be skipped to synchronize a fully qualified type represented
+     * by a single child in {@code diffElements}.
+     *
+     * <p>A fully qualified type is represented by multiple tokens in the
+     * original text, separated by dots, but as a single child in the
+     * difference sequence.
+     *
+     * <p>For example, {@code java.lang.Object} consists of five tokens:
+     * {@code java}, {@code .}, {@code lang}, {@code .}, and {@code Object}.
+     * When starting at {@code java}, this method returns 4 because the
+     * remaining four tokens must be skipped.
+     *
+     * <p>The method compares the original tokens with the name components
+     * of the fully qualified type. If the tokens do not match the expected
+     * sequence, it returns 0.
+     *
+     * @param element the current token in the original elements
+     * @param kept the difference element representing the fully qualified type
+     * @return the number of subsequent tokens to skip
      */
     private int getIndexToNextTokenElement(TokenTextElement element, DifferenceElement kept) {
         // number of token to skip
@@ -882,28 +1009,28 @@ public class Difference {
     }
 
     /**
-     * Determines how many subsequent tokens in the original elements must
-     * be skipped to move past a generic type argument declaration.
+     * Returns the number of subsequent tokens to skip in {@code originalElements}
+     * to synchronize it with {@code diffElements}.
      *
-     * The original NodeText represents generic type syntax as individual
-     * tokens, whereas the corresponding difference element can represent
-     * the entire type as a single child.
+     * <p>Types represented as a single child in {@code diffElements} can consist
+     * of multiple tokens in {@code originalElements}. This method counts the
+     * tokens belonging to the generic type argument declaration, including
+     * whitespace encountered while traversing it.
      *
-     * The method tracks nested angle brackets:
-     * <ul>
-     *     <li>{@code <} increases the nesting level.</li>
-     *     <li>{@code >} decreases the nesting level.</li>
-     * </ul>
-     * Tokens are counted until the matching closing angle bracket is reached.
-     * Whitespace between the type name and its opening angle bracket is also
-     * included when encountered during traversal.
+     * <p>The method tracks nested angle brackets: {@code <} increases the nesting
+     * level and {@code >} decreases it. Traversal ends when the nesting level
+     * returns to zero and the next token is not whitespace.
      *
-     * For example, when processing {@code List<String>}, starting at
-     * {@code List}, the method counts {@code <}, {@code String}, and
-     * {@code >}, returning 3.
+     * <p>This method must only be called when a generic type argument declaration
+     * follows the current type identifier. For example, starting at {@code List}
+     * in {@code List<String>}, it returns 3 to skip {@code <}, {@code String},
+     * and {@code >}. It must not be used for {@code List i}: starting at
+     * {@code List} in that input would return 2, incorrectly skipping the
+     * whitespace and the identifier {@code i}.
      *
-     * For {@code List<List<String>>}, both nested generic declarations
-     * must be traversed before the method finishes counting the tokens.
+     * <p>For {@code List<List<String>>}, starting at the first {@code List},
+     * it returns 6 to skip {@code <}, {@code List}, {@code <}, {@code String},
+     * {@code >}, and {@code >}.
      *
      * @param element the current token in the original elements
      * @param nestedDiamondOperator the current angle-bracket nesting level
