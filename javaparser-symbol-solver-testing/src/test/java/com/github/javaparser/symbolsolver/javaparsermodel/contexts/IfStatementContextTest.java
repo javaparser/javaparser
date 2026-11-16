@@ -35,6 +35,8 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class IfStatementContextTest {
 
@@ -273,6 +275,32 @@ class IfStatementContextTest {
         assertEquals("q", barTypePattern.getNameAsString());
         assertEquals(0, typePatternsExposedToElse.size());
         assertEquals(0, introducedTypePatterns.size());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"while (true) {}", "for (;;) {}", "do {} while (true);"})
+    void testPatternVariableIntroducedAfterIfWhenThenIsAnInfiniteLoop(String thenStatement) {
+        IfStmt ifStmt = parseIfStmt("if (!(o instanceof Foo f)) " + thenStatement);
+        IfStatementContext ifContext = new IfStatementContext(ifStmt, typeSolver);
+
+        List<TypePatternExpr> introducedTypePatterns = ifContext.getIntroducedTypePatterns();
+
+        assertEquals(1, introducedTypePatterns.size());
+        assertEquals("f", introducedTypePatterns.get(0).getNameAsString());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"while (true) { break; }", "for (;;) { break; }", "do { break; } while (true);"})
+    void testPatternVariableNotIntroducedAfterIfWhenLoopCanBreak(String thenStatement) {
+        IfStmt ifStmt = parseIfStmt("if (!(o instanceof Foo f)) " + thenStatement);
+        IfStatementContext ifContext = new IfStatementContext(ifStmt, typeSolver);
+
+        assertEquals(0, ifContext.getIntroducedTypePatterns().size());
+    }
+
+    private IfStmt parseIfStmt(String statement) {
+        CompilationUnit cu = parse("class Foo {\n  public void foo(Object o) {\n    " + statement + "\n  }\n}");
+        return Navigator.demandNodeOfGivenClass(cu, IfStmt.class);
     }
 
     private CompilationUnit parse(String sourceCode) {

@@ -22,6 +22,9 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.GenericVisitorWithDefaults;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -114,7 +117,8 @@ public class NormalCompletionVisitor extends GenericVisitorWithDefaults<Boolean,
      * An empty block that is not a switch block can complete normally iff it is reachable.
      *
      * A non-empty block that is not a switch block can complete normally iff the last statement in it can complete
-     * normally.
+     * normally (we assume the last statement is reachable. If it weren't, the code wouldn't compile and
+     * would therefore be unsupported).
      *
      * The first statement in a non-empty block that is not a switch block is reachable iff the block is reachable.
      *
@@ -173,41 +177,7 @@ public class NormalCompletionVisitor extends GenericVisitorWithDefaults<Boolean,
      */
     @Override
     public Boolean visit(WhileStmt whileStmt, Void unused) {
-        /**
-         * FIXME: To implement this properly, constant expression evaluation would need to be implemented.
-         *  this is specifically necessary for the first statement in the docstring.
-         *
-         * Simply returning true here will only cause issues where the while statement is the only statement, or the
-         * last statement in a block for which it should be determined if it completes normally. For example, keeping
-         * in mind the rule:
-         *   A pattern variable is introduced by if (e) S iff
-         *     (i) it is introduced by e when false and
-         *     (ii) S cannot complete normally.
-         *
-         * {@code
-         * while(true) {}
-         * }
-         * cannot complete normally since
-         *   (i) the condition is a constant expression with value true and
-         *   (ii) there is no break statement that exits the loop.
-         *
-         * Therefore, in:
-         * {@code
-         * if (!(x instanceof Foo f)) {
-         *     while (true) {}
-         * }
-         * System.out.println(f);
-         * }
-         * the if statement should introduce the variable f into scope, so the f that is printed should be the pattern
-         * variable.
-         *
-         * Simply returning true in this visit method would mean that {@code while (true) {}} is erroneously considered
-         * to complete normally and this example will not be handled correctly.
-         *
-         * As long as the last statement is not the while, however, JavaParser will still handle this correctly for
-         * compiling code.
-         */
-        return true;
+        return !isConstantTrue(whileStmt.getCondition()) || containsCorrespondingBreak(whileStmt);
     }
 
     /**
@@ -224,8 +194,13 @@ public class NormalCompletionVisitor extends GenericVisitorWithDefaults<Boolean,
      */
     @Override
     public Boolean visit(DoStmt doStmt, Void unused) {
-        // FIXME: See comment in while visit method
-        return true;
+        if (containsCorrespondingBreak(doStmt)) {
+            return true;
+        }
+        if (isConstantTrue(doStmt.getCondition())) {
+            return false;
+        }
+        return doStmt.getBody().accept(this, unused) || containsContinueOf(doStmt);
     }
 
     /**
@@ -236,8 +211,59 @@ public class NormalCompletionVisitor extends GenericVisitorWithDefaults<Boolean,
      */
     @Override
     public Boolean visit(ForStmt forStmt, Void unused) {
-        // FIXME: See comment in while visit method
-        return true;
+        boolean hasNonConstantTrueCondition = forStmt.getCompare().isPresent()
+                && !isConstantTrue(forStmt.getCompare().get());
+        return hasNonConstantTrueCondition || containsCorrespondingBreak(forStmt);
+    }
+
+    /**
+     * Only boolean literals (optionally parenthesized) are recognized as constant expressions. Every other expression,
+     * including ones that are constant according to JLS 15.29 such as {@code 1 < 2} or a reference to a constant
+     * variable, is treated as not constant.
+     */
+    private static boolean isConstantTrue(Expression expression) {
+        while (expression.isEnclosedExpr()) {
+            expression = expression.asEnclosedExpr().getInner();
+        }
+        return expression.isBooleanLiteralExpr()
+                && expression.asBooleanLiteralExpr().getValue();
+    }
+
+    /**
+     * Whether the do statement contains a continue statement that continues it: an unlabeled continue for which the
+     * do statement is the innermost enclosing loop, or a continue whose label is the label of the do statement.
+     */
+    private static boolean containsContinueOf(DoStmt doStmt) {
+        Optional<String> label = doStmt.getParentNode()
+                .filter(parent -> parent instanceof LabeledStmt)
+                .map(parent -> ((LabeledStmt) parent).getLabel().getIdentifier());
+
+        for (ContinueStmt continueStmt : doStmt.findAll(ContinueStmt.class)) {
+            if (continueStmt.getLabel().isPresent()) {
+                if (label.isPresent()
+                        && label.get().equals(continueStmt.getLabel().get().getIdentifier())) {
+                    return true;
+                }
+            } else if (innermostLoop(continueStmt) == doStmt) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static Node innermostLoop(Node node) {
+        Optional<Node> parent = node.getParentNode();
+        while (parent.isPresent()) {
+            Node current = parent.get();
+            if (current instanceof WhileStmt
+                    || current instanceof DoStmt
+                    || current instanceof ForStmt
+                    || current instanceof ForEachStmt) {
+                return current;
+            }
+            parent = current.getParentNode();
+        }
+        return null;
     }
 
     /**
@@ -358,6 +384,12 @@ public class NormalCompletionVisitor extends GenericVisitorWithDefaults<Boolean,
                 }
 
                 Node parentNode = maybeParentNode.get();
+
+                // A break cannot leave a lambda body or a method, constructor or initializer of a local or anonymous
+                // class, so it cannot correspond to a statement outside of it.
+                if (parentNode instanceof LambdaExpr || parentNode instanceof BodyDeclaration) {
+                    break;
+                }
 
                 if (parentNode instanceof SwitchStmt
                         || parentNode instanceof WhileStmt
