@@ -54,6 +54,7 @@ import com.github.javaparser.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprResolver;
@@ -367,9 +368,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                             classOrInterfaceType, typeSolver)
                     .solveType(nameWithScope);
             if (typeDeclarationSymbolReference.isSolved()) {
-                return new ReferenceTypeImpl(typeDeclarationSymbolReference
-                        .getCorrespondingDeclaration()
-                        .asReferenceType());
+                ResolvedTypeDeclaration solvedDeclaration =
+                        typeDeclarationSymbolReference.getCorrespondingDeclaration();
+                if (solvedDeclaration.isTypeParameter()) {
+                    // JLS 15.13 - ReferenceType may be a TypeVariable, e.g. T::compareTo
+                    return new ResolvedTypeVariable(solvedDeclaration.asTypeParameter());
+                }
+                return new ReferenceTypeImpl(solvedDeclaration.asReferenceType());
             }
 
             // JLS 15.13 - ExpressionName :: [TypeArguments] Identifier

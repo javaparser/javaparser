@@ -43,6 +43,7 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -305,10 +306,11 @@ public class MethodReferenceExpr extends Expression
      * If they are different, we consider it to be a primary expression.
      */
     public boolean isScopePrimaryExpr() {
-        return !getScope()
-                .calculateResolvedType()
-                .erasure()
-                .describe()
-                .endsWith(getScope().toString());
+        ResolvedType scopeType = getScope().calculateResolvedType();
+        if (scopeType.isTypeVariable()) {
+            // erasure would yield the bound (e.g. Comparable for T extends Comparable<T>), so compare the variable name
+            return !scopeType.describe().equals(getScope().toString());
+        }
+        return !scopeType.erasure().describe().endsWith(getScope().toString());
     }
 }
