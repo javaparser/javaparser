@@ -28,9 +28,12 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -80,5 +83,33 @@ class MethodReferenceArrayScopeTest {
 
         assertEquals(
                 "java.lang.String[]", scopeType.asArrayType().getComponentType().describe());
+    }
+
+    private static MethodUsage resolveUnbound(MethodReferenceExpr expr) {
+        ResolvedType receiver = expr.getScope().calculateResolvedType();
+        return JavaParserFacade.get(new ReflectionTypeSolver())
+                .toMethodUsage(expr, Collections.singletonList(receiver));
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+            delimiter = '|',
+            value = {"int[]::clone | int[]", "int[][]::clone | int[][]", "String[]::clone | java.lang.String[]"})
+    void cloneOfArrayReturnsTheArrayType(String methodReference, String expectedReturnType) {
+        MethodUsage usage = resolveUnbound(parse(methodReference));
+
+        assertEquals("clone", usage.getName());
+        assertEquals(expectedReturnType, usage.returnType().describe(), methodReference);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"int[]::hashCode", "String[]::toString", "int[]::getClass"})
+    void arrayHasTheMethodsOfObject(String methodReference) {
+        MethodReferenceExpr expr = parse(methodReference);
+
+        MethodUsage usage = resolveUnbound(expr);
+
+        assertEquals(expr.getIdentifier(), usage.getName());
+        assertEquals("java.lang.Object", usage.declaringType().getQualifiedName());
     }
 }
