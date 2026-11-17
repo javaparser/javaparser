@@ -22,11 +22,13 @@
 package com.github.javaparser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.utils.LineSeparator;
+import java.time.Duration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -183,5 +185,40 @@ class JavadocParserTest {
     @Test
     void startsWithAsteriskAfterSpaces() {
         assertEquals(3, JavadocParser.startsWithAsteriskOrMdSlash("   * ciao"));
+    }
+
+    @Test
+    void blankLinesBetweenBlockTagsAreNotPartOfTheTag() {
+        String eol = LineSeparator.SYSTEM.asRawString();
+        Javadoc javadoc =
+                JavadocParser.parse(" * @param a first" + eol + " *" + eol + " *" + eol + " * @param b second");
+        assertEquals(2, javadoc.getBlockTags().size());
+        assertEquals(
+                JavadocBlockTag.createParamBlockTag("a", "first"),
+                javadoc.getBlockTags().get(0));
+        assertEquals(
+                JavadocBlockTag.createParamBlockTag("b", "second"),
+                javadoc.getBlockTags().get(1));
+    }
+
+    @Test
+    void longWhitespaceRunsParseInLinearTime() {
+        String eol = LineSeparator.SYSTEM.asRawString();
+        StringBuilder blankLines = new StringBuilder(" * @param a first");
+        for (int i = 0; i < 100_000; i++) {
+            blankLines.append(eol);
+        }
+        blankLines.append(" x");
+        StringBuilder trailingSpaces = new StringBuilder(" description");
+        for (int i = 0; i < 200_000; i++) {
+            trailingSpaces.append(' ');
+        }
+        trailingSpaces.append(eol).append(" * @return x");
+        Javadoc tags =
+                assertTimeoutPreemptively(Duration.ofSeconds(10), () -> JavadocParser.parse(blankLines.toString()));
+        Javadoc description =
+                assertTimeoutPreemptively(Duration.ofSeconds(10), () -> JavadocParser.parse(trailingSpaces.toString()));
+        assertEquals(1, tags.getBlockTags().size());
+        assertEquals("description", description.getDescription().toText());
     }
 }
