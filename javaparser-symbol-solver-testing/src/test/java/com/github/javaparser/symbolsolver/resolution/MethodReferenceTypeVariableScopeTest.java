@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -46,12 +47,24 @@ class MethodReferenceTypeVariableScopeTest {
 
     private static final ReflectionTypeSolver TYPE_SOLVER = new ReflectionTypeSolver();
 
+    private static final String IMPORTS =
+            "import java.util.*; import java.util.function.*; import java.util.stream.*; ";
+
     private static MethodReferenceExpr parse(String code) {
         ParserConfiguration configuration =
                 new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(TYPE_SOLVER));
         CompilationUnit cu =
-                new JavaParser(configuration).parse(code).getResult().get();
+                new JavaParser(configuration).parse(IMPORTS + code).getResult().get();
         return cu.findFirst(MethodReferenceExpr.class).get();
+    }
+
+    private static MethodCallExpr parseMapCall(String code) {
+        ParserConfiguration configuration =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(TYPE_SOLVER));
+        CompilationUnit cu =
+                new JavaParser(configuration).parse(IMPORTS + code).getResult().get();
+        return cu.findFirst(MethodCallExpr.class, c -> c.getNameAsString().equals("map"))
+                .get();
     }
 
     private static void assertTypeVariableScope(MethodReferenceExpr expr, String name) {
@@ -67,14 +80,14 @@ class MethodReferenceTypeVariableScopeTest {
     @Test
     void methodTypeParameter() {
         MethodReferenceExpr expr =
-                parse("class Test { <T extends Comparable<T>> void m() { Object o = T::compareTo; } }");
+                parse("class Test { <T extends Comparable<T>> void m() { Comparator<T> c = T::compareTo; } }");
 
         assertTypeVariableScope(expr, "T");
     }
 
     @Test
     void unboundedMethodTypeParameter() {
-        MethodReferenceExpr expr = parse("class Test { <T> void m() { Object o = T::toString; } }");
+        MethodReferenceExpr expr = parse("class Test { <T> void m() { Function<T, String> f = T::toString; } }");
 
         assertTypeVariableScope(expr, "T");
     }
@@ -82,22 +95,23 @@ class MethodReferenceTypeVariableScopeTest {
     @Test
     void classTypeParameter() {
         MethodReferenceExpr expr =
-                parse("class Test<T extends Comparable<T>> { void m() { Object o = T::compareTo; } }");
+                parse("class Test<T extends Comparable<T>> { void m() { Comparator<T> c = T::compareTo; } }");
 
         assertTypeVariableScope(expr, "T");
     }
 
     @Test
     void constructorTypeParameter() {
-        MethodReferenceExpr expr = parse("class Test { <T extends Number> Test() { Object o = T::intValue; } }");
+        MethodReferenceExpr expr =
+                parse("class Test { <T extends Number> Test() { Function<T, Integer> f = T::intValue; } }");
 
         assertTypeVariableScope(expr, "T");
     }
 
     @Test
     void typeParameterOfEnclosingClassUsedInNestedClass() {
-        MethodReferenceExpr expr =
-                parse("class Test<T extends Comparable<T>> { class Inner { void m() { Object o = T::compareTo; } } }");
+        MethodReferenceExpr expr = parse(
+                "class Test<T extends Comparable<T>> { class Inner { void m() { Comparator<T> c = T::compareTo; } } }");
 
         assertTypeVariableScope(expr, "T");
     }
@@ -105,7 +119,7 @@ class MethodReferenceTypeVariableScopeTest {
     @Test
     void multiLetterTypeParameter() {
         MethodReferenceExpr expr =
-                parse("class Test { <Elem extends Number> void m() { Object o = Elem::intValue; } }");
+                parse("class Test { <Elem extends Number> void m() { Function<Elem, Integer> f = Elem::intValue; } }");
 
         assertTypeVariableScope(expr, "Elem");
     }
@@ -113,7 +127,8 @@ class MethodReferenceTypeVariableScopeTest {
     @Test
     void typeParameterShadowingClassName() {
         // the type parameter T hides the class T, so T::hashCode refers to the type variable
-        MethodReferenceExpr expr = parse("class T { } class Test { <T> void m() { Object o = T::hashCode; } }");
+        MethodReferenceExpr expr =
+                parse("class T { } class Test { <T> void m() { Function<T, Integer> f = T::hashCode; } }");
 
         assertTypeVariableScope(expr, "T");
     }
@@ -129,7 +144,8 @@ class MethodReferenceTypeVariableScopeTest {
 
     @Test
     void resolvesMethodOfBound() {
-        MethodReferenceExpr expr = parse("class Test { <T extends Number> void m() { Object o = T::intValue; } }");
+        MethodReferenceExpr expr =
+                parse("class Test { <T extends Number> void m() { Function<T, Integer> f = T::intValue; } }");
 
         MethodUsage usage = resolveAsUsage(expr);
 
@@ -140,7 +156,7 @@ class MethodReferenceTypeVariableScopeTest {
     @Test
     void resolvesMethodOfParameterizedBound() {
         MethodReferenceExpr expr =
-                parse("class Test { <T extends Comparable<T>> void m() { Object o = T::compareTo; } }");
+                parse("class Test { <T extends Comparable<T>> void m() { Comparator<T> c = T::compareTo; } }");
 
         MethodUsage usage = resolveAsUsage(expr, expr.getScope().calculateResolvedType());
 
@@ -150,7 +166,7 @@ class MethodReferenceTypeVariableScopeTest {
 
     @Test
     void resolvesObjectMethodOfUnboundedTypeVariable() {
-        MethodReferenceExpr expr = parse("class Test { <T> void m() { Object o = T::toString; } }");
+        MethodReferenceExpr expr = parse("class Test { <T> void m() { Function<T, String> f = T::toString; } }");
 
         MethodUsage usage = resolveAsUsage(expr);
 
@@ -160,9 +176,9 @@ class MethodReferenceTypeVariableScopeTest {
 
     @Test
     void resolvesMethodsOfEveryBoundOfIntersection() {
-        String code = "class Test { <T extends Number & Comparable<T>> void m() { Object o = T::%s; } }";
-        MethodReferenceExpr intValue = parse(String.format(code, "intValue"));
-        MethodReferenceExpr compareTo = parse(String.format(code, "compareTo"));
+        String code = "class Test { <T extends Number & Comparable<T>> void m() { %s f = T::%s; } }";
+        MethodReferenceExpr intValue = parse(String.format(code, "Function<T, Integer>", "intValue"));
+        MethodReferenceExpr compareTo = parse(String.format(code, "Comparator<T>", "compareTo"));
 
         MethodUsage intValueUsage = resolveAsUsage(intValue);
         MethodUsage compareToUsage =
@@ -174,8 +190,8 @@ class MethodReferenceTypeVariableScopeTest {
 
     @Test
     void resolvesMethodOfBoundThatIsAnotherTypeVariable() {
-        MethodReferenceExpr expr =
-                parse("class Test { <U extends Number, T extends U> void m() { Object o = T::intValue; } }");
+        MethodReferenceExpr expr = parse(
+                "class Test { <U extends Number, T extends U> void m() { Function<T, Integer> f = T::intValue; } }");
 
         MethodUsage usage = resolveAsUsage(expr);
 
@@ -185,9 +201,40 @@ class MethodReferenceTypeVariableScopeTest {
 
     @Test
     void methodNotInBoundIsNotResolved() {
-        MethodReferenceExpr expr = parse("class Test { <T extends Number> void m() { Object o = T::length; } }");
+        MethodReferenceExpr expr =
+                parse("class Test { <T extends Number> void m() { Function<T, Integer> f = T::length; } }");
 
         assertThrows(RuntimeException.class, () -> resolveAsUsage(expr));
+    }
+
+    @Test
+    void streamMapWithTypeVariableScopeBoundedByNumber() {
+        MethodCallExpr call = parseMapCall(
+                "class Test { <T extends Number> Stream<Integer> m(List<T> l) { return l.stream().map(T::intValue); } }");
+
+        assertEquals(
+                "java.util.stream.Stream<java.lang.Integer>",
+                call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void streamMapWithTypeVariableScopeBoundedByCollection() {
+        MethodCallExpr call = parseMapCall(
+                "class Test { <T extends Collection<String>> Stream<Integer> m(List<T> l) { return l.stream().map(T::size); } }");
+
+        assertEquals(
+                "java.util.stream.Stream<java.lang.Integer>",
+                call.calculateResolvedType().describe());
+    }
+
+    @Test
+    void streamMapWithTypeVariableScopeUsingObjectMethod() {
+        MethodCallExpr call =
+                parseMapCall("class Test { <T> Stream<String> m(List<T> l) { return l.stream().map(T::toString); } }");
+
+        assertEquals(
+                "java.util.stream.Stream<java.lang.String>",
+                call.calculateResolvedType().describe());
     }
 
     @Test
@@ -197,7 +244,8 @@ class MethodReferenceTypeVariableScopeTest {
         assertThrows(
                 AssertionError.class,
                 () -> {
-                    MethodReferenceExpr expr = parse("class Test { <T> void m(String T) { Object o = T::length; } }");
+                    MethodReferenceExpr expr =
+                            parse("class Test { <T> void m(String T) { Supplier<Integer> f = T::length; } }");
 
                     assertFalse(expr.getScope().isTypeExpr()
                             && expr.getScope().calculateResolvedType().isTypeVariable());
