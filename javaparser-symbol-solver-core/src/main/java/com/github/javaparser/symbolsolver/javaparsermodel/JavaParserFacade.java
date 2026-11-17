@@ -465,6 +465,48 @@ public class JavaParserFacade {
         });
     }
 
+    /**
+     * The member methods of the type to search for a method reference (JLS §15.13.1).
+     * <ul>
+     *   <li>reference type: its declared and inherited methods;</li>
+     *   <li>type variable: the methods of the intersection of its bounds (JLS §4.4), or of Object if it has none;</li>
+     *   <li>array type: the methods of Object, where clone() is public and returns the array type (JLS §10.7).</li>
+     * </ul>
+     */
+    private Set<MethodUsage> getMethodsOfScopeType(ResolvedType type) {
+        if (type.isReferenceType()) {
+            return type.asReferenceType().getAllMethodsAsUsages();
+        }
+        if (type.isTypeVariable()) {
+            Set<MethodUsage> methods = new LinkedHashSet<>();
+            boolean hasBound = false;
+            for (ResolvedTypeParameterDeclaration.Bound bound :
+                    type.asTypeVariable().asTypeParameter().getBounds()) {
+                if (bound.isExtends()) {
+                    hasBound = true;
+                    methods.addAll(getMethodsOfScopeType(bound.getType()));
+                }
+            }
+            if (!hasBound) {
+                methods.addAll(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()).getAllMethodsAsUsages());
+            }
+            return methods;
+        }
+        if (type.isArray()) {
+            Set<MethodUsage> methods = new LinkedHashSet<>();
+            for (MethodUsage method :
+                    new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()).getAllMethodsAsUsages()) {
+                methods.add(
+                        method.getName().equals("clone") && method.getNoParams() == 0
+                                ? method.replaceReturnType(type)
+                                : method);
+            }
+            return methods;
+        }
+        throw new UnsupportedOperationException("Cannot resolve method reference on non-reference type: "
+                + type.getClass().getCanonicalName());
+    }
+
     public MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
         // JLS §15.13.1: "A method reference expression consists of a ReferenceType or Primary,
         // followed by :: and a method name."
@@ -472,8 +514,19 @@ public class JavaParserFacade {
         Expression scope = methodReferenceExpr.getScope();
         ResolvedType typeOfScope = getType(scope);
 
-        // JLS §15.13.1: The scope must be a reference type
-        if (!typeOfScope.isReferenceType()) {
+        /**
+         * MethodReference:
+         *   ExpressionName :: [TypeArguments] Identifier
+         *   Primary :: [TypeArguments] Identifier
+         *   ReferenceType :: [TypeArguments] Identifier
+         *   super :: [TypeArguments] Identifier
+         *   TypeName . super :: [TypeArguments] Identifier
+         *   ClassType :: [TypeArguments] new
+         *   ArrayType :: new
+         *
+         * The type of scope must therefore be a reference type, type variable, or array type.
+         */
+        if (!typeOfScope.isReferenceType() && !typeOfScope.isTypeVariable() && !typeOfScope.isArray()) {
             throw new UnsupportedOperationException("Cannot resolve method reference on non-reference type: "
                     + typeOfScope.getClass().getCanonicalName());
         }
@@ -486,7 +539,7 @@ public class JavaParserFacade {
         // arguments already substituted, so e.g. Class<Sub>::cast reports Sub rather than the type
         // variable T. This lets poly inference for pipelines like list.stream().map(Sub.class::cast)
         // refine Stream<Base> to Stream<Sub> without any consumer-side compensation (see #4989, #5080).
-        Set<MethodUsage> allMethods = typeOfScope.asReferenceType().getAllMethodsAsUsages();
+        Set<MethodUsage> allMethods = getMethodsOfScopeType(typeOfScope);
         String methodName = methodReferenceExpr.getIdentifier();
 
         // Filter methods by name.
@@ -522,7 +575,7 @@ public class JavaParserFacade {
         //            → The receiver is foo (already bound at reference creation time)
         Optional<MethodUsage> result;
 
-        if (scope.isTypeExpr() && typeOfScope.isReferenceType() && !methodReferenceExpr.isScopePrimaryExpr()) {
+        if (scope.isTypeExpr() && !methodReferenceExpr.isScopePrimaryExpr()) {
             // JLS §15.13.1: "If the method reference expression has the form ReferenceType ::
             // [TypeArguments] Identifier, the potentially applicable methods are:"
             //
