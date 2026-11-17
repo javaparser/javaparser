@@ -32,6 +32,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -204,7 +205,7 @@ class MethodReferenceTypeVariableScopeTest {
         MethodReferenceExpr expr =
                 parse("class Test { <T extends Number> void m() { Function<T, Integer> f = T::length; } }");
 
-        assertThrows(RuntimeException.class, () -> resolveAsUsage(expr));
+        assertThrows(UnsolvedSymbolException.class, () -> resolveAsUsage(expr));
     }
 
     @Test
