@@ -31,11 +31,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.resolution.*;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
-import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
@@ -240,98 +238,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 }
                 throw new UnsolvedSymbolException(scope.toString(), wrappedNode.toString(), e);
             }
-            if (typeOfScope.isWildcard()) {
-                if (typeOfScope.asWildcard().isExtends()
-                        || typeOfScope.asWildcard().isSuper()) {
-                    return singletonList(
-                            typeOfScope.asWildcard().getBoundedType().asReferenceType());
-                }
-                return singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
-            }
-            if (typeOfScope.isArray()) {
-                // method call on array are Object methods
-                return singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
-            }
-            if (typeOfScope.isTypeVariable()) {
-                Collection<ResolvedReferenceType> result = new ArrayList<>();
-                for (ResolvedTypeParameterDeclaration.Bound bound :
-                        typeOfScope.asTypeParameter().getBounds()) {
-                    result.add(bound.getType().asReferenceType());
-                }
-                return result;
-            }
-            if (typeOfScope.isConstraint()) {
-                // A ResolvedLambdaConstraintType wraps the inferred bound of an implicit lambda
-                // parameter, e.g. when resolving `a` in `Comparator.comparing(a -> a.getName())`.
-                // We need the type declaration of the bound so that method lookups (like getName())
-                // can proceed.
-                ResolvedType type = typeOfScope.asConstraintType().getBound();
-                if (type.isReferenceType()) {
-                    // Common case: the bound is a fully-resolved reference type, e.g. `A`.
-                    return singletonList(type.asReferenceType());
-                }
-                if (type.isTypeVariable()) {
-                    // The bound is still an unresolved type variable (e.g. `T` in
-                    // `Comparator.comparing` when no outer context inference was possible).
-                    // The best we can do is use the type variable's explicit upper bounds;
-                    // if the variable is unconstrained (declared as plain `T`), we fall back
-                    // to Object, which is Java's implicit upper bound for all type parameters.
-                    Collection<ResolvedReferenceType> result = new ArrayList<>();
-                    for (ResolvedTypeParameterDeclaration.Bound bound :
-                            type.asTypeParameter().getBounds()) {
-                        result.add(bound.getType().asReferenceType());
-                    }
-                    if (result.isEmpty()) {
-                        result.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
-                    }
-                    return result;
-                }
-                if (type.isWildcard() && type.asWildcard().isSuper()) {
-                    // The bound is a `? super X` wildcard. This shape arises when
-                    // LambdaExprContext infers the type of a lambda parameter by matching
-                    // the outer call's expected parameter type against the inner static
-                    // method's return type. For example:
-                    //   stream.sorted(Comparator.comparing(a -> a.getName()))
-                    // The inference learns that comparing's Comparator<T> must be a
-                    // Comparator<? super A> (sorted's formal type), so T is registered as
-                    // `? super A`. The constraint bound here is therefore `? super A`, and
-                    // we need A's type declaration to look up `getName()`.
-                    ResolvedType bounded = type.asWildcard().getBoundedType();
-                    if (bounded.isReferenceType()) {
-                        // Normal case: `? super A` where A is a concrete reference type.
-                        return singletonList(bounded.asReferenceType());
-                    }
-                    if (bounded.isTypeVariable()) {
-                        // Edge case: `? super T` where T is itself still an unresolved type
-                        // variable (outer context inference did not fully concretize T).
-                        // Apply the same upper-bound / Object fallback as the plain
-                        // type-variable case above.
-                        Collection<ResolvedReferenceType> result = new ArrayList<>();
-                        for (ResolvedTypeParameterDeclaration.Bound bound :
-                                bounded.asTypeParameter().getBounds()) {
-                            result.add(bound.getType().asReferenceType());
-                        }
-                        if (result.isEmpty()) {
-                            result.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
-                        }
-                        return result;
-                    }
-                }
-                throw new UnsupportedOperationException(
-                        "The type declaration cannot be found on constraint " + type.describe());
-            }
-            if (typeOfScope.isUnionType()) {
-                return typeOfScope
-                        .asUnionType()
-                        .getCommonAncestor()
-                        .filter(commonAncestor ->
-                                commonAncestor.getTypeDeclaration().isPresent())
-                        .map(Collections::singletonList)
-                        .orElseThrow(() -> new UnsolvedSymbolException(
-                                "No common ancestor available for UnionType" + typeOfScope.describe()));
-            }
-
-            return singletonList(typeOfScope.asReferenceType());
+            return JavaParserFacade.get(typeSolver).findReceiverTypes(typeOfScope);
         }
 
         ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);

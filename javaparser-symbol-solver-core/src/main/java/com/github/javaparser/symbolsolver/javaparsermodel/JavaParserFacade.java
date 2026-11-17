@@ -466,45 +466,79 @@ public class JavaParserFacade {
     }
 
     /**
-     * The member methods of the type to search for a method reference (JLS §15.13.1).
-     * <ul>
-     *   <li>reference type: its declared and inherited methods;</li>
-     *   <li>type variable: the methods of the intersection of its bounds (JLS §4.4), or of Object if it has none;</li>
-     *   <li>array type: the methods of Object, where clone() is public and returns the array type (JLS §10.7).</li>
-     * </ul>
+     * The types whose members a call, access or method reference on a scope of type {@code type} looks up.
+     * <p>
+     * The type is reduced to the type(s) carrying the members: the bound of a wildcard, of a type variable (followed
+     * through type variables bounding type variables) or of a lambda parameter constraint, {@code Object} for an
+     * array, an unbounded wildcard or an unbounded type variable, and the common ancestor of a union type. The type
+     * arguments are kept, e.g. {@code Box<String>} for {@code ? extends Box<String>}. Several types are returned for
+     * a type variable bounded by an intersection (JLS §4.4).
      */
-    private Set<MethodUsage> getMethodsOfScopeType(ResolvedType type) {
+    public Collection<ResolvedReferenceType> findReceiverTypes(ResolvedType type) {
         if (type.isReferenceType()) {
-            return type.asReferenceType().getAllMethodsAsUsages();
+            return Collections.singletonList(type.asReferenceType());
         }
-        if (type.isTypeVariable()) {
-            Set<MethodUsage> methods = new LinkedHashSet<>();
-            boolean hasBound = false;
-            for (ResolvedTypeParameterDeclaration.Bound bound :
-                    type.asTypeVariable().asTypeParameter().getBounds()) {
-                if (bound.isExtends()) {
-                    hasBound = true;
-                    methods.addAll(getMethodsOfScopeType(bound.getType()));
-                }
+        if (type.isWildcard()) {
+            if (type.asWildcard().isExtends() || type.asWildcard().isSuper()) {
+                return findReceiverTypes(type.asWildcard().getBoundedType());
             }
-            if (!hasBound) {
-                methods.addAll(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()).getAllMethodsAsUsages());
-            }
-            return methods;
+            return Collections.singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
         }
         if (type.isArray()) {
-            Set<MethodUsage> methods = new LinkedHashSet<>();
-            for (MethodUsage method :
-                    new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()).getAllMethodsAsUsages()) {
-                methods.add(
+            // members of an array are those of Object
+            return Collections.singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+        }
+        if (type.isTypeVariable()) {
+            Collection<ResolvedReferenceType> result = new ArrayList<>();
+            for (ResolvedTypeParameterDeclaration.Bound bound :
+                    type.asTypeParameter().getBounds()) {
+                result.addAll(findReceiverTypes(bound.getType()));
+            }
+            if (result.isEmpty()) {
+                // Object is the implicit upper bound of every type variable
+                result.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+            }
+            return result;
+        }
+        if (type.isConstraint()) {
+            // A ResolvedLambdaConstraintType wraps the inferred bound of an implicit lambda parameter, e.g. `a`
+            // in `Comparator.comparing(a -> a.getName())`; the bound may be `? super A` or a type variable.
+            return findReceiverTypes(type.asConstraintType().getBound());
+        }
+        if (type.isUnionType()) {
+            return type.asUnionType()
+                    .getCommonAncestor()
+                    .filter(commonAncestor ->
+                            commonAncestor.getTypeDeclaration().isPresent())
+                    .map(Collections::singletonList)
+                    .orElseThrow(() -> new UnsolvedSymbolException(
+                            "No common ancestor available for UnionType" + type.describe()));
+        }
+        throw new UnsupportedOperationException("Cannot resolve members of non-reference type: "
+                + type.getClass().getCanonicalName());
+    }
+
+    /**
+     * The member methods of the type to search for a method reference (JLS §15.13.1): the declared and inherited
+     * methods of {@link #findReceiverTypes(ResolvedType)}, where for an array clone() is public and returns the
+     * array type (JLS §10.7).
+     */
+    private Set<MethodUsage> getMethodsOfScopeType(ResolvedType type) {
+        Set<MethodUsage> methods = new LinkedHashSet<>();
+        for (ResolvedReferenceType receiver : findReceiverTypes(type)) {
+            methods.addAll(receiver.getAllMethodsAsUsages());
+        }
+        if (type.isArray()) {
+            Set<MethodUsage> arrayMethods = new LinkedHashSet<>();
+            for (MethodUsage method : methods) {
+                arrayMethods.add(
                         method.getName().equals("clone") && method.getNoParams() == 0
                                 ? method.replaceReturnType(type)
                                 : method);
             }
-            return methods;
+            return arrayMethods;
         }
-        throw new UnsupportedOperationException("Cannot resolve method reference on non-reference type: "
-                + type.getClass().getCanonicalName());
+        return methods;
     }
 
     public MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
@@ -526,10 +560,6 @@ public class JavaParserFacade {
          *
          * The type of scope must therefore be a reference type, type variable, or array type.
          */
-        if (!typeOfScope.isReferenceType() && !typeOfScope.isTypeVariable() && !typeOfScope.isArray()) {
-            throw new UnsupportedOperationException("Cannot resolve method reference on non-reference type: "
-                    + typeOfScope.getClass().getCanonicalName());
-        }
 
         // JLS §15.12.2.1: "Identify Potentially Applicable Methods"
         // "The class or interface determined by compile-time step 1 (§15.12.1) is searched
