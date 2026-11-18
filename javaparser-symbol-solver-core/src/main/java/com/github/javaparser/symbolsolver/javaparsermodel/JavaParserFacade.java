@@ -548,18 +548,16 @@ public class JavaParserFacade {
         Expression scope = methodReferenceExpr.getScope();
         ResolvedType typeOfScope = getType(scope);
 
-        /**
-         * MethodReference:
-         *   ExpressionName :: [TypeArguments] Identifier
-         *   Primary :: [TypeArguments] Identifier
-         *   ReferenceType :: [TypeArguments] Identifier
-         *   super :: [TypeArguments] Identifier
-         *   TypeName . super :: [TypeArguments] Identifier
-         *   ClassType :: [TypeArguments] new
-         *   ArrayType :: new
-         *
-         * The type of scope must therefore be a reference type, type variable, or array type.
-         */
+        // MethodReference:
+        //   ExpressionName :: [TypeArguments] Identifier
+        //   Primary :: [TypeArguments] Identifier
+        //   ReferenceType :: [TypeArguments] Identifier
+        //   super :: [TypeArguments] Identifier
+        //   TypeName . super :: [TypeArguments] Identifier
+        //   ClassType :: [TypeArguments] new
+        //   ArrayType :: new
+        //
+        // Unsupported scope types are rejected by findReceiverTypes() in getMethodsOfScopeType().
 
         // JLS §15.12.2.1: "Identify Potentially Applicable Methods"
         // "The class or interface determined by compile-time step 1 (§15.12.1) is searched
