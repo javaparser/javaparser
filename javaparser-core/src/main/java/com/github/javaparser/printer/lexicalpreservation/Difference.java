@@ -57,7 +57,7 @@ public class Difference {
     /**
      * The original elements of the NodeText being modified.
      *
-     * This is the live list returned by {@code nodeText.getElements()},
+     * <p>This is the live list returned by {@code nodeText.getElements()},
      * not a copy. Changes made through {@code nodeText} or this list
      * therefore immediately affect the positions of its elements.
      */
@@ -66,7 +66,7 @@ public class Difference {
     /**
      * Current position in {@code originalElements}.
      *
-     * Because {@code originalElements} is a live, mutable list, changes to
+     * <p>Because {@code originalElements} is a live, mutable list, changes to
      * the list can shift elements relative to this index. Consequently,
      * {@code originalIndex} may:
      * <ul>
@@ -82,7 +82,7 @@ public class Difference {
     /**
      * Current position in {@code diffElements}.
      *
-     * This index advances when a difference element has been processed
+     * <p>This index advances when a difference element has been processed
      * or intentionally skipped.
      */
     private int diffIndex = 0;
@@ -313,22 +313,22 @@ public class Difference {
     /**
      * Applies the calculated differences to the original NodeText.
      *
-     * Before applying the differences, the method passes {@code diffElements}
+     * <p>Before applying the differences, the method passes {@code diffElements}
      * through {@link ReshuffledDiffElementExtractor}, which reorders the
      * difference elements based on the original {@code NodeText}.
      *
-     * The method processes two sequences in parallel:
+     * <p>The method processes two sequences in parallel:
      * <ul>
      *     <li>{@code originalElements}, which represents the existing text.</li>
      *     <li>{@code diffElements}, which describes the elements to keep,
      *         remove, or add.</li>
      * </ul>
      *
-     * {@code originalIndex} tracks the current position in the original
+     * <p>{@code originalIndex} tracks the current position in the original
      * elements, while {@code diffIndex} tracks the current difference.
      * Depending on the operation, either cursor or both cursors may advance.
      *
-     * Elements remaining in either sequence are handled by the corresponding
+     * <p>Elements remaining in either sequence are handled by the corresponding
      * leftover-element methods.
      */
     void apply() {
@@ -504,10 +504,11 @@ public class Difference {
      *         Processing continues at the same {@code originalIndex} and
      *         with the same {@code diffIndex}.</li>
      *
-     *     <li><b>Unrelated comments:</b> When a comment is encountered
-     *         before the child being removed but is not associated with it,
-     *         the comment is preserved and {@code originalIndex} advances.
-     *         The same removal is retried against the next original element.</li>
+     *     <li><b>Comments:</b> A comment represented as a child element
+     *         can be preserved by the child-removal logic. A comment
+     *         represented as a token is removed by the
+     *         {@code removed.isChild() && originalElement.isComment()}
+     *         branch without checking which node it belongs to.</li>
      *
      *     <li><b>Matching tokens:</b> When a removed token matches the
      *         original token kind, the original token is removed and
@@ -768,14 +769,16 @@ public class Difference {
      *         corresponding child node, both {@code diffIndex} and
      *         {@code originalIndex} advance.</li>
      *
-     *     <li><b>Generic type:</b> For {@code List<String> names;}, the kept
-     *         type can be represented as one child while the original text
-     *         contains separate tokens. When the original element is the
-     *         {@code List} identifier and the kept child has type arguments,
-     *         the generic-type branch advances {@code diffIndex}, skips the
-     *         three subsequent tokens {@code <}, {@code String}, and
-     *         {@code >}. It then advances {@code originalIndex} past
-     *         the complete type.</li>
+     *     <li><b>Unqualified generic type:</b> For
+     *         {@code List<String> names;}, the kept type can be represented
+     *         as one child while the original text contains separate tokens.
+     *         When the original element is the {@code List} identifier and
+     *         the kept child has type arguments, the generic-type branch
+     *         advances {@code diffIndex}, skips the three subsequent tokens
+     *         {@code <}, {@code String}, and {@code >}, and advances
+     *         {@code originalIndex} past the complete type. This description
+     *         applies to unqualified generic types, not fully qualified
+     *         generic types.</li>
      *
      *     <li><b>Generic type without following arguments:</b> For
      *         {@code List names;}, the original {@code List} identifier is
