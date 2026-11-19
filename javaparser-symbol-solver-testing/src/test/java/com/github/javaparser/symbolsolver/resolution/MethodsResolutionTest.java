@@ -25,6 +25,7 @@ import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -36,6 +37,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -951,5 +953,103 @@ class MethodsResolutionTest extends AbstractResolutionTest {
 
         assertDoesNotThrow(callExpr::calculateResolvedType);
         assertEquals("java.lang.String", callExpr.calculateResolvedType().describe());
+    }
+
+    private static ResolvedMethodDeclaration resolveCallWithTypeVariableReceiver(String code, String methodName) {
+        ParserConfiguration configuration =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit cu = new JavaParser(configuration)
+                .parse("import java.util.*; " + code)
+                .getResult()
+                .get();
+        MethodCallExpr call = cu.findFirst(
+                        MethodCallExpr.class, c -> c.getNameAsString().equals(methodName))
+                .get();
+        return call.resolve();
+    }
+
+    @Test
+    void typeVariableReceiver_methodOfBound() {
+        ResolvedMethodDeclaration lengthMethod = resolveCallWithTypeVariableReceiver(
+                "class Test { <T extends CharSequence> int m(T t) { return t.length(); } }", "length");
+
+        assertEquals("length", lengthMethod.getName());
+        assertEquals("java.lang.CharSequence", lengthMethod.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void typeVariableReceiver_methodOfBoundThatIsAnotherTypeVariable() {
+        ResolvedMethodDeclaration lengthMethod = resolveCallWithTypeVariableReceiver(
+                "class Test { <U extends CharSequence, T extends U> int m(T t) { return t.length(); } }", "length");
+
+        assertEquals("length", lengthMethod.getName());
+        assertEquals("java.lang.CharSequence", lengthMethod.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void typeVariableReceiver_methodOfBoundOfWildcardBoundedByTypeVariable() {
+        // List<? extends T>.get(0) has the type `? extends T`, whose members are those of T's bound
+        ResolvedMethodDeclaration lengthMethod = resolveCallWithTypeVariableReceiver(
+                "class Test { <T extends CharSequence> int m(List<? extends T> l) { return l.get(0).length(); } }",
+                "length");
+
+        assertEquals("length", lengthMethod.getName());
+        assertEquals("java.lang.CharSequence", lengthMethod.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void typeVariableReceiver_methodOfBoundOfWildcardBoundedByTypeVariableWithTypeVariableBound() {
+        ResolvedMethodDeclaration lengthMethod = resolveCallWithTypeVariableReceiver(
+                "class Test { <U extends CharSequence, T extends U> int m(List<? extends T> l) { return l.get(0).length(); } }",
+                "length");
+
+        assertEquals("length", lengthMethod.getName());
+        assertEquals("java.lang.CharSequence", lengthMethod.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void typeVariableReceiver_methodOfEveryBoundOfIntersection() {
+        String code = "class Test { <T extends Number & Comparable<T>> void m(T t) { t.%s; } }";
+
+        ResolvedMethodDeclaration intValue =
+                resolveCallWithTypeVariableReceiver(String.format(code, "intValue()"), "intValue");
+        ResolvedMethodDeclaration compareTo =
+                resolveCallWithTypeVariableReceiver(String.format(code, "compareTo(t)"), "compareTo");
+
+        assertEquals("java.lang.Number", intValue.declaringType().getQualifiedName());
+        assertEquals("java.lang.Comparable", compareTo.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void typeVariableReceiver_objectMethodOfTypeVariableWithOnlyInterfaceBounds() {
+        // CharSequence declares toString() itself, so it is found there rather than in Object
+        ResolvedMethodDeclaration toString = resolveCallWithTypeVariableReceiver(
+                "class Test { <T extends CharSequence> String m(T t) { return t.toString(); } }", "toString");
+        ResolvedMethodDeclaration hashCode = resolveCallWithTypeVariableReceiver(
+                "class Test { <T extends Runnable> int m(T t) { return t.hashCode(); } }", "hashCode");
+
+        assertEquals("java.lang.CharSequence", toString.declaringType().getQualifiedName());
+        assertEquals("java.lang.Object", hashCode.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void typeVariableReceiver_objectMethodOfUnboundedTypeVariable() {
+        ResolvedMethodDeclaration hashCodeMethod = resolveCallWithTypeVariableReceiver(
+                "class Test { <T> int m(T t) { return t.hashCode(); } }", "hashCode");
+        assertEquals("hashCode", hashCodeMethod.getName());
+        assertEquals("java.lang.Object", hashCodeMethod.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void typeVariableReceiver_methodNotInBoundIsNotResolved() {
+        assertThrows(
+                UnsolvedSymbolException.class,
+                () -> resolveCallWithTypeVariableReceiver(
+                        "class Test { <T extends CharSequence> int m(T t) { return t.intValue(); } }", "intValue"));
+        assertThrows(
+                UnsolvedSymbolException.class,
+                () -> resolveCallWithTypeVariableReceiver(
+                        "class Test { <T extends CharSequence> int m(List<? extends T> l) { return l.get(0).intValue(); } }",
+                        "intValue"));
     }
 }
