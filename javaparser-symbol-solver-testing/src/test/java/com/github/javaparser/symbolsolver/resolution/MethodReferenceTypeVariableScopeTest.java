@@ -155,14 +155,21 @@ class MethodReferenceTypeVariableScopeTest {
     }
 
     @Test
-    void resolvesMethodOfParameterizedBound() {
-        MethodReferenceExpr expr =
-                parse("class Test { <T extends Comparable<T>> void m() { Comparator<T> c = T::compareTo; } }");
+    void typeVariableWithInterfaceTypeHasObjectMethods() {
+        String code = "class Test { <T extends Comparable<T>> void m() { %s c = T::%s; } }";
 
-        MethodUsage usage = resolveAsUsage(expr, expr.getScope().calculateResolvedType());
+        MethodReferenceExpr compareTo = parse(String.format(code, "Comparator<T>", "compareTo"));
+        MethodReferenceExpr toString = parse(String.format(code, "Function<T, String>", "toString"));
 
-        assertEquals("compareTo", usage.getName());
-        assertEquals("java.lang.Comparable", usage.declaringType().getQualifiedName());
+        MethodUsage compareToUsage =
+                resolveAsUsage(compareTo, compareTo.getScope().calculateResolvedType());
+        MethodUsage toStringUsage = resolveAsUsage(toString);
+
+        assertEquals("compareTo", compareToUsage.getName());
+        assertEquals("java.lang.Comparable", compareToUsage.declaringType().getQualifiedName());
+
+        assertEquals("toString", toStringUsage.getName());
+        assertEquals("java.lang.Object", toStringUsage.declaringType().getQualifiedName());
     }
 
     @Test

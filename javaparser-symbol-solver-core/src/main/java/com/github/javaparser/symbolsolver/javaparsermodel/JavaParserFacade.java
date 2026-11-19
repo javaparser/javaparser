@@ -494,8 +494,12 @@ public class JavaParserFacade {
                     type.asTypeParameter().getBounds()) {
                 result.addAll(findReceiverTypes(bound.getType()));
             }
-            if (result.isEmpty()) {
-                // Object is the implicit upper bound of every type variable
+            // Object is the implicit upper bound of every type variable, unless one of the bounds is a class
+            // (which then has Object as a superclass). With no bounds, or only interface bounds, add it explicitly.
+            boolean hasClassBound = result.stream()
+                    .map(ResolvedReferenceType::getTypeDeclaration)
+                    .anyMatch(decl -> decl.isPresent() && !decl.get().isInterface());
+            if (!hasClassBound) {
                 result.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
             }
             return result;
