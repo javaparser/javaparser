@@ -26,11 +26,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class SourceZipTest {
 
@@ -82,5 +87,21 @@ class SourceZipTest {
     @Test
     void fileAsZipIsNotAllowed() {
         assertThrows(IOException.class, () -> new SourceZip(testDir.resolve("test.txt")).parse());
+    }
+
+    @Test
+    void entryOutsideOfTheZipRootIsNotAllowed(@TempDir Path tempDir) throws IOException {
+        for (String entryName : new String[] {"../../evil/Evil.java", "a/../../Evil.java", "/tmp/Evil.java"}) {
+            Path zip = tempDir.resolve("evil" + Math.abs(entryName.hashCode()) + ".zip");
+            try (ZipOutputStream out = new ZipOutputStream(Files.newOutputStream(zip))) {
+                out.putNextEntry(new ZipEntry(entryName));
+                out.write("class Evil {}".getBytes(StandardCharsets.UTF_8));
+                out.closeEntry();
+            }
+            List<Path> paths = new ArrayList<>();
+            assertThrows(
+                    IOException.class, () -> new SourceZip(zip).parse((path, result) -> paths.add(path)), entryName);
+            assertTrue(paths.isEmpty(), entryName);
+        }
     }
 }
