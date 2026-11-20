@@ -71,11 +71,17 @@ public final class StringEscapeUtils {
      * @return a new unescaped {@code String}, {@code null} if null string input
      */
     public static String unescapeJava(final String input) {
-        return UNESCAPE_JAVA.translate(input);
+        if (input == null) {
+            return null;
+        }
+        return UNESCAPE_JAVA.translate(UNESCAPE_UNICODE.translate(input));
     }
 
     public static String unescapeJavaTextBlock(final String input) {
-        return UNESCAPE_JAVA_TEXT_BLOCK.translate(input);
+        if (input == null) {
+            return null;
+        }
+        return UNESCAPE_JAVA_TEXT_BLOCK.translate(UNESCAPE_UNICODE.translate(input));
     }
 
     private static final LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new LookupTranslator(
@@ -87,20 +93,17 @@ public final class StringEscapeUtils {
     private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(
             new LookupTranslator(new String[][] {{"\"", "\\\""}, {"\\", "\\\\"}}), JAVA_CTRL_CHARS_ESCAPE);
 
+    private static final CharSequenceTranslator UNESCAPE_UNICODE = new UnicodeUnescaper();
+
     private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(
-            new OctalUnescaper(),
-            new UnicodeUnescaper(),
-            JAVA_CTRL_CHARS_UNESCAPE,
-            new LookupTranslator(
-                    new String[][] {{"\\\\", "\\"}, {"\\\"", "\""}, {"\\'", "'"}, {"\\", ""}, {"\\s", " "}}));
+            new OctalUnescaper(), JAVA_CTRL_CHARS_UNESCAPE, new LookupTranslator(new String[][] {
+                {"\\\\", "\\"}, {"\\\"", "\""}, {"\\'", "'"}, {"\\", ""}, {"\\s", " "}
+            }));
 
     private static final CharSequenceTranslator UNESCAPE_JAVA_TEXT_BLOCK = new AggregateTranslator(
-            new OctalUnescaper(),
-            new UnicodeUnescaper(),
-            JAVA_CTRL_CHARS_UNESCAPE,
-            new LookupTranslator(
-                    new String[][] {{"\\\\", "\\"}, {"\\\"", "\""}, {"\\'", "'"}, {"\\", ""}, {"\\s", " "}, {"\\\n", ""}
-                    }));
+            new OctalUnescaper(), JAVA_CTRL_CHARS_UNESCAPE, new LookupTranslator(new String[][] {
+                {"\\\\", "\\"}, {"\\\"", "\""}, {"\\'", "'"}, {"\\", ""}, {"\\s", " "}, {"\\\n", ""}
+            }));
 
     /**
      * Adapted from apache commons-lang3 project.
@@ -380,6 +383,15 @@ public final class StringEscapeUtils {
         @Override
         protected int translate(final CharSequence input, final int index, final Writer out) throws IOException {
             if (input.charAt(index) == '\\' && index + 1 < input.length() && input.charAt(index + 1) == 'u') {
+                int precedingBackslashes = 0;
+                int p = index - 1;
+                while (p >= 0 && input.charAt(p) == '\\') {
+                    precedingBackslashes++;
+                    p--;
+                }
+                if ((precedingBackslashes % 2) != 0) {
+                    return 0;
+                }
                 // consume optional additional 'u' chars
                 int i = 2;
                 while (index + i < input.length() && input.charAt(index + i) == 'u') {
