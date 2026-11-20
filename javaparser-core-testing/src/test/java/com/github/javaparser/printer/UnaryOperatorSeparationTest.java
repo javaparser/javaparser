@@ -37,7 +37,7 @@ class UnaryOperatorSeparationTest {
     static Stream<Arguments> signedLiterals() {
         return Stream.of(
                 Arguments.of(new IntegerLiteralExpr(-5), MINUS, "- -5"),
-                Arguments.of(new LongLiteralExpr(-5L), MINUS, "- -5"),
+                Arguments.of(new LongLiteralExpr(-5L), MINUS, "- -5L"),
                 Arguments.of(new LongLiteralExpr("-5L"), MINUS, "- -5L"),
                 Arguments.of(new DoubleLiteralExpr(-1.5), MINUS, "- -1.5"),
                 Arguments.of(new DoubleLiteralExpr(-0.0), MINUS, "- -0.0"),
