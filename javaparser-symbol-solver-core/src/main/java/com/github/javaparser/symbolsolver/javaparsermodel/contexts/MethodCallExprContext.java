@@ -355,7 +355,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 ? methodUsage.getDeclaration().getNumberOfParams() - 1
                 : methodUsage.getDeclaration().getNumberOfParams();
 
-        Map<ResolvedTypeParameterDeclaration, ResolvedType> polyDerivedValues = new HashMap<>();
+        Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> polyDerivedValues = new LinkedHashMap<>();
 
         for (int i = 0; i < Math.min(paramCount, Math.min(argumentsTypes.size(), callArgs.size())); i++) {
             // Identify poly-expression arguments directly from the AST: in solveMethodAsUsage,
@@ -443,14 +443,12 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             }
         }
 
-        for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> entry : polyDerivedValues.entrySet()) {
-            methodUsage = methodUsage.replaceTypeParameter(entry.getKey(), entry.getValue());
-        }
+        methodUsage = replaceTypeParameter(methodUsage, polyDerivedValues);
         return methodUsage;
     }
 
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<ResolvedType> actualParamTypes) {
-        Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters = new HashMap<>();
+        Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> matchedTypeParameters = new LinkedHashMap<>();
 
         if (methodUsage.getDeclaration().hasVariadicParameter()) {
             if (actualParamTypes.size() == methodUsage.getDeclaration().getNumberOfParams()) {
@@ -503,7 +501,6 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 matchTypeParameters(expectedType, actualType, matchedTypeParameters);
             } else if (methodUsage.getDeclaration().getNumberOfParams() == 1) {
                 // In this case the method declares only one parameter which is a variadic parameter.
-                // At this stage we can consider that the actual parameters all have the same type.
                 ResolvedType expectedType = methodUsage
                         .getDeclaration()
                         .getLastParam()
@@ -517,13 +514,14 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                 if (actualParamTypes.isEmpty()) {
                     return methodUsage;
                 }
-                ResolvedType actualType = actualParamTypes.get(actualParamTypes.size() - 1);
-                if (!expectedType.isAssignableBy(actualType)) {
-                    throw new UnsupportedOperationException(String.format(
-                            "Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
-                            expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
+                for (ResolvedType actualType : actualParamTypes) {
+                    if (!expectedType.isAssignableBy(actualType)) {
+                        throw new UnsupportedOperationException(String.format(
+                                "Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                                expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
+                    }
+                    matchTypeParameters(expectedType, actualType, matchedTypeParameters);
                 }
-                matchTypeParameters(expectedType, actualType, matchedTypeParameters);
                 return replaceTypeParameter(methodUsage, matchedTypeParameters);
             } else {
                 return methodUsage;
@@ -549,7 +547,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
      * then the type parameter list is reduced using LUB fonction.
      */
     private MethodUsage replaceTypeParameter(
-            MethodUsage methodUsage, Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
+            MethodUsage methodUsage, Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> matchedTypeParameters) {
         // first group all resolved types by type variable
         Map<String, Set<ResolvedType>> resolvedTypesByTypeVariable =
                 groupResolvedTypeByTypeVariable(matchedTypeParameters);
@@ -557,10 +555,11 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
         Map<String, ResolvedType> reducedResolvedTypesByTypeVariable =
                 reduceResolvedTypesByTypeVariable(resolvedTypesByTypeVariable);
         // then replace resolved type by the reduced type for each type variable
-        convertTypesParameters(matchedTypeParameters, reducedResolvedTypesByTypeVariable);
+        Map<ResolvedTypeParameterDeclaration, ResolvedType> convertedTypesParameters =
+                convertTypesParameters(matchedTypeParameters, reducedResolvedTypesByTypeVariable);
         // finally replace type parameters
-        for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
-            methodUsage = methodUsage.replaceTypeParameter(tp, matchedTypeParameters.get(tp));
+        for (ResolvedTypeParameterDeclaration tp : convertedTypesParameters.keySet()) {
+            methodUsage = methodUsage.replaceTypeParameter(tp, convertedTypesParameters.get(tp));
         }
         return methodUsage;
     }
@@ -568,16 +567,17 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     /*
      * Update the matchedTypeParameters map from the types in reducedResolvedTypesByTypeVariable map.
      */
-    private void convertTypesParameters(
-            Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters,
+    private Map<ResolvedTypeParameterDeclaration, ResolvedType> convertTypesParameters(
+            Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> matchedTypeParameters,
             Map<String, ResolvedType> reducedResolvedTypesByTypeVariable) {
+        Map<ResolvedTypeParameterDeclaration, ResolvedType> converted = new HashMap<>();
         for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
             String typeParameterName = tp.getName();
-            boolean replacement = reducedResolvedTypesByTypeVariable.keySet().contains(typeParameterName);
-            if (replacement) {
-                matchedTypeParameters.put(tp, reducedResolvedTypesByTypeVariable.get(typeParameterName));
+            if (reducedResolvedTypesByTypeVariable.containsKey(typeParameterName)) {
+                converted.put(tp, reducedResolvedTypesByTypeVariable.get(typeParameterName));
             }
         }
+        return converted;
     }
 
     /*
@@ -587,11 +587,11 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
      * must reference v1 (Integer type) and v2 (Double type).
      */
     private Map<String, Set<ResolvedType>> groupResolvedTypeByTypeVariable(
-            Map<ResolvedTypeParameterDeclaration, ResolvedType> typeParameters) {
+            Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> typeParameters) {
         Map<String, Set<ResolvedType>> resolvedTypesByTypeVariable = new HashMap<>();
         for (ResolvedTypeParameterDeclaration tp : typeParameters.keySet()) {
             String typeParameterName = tp.getName();
-            boolean alreadyCollected = resolvedTypesByTypeVariable.keySet().contains(typeParameterName);
+            boolean alreadyCollected = resolvedTypesByTypeVariable.containsKey(typeParameterName);
             if (!alreadyCollected) {
                 Set<ResolvedType> resolvedTypes = findResolvedTypesByTypeVariable(typeParameterName, typeParameters);
                 resolvedTypesByTypeVariable.put(typeParameterName, resolvedTypes);
@@ -604,11 +604,10 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
      * Collect all resolved type from a type variable name
      */
     private Set<ResolvedType> findResolvedTypesByTypeVariable(
-            String typeVariableName, Map<ResolvedTypeParameterDeclaration, ResolvedType> typeParameters) {
-        return typeParameters.keySet().stream()
-                .filter(resolvedTypeParameterDeclaration ->
-                        resolvedTypeParameterDeclaration.getName().equals(typeVariableName))
-                .map(resolvedTypeParameterDeclaration -> typeParameters.get(resolvedTypeParameterDeclaration))
+            String typeVariableName, Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> typeParameters) {
+        return typeParameters.entrySet().stream()
+                .filter(entry -> entry.getKey().getName().equals(typeVariableName))
+                .flatMap(entry -> entry.getValue().stream())
                 .collect(Collectors.toSet());
     }
 
@@ -658,7 +657,7 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
     private void matchTypeParameters(
             ResolvedType expectedType,
             ResolvedType actualType,
-            Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
+            Map<ResolvedTypeParameterDeclaration, Set<ResolvedType>> matchedTypeParameters) {
         if (expectedType.isTypeVariable()) {
             ResolvedType type = actualType;
             // in case of primitive type, the expected type must be compared with the boxed type of the actual type
@@ -681,7 +680,9 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
             if (type.isWildcard()) {
                 ResolvedWildcard wildcard = type.asWildcard();
                 if (wildcard.isBounded()) {
-                    matchedTypeParameters.put(expectedType.asTypeParameter(), wildcard.getBoundedType());
+                    matchedTypeParameters
+                            .computeIfAbsent(expectedType.asTypeParameter(), k -> new LinkedHashSet<>())
+                            .add(wildcard.getBoundedType());
                 }
                 return;
             }
@@ -698,7 +699,9 @@ public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
                             .equals(expectedType.asTypeParameter().getQualifiedName())) {
                 return;
             }
-            matchedTypeParameters.put(expectedType.asTypeParameter(), type);
+            matchedTypeParameters
+                    .computeIfAbsent(expectedType.asTypeParameter(), k -> new LinkedHashSet<>())
+                    .add(type);
         } else if (expectedType.isArray()) {
             // Issue 2258 : NullType must not fail this search
             if (!(actualType.isArray() || actualType.isNull())) {
