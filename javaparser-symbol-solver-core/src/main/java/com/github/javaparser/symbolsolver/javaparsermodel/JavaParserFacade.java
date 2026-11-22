@@ -52,6 +52,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
+import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,7 +68,7 @@ public class JavaParserFacade {
     private static final DataKey<ResolvedType> TYPE_WITH_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {};
     private static final DataKey<ResolvedType> TYPE_WITHOUT_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {};
 
-    private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
+    private static final Map<TypeSolver, WeakReference<JavaParserFacade>> instances = new WeakHashMap<>();
 
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
 
@@ -82,7 +83,14 @@ public class JavaParserFacade {
      * @see <a href="https://github.com/javaparser/javaparser/issues/2671">https://github.com/javaparser/javaparser/issues/2671</a>
      */
     public static synchronized JavaParserFacade get(TypeSolver typeSolver) {
-        return instances.computeIfAbsent(typeSolver.getRoot(), JavaParserFacade::new);
+        TypeSolver root = typeSolver.getRoot();
+        WeakReference<JavaParserFacade> ref = instances.get(root);
+        JavaParserFacade facade = ref == null ? null : ref.get();
+        if (facade == null) {
+            facade = new JavaParserFacade(root);
+            instances.put(root, new WeakReference<>(facade));
+        }
+        return facade;
     }
 
     /**
