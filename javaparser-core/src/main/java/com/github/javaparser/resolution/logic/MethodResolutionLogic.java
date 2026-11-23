@@ -165,6 +165,14 @@ public class MethodResolutionLogic {
                 countOfMethodParametersDeclared, countOfNeedleArgumentsPassed, methodIsDeclaredWithVariadicParameter)) {
             return false;
         }
+        // Whether the call passes a single array directly in the final (variadic) position, e.g. m(new int[] {1})
+        // for m(double... v). Such a call uses the fixed arity form: the array must be assignable to the variadic
+        // parameter type as a whole (double[]). Its elements must not be widened or boxed component by component
+        // the way the grouped scalar arguments of a variable arity call (m(1, 2)) are.
+        boolean lastArgumentIsArrayInFixedArityPosition = methodIsDeclaredWithVariadicParameter
+                && countOfNeedleArgumentsPassed == countOfMethodParametersDeclared
+                && countOfNeedleArgumentsPassed > 0
+                && needleArgumentTypes.get(countOfNeedleArgumentsPassed - 1).isArray();
         if (methodIsDeclaredWithVariadicParameter) {
             // If the method declaration we're considering has a variadic parameter,
             // attempt to convert the given list of arguments to fit this pattern
@@ -289,8 +297,11 @@ public class MethodResolutionLogic {
                             continue;
                         }
                         // Variadic arguments grouped into an array may match the component type through
-                        // boxing, unboxing or widening (JLS 15.12.2.4), e.g. print(1, 2) with print(Integer...)
-                        if (expectedDeclaredType.isArray()
+                        // boxing, unboxing or widening (JLS 15.12.2.4), e.g. print(1, 2) with print(Integer...).
+                        // This does not apply to an array passed directly in the fixed arity form: there the array
+                        // itself must be assignable to the variadic parameter type, so int[] does not match double...
+                        if (!lastArgumentIsArrayInFixedArityPosition
+                                && expectedDeclaredType.isArray()
                                 && actualArgumentType.isArray()
                                 && isBoxingCompatibleWithTypeSolver(
                                         expectedDeclaredType.asArrayType().getComponentType(),
