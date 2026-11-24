@@ -101,7 +101,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
 
     @Override
     public String toString() {
-        return "JavaParserClassDeclaration{" + "wrappedNode=" + wrappedNode + '}';
+        return "JavaParserRecordDeclaration{" + "wrappedNode=" + wrappedNode + '}';
     }
 
     ///
