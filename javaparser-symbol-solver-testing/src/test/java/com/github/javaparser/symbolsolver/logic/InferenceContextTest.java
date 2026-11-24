@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +41,7 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDec
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,16 +96,18 @@ class InferenceContextTest {
 
     @Test
     void matchingParameterizedFormalWithRawSubtype() {
-        ResolvedReferenceType rawArrayList =
-                new ReferenceTypeImpl(new ReflectionClassDeclaration(ArrayList.class, typeSolver));
+        ResolvedReferenceType rawArrayList = new ReferenceTypeImpl(
+                new ReflectionClassDeclaration(ArrayList.class, typeSolver), Collections.emptyList());
+        assertTrue(rawArrayList.isRawType());
         ResolvedType result = new InferenceContext(typeSolver).addPair(listOfString, rawArrayList);
         assertEquals(listOfString, result);
     }
 
     @Test
     void matchingParameterizedFormalWithUnrelatedRawTypeThrows() {
-        ResolvedReferenceType rawHashMap =
-                new ReferenceTypeImpl(new ReflectionClassDeclaration(HashMap.class, typeSolver));
+        ResolvedReferenceType rawHashMap = new ReferenceTypeImpl(
+                new ReflectionClassDeclaration(HashMap.class, typeSolver), Collections.emptyList());
+        assertTrue(rawHashMap.isRawType());
         assertThrows(ConflictingGenericTypesException.class, () -> new InferenceContext(typeSolver)
                 .addPair(listOfString, rawHashMap));
     }
