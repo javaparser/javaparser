@@ -81,6 +81,23 @@ public class JavaParserRecordDeclarationTest {
         assertTrue(resolvedReferenceTypeDeclaration.isRecord());
     }
 
+    /**
+     * Issue #5256: the string representation used to name JavaParserClassDeclaration.
+     */
+    @Test
+    void toStringNamesTheRecordDeclaration() {
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecord);
+        CompilationUnit compilationUnit = x.getResult().get();
+
+        RecordDeclaration recordDeclaration =
+                compilationUnit.findFirst(RecordDeclaration.class).get();
+        ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = recordDeclaration.resolve();
+
+        assertEquals(
+                "JavaParserRecordDeclaration{wrappedNode=" + recordDeclaration + "}",
+                resolvedReferenceTypeDeclaration.toString());
+    }
+
     @Test
     void testIsClass() {
         ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
