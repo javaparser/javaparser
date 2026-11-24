@@ -475,12 +475,27 @@ public class JavaParserFacade {
      * a type variable bounded by an intersection (JLS §4.4).
      */
     public Collection<ResolvedReferenceType> findReceiverTypes(ResolvedType type) {
+        Collection<ResolvedReferenceType> result = collectReceiverTypes(type);
+        // Object is a member of every interface (JLS §9.2) and the implicit upper bound of every type variable
+        // (JLS §4.4), unless one of the receivers is a class, which has Object as a superclass. With no receiver,
+        // or only interfaces, add it explicitly.
+        boolean hasClass = result.stream()
+                .map(ResolvedReferenceType::getTypeDeclaration)
+                .anyMatch(decl -> decl.isPresent() && !decl.get().isInterface());
+        if (!hasClass) {
+            result = new ArrayList<>(result);
+            result.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+        }
+        return result;
+    }
+
+    private Collection<ResolvedReferenceType> collectReceiverTypes(ResolvedType type) {
         if (type.isReferenceType()) {
             return Collections.singletonList(type.asReferenceType());
         }
         if (type.isWildcard()) {
             if (type.asWildcard().isExtends() || type.asWildcard().isSuper()) {
-                return findReceiverTypes(type.asWildcard().getBoundedType());
+                return collectReceiverTypes(type.asWildcard().getBoundedType());
             }
             return Collections.singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
         }
@@ -492,22 +507,14 @@ public class JavaParserFacade {
             Collection<ResolvedReferenceType> result = new ArrayList<>();
             for (ResolvedTypeParameterDeclaration.Bound bound :
                     type.asTypeParameter().getBounds()) {
-                result.addAll(findReceiverTypes(bound.getType()));
-            }
-            // Object is the implicit upper bound of every type variable, unless one of the bounds is a class
-            // (which then has Object as a superclass). With no bounds, or only interface bounds, add it explicitly.
-            boolean hasClassBound = result.stream()
-                    .map(ResolvedReferenceType::getTypeDeclaration)
-                    .anyMatch(decl -> decl.isPresent() && !decl.get().isInterface());
-            if (!hasClassBound) {
-                result.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+                result.addAll(collectReceiverTypes(bound.getType()));
             }
             return result;
         }
         if (type.isConstraint()) {
             // A ResolvedLambdaConstraintType wraps the inferred bound of an implicit lambda parameter, e.g. `a`
             // in `Comparator.comparing(a -> a.getName())`; the bound may be `? super A` or a type variable.
-            return findReceiverTypes(type.asConstraintType().getBound());
+            return collectReceiverTypes(type.asConstraintType().getBound());
         }
         if (type.isUnionType()) {
             return type.asUnionType()

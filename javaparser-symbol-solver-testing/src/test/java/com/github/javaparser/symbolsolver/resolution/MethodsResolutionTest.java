@@ -1052,4 +1052,47 @@ class MethodsResolutionTest extends AbstractResolutionTest {
                         "class Test { <T extends CharSequence> int m(List<? extends T> l) { return l.get(0).intValue(); } }",
                         "intValue"));
     }
+
+    @Test
+    void interfaceReceiver_objectMethodOfInterface() {
+        ResolvedMethodDeclaration hashCodeMethod = resolveCallWithTypeVariableReceiver(
+                "class Test { int m(Runnable r) { return r.hashCode(); } }", "hashCode");
+        assertEquals("java.lang.Object", hashCodeMethod.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void interfaceReceiver_objectMethodWithArgument() {
+        ResolvedMethodDeclaration equalsMethod = resolveCallWithTypeVariableReceiver(
+                "class Test { boolean m(CharSequence c) { return c.equals(c); } }", "equals");
+        assertEquals("java.lang.Object", equalsMethod.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void interfaceReceiver_methodOfInterfaceIsNotShadowedByObject() {
+        ResolvedMethodDeclaration toStringMethod = resolveCallWithTypeVariableReceiver(
+                "class Test { int m(CharSequence c) { return c.length(); } }", "length");
+        assertEquals("java.lang.CharSequence", toStringMethod.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void interfaceReceiver_objectMethodOfWildcardBoundedByInterface() {
+        ResolvedMethodDeclaration hashCodeMethod = resolveCallWithTypeVariableReceiver(
+                "class Test { int m(List<? extends Runnable> l) { return l.get(0).hashCode(); } }", "hashCode");
+        assertEquals("java.lang.Object", hashCodeMethod.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void interfaceReceiver_objectMethodOfTypeVariableWithOnlyInterfaceBounds() {
+        ResolvedMethodDeclaration hashCodeMethod = resolveCallWithTypeVariableReceiver(
+                "class Test { <T extends Runnable & Comparable<T>> int m(T t) { return t.hashCode(); } }", "hashCode");
+        assertEquals("java.lang.Object", hashCodeMethod.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void interfaceReceiver_methodNotInInterfaceIsNotResolved() {
+        assertThrows(
+                UnsolvedSymbolException.class,
+                () -> resolveCallWithTypeVariableReceiver(
+                        "class Test { int m(Runnable r) { return r.intValue(); } }", "intValue"));
+    }
 }
