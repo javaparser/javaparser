@@ -404,7 +404,12 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
             ref = typeSolver.tryToSolveType(typeName);
         }
         if (ref == null || !ref.isSolved()) {
-            ref = solveType(typeName);
+            // The extended types are not in the scope of the member types of the interface (JLS 6.3): resolve them
+            // from the context containing the interface declaration (issue #5254).
+            ref = getContext()
+                    .getParent()
+                    .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                    .solveType(typeName);
         }
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
