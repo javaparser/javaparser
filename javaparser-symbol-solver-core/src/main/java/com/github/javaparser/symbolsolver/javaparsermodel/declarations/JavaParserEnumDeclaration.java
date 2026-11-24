@@ -274,7 +274,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             // look for the qualified name (for example class of type Rectangle2D.Double)
             className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
-        SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
+        // The implemented types are not in the scope of the member types of the enum (JLS 6.3): resolve them from
+        // the context containing the enum declaration (issue #5254).
+        SymbolReference<ResolvedTypeDeclaration> ref = getContext()
+                .getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(className);
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
