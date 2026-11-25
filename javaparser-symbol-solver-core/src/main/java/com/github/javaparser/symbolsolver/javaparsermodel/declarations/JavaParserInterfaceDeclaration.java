@@ -394,23 +394,19 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     ///
 
     private ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
-        SymbolReference<? extends ResolvedTypeDeclaration> ref = null;
         String typeName = classOrInterfaceType.getName().getId();
         if (classOrInterfaceType.getScope().isPresent()) {
             typeName = classOrInterfaceType.getScope().get().asString() + "." + typeName;
         }
 
-        if (typeName.indexOf('.') > -1) {
-            ref = typeSolver.tryToSolveType(typeName);
-        }
-        if (ref == null || !ref.isSolved()) {
-            // The extended types are not in the scope of the member types of the interface (JLS 6.3): resolve them
-            // from the context containing the interface declaration (issue #5254).
-            ref = getContext()
-                    .getParent()
-                    .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                    .solveType(typeName);
-        }
+        // The extended types are not in the scope of the member types of the interface (JLS 6.3): resolve them
+        // from the context containing the interface declaration (issue #5254). A qualified name is resolved there
+        // too, not by the type solver first: a type in scope is chosen in preference to a package of the same name
+        // (JLS 6.4.2), the context falling back on the type solver otherwise (issue #5264).
+        SymbolReference<ResolvedTypeDeclaration> ref = getContext()
+                .getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(typeName);
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
