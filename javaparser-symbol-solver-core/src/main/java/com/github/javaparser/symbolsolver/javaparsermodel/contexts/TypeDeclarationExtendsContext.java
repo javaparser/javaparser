@@ -32,10 +32,15 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import java.util.List;
 
 /**
- * Context of the types named in the extends and implements clauses of a type declaration.
+ * Context of the types named in the extends, implements and permits clauses of a type declaration.
  * <p>
- * The member types of the declaration are not in scope in these clauses (JLS 6.3): only its type parameters are,
- * then the context containing the declaration.
+ * The member types of the declaration are not in scope in these clauses, since the scope of a member is the body of
+ * the declaration (JLS 6.3). Names are resolved against the type parameters of the declaration, which are in scope
+ * in the type arguments of its superclass and superinterface types (JLS 6.3), then against the context containing
+ * the declaration.
+ * <p>
+ * The permits clause (JLS 8.1.6, JLS 9.1.4) names classes and interfaces: javac rejects a name of a type parameter
+ * there, so looking at the type parameters first does not change the resolution of a valid permits clause.
  */
 public class TypeDeclarationExtendsContext extends AbstractJavaParserContext<TypeDeclaration<?>> {
 
