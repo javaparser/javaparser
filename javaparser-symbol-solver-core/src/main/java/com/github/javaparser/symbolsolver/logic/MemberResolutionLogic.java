@@ -236,8 +236,8 @@ public class MemberResolutionLogic {
         List<ResolvedMethodDeclaration> candidateMethods =
                 collectCandidateMembers(typeDeclaration, name, argumentsTypes, staticOnly);
 
-        // if is interface and candidate method list is empty, we should check the Object Methods
-        if (candidateMethods.isEmpty() && typeDeclaration.isInterface()) {
+        // if is interface or annotation and candidate method list is empty, we should check the Object Methods
+        if (candidateMethods.isEmpty() && (typeDeclaration.isInterface() || typeDeclaration.isAnnotation())) {
             SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(
                     typeSolver.getSolvedJavaLangObject(), name, argumentsTypes, false);
             if (res.isSolved()) {

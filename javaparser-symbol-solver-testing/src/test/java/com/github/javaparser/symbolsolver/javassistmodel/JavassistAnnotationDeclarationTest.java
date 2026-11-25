@@ -24,10 +24,13 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarationTest;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -36,8 +39,11 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
@@ -75,13 +81,6 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
     @Override
     public void containerTypeCantBeNull() {
         super.containerTypeCantBeNull();
-    }
-
-    @Disabled(value = "This feature is not yet implemented. See https://github.com/javaparser/javaparser/issues/1838")
-    @Test
-    @Override
-    public void getDeclaredMethodsCantBeNull() {
-        super.getDeclaredMethodsCantBeNull();
     }
 
     @Test
@@ -179,5 +178,49 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
         assertTrue(deprecated.canBeAssignedTo(typeSolver.solveType("java.lang.annotation.Annotation")));
         assertTrue(deprecated.canBeAssignedTo(typeSolver.getSolvedJavaLangObject()));
         assertFalse(deprecated.canBeAssignedTo(typeSolver.solveType("java.lang.Override")));
+    }
+
+    @Test
+    void getDeclaredMethodsAndSolveMethod_shouldResolveAnnotationElementsAndInheritedMethods()
+            throws NotFoundException {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        JavassistAnnotationDeclaration target = new JavassistAnnotationDeclaration(
+                ClassPool.getDefault().get("java.lang.annotation.Target"), typeSolver);
+
+        Set<String> declaredSignatures = target.getDeclaredMethods().stream()
+                .map(ResolvedMethodDeclaration::getSignature)
+                .collect(Collectors.toSet());
+        assertEquals(Collections.singleton("value()"), declaredSignatures);
+
+        SymbolReference<ResolvedMethodDeclaration> valueRef =
+                target.solveMethod("value", Collections.emptyList(), false);
+        assertTrue(valueRef.isSolved());
+        assertEquals(
+                "java.lang.annotation.Target.value()",
+                valueRef.getCorrespondingDeclaration().getQualifiedSignature());
+
+        Optional<MethodUsage> valueUsage =
+                target.solveMethodAsUsage("value", Collections.emptyList(), null, Collections.emptyList());
+        assertTrue(valueUsage.isPresent());
+        assertEquals(
+                "java.lang.annotation.ElementType[]",
+                valueUsage.get().returnType().describe());
+
+        SymbolReference<ResolvedMethodDeclaration> annotationTypeRef =
+                target.solveMethod("annotationType", Collections.emptyList(), false);
+        assertTrue(annotationTypeRef.isSolved());
+        assertEquals(
+                "java.lang.annotation.Annotation.annotationType()",
+                annotationTypeRef.getCorrespondingDeclaration().getQualifiedSignature());
+
+        SymbolReference<ResolvedMethodDeclaration> getClassRef =
+                target.solveMethod("getClass", Collections.emptyList(), false);
+        assertTrue(getClassRef.isSolved());
+        assertEquals(
+                "java.lang.Object.getClass()",
+                getClassRef.getCorrespondingDeclaration().getQualifiedSignature());
+
+        assertFalse(target.solveMethod("nonExistent", Collections.emptyList(), false)
+                .isSolved());
     }
 }
