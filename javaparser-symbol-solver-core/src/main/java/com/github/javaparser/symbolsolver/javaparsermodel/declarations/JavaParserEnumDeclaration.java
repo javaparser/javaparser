@@ -24,15 +24,12 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.SymbolReference;
-import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -41,7 +38,6 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
@@ -252,45 +248,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             // Consider IllegalStateException or similar?
         }
 
-        // TODO FIXME: Remove null check -- should be an empty list...
-        if (wrappedNode.getImplementedTypes() != null) {
-            for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
-                try {
-                    ancestors.add(toReferenceType(implementedType));
-                } catch (UnsolvedSymbolException e) {
-                    if (!acceptIncompleteList) {
-                        throw e;
-                    }
-                }
-            }
-        }
-
+        ancestors.addAll(
+                javaParserTypeAdapter.toReferenceTypes(wrappedNode.getImplementedTypes(), acceptIncompleteList));
         return ancestors;
-    }
-
-    private ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
-        String className = classOrInterfaceType.getName().getId();
-        if (classOrInterfaceType.getScope().isPresent()) {
-            // look for the qualified name (for example class of type Rectangle2D.Double): the name of the scope
-            // without the comments of the source, which are not part of the name (JLS 3.2, issue #5268)
-            className = classOrInterfaceType.getScope().get().asString() + "." + className;
-        }
-        // The implemented types are not in the scope of the member types of the enum (JLS 6.3): resolve them from
-        // the context containing the enum declaration (issue #5254).
-        SymbolReference<ResolvedTypeDeclaration> ref = getContext()
-                .getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(className);
-        if (!ref.isSolved()) {
-            throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
-        }
-        if (!classOrInterfaceType.getTypeArguments().isPresent()) {
-            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
-        }
-        List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get().stream()
-                .map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
-                .collect(Collectors.toList());
-        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters);
     }
 
     /**
@@ -303,18 +263,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
      */
     @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        if (this.wrappedNode.getName().getId().equals(name)) {
-            return SymbolReference.solved(this);
-        }
-        SymbolReference<ResolvedTypeDeclaration> ref = javaParserTypeAdapter.solveType(name);
-        if (ref.isSolved()) {
-            return ref;
-        }
-
-        return getContext()
-                .getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name);
+        return javaParserTypeAdapter.solveType(name, this);
     }
 
     @Override

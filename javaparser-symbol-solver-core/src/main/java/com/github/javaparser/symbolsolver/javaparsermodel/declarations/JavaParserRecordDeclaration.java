@@ -35,14 +35,12 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.SymbolReference;
-import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
@@ -243,14 +241,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
     }
 
     public List<ResolvedReferenceType> getInterfaces() {
-        List<ResolvedReferenceType> interfaces = new ArrayList<>();
-        // TODO FIXME: Remove null check -- should be an empty list...
-        if (wrappedNode.getImplementedTypes() != null) {
-            for (ClassOrInterfaceType t : wrappedNode.getImplementedTypes()) {
-                interfaces.add(toReferenceType(t));
-            }
-        }
-        return interfaces;
+        return javaParserTypeAdapter.toReferenceTypes(wrappedNode.getImplementedTypes(), false);
     }
 
     @Override
@@ -374,24 +365,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
      */
     @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        if (this.wrappedNode.getName().getId().equals(name)) {
-            return SymbolReference.solved(this);
-        }
-        SymbolReference<ResolvedTypeDeclaration> ref = javaParserTypeAdapter.solveType(name);
-        if (ref.isSolved()) {
-            return ref;
-        }
-
-        String prefix = wrappedNode.getName().asString() + ".";
-        if (name.startsWith(prefix) && name.length() > prefix.length()) {
-            return new JavaParserRecordDeclaration(this.wrappedNode, typeSolver)
-                    .solveType(name.substring(prefix.length()));
-        }
-
-        return getContext()
-                .getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name);
+        return javaParserTypeAdapter.solveType(name, this);
     }
 
     @Override
@@ -438,22 +412,8 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
             }
         }
 
-        for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
-            try {
-                // If an implemented interface is found, add it as an ancestor
-                ancestors.add(toReferenceType(implemented));
-            } catch (UnsolvedSymbolException e) {
-                // in case we could not resolve some implemented interface, we may still be able to resolve the
-                // extended class or (some of) the other implemented interfaces and so we continue gracefully
-                // with an (incomplete) list of ancestors
-
-                if (!acceptIncompleteList) {
-                    // Only throw if an incomplete ancestor list is unacceptable.
-                    throw e;
-                }
-            }
-        }
-
+        ancestors.addAll(
+                javaParserTypeAdapter.toReferenceTypes(wrappedNode.getImplementedTypes(), acceptIncompleteList));
         return ancestors;
     }
 
@@ -513,45 +473,6 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return javaParserTypeAdapter.containerType();
-    }
-
-    ///
-    /// Private methods
-    ///
-
-    private ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
-        String className = classOrInterfaceType.getName().getId();
-        if (classOrInterfaceType.getScope().isPresent()) {
-            // look for the qualified name (for example class of type Rectangle2D.Double): the name of the scope
-            // without the comments of the source, which are not part of the name (JLS 3.2, issue #5268)
-            className = classOrInterfaceType.getScope().get().asString() + "." + className;
-        }
-
-        // Since this is used to resolve reference to "extended" and "implemented" types, and since these type
-        // references
-        // should not be resolved against member types of the current type, we resolve based on the context containing
-        // the class declaration.
-        // TODO: solveType with type arguments
-        SymbolReference<ResolvedTypeDeclaration> ref = getContext()
-                .getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(className);
-
-        // A qualified name is never retried with its leading segments dropped: "a.b.C" and "b.C" may
-        // denote different types, the declared type itself included (issue #4190).
-        if (!ref.isSolved()) {
-            throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
-        }
-
-        if (!classOrInterfaceType.getTypeArguments().isPresent()) {
-            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
-        }
-
-        List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get().stream()
-                .map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
-                .collect(Collectors.toList());
-
-        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters);
     }
 
     public static class ImplicitGetterMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {

@@ -28,17 +28,13 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.SymbolReference;
-import com.github.javaparser.resolution.model.typesystem.LazyType;
-import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.MemberResolutionLogic;
@@ -126,11 +122,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public List<ResolvedReferenceType> getInterfacesExtended() {
-        List<ResolvedReferenceType> interfaces = new ArrayList<>();
-        for (ClassOrInterfaceType t : wrappedNode.getExtendedTypes()) {
-            interfaces.add(toReferenceType(t));
-        }
-        return interfaces;
+        return javaParserTypeAdapter.toReferenceTypes(wrappedNode.getExtendedTypes(), false);
     }
 
     @Override
@@ -260,24 +252,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
      */
     @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        if (this.wrappedNode.getName().getId().equals(name)) {
-            return SymbolReference.solved(this);
-        }
-        SymbolReference<ResolvedTypeDeclaration> ref = javaParserTypeAdapter.solveType(name);
-        if (ref.isSolved()) {
-            return ref;
-        }
-
-        String prefix = wrappedNode.getName().asString() + ".";
-        if (name.startsWith(prefix) && name.length() > prefix.length()) {
-            return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver)
-                    .solveType(name.substring(prefix.length()));
-        }
-
-        return getContext()
-                .getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name);
+        return javaParserTypeAdapter.solveType(name, this);
     }
 
     @Override
@@ -314,34 +289,9 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        if (wrappedNode.getExtendedTypes() != null) {
-            for (ClassOrInterfaceType extended : wrappedNode.getExtendedTypes()) {
-                try {
-                    ancestors.add(toReferenceType(extended));
-                } catch (UnsolvedSymbolException e) {
-                    if (!acceptIncompleteList) {
-                        // we only throw an exception if we require a complete list; otherwise, we attempt to continue
-                        // gracefully
-                        throw e;
-                    }
-                }
-            }
-        }
-
-        // TODO FIXME: Remove null check -- should be an empty list...
-        if (wrappedNode.getImplementedTypes() != null) {
-            for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
-                try {
-                    ancestors.add(toReferenceType(implemented));
-                } catch (UnsolvedSymbolException e) {
-                    if (!acceptIncompleteList) {
-                        // we only throw an exception if we require a complete list; otherwise, we attempt to continue
-                        // gracefully
-                        throw e;
-                    }
-                }
-            }
-        }
+        ancestors.addAll(javaParserTypeAdapter.toReferenceTypes(wrappedNode.getExtendedTypes(), acceptIncompleteList));
+        ancestors.addAll(
+                javaParserTypeAdapter.toReferenceTypes(wrappedNode.getImplementedTypes(), acceptIncompleteList));
         return ancestors;
     }
 
@@ -387,35 +337,5 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     @Override
     public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
-    }
-
-    ///
-    /// Private methods
-    ///
-
-    private ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
-        String typeName = classOrInterfaceType.getName().getId();
-        if (classOrInterfaceType.getScope().isPresent()) {
-            typeName = classOrInterfaceType.getScope().get().asString() + "." + typeName;
-        }
-
-        // The extended types are not in the scope of the member types of the interface (JLS 6.3): resolve them
-        // from the context containing the interface declaration (issue #5254). A qualified name is resolved there
-        // too, not by the type solver first: a type in scope is chosen in preference to a package of the same name
-        // (JLS 6.4.2), the context falling back on the type solver otherwise (issue #5264).
-        SymbolReference<ResolvedTypeDeclaration> ref = getContext()
-                .getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(typeName);
-        if (!ref.isSolved()) {
-            throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
-        }
-        if (!classOrInterfaceType.getTypeArguments().isPresent()) {
-            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
-        }
-        List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get().stream()
-                .map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
-                .collect(Collectors.toList());
-        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters);
     }
 }
