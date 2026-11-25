@@ -424,11 +424,6 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
             return ancestors;
         }
 
-        Optional<String> qualifiedName = wrappedNode.getFullyQualifiedName();
-        if (!qualifiedName.isPresent()) {
-            return ancestors;
-        }
-
         try {
             // If a superclass is found, add it as an ancestor
             Optional<ResolvedReferenceType> superClass = getSuperClass();
