@@ -616,13 +616,17 @@ TOKEN :
   >
 |
   < #DECIMAL_FLOATING_POINT_LITERAL:
-        <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>)? (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
-      | "." <DECIMAL_LITERAL> (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
-      | <DECIMAL_LITERAL> <DECIMAL_EXPONENT> (["f","F","d","D"])?
-      | <DECIMAL_LITERAL> (<DECIMAL_EXPONENT>)? ["f","F","d","D"]
+        (
+          <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>)?
+        | "." <DECIMAL_LITERAL>
+        ) (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      | <DECIMAL_LITERAL> (
+          <DECIMAL_EXPONENT> (["f","F","d","D"])?
+        | ["f","F","d","D"]
+        )
   >
 |
-  < #DECIMAL_EXPONENT: ["e","E"] (["+","-"])? (<DECIMAL_LITERAL>)+ >
+  < #DECIMAL_EXPONENT: ["e","E"] (["+","-"])? <DECIMAL_LITERAL> >
 |
   < #HEXADECIMAL_FLOATING_POINT_LITERAL:
         <HEX_LITERAL> (".")? <HEXADECIMAL_EXPONENT> (["f","F","d","D"])?
