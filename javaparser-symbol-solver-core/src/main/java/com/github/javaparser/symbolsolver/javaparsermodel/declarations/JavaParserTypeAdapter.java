@@ -29,15 +29,20 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -171,6 +176,98 @@ public class JavaParserTypeAdapter<
             }
         }
         return SymbolReference.unsolved();
+    }
+
+    /**
+     * Resolves a type name from the body of the wrapped declaration: the declaration itself, its type parameters
+     * and member types, a member type qualified by the name of the declaration, then the types in scope in the
+     * context containing the declaration.
+     *
+     * @param declaration the declaration of the wrapped node
+     */
+    SymbolReference<ResolvedTypeDeclaration> solveType(String name, ResolvedTypeDeclaration declaration) {
+        if (wrappedNode.getName().getId().equals(name)) {
+            return SymbolReference.solved(declaration);
+        }
+        SymbolReference<ResolvedTypeDeclaration> ref = solveType(name);
+        if (ref.isSolved()) {
+            return ref;
+        }
+
+        String prefix = wrappedNode.getName().asString() + ".";
+        if (name.startsWith(prefix) && name.length() > prefix.length()) {
+            return solveType(name.substring(prefix.length()), declaration);
+        }
+
+        return enclosingContext().solveType(name);
+    }
+
+    /**
+     * Resolves the types of a supertype clause of the wrapped declaration, see
+     * {@link #toReferenceType(ClassOrInterfaceType)}.
+     *
+     * @param acceptIncompleteList whether a type that cannot be resolved is left out instead of failing
+     * @throws UnsolvedSymbolException if a type cannot be resolved and an incomplete list is not accepted
+     */
+    List<ResolvedReferenceType> toReferenceTypes(NodeList<ClassOrInterfaceType> clause, boolean acceptIncompleteList) {
+        List<ResolvedReferenceType> types = new ArrayList<>();
+        for (ClassOrInterfaceType type : clause) {
+            try {
+                types.add(toReferenceType(type));
+            } catch (UnsolvedSymbolException e) {
+                if (!acceptIncompleteList) {
+                    throw e;
+                }
+            }
+        }
+        return types;
+    }
+
+    /**
+     * Resolves a type of a supertype clause (extends, implements) of the wrapped declaration.
+     *
+     * @throws UnsolvedSymbolException if the type cannot be resolved
+     */
+    ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
+        String typeName = classOrInterfaceType.getName().getId();
+        if (classOrInterfaceType.getScope().isPresent()) {
+            // The name of the scope, without the comments of the source, which are not part of the name (JLS 3.2,
+            // issue #5268)
+            typeName = classOrInterfaceType.getScope().get().asString() + "." + typeName;
+        }
+
+        // The supertypes are not in the scope of the member types of the declaration (JLS 6.3): resolve them from
+        // the context containing the declaration (issue #5254). A qualified name is resolved there too, not by the
+        // type solver first: a type in scope is chosen in preference to a package of the same name (JLS 6.4.2), the
+        // context falling back on the type solver otherwise (issue #5264).
+        // TODO: solveType with type arguments
+        SymbolReference<ResolvedTypeDeclaration> ref = enclosingContext().solveType(typeName);
+
+        // A qualified name is never retried with its leading segments dropped: "a.b.C" and "b.C" may
+        // denote different types, the declared type itself included (issue #4190).
+        if (!ref.isSolved()) {
+            throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
+        }
+
+        if (!classOrInterfaceType.getTypeArguments().isPresent()) {
+            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
+        }
+
+        List<ResolvedType> typeArguments = classOrInterfaceType.getTypeArguments().get().stream()
+                .map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
+                .collect(Collectors.toList());
+
+        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeArguments);
+    }
+
+    /**
+     * The context containing the wrapped declaration, which resolves its supertypes (JLS 6.3) and the type names its
+     * body does not declare.
+     */
+    private Context enclosingContext() {
+        return JavaParserFactory.getContext(wrappedNode, typeSolver)
+                .getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
     }
 
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
