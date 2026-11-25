@@ -367,11 +367,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         try {
             // If a superclass is found, add it as an ancestor
             Optional<ResolvedReferenceType> superClass = getSuperClass();
-            if (superClass.isPresent()) {
-                if (isAncestor(superClass.get(), qualifiedName.get())) {
-                    ancestors.add(superClass.get());
-                }
-            }
+            superClass.ifPresent(ancestors::add);
         } catch (UnsolvedSymbolException e) {
             // in case we could not resolve the super class, we may still be able to resolve (some of) the
             // implemented interfaces and so we continue gracefully with an (incomplete) list of ancestors
@@ -385,10 +381,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
             try {
                 // If an implemented interface is found, add it as an ancestor
-                ResolvedReferenceType rrt = toReferenceType(implemented);
-                if (isAncestor(rrt, qualifiedName.get())) {
-                    ancestors.add(rrt);
-                }
+                ancestors.add(toReferenceType(implemented));
             } catch (UnsolvedSymbolException e) {
                 // in case we could not resolve some implemented interface, we may still be able to resolve the
                 // extended class or (some of) the other implemented interfaces and so we continue gracefully
@@ -402,17 +395,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         }
 
         return ancestors;
-    }
-
-    private boolean isAncestor(ResolvedReferenceType candidateAncestor, String ownQualifiedName) {
-        Optional<ResolvedReferenceTypeDeclaration> resolvedReferenceTypeDeclaration =
-                candidateAncestor.getTypeDeclaration();
-        if (resolvedReferenceTypeDeclaration.isPresent()) {
-            ResolvedTypeDeclaration rtd = resolvedReferenceTypeDeclaration.get().asType();
-            // do not consider an inner or nested class as an ancestor
-            return !rtd.hasInternalType(ownQualifiedName);
-        }
-        return false;
     }
 
     @Override
