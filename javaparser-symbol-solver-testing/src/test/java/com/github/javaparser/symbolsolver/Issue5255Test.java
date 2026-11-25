@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 /**
  * Issue #5255: the types of the {@code extends} and {@code implements} clauses, and their type arguments, must not
@@ -105,6 +107,14 @@ class Issue5255Test {
         CompilationUnit cu = parse(MEMBER_WITH_THE_SAME_NAME);
 
         assertEquals(Arrays.asList("I", "G<I>"), clauseTypes(cu, "R"));
+    }
+
+    /** The ancestors of a record include java.lang.Record, which the reflection type solver finds from Java 14. */
+    @Test
+    @EnabledForJreRange(min = JRE.JAVA_14)
+    void ancestorsOfARecordAreResolvedFromTheEnclosingScope() {
+        CompilationUnit cu = parse(MEMBER_WITH_THE_SAME_NAME);
+
         assertEquals(Arrays.asList("java.lang.Record", "I", "G<I>"), ancestors(cu, "R"));
     }
 
@@ -123,6 +133,13 @@ class Issue5255Test {
         CompilationUnit cu = parse("interface G<T> {}\nrecord R<T>() implements G<T> {}");
 
         assertEquals(Arrays.asList("G<T>"), clauseTypes(cu, "R"));
+    }
+
+    @Test
+    @EnabledForJreRange(min = JRE.JAVA_14)
+    void typeParametersOfTheRecordAreStillVisibleInItsAncestors() {
+        CompilationUnit cu = parse("interface G<T> {}\nrecord R<T>() implements G<T> {}");
+
         assertEquals(Arrays.asList("java.lang.Record", "G<T>"), ancestors(cu, "R"));
     }
 
