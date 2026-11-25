@@ -22,9 +22,6 @@ package com.github.javaparser;
 
 import com.github.javaparser.utils.LineSeparator;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * {@link Provider} un-escaping unicode escape sequences in the input sequence.
@@ -55,7 +52,11 @@ public class LineEndingProcessingProvider implements Provider {
      */
     private int _pos = 0;
 
-    private final Map<LineSeparator, Integer> eolCounts = new HashMap<>();
+    private int crCount = 0;
+
+    private int lfCount = 0;
+
+    private int crlfCount = 0;
 
     public LineEndingProcessingProvider(Provider input) {
         this(DEFAULT_BUFFER_SIZE, input);
@@ -81,10 +82,7 @@ public class LineEndingProcessingProvider implements Provider {
     }
 
     public LineSeparator getDetectedLineEnding() {
-        return LineSeparator.getLineEnding(
-                eolCounts.getOrDefault(LineSeparator.CR, 0),
-                eolCounts.getOrDefault(LineSeparator.LF, 0),
-                eolCounts.getOrDefault(LineSeparator.CRLF, 0));
+        return LineSeparator.getLineEnding(crCount, lfCount, crlfCount);
     }
 
     private boolean isBufferEmpty() {
@@ -110,7 +108,7 @@ public class LineEndingProcessingProvider implements Provider {
     public int read(char[] buffer, final int offset, int len) throws IOException {
         int pos = offset;
         int stop = offset + len;
-        LineSeparator previousLineSeparator = null;
+        boolean previousWasCr = false;
         while (pos < stop) {
             int ch = nextBufferedChar();
             if (ch < 0) {
@@ -120,28 +118,19 @@ public class LineEndingProcessingProvider implements Provider {
                 }
                 break;
             }
-            String str = String.valueOf((char) ch);
-            Optional<LineSeparator> lookup = LineSeparator.lookup(str);
-            if (lookup.isPresent()) {
-                LineSeparator lineSeparator = lookup.get();
-                // Track the number of times this character is found..
-                eolCounts.putIfAbsent(lineSeparator, 0);
-                eolCounts.put(lineSeparator, eolCounts.get(lineSeparator) + 1);
-                // Handle line separators of length two (specifically CRLF)
-                // TODO: Make this more generic than just CRLF (e.g. track the previous char rather than the previous
-                // line separator
-                if (lineSeparator == LineSeparator.LF) {
-                    if (previousLineSeparator == LineSeparator.CR) {
-                        eolCounts.putIfAbsent(LineSeparator.CRLF, 0);
-                        eolCounts.put(LineSeparator.CRLF, eolCounts.get(LineSeparator.CRLF) + 1);
-                    }
+            // Track the number of times each line separator is found.
+            // CRLF is only counted when both characters arrive in the same read call.
+            if (ch == '\r') {
+                crCount++;
+                previousWasCr = true;
+            } else if (ch == '\n') {
+                lfCount++;
+                if (previousWasCr) {
+                    crlfCount++;
                 }
-                // If "this" (current) char <strong>is</strong> a line separator, set the next loop's "previous" to this
-                previousLineSeparator = lineSeparator;
+                previousWasCr = false;
             } else {
-                // If "this" (current) char <strong>is not</strong> a line separator, set the next loop's "previous" to
-                // null
-                previousLineSeparator = null;
+                previousWasCr = false;
             }
             buffer[pos++] = (char) ch;
         }
