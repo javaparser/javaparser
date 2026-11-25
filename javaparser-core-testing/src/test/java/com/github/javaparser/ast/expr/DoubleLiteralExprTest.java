@@ -31,6 +31,24 @@ class DoubleLiteralExprTest {
     private final JavaParserAdapter parser = StaticJavaParser.newParserAdapter();
 
     @Test
+    void preservesDecimalFloatingPointLiterals() {
+        assertDecimalLiteral("1.", 1.0);
+        assertDecimalLiteral("1.e+2", 100.0);
+        assertDecimalLiteral(".5", 0.5);
+        assertDecimalLiteral(".0_5E+2F", 5.0);
+        assertDecimalLiteral("1e2", 100.0);
+        assertDecimalLiteral("1_2e-1_0F", 1.2e-9);
+        assertDecimalLiteral("1E3d", 1000.0);
+        assertDecimalLiteral("2D", 2.0);
+    }
+
+    private void assertDecimalLiteral(String literal, double expectedValue) {
+        DoubleLiteralExpr expression = parser.parseExpression(literal);
+        Assertions.assertEquals(literal, expression.getValue());
+        Assertions.assertEquals(expectedValue, expression.asDouble(), literal);
+    }
+
+    @Test
     void test1() {
         float x = 0x0.00_00_02p-126f;
         DoubleLiteralExpr e = parser.parseExpression("0x0.00_00_02p-126f");
