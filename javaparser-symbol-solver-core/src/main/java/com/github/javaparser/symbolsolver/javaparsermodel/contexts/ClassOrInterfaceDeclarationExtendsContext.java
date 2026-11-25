@@ -33,7 +33,11 @@ import java.util.List;
 /**
  * Limited version of ClassOrInterfaceDeclarationContext that only resolves type parameters for use by
  * extends and implements part of declaration.
+ *
+ * @deprecated it is no longer used by the symbol solver, which uses {@link TypeDeclarationExtendsContext} for the
+ * extends and implements clauses of every kind of type declaration.
  */
+@Deprecated
 public class ClassOrInterfaceDeclarationExtendsContext extends AbstractJavaParserContext<ClassOrInterfaceDeclaration> {
     public ClassOrInterfaceDeclarationExtendsContext(ClassOrInterfaceDeclaration wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
