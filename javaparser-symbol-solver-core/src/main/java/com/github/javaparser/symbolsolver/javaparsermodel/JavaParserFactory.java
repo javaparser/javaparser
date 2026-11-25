@@ -163,15 +163,15 @@ public class JavaParserFactory {
             }
         }
         final Node parentNode = demandParentNode(node);
-        if (node instanceof ClassOrInterfaceType && isInExtendsOrImplementsClause(node, parentNode)) {
-            // When resolving names in implements and extends the body of the declaration
-            // should not be searched so use limited context.
+        if (node instanceof ClassOrInterfaceType && isInExtendsImplementsOrPermitsClause(node, parentNode)) {
+            // The member types of the declaration are not in scope in its extends, implements and permits
+            // clauses (JLS 6.3), so the body of the declaration must not be searched: use a limited context.
             return new TypeDeclarationExtendsContext((TypeDeclaration<?>) parentNode, typeSolver);
         }
         return getContext(parentNode, typeSolver);
     }
 
-    private static boolean isInExtendsOrImplementsClause(Node type, Node declaration) {
+    private static boolean isInExtendsImplementsOrPermitsClause(Node type, Node declaration) {
         if (!(declaration instanceof TypeDeclaration)) {
             return false;
         }
@@ -180,6 +180,10 @@ public class JavaParserFactory {
                 || (declaration instanceof NodeWithImplements
                         && ((NodeWithImplements<?>) declaration)
                                 .getImplementedTypes()
+                                .contains(type))
+                || (declaration instanceof ClassOrInterfaceDeclaration
+                        && ((ClassOrInterfaceDeclaration) declaration)
+                                .getPermittedTypes()
                                 .contains(type));
     }
 
