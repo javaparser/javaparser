@@ -522,8 +522,9 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
     private ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
         String className = classOrInterfaceType.getName().getId();
         if (classOrInterfaceType.getScope().isPresent()) {
-            // look for the qualified name (for example class of type Rectangle2D.Double)
-            className = classOrInterfaceType.getScope().get().toString() + "." + className;
+            // look for the qualified name (for example class of type Rectangle2D.Double): the name of the scope
+            // without the comments of the source, which are not part of the name (JLS 3.2, issue #5268)
+            className = classOrInterfaceType.getScope().get().asString() + "." + className;
         }
 
         // Since this is used to resolve reference to "extended" and "implemented" types, and since these type
