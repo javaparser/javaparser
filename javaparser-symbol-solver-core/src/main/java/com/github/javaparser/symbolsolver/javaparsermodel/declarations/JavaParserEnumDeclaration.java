@@ -271,8 +271,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     private ResolvedReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
         String className = classOrInterfaceType.getName().getId();
         if (classOrInterfaceType.getScope().isPresent()) {
-            // look for the qualified name (for example class of type Rectangle2D.Double)
-            className = classOrInterfaceType.getScope().get().toString() + "." + className;
+            // look for the qualified name (for example class of type Rectangle2D.Double): the name of the scope
+            // without the comments of the source, which are not part of the name (JLS 3.2, issue #5268)
+            className = classOrInterfaceType.getScope().get().asString() + "." + className;
         }
         // The implemented types are not in the scope of the member types of the enum (JLS 6.3): resolve them from
         // the context containing the enum declaration (issue #5254).
