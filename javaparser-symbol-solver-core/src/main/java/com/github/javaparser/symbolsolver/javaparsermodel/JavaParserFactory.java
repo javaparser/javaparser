@@ -27,6 +27,8 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
+import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
@@ -161,16 +163,24 @@ public class JavaParserFactory {
             }
         }
         final Node parentNode = demandParentNode(node);
-        if (node instanceof ClassOrInterfaceType && parentNode instanceof ClassOrInterfaceDeclaration) {
-            ClassOrInterfaceDeclaration parentDeclaration = (ClassOrInterfaceDeclaration) parentNode;
-            if (parentDeclaration.getImplementedTypes().contains(node)
-                    || parentDeclaration.getExtendedTypes().contains(node)) {
-                // When resolving names in implements and extends the body of the declaration
-                // should not be searched so use limited context.
-                return new ClassOrInterfaceDeclarationExtendsContext(parentDeclaration, typeSolver);
-            }
+        if (node instanceof ClassOrInterfaceType && isInExtendsOrImplementsClause(node, parentNode)) {
+            // When resolving names in implements and extends the body of the declaration
+            // should not be searched so use limited context.
+            return new TypeDeclarationExtendsContext((TypeDeclaration<?>) parentNode, typeSolver);
         }
         return getContext(parentNode, typeSolver);
+    }
+
+    private static boolean isInExtendsOrImplementsClause(Node type, Node declaration) {
+        if (!(declaration instanceof TypeDeclaration)) {
+            return false;
+        }
+        return (declaration instanceof NodeWithExtends
+                        && ((NodeWithExtends<?>) declaration).getExtendedTypes().contains(type))
+                || (declaration instanceof NodeWithImplements
+                        && ((NodeWithImplements<?>) declaration)
+                                .getImplementedTypes()
+                                .contains(type));
     }
 
     public static SymbolDeclarator getSymbolDeclarator(Node node, TypeSolver typeSolver) {
