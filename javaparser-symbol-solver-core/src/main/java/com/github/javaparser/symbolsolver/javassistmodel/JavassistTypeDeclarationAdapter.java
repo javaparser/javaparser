@@ -155,7 +155,7 @@ public class JavassistTypeDeclarationAdapter {
                 .filter(m -> ((m.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0)
                         && ((m.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0))
                 .map(m -> new JavassistMethodDeclaration(m, typeSolver))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public List<ResolvedConstructorDeclaration> getConstructors() {

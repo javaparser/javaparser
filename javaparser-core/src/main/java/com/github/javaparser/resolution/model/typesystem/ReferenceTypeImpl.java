@@ -170,7 +170,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     @Override
     public Set<MethodUsage> getDeclaredMethods() {
-        Set<MethodUsage> methods = new HashSet<>();
+        Set<MethodUsage> methods = new LinkedHashSet<>();
         getTypeDeclaration().ifPresent(referenceTypeDeclaration -> {
             for (ResolvedMethodDeclaration methodDeclaration : referenceTypeDeclaration.getDeclaredMethods()) {
                 methods.add(substituteTypeParameters(new MethodUsage(methodDeclaration)));

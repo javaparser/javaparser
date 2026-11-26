@@ -36,6 +36,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
@@ -970,6 +971,33 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                             "java.lang.Comparable<java.lang.String>",
                             "java.io.Serializable"));
         }
+    }
+
+    @Test
+    void testDeclaredMethodsPreserveDeclarationOrder() {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        String code = "class OrderedMethods {"
+                + " void first() {}"
+                + " void second() {}"
+                + " void third() {}"
+                + " void fourth() {}"
+                + "}";
+
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+
+        CompilationUnit cu =
+                new JavaParser(parserConfiguration).parse(code).getResult().get();
+
+        ClassOrInterfaceDeclaration classDeclaration =
+                cu.getClassByName("OrderedMethods").get();
+        ResolvedReferenceType referenceType = new ReferenceTypeImpl(classDeclaration.resolve());
+
+        List<String> actualMethodNames = referenceType.getDeclaredMethods().stream()
+                .map(MethodUsage::getName)
+                .collect(Collectors.toList());
+
+        assertEquals(Arrays.asList("first", "second", "third", "fourth"), actualMethodNames);
     }
 
     @Test

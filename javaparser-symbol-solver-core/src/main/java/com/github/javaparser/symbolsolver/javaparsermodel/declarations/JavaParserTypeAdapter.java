@@ -306,7 +306,7 @@ public class JavaParserTypeAdapter<
      * Returns a set of the declared methods on this type
      */
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        Set<ResolvedMethodDeclaration> methods = new HashSet<>();
+        Set<ResolvedMethodDeclaration> methods = new LinkedHashSet<>();
         for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
             if (member instanceof MethodDeclaration) {
                 methods.add(new JavaParserMethodDeclaration((MethodDeclaration) member, typeSolver));
