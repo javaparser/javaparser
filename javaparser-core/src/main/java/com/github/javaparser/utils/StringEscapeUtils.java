@@ -65,7 +65,7 @@ public final class StringEscapeUtils {
      * @param input character to escape
      * @return String with escaped value
      */
-    public static String escapeJava(final char input) {
+    public static String escapeJavaCharLiteral(final char input) {
         return ESCAPE_JAVA_CHAR.translate(String.valueOf(input));
     }
 
@@ -97,9 +97,8 @@ public final class StringEscapeUtils {
     private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(
             new LookupTranslator(new String[][] {{"\"", "\\\""}, {"\\", "\\\\"}}), JAVA_CTRL_CHARS_ESCAPE);
 
-    private static final CharSequenceTranslator ESCAPE_JAVA_CHAR = new AggregateTranslator(
-            new LookupTranslator(new String[][] {{"\"", "\\\""}, {"\\", "\\\\"}, {"'", "\\'"}}),
-            JAVA_CTRL_CHARS_ESCAPE);
+    private static final CharSequenceTranslator ESCAPE_JAVA_CHAR =
+            new AggregateTranslator(new LookupTranslator(new String[][] {{"'", "\\'"}}), ESCAPE_JAVA);
 
     private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(
             new OctalUnescaper(),

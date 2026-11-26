@@ -60,7 +60,7 @@ public class CharLiteralExpr extends LiteralStringValueExpr {
      * @param value a char
      */
     public CharLiteralExpr(char value) {
-        this(null, StringEscapeUtils.escapeJava(value));
+        this(null, StringEscapeUtils.escapeJavaCharLiteral(value));
     }
 
     /**
@@ -105,7 +105,7 @@ public class CharLiteralExpr extends LiteralStringValueExpr {
      * @return this expression
      */
     public CharLiteralExpr setChar(char value) {
-        setValue(StringEscapeUtils.escapeJava(value));
+        setValue(StringEscapeUtils.escapeJavaCharLiteral(value));
         return this;
     }
 
