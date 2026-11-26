@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -44,30 +45,39 @@ import org.junit.jupiter.params.provider.CsvSource;
  */
 class MethodReferenceArrayScopeTest {
 
-    private static MethodReferenceExpr parse(String methodReference) {
+    private static CompilationUnit parseUnit(String body) {
         ParserConfiguration configuration =
                 new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
-        String code = "import java.util.*; class Test { static class Nested { } " + "void m() { Object o = "
-                + methodReference + "; } }";
-        CompilationUnit cu =
-                new JavaParser(configuration).parse(code).getResult().get();
-        return cu.findFirst(MethodReferenceExpr.class).get();
+        String code = "import java.util.*;\n" + "import java.util.function.*;\n"
+                + "import java.util.stream.*;\n"
+                + "class Test {\n"
+                + "    static class Nested { } "
+                + body
+                + " }";
+        return new JavaParser(configuration).parse(code).getResult().get();
+    }
+
+    /** Parses {@code methodReference} assigned to a variable of the functional interface type {@code target}. */
+    private static MethodReferenceExpr parse(String target, String methodReference) {
+        return parseUnit("void m() { " + target + " f = " + methodReference + "; }")
+                .findFirst(MethodReferenceExpr.class)
+                .get();
     }
 
     @ParameterizedTest
     @CsvSource(
             delimiter = '|',
             value = {
-                "int[]::clone | int[]",
-                "int[][]::clone | int[][]",
-                "String[]::new | java.lang.String[]",
-                "String[][]::new | java.lang.String[][]",
-                "java.lang.String[]::new | java.lang.String[]",
-                "Nested[]::new | Test.Nested[]",
-                "List<String>[]::new | java.util.List<java.lang.String>[]"
+                "Function<int[], int[]> | int[]::clone | int[]",
+                "Function<int[][], int[][]> | int[][]::clone | int[][]",
+                "IntFunction<String[]> | String[]::new | java.lang.String[]",
+                "IntFunction<String[][]> | String[][]::new | java.lang.String[][]",
+                "IntFunction<String[]> | java.lang.String[]::new | java.lang.String[]",
+                "IntFunction<Nested[]> | Nested[]::new | Test.Nested[]",
+                "Function<List<String>[], List<String>[]> | List<String>[]::clone | java.util.List<java.lang.String>[]"
             })
-    void arrayScopeResolvesToArrayType(String methodReference, String expectedType) {
-        MethodReferenceExpr expr = parse(methodReference);
+    void arrayScopeResolvesToArrayType(String target, String methodReference, String expectedType) {
+        MethodReferenceExpr expr = parse(target, methodReference);
         assertTrue(expr.getScope().isTypeExpr());
         assertTrue(expr.getScope().asTypeExpr().getType().isArrayType());
 
@@ -79,7 +89,8 @@ class MethodReferenceArrayScopeTest {
 
     @Test
     void arrayScopeComponentType() {
-        ResolvedType scopeType = parse("String[][]::new").getScope().calculateResolvedType();
+        ResolvedType scopeType =
+                parse("IntFunction<String[][]>", "String[][]::new").getScope().calculateResolvedType();
 
         assertEquals(
                 "java.lang.String[]", scopeType.asArrayType().getComponentType().describe());
@@ -94,22 +105,51 @@ class MethodReferenceArrayScopeTest {
     @ParameterizedTest
     @CsvSource(
             delimiter = '|',
-            value = {"int[]::clone | int[]", "int[][]::clone | int[][]", "String[]::clone | java.lang.String[]"})
-    void cloneOfArrayReturnsTheArrayType(String methodReference, String expectedReturnType) {
-        MethodUsage usage = resolveUnbound(parse(methodReference));
+            value = {
+                "Function<int[], int[]> | int[]::clone | int[]",
+                "Function<int[][], int[][]> | int[][]::clone | int[][]",
+                "Function<String[], String[]> | String[]::clone | java.lang.String[]"
+            })
+    void cloneOfArrayReturnsTheArrayType(String target, String methodReference, String expectedReturnType) {
+        MethodUsage usage = resolveUnbound(parse(target, methodReference));
 
         assertEquals("clone", usage.getName());
         assertEquals(expectedReturnType, usage.returnType().describe(), methodReference);
     }
 
     @ParameterizedTest
-    @CsvSource({"int[]::hashCode", "String[]::toString", "int[]::getClass"})
-    void arrayHasTheMethodsOfObject(String methodReference) {
-        MethodReferenceExpr expr = parse(methodReference);
+    @CsvSource(
+            delimiter = '|',
+            value = {
+                "ToIntFunction<int[]> | int[]::hashCode",
+                "Function<String[], String> | String[]::toString",
+                "Function<int[], Class<?>> | int[]::getClass"
+            })
+    void arrayHasTheMethodsOfObject(String target, String methodReference) {
+        MethodReferenceExpr expr = parse(target, methodReference);
 
         MethodUsage usage = resolveUnbound(expr);
 
         assertEquals(expr.getIdentifier(), usage.getName());
         assertEquals("java.lang.Object", usage.declaringType().getQualifiedName());
+    }
+
+    // End-to-end: type of a call whose argument is a method reference with an array scope.
+
+    @ParameterizedTest
+    @CsvSource(
+            delimiter = '|',
+            value = {
+                "Stream<int[]> s | s.map(int[]::clone) | java.util.stream.Stream<int[]>",
+                "Stream<String[]> s | s.map(String[]::clone) | java.util.stream.Stream<java.lang.String[]>",
+                "Stream<int[]> s | s.map(int[]::hashCode) | java.util.stream.Stream<java.lang.Integer>",
+                "Stream<String> s | s.toArray(String[]::new) | java.lang.String[]"
+            })
+    void streamCallWithArrayScopeMethodReference(String declaration, String call, String expectedType) {
+        MethodCallExpr expr = parseUnit("void m(" + declaration + ") { var r = " + call + "; }")
+                .findAll(MethodCallExpr.class, c -> c.toString().equals(call))
+                .get(0);
+
+        assertEquals(expectedType, expr.calculateResolvedType().describe());
     }
 }

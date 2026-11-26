@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -33,14 +35,18 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -804,5 +810,35 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         // functional interface declared by the enclosing context (here: the method return type
         // Function<String, SuperClass>), not the constructed type (SuperClass).
         assertEquals("Function<java.lang.String, SuperClass>", resolvedType.describe());
+    }
+
+    private MethodReferenceExpr parseMethodRef(String body) {
+        JavaParser parser = new JavaParser(
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver())));
+        CompilationUnit cu = parser.parse("import java.util.*; import java.util.function.*;\n" + body)
+                .getResult()
+                .get();
+        return cu.findFirst(MethodReferenceExpr.class).get();
+    }
+
+    private void assertBoth(MethodReferenceExpr ref) {
+        MethodUsage usage = JavaParserFacade.get(new ReflectionTypeSolver())
+                .toMethodUsage(ref, Collections.singletonList(ResolvedPrimitiveType.INT));
+        assertEquals("java.lang.CharSequence.charAt(int)", ref.resolve().getQualifiedSignature());
+        assertEquals(
+                "java.lang.CharSequence.charAt(int)", usage.getDeclaration().getQualifiedSignature());
+    }
+
+    @Test
+    void wildcardScope() {
+        assertBoth(parseMethodRef(
+                "class A { void m(List<? extends CharSequence> l) { IntFunction<Character> f = l.get(0)::charAt; } }"));
+    }
+
+    @Test
+    void typeVariableBoundByTypeVariable() {
+        assertBoth(
+                parseMethodRef(
+                        "class A<U extends CharSequence, T extends U> { void m(T t) { IntFunction<Character> f = t::charAt; } }"));
     }
 }
