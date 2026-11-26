@@ -22,6 +22,7 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.observer.AstObserver;
+import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.Observable;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
@@ -52,7 +53,7 @@ public class NodeList<N extends Node>
 
     private Node parentNode;
 
-    private final List<AstObserver> observers = new ArrayList<>();
+    private final List<AstObserver> observers = new ArrayList<>(Collections.singletonList(new NodeListIndexObserver()));
 
     public NodeList() {
         parentNode = null;
@@ -61,6 +62,8 @@ public class NodeList<N extends Node>
     public NodeList(Collection<N> n) {
         this.addAll(n);
     }
+
+    private boolean indicesInvalidated = true;
 
     @SafeVarargs
     public NodeList(N... n) {
@@ -72,6 +75,17 @@ public class NodeList<N extends Node>
         notifyElementAdded(innerList.size(), node);
         own(node);
         return innerList.add(node);
+    }
+
+    private void invalidateIndices() {
+        indicesInvalidated = true;
+    }
+
+    private void resetIndices() {
+        for (int i = 0; i < innerList.size(); i++) {
+            innerList.get(i).setNodeListIndex(i);
+        }
+        indicesInvalidated = false;
     }
 
     private void own(N node) {
@@ -102,18 +116,21 @@ public class NodeList<N extends Node>
     public static <X extends Node> NodeList<X> nodeList(X... nodes) {
         final NodeList<X> nodeList = new NodeList<>();
         Collections.addAll(nodeList, nodes);
+        nodeList.resetIndices();
         return nodeList;
     }
 
     public static <X extends Node> NodeList<X> nodeList(Collection<X> nodes) {
         final NodeList<X> nodeList = new NodeList<>();
         nodeList.addAll(nodes);
+        nodeList.resetIndices();
         return nodeList;
     }
 
     public static <X extends Node> NodeList<X> nodeList(NodeList<X> nodes) {
         final NodeList<X> nodeList = new NodeList<>();
         nodeList.addAll(nodes);
+        nodeList.resetIndices();
         return nodeList;
     }
 
@@ -167,6 +184,7 @@ public class NodeList<N extends Node>
 
     @Override
     public void sort(Comparator<? super N> comparator) {
+        invalidateIndices();
         innerList.sort(comparator);
     }
 
@@ -434,6 +452,41 @@ public class NodeList<N extends Node>
     }
 
     /**
+     * This method is an optimized version of indexOf which uses the nodeListIndex field of
+     * Nodes to find the index of the given Node (if the given Object is a Node) in constant
+     * time in some cases where the argument o is a reference to one of the Nodes in the list.
+     * <br/>
+     * Unlike the regular indexOf method, this is not guaranteed to return the first index at which
+     * {@code nodeList.get(n) == o}. If a node {@code A(0)} means a node == A with index 0, then for
+     * the list {@code NodeList(A(0), B(1), A(2))}, {@code nodeList.indexOf(A(2)) => 0} while
+     * {@code nodeList.fastIndexOf(A(2)) => 2}. This is the desired behaviour in many cases, however.
+     * <br/>
+     * Note: If the list is modified, the {@code nodeListIndex} fields of the contained nodes are invalidated,
+     * and are then reset when this method is called. This is a linear-time, mutating operation, so
+     * this method is NOT thread safe. This operation is also not safe when used in conjunction with
+     * `NodeList.sublist` or aliases of the list in general.
+     */
+    public int fastIndexOf(Object o) {
+        if (indicesInvalidated) {
+            // If indices are currently invalidated, start by resetting the indices of the nodes in the list. If
+            // `o` is a reference to a node in the list (which is the intended use-case), then the nodeListIndex
+            // of that node will also be reset, so the lookup below will still work.
+            resetIndices();
+        }
+        if (o instanceof Node) {
+            int index = ((Node) o).getNodeListIndex();
+            if (index >= 0 && index < innerList.size()) {
+                Node candidate = innerList.get(index);
+                // Use structural equality to use the fast path in more cases.
+                if (candidate.equals(o)) {
+                    return index;
+                }
+            }
+        }
+        return innerList.indexOf(o);
+    }
+
+    /**
      * @see java.util.List#lastIndexOf(java.lang.Object)
      */
     @Override
@@ -561,6 +614,49 @@ public class NodeList<N extends Node>
     @Override
     public String toString() {
         return innerList.stream().map(Node::toString).collect(Collectors.joining(", ", "[", "]"));
+    }
+
+    private class NodeListIndexObserver extends AstObserverAdapter {
+
+        @Override
+        public void listChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+            if (type == ListChangeType.ADDITION) {
+                handleAddition(index, nodeAddedOrRemoved);
+            } else if (type == ListChangeType.REMOVAL) {
+                handleRemoval(index, nodeAddedOrRemoved);
+            } else {
+                throw new IllegalArgumentException("NodeListIndexObserver does not handle type " + type);
+            }
+        }
+
+        @Override
+        public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
+            if (oldNode != null) {
+                oldNode.setNodeListIndex(-1);
+            }
+            if (newNode != null) {
+                newNode.setNodeListIndex(index);
+            }
+        }
+
+        private void handleAddition(int index, Node node) {
+            if (node != null) node.setNodeListIndex(index);
+            // If the node is added at the end of the list, just set its index and don't invalidate indices
+            // for the rest of the list
+            if (index != innerList.size()) {
+                invalidateIndices();
+            }
+        }
+
+        private void handleRemoval(int index, Node node) {
+            if (node != null) {
+                node.setNodeListIndex(-1);
+            }
+            // If the last node in the list is removed, don't invalidate the whole list
+            if (index != innerList.size() - 1) {
+                invalidateIndices();
+            }
+        }
     }
 
     protected class NodeListIterator implements ListIterator<N> {
