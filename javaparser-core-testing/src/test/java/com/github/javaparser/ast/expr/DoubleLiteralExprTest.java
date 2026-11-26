@@ -64,4 +64,40 @@ class DoubleLiteralExprTest {
         DoubleLiteralExpr e = parser.parseExpression("0x0_0.0_0p-1_0");
         Assertions.assertEquals(x, e.asDouble());
     }
+
+    @Test
+    void nonFiniteDoubleRejected() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new DoubleLiteralExpr(Double.NaN));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new DoubleLiteralExpr(Double.POSITIVE_INFINITY));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new DoubleLiteralExpr(Double.NEGATIVE_INFINITY));
+
+        DoubleLiteralExpr expr = new DoubleLiteralExpr(1.0);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> expr.setDouble(Double.NaN));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> expr.setDouble(Double.POSITIVE_INFINITY));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> expr.setDouble(Double.NEGATIVE_INFINITY));
+    }
+
+    @Test
+    void setDoublePreservesSuffix() {
+        DoubleLiteralExpr floatExpr = (DoubleLiteralExpr) parser.parseExpression("1.0f");
+        floatExpr.setDouble(2.5);
+        Assertions.assertEquals("2.5f", floatExpr.getValue());
+        Assertions.assertEquals(2.5, floatExpr.asDouble());
+
+        DoubleLiteralExpr floatUpperExpr = (DoubleLiteralExpr) parser.parseExpression("1.0F");
+        floatUpperExpr.setDouble(2.5);
+        Assertions.assertEquals("2.5F", floatUpperExpr.getValue());
+
+        DoubleLiteralExpr doubleLowerExpr = (DoubleLiteralExpr) parser.parseExpression("1.0d");
+        doubleLowerExpr.setDouble(2.5);
+        Assertions.assertEquals("2.5d", doubleLowerExpr.getValue());
+
+        DoubleLiteralExpr doubleUpperExpr = (DoubleLiteralExpr) parser.parseExpression("1.0D");
+        doubleUpperExpr.setDouble(2.5);
+        Assertions.assertEquals("2.5D", doubleUpperExpr.getValue());
+
+        DoubleLiteralExpr plainExpr = (DoubleLiteralExpr) parser.parseExpression("1.0");
+        plainExpr.setDouble(2.5);
+        Assertions.assertEquals("2.5", plainExpr.getValue());
+    }
 }

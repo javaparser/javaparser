@@ -58,10 +58,32 @@ class LiteralValueSettersTest extends AbstractLexicalPreservingTest {
     }
 
     @Test
+    void setCharEscapedCharacters() {
+        considerCode("class A { char c = 'a'; }");
+        cu.findFirst(CharLiteralExpr.class).get().setChar('\'');
+        assertEqualsStringIgnoringEol("class A { char c = '\\''; }", LexicalPreservingPrinter.print(cu));
+
+        considerCode("class A { char c = 'a'; }");
+        cu.findFirst(CharLiteralExpr.class).get().setChar('\\');
+        assertEqualsStringIgnoringEol("class A { char c = '\\\\'; }", LexicalPreservingPrinter.print(cu));
+
+        considerCode("class A { char c = 'a'; }");
+        cu.findFirst(CharLiteralExpr.class).get().setChar('\n');
+        assertEqualsStringIgnoringEol("class A { char c = '\\n'; }", LexicalPreservingPrinter.print(cu));
+    }
+
+    @Test
     void setDouble() {
         considerCode("class A { double d = 1.0; }");
         cu.findFirst(DoubleLiteralExpr.class).get().setDouble(2.5);
         assertEqualsStringIgnoringEol("class A { double d = 2.5; }", LexicalPreservingPrinter.print(cu));
+    }
+
+    @Test
+    void setDoublePreservesFloatSuffix() {
+        considerCode("class A { float f = 1.0f; }");
+        cu.findFirst(DoubleLiteralExpr.class).get().setDouble(2.5);
+        assertEqualsStringIgnoringEol("class A { float f = 2.5f; }", LexicalPreservingPrinter.print(cu));
     }
 
     @Test
@@ -77,8 +99,14 @@ class LiteralValueSettersTest extends AbstractLexicalPreservingTest {
     void setLong() {
         considerCode("class A { long l = 1L; }");
         cu.findFirst(LongLiteralExpr.class).get().setLong(2);
-        // The deprecated setLong stores String.valueOf(value) and so drops the L suffix. This test is
-        // about the printer seeing the new value; it records that behaviour, it does not endorse it.
-        assertEqualsStringIgnoringEol("class A { long l = 2; }", LexicalPreservingPrinter.print(cu));
+        assertEqualsStringIgnoringEol("class A { long l = 2L; }", LexicalPreservingPrinter.print(cu));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void setLongPreservesLowercaseSuffix() {
+        considerCode("class A { long l = 1l; }");
+        cu.findFirst(LongLiteralExpr.class).get().setLong(2);
+        assertEqualsStringIgnoringEol("class A { long l = 2l; }", LexicalPreservingPrinter.print(cu));
     }
 }
