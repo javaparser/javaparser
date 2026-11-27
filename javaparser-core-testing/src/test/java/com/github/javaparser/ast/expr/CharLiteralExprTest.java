@@ -84,4 +84,60 @@ class CharLiteralExprTest {
         assertEquals("\\s", c.getValue());
         assertEquals(' ', c.asChar());
     }
+
+    @Test
+    void charLiteralConstructorEscapesSpecialChars() {
+        CharLiteralExpr singleQuote = new CharLiteralExpr('\'');
+        assertEquals("\\'", singleQuote.getValue());
+        assertEquals('\'', singleQuote.asChar());
+        assertEquals("'\\''", singleQuote.toString());
+        assertEquals(singleQuote, StaticJavaParser.parseExpression(singleQuote.toString()));
+
+        CharLiteralExpr backslash = new CharLiteralExpr('\\');
+        assertEquals("\\\\", backslash.getValue());
+        assertEquals('\\', backslash.asChar());
+        assertEquals("'\\\\'", backslash.toString());
+        assertEquals(backslash, StaticJavaParser.parseExpression(backslash.toString()));
+
+        CharLiteralExpr newline = new CharLiteralExpr('\n');
+        assertEquals("\\n", newline.getValue());
+        assertEquals('\n', newline.asChar());
+        assertEquals("'\\n'", newline.toString());
+        assertEquals(newline, StaticJavaParser.parseExpression(newline.toString()));
+
+        CharLiteralExpr tab = new CharLiteralExpr('\t');
+        assertEquals("\\t", tab.getValue());
+        assertEquals('\t', tab.asChar());
+        assertEquals("'\\t'", tab.toString());
+        assertEquals(tab, StaticJavaParser.parseExpression(tab.toString()));
+    }
+
+    @Test
+    void charLiteralSetterEscapesSpecialChars() {
+        CharLiteralExpr c = new CharLiteralExpr('a');
+
+        c.setChar('\'');
+        assertEquals("\\'", c.getValue());
+        assertEquals('\'', c.asChar());
+        assertEquals("'\\''", c.toString());
+        assertEquals(c, StaticJavaParser.parseExpression(c.toString()));
+
+        c.setChar('\\');
+        assertEquals("\\\\", c.getValue());
+        assertEquals('\\', c.asChar());
+        assertEquals("'\\\\'", c.toString());
+        assertEquals(c, StaticJavaParser.parseExpression(c.toString()));
+
+        c.setChar('\n');
+        assertEquals("\\n", c.getValue());
+        assertEquals('\n', c.asChar());
+        assertEquals("'\\n'", c.toString());
+        assertEquals(c, StaticJavaParser.parseExpression(c.toString()));
+
+        c.setChar('\t');
+        assertEquals("\\t", c.getValue());
+        assertEquals('\t', c.asChar());
+        assertEquals("'\\t'", c.toString());
+        assertEquals(c, StaticJavaParser.parseExpression(c.toString()));
+    }
 }

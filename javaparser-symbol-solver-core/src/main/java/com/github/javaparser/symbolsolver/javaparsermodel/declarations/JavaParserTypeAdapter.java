@@ -43,7 +43,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -147,31 +146,11 @@ public class JavaParserTypeAdapter<
                     throw new UnsupportedOperationException();
                 }
                 if (name.startsWith(prefix) && name.length() > prefix.length()) {
-                    if (internalType instanceof ClassOrInterfaceDeclaration) {
-                        if (((ClassOrInterfaceDeclaration) internalType).isInterface()) {
-                            return new JavaParserInterfaceDeclaration(
-                                            (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType,
-                                            typeSolver)
-                                    .solveType(name.substring(prefix.length()));
-                        }
-                        return new JavaParserClassDeclaration(
-                                        (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType,
-                                        typeSolver)
-                                .solveType(name.substring(prefix.length()));
-                    }
-                    if (internalType instanceof EnumDeclaration) {
-                        return new SymbolSolver(typeSolver)
-                                .solveTypeInType(
-                                        new JavaParserEnumDeclaration(
-                                                (com.github.javaparser.ast.body.EnumDeclaration) internalType,
-                                                typeSolver),
-                                        name.substring(prefix.length()));
-                    }
-                    if (internalType instanceof AnnotationDeclaration) {
-                        return SymbolReference.solved(new JavaParserAnnotationDeclaration(
-                                (com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
-                    }
-                    throw new UnsupportedOperationException();
+                    // The rest of the name denotes a member type of the member type, whatever its kind (JLS 6.5.5.2,
+                    // issue #5272), declared or inherited (JLS 8.5, JLS 9.5, issue #5273): resolve it in the context
+                    // of the member type
+                    return JavaParserFactory.getContext(internalType, typeSolver)
+                            .solveType(name.substring(prefix.length()));
                 }
             }
         }

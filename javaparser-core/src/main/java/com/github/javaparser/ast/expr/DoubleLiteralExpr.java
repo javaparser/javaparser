@@ -59,8 +59,21 @@ public class DoubleLiteralExpr extends LiteralStringValueExpr {
         customInitialization();
     }
 
+    /**
+     * Constructs a DoubleLiteralExpr with the given value.
+     *
+     * @param value a finite double value
+     * @throws IllegalArgumentException if {@code value} is {@code NaN} or infinite
+     */
     public DoubleLiteralExpr(final double value) {
-        this(null, String.valueOf(value));
+        this(null, validateDouble(value));
+    }
+
+    private static String validateDouble(double value) {
+        if (!Double.isFinite(value)) {
+            throw new IllegalArgumentException("DoubleLiteralExpr cannot represent non-finite values: " + value);
+        }
+        return String.valueOf(value);
     }
 
     @Override
@@ -86,8 +99,34 @@ public class DoubleLiteralExpr extends LiteralStringValueExpr {
         return Double.parseDouble(noUnderscoreValue);
     }
 
+    /**
+     * Sets the literal value to the given finite double, keeping any existing
+     * {@code f}, {@code F}, {@code d}, or {@code D} suffix. The caller must ensure
+     * that {@code value} fits the existing suffix type; for example, calling
+     * {@code setDouble(1e40)} on {@code 1.0f} produces {@code 1.0E40f} and
+     * {@code setDouble(1e-50)} produces {@code 1.0E-50f}, both of which javac
+     * rejects because a non-zero floating-point literal must not round to infinity
+     * or to zero (JLS §3.10.2).
+     *
+     * @param value a finite double value
+     * @return this expression
+     * @throws IllegalArgumentException if {@code value} is {@code NaN} or infinite
+     */
     public DoubleLiteralExpr setDouble(double value) {
-        setValue(String.valueOf(value));
+        String str = validateDouble(value);
+        String suffix = "";
+        if (this.value != null) {
+            if (this.value.endsWith("f")) {
+                suffix = "f";
+            } else if (this.value.endsWith("F")) {
+                suffix = "F";
+            } else if (this.value.endsWith("d")) {
+                suffix = "d";
+            } else if (this.value.endsWith("D")) {
+                suffix = "D";
+            }
+        }
+        setValue(str + suffix);
         return this;
     }
 
