@@ -102,6 +102,21 @@ class ReflectionAnnotationDeclarationTest {
     }
 
     @Test
+    void getDeclaredMethods_shouldReturnAnnotationMembers() {
+        ReflectionAnnotationDeclaration withValue =
+                (ReflectionAnnotationDeclaration) typeSolver.solveType(WithValue.class.getCanonicalName());
+        assertEquals(
+                Collections.singleton("value()"),
+                withValue.getDeclaredMethods().stream()
+                        .map(ResolvedMethodDeclaration::getSignature)
+                        .collect(Collectors.toSet()));
+
+        ReflectionAnnotationDeclaration outer =
+                (ReflectionAnnotationDeclaration) typeSolver.solveType(OuterAnnotation.class.getCanonicalName());
+        assertTrue(outer.getDeclaredMethods().isEmpty());
+    }
+
+    @Test
     void getAllFields_shouldReturnTheCorrectFields() {
         ReflectionAnnotationDeclaration annotation = (ReflectionAnnotationDeclaration)
                 typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.WithField");
