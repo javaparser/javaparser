@@ -8,7 +8,9 @@ Here is some information that's good to know when contributing to JavaParser:
 - If you're new and would like to become a member, start your own project that uses JavaParser.
 We noticed we get the best feedback from those. 
 Here are [some fun project ideas](https://github.com/javaparser/javaparser/labels/fun%20project%20idea).
+- Before opening a pull request, please open an issue that describes in detail the problem you found (steps to reproduce, expected and actual behaviour, JavaParser version) or the improvement you propose. This lets us agree on the problem and the approach before any code is written. Then reference the issue in your pull request.
 - If you start working on an issue, please say so with a comment in the issue.
+- If an issue is already assigned to someone, do not start working on it without the consent of the assignee. Ask in a comment on the issue whether you may take it over, and wait for their agreement before opening a pull request. If the assignee does not reply within a reasonable time, ask a maintainer to reassign the issue.
 - If you know how to fix a problem, please fix it and open a pull request instead of opening an issue.
 - If you would like to add new nodes, or new fields to existing nodes, check out the [Guide to Adding New Nodes and Fields](https://github.com/javaparser/javaparser/wiki/A-Detailed-Guide-to-Adding-New-Nodes-and-Fields).
 
