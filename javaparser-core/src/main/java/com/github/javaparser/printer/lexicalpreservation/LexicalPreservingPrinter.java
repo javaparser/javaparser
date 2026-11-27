@@ -35,10 +35,13 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.Printer;
@@ -147,8 +150,9 @@ public class LexicalPreservingPrinter {
             if (property == ObservableProperty.RANGE || property == ObservableProperty.COMMENTED_NODE) {
                 return;
             }
-            // Handle node replacements with TokenOwnerDetector
-            if (oldValue instanceof Node && newValue instanceof Node) {
+            if (observedNode instanceof ClassOrInterfaceType && property == ObservableProperty.SCOPE) {
+                makeTypeTextVisible((ClassOrInterfaceType) observedNode);
+            } else if (oldValue instanceof Node && newValue instanceof Node) {
                 Node oldNode = (Node) oldValue;
                 Node newNode = (Node) newValue;
                 // Find the actual token owner
@@ -264,6 +268,65 @@ public class LexicalPreservingPrinter {
                 throw new NullPointerException(observedNode.getClass().getSimpleName());
             }
             LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(nodeText, observedNode, property, oldValue, newValue);
+        }
+
+        private void makeTypeTextVisible(ClassOrInterfaceType type) {
+            if (!type.isPhantom()) {
+                return;
+            }
+            Node owner = TokenOwnerDetector.findTokenOwner(type);
+            if (!(owner instanceof NodeWithVariables)) {
+                return;
+            }
+            NodeText ownerText = getOrCreateNodeText(owner);
+            if (ownerText.getElements().stream().anyMatch(element -> element.isChildOfClass(Type.class))) {
+                return;
+            }
+            // A declaration initially stores its type as raw tokens. Make the common type a text child
+            // so that changes to its scope reach the declaration, without reformatting the type.
+            NodeWithVariables<?> declaration = (NodeWithVariables<?>) owner;
+            declaration.getMaximumCommonType().filter(Node::hasRange).ifPresent(commonType -> {
+                List<TextElement> originalElements = new ArrayList<>(ownerText.getElements());
+                int arrayLevel = commonType.getArrayLevel();
+                // Each variable has its own copy of the shared type. Preserve the same text for all
+                // copies, so later common-type calculations do not compare different formatting.
+                for (VariableDeclarator variable : declaration.getVariables()) {
+                    Type sharedType = variable.getType();
+                    while (sharedType.getArrayLevel() > arrayLevel) {
+                        sharedType = sharedType.asArrayType().getComponentType();
+                    }
+                    NodeText parentText =
+                            sharedType == commonType ? ownerText : new NodeText(new ArrayList<>(originalElements));
+                    storeTypeText(sharedType, parentText, commonType.getRange().get());
+                }
+            });
+        }
+
+        private void storeTypeText(Node node, NodeText parentText, Range range) {
+            List<TextElement> elements = parentText.getElements();
+            int begin = NodeText.NOT_FOUND;
+            int end = NodeText.NOT_FOUND;
+            for (int i = 0; i < elements.size(); i++) {
+                TextElement element = elements.get(i);
+                if (element.isNode(node)) {
+                    return;
+                }
+                if (element.getRange().map(range::contains).orElse(false)) {
+                    if (begin == NodeText.NOT_FOUND) {
+                        begin = i;
+                    }
+                    end = i + 1;
+                }
+            }
+            if (begin == NodeText.NOT_FOUND) {
+                return;
+            }
+            NodeText nodeText = new NodeText(new ArrayList<>(elements.subList(begin, end)));
+            elements.subList(begin, end).clear();
+            parentText.addChild(begin, node);
+            node.setData(NODE_TEXT_DATA, nodeText);
+            node.getChildNodes().forEach(child -> child.getRange()
+                    .ifPresent(childRange -> storeTypeText(child, nodeText, childRange)));
         }
 
         private boolean isCompleteLine(List<TextElement> elements, int index) {
