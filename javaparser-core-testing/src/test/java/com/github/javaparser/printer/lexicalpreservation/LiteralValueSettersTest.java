@@ -73,6 +73,15 @@ class LiteralValueSettersTest extends AbstractLexicalPreservingTest {
     }
 
     @Test
+    void setUnpairedSurrogates() {
+        considerCode("class A { char c = 'a'; String s = \"b\"; }");
+        cu.findFirst(CharLiteralExpr.class).get().setChar('\uD800');
+        cu.findFirst(StringLiteralExpr.class).get().setString("x\uDFFF");
+        assertEqualsStringIgnoringEol(
+                "class A { char c = '\\uD800'; String s = \"x\\uDFFF\"; }", LexicalPreservingPrinter.print(cu));
+    }
+
+    @Test
     void setDouble() {
         considerCode("class A { double d = 1.0; }");
         cu.findFirst(DoubleLiteralExpr.class).get().setDouble(2.5);
