@@ -56,11 +56,19 @@ public class JavadocDescription {
             return null;
         }
         // we are interested only in complete inline tags
-        int closeIndex = text.indexOf("}", index);
-        if (closeIndex == -1) {
-            return null;
+        int braceDepth = 1;
+        for (int closeIndex = index + 2; closeIndex < text.length(); closeIndex++) {
+            char c = text.charAt(closeIndex);
+            if (c == '{') {
+                braceDepth++;
+            } else if (c == '}') {
+                braceDepth--;
+                if (braceDepth == 0) {
+                    return new Pair<>(index, closeIndex);
+                }
+            }
         }
-        return new Pair<>(index, closeIndex);
+        return null;
     }
 
     public JavadocDescription() {
