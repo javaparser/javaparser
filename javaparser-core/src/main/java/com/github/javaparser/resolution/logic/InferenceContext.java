@@ -80,6 +80,10 @@ public class InferenceContext {
         if (formalType.isReferenceType() && actualType.isReferenceType()) {
             ResolvedReferenceType formalTypeAsReference = formalType.asReferenceType();
             ResolvedReferenceType actualTypeAsReference = actualType.asReferenceType();
+            // Remember whether the original actual type is raw (including diamond instantiations
+            // resolved without explicit type arguments), because ancestor lookup on a raw type
+            // can yield a parameterized ancestor with un-substituted type variables (e.g. List<E>).
+            boolean actualIsRaw = actualTypeAsReference.isRawType();
             if (!formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
                 List<ResolvedReferenceType> ancestors = actualTypeAsReference.getAllAncestors();
                 final String formalParamTypeQName = formalTypeAsReference.getQualifiedName();
@@ -112,7 +116,7 @@ public class InferenceContext {
             }
             if (formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
                 if (!formalTypeAsReference.typeParametersValues().isEmpty()) {
-                    if (actualTypeAsReference.isRawType()) {
+                    if (actualIsRaw || actualTypeAsReference.isRawType()) {
                         // nothing to do
                     } else {
                         int i = 0;
@@ -173,6 +177,9 @@ public class InferenceContext {
             } else if (formalType instanceof InferenceVariableType) {
                 ((InferenceVariableType) actualType).registerEquivalentType(formalType);
             }
+        } else if (actualType.isTypeVariable()) {
+            // An un-substituted type variable introduced while traversing ancestors of a raw type
+            // carries no concrete type argument constraint.
         } else if (actualType.isConstraint()) {
             ResolvedLambdaConstraintType constraintType = actualType.asConstraintType();
             if (constraintType.getBound() instanceof InferenceVariableType) {
