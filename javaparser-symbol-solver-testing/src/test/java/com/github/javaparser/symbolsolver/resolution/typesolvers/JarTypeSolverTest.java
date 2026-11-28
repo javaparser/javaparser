@@ -30,12 +30,20 @@ import com.google.common.collect.Sets;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -181,6 +189,37 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
             JarTypeSolver typeSolver = new JarTypeSolver(fileInputStream);
             assertTrue(
                     typeSolver.tryToSolveType("com.github.javaparser.ast.Node").isSolved());
+        }
+    }
+
+    @Test
+    void theTemporaryFileCreatedFromAnInputStreamIsOnlyReadableByTheOwner() throws IOException {
+        Assumptions.assumeTrue(
+                FileSystems.getDefault().supportedFileAttributeViews().contains("posix"),
+                "POSIX file permissions are not supported on this file system");
+        Set<Path> existingTempFiles = dumpedJarFiles();
+
+        Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
+        try (FileInputStream fileInputStream = new FileInputStream(pathToJar.toFile())) {
+            new JarTypeSolver(fileInputStream);
+        }
+
+        Set<Path> newTempFiles = dumpedJarFiles();
+        newTempFiles.removeAll(existingTempFiles);
+        assertFalse(newTempFiles.isEmpty());
+        for (Path tempFile : newTempFiles) {
+            assertEquals(
+                    EnumSet.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE),
+                    Files.getPosixFilePermissions(tempFile),
+                    tempFile.toString());
+        }
+    }
+
+    private static Set<Path> dumpedJarFiles() throws IOException {
+        Path tempDirectory = Paths.get(System.getProperty("java.io.tmpdir"));
+        try (Stream<Path> files = Files.list(tempDirectory)) {
+            return files.filter(file -> file.getFileName().toString().startsWith("jar_file_from_input_stream"))
+                    .collect(Collectors.toSet());
         }
     }
 
