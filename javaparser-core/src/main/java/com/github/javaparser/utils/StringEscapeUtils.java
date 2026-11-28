@@ -95,7 +95,9 @@ public final class StringEscapeUtils {
             new String[][] {{"\b", "\\b"}, {"\n", "\\n"}, {"\t", "\\t"}, {"\f", "\\f"}, {"\r", "\\r"}});
 
     private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(
-            new LookupTranslator(new String[][] {{"\"", "\\\""}, {"\\", "\\\\"}}), JAVA_CTRL_CHARS_ESCAPE);
+            new LookupTranslator(new String[][] {{"\"", "\\\""}, {"\\", "\\\\"}}),
+            JAVA_CTRL_CHARS_ESCAPE,
+            new UnpairedSurrogateEscaper());
 
     private static final CharSequenceTranslator ESCAPE_JAVA_CHAR =
             new AggregateTranslator(new LookupTranslator(new String[][] {{"'", "\\'"}}), ESCAPE_JAVA);
@@ -311,6 +313,18 @@ public final class StringEscapeUtils {
                 }
             }
             return 0;
+        }
+    }
+
+    private static class UnpairedSurrogateEscaper extends CharSequenceTranslator {
+        @Override
+        protected int translate(final CharSequence input, final int index, final Writer out) throws IOException {
+            final int codePoint = Character.codePointAt(input, index);
+            if (codePoint < Character.MIN_SURROGATE || codePoint > Character.MAX_SURROGATE) {
+                return 0;
+            }
+            out.write(String.format("\\u%04X", codePoint));
+            return 1;
         }
     }
 

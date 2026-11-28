@@ -113,6 +113,17 @@ class CharLiteralExprTest {
     }
 
     @Test
+    void charLiteralEscapesUnpairedSurrogates() {
+        CharLiteralExpr c = new CharLiteralExpr('\uD800');
+        assertEquals("\\uD800", c.getValue());
+        assertEquals('\uD800', c.asChar());
+
+        c.setChar('\uDFFF');
+        assertEquals("'\\uDFFF'", c.toString());
+        assertEquals(c, parser.parseExpression(c.toString()));
+    }
+
+    @Test
     void charLiteralSetterEscapesSpecialChars() {
         CharLiteralExpr c = new CharLiteralExpr('a');
 

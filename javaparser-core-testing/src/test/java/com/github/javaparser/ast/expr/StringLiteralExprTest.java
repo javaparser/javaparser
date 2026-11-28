@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.StaticJavaParser;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 
 class StringLiteralExprTest {
@@ -35,6 +36,18 @@ class StringLiteralExprTest {
     void unicodeEscapesArePreservedInStrings() {
         StringLiteralExpr omega = parser.parseExpression("\"xxx\\u03a9xxx\"");
         assertEquals("xxx\\u03a9xxx", omega.getValue());
+    }
+
+    @Test
+    void setStringPreservesUnpairedSurrogatesAcrossUtf8() {
+        String pair = new String(Character.toChars(0x1F4A9));
+        String value = "\uD800" + pair + "\uDC00";
+        String source = new StringLiteralExpr().setString(value).toString();
+        assertEquals("\"\\uD800" + pair + "\\uDC00\"", source);
+
+        String saved = new String(source.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+        StringLiteralExpr parsed = parser.parseExpression(saved);
+        assertEquals(value, parsed.asString());
     }
 
     @Test
