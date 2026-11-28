@@ -101,10 +101,15 @@ public class SourceZip {
         try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
             for (ZipEntry entry : Collections.list(zipFile.entries())) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
+                    final Path entryPath = Paths.get(entry.getName());
+                    // The callback gets the entry path as a relative path inside the ZIP, so it must not escape it.
+                    if (entryPath.getRoot() != null || entryPath.normalize().startsWith("..")) {
+                        throw new IOException("Zip entry is outside of the zip root: " + entry.getName());
+                    }
                     Log.info("Parsing zip entry \"%s\"", () -> entry.getName());
                     final ParseResult<CompilationUnit> result =
                             javaParser.parse(COMPILATION_UNIT, provider(zipFile.getInputStream(entry)));
-                    callback.process(Paths.get(entry.getName()), result);
+                    callback.process(entryPath, result);
                 }
             }
         }
