@@ -41,7 +41,9 @@ class JavadocParser {
 
     private static String BLOCK_TAG_PREFIX = "@";
 
-    private static Pattern BLOCK_PATTERN = Pattern.compile("^\\s*" + BLOCK_TAG_PREFIX, Pattern.MULTILINE);
+    // Only horizontal whitespace may precede the tag: with \s the match could run across blank lines, and every line
+    // start inside a long run of blank lines would scan to its end, which made splitting quadratic in the run length.
+    private static Pattern BLOCK_PATTERN = Pattern.compile("^[ \\t\\x0B\\f]*" + BLOCK_TAG_PREFIX, Pattern.MULTILINE);
 
     public static Javadoc parse(JavadocComment comment) {
         return parse(comment.getContent(), comment.isMarkdownComment());
@@ -97,10 +99,11 @@ class JavadocParser {
     }
 
     private static String trimRight(String string) {
-        while (!string.isEmpty() && Character.isWhitespace(string.charAt(string.length() - 1))) {
-            string = string.substring(0, string.length() - 1);
+        int end = string.length();
+        while (end > 0 && Character.isWhitespace(string.charAt(end - 1))) {
+            end--;
         }
-        return string;
+        return string.substring(0, end);
     }
 
     private static List<String> cleanLines(String content, boolean isMarkdownComment) {
